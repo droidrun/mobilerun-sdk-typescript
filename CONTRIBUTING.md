@@ -42,15 +42,15 @@ If you’d like to use the repository from source, you can either install from g
 To install via git:
 
 ```sh
-$ npm install git+ssh://git@github.com:stainless-sdks/droidrun-cloud-typescript.git
+$ npm install git+ssh://git@github.com:droidrun/cloud-sdk-typescript.git
 ```
 
 Alternatively, to link a local copy of the repo:
 
 ```sh
 # Clone
-$ git clone https://www.github.com/stainless-sdks/droidrun-cloud-typescript
-$ cd droidrun-cloud-typescript
+$ git clone https://www.github.com/droidrun/cloud-sdk-typescript
+$ cd cloud-sdk-typescript
 
 # With yarn
 $ yarn link
