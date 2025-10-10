@@ -18,6 +18,10 @@ before making any information public.
 If you encounter security issues that are not directly related to SDKs but pertain to the services
 or products provided by Droidrun Cloud, please follow the respective company's security reporting guidelines.
 
+### Droidrun Cloud Terms and Policies
+
+Please contact timo@droidrun.ai for any questions or concerns regarding the security of our services.
+
 ---
 
 Thank you for helping us keep the SDKs and systems they interact with secure.
