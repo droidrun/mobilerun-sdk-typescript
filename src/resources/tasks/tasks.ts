@@ -54,6 +54,13 @@ export class Tasks extends APIResource {
   }
 
   /**
+   * Get the trajectory of a task.
+   */
+  getTrajectory(taskID: string, options?: RequestOptions): APIPromise<ScreenshotsAPI.MediaResponse> {
+    return this._client.get(path`/tasks/${taskID}/trajectory`, options);
+  }
+
+  /**
    * Run Task
    */
   run(body: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
