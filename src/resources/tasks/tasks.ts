@@ -127,6 +127,8 @@ export interface Task {
   updatedAt?: string;
 
   vision?: boolean;
+
+  workflowRunId?: string;
 }
 
 export interface TaskCreate {
@@ -245,6 +247,8 @@ export interface TaskStopResponse {
 }
 
 export interface TaskListParams {
+  groupBy?: 'workflowRunId' | null;
+
   orderBy?: 'id' | 'createdAt' | 'finishedAt' | 'status' | null;
 
   orderByDirection?: 'asc' | 'desc';
