@@ -37,15 +37,7 @@ describe('resource tasks', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.tasks.list(
-        {
-          groupBy: 'workflowRunId',
-          orderBy: 'id',
-          orderByDirection: 'asc',
-          page: 1,
-          pageSize: 1,
-          query: 'query',
-          status: 'created',
-        },
+        { orderBy: 'id', orderByDirection: 'asc', page: 1, pageSize: 1, query: 'query', status: 'created' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(DroidrunCloud.NotFoundError);

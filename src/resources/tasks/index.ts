@@ -9,12 +9,12 @@ export {
 export {
   Tasks,
   type LlmModel,
-  type Task,
   type TaskCreate,
   type TaskStatus,
   type TaskRetrieveResponse,
   type TaskListResponse,
   type TaskGetStatusResponse,
+  type TaskGetTrajectoryResponse,
   type TaskRunResponse,
   type TaskStopResponse,
   type TaskListParams,
