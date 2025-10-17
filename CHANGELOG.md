@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 (2025-10-17)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/droidrun/cloud-sdk-typescript/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** update model & endpoint config ([b8ba47d](https://github.com/droidrun/cloud-sdk-typescript/commit/b8ba47d953bc2a730613b0e8eb2c100c21789be0))
+* **api:** update to latest api spec ([471313d](https://github.com/droidrun/cloud-sdk-typescript/commit/471313dc19bcdbb0002fb9bd586fb8c6412a544c))
+
 ## 0.2.0 (2025-10-11)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/droidrun/cloud-sdk-typescript/compare/v0.1.0...v0.2.0)
