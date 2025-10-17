@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as TasksAPI from './tasks';
 import * as ScreenshotsAPI from './screenshots';
 import { MediaResponse, ScreenshotListResponse, ScreenshotRetrieveParams, Screenshots } from './screenshots';
 import { APIPromise } from '../../core/api-promise';
@@ -56,7 +57,7 @@ export class Tasks extends APIResource {
   /**
    * Get the trajectory of a task.
    */
-  getTrajectory(taskID: string, options?: RequestOptions): APIPromise<ScreenshotsAPI.MediaResponse> {
+  getTrajectory(taskID: string, options?: RequestOptions): APIPromise<TaskGetTrajectoryResponse> {
     return this._client.get(path`/tasks/${taskID}/trajectory`, options);
   }
 
@@ -98,46 +99,6 @@ export type LlmModel =
   | 'claude-3-7-sonnet-latest'
   | 'claude-sonnet-4-20250514';
 
-export interface Task {
-  deviceId: string;
-
-  task: string;
-
-  userId: string;
-
-  id?: string;
-
-  createdAt?: string;
-
-  finishedAt?: string;
-
-  llmModel?: LlmModel;
-
-  maxSteps?: number;
-
-  output?: string;
-
-  reasoning?: boolean;
-
-  reflection?: boolean;
-
-  status?: TaskStatus;
-
-  steps?: number;
-
-  succeeded?: boolean;
-
-  temperature?: number;
-
-  timeout?: number;
-
-  updatedAt?: string;
-
-  vision?: boolean;
-
-  workflowRunId?: string;
-}
-
 export interface TaskCreate {
   task: string;
 
@@ -170,14 +131,59 @@ export interface TaskRetrieveResponse {
   /**
    * The task
    */
-  task: Task;
+  task: TaskRetrieveResponse.Task;
+}
+
+export namespace TaskRetrieveResponse {
+  /**
+   * The task
+   */
+  export interface Task {
+    deviceId: string;
+
+    task: string;
+
+    userId: string;
+
+    id?: string;
+
+    createdAt?: string;
+
+    finishedAt?: string | null;
+
+    llmModel?: TasksAPI.LlmModel;
+
+    maxSteps?: number;
+
+    output?: string | null;
+
+    reasoning?: boolean;
+
+    reflection?: boolean;
+
+    status?: TasksAPI.TaskStatus;
+
+    steps?: number | null;
+
+    succeeded?: boolean | null;
+
+    temperature?: number;
+
+    timeout?: number;
+
+    trajectory?: Array<{ [key: string]: unknown }>;
+
+    updatedAt?: string;
+
+    vision?: boolean;
+  }
 }
 
 export interface TaskListResponse {
   /**
    * The paginated items
    */
-  items: Array<Task>;
+  items: Array<TaskListResponse.Item>;
 
   /**
    * Pagination metadata
@@ -186,6 +192,46 @@ export interface TaskListResponse {
 }
 
 export namespace TaskListResponse {
+  export interface Item {
+    deviceId: string;
+
+    task: string;
+
+    userId: string;
+
+    id?: string;
+
+    createdAt?: string;
+
+    finishedAt?: string | null;
+
+    llmModel?: TasksAPI.LlmModel;
+
+    maxSteps?: number;
+
+    output?: string | null;
+
+    reasoning?: boolean;
+
+    reflection?: boolean;
+
+    status?: TasksAPI.TaskStatus;
+
+    steps?: number | null;
+
+    succeeded?: boolean | null;
+
+    temperature?: number;
+
+    timeout?: number;
+
+    trajectory?: Array<{ [key: string]: unknown }>;
+
+    updatedAt?: string;
+
+    vision?: boolean;
+  }
+
   /**
    * Pagination metadata
    */
@@ -229,6 +275,242 @@ export interface TaskGetStatusResponse {
   status: TaskStatus;
 }
 
+export interface TaskGetTrajectoryResponse {
+  /**
+   * The trajectory of the task
+   */
+  trajectory: Array<
+    | TaskGetTrajectoryResponse.TrajectoryCreatedEvent
+    | TaskGetTrajectoryResponse.TrajectoryExceptionEvent
+    | TaskGetTrajectoryResponse.TrajectoryCancelEvent
+    | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent
+    | TaskGetTrajectoryResponse.TrajectoryStartEvent
+    | TaskGetTrajectoryResponse.TrajectoryPlanInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryPlanThinkingEvent
+    | TaskGetTrajectoryResponse.TrajectoryPlanCreatedEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskThinkingEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskEndEvent
+    | TaskGetTrajectoryResponse.TrajectoryEpisodicMemoryEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActExecuteEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryReflectionEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskRunnerEvent
+    | TaskGetTrajectoryResponse.TrajectoryReasoningLogicEvent
+    | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent
+    | TaskGetTrajectoryResponse.TrajectoryStopEvent
+    | TaskGetTrajectoryResponse.TrajectoryTapActionEvent
+    | TaskGetTrajectoryResponse.TrajectorySwipeActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryDragActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryInputTextActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryKeyPressActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryStartAppEvent
+    | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent
+  >;
+}
+
+export namespace TaskGetTrajectoryResponse {
+  export interface TrajectoryCreatedEvent {
+    data: TrajectoryCreatedEvent.Data;
+
+    event?: 'CreatedEvent';
+  }
+
+  export namespace TrajectoryCreatedEvent {
+    export interface Data {
+      id: string;
+
+      token: string;
+
+      streamUrl: string;
+    }
+  }
+
+  export interface TrajectoryExceptionEvent {
+    data: TrajectoryExceptionEvent.Data;
+
+    event?: 'ExceptionEvent';
+  }
+
+  export namespace TrajectoryExceptionEvent {
+    export interface Data {
+      exception: string;
+    }
+  }
+
+  export interface TrajectoryCancelEvent {
+    data: TrajectoryCancelEvent.Data;
+
+    event?: 'CancelEvent';
+  }
+
+  export namespace TrajectoryCancelEvent {
+    export interface Data {
+      reason: string;
+    }
+  }
+
+  export interface TrajectoryScreenshotEvent {
+    data: TrajectoryScreenshotEvent.Data;
+
+    event?: 'ScreenshotEvent';
+  }
+
+  export namespace TrajectoryScreenshotEvent {
+    export interface Data {
+      index: number;
+
+      url: string;
+    }
+  }
+
+  export interface TrajectoryStartEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'StartEvent';
+  }
+
+  export interface TrajectoryPlanInputEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'PlanInputEvent';
+  }
+
+  export interface TrajectoryPlanThinkingEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'PlanThinkingEvent';
+  }
+
+  export interface TrajectoryPlanCreatedEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'PlanCreatedEvent';
+  }
+
+  export interface TrajectoryTaskInputEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'TaskInputEvent';
+  }
+
+  export interface TrajectoryTaskThinkingEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'TaskThinkingEvent';
+  }
+
+  export interface TrajectoryTaskExecutionEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'TaskExecutionEvent';
+  }
+
+  export interface TrajectoryTaskExecutionResultEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'TaskExecutionResultEvent';
+  }
+
+  export interface TrajectoryTaskEndEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'TaskEndEvent';
+  }
+
+  export interface TrajectoryEpisodicMemoryEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'EpisodicMemoryEvent';
+  }
+
+  export interface TrajectoryCodeActExecuteEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'CodeActExecuteEvent';
+  }
+
+  export interface TrajectoryCodeActResultEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'CodeActResultEvent';
+  }
+
+  export interface TrajectoryReflectionEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'ReflectionEvent';
+  }
+
+  export interface TrajectoryTaskRunnerEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'TaskRunnerEvent';
+  }
+
+  export interface TrajectoryReasoningLogicEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'ReasoningLogicEvent';
+  }
+
+  export interface TrajectoryFinalizeEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'FinalizeEvent';
+  }
+
+  export interface TrajectoryStopEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'StopEvent';
+  }
+
+  export interface TrajectoryTapActionEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'TapActionEvent';
+  }
+
+  export interface TrajectorySwipeActionEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'SwipeActionEvent';
+  }
+
+  export interface TrajectoryDragActionEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'DragActionEvent';
+  }
+
+  export interface TrajectoryInputTextActionEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'InputTextActionEvent';
+  }
+
+  export interface TrajectoryKeyPressActionEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'KeyPressActionEvent';
+  }
+
+  export interface TrajectoryStartAppEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'StartAppEvent';
+  }
+
+  export interface TrajectoryRecordUiStateEvent {
+    data: { [key: string]: unknown };
+
+    event?: 'RecordUIStateEvent';
+  }
+}
+
 export interface TaskRunResponse {
   /**
    * The ID of the task
@@ -254,8 +536,6 @@ export interface TaskStopResponse {
 }
 
 export interface TaskListParams {
-  groupBy?: 'workflowRunId' | null;
-
   orderBy?: 'id' | 'createdAt' | 'finishedAt' | 'status' | null;
 
   orderByDirection?: 'asc' | 'desc';
@@ -335,12 +615,12 @@ Tasks.Screenshots = Screenshots;
 export declare namespace Tasks {
   export {
     type LlmModel as LlmModel,
-    type Task as Task,
     type TaskCreate as TaskCreate,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,
     type TaskListResponse as TaskListResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,
+    type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
     type TaskRunResponse as TaskRunResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
