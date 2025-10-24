@@ -9,7 +9,6 @@ export {
 export {
   Tasks,
   type LlmModel,
-  type Task,
   type TaskCreate,
   type TaskStatus,
   type TaskRetrieveResponse,
