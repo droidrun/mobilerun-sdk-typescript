@@ -18,7 +18,6 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
   LlmModel,
-  Task,
   TaskCreate,
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
@@ -740,7 +739,6 @@ export declare namespace DroidrunCloud {
   export {
     Tasks as Tasks,
     type LlmModel as LlmModel,
-    type Task as Task,
     type TaskCreate as TaskCreate,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,
