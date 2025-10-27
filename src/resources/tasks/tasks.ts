@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as TasksAPI from './tasks';
 import * as ScreenshotsAPI from './screenshots';
 import { MediaResponse, ScreenshotListResponse, ScreenshotRetrieveParams, Screenshots } from './screenshots';
 import { APIPromise } from '../../core/api-promise';
@@ -99,6 +98,46 @@ export type LlmModel =
   | 'claude-3-7-sonnet-latest'
   | 'claude-sonnet-4-20250514';
 
+export interface Task {
+  deviceId: string;
+
+  task: string;
+
+  userId: string;
+
+  id?: string;
+
+  createdAt?: string;
+
+  finishedAt?: string | null;
+
+  llmModel?: LlmModel;
+
+  maxSteps?: number;
+
+  output?: string | null;
+
+  reasoning?: boolean;
+
+  reflection?: boolean;
+
+  status?: TaskStatus;
+
+  steps?: number | null;
+
+  succeeded?: boolean | null;
+
+  temperature?: number;
+
+  timeout?: number;
+
+  trajectory?: Array<{ [key: string]: unknown }>;
+
+  updatedAt?: string;
+
+  vision?: boolean;
+}
+
 export interface TaskCreate {
   task: string;
 
@@ -131,59 +170,14 @@ export interface TaskRetrieveResponse {
   /**
    * The task
    */
-  task: TaskRetrieveResponse.Task;
-}
-
-export namespace TaskRetrieveResponse {
-  /**
-   * The task
-   */
-  export interface Task {
-    deviceId: string;
-
-    task: string;
-
-    userId: string;
-
-    id?: string;
-
-    createdAt?: string;
-
-    finishedAt?: string | null;
-
-    llmModel?: TasksAPI.LlmModel;
-
-    maxSteps?: number;
-
-    output?: string | null;
-
-    reasoning?: boolean;
-
-    reflection?: boolean;
-
-    status?: TasksAPI.TaskStatus;
-
-    steps?: number | null;
-
-    succeeded?: boolean | null;
-
-    temperature?: number;
-
-    timeout?: number;
-
-    trajectory?: Array<{ [key: string]: unknown }>;
-
-    updatedAt?: string;
-
-    vision?: boolean;
-  }
+  task: Task;
 }
 
 export interface TaskListResponse {
   /**
    * The paginated items
    */
-  items: Array<TaskListResponse.Item>;
+  items: Array<Task>;
 
   /**
    * Pagination metadata
@@ -192,46 +186,6 @@ export interface TaskListResponse {
 }
 
 export namespace TaskListResponse {
-  export interface Item {
-    deviceId: string;
-
-    task: string;
-
-    userId: string;
-
-    id?: string;
-
-    createdAt?: string;
-
-    finishedAt?: string | null;
-
-    llmModel?: TasksAPI.LlmModel;
-
-    maxSteps?: number;
-
-    output?: string | null;
-
-    reasoning?: boolean;
-
-    reflection?: boolean;
-
-    status?: TasksAPI.TaskStatus;
-
-    steps?: number | null;
-
-    succeeded?: boolean | null;
-
-    temperature?: number;
-
-    timeout?: number;
-
-    trajectory?: Array<{ [key: string]: unknown }>;
-
-    updatedAt?: string;
-
-    vision?: boolean;
-  }
-
   /**
    * Pagination metadata
    */
@@ -615,6 +569,7 @@ Tasks.Screenshots = Screenshots;
 export declare namespace Tasks {
   export {
     type LlmModel as LlmModel,
+    type Task as Task,
     type TaskCreate as TaskCreate,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,

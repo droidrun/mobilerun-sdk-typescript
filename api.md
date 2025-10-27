@@ -3,6 +3,7 @@
 Types:
 
 - <code><a href="./src/resources/tasks/tasks.ts">LlmModel</a></code>
+- <code><a href="./src/resources/tasks/tasks.ts">Task</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskCreate</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskStatus</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskRetrieveResponse</a></code>
