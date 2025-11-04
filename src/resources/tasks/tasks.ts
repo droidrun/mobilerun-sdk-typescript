@@ -93,10 +93,10 @@ export type LlmModel =
   | 'gpt-4.1-mini'
   | 'gpt-o4-mini'
   | 'gpt-o3'
+  | 'gpt-5'
   | 'gemini-2.5-flash'
   | 'gemini-2.5-pro'
-  | 'claude-3-7-sonnet-latest'
-  | 'claude-sonnet-4-20250514';
+  | 'claude-sonnet-4-5';
 
 export interface Task {
   deviceId: string;
@@ -109,17 +109,23 @@ export interface Task {
 
   createdAt?: string;
 
+  credentials?: Array<Task.Credential>;
+
+  files?: Array<string>;
+
   finishedAt?: string | null;
+
+  libraryApps?: Array<string>;
 
   llmModel?: LlmModel;
 
   maxSteps?: number;
 
-  output?: string | null;
+  output?: { [key: string]: unknown } | null;
+
+  outputSchema?: { [key: string]: unknown } | null;
 
   reasoning?: boolean;
-
-  reflection?: boolean;
 
   status?: TaskStatus;
 
@@ -135,13 +141,23 @@ export interface Task {
 
   updatedAt?: string;
 
+  uploadedApps?: Array<string>;
+
   vision?: boolean;
+}
+
+export namespace Task {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
 }
 
 export interface TaskCreate {
   task: string;
 
-  credentials?: { [key: string]: { [key: string]: string } };
+  credentials?: Array<TaskCreate.Credential>;
 
   files?: Array<string>;
 
@@ -151,9 +167,9 @@ export interface TaskCreate {
 
   maxSteps?: number;
 
-  reasoning?: boolean;
+  outputSchema?: { [key: string]: unknown } | null;
 
-  reflection?: boolean;
+  reasoning?: boolean;
 
   temperature?: number;
 
@@ -162,6 +178,14 @@ export interface TaskCreate {
   uploadedApps?: Array<string>;
 
   vision?: boolean;
+}
+
+export namespace TaskCreate {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
 }
 
 export type TaskStatus = 'created' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
@@ -238,30 +262,47 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryExceptionEvent
     | TaskGetTrajectoryResponse.TrajectoryCancelEvent
     | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent
-    | TaskGetTrajectoryResponse.TrajectoryStartEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryPlanInputEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryPlanThinkingEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryPlanCreatedEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryTaskInputEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryTaskThinkingEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionResultEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryTaskEndEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryEpisodicMemoryEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryCodeActExecuteEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryCodeActResultEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryReflectionEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryTaskRunnerEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryReasoningLogicEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryFinalizeEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryStopEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryTapActionEventOutput
-    | TaskGetTrajectoryResponse.TrajectorySwipeActionEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryDragActionEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryInputTextActionEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryKeyPressActionEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryStartAppEventOutput
-    | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEventOutput
+    | TaskGetTrajectoryResponse.TrajectoryStartEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskRunnerEvent
+    | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent
+    | TaskGetTrajectoryResponse.TrajectoryStopEvent
+    | TaskGetTrajectoryResponse.TrajectoryResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerPlanEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterExecutorInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterExecutorResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryPlanCreatedEvent
+    | TaskGetTrajectoryResponse.TrajectoryPlanInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryPlanThinkingEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskThinkingEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskEndEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActExecuteEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryTapActionEvent
+    | TaskGetTrajectoryResponse.TrajectorySwipeActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryDragActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryInputTextActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryKeyPressActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryStartAppEvent
+    | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent
+    | TaskGetTrajectoryResponse.TrajectoryWaitEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerContextEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerResponseEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerPlanDetailsEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorContextEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterThinkingEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterExecutionEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterExecutionResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterEndEvent
   >;
 }
 
@@ -320,148 +361,250 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
-  export interface TrajectoryStartEventOutput {
+  export interface TrajectoryStartEvent {
     data: { [key: string]: unknown };
 
     event: 'StartEvent';
   }
 
-  export interface TrajectoryPlanInputEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'PlanInputEvent';
-  }
-
-  export interface TrajectoryPlanThinkingEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'PlanThinkingEvent';
-  }
-
-  export interface TrajectoryPlanCreatedEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'PlanCreatedEvent';
-  }
-
-  export interface TrajectoryTaskInputEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'TaskInputEvent';
-  }
-
-  export interface TrajectoryTaskThinkingEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'TaskThinkingEvent';
-  }
-
-  export interface TrajectoryTaskExecutionEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'TaskExecutionEvent';
-  }
-
-  export interface TrajectoryTaskExecutionResultEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'TaskExecutionResultEvent';
-  }
-
-  export interface TrajectoryTaskEndEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'TaskEndEvent';
-  }
-
-  export interface TrajectoryEpisodicMemoryEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'EpisodicMemoryEvent';
-  }
-
-  export interface TrajectoryCodeActExecuteEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'CodeActExecuteEvent';
-  }
-
-  export interface TrajectoryCodeActResultEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'CodeActResultEvent';
-  }
-
-  export interface TrajectoryReflectionEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'ReflectionEvent';
-  }
-
-  export interface TrajectoryTaskRunnerEventOutput {
+  export interface TrajectoryTaskRunnerEvent {
     data: { [key: string]: unknown };
 
     event: 'TaskRunnerEvent';
   }
 
-  export interface TrajectoryReasoningLogicEventOutput {
-    data: { [key: string]: unknown };
-
-    event: 'ReasoningLogicEvent';
-  }
-
-  export interface TrajectoryFinalizeEventOutput {
+  export interface TrajectoryFinalizeEvent {
     data: { [key: string]: unknown };
 
     event: 'FinalizeEvent';
   }
 
-  export interface TrajectoryStopEventOutput {
+  export interface TrajectoryStopEvent {
     data: { [key: string]: unknown };
 
     event: 'StopEvent';
   }
 
-  export interface TrajectoryTapActionEventOutput {
+  export interface TrajectoryResultEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ResultEvent';
+  }
+
+  export interface TrajectoryManagerInputEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ManagerInputEvent';
+  }
+
+  export interface TrajectoryManagerPlanEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ManagerPlanEvent';
+  }
+
+  export interface TrajectoryExecutorInputEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ExecutorInputEvent';
+  }
+
+  export interface TrajectoryExecutorResultEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ExecutorResultEvent';
+  }
+
+  export interface TrajectoryScripterExecutorInputEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ScripterExecutorInputEvent';
+  }
+
+  export interface TrajectoryScripterExecutorResultEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ScripterExecutorResultEvent';
+  }
+
+  export interface TrajectoryPlanCreatedEvent {
+    data: { [key: string]: unknown };
+
+    event: 'PlanCreatedEvent';
+  }
+
+  export interface TrajectoryPlanInputEvent {
+    data: { [key: string]: unknown };
+
+    event: 'PlanInputEvent';
+  }
+
+  export interface TrajectoryPlanThinkingEvent {
+    data: { [key: string]: unknown };
+
+    event: 'PlanThinkingEvent';
+  }
+
+  export interface TrajectoryTaskInputEvent {
+    data: { [key: string]: unknown };
+
+    event: 'TaskInputEvent';
+  }
+
+  export interface TrajectoryTaskThinkingEvent {
+    data: { [key: string]: unknown };
+
+    event: 'TaskThinkingEvent';
+  }
+
+  export interface TrajectoryTaskExecutionEvent {
+    data: { [key: string]: unknown };
+
+    event: 'TaskExecutionEvent';
+  }
+
+  export interface TrajectoryTaskExecutionResultEvent {
+    data: { [key: string]: unknown };
+
+    event: 'TaskExecutionResultEvent';
+  }
+
+  export interface TrajectoryTaskEndEvent {
+    data: { [key: string]: unknown };
+
+    event: 'TaskEndEvent';
+  }
+
+  export interface TrajectoryCodeActExecuteEvent {
+    data: { [key: string]: unknown };
+
+    event: 'CodeActExecuteEvent';
+  }
+
+  export interface TrajectoryCodeActResultEvent {
+    data: { [key: string]: unknown };
+
+    event: 'CodeActResultEvent';
+  }
+
+  export interface TrajectoryTapActionEvent {
     data: { [key: string]: unknown };
 
     event: 'TapActionEvent';
   }
 
-  export interface TrajectorySwipeActionEventOutput {
+  export interface TrajectorySwipeActionEvent {
     data: { [key: string]: unknown };
 
     event: 'SwipeActionEvent';
   }
 
-  export interface TrajectoryDragActionEventOutput {
+  export interface TrajectoryDragActionEvent {
     data: { [key: string]: unknown };
 
     event: 'DragActionEvent';
   }
 
-  export interface TrajectoryInputTextActionEventOutput {
+  export interface TrajectoryInputTextActionEvent {
     data: { [key: string]: unknown };
 
     event: 'InputTextActionEvent';
   }
 
-  export interface TrajectoryKeyPressActionEventOutput {
+  export interface TrajectoryKeyPressActionEvent {
     data: { [key: string]: unknown };
 
     event: 'KeyPressActionEvent';
   }
 
-  export interface TrajectoryStartAppEventOutput {
+  export interface TrajectoryStartAppEvent {
     data: { [key: string]: unknown };
 
     event: 'StartAppEvent';
   }
 
-  export interface TrajectoryRecordUiStateEventOutput {
+  export interface TrajectoryRecordUiStateEvent {
     data: { [key: string]: unknown };
 
     event: 'RecordUIStateEvent';
+  }
+
+  export interface TrajectoryWaitEvent {
+    data: { [key: string]: unknown };
+
+    event: 'WaitEvent';
+  }
+
+  export interface TrajectoryManagerContextEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ManagerContextEvent';
+  }
+
+  export interface TrajectoryManagerResponseEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ManagerResponseEvent';
+  }
+
+  export interface TrajectoryManagerPlanDetailsEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ManagerPlanDetailsEvent';
+  }
+
+  export interface TrajectoryExecutorContextEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ExecutorContextEvent';
+  }
+
+  export interface TrajectoryExecutorResponseEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ExecutorResponseEvent';
+  }
+
+  export interface TrajectoryExecutorActionEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ExecutorActionEvent';
+  }
+
+  export interface TrajectoryExecutorActionResultEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ExecutorActionResultEvent';
+  }
+
+  export interface TrajectoryScripterInputEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ScripterInputEvent';
+  }
+
+  export interface TrajectoryScripterThinkingEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ScripterThinkingEvent';
+  }
+
+  export interface TrajectoryScripterExecutionEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ScripterExecutionEvent';
+  }
+
+  export interface TrajectoryScripterExecutionResultEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ScripterExecutionResultEvent';
+  }
+
+  export interface TrajectoryScripterEndEvent {
+    data: { [key: string]: unknown };
+
+    event: 'ScripterEndEvent';
   }
 }
 
@@ -515,7 +658,7 @@ export interface TaskListParams {
 export interface TaskRunParams {
   task: string;
 
-  credentials?: { [key: string]: { [key: string]: string } };
+  credentials?: Array<TaskRunParams.Credential>;
 
   files?: Array<string>;
 
@@ -525,9 +668,9 @@ export interface TaskRunParams {
 
   maxSteps?: number;
 
-  reasoning?: boolean;
+  outputSchema?: { [key: string]: unknown } | null;
 
-  reflection?: boolean;
+  reasoning?: boolean;
 
   temperature?: number;
 
@@ -538,10 +681,18 @@ export interface TaskRunParams {
   vision?: boolean;
 }
 
+export namespace TaskRunParams {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
+}
+
 export interface TaskRunStreamedParams {
   task: string;
 
-  credentials?: { [key: string]: { [key: string]: string } };
+  credentials?: Array<TaskRunStreamedParams.Credential>;
 
   files?: Array<string>;
 
@@ -551,9 +702,9 @@ export interface TaskRunStreamedParams {
 
   maxSteps?: number;
 
-  reasoning?: boolean;
+  outputSchema?: { [key: string]: unknown } | null;
 
-  reflection?: boolean;
+  reasoning?: boolean;
 
   temperature?: number;
 
@@ -562,6 +713,14 @@ export interface TaskRunStreamedParams {
   uploadedApps?: Array<string>;
 
   vision?: boolean;
+}
+
+export namespace TaskRunStreamedParams {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
 }
 
 Tasks.Screenshots = Screenshots;

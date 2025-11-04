@@ -107,13 +107,13 @@ describe('resource tasks', () => {
   test.skip('run: required and optional params', async () => {
     const response = await client.tasks.run({
       task: 'x',
-      credentials: { foo: { foo: 'string' } },
+      credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
       files: ['string'],
       libraryApps: ['string'],
       llmModel: 'gpt-4o',
       maxSteps: 0,
+      outputSchema: { foo: 'bar' },
       reasoning: true,
-      reflection: true,
       temperature: 0,
       timeout: 0,
       uploadedApps: ['string'],
@@ -137,13 +137,13 @@ describe('resource tasks', () => {
   test.skip('runStreamed: required and optional params', async () => {
     const response = await client.tasks.runStreamed({
       task: 'x',
-      credentials: { foo: { foo: 'string' } },
+      credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
       files: ['string'],
       libraryApps: ['string'],
       llmModel: 'gpt-4o',
       maxSteps: 0,
+      outputSchema: { foo: 'bar' },
       reasoning: true,
-      reflection: true,
       temperature: 0,
       timeout: 0,
       uploadedApps: ['string'],
