@@ -2,15 +2,18 @@
 
 export {
   Screenshots,
-  type ScreenshotRetrieveResponse,
+  type MediaResponse,
   type ScreenshotListResponse,
   type ScreenshotRetrieveParams,
 } from './screenshots';
 export {
   Tasks,
+  type LlmModel,
+  type Task,
+  type TaskCreate,
+  type TaskStatus,
   type TaskRetrieveResponse,
   type TaskListResponse,
-  type TaskGetGifResponse,
   type TaskGetStatusResponse,
   type TaskGetTrajectoryResponse,
   type TaskRunResponse,
