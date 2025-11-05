@@ -37,7 +37,7 @@ describe('resource tasks', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.tasks.list(
-        { orderBy: 'id', orderByDirection: 'asc', page: 1, pageSize: 1, query: 'query', status: 'created' },
+        { orderBy: 'id', orderByDirection: 'asc', page: 1, pageSize: 1, query: 'query', status: {} },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(DroidrunCloud.NotFoundError);
@@ -93,7 +93,7 @@ describe('resource tasks', () => {
 
   // Prism tests are disabled
   test.skip('run: only required params', async () => {
-    const responsePromise = client.tasks.run({ task: 'x' });
+    const responsePromise = client.tasks.run({ body: {} });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -105,25 +105,12 @@ describe('resource tasks', () => {
 
   // Prism tests are disabled
   test.skip('run: required and optional params', async () => {
-    const response = await client.tasks.run({
-      task: 'x',
-      credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
-      files: ['string'],
-      libraryApps: ['string'],
-      llmModel: 'gpt-4o',
-      maxSteps: 0,
-      outputSchema: { foo: 'bar' },
-      reasoning: true,
-      temperature: 0,
-      timeout: 0,
-      uploadedApps: ['string'],
-      vision: true,
-    });
+    const response = await client.tasks.run({ body: {} });
   });
 
   // Prism tests are disabled
   test.skip('runStreamed: only required params', async () => {
-    const responsePromise = client.tasks.runStreamed({ task: 'x' });
+    const responsePromise = client.tasks.runStreamed({ body: {} });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -135,20 +122,7 @@ describe('resource tasks', () => {
 
   // Prism tests are disabled
   test.skip('runStreamed: required and optional params', async () => {
-    const response = await client.tasks.runStreamed({
-      task: 'x',
-      credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
-      files: ['string'],
-      libraryApps: ['string'],
-      llmModel: 'gpt-4o',
-      maxSteps: 0,
-      outputSchema: { foo: 'bar' },
-      reasoning: true,
-      temperature: 0,
-      timeout: 0,
-      uploadedApps: ['string'],
-      vision: true,
-    });
+    const response = await client.tasks.runStreamed({ body: {} });
   });
 
   // Prism tests are disabled

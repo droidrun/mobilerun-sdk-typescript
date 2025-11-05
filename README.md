@@ -25,13 +25,9 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import DroidrunCloud from 'droidrun-cloud';
 
-const client = new DroidrunCloud({
-  apiKey: process.env['DROIDRUN_CLOUD_API_KEY'], // This is the default and can be omitted
-});
+const client = new DroidrunCloud();
 
-const response = await client.tasks.run({ task: 'x' });
-
-console.log(response.id);
+const response = await client.tasks.run({ body: {} });
 ```
 
 ### Request & Response types
@@ -42,12 +38,10 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import DroidrunCloud from 'droidrun-cloud';
 
-const client = new DroidrunCloud({
-  apiKey: process.env['DROIDRUN_CLOUD_API_KEY'], // This is the default and can be omitted
-});
+const client = new DroidrunCloud();
 
-const params: DroidrunCloud.TaskRunParams = { task: 'x' };
-const response: DroidrunCloud.TaskRunResponse = await client.tasks.run(params);
+const params: DroidrunCloud.TaskRunParams = { body: {} };
+const response: unknown = await client.tasks.run(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -60,7 +54,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.tasks.run({ task: 'x' }).catch(async (err) => {
+const response = await client.tasks.run({ body: {} }).catch(async (err) => {
   if (err instanceof DroidrunCloud.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -96,11 +90,12 @@ You can use the `maxRetries` option to configure or disable this:
 ```js
 // Configure the default for all requests:
 const client = new DroidrunCloud({
+  apiKey: 'My API Key',
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.tasks.run({ task: 'x' }, {
+await client.tasks.run({ body: {} }, {
   maxRetries: 5,
 });
 ```
@@ -113,11 +108,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 ```ts
 // Configure the default for all requests:
 const client = new DroidrunCloud({
+  apiKey: 'My API Key',
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await client.tasks.run({ task: 'x' }, {
+await client.tasks.run({ body: {} }, {
   timeout: 5 * 1000,
 });
 ```
@@ -140,13 +136,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new DroidrunCloud();
 
-const response = await client.tasks.run({ task: 'x' }).asResponse();
+const response = await client.tasks.run({ body: {} }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.tasks.run({ task: 'x' }).withResponse();
+const { data: response, response: raw } = await client.tasks.run({ body: {} }).withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.id);
+console.log(response);
 ```
 
 ### Logging
