@@ -11,14 +11,15 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
-import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
-  TaskGetGifResponse,
+  LlmModel,
+  Task,
+  TaskCreate,
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
   TaskListParams,
@@ -27,6 +28,7 @@ import {
   TaskRunParams,
   TaskRunResponse,
   TaskRunStreamedParams,
+  TaskStatus,
   TaskStopResponse,
   Tasks,
 } from './resources/tasks/tasks';
@@ -219,8 +221,24 @@ export class DroidrunCloud {
     return;
   }
 
+  /**
+   * Basic re-implementation of `qs.stringify` for primitive types.
+   */
   protected stringifyQuery(query: Record<string, unknown>): string {
-    return qs.stringify(query, { arrayFormat: 'comma' });
+    return Object.entries(query)
+      .filter(([_, value]) => typeof value !== 'undefined')
+      .map(([key, value]) => {
+        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        }
+        if (value === null) {
+          return `${encodeURIComponent(key)}=`;
+        }
+        throw new Errors.DroidrunCloudError(
+          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
+        );
+      })
+      .join('&');
   }
 
   private getUserAgent(): string {
@@ -716,9 +734,12 @@ export declare namespace DroidrunCloud {
 
   export {
     Tasks as Tasks,
+    type LlmModel as LlmModel,
+    type Task as Task,
+    type TaskCreate as TaskCreate,
+    type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,
     type TaskListResponse as TaskListResponse,
-    type TaskGetGifResponse as TaskGetGifResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,
     type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
     type TaskRunResponse as TaskRunResponse,
