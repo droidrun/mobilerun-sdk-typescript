@@ -4,6 +4,7 @@ import DroidrunCloud from 'droidrun-cloud';
 
 const client = new DroidrunCloud({
   apiKey: 'My API Key',
+  bearer: 'My Bearer',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
