@@ -50,11 +50,6 @@ export interface ClientOptions {
   apiKey?: string | undefined;
 
   /**
-   * Defaults to process.env['DROIDRUN_CLOUD_BEARER_TOKEN'].
-   */
-  bearer?: string | undefined;
-
-  /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
    * Defaults to process.env['DROIDRUN_CLOUD_BASE_URL'].
@@ -128,7 +123,6 @@ export interface ClientOptions {
  */
 export class DroidrunCloud {
   apiKey: string;
-  bearer: string;
 
   baseURL: string;
   maxRetries: number;
@@ -146,7 +140,6 @@ export class DroidrunCloud {
    * API Client for interfacing with the Droidrun Cloud API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['DROIDRUN_CLOUD_API_KEY'] ?? undefined]
-   * @param {string | undefined} [opts.bearer=process.env['DROIDRUN_CLOUD_BEARER_TOKEN'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['DROIDRUN_CLOUD_BASE_URL'] ?? https://api.droidrun.ai/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -158,7 +151,6 @@ export class DroidrunCloud {
   constructor({
     baseURL = readEnv('DROIDRUN_CLOUD_BASE_URL'),
     apiKey = readEnv('DROIDRUN_CLOUD_API_KEY'),
-    bearer = readEnv('DROIDRUN_CLOUD_BEARER_TOKEN'),
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
@@ -166,15 +158,9 @@ export class DroidrunCloud {
         "The DROIDRUN_CLOUD_API_KEY environment variable is missing or empty; either provide it, or instantiate the DroidrunCloud client with an apiKey option, like new DroidrunCloud({ apiKey: 'My API Key' }).",
       );
     }
-    if (bearer === undefined) {
-      throw new Errors.DroidrunCloudError(
-        "The DROIDRUN_CLOUD_BEARER_TOKEN environment variable is missing or empty; either provide it, or instantiate the DroidrunCloud client with an bearer option, like new DroidrunCloud({ bearer: 'My Bearer' }).",
-      );
-    }
 
     const options: ClientOptions = {
       apiKey,
-      bearer,
       ...opts,
       baseURL: baseURL || `https://api.droidrun.ai/v1`,
     };
@@ -197,7 +183,6 @@ export class DroidrunCloud {
     this._options = options;
 
     this.apiKey = apiKey;
-    this.bearer = bearer;
   }
 
   /**
@@ -214,7 +199,6 @@ export class DroidrunCloud {
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
       apiKey: this.apiKey,
-      bearer: this.bearer,
       ...options,
     });
     return client;

@@ -24,7 +24,6 @@ describe('instantiate client', () => {
       baseURL: 'http://localhost:5000/',
       defaultHeaders: { 'X-My-Default-Header': '2' },
       apiKey: 'My API Key',
-      bearer: 'My Bearer',
     });
 
     test('they are used in the request', async () => {
@@ -88,19 +87,14 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new DroidrunCloud({
-        logger: logger,
-        logLevel: 'debug',
-        apiKey: 'My API Key',
-        bearer: 'My Bearer',
-      });
+      const client = new DroidrunCloud({ logger: logger, logLevel: 'debug', apiKey: 'My API Key' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).toHaveBeenCalled();
     });
 
     test('default logLevel is warn', async () => {
-      const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+      const client = new DroidrunCloud({ apiKey: 'My API Key' });
       expect(client.logLevel).toBe('warn');
     });
 
@@ -113,12 +107,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new DroidrunCloud({
-        logger: logger,
-        logLevel: 'info',
-        apiKey: 'My API Key',
-        bearer: 'My Bearer',
-      });
+      const client = new DroidrunCloud({ logger: logger, logLevel: 'info', apiKey: 'My API Key' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).not.toHaveBeenCalled();
@@ -134,7 +123,7 @@ describe('instantiate client', () => {
       };
 
       process.env['DROIDRUN_CLOUD_LOG'] = 'debug';
-      const client = new DroidrunCloud({ logger: logger, apiKey: 'My API Key', bearer: 'My Bearer' });
+      const client = new DroidrunCloud({ logger: logger, apiKey: 'My API Key' });
       expect(client.logLevel).toBe('debug');
 
       await forceAPIResponseForClient(client);
@@ -151,7 +140,7 @@ describe('instantiate client', () => {
       };
 
       process.env['DROIDRUN_CLOUD_LOG'] = 'not a log level';
-      const client = new DroidrunCloud({ logger: logger, apiKey: 'My API Key', bearer: 'My Bearer' });
+      const client = new DroidrunCloud({ logger: logger, apiKey: 'My API Key' });
       expect(client.logLevel).toBe('warn');
       expect(warnMock).toHaveBeenCalledWith(
         'process.env[\'DROIDRUN_CLOUD_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
@@ -168,12 +157,7 @@ describe('instantiate client', () => {
       };
 
       process.env['DROIDRUN_CLOUD_LOG'] = 'debug';
-      const client = new DroidrunCloud({
-        logger: logger,
-        logLevel: 'off',
-        apiKey: 'My API Key',
-        bearer: 'My Bearer',
-      });
+      const client = new DroidrunCloud({ logger: logger, logLevel: 'off', apiKey: 'My API Key' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).not.toHaveBeenCalled();
@@ -189,12 +173,7 @@ describe('instantiate client', () => {
       };
 
       process.env['DROIDRUN_CLOUD_LOG'] = 'not a log level';
-      const client = new DroidrunCloud({
-        logger: logger,
-        logLevel: 'debug',
-        apiKey: 'My API Key',
-        bearer: 'My Bearer',
-      });
+      const client = new DroidrunCloud({ logger: logger, logLevel: 'debug', apiKey: 'My API Key' });
       expect(client.logLevel).toBe('debug');
       expect(warnMock).not.toHaveBeenCalled();
     });
@@ -206,7 +185,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo' },
         apiKey: 'My API Key',
-        bearer: 'My Bearer',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo');
     });
@@ -216,7 +194,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo', hello: 'world' },
         apiKey: 'My API Key',
-        bearer: 'My Bearer',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo&hello=world');
     });
@@ -226,7 +203,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         defaultQuery: { hello: 'world' },
         apiKey: 'My API Key',
-        bearer: 'My Bearer',
       });
       expect(client.buildURL('/foo', { hello: undefined })).toEqual('http://localhost:5000/foo');
     });
@@ -236,7 +212,6 @@ describe('instantiate client', () => {
     const client = new DroidrunCloud({
       baseURL: 'http://localhost:5000/',
       apiKey: 'My API Key',
-      bearer: 'My Bearer',
       fetch: (url) => {
         return Promise.resolve(
           new Response(JSON.stringify({ url, custom: true }), {
@@ -255,7 +230,6 @@ describe('instantiate client', () => {
     const client = new DroidrunCloud({
       baseURL: 'http://localhost:5000/',
       apiKey: 'My API Key',
-      bearer: 'My Bearer',
       fetch: defaultFetch,
     });
   });
@@ -264,7 +238,6 @@ describe('instantiate client', () => {
     const client = new DroidrunCloud({
       baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
       apiKey: 'My API Key',
-      bearer: 'My Bearer',
       fetch: (...args) => {
         return new Promise((resolve, reject) =>
           setTimeout(
@@ -297,7 +270,6 @@ describe('instantiate client', () => {
     const client = new DroidrunCloud({
       baseURL: 'http://localhost:5000/',
       apiKey: 'My API Key',
-      bearer: 'My Bearer',
       fetch: testFetch,
     });
 
@@ -310,7 +282,6 @@ describe('instantiate client', () => {
       const client = new DroidrunCloud({
         baseURL: 'http://localhost:5000/custom/path/',
         apiKey: 'My API Key',
-        bearer: 'My Bearer',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
     });
@@ -319,7 +290,6 @@ describe('instantiate client', () => {
       const client = new DroidrunCloud({
         baseURL: 'http://localhost:5000/custom/path',
         apiKey: 'My API Key',
-        bearer: 'My Bearer',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
     });
@@ -329,45 +299,37 @@ describe('instantiate client', () => {
     });
 
     test('explicit option', () => {
-      const client = new DroidrunCloud({
-        baseURL: 'https://example.com',
-        apiKey: 'My API Key',
-        bearer: 'My Bearer',
-      });
+      const client = new DroidrunCloud({ baseURL: 'https://example.com', apiKey: 'My API Key' });
       expect(client.baseURL).toEqual('https://example.com');
     });
 
     test('env variable', () => {
       process.env['DROIDRUN_CLOUD_BASE_URL'] = 'https://example.com/from_env';
-      const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+      const client = new DroidrunCloud({ apiKey: 'My API Key' });
       expect(client.baseURL).toEqual('https://example.com/from_env');
     });
 
     test('empty env variable', () => {
       process.env['DROIDRUN_CLOUD_BASE_URL'] = ''; // empty
-      const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+      const client = new DroidrunCloud({ apiKey: 'My API Key' });
       expect(client.baseURL).toEqual('https://api.droidrun.ai/v1');
     });
 
     test('blank env variable', () => {
       process.env['DROIDRUN_CLOUD_BASE_URL'] = '  '; // blank
-      const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+      const client = new DroidrunCloud({ apiKey: 'My API Key' });
       expect(client.baseURL).toEqual('https://api.droidrun.ai/v1');
     });
 
     test('in request options', () => {
-      const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+      const client = new DroidrunCloud({ apiKey: 'My API Key' });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/option/foo',
       );
     });
 
     test('in request options overridden by client options', () => {
-      const client = new DroidrunCloud({
-        apiKey: 'My API Key',
-        bearer: 'My Bearer',
-        baseURL: 'http://localhost:5000/client',
-      });
+      const client = new DroidrunCloud({ apiKey: 'My API Key', baseURL: 'http://localhost:5000/client' });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/client/foo',
       );
@@ -375,7 +337,7 @@ describe('instantiate client', () => {
 
     test('in request options overridden by env variable', () => {
       process.env['DROIDRUN_CLOUD_BASE_URL'] = 'http://localhost:5000/env';
-      const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+      const client = new DroidrunCloud({ apiKey: 'My API Key' });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/env/foo',
       );
@@ -383,11 +345,11 @@ describe('instantiate client', () => {
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new DroidrunCloud({ maxRetries: 4, apiKey: 'My API Key', bearer: 'My Bearer' });
+    const client = new DroidrunCloud({ maxRetries: 4, apiKey: 'My API Key' });
     expect(client.maxRetries).toEqual(4);
 
     // default
-    const client2 = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+    const client2 = new DroidrunCloud({ apiKey: 'My API Key' });
     expect(client2.maxRetries).toEqual(2);
   });
 
@@ -397,7 +359,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         maxRetries: 3,
         apiKey: 'My API Key',
-        bearer: 'My Bearer',
       });
 
       const newClient = client.withOptions({
@@ -424,7 +385,6 @@ describe('instantiate client', () => {
         defaultHeaders: { 'X-Test-Header': 'test-value' },
         defaultQuery: { 'test-param': 'test-value' },
         apiKey: 'My API Key',
-        bearer: 'My Bearer',
       });
 
       const newClient = client.withOptions({
@@ -443,7 +403,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         timeout: 1000,
         apiKey: 'My API Key',
-        bearer: 'My Bearer',
       });
 
       // Modify the client properties directly after creation
@@ -473,24 +432,20 @@ describe('instantiate client', () => {
   test('with environment variable arguments', () => {
     // set options via env var
     process.env['DROIDRUN_CLOUD_API_KEY'] = 'My API Key';
-    process.env['DROIDRUN_CLOUD_BEARER_TOKEN'] = 'My Bearer';
     const client = new DroidrunCloud();
     expect(client.apiKey).toBe('My API Key');
-    expect(client.bearer).toBe('My Bearer');
   });
 
   test('with overridden environment variable arguments', () => {
     // set options via env var
     process.env['DROIDRUN_CLOUD_API_KEY'] = 'another My API Key';
-    process.env['DROIDRUN_CLOUD_BEARER_TOKEN'] = 'another My Bearer';
-    const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+    const client = new DroidrunCloud({ apiKey: 'My API Key' });
     expect(client.apiKey).toBe('My API Key');
-    expect(client.bearer).toBe('My Bearer');
   });
 });
 
 describe('request building', () => {
-  const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+  const client = new DroidrunCloud({ apiKey: 'My API Key' });
 
   describe('custom headers', () => {
     test('handles undefined', async () => {
@@ -509,7 +464,7 @@ describe('request building', () => {
 });
 
 describe('default encoder', () => {
-  const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer' });
+  const client = new DroidrunCloud({ apiKey: 'My API Key' });
 
   class Serializable {
     toJSON() {
@@ -594,12 +549,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new DroidrunCloud({
-      apiKey: 'My API Key',
-      bearer: 'My Bearer',
-      timeout: 10,
-      fetch: testFetch,
-    });
+    const client = new DroidrunCloud({ apiKey: 'My API Key', timeout: 10, fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -629,12 +579,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new DroidrunCloud({
-      apiKey: 'My API Key',
-      bearer: 'My Bearer',
-      fetch: testFetch,
-      maxRetries: 4,
-    });
+    const client = new DroidrunCloud({ apiKey: 'My API Key', fetch: testFetch, maxRetries: 4 });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
 
@@ -658,12 +603,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new DroidrunCloud({
-      apiKey: 'My API Key',
-      bearer: 'My Bearer',
-      fetch: testFetch,
-      maxRetries: 4,
-    });
+    const client = new DroidrunCloud({ apiKey: 'My API Key', fetch: testFetch, maxRetries: 4 });
 
     expect(
       await client.request({
@@ -694,7 +634,6 @@ describe('retries', () => {
     };
     const client = new DroidrunCloud({
       apiKey: 'My API Key',
-      bearer: 'My Bearer',
       fetch: testFetch,
       maxRetries: 4,
       defaultHeaders: { 'X-Stainless-Retry-Count': null },
@@ -726,12 +665,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new DroidrunCloud({
-      apiKey: 'My API Key',
-      bearer: 'My Bearer',
-      fetch: testFetch,
-      maxRetries: 4,
-    });
+    const client = new DroidrunCloud({ apiKey: 'My API Key', fetch: testFetch, maxRetries: 4 });
 
     expect(
       await client.request({
@@ -761,7 +695,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer', fetch: testFetch });
+    const client = new DroidrunCloud({ apiKey: 'My API Key', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -791,7 +725,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new DroidrunCloud({ apiKey: 'My API Key', bearer: 'My Bearer', fetch: testFetch });
+    const client = new DroidrunCloud({ apiKey: 'My API Key', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
