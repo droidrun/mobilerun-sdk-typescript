@@ -107,6 +107,8 @@ export interface Task {
 
   id?: string;
 
+  apps?: Array<string>;
+
   createdAt?: string;
 
   credentials?: Array<Task.Credential>;
@@ -114,8 +116,6 @@ export interface Task {
   files?: Array<string>;
 
   finishedAt?: string | null;
-
-  libraryApps?: Array<string>;
 
   llmModel?: LlmModel;
 
@@ -141,8 +141,6 @@ export interface Task {
 
   updatedAt?: string;
 
-  uploadedApps?: Array<string>;
-
   vision?: boolean;
 }
 
@@ -157,11 +155,11 @@ export namespace Task {
 export interface TaskCreate {
   task: string;
 
+  apps?: Array<string>;
+
   credentials?: Array<TaskCreate.Credential>;
 
   files?: Array<string>;
-
-  libraryApps?: Array<string>;
 
   llmModel?: LlmModel;
 
@@ -174,8 +172,6 @@ export interface TaskCreate {
   temperature?: number;
 
   timeout?: number;
-
-  uploadedApps?: Array<string>;
 
   vision?: boolean;
 }
@@ -658,11 +654,11 @@ export interface TaskListParams {
 export interface TaskRunParams {
   task: string;
 
+  apps?: Array<string>;
+
   credentials?: Array<TaskRunParams.Credential>;
 
   files?: Array<string>;
-
-  libraryApps?: Array<string>;
 
   llmModel?: LlmModel;
 
@@ -675,8 +671,6 @@ export interface TaskRunParams {
   temperature?: number;
 
   timeout?: number;
-
-  uploadedApps?: Array<string>;
 
   vision?: boolean;
 }
@@ -692,11 +686,11 @@ export namespace TaskRunParams {
 export interface TaskRunStreamedParams {
   task: string;
 
+  apps?: Array<string>;
+
   credentials?: Array<TaskRunStreamedParams.Credential>;
 
   files?: Array<string>;
-
-  libraryApps?: Array<string>;
 
   llmModel?: LlmModel;
 
@@ -709,8 +703,6 @@ export interface TaskRunStreamedParams {
   temperature?: number;
 
   timeout?: number;
-
-  uploadedApps?: Array<string>;
 
   vision?: boolean;
 }
