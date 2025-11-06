@@ -16,31 +16,9 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import {
-  AppCreateSignedUploadURLParams,
-  AppCreateSignedUploadURLResponse,
-  AppListParams,
-  AppListResponse,
-  AppMarkUploadFailedParams,
-  AppMarkUploadFailedResponse,
-  AppRetrieveByPackageNameResponse,
-  AppRetrieveResponse,
-  AppUpdateAppParams,
-  AppUpdateAppResponse,
-  Apps,
-} from './resources/apps';
-import {
-  Playstore,
-  PlaystoreCreateAppParams,
-  PlaystoreCreateAppResponse,
-  PlaystoreSearchAppParams,
-  PlaystoreSearchAppResponse,
-} from './resources/playstore';
-import {
-  CredentialListParams,
-  CredentialListResponse,
-  Credentials,
-} from './resources/credentials/credentials';
+import { Apps } from './resources/apps';
+import { Playstore } from './resources/playstore';
+import { Credentials } from './resources/credentials/credentials';
 import {
   LlmModel,
   Task,
@@ -785,31 +763,9 @@ export declare namespace DroidrunCloud {
     type TaskRunStreamedParams as TaskRunStreamedParams,
   };
 
-  export {
-    Apps as Apps,
-    type AppRetrieveResponse as AppRetrieveResponse,
-    type AppListResponse as AppListResponse,
-    type AppCreateSignedUploadURLResponse as AppCreateSignedUploadURLResponse,
-    type AppMarkUploadFailedResponse as AppMarkUploadFailedResponse,
-    type AppRetrieveByPackageNameResponse as AppRetrieveByPackageNameResponse,
-    type AppUpdateAppResponse as AppUpdateAppResponse,
-    type AppListParams as AppListParams,
-    type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
-    type AppMarkUploadFailedParams as AppMarkUploadFailedParams,
-    type AppUpdateAppParams as AppUpdateAppParams,
-  };
+  export { Apps as Apps };
 
-  export {
-    Playstore as Playstore,
-    type PlaystoreCreateAppResponse as PlaystoreCreateAppResponse,
-    type PlaystoreSearchAppResponse as PlaystoreSearchAppResponse,
-    type PlaystoreCreateAppParams as PlaystoreCreateAppParams,
-    type PlaystoreSearchAppParams as PlaystoreSearchAppParams,
-  };
+  export { Playstore as Playstore };
 
-  export {
-    Credentials as Credentials,
-    type CredentialListResponse as CredentialListResponse,
-    type CredentialListParams as CredentialListParams,
-  };
+  export { Credentials as Credentials };
 }
