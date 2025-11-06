@@ -2,14 +2,70 @@
 
 import { APIResource } from '../../core/resource';
 import * as PackagesAPI from './packages/packages';
-import { Packages } from './packages/packages';
+import {
+  PackageCreateParams,
+  PackageCreateResponse,
+  PackageListResponse,
+  Packages,
+} from './packages/packages';
+import * as CredentialsCredentialsAPI from './packages/credentials/credentials';
+import { APIPromise } from '../../core/api-promise';
+import { RequestOptions } from '../../internal/request-options';
 
 export class Credentials extends APIResource {
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
+
+  /**
+   * List all credentials for the authenticated user
+   */
+  list(
+    query: CredentialListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CredentialListResponse> {
+    return this._client.get('/credentials', { query, ...options });
+  }
+}
+
+export interface CredentialListResponse {
+  data: CredentialListResponse.Data;
+}
+
+export namespace CredentialListResponse {
+  export interface Data {
+    items: Array<CredentialsCredentialsAPI.Credential>;
+
+    page: number;
+
+    pageSize: number;
+
+    total: number;
+  }
+}
+
+export interface CredentialListParams {
+  /**
+   * Page number (starting at 1)
+   */
+  page?: string;
+
+  /**
+   * Items per page
+   */
+  pageSize?: string;
 }
 
 Credentials.Packages = Packages;
 
 export declare namespace Credentials {
-  export { Packages as Packages };
+  export {
+    type CredentialListResponse as CredentialListResponse,
+    type CredentialListParams as CredentialListParams,
+  };
+
+  export {
+    Packages as Packages,
+    type PackageCreateResponse as PackageCreateResponse,
+    type PackageListResponse as PackageListResponse,
+    type PackageCreateParams as PackageCreateParams,
+  };
 }

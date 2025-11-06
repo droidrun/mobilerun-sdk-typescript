@@ -36,7 +36,11 @@ import {
   PlaystoreSearchAppParams,
   PlaystoreSearchAppResponse,
 } from './resources/playstore';
-import { Credentials } from './resources/credentials/credentials';
+import {
+  CredentialListParams,
+  CredentialListResponse,
+  Credentials,
+} from './resources/credentials/credentials';
 import {
   LlmModel,
   Task,
@@ -803,5 +807,9 @@ export declare namespace DroidrunCloud {
     type PlaystoreSearchAppParams as PlaystoreSearchAppParams,
   };
 
-  export { Credentials as Credentials };
+  export {
+    Credentials as Credentials,
+    type CredentialListResponse as CredentialListResponse,
+    type CredentialListParams as CredentialListParams,
+  };
 }
