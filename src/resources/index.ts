@@ -13,7 +13,11 @@ export {
   type AppMarkUploadFailedParams,
   type AppUpdateAppParams,
 } from './apps';
-export { Credentials } from './credentials/credentials';
+export {
+  Credentials,
+  type CredentialListResponse,
+  type CredentialListParams,
+} from './credentials/credentials';
 export {
   Playstore,
   type PlaystoreCreateAppResponse,
