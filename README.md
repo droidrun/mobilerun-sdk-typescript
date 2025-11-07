@@ -4,7 +4,7 @@
 
 This library provides convenient access to the Droidrun Cloud REST API from server-side TypeScript or JavaScript.
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.droidrun.ai](https://docs.droidrun.ai/api-reference). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -27,12 +27,12 @@ import DroidrunCloud from 'droidrun-cloud';
 
 const client = new DroidrunCloud({
   apiKey: process.env['DROIDRUN_CLOUD_API_KEY'], // This is the default and can be omitted
-  environment: 'sandbox', // defaults to 'production'
+  environment: 'staging', // or 'production' | 'dev'; defaults to 'production'
 });
 
-const response = await client.tasks.run({ task: 'x' });
+const tasks = await client.tasks.list();
 
-console.log(response.id);
+console.log(tasks.items);
 ```
 
 ### Request & Response types
@@ -45,11 +45,10 @@ import DroidrunCloud from 'droidrun-cloud';
 
 const client = new DroidrunCloud({
   apiKey: process.env['DROIDRUN_CLOUD_API_KEY'], // This is the default and can be omitted
-  environment: 'sandbox', // defaults to 'production'
+  environment: 'staging', // or 'production' | 'dev'; defaults to 'production'
 });
 
-const params: DroidrunCloud.TaskRunParams = { task: 'x' };
-const response: DroidrunCloud.TaskRunResponse = await client.tasks.run(params);
+const tasks: DroidrunCloud.TaskListResponse = await client.tasks.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -62,7 +61,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.tasks.run({ task: 'x' }).catch(async (err) => {
+const tasks = await client.tasks.list().catch(async (err) => {
   if (err instanceof DroidrunCloud.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -102,7 +101,7 @@ const client = new DroidrunCloud({
 });
 
 // Or, configure per-request:
-await client.tasks.run({ task: 'x' }, {
+await client.tasks.list({
   maxRetries: 5,
 });
 ```
@@ -119,7 +118,7 @@ const client = new DroidrunCloud({
 });
 
 // Override per-request:
-await client.tasks.run({ task: 'x' }, {
+await client.tasks.list({
   timeout: 5 * 1000,
 });
 ```
@@ -142,13 +141,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new DroidrunCloud();
 
-const response = await client.tasks.run({ task: 'x' }).asResponse();
+const response = await client.tasks.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.tasks.run({ task: 'x' }).withResponse();
+const { data: tasks, response: raw } = await client.tasks.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.id);
+console.log(tasks.items);
 ```
 
 ### Logging
@@ -228,7 +227,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.tasks.run({
+client.tasks.list({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

@@ -49,7 +49,8 @@ import { isEmptyObj } from './internal/utils/values';
 
 const environments = {
   production: 'https://api.droidrun.ai/v1',
-  sandbox: 'https://dev-api.droidrun.ai/v1',
+  staging: 'https://staging-api.droidrun.ai/v1',
+  dev: 'https://dev-api.droidrun.ai/v1',
 };
 type Environment = keyof typeof environments;
 
@@ -64,7 +65,8 @@ export interface ClientOptions {
    *
    * Each environment maps to a different base URL:
    * - `production` corresponds to `https://api.droidrun.ai/v1`
-   * - `sandbox` corresponds to `https://dev-api.droidrun.ai/v1`
+   * - `staging` corresponds to `https://staging-api.droidrun.ai/v1`
+   * - `dev` corresponds to `https://dev-api.droidrun.ai/v1`
    */
   environment?: Environment | undefined;
 
