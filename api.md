@@ -47,8 +47,6 @@ Methods:
 
 - <code title="get /apps">client.apps.<a href="./src/resources/apps.ts">list</a>({ ...params }) -> AppListResponse</code>
 
-# Playstore
-
 # Credentials
 
 Types:

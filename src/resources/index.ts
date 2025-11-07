@@ -2,7 +2,6 @@
 
 export { Apps, type AppListResponse, type AppListParams } from './apps';
 export { Credentials, type CredentialListResponse } from './credentials/credentials';
-export { Playstore } from './playstore';
 export {
   Tasks,
   type LlmModel,
