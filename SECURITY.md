@@ -20,7 +20,7 @@ or products provided by Droidrun Cloud, please follow the respective company's s
 
 ### Droidrun Cloud Terms and Policies
 
-Please contact timo@droidrun.ai for any questions or concerns regarding the security of our services.
+Please contact support@droidrun.ai for any questions or concerns regarding the security of our services.
 
 ---
 
