@@ -27,6 +27,7 @@ import DroidrunCloud from 'droidrun-cloud';
 
 const client = new DroidrunCloud({
   apiKey: process.env['DROIDRUN_CLOUD_API_KEY'], // This is the default and can be omitted
+  environment: 'sandbox', // defaults to 'production'
 });
 
 const response = await client.tasks.run({ task: 'x' });
@@ -44,6 +45,7 @@ import DroidrunCloud from 'droidrun-cloud';
 
 const client = new DroidrunCloud({
   apiKey: process.env['DROIDRUN_CLOUD_API_KEY'], // This is the default and can be omitted
+  environment: 'sandbox', // defaults to 'production'
 });
 
 const params: DroidrunCloud.TaskRunParams = { task: 'x' };
