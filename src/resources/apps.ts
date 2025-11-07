@@ -55,7 +55,7 @@ export namespace AppListResponse {
 
     sizeBytes: number | null;
 
-    source: string;
+    source: 'uploaded' | 'store';
 
     targetSdk: number | null;
 
