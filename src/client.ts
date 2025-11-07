@@ -17,7 +17,6 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { AppListParams, AppListResponse, Apps } from './resources/apps';
-import { Playstore } from './resources/playstore';
 import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
 import {
   LlmModel,
@@ -734,13 +733,11 @@ export class DroidrunCloud {
 
   tasks: API.Tasks = new API.Tasks(this);
   apps: API.Apps = new API.Apps(this);
-  playstore: API.Playstore = new API.Playstore(this);
   credentials: API.Credentials = new API.Credentials(this);
 }
 
 DroidrunCloud.Tasks = Tasks;
 DroidrunCloud.Apps = Apps;
-DroidrunCloud.Playstore = Playstore;
 DroidrunCloud.Credentials = Credentials;
 
 export declare namespace DroidrunCloud {
@@ -764,8 +761,6 @@ export declare namespace DroidrunCloud {
   };
 
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
-
-  export { Playstore as Playstore };
 
   export { Credentials as Credentials, type CredentialListResponse as CredentialListResponse };
 }
