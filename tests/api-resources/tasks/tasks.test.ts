@@ -117,6 +117,7 @@ describe('resource tasks', () => {
       temperature: 0,
       timeout: 0,
       vision: true,
+      vpnCountry: 'Mv',
     });
   });
 
@@ -146,6 +147,7 @@ describe('resource tasks', () => {
       temperature: 0,
       timeout: 0,
       vision: true,
+      vpnCountry: 'Mv',
     });
   });
 

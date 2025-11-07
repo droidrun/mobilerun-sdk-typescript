@@ -142,6 +142,8 @@ export interface Task {
   updatedAt?: string;
 
   vision?: boolean;
+
+  vpnCountry?: string | null;
 }
 
 export namespace Task {
@@ -174,6 +176,8 @@ export interface TaskCreate {
   timeout?: number;
 
   vision?: boolean;
+
+  vpnCountry?: string | null;
 }
 
 export namespace TaskCreate {
@@ -673,6 +677,8 @@ export interface TaskRunParams {
   timeout?: number;
 
   vision?: boolean;
+
+  vpnCountry?: string | null;
 }
 
 export namespace TaskRunParams {
@@ -705,6 +711,8 @@ export interface TaskRunStreamedParams {
   timeout?: number;
 
   vision?: boolean;
+
+  vpnCountry?: string | null;
 }
 
 export namespace TaskRunStreamedParams {
