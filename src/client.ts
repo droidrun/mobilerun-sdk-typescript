@@ -58,7 +58,7 @@ export interface ClientOptions {
   /**
    * Defaults to process.env['DROIDRUN_CLOUD_API_KEY'].
    */
-  apiKey?: string | undefined;
+  apiKey?: string | null | undefined;
 
   /**
    * Specifies the environment to use for the API.
@@ -143,7 +143,7 @@ export interface ClientOptions {
  * API Client for interfacing with the Droidrun Cloud API.
  */
 export class DroidrunCloud {
-  apiKey: string;
+  apiKey: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -160,7 +160,7 @@ export class DroidrunCloud {
   /**
    * API Client for interfacing with the Droidrun Cloud API.
    *
-   * @param {string | undefined} [opts.apiKey=process.env['DROIDRUN_CLOUD_API_KEY'] ?? undefined]
+   * @param {string | null | undefined} [opts.apiKey=process.env['DROIDRUN_CLOUD_API_KEY'] ?? null]
    * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
    * @param {string} [opts.baseURL=process.env['DROIDRUN_CLOUD_BASE_URL'] ?? https://api.droidrun.ai/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
@@ -172,15 +172,9 @@ export class DroidrunCloud {
    */
   constructor({
     baseURL = readEnv('DROIDRUN_CLOUD_BASE_URL'),
-    apiKey = readEnv('DROIDRUN_CLOUD_API_KEY'),
+    apiKey = readEnv('DROIDRUN_CLOUD_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
-    if (apiKey === undefined) {
-      throw new Errors.DroidrunCloudError(
-        "The DROIDRUN_CLOUD_API_KEY environment variable is missing or empty; either provide it, or instantiate the DroidrunCloud client with an apiKey option, like new DroidrunCloud({ apiKey: 'My API Key' }).",
-      );
-    }
-
     const options: ClientOptions = {
       apiKey,
       ...opts,
@@ -246,10 +240,22 @@ export class DroidrunCloud {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.apiKey && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+    );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.apiKey == null) {
+      return undefined;
+    }
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
