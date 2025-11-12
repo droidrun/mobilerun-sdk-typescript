@@ -18,4 +18,5 @@ jobs:
         run: |
           bash ./bin/check-release-environment
         env:
+          DOCKERHUB_TOKEN: ${{ secrets.DROIDRUN_CLOUD_DOCKERHUB_TOKEN || secrets.DOCKERHUB_TOKEN }}
 
