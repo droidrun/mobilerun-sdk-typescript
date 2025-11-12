@@ -1,0 +1,39 @@
+name: Deploy Docker-MCP to GCloud
+
+on:
+  push:
+    branches:
+      - next
+
+jobs:
+  deploy:
+    name: Deploy Docker-MCP to GCloud
+    runs-on: ubuntu-latest
+    environment: 
+      # <branch>  -> <github environment>
+      # next   -> develop
+      # next   -> staging
+      # main      -> prod
+      name: ${{ github.ref_name == 'next' && 'develop' || (github.ref_name == 'main' && 'prod' || github.ref_name) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ vars.IMAGE_REGION }}-docker.pkg.dev --quiet
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./packages/mcp-server/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ vars.IMAGE_REGION }}-docker.pkg.dev/${{ vars.IMAGE_PROJECT_ID }}/droidrun/${{ vars.IMAGE_NAME }}:dev
+          ssh: |
+            default=${{ env.SSH_AUTH_SOCK }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
