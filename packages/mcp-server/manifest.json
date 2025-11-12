@@ -28,7 +28,7 @@
     "DROIDRUN_CLOUD_API_KEY": {
       "title": "apiKey",
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string"
     }
   },
