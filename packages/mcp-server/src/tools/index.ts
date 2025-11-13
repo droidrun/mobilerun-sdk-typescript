@@ -4,17 +4,6 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 
 export { Metadata, Endpoint, HandlerFunction };
 
-import retrieve_tasks from './tasks/retrieve-tasks';
-import list_tasks from './tasks/list-tasks';
-import attach_tasks from './tasks/attach-tasks';
-import get_gif_tasks from './tasks/get-gif-tasks';
-import get_status_tasks from './tasks/get-status-tasks';
-import get_trajectory_tasks from './tasks/get-trajectory-tasks';
-import run_tasks from './tasks/run-tasks';
-import run_streamed_tasks from './tasks/run-streamed-tasks';
-import stop_tasks from './tasks/stop-tasks';
-import retrieve_tasks_screenshots from './tasks/screenshots/retrieve-tasks-screenshots';
-import list_tasks_screenshots from './tasks/screenshots/list-tasks-screenshots';
 import list_apps from './apps/list-apps';
 import list_credentials from './credentials/list-credentials';
 import create_credentials_packages from './credentials/packages/create-credentials-packages';
@@ -32,17 +21,6 @@ function addEndpoint(endpoint: Endpoint) {
   endpoints.push(endpoint);
 }
 
-addEndpoint(retrieve_tasks);
-addEndpoint(list_tasks);
-addEndpoint(attach_tasks);
-addEndpoint(get_gif_tasks);
-addEndpoint(get_status_tasks);
-addEndpoint(get_trajectory_tasks);
-addEndpoint(run_tasks);
-addEndpoint(run_streamed_tasks);
-addEndpoint(stop_tasks);
-addEndpoint(retrieve_tasks_screenshots);
-addEndpoint(list_tasks_screenshots);
 addEndpoint(list_apps);
 addEndpoint(list_credentials);
 addEndpoint(create_credentials_packages);

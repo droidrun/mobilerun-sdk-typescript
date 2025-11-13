@@ -1,4 +1,4 @@
-configured_endpoints: 21
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/droidrun%2Fdroidrun-cloud-a0dd8a3f20b83af0717602aa75b15297e331a396d52465ed3349923d7c8f5dd4.yml
-openapi_spec_hash: c4eff5a702ee371f1621031c124f4b50
+configured_endpoints: 10
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/droidrun%2Fdroidrun-cloud-28e2b0879401cdaeebeb093cea0f15cb39de5609ba66622f918ea24ae7366876.yml
+openapi_spec_hash: 832d44631399976ad861e348ae0aa476
 config_hash: 3ff4e670c552d63a807687a6dd6627e8

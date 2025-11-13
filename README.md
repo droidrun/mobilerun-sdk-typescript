@@ -30,9 +30,9 @@ const client = new DroidrunCloud({
   environment: 'staging', // or 'production' | 'dev'; defaults to 'production'
 });
 
-const tasks = await client.tasks.list();
+const apps = await client.apps.list();
 
-console.log(tasks.items);
+console.log(apps.apps);
 ```
 
 ### Request & Response types
@@ -48,7 +48,7 @@ const client = new DroidrunCloud({
   environment: 'staging', // or 'production' | 'dev'; defaults to 'production'
 });
 
-const tasks: DroidrunCloud.TaskListResponse = await client.tasks.list();
+const apps: DroidrunCloud.AppListResponse = await client.apps.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -61,7 +61,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const tasks = await client.tasks.list().catch(async (err) => {
+const apps = await client.apps.list().catch(async (err) => {
   if (err instanceof DroidrunCloud.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -101,7 +101,7 @@ const client = new DroidrunCloud({
 });
 
 // Or, configure per-request:
-await client.tasks.list({
+await client.apps.list({
   maxRetries: 5,
 });
 ```
@@ -118,7 +118,7 @@ const client = new DroidrunCloud({
 });
 
 // Override per-request:
-await client.tasks.list({
+await client.apps.list({
   timeout: 5 * 1000,
 });
 ```
@@ -141,13 +141,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new DroidrunCloud();
 
-const response = await client.tasks.list().asResponse();
+const response = await client.apps.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: tasks, response: raw } = await client.tasks.list().withResponse();
+const { data: apps, response: raw } = await client.apps.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(tasks.items);
+console.log(apps.apps);
 ```
 
 ### Logging
@@ -227,7 +227,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.tasks.list({
+client.apps.list({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
