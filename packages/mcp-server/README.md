@@ -41,7 +41,11 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "droidrun_cloud_api": {
       "command": "node",
-      "args": ["/path/to/local/cloud-sdk-typescript/packages/mcp-server", "--client=claude", "--tools=all"],
+      "args": [
+        "/path/to/local/cloud-sdk-typescript/packages/mcp-server",
+        "--client=claude",
+        "--tools=dynamic"
+      ],
       "env": {
         "DROIDRUN_CLOUD_API_KEY": "My API Key",
         "DROIDRUN_CLOUD_ENVIRONMENT": "production"
@@ -202,7 +206,7 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 import { server, endpoints, init } from "droidrun-cloud-mcp/server";
 
 // import a specific tool
-import listApps from "droidrun-cloud-mcp/tools/apps/list-apps";
+import retrieveTasks from "droidrun-cloud-mcp/tools/tasks/retrieve-tasks";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -227,12 +231,29 @@ const myCustomEndpoint = {
 };
 
 // initialize the server with your custom endpoints
-init({ server: myServer, endpoints: [listApps, myCustomEndpoint] });
+init({ server: myServer, endpoints: [retrieveTasks, myCustomEndpoint] });
 ```
 
 ## Available Tools
 
 The following tools are available in this MCP server.
+
+### Resource `tasks`:
+
+- `retrieve_tasks` (`read`): Get Task
+- `list_tasks` (`read`): List all tasks you've created so far
+- `attach_tasks` (`read`): Attach Task
+- `get_gif_tasks` (`read`): Get Task Gif
+- `get_status_tasks` (`read`): Get the status of a task. If device is provided, return the status of the specific device. Otherwise, return the status of all devices.
+- `get_trajectory_tasks` (`read`): Get the trajectory of a task.
+- `run_tasks` (`write`): Run Task
+- `run_streamed_tasks` (`write`): Run Streamed Task
+- `stop_tasks` (`write`): Stop Task
+
+### Resource `tasks.screenshots`:
+
+- `retrieve_tasks_screenshots` (`read`): Get Task Screenshot
+- `list_tasks_screenshots` (`read`): Get Task Screenshots
 
 ### Resource `apps`:
 
