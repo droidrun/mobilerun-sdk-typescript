@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { maybeFilter } from 'droidrun-cloud-mcp/filtering';
-import { Metadata, asTextContentResult } from 'droidrun-cloud-mcp/tools/types';
+import { isJqError, maybeFilter } from 'droidrun-cloud-mcp/filtering';
+import { Metadata, asErrorResult, asTextContentResult } from 'droidrun-cloud-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import DroidrunCloud from 'droidrun-cloud';
@@ -66,9 +66,16 @@ export const tool: Tool = {
 
 export const handler = async (client: DroidrunCloud, args: Record<string, unknown> | undefined) => {
   const { packageName, jq_filter, ...body } = args as any;
-  return asTextContentResult(
-    await maybeFilter(jq_filter, await client.credentials.packages.credentials.create(packageName, body)),
-  );
+  try {
+    return asTextContentResult(
+      await maybeFilter(jq_filter, await client.credentials.packages.credentials.create(packageName, body)),
+    );
+  } catch (error) {
+    if (isJqError(error)) {
+      return asErrorResult(error.message);
+    }
+    throw error;
+  }
 };
 
 export default { metadata, tool, handler };
