@@ -42,6 +42,17 @@ function getRunFunctionNode(
 
 const fuse = new Fuse(
   [
+    'client.tasks.attach',
+    'client.tasks.getGif',
+    'client.tasks.getStatus',
+    'client.tasks.getTrajectory',
+    'client.tasks.list',
+    'client.tasks.retrieve',
+    'client.tasks.run',
+    'client.tasks.runStreamed',
+    'client.tasks.stop',
+    'client.tasks.screenshots.list',
+    'client.tasks.screenshots.retrieve',
     'client.apps.list',
     'client.credentials.list',
     'client.credentials.packages.create',
