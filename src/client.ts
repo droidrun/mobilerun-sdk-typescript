@@ -18,22 +18,7 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { AppListParams, AppListResponse, Apps } from './resources/apps';
 import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
-import {
-  LlmModel,
-  Task,
-  TaskCreate,
-  TaskGetStatusResponse,
-  TaskGetTrajectoryResponse,
-  TaskListParams,
-  TaskListResponse,
-  TaskRetrieveResponse,
-  TaskRunParams,
-  TaskRunResponse,
-  TaskRunStreamedParams,
-  TaskStatus,
-  TaskStopResponse,
-  Tasks,
-} from './resources/tasks/tasks';
+import { Tasks } from './resources/tasks/tasks';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -775,22 +760,7 @@ DroidrunCloud.Credentials = Credentials;
 export declare namespace DroidrunCloud {
   export type RequestOptions = Opts.RequestOptions;
 
-  export {
-    Tasks as Tasks,
-    type LlmModel as LlmModel,
-    type Task as Task,
-    type TaskCreate as TaskCreate,
-    type TaskStatus as TaskStatus,
-    type TaskRetrieveResponse as TaskRetrieveResponse,
-    type TaskListResponse as TaskListResponse,
-    type TaskGetStatusResponse as TaskGetStatusResponse,
-    type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
-    type TaskRunResponse as TaskRunResponse,
-    type TaskStopResponse as TaskStopResponse,
-    type TaskListParams as TaskListParams,
-    type TaskRunParams as TaskRunParams,
-    type TaskRunStreamedParams as TaskRunStreamedParams,
-  };
+  export { Tasks as Tasks };
 
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
 
