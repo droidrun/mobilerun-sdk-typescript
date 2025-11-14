@@ -7,7 +7,6 @@ export { Metadata, Endpoint, HandlerFunction };
 import retrieve_tasks from './tasks/retrieve-tasks';
 import list_tasks from './tasks/list-tasks';
 import attach_tasks from './tasks/attach-tasks';
-import get_gif_tasks from './tasks/get-gif-tasks';
 import get_status_tasks from './tasks/get-status-tasks';
 import get_trajectory_tasks from './tasks/get-trajectory-tasks';
 import run_tasks from './tasks/run-tasks';
@@ -35,7 +34,6 @@ function addEndpoint(endpoint: Endpoint) {
 addEndpoint(retrieve_tasks);
 addEndpoint(list_tasks);
 addEndpoint(attach_tasks);
-addEndpoint(get_gif_tasks);
 addEndpoint(get_status_tasks);
 addEndpoint(get_trajectory_tasks);
 addEndpoint(run_tasks);

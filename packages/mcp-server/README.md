@@ -41,11 +41,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "droidrun_cloud_api": {
       "command": "node",
-      "args": [
-        "/path/to/local/cloud-sdk-typescript/packages/mcp-server",
-        "--client=claude",
-        "--tools=dynamic"
-      ],
+      "args": ["/path/to/local/cloud-sdk-typescript/packages/mcp-server", "--client=claude", "--tools=all"],
       "env": {
         "DROIDRUN_CLOUD_API_KEY": "My API Key",
         "DROIDRUN_CLOUD_ENVIRONMENT": "production"
@@ -243,7 +239,6 @@ The following tools are available in this MCP server.
 - `retrieve_tasks` (`read`): Get Task
 - `list_tasks` (`read`): List all tasks you've created so far
 - `attach_tasks` (`read`): Attach Task
-- `get_gif_tasks` (`read`): Get Task Gif
 - `get_status_tasks` (`read`): Get the status of a task. If device is provided, return the status of the specific device. Otherwise, return the status of all devices.
 - `get_trajectory_tasks` (`read`): Get the trajectory of a task.
 - `run_tasks` (`write`): Run Task
