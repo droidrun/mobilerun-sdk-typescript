@@ -39,13 +39,6 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * Get Task Gif
-   */
-  getGif(taskID: string, options?: RequestOptions): APIPromise<ScreenshotsAPI.MediaResponse> {
-    return this._client.get(path`/tasks/${taskID}/gif`, options);
-  }
-
-  /**
    * Get the status of a task. If device is provided, return the status of the
    * specific device. Otherwise, return the status of all devices.
    */
