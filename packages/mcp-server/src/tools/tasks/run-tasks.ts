@@ -22,6 +22,9 @@ export const tool: Tool = {
   inputSchema: {
     type: 'object',
     properties: {
+      llmModel: {
+        $ref: '#/$defs/llm_model',
+      },
       task: {
         type: 'string',
         title: 'Task',
@@ -62,9 +65,6 @@ export const tool: Tool = {
           type: 'string',
         },
       },
-      llmModel: {
-        $ref: '#/$defs/llm_model',
-      },
       maxSteps: {
         type: 'integer',
         title: 'Maxsteps',
@@ -102,12 +102,20 @@ export const tool: Tool = {
           'A jq filter to apply to the response to include certain fields. Consult the output schema in the tool description to see the fields that are available.\n\nFor example: to include only the `name` field in every object of a results array, you can provide ".results[].name".\n\nFor more information, see the [jq documentation](https://jqlang.org/manual/).',
       },
     },
-    required: ['task'],
+    required: ['llmModel', 'task'],
     $defs: {
       llm_model: {
         type: 'string',
         title: 'LLMModel',
-        enum: ['gpt-5', 'gemini-2.5-flash', 'gemini-2.5-pro', 'claude-sonnet-4-5'],
+        enum: [
+          'openai/gpt-5',
+          'google/gemini-2.5-flash',
+          'google/gemini-2.5-pro',
+          'google/gemini-3-pro-preview',
+          'anthropic/claude-sonnet-4.5',
+          'minimax/minimax-m2',
+          'moonshotai/kimi-k2-thinking',
+        ],
       },
     },
   },

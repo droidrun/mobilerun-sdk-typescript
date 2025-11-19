@@ -79,10 +79,19 @@ export class Tasks extends APIResource {
   }
 }
 
-export type LlmModel = 'gpt-5' | 'gemini-2.5-flash' | 'gemini-2.5-pro' | 'claude-sonnet-4-5';
+export type LlmModel =
+  | 'openai/gpt-5'
+  | 'google/gemini-2.5-flash'
+  | 'google/gemini-2.5-pro'
+  | 'google/gemini-3-pro-preview'
+  | 'anthropic/claude-sonnet-4.5'
+  | 'minimax/minimax-m2'
+  | 'moonshotai/kimi-k2-thinking';
 
 export interface Task {
   deviceId: string;
+
+  llmModel: LlmModel;
 
   task: string;
 
@@ -99,8 +108,6 @@ export interface Task {
   files?: Array<string>;
 
   finishedAt?: string | null;
-
-  llmModel?: LlmModel;
 
   maxSteps?: number;
 
@@ -138,6 +145,8 @@ export namespace Task {
 }
 
 export interface TaskCreate {
+  llmModel: LlmModel;
+
   task: string;
 
   apps?: Array<string>;
@@ -145,8 +154,6 @@ export interface TaskCreate {
   credentials?: Array<TaskCreate.Credential>;
 
   files?: Array<string>;
-
-  llmModel?: LlmModel;
 
   maxSteps?: number;
 
@@ -646,6 +653,8 @@ export interface TaskListParams {
 }
 
 export interface TaskRunParams {
+  llmModel: LlmModel;
+
   task: string;
 
   apps?: Array<string>;
@@ -653,8 +662,6 @@ export interface TaskRunParams {
   credentials?: Array<TaskRunParams.Credential>;
 
   files?: Array<string>;
-
-  llmModel?: LlmModel;
 
   maxSteps?: number;
 
@@ -680,6 +687,8 @@ export namespace TaskRunParams {
 }
 
 export interface TaskRunStreamedParams {
+  llmModel: LlmModel;
+
   task: string;
 
   apps?: Array<string>;
@@ -687,8 +696,6 @@ export interface TaskRunStreamedParams {
   credentials?: Array<TaskRunStreamedParams.Credential>;
 
   files?: Array<string>;
-
-  llmModel?: LlmModel;
 
   maxSteps?: number;
 
