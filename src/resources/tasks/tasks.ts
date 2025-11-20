@@ -408,40 +408,14 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryResultEvent {
-    /**
-     * DroidAgent final result event.
-     *
-     * Returned by DroidAgent.run() with attributes:
-     *
-     * - success: Whether the task completed successfully
-     * - reason: Explanation of the result or error message
-     * - steps: Number of steps taken
-     * - structured_output: Extracted structured data (if output_model was provided)
-     */
     data: TrajectoryResultEvent.Data;
 
     event: 'ResultEvent';
   }
 
   export namespace TrajectoryResultEvent {
-    /**
-     * DroidAgent final result event.
-     *
-     * Returned by DroidAgent.run() with attributes:
-     *
-     * - success: Whether the task completed successfully
-     * - reason: Explanation of the result or error message
-     * - steps: Number of steps taken
-     * - structured_output: Extracted structured data (if output_model was provided)
-     */
     export interface Data {
-      reason: string;
-
-      steps: number;
-
-      structured_output: unknown | null;
-
-      success: boolean;
+      structured_output?: { [key: string]: unknown } | unknown | null;
     }
   }
 
