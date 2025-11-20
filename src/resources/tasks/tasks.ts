@@ -408,15 +408,9 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryResultEvent {
-    data: TrajectoryResultEvent.Data;
+    data: { [key: string]: unknown };
 
     event: 'ResultEvent';
-  }
-
-  export namespace TrajectoryResultEvent {
-    export interface Data {
-      structured_output?: { [key: string]: unknown } | unknown | null;
-    }
   }
 
   export interface TrajectoryManagerInputEvent {
