@@ -866,7 +866,9 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryRecordUiStateEvent {
     export interface Data {
-      ui_state: Array<{ [key: string]: unknown }>;
+      index: number;
+
+      url: string;
     }
   }
 
