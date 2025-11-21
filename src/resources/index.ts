@@ -3,6 +3,18 @@
 export { Apps, type AppListResponse, type AppListParams } from './apps';
 export { Credentials, type CredentialListResponse } from './credentials/credentials';
 export {
+  Hooks,
+  type HookUpdateResponse,
+  type HookListResponse,
+  type HookGetSampleDataResponse,
+  type HookPerformResponse,
+  type HookSubscribeResponse,
+  type HookUnsubscribeResponse,
+  type HookUpdateParams,
+  type HookListParams,
+  type HookSubscribeParams,
+} from './hooks';
+export {
   Tasks,
   type LlmModel,
   type Task,

@@ -17,6 +17,18 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { AppListParams, AppListResponse, Apps } from './resources/apps';
+import {
+  HookGetSampleDataResponse,
+  HookListParams,
+  HookListResponse,
+  HookPerformResponse,
+  HookSubscribeParams,
+  HookSubscribeResponse,
+  HookUnsubscribeResponse,
+  HookUpdateParams,
+  HookUpdateResponse,
+  Hooks,
+} from './resources/hooks';
 import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
 import {
   LlmModel,
@@ -766,11 +778,13 @@ export class DroidrunCloud {
   tasks: API.Tasks = new API.Tasks(this);
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
+  hooks: API.Hooks = new API.Hooks(this);
 }
 
 DroidrunCloud.Tasks = Tasks;
 DroidrunCloud.Apps = Apps;
 DroidrunCloud.Credentials = Credentials;
+DroidrunCloud.Hooks = Hooks;
 
 export declare namespace DroidrunCloud {
   export type RequestOptions = Opts.RequestOptions;
@@ -795,4 +809,17 @@ export declare namespace DroidrunCloud {
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
 
   export { Credentials as Credentials, type CredentialListResponse as CredentialListResponse };
+
+  export {
+    Hooks as Hooks,
+    type HookUpdateResponse as HookUpdateResponse,
+    type HookListResponse as HookListResponse,
+    type HookGetSampleDataResponse as HookGetSampleDataResponse,
+    type HookPerformResponse as HookPerformResponse,
+    type HookSubscribeResponse as HookSubscribeResponse,
+    type HookUnsubscribeResponse as HookUnsubscribeResponse,
+    type HookUpdateParams as HookUpdateParams,
+    type HookListParams as HookListParams,
+    type HookSubscribeParams as HookSubscribeParams,
+  };
 }
