@@ -108,6 +108,8 @@ export interface Task {
 
   credentials?: Array<Task.Credential>;
 
+  executionTimeout?: number;
+
   files?: Array<string>;
 
   finishedAt?: string | null;
@@ -127,8 +129,6 @@ export interface Task {
   succeeded?: boolean | null;
 
   temperature?: number;
-
-  timeout?: number;
 
   trajectory?: Array<{ [key: string]: unknown }>;
 
@@ -156,6 +156,8 @@ export interface TaskCreate {
 
   credentials?: Array<TaskCreate.Credential>;
 
+  executionTimeout?: number;
+
   files?: Array<string>;
 
   maxSteps?: number;
@@ -165,8 +167,6 @@ export interface TaskCreate {
   reasoning?: boolean;
 
   temperature?: number;
-
-  timeout?: number;
 
   vision?: boolean;
 
@@ -1283,6 +1283,8 @@ export interface TaskRunParams {
 
   credentials?: Array<TaskRunParams.Credential>;
 
+  executionTimeout?: number;
+
   files?: Array<string>;
 
   maxSteps?: number;
@@ -1292,8 +1294,6 @@ export interface TaskRunParams {
   reasoning?: boolean;
 
   temperature?: number;
-
-  timeout?: number;
 
   vision?: boolean;
 
@@ -1317,6 +1317,8 @@ export interface TaskRunStreamedParams {
 
   credentials?: Array<TaskRunStreamedParams.Credential>;
 
+  executionTimeout?: number;
+
   files?: Array<string>;
 
   maxSteps?: number;
@@ -1326,8 +1328,6 @@ export interface TaskRunStreamedParams {
   reasoning?: boolean;
 
   temperature?: number;
-
-  timeout?: number;
 
   vision?: boolean;
 

@@ -56,6 +56,10 @@ export const tool: Tool = {
           required: ['credentialNames', 'packageName'],
         },
       },
+      executionTimeout: {
+        type: 'integer',
+        title: 'Executiontimeout',
+      },
       files: {
         type: 'array',
         title: 'Files',
@@ -79,10 +83,6 @@ export const tool: Tool = {
       temperature: {
         type: 'number',
         title: 'Temperature',
-      },
-      timeout: {
-        type: 'integer',
-        title: 'Timeout',
       },
       vision: {
         type: 'boolean',
