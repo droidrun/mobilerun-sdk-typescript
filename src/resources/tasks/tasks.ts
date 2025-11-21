@@ -3,6 +3,8 @@
 import { APIResource } from '../../core/resource';
 import * as ScreenshotsAPI from './screenshots';
 import { MediaResponse, ScreenshotListResponse, ScreenshotRetrieveParams, Screenshots } from './screenshots';
+import * as UiStatesAPI from './ui-states';
+import { UiStateListResponse, UiStateRetrieveParams, UiStates } from './ui-states';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -10,6 +12,7 @@ import { path } from '../../internal/utils/path';
 
 export class Tasks extends APIResource {
   screenshots: ScreenshotsAPI.Screenshots = new ScreenshotsAPI.Screenshots(this._client);
+  uiStates: UiStatesAPI.UiStates = new UiStatesAPI.UiStates(this._client);
 
   /**
    * Get Task
@@ -1340,6 +1343,7 @@ export namespace TaskRunStreamedParams {
 }
 
 Tasks.Screenshots = Screenshots;
+Tasks.UiStates = UiStates;
 
 export declare namespace Tasks {
   export {
@@ -1363,5 +1367,11 @@ export declare namespace Tasks {
     type MediaResponse as MediaResponse,
     type ScreenshotListResponse as ScreenshotListResponse,
     type ScreenshotRetrieveParams as ScreenshotRetrieveParams,
+  };
+
+  export {
+    UiStates as UiStates,
+    type UiStateListResponse as UiStateListResponse,
+    type UiStateRetrieveParams as UiStateRetrieveParams,
   };
 }

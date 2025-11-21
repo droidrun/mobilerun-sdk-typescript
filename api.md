@@ -36,6 +36,17 @@ Methods:
 - <code title="get /tasks/{task_id}/screenshots/{index}">client.tasks.screenshots.<a href="./src/resources/tasks/screenshots.ts">retrieve</a>(index, { ...params }) -> MediaResponse</code>
 - <code title="get /tasks/{task_id}/screenshots">client.tasks.screenshots.<a href="./src/resources/tasks/screenshots.ts">list</a>(taskID) -> ScreenshotListResponse</code>
 
+## UiStates
+
+Types:
+
+- <code><a href="./src/resources/tasks/ui-states.ts">UiStateListResponse</a></code>
+
+Methods:
+
+- <code title="get /tasks/{task_id}/ui_states/{index}">client.tasks.uiStates.<a href="./src/resources/tasks/ui-states.ts">retrieve</a>(index, { ...params }) -> MediaResponse</code>
+- <code title="get /tasks/{task_id}/ui_states">client.tasks.uiStates.<a href="./src/resources/tasks/ui-states.ts">list</a>(taskID) -> UiStateListResponse</code>
+
 # Apps
 
 Types:
@@ -96,3 +107,23 @@ Methods:
 - <code title="post /credentials/packages/{packageName}/credentials/{credentialName}/fields">client.credentials.packages.credentials.fields.<a href="./src/resources/credentials/packages/credentials/fields.ts">create</a>(credentialName, { ...params }) -> FieldCreateResponse</code>
 - <code title="patch /credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}">client.credentials.packages.credentials.fields.<a href="./src/resources/credentials/packages/credentials/fields.ts">update</a>(fieldType, { ...params }) -> FieldUpdateResponse</code>
 - <code title="delete /credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}">client.credentials.packages.credentials.fields.<a href="./src/resources/credentials/packages/credentials/fields.ts">delete</a>(fieldType, { ...params }) -> FieldDeleteResponse</code>
+
+# Hooks
+
+Types:
+
+- <code><a href="./src/resources/hooks.ts">HookUpdateResponse</a></code>
+- <code><a href="./src/resources/hooks.ts">HookListResponse</a></code>
+- <code><a href="./src/resources/hooks.ts">HookGetSampleDataResponse</a></code>
+- <code><a href="./src/resources/hooks.ts">HookPerformResponse</a></code>
+- <code><a href="./src/resources/hooks.ts">HookSubscribeResponse</a></code>
+- <code><a href="./src/resources/hooks.ts">HookUnsubscribeResponse</a></code>
+
+Methods:
+
+- <code title="post /hooks/{hook_id}/edit">client.hooks.<a href="./src/resources/hooks.ts">update</a>(hookID, { ...params }) -> HookUpdateResponse</code>
+- <code title="get /hooks/">client.hooks.<a href="./src/resources/hooks.ts">list</a>({ ...params }) -> HookListResponse</code>
+- <code title="get /hooks/sample">client.hooks.<a href="./src/resources/hooks.ts">getSampleData</a>() -> HookGetSampleDataResponse</code>
+- <code title="post /hooks/perform">client.hooks.<a href="./src/resources/hooks.ts">perform</a>() -> HookPerformResponse</code>
+- <code title="post /hooks/subscribe">client.hooks.<a href="./src/resources/hooks.ts">subscribe</a>({ ...params }) -> HookSubscribeResponse</code>
+- <code title="post /hooks/{hook_id}/unsubscribe">client.hooks.<a href="./src/resources/hooks.ts">unsubscribe</a>(hookID) -> HookUnsubscribeResponse</code>

@@ -41,7 +41,11 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "droidrun_cloud_api": {
       "command": "node",
-      "args": ["/path/to/local/cloud-sdk-typescript/packages/mcp-server", "--client=claude", "--tools=all"],
+      "args": [
+        "/path/to/local/cloud-sdk-typescript/packages/mcp-server",
+        "--client=claude",
+        "--tools=dynamic"
+      ],
       "env": {
         "DROIDRUN_CLOUD_API_KEY": "My API Key",
         "DROIDRUN_CLOUD_ENVIRONMENT": "production"
@@ -250,6 +254,11 @@ The following tools are available in this MCP server.
 - `retrieve_tasks_screenshots` (`read`): Get Task Screenshot
 - `list_tasks_screenshots` (`read`): Get Task Screenshots
 
+### Resource `tasks.ui_states`:
+
+- `retrieve_tasks_ui_states` (`read`): Get Task Ui State
+- `list_tasks_ui_states` (`read`): Get Task Ui States
+
 ### Resource `apps`:
 
 - `list_apps` (`read`): Retrieves a paginated list of apps with filtering and search capabilities
@@ -274,3 +283,17 @@ The following tools are available in this MCP server.
 - `create_credentials_packages_credentials_fields` (`write`): Add a new field to an existing credential
 - `update_credentials_packages_credentials_fields` (`write`): Update the value of a credential field
 - `delete_credentials_packages_credentials_fields` (`write`): Delete a field from a credential
+
+### Resource `hooks`:
+
+- `update_hooks` (`write`): Edit a hook subscription (events or state).
+
+  Allows updating the events filter and/or the state of a hook.
+
+- `list_hooks` (`read`): List hooks belonging to the requesting user (paginated).
+- `get_sample_data_hooks` (`read`): Get sample hook data for Zapier Perform List (testing/field mapping).
+- `perform_hooks` (`write`): Zapier Perform endpoint - processes webhook payloads.
+- `subscribe_hooks` (`write`): Subscribe the current user to a webhook URL. Returns subscription id.
+- `unsubscribe_hooks` (`write`): Unsubscribe a previously created subscription by id.
+
+  Marks the subscription as DELETED if it belongs to the user.
