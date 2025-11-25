@@ -101,6 +101,8 @@ export interface HookListResponse {
 
 export namespace HookListResponse {
   export interface Item {
+    service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other';
+
     url: string;
 
     userId: string;
@@ -110,8 +112,6 @@ export namespace HookListResponse {
     createdAt?: string;
 
     events?: Array<TasksAPI.TaskStatus>;
-
-    service?: 'zapier' | 'n8n' | 'make' | 'other';
 
     state?: 'active' | 'disabled' | 'deleted';
 
