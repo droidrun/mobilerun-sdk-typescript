@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'droidrun-cloud/core/api-promise';
+import { APIPromise } from '@mobilerun/sdk/core/api-promise';
 
 import util from 'node:util';
-import DroidrunCloud from 'droidrun-cloud';
-import { APIUserAbortError } from 'droidrun-cloud';
+import DroidrunCloud from '@mobilerun/sdk';
+import { APIUserAbortError } from '@mobilerun/sdk';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {

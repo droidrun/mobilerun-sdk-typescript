@@ -10,8 +10,8 @@ import {
   Implementation,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
-import { ClientOptions } from 'droidrun-cloud';
-import DroidrunCloud from 'droidrun-cloud';
+import { ClientOptions } from '@mobilerun/sdk';
+import DroidrunCloud from '@mobilerun/sdk';
 import {
   applyCompatibilityTransformations,
   ClientCapabilities,
@@ -27,13 +27,13 @@ import { McpOptions } from './options';
 export { McpOptions } from './options';
 export { ClientType } from './compat';
 export { Filter } from './tools';
-export { ClientOptions } from 'droidrun-cloud';
+export { ClientOptions } from '@mobilerun/sdk';
 export { endpoints } from './tools';
 
 export const newMcpServer = () =>
   new McpServer(
     {
-      name: 'droidrun_cloud_api',
+      name: 'mobilerun_sdk_api',
       version: '0.3.0',
     },
     { capabilities: { tools: {}, logging: {} } },

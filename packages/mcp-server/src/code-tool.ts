@@ -2,7 +2,7 @@
 
 import { dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import DroidrunCloud, { ClientOptions } from 'droidrun-cloud';
+import DroidrunCloud, { ClientOptions } from '@mobilerun/sdk';
 import { ContentBlock, Endpoint, Metadata, ToolCallResult } from './tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { DroidrunCloud } from 'droidrun-cloud';
+import { DroidrunCloud } from '@mobilerun/sdk';
 
 const { stringifyQuery } = DroidrunCloud.prototype as any;
 

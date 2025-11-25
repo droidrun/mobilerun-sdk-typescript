@@ -1,5 +1,5 @@
 import { inspect } from 'node:util';
-import { buildHeaders, type HeadersLike, type NullableHeaders } from 'droidrun-cloud/internal/headers';
+import { buildHeaders, type HeadersLike, type NullableHeaders } from '@mobilerun/sdk/internal/headers';
 
 function inspectNullableHeaders(headers: NullableHeaders) {
   return `NullableHeaders {${[

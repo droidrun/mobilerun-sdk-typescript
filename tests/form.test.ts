@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'droidrun-cloud/internal/uploads';
-import { toFile } from 'droidrun-cloud/core/uploads';
+import { multipartFormRequestOptions, createForm } from '@mobilerun/sdk/internal/uploads';
+import { toFile } from '@mobilerun/sdk/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

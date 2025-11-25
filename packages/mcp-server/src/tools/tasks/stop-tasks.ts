@@ -4,7 +4,7 @@ import { isJqError, maybeFilter } from 'droidrun-cloud-mcp/filtering';
 import { Metadata, asErrorResult, asTextContentResult } from 'droidrun-cloud-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import DroidrunCloud from 'droidrun-cloud';
+import DroidrunCloud from '@mobilerun/sdk';
 
 export const metadata: Metadata = {
   resource: 'tasks',
