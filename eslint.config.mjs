@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^droidrun-cloud(/.*)?',
+              regex: '^@mobilerun/sdk(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],

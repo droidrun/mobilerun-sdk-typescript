@@ -77,6 +77,9 @@ importers:
       '@cloudflare/cabidela':
         specifier: ^0.2.4
         version: 0.2.4
+      '@mobilerun/sdk':
+        specifier: workspace:*
+        version: link:../..
       '@modelcontextprotocol/sdk':
         specifier: ^1.11.5
         version: 1.18.2
@@ -86,9 +89,6 @@ importers:
       cors:
         specifier: ^2.8.5
         version: 2.8.5
-      droidrun-cloud:
-        specifier: workspace:*
-        version: link:../..
       express:
         specifier: ^5.1.0
         version: 5.1.0

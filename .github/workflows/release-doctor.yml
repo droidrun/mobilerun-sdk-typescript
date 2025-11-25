@@ -18,5 +18,6 @@ jobs:
         run: |
           bash ./bin/check-release-environment
         env:
+          NPM_TOKEN: ${{ secrets.DROIDRUN_CLOUD_NPM_TOKEN || secrets.NPM_TOKEN }}
           DOCKERHUB_TOKEN: ${{ secrets.DROIDRUN_CLOUD_DOCKERHUB_TOKEN || secrets.DOCKERHUB_TOKEN }}
 

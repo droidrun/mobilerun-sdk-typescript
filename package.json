@@ -1,5 +1,5 @@
 {
-  "name": "droidrun-cloud",
+  "name": "@mobilerun/sdk",
   "version": "0.3.0",
   "description": "The official TypeScript library for the Droidrun Cloud API",
   "author": "Droidrun Cloud <support@droidrun.ai>",

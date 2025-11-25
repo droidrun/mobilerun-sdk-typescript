@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "droidrun-cloud/*": ["./dist/src/*"],
-      "droidrun-cloud": ["./dist/src/index.ts"]
+      "@mobilerun/sdk/*": ["./dist/src/*"],
+      "@mobilerun/sdk": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
