@@ -1,6 +1,6 @@
 {
   "name": "droidrun-cloud",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "The official TypeScript library for the Droidrun Cloud API",
   "author": "Droidrun Cloud <support@droidrun.ai>",
   "types": "dist/index.d.ts",
