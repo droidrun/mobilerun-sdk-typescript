@@ -2,7 +2,7 @@
 
 import { dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import DroidrunCloud, { ClientOptions } from '@mobilerun/sdk';
+import MobilerunCloud, { ClientOptions } from '@mobilerun/sdk';
 import { ContentBlock, Endpoint, Metadata, ToolCallResult } from './tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
@@ -31,7 +31,7 @@ export async function codeTool(): Promise<Endpoint> {
   const { newDenoHTTPWorker } = await import('@valtown/deno-http-worker');
   const { workerPath } = await import('./code-tool-paths.cjs');
 
-  const handler = async (client: DroidrunCloud, args: unknown): Promise<ToolCallResult> => {
+  const handler = async (client: MobilerunCloud, args: unknown): Promise<ToolCallResult> => {
     const baseURLHostname = new URL(client.baseURL).hostname;
     const { code } = args as { code: string };
 

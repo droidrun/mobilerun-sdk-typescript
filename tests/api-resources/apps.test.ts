@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import DroidrunCloud from '@mobilerun/sdk';
+import MobilerunCloud from '@mobilerun/sdk';
 
-const client = new DroidrunCloud({
+const client = new MobilerunCloud({
   apiKey: 'My API Key',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
@@ -28,6 +28,6 @@ describe('resource apps', () => {
         { order: 'asc', page: 1, pageSize: 1, query: 'query', sortBy: 'createdAt', source: 'all' },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(DroidrunCloud.NotFoundError);
+    ).rejects.toThrow(MobilerunCloud.NotFoundError);
   });
 });

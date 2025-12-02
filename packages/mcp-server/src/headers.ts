@@ -18,8 +18,8 @@ export const parseAuthHeaders = (req: IncomingMessage): Partial<ClientOptions> =
   }
 
   const apiKey =
-    Array.isArray(req.headers['x-droidrun-cloud-api-key']) ?
-      req.headers['x-droidrun-cloud-api-key'][0]
-    : req.headers['x-droidrun-cloud-api-key'];
+    Array.isArray(req.headers['x-mobilerun-cloud-api-key']) ?
+      req.headers['x-mobilerun-cloud-api-key'][0]
+    : req.headers['x-mobilerun-cloud-api-key'];
   return { apiKey };
 };

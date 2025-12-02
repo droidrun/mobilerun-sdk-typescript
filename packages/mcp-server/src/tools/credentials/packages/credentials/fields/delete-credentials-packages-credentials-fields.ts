@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { isJqError, maybeFilter } from 'droidrun-cloud-mcp/filtering';
-import { Metadata, asErrorResult, asTextContentResult } from 'droidrun-cloud-mcp/tools/types';
+import { isJqError, maybeFilter } from 'mobilerun-cloud-mcp/filtering';
+import { Metadata, asErrorResult, asTextContentResult } from 'mobilerun-cloud-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import DroidrunCloud from '@mobilerun/sdk';
+import MobilerunCloud from '@mobilerun/sdk';
 
 export const metadata: Metadata = {
   resource: 'credentials.packages.credentials.fields',
@@ -54,7 +54,7 @@ export const tool: Tool = {
   },
 };
 
-export const handler = async (client: DroidrunCloud, args: Record<string, unknown> | undefined) => {
+export const handler = async (client: MobilerunCloud, args: Record<string, unknown> | undefined) => {
   const { fieldType, jq_filter, ...body } = args as any;
   try {
     return asTextContentResult(
@@ -64,7 +64,7 @@ export const handler = async (client: DroidrunCloud, args: Record<string, unknow
       ),
     );
   } catch (error) {
-    if (error instanceof DroidrunCloud.APIError || isJqError(error)) {
+    if (error instanceof MobilerunCloud.APIError || isJqError(error)) {
       return asErrorResult(error.message);
     }
     throw error;

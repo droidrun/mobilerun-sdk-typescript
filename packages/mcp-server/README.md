@@ -1,4 +1,4 @@
-# Droidrun Cloud TypeScript MCP Server
+# Mobilerun Cloud TypeScript MCP Server
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -9,9 +9,9 @@ It is generated with [Stainless](https://www.stainless.com/).
 You can run the MCP Server directly via `npx`:
 
 ```sh
-export DROIDRUN_CLOUD_API_KEY="My API Key"
-export DROIDRUN_CLOUD_ENVIRONMENT="production"
-npx -y droidrun-cloud-mcp@latest
+export MOBILERUN_CLOUD_API_KEY="My API Key"
+export MOBILERUN_CLOUD_ENVIRONMENT="production"
+npx -y mobilerun-cloud-mcp@latest
 ```
 
 ### Via MCP Client
@@ -26,10 +26,10 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "mobilerun_sdk_api": {
       "command": "npx",
-      "args": ["-y", "droidrun-cloud-mcp", "--client=claude", "--tools=dynamic"],
+      "args": ["-y", "mobilerun-cloud-mcp", "--client=claude", "--tools=dynamic"],
       "env": {
-        "DROIDRUN_CLOUD_API_KEY": "My API Key",
-        "DROIDRUN_CLOUD_ENVIRONMENT": "production"
+        "MOBILERUN_CLOUD_API_KEY": "My API Key",
+        "MOBILERUN_CLOUD_ENVIRONMENT": "production"
       }
     }
   }
@@ -41,14 +41,14 @@ For clients with a configuration JSON, it might look something like this:
 If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
 in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=droidrun-cloud-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImRyb2lkcnVuLWNsb3VkLW1jcCJdLCJlbnYiOnsiRFJPSURSVU5fQ0xPVURfQVBJX0tFWSI6IlNldCB5b3VyIERST0lEUlVOX0NMT1VEX0FQSV9LRVkgaGVyZS4ifX0)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=mobilerun-cloud-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm1vYmlsZXJ1bi1jbG91ZC1tY3AiXSwiZW52Ijp7Ik1PQklMRVJVTl9DTE9VRF9BUElfS0VZIjoiU2V0IHlvdXIgTU9CSUxFUlVOX0NMT1VEX0FQSV9LRVkgaGVyZS4ifX0)
 
 ### VS Code
 
 If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
 in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
 
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22droidrun-cloud-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22droidrun-cloud-mcp%22%5D%2C%22env%22%3A%7B%22DROIDRUN_CLOUD_API_KEY%22%3A%22Set%20your%20DROIDRUN_CLOUD_API_KEY%20here.%22%7D%7D)
+[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22mobilerun-cloud-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22mobilerun-cloud-mcp%22%5D%2C%22env%22%3A%7B%22MOBILERUN_CLOUD_API_KEY%22%3A%22Set%20your%20MOBILERUN_CLOUD_API_KEY%20here.%22%7D%7D)
 
 ### Claude Code
 
@@ -56,7 +56,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add --transport stdio mobilerun_sdk_api --env DROIDRUN_CLOUD_API_KEY="Your DROIDRUN_CLOUD_API_KEY here." -- npx -y droidrun-cloud-mcp
+claude mcp add --transport stdio mobilerun_sdk_api --env MOBILERUN_CLOUD_API_KEY="Your MOBILERUN_CLOUD_API_KEY here." -- npx -y mobilerun-cloud-mcp
 ```
 
 ## Exposing endpoints to your MCP Client
@@ -172,8 +172,8 @@ Authorization can be provided via the `Authorization` header using the Bearer sc
 
 Additionally, authorization can be provided via the following headers:
 | Header | Equivalent client option | Security scheme |
-| -------------------------- | ------------------------ | --------------- |
-| `x-droidrun-cloud-api-key` | `apiKey` | bearerAuth |
+| --------------------------- | ------------------------ | --------------- |
+| `x-mobilerun-cloud-api-key` | `apiKey` | bearerAuth |
 
 A configuration JSON for this server might look like this, assuming the server is hosted at `http://localhost:3000`:
 
@@ -207,10 +207,10 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 
 ```js
 // Import the server, generated endpoints, or the init function
-import { server, endpoints, init } from "droidrun-cloud-mcp/server";
+import { server, endpoints, init } from "mobilerun-cloud-mcp/server";
 
 // import a specific tool
-import retrieveTasks from "droidrun-cloud-mcp/tools/tasks/retrieve-tasks";
+import retrieveTasks from "mobilerun-cloud-mcp/tools/tasks/retrieve-tasks";
 
 // initialize the server and all endpoints
 init({ server, endpoints });

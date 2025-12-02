@@ -60,7 +60,7 @@ import {
 import { isEmptyObj } from './internal/utils/values';
 
 const environments = {
-  production: 'https://api.droidrun.ai/v1',
+  production: 'https://api.mobilerun.ai/v1',
   staging: 'https://staging-api.droidrun.ai/v1',
   dev: 'https://dev-api.droidrun.ai/v1',
 };
@@ -68,7 +68,7 @@ type Environment = keyof typeof environments;
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['DROIDRUN_CLOUD_API_KEY'].
+   * Defaults to process.env['MOBILERUN_CLOUD_API_KEY'].
    */
   apiKey?: string | null | undefined;
 
@@ -76,7 +76,7 @@ export interface ClientOptions {
    * Specifies the environment to use for the API.
    *
    * Each environment maps to a different base URL:
-   * - `production` corresponds to `https://api.droidrun.ai/v1`
+   * - `production` corresponds to `https://api.mobilerun.ai/v1`
    * - `staging` corresponds to `https://staging-api.droidrun.ai/v1`
    * - `dev` corresponds to `https://dev-api.droidrun.ai/v1`
    */
@@ -85,7 +85,7 @@ export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['DROIDRUN_CLOUD_BASE_URL'].
+   * Defaults to process.env['MOBILERUN_CLOUD_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -139,7 +139,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['DROIDRUN_CLOUD_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['MOBILERUN_CLOUD_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -152,9 +152,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Droidrun Cloud API.
+ * API Client for interfacing with the Mobilerun Cloud API.
  */
-export class DroidrunCloud {
+export class MobilerunCloud {
   apiKey: string | null;
 
   baseURL: string;
@@ -170,11 +170,11 @@ export class DroidrunCloud {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Droidrun Cloud API.
+   * API Client for interfacing with the Mobilerun Cloud API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['DROIDRUN_CLOUD_API_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_CLOUD_API_KEY'] ?? null]
    * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
-   * @param {string} [opts.baseURL=process.env['DROIDRUN_CLOUD_BASE_URL'] ?? https://api.droidrun.ai/v1] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['MOBILERUN_CLOUD_BASE_URL'] ?? https://api.mobilerun.ai/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -183,8 +183,8 @@ export class DroidrunCloud {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('DROIDRUN_CLOUD_BASE_URL'),
-    apiKey = readEnv('DROIDRUN_CLOUD_API_KEY') ?? null,
+    baseURL = readEnv('MOBILERUN_CLOUD_BASE_URL'),
+    apiKey = readEnv('MOBILERUN_CLOUD_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
@@ -195,20 +195,20 @@ export class DroidrunCloud {
     };
 
     if (baseURL && opts.environment) {
-      throw new Errors.DroidrunCloudError(
-        'Ambiguous URL; The `baseURL` option (or DROIDRUN_CLOUD_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
+      throw new Errors.MobilerunCloudError(
+        'Ambiguous URL; The `baseURL` option (or MOBILERUN_CLOUD_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
       );
     }
 
     this.baseURL = options.baseURL || environments[options.environment || 'production'];
-    this.timeout = options.timeout ?? DroidrunCloud.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? MobilerunCloud.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('DROIDRUN_CLOUD_LOG'), "process.env['DROIDRUN_CLOUD_LOG']", this) ??
+      parseLogLevel(readEnv('MOBILERUN_CLOUD_LOG'), "process.env['MOBILERUN_CLOUD_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -284,7 +284,7 @@ export class DroidrunCloud {
         if (value === null) {
           return `${encodeURIComponent(key)}=`;
         }
-        throw new Errors.DroidrunCloudError(
+        throw new Errors.MobilerunCloudError(
           `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
         );
       })
@@ -756,10 +756,10 @@ export class DroidrunCloud {
     }
   }
 
-  static DroidrunCloud = this;
+  static MobilerunCloud = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static DroidrunCloudError = Errors.DroidrunCloudError;
+  static MobilerunCloudError = Errors.MobilerunCloudError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -781,12 +781,12 @@ export class DroidrunCloud {
   hooks: API.Hooks = new API.Hooks(this);
 }
 
-DroidrunCloud.Tasks = Tasks;
-DroidrunCloud.Apps = Apps;
-DroidrunCloud.Credentials = Credentials;
-DroidrunCloud.Hooks = Hooks;
+MobilerunCloud.Tasks = Tasks;
+MobilerunCloud.Apps = Apps;
+MobilerunCloud.Credentials = Credentials;
+MobilerunCloud.Hooks = Hooks;
 
-export declare namespace DroidrunCloud {
+export declare namespace MobilerunCloud {
   export type RequestOptions = Opts.RequestOptions;
 
   export {

@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^droidrun-cloud-mcp$': '<rootDir>/src/index.ts',
-    '^droidrun-cloud-mcp/(.*)$': '<rootDir>/src/$1',
+    '^mobilerun-cloud-mcp$': '<rootDir>/src/index.ts',
+    '^mobilerun-cloud-mcp/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   testPathIgnorePatterns: ['scripts'],

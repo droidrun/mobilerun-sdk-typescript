@@ -6,7 +6,7 @@ import Fuse from 'fuse.js';
 import ts from 'typescript';
 
 import { WorkerInput, WorkerSuccess, WorkerError } from './code-tool-types';
-import { DroidrunCloud } from '@mobilerun/sdk';
+import { MobilerunCloud } from '@mobilerun/sdk';
 
 function getRunFunctionNode(
   code: string,
@@ -190,7 +190,7 @@ const fetch = async (req: Request): Promise<Response> => {
     );
   }
 
-  const client = new DroidrunCloud({
+  const client = new MobilerunCloud({
     ...opts,
   });
 

@@ -11,7 +11,7 @@ import {
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import { ClientOptions } from '@mobilerun/sdk';
-import DroidrunCloud from '@mobilerun/sdk';
+import MobilerunCloud from '@mobilerun/sdk';
 import {
   applyCompatibilityTransformations,
   ClientCapabilities,
@@ -87,8 +87,8 @@ export function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
-  let client = new DroidrunCloud({
-    ...{ environment: (readEnv('DROIDRUN_CLOUD_ENVIRONMENT') || undefined) as any },
+  let client = new MobilerunCloud({
+    ...{ environment: (readEnv('MOBILERUN_CLOUD_ENVIRONMENT') || undefined) as any },
     logger,
     ...params.clientOptions,
     defaultHeaders: {
@@ -179,7 +179,7 @@ export async function selectTools(endpoints: Endpoint[], options?: McpOptions): 
 export async function executeHandler(
   tool: Tool,
   handler: HandlerFunction,
-  client: DroidrunCloud,
+  client: MobilerunCloud,
   args: Record<string, unknown> | undefined,
   compatibilityOptions?: Partial<ClientCapabilities>,
 ) {

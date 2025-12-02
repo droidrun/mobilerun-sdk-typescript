@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Metadata, asErrorResult, asTextContentResult } from 'droidrun-cloud-mcp/tools/types';
+import { Metadata, asErrorResult, asTextContentResult } from 'mobilerun-cloud-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import DroidrunCloud from '@mobilerun/sdk';
+import MobilerunCloud from '@mobilerun/sdk';
 
 export const metadata: Metadata = {
   resource: 'tasks',
@@ -32,12 +32,12 @@ export const tool: Tool = {
   },
 };
 
-export const handler = async (client: DroidrunCloud, args: Record<string, unknown> | undefined) => {
+export const handler = async (client: MobilerunCloud, args: Record<string, unknown> | undefined) => {
   const { task_id, ...body } = args as any;
   try {
     return asTextContentResult(await client.tasks.getTrajectory(task_id));
   } catch (error) {
-    if (error instanceof DroidrunCloud.APIError) {
+    if (error instanceof MobilerunCloud.APIError) {
       return asErrorResult(error.message);
     }
     throw error;
