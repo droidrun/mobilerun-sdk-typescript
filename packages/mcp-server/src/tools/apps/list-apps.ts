@@ -41,7 +41,7 @@ export const tool: Tool = {
       },
       source: {
         type: 'string',
-        enum: ['all', 'uploaded', 'store'],
+        enum: ['all', 'uploaded', 'store', 'queued'],
       },
       jq_filter: {
         type: 'string',
