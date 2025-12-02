@@ -62,7 +62,7 @@ export const handler = async (client: DroidrunCloud, args: Record<string, unknow
   try {
     return asTextContentResult(await maybeFilter(jq_filter, await client.apps.list(body)));
   } catch (error) {
-    if (isJqError(error)) {
+    if (error instanceof DroidrunCloud.APIError || isJqError(error)) {
       return asErrorResult(error.message);
     }
     throw error;
