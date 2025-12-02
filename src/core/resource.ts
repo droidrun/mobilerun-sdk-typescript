@@ -1,11 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { DroidrunCloud } from '../client';
+import type { MobilerunCloud } from '../client';
 
 export abstract class APIResource {
-  protected _client: DroidrunCloud;
+  protected _client: MobilerunCloud;
 
-  constructor(client: DroidrunCloud) {
+  constructor(client: MobilerunCloud) {
     this._client = client;
   }
 }

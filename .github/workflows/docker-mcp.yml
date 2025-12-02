@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: droidrun/droidrun-cloud
+  IMAGE_NAME: droidrun/mobilerun-cloud
 
 jobs:
   build-and-push:
@@ -72,9 +72,9 @@ jobs:
           tags: |
             ${{ steps.tags.outputs.tags }}
           labels: |
-            org.opencontainers.image.title=Droidrun Cloud MCP Server
-            org.opencontainers.image.description=Model Context Protocol server for Droidrun Cloud API
-            org.opencontainers.image.vendor=droidrun-cloud
+            org.opencontainers.image.title=Mobilerun Cloud MCP Server
+            org.opencontainers.image.description=Model Context Protocol server for Mobilerun Cloud API
+            org.opencontainers.image.vendor=mobilerun-cloud
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6

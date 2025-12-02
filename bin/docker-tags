@@ -23,7 +23,7 @@ fi
 
 # Check if there's any stable release in Docker Hub
 # This matches the npm logic: check if ANY stable version exists
-DOCKER_IMAGE="${DOCKER_IMAGE:-droidrun/droidrun-cloud}"
+DOCKER_IMAGE="${DOCKER_IMAGE:-droidrun/mobilerun-cloud}"
 HAS_STABLE_RELEASE=false
 
 PAGE=1

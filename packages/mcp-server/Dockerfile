@@ -1,12 +1,12 @@
-# Dockerfile for Droidrun Cloud MCP Server
+# Dockerfile for Mobilerun Cloud MCP Server
     #
     # This Dockerfile builds a Docker image for the MCP Server.
     #
     # To build the image locally:
-    #   docker build -f packages/mcp-server/Dockerfile -t droidrun/droidrun-cloud:local .
+    #   docker build -f packages/mcp-server/Dockerfile -t droidrun/mobilerun-cloud:local .
     #
     # To run the image:
-    #   docker run -i droidrun/droidrun-cloud:local [OPTIONS]
+    #   docker run -i droidrun/mobilerun-cloud:local [OPTIONS]
     #
     # Common options:
     #   --tool=<name>              Include specific tools
@@ -16,7 +16,7 @@
     #   --transport=<type>         Set transport type (stdio or http)
     #
     # For a full list of options:
-    #   docker run -i droidrun/droidrun-cloud:local --help
+    #   docker run -i droidrun/mobilerun-cloud:local --help
     #
     # Note: The MCP server uses stdio transport by default. Docker's -i flag
     # enables interactive mode, allowing the container to communicate over stdin/stdout.
