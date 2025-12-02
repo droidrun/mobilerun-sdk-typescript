@@ -335,7 +335,7 @@ export interface AppListParams {
 
   sortBy?: 'createdAt' | 'name';
 
-  source?: 'all' | 'uploaded' | 'store';
+  source?: 'all' | 'uploaded' | 'store' | 'queued';
 }
 
 export declare namespace Apps {
