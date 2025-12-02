@@ -71,7 +71,7 @@ export const handler = async (client: DroidrunCloud, args: Record<string, unknow
       await maybeFilter(jq_filter, await client.credentials.packages.credentials.create(packageName, body)),
     );
   } catch (error) {
-    if (isJqError(error)) {
+    if (error instanceof DroidrunCloud.APIError || isJqError(error)) {
       return asErrorResult(error.message);
     }
     throw error;
