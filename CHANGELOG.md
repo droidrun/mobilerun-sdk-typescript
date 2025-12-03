@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0 (2025-12-03)
+
+Full Changelog: [v0.4.0...v1.0.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v0.4.0...v1.0.0)
+
+### Features
+
+* **api:** named python and mcp to mobilerun ([307fdf6](https://github.com/droidrun/mobilerun-sdk-typescript/commit/307fdf611e850cc2f67bf8a4202133db4b9ac89e))
+
 ## 0.4.0 (2025-12-03)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v0.3.0...v0.4.0)
