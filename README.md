@@ -1,21 +1,18 @@
-# Droidrun Cloud TypeScript API Library
+# Mobilerun TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/droidrun-cloud.svg?label=npm%20(stable)>)](https://npmjs.org/package/droidrun-cloud) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/droidrun-cloud)
+[![NPM version](<https://img.shields.io/npm/v/@mobilerun/sdk.svg?label=npm%20(stable)>)](https://npmjs.org/package/@mobilerun/sdk) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@mobilerun/sdk)
 
-This library provides convenient access to the Droidrun Cloud REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Mobilerun REST API from server-side TypeScript or JavaScript.
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.mobilerun.ai](https://docs.mobilerun.ai). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:droidrun/cloud-sdk-typescript.git
+npm install @mobilerun/sdk
 ```
-
-> [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install droidrun-cloud`
 
 ## Usage
 
@@ -23,15 +20,15 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import DroidrunCloud from 'droidrun-cloud';
+import Mobilerun from '@mobilerun/sdk';
 
-const client = new DroidrunCloud({
-  apiKey: process.env['DROIDRUN_CLOUD_API_KEY'], // This is the default and can be omitted
+const client = new Mobilerun({
+  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
 });
 
-const response = await client.tasks.run({ task: 'x' });
+const tasks = await client.tasks.list();
 
-console.log(response.id);
+console.log(tasks.items);
 ```
 
 ### Request & Response types
@@ -40,14 +37,13 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import DroidrunCloud from 'droidrun-cloud';
+import Mobilerun from '@mobilerun/sdk';
 
-const client = new DroidrunCloud({
-  apiKey: process.env['DROIDRUN_CLOUD_API_KEY'], // This is the default and can be omitted
+const client = new Mobilerun({
+  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
 });
 
-const params: DroidrunCloud.TaskRunParams = { task: 'x' };
-const response: DroidrunCloud.TaskRunResponse = await client.tasks.run(params);
+const tasks: Mobilerun.TaskListResponse = await client.tasks.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -60,8 +56,8 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.tasks.run({ task: 'x' }).catch(async (err) => {
-  if (err instanceof DroidrunCloud.APIError) {
+const tasks = await client.tasks.list().catch(async (err) => {
+  if (err instanceof Mobilerun.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
     console.log(err.headers); // {server: 'nginx', ...}
@@ -95,12 +91,12 @@ You can use the `maxRetries` option to configure or disable this:
 <!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
-const client = new DroidrunCloud({
+const client = new Mobilerun({
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.tasks.run({ task: 'x' }, {
+await client.tasks.list({
   maxRetries: 5,
 });
 ```
@@ -112,12 +108,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
-const client = new DroidrunCloud({
+const client = new Mobilerun({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await client.tasks.run({ task: 'x' }, {
+await client.tasks.list({
   timeout: 5 * 1000,
 });
 ```
@@ -138,15 +134,15 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 
 <!-- prettier-ignore -->
 ```ts
-const client = new DroidrunCloud();
+const client = new Mobilerun();
 
-const response = await client.tasks.run({ task: 'x' }).asResponse();
+const response = await client.tasks.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.tasks.run({ task: 'x' }).withResponse();
+const { data: tasks, response: raw } = await client.tasks.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.id);
+console.log(tasks.items);
 ```
 
 ### Logging
@@ -159,13 +155,13 @@ console.log(response.id);
 
 The log level can be configured in two ways:
 
-1. Via the `DROIDRUN_CLOUD_LOG` environment variable
+1. Via the `MOBILERUN_LOG` environment variable
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import DroidrunCloud from 'droidrun-cloud';
+import Mobilerun from '@mobilerun/sdk';
 
-const client = new DroidrunCloud({
+const client = new Mobilerun({
   logLevel: 'debug', // Show all log messages
 });
 ```
@@ -191,13 +187,13 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import DroidrunCloud from 'droidrun-cloud';
+import Mobilerun from '@mobilerun/sdk';
 import pino from 'pino';
 
 const logger = pino();
 
-const client = new DroidrunCloud({
-  logger: logger.child({ name: 'DroidrunCloud' }),
+const client = new Mobilerun({
+  logger: logger.child({ name: 'Mobilerun' }),
   logLevel: 'debug', // Send all messages to pino, allowing it to filter
 });
 ```
@@ -226,7 +222,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.tasks.run({
+client.tasks.list({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
@@ -260,10 +256,10 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import DroidrunCloud from 'droidrun-cloud';
+import Mobilerun from '@mobilerun/sdk';
 import fetch from 'my-fetch';
 
-const client = new DroidrunCloud({ fetch });
+const client = new Mobilerun({ fetch });
 ```
 
 ### Fetch options
@@ -271,9 +267,9 @@ const client = new DroidrunCloud({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import DroidrunCloud from 'droidrun-cloud';
+import Mobilerun from '@mobilerun/sdk';
 
-const client = new DroidrunCloud({
+const client = new Mobilerun({
   fetchOptions: {
     // `RequestInit` options
   },
@@ -288,11 +284,11 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import DroidrunCloud from 'droidrun-cloud';
+import Mobilerun from '@mobilerun/sdk';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
-const client = new DroidrunCloud({
+const client = new Mobilerun({
   fetchOptions: {
     dispatcher: proxyAgent,
   },
@@ -302,9 +298,9 @@ const client = new DroidrunCloud({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import DroidrunCloud from 'droidrun-cloud';
+import Mobilerun from '@mobilerun/sdk';
 
-const client = new DroidrunCloud({
+const client = new Mobilerun({
   fetchOptions: {
     proxy: 'http://localhost:8888',
   },
@@ -314,10 +310,10 @@ const client = new DroidrunCloud({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import DroidrunCloud from 'npm:droidrun-cloud';
+import Mobilerun from 'npm:@mobilerun/sdk';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
-const client = new DroidrunCloud({
+const client = new Mobilerun({
   fetchOptions: {
     client: httpClient,
   },
@@ -336,7 +332,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/droidrun/cloud-sdk-typescript/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/droidrun/mobilerun-sdk-typescript/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 

@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^droidrun-cloud$': '<rootDir>/src/index.ts',
-    '^droidrun-cloud/(.*)$': '<rootDir>/src/$1',
+    '^@mobilerun/sdk$': '<rootDir>/src/index.ts',
+    '^@mobilerun/sdk/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',

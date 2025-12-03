@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import DroidrunCloud from 'droidrun-cloud';
+import Mobilerun from '@mobilerun/sdk';
 
-const client = new DroidrunCloud({
+const client = new Mobilerun({
   apiKey: 'My API Key',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
@@ -40,24 +40,12 @@ describe('resource tasks', () => {
         { orderBy: 'id', orderByDirection: 'asc', page: 1, pageSize: 1, query: 'query', status: 'created' },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(DroidrunCloud.NotFoundError);
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Prism tests are disabled
   test.skip('attach', async () => {
     const responsePromise = client.tasks.attach('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('getGif', async () => {
-    const responsePromise = client.tasks.getGif('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -93,7 +81,7 @@ describe('resource tasks', () => {
 
   // Prism tests are disabled
   test.skip('run: only required params', async () => {
-    const responsePromise = client.tasks.run({ task: 'x' });
+    const responsePromise = client.tasks.run({ llmModel: 'openai/gpt-5', task: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -106,24 +94,24 @@ describe('resource tasks', () => {
   // Prism tests are disabled
   test.skip('run: required and optional params', async () => {
     const response = await client.tasks.run({
+      llmModel: 'openai/gpt-5',
       task: 'x',
-      credentials: { foo: { foo: 'string' } },
+      apps: ['string'],
+      credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
+      executionTimeout: 0,
       files: ['string'],
-      libraryApps: ['string'],
-      llmModel: 'gpt-4o',
       maxSteps: 0,
+      outputSchema: { foo: 'bar' },
       reasoning: true,
-      reflection: true,
       temperature: 0,
-      timeout: 0,
-      uploadedApps: ['string'],
       vision: true,
+      vpnCountry: 'US',
     });
   });
 
   // Prism tests are disabled
   test.skip('runStreamed: only required params', async () => {
-    const responsePromise = client.tasks.runStreamed({ task: 'x' });
+    const responsePromise = client.tasks.runStreamed({ llmModel: 'openai/gpt-5', task: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -136,18 +124,18 @@ describe('resource tasks', () => {
   // Prism tests are disabled
   test.skip('runStreamed: required and optional params', async () => {
     const response = await client.tasks.runStreamed({
+      llmModel: 'openai/gpt-5',
       task: 'x',
-      credentials: { foo: { foo: 'string' } },
+      apps: ['string'],
+      credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
+      executionTimeout: 0,
       files: ['string'],
-      libraryApps: ['string'],
-      llmModel: 'gpt-4o',
       maxSteps: 0,
+      outputSchema: { foo: 'bar' },
       reasoning: true,
-      reflection: true,
       temperature: 0,
-      timeout: 0,
-      uploadedApps: ['string'],
       vision: true,
+      vpnCountry: 'US',
     });
   });
 

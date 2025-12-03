@@ -16,6 +16,20 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { AppListParams, AppListResponse, Apps } from './resources/apps';
+import {
+  HookGetSampleDataResponse,
+  HookListParams,
+  HookListResponse,
+  HookPerformResponse,
+  HookSubscribeParams,
+  HookSubscribeResponse,
+  HookUnsubscribeResponse,
+  HookUpdateParams,
+  HookUpdateResponse,
+  Hooks,
+} from './resources/hooks';
+import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
 import {
   LlmModel,
   Task,
@@ -47,14 +61,14 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['DROIDRUN_CLOUD_API_KEY'].
+   * Defaults to process.env['MOBILERUN_CLOUD_API_KEY'].
    */
-  apiKey?: string | undefined;
+  apiKey?: string | null | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['DROIDRUN_CLOUD_BASE_URL'].
+   * Defaults to process.env['MOBILERUN_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -108,7 +122,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['DROIDRUN_CLOUD_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['MOBILERUN_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -121,15 +135,15 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Droidrun Cloud API.
+ * API Client for interfacing with the Mobilerun API.
  */
-export class DroidrunCloud {
-  apiKey: string;
+export class Mobilerun {
+  apiKey: string | null;
 
   baseURL: string;
   maxRetries: number;
   timeout: number;
-  logger: Logger | undefined;
+  logger: Logger;
   logLevel: LogLevel | undefined;
   fetchOptions: MergedRequestInit | undefined;
 
@@ -139,10 +153,10 @@ export class DroidrunCloud {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Droidrun Cloud API.
+   * API Client for interfacing with the Mobilerun API.
    *
-   * @param {string | undefined} [opts.apiKey=process.env['DROIDRUN_CLOUD_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['DROIDRUN_CLOUD_BASE_URL'] ?? https://api.droidrun.ai/v1] - Override the default base URL for the API.
+   * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_CLOUD_API_KEY'] ?? null]
+   * @param {string} [opts.baseURL=process.env['MOBILERUN_BASE_URL'] ?? https://api.mobilerun.ai/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -151,31 +165,25 @@ export class DroidrunCloud {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('DROIDRUN_CLOUD_BASE_URL'),
-    apiKey = readEnv('DROIDRUN_CLOUD_API_KEY'),
+    baseURL = readEnv('MOBILERUN_BASE_URL'),
+    apiKey = readEnv('MOBILERUN_CLOUD_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
-    if (apiKey === undefined) {
-      throw new Errors.DroidrunCloudError(
-        "The DROIDRUN_CLOUD_API_KEY environment variable is missing or empty; either provide it, or instantiate the DroidrunCloud client with an apiKey option, like new DroidrunCloud({ apiKey: 'My API Key' }).",
-      );
-    }
-
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `https://api.droidrun.ai/v1`,
+      baseURL: baseURL || `https://api.mobilerun.ai/v1`,
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? DroidrunCloud.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? Mobilerun.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('DROIDRUN_CLOUD_LOG'), "process.env['DROIDRUN_CLOUD_LOG']", this) ??
+      parseLogLevel(readEnv('MOBILERUN_LOG'), "process.env['MOBILERUN_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -210,7 +218,7 @@ export class DroidrunCloud {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://api.droidrun.ai/v1';
+    return this.baseURL !== 'https://api.mobilerun.ai/v1';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -218,10 +226,22 @@ export class DroidrunCloud {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.apiKey && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+    );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.apiKey == null) {
+      return undefined;
+    }
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
@@ -238,7 +258,7 @@ export class DroidrunCloud {
         if (value === null) {
           return `${encodeURIComponent(key)}=`;
         }
-        throw new Errors.DroidrunCloudError(
+        throw new Errors.MobilerunError(
           `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
         );
       })
@@ -710,10 +730,10 @@ export class DroidrunCloud {
     }
   }
 
-  static DroidrunCloud = this;
+  static Mobilerun = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static DroidrunCloudError = Errors.DroidrunCloudError;
+  static MobilerunError = Errors.MobilerunError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -730,11 +750,17 @@ export class DroidrunCloud {
   static toFile = Uploads.toFile;
 
   tasks: API.Tasks = new API.Tasks(this);
+  apps: API.Apps = new API.Apps(this);
+  credentials: API.Credentials = new API.Credentials(this);
+  hooks: API.Hooks = new API.Hooks(this);
 }
 
-DroidrunCloud.Tasks = Tasks;
+Mobilerun.Tasks = Tasks;
+Mobilerun.Apps = Apps;
+Mobilerun.Credentials = Credentials;
+Mobilerun.Hooks = Hooks;
 
-export declare namespace DroidrunCloud {
+export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
 
   export {
@@ -752,5 +778,22 @@ export declare namespace DroidrunCloud {
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
+  };
+
+  export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
+
+  export { Credentials as Credentials, type CredentialListResponse as CredentialListResponse };
+
+  export {
+    Hooks as Hooks,
+    type HookUpdateResponse as HookUpdateResponse,
+    type HookListResponse as HookListResponse,
+    type HookGetSampleDataResponse as HookGetSampleDataResponse,
+    type HookPerformResponse as HookPerformResponse,
+    type HookSubscribeResponse as HookSubscribeResponse,
+    type HookUnsubscribeResponse as HookUnsubscribeResponse,
+    type HookUpdateParams as HookUpdateParams,
+    type HookListParams as HookListParams,
+    type HookSubscribeParams as HookSubscribeParams,
   };
 }

@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "droidrun-cloud/*": ["./src/*"],
-      "droidrun-cloud": ["./src/index.ts"]
+      "@mobilerun/sdk/*": ["./src/*"],
+      "@mobilerun/sdk": ["./src/index.ts"]
     },
     "noEmit": true,
 

@@ -3,6 +3,8 @@
 import { APIResource } from '../../core/resource';
 import * as ScreenshotsAPI from './screenshots';
 import { MediaResponse, ScreenshotListResponse, ScreenshotRetrieveParams, Screenshots } from './screenshots';
+import * as UiStatesAPI from './ui-states';
+import { UiStateListResponse, UiStateRetrieveParams, UiStates } from './ui-states';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -10,6 +12,7 @@ import { path } from '../../internal/utils/path';
 
 export class Tasks extends APIResource {
   screenshots: ScreenshotsAPI.Screenshots = new ScreenshotsAPI.Screenshots(this._client);
+  uiStates: UiStatesAPI.UiStates = new UiStatesAPI.UiStates(this._client);
 
   /**
    * Get Task
@@ -36,13 +39,6 @@ export class Tasks extends APIResource {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
-  }
-
-  /**
-   * Get Task Gif
-   */
-  getGif(taskID: string, options?: RequestOptions): APIPromise<ScreenshotsAPI.MediaResponse> {
-    return this._client.get(path`/tasks/${taskID}/gif`, options);
   }
 
   /**
@@ -87,19 +83,18 @@ export class Tasks extends APIResource {
 }
 
 export type LlmModel =
-  | 'gpt-4o'
-  | 'gpt-4o-mini'
-  | 'gpt-4.1'
-  | 'gpt-4.1-mini'
-  | 'gpt-o4-mini'
-  | 'gpt-o3'
-  | 'gemini-2.5-flash'
-  | 'gemini-2.5-pro'
-  | 'claude-3-7-sonnet-latest'
-  | 'claude-sonnet-4-20250514';
+  | 'openai/gpt-5'
+  | 'google/gemini-2.5-flash'
+  | 'google/gemini-2.5-pro'
+  | 'google/gemini-3-pro-preview'
+  | 'anthropic/claude-sonnet-4.5'
+  | 'minimax/minimax-m2'
+  | 'moonshotai/kimi-k2-thinking';
 
 export interface Task {
   deviceId: string;
+
+  llmModel: LlmModel;
 
   task: string;
 
@@ -107,19 +102,25 @@ export interface Task {
 
   id?: string;
 
+  apps?: Array<string>;
+
   createdAt?: string;
+
+  credentials?: Array<Task.Credential>;
+
+  executionTimeout?: number;
+
+  files?: Array<string>;
 
   finishedAt?: string | null;
 
-  llmModel?: LlmModel;
-
   maxSteps?: number;
 
-  output?: string | null;
+  output?: { [key: string]: unknown } | null;
+
+  outputSchema?: { [key: string]: unknown } | null;
 
   reasoning?: boolean;
-
-  reflection?: boolean;
 
   status?: TaskStatus;
 
@@ -129,39 +130,55 @@ export interface Task {
 
   temperature?: number;
 
-  timeout?: number;
-
   trajectory?: Array<{ [key: string]: unknown }>;
 
   updatedAt?: string;
 
   vision?: boolean;
+
+  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+}
+
+export namespace Task {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
 }
 
 export interface TaskCreate {
+  llmModel: LlmModel;
+
   task: string;
 
-  credentials?: { [key: string]: { [key: string]: string } };
+  apps?: Array<string>;
+
+  credentials?: Array<TaskCreate.Credential>;
+
+  executionTimeout?: number;
 
   files?: Array<string>;
 
-  libraryApps?: Array<string>;
-
-  llmModel?: LlmModel;
-
   maxSteps?: number;
+
+  outputSchema?: { [key: string]: unknown } | null;
 
   reasoning?: boolean;
 
-  reflection?: boolean;
-
   temperature?: number;
 
-  timeout?: number;
-
-  uploadedApps?: Array<string>;
-
   vision?: boolean;
+
+  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+}
+
+export namespace TaskCreate {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
 }
 
 export type TaskStatus = 'created' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
@@ -239,22 +256,25 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryCancelEvent
     | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent
     | TaskGetTrajectoryResponse.TrajectoryStartEvent
+    | TaskGetTrajectoryResponse.TrajectoryTaskRunnerEvent
+    | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent
+    | TaskGetTrajectoryResponse.TrajectoryStopEvent
+    | TaskGetTrajectoryResponse.TrajectoryResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerPlanEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterExecutorInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterExecutorResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryPlanCreatedEvent
     | TaskGetTrajectoryResponse.TrajectoryPlanInputEvent
     | TaskGetTrajectoryResponse.TrajectoryPlanThinkingEvent
-    | TaskGetTrajectoryResponse.TrajectoryPlanCreatedEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskInputEvent
     | TaskGetTrajectoryResponse.TrajectoryTaskThinkingEvent
     | TaskGetTrajectoryResponse.TrajectoryTaskExecutionEvent
     | TaskGetTrajectoryResponse.TrajectoryTaskExecutionResultEvent
     | TaskGetTrajectoryResponse.TrajectoryTaskEndEvent
-    | TaskGetTrajectoryResponse.TrajectoryEpisodicMemoryEvent
     | TaskGetTrajectoryResponse.TrajectoryCodeActExecuteEvent
     | TaskGetTrajectoryResponse.TrajectoryCodeActResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryReflectionEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskRunnerEvent
-    | TaskGetTrajectoryResponse.TrajectoryReasoningLogicEvent
-    | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent
-    | TaskGetTrajectoryResponse.TrajectoryStopEvent
     | TaskGetTrajectoryResponse.TrajectoryTapActionEvent
     | TaskGetTrajectoryResponse.TrajectorySwipeActionEvent
     | TaskGetTrajectoryResponse.TrajectoryDragActionEvent
@@ -262,6 +282,21 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryKeyPressActionEvent
     | TaskGetTrajectoryResponse.TrajectoryStartAppEvent
     | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent
+    | TaskGetTrajectoryResponse.TrajectoryWaitEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerContextEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerResponseEvent
+    | TaskGetTrajectoryResponse.TrajectoryManagerPlanDetailsEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorContextEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent
+    | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterThinkingEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterExecutionEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterExecutionResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryScripterEndEvent
+    | TaskGetTrajectoryResponse.TrajectoryTextManipulatorInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryTextManipulatorResultEvent
   >;
 }
 
@@ -269,7 +304,7 @@ export namespace TaskGetTrajectoryResponse {
   export interface TrajectoryCreatedEvent {
     data: TrajectoryCreatedEvent.Data;
 
-    event?: 'CreatedEvent';
+    event: 'CreatedEvent';
   }
 
   export namespace TrajectoryCreatedEvent {
@@ -285,7 +320,7 @@ export namespace TaskGetTrajectoryResponse {
   export interface TrajectoryExceptionEvent {
     data: TrajectoryExceptionEvent.Data;
 
-    event?: 'ExceptionEvent';
+    event: 'ExceptionEvent';
   }
 
   export namespace TrajectoryExceptionEvent {
@@ -297,7 +332,7 @@ export namespace TaskGetTrajectoryResponse {
   export interface TrajectoryCancelEvent {
     data: TrajectoryCancelEvent.Data;
 
-    event?: 'CancelEvent';
+    event: 'CancelEvent';
   }
 
   export namespace TrajectoryCancelEvent {
@@ -309,7 +344,7 @@ export namespace TaskGetTrajectoryResponse {
   export interface TrajectoryScreenshotEvent {
     data: TrajectoryScreenshotEvent.Data;
 
-    event?: 'ScreenshotEvent';
+    event: 'ScreenshotEvent';
   }
 
   export namespace TrajectoryScreenshotEvent {
@@ -321,147 +356,874 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryStartEvent {
-    data: { [key: string]: unknown };
+    /**
+     * Implicit entry event sent to kick off a `Workflow.run()`.
+     */
+    data: unknown;
 
-    event?: 'StartEvent';
+    event: 'StartEvent';
   }
 
-  export interface TrajectoryPlanInputEvent {
-    data: { [key: string]: unknown };
+  export interface TrajectoryTaskRunnerEvent {
+    data: unknown;
 
-    event?: 'PlanInputEvent';
+    event: 'TaskRunnerEvent';
   }
 
-  export interface TrajectoryPlanThinkingEvent {
+  export interface TrajectoryFinalizeEvent {
+    data: TrajectoryFinalizeEvent.Data;
+
+    event: 'FinalizeEvent';
+  }
+
+  export namespace TrajectoryFinalizeEvent {
+    export interface Data {
+      reason: string;
+
+      success: boolean;
+    }
+  }
+
+  export interface TrajectoryStopEvent {
+    /**
+     * Terminal event that signals the workflow has completed.
+     *
+     * The `result` property contains the return value of the workflow run. When a
+     * custom stop event subclass is used, the workflow result is that event instance
+     * itself.
+     *
+     * Examples:
+     * `python # default stop event: result holds the value return StopEvent(result={"answer": 42}) `
+     *
+     *     Subclassing to provide a custom result:
+     *
+     *     ```python
+     *     class MyStopEv(StopEvent):
+     *         pass
+     *
+     *     @step
+     *     async def my_step(self, ctx: Context, ev: StartEvent) -> MyStopEv:
+     *         return MyStopEv(result={"answer": 42})
+     */
+    data: unknown;
+
+    event: 'StopEvent';
+  }
+
+  export interface TrajectoryResultEvent {
     data: { [key: string]: unknown };
 
-    event?: 'PlanThinkingEvent';
+    event: 'ResultEvent';
+  }
+
+  export interface TrajectoryManagerInputEvent {
+    /**
+     * Trigger Manager workflow for planning
+     */
+    data: unknown;
+
+    event: 'ManagerInputEvent';
+  }
+
+  export interface TrajectoryManagerPlanEvent {
+    /**
+     * Coordination event from ManagerAgent to DroidAgent.
+     *
+     * Used for workflow step routing only (NOT streamed to frontend). For internal
+     * events with memory_update metadata, see ManagerPlanDetailsEvent.
+     */
+    data: TrajectoryManagerPlanEvent.Data;
+
+    event: 'ManagerPlanEvent';
+  }
+
+  export namespace TrajectoryManagerPlanEvent {
+    /**
+     * Coordination event from ManagerAgent to DroidAgent.
+     *
+     * Used for workflow step routing only (NOT streamed to frontend). For internal
+     * events with memory_update metadata, see ManagerPlanDetailsEvent.
+     */
+    export interface Data {
+      current_subgoal: string;
+
+      plan: string;
+
+      thought: string;
+
+      manager_answer?: string;
+
+      success?: boolean | null;
+    }
+  }
+
+  export interface TrajectoryExecutorInputEvent {
+    /**
+     * Trigger Executor workflow for action execution
+     */
+    data: TrajectoryExecutorInputEvent.Data;
+
+    event: 'ExecutorInputEvent';
+  }
+
+  export namespace TrajectoryExecutorInputEvent {
+    /**
+     * Trigger Executor workflow for action execution
+     */
+    export interface Data {
+      current_subgoal: string;
+    }
+  }
+
+  export interface TrajectoryExecutorResultEvent {
+    /**
+     * Coordination event from ExecutorAgent to DroidAgent.
+     *
+     * Used for workflow step routing only (NOT streamed to frontend). For internal
+     * events with thought/action_json metadata, see ExecutorActionResultEvent.
+     */
+    data: TrajectoryExecutorResultEvent.Data;
+
+    event: 'ExecutorResultEvent';
+  }
+
+  export namespace TrajectoryExecutorResultEvent {
+    /**
+     * Coordination event from ExecutorAgent to DroidAgent.
+     *
+     * Used for workflow step routing only (NOT streamed to frontend). For internal
+     * events with thought/action_json metadata, see ExecutorActionResultEvent.
+     */
+    export interface Data {
+      action: { [key: string]: unknown };
+
+      error: string;
+
+      outcome: boolean;
+
+      summary: string;
+
+      full_response?: string;
+    }
+  }
+
+  export interface TrajectoryScripterExecutorInputEvent {
+    /**
+     * Trigger ScripterAgent workflow for off-device operations
+     */
+    data: TrajectoryScripterExecutorInputEvent.Data;
+
+    event: 'ScripterExecutorInputEvent';
+  }
+
+  export namespace TrajectoryScripterExecutorInputEvent {
+    /**
+     * Trigger ScripterAgent workflow for off-device operations
+     */
+    export interface Data {
+      task: string;
+    }
+  }
+
+  export interface TrajectoryScripterExecutorResultEvent {
+    /**
+     * Coordination event from ScripterAgent to DroidAgent.
+     *
+     * Used for workflow step routing only (NOT streamed to frontend).
+     */
+    data: TrajectoryScripterExecutorResultEvent.Data;
+
+    event: 'ScripterExecutorResultEvent';
+  }
+
+  export namespace TrajectoryScripterExecutorResultEvent {
+    /**
+     * Coordination event from ScripterAgent to DroidAgent.
+     *
+     * Used for workflow step routing only (NOT streamed to frontend).
+     */
+    export interface Data {
+      code_executions: number;
+
+      message: string;
+
+      success: boolean;
+
+      task: string;
+    }
   }
 
   export interface TrajectoryPlanCreatedEvent {
     data: { [key: string]: unknown };
 
-    event?: 'PlanCreatedEvent';
+    event: 'PlanCreatedEvent';
   }
 
-  export interface TrajectoryTaskInputEvent {
+  export interface TrajectoryPlanInputEvent {
     data: { [key: string]: unknown };
 
-    event?: 'TaskInputEvent';
+    event: 'PlanInputEvent';
+  }
+
+  export interface TrajectoryPlanThinkingEvent {
+    data: { [key: string]: unknown };
+
+    event: 'PlanThinkingEvent';
   }
 
   export interface TrajectoryTaskThinkingEvent {
-    data: { [key: string]: unknown };
+    data: TrajectoryTaskThinkingEvent.Data;
 
-    event?: 'TaskThinkingEvent';
+    event: 'TaskThinkingEvent';
+  }
+
+  export namespace TrajectoryTaskThinkingEvent {
+    export interface Data {
+      code?: string | null;
+
+      thoughts?: string | null;
+
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
+    }
   }
 
   export interface TrajectoryTaskExecutionEvent {
-    data: { [key: string]: unknown };
+    data: TrajectoryTaskExecutionEvent.Data;
 
-    event?: 'TaskExecutionEvent';
+    event: 'TaskExecutionEvent';
+  }
+
+  export namespace TrajectoryTaskExecutionEvent {
+    export interface Data {
+      code: string;
+
+      globals?: { [key: string]: string };
+
+      locals?: { [key: string]: string };
+    }
   }
 
   export interface TrajectoryTaskExecutionResultEvent {
-    data: { [key: string]: unknown };
+    data: TrajectoryTaskExecutionResultEvent.Data;
 
-    event?: 'TaskExecutionResultEvent';
+    event: 'TaskExecutionResultEvent';
+  }
+
+  export namespace TrajectoryTaskExecutionResultEvent {
+    export interface Data {
+      output: string;
+    }
   }
 
   export interface TrajectoryTaskEndEvent {
-    data: { [key: string]: unknown };
+    data: TrajectoryTaskEndEvent.Data;
 
-    event?: 'TaskEndEvent';
+    event: 'TaskEndEvent';
   }
 
-  export interface TrajectoryEpisodicMemoryEvent {
-    data: { [key: string]: unknown };
+  export namespace TrajectoryTaskEndEvent {
+    export interface Data {
+      reason: string;
 
-    event?: 'EpisodicMemoryEvent';
+      success: boolean;
+    }
   }
 
   export interface TrajectoryCodeActExecuteEvent {
-    data: { [key: string]: unknown };
+    data: TrajectoryCodeActExecuteEvent.Data;
 
-    event?: 'CodeActExecuteEvent';
+    event: 'CodeActExecuteEvent';
+  }
+
+  export namespace TrajectoryCodeActExecuteEvent {
+    export interface Data {
+      instruction: string;
+    }
   }
 
   export interface TrajectoryCodeActResultEvent {
-    data: { [key: string]: unknown };
+    data: TrajectoryCodeActResultEvent.Data;
 
-    event?: 'CodeActResultEvent';
+    event: 'CodeActResultEvent';
   }
 
-  export interface TrajectoryReflectionEvent {
-    data: { [key: string]: unknown };
+  export namespace TrajectoryCodeActResultEvent {
+    export interface Data {
+      instruction: string;
 
-    event?: 'ReflectionEvent';
-  }
+      reason: string;
 
-  export interface TrajectoryTaskRunnerEvent {
-    data: { [key: string]: unknown };
-
-    event?: 'TaskRunnerEvent';
-  }
-
-  export interface TrajectoryReasoningLogicEvent {
-    data: { [key: string]: unknown };
-
-    event?: 'ReasoningLogicEvent';
-  }
-
-  export interface TrajectoryFinalizeEvent {
-    data: { [key: string]: unknown };
-
-    event?: 'FinalizeEvent';
-  }
-
-  export interface TrajectoryStopEvent {
-    data: { [key: string]: unknown };
-
-    event?: 'StopEvent';
+      success: boolean;
+    }
   }
 
   export interface TrajectoryTapActionEvent {
-    data: { [key: string]: unknown };
+    /**
+     * Event for tap actions with coordinates
+     */
+    data: TrajectoryTapActionEvent.Data;
 
-    event?: 'TapActionEvent';
+    event: 'TapActionEvent';
+  }
+
+  export namespace TrajectoryTapActionEvent {
+    /**
+     * Event for tap actions with coordinates
+     */
+    export interface Data {
+      action_type: string;
+
+      description: string;
+
+      x: number;
+
+      y: number;
+
+      element_bounds?: string;
+
+      element_index?: number;
+
+      element_text?: string;
+    }
   }
 
   export interface TrajectorySwipeActionEvent {
-    data: { [key: string]: unknown };
+    /**
+     * Event for swipe actions with coordinates
+     */
+    data: TrajectorySwipeActionEvent.Data;
 
-    event?: 'SwipeActionEvent';
+    event: 'SwipeActionEvent';
+  }
+
+  export namespace TrajectorySwipeActionEvent {
+    /**
+     * Event for swipe actions with coordinates
+     */
+    export interface Data {
+      action_type: string;
+
+      description: string;
+
+      duration_ms: number;
+
+      end_x: number;
+
+      end_y: number;
+
+      start_x: number;
+
+      start_y: number;
+    }
   }
 
   export interface TrajectoryDragActionEvent {
-    data: { [key: string]: unknown };
+    /**
+     * Event for drag actions with coordinates
+     */
+    data: TrajectoryDragActionEvent.Data;
 
-    event?: 'DragActionEvent';
+    event: 'DragActionEvent';
+  }
+
+  export namespace TrajectoryDragActionEvent {
+    /**
+     * Event for drag actions with coordinates
+     */
+    export interface Data {
+      action_type: string;
+
+      description: string;
+
+      duration_ms: number;
+
+      end_x: number;
+
+      end_y: number;
+
+      start_x: number;
+
+      start_y: number;
+    }
   }
 
   export interface TrajectoryInputTextActionEvent {
-    data: { [key: string]: unknown };
+    /**
+     * Event for text input actions
+     */
+    data: TrajectoryInputTextActionEvent.Data;
 
-    event?: 'InputTextActionEvent';
+    event: 'InputTextActionEvent';
+  }
+
+  export namespace TrajectoryInputTextActionEvent {
+    /**
+     * Event for text input actions
+     */
+    export interface Data {
+      action_type: string;
+
+      description: string;
+
+      text: string;
+    }
   }
 
   export interface TrajectoryKeyPressActionEvent {
-    data: { [key: string]: unknown };
+    /**
+     * Event for key press actions
+     */
+    data: TrajectoryKeyPressActionEvent.Data;
 
-    event?: 'KeyPressActionEvent';
+    event: 'KeyPressActionEvent';
+  }
+
+  export namespace TrajectoryKeyPressActionEvent {
+    /**
+     * Event for key press actions
+     */
+    export interface Data {
+      action_type: string;
+
+      description: string;
+
+      keycode: number;
+
+      key_name?: string;
+    }
   }
 
   export interface TrajectoryStartAppEvent {
-    data: { [key: string]: unknown };
+    /**
+     * "Event for starting an app
+     */
+    data: TrajectoryStartAppEvent.Data;
 
-    event?: 'StartAppEvent';
+    event: 'StartAppEvent';
+  }
+
+  export namespace TrajectoryStartAppEvent {
+    /**
+     * "Event for starting an app
+     */
+    export interface Data {
+      action_type: string;
+
+      description: string;
+
+      package: string;
+
+      activity?: string;
+    }
   }
 
   export interface TrajectoryRecordUiStateEvent {
-    data: { [key: string]: unknown };
+    data: TrajectoryRecordUiStateEvent.Data;
 
-    event?: 'RecordUIStateEvent';
+    event: 'RecordUIStateEvent';
+  }
+
+  export namespace TrajectoryRecordUiStateEvent {
+    export interface Data {
+      index: number;
+
+      url: string;
+    }
+  }
+
+  export interface TrajectoryWaitEvent {
+    /**
+     * Event for wait/sleep actions
+     */
+    data: TrajectoryWaitEvent.Data;
+
+    event: 'WaitEvent';
+  }
+
+  export namespace TrajectoryWaitEvent {
+    /**
+     * Event for wait/sleep actions
+     */
+    export interface Data {
+      action_type: string;
+
+      description: string;
+
+      duration: number;
+    }
+  }
+
+  export interface TrajectoryManagerContextEvent {
+    /**
+     * Manager context prepared, ready for LLM call
+     */
+    data: unknown;
+
+    event: 'ManagerContextEvent';
+  }
+
+  export interface TrajectoryManagerResponseEvent {
+    /**
+     * Manager has received LLM response, ready for parsing.
+     *
+     * This event carries the raw validated LLM output before parsing.
+     */
+    data: TrajectoryManagerResponseEvent.Data;
+
+    event: 'ManagerResponseEvent';
+  }
+
+  export namespace TrajectoryManagerResponseEvent {
+    /**
+     * Manager has received LLM response, ready for parsing.
+     *
+     * This event carries the raw validated LLM output before parsing.
+     */
+    export interface Data {
+      output_planning: string;
+
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
+    }
+  }
+
+  export interface TrajectoryManagerPlanDetailsEvent {
+    /**
+     * Manager planning event with full state and metadata.
+     *
+     * This event is streamed to frontend/logging but NOT used for workflow
+     * coordination between ManagerAgent and DroidAgent.
+     *
+     * For workflow coordination, see ManagerPlanEvent in droid/events.py
+     */
+    data: TrajectoryManagerPlanDetailsEvent.Data;
+
+    event: 'ManagerPlanDetailsEvent';
+  }
+
+  export namespace TrajectoryManagerPlanDetailsEvent {
+    /**
+     * Manager planning event with full state and metadata.
+     *
+     * This event is streamed to frontend/logging but NOT used for workflow
+     * coordination between ManagerAgent and DroidAgent.
+     *
+     * For workflow coordination, see ManagerPlanEvent in droid/events.py
+     */
+    export interface Data {
+      current_subgoal: string;
+
+      plan: string;
+
+      thought: string;
+
+      full_response?: string;
+
+      manager_answer?: string;
+
+      memory_update?: string;
+
+      success?: boolean | null;
+    }
+  }
+
+  export interface TrajectoryExecutorContextEvent {
+    /**
+     * Executor context prepared, ready for LLM call
+     */
+    data: TrajectoryExecutorContextEvent.Data;
+
+    event: 'ExecutorContextEvent';
+  }
+
+  export namespace TrajectoryExecutorContextEvent {
+    /**
+     * Executor context prepared, ready for LLM call
+     */
+    export interface Data {
+      messages: Array<unknown>;
+
+      subgoal: string;
+    }
+  }
+
+  export interface TrajectoryExecutorResponseEvent {
+    /**
+     * Executor has received LLM response, ready for parsing.
+     *
+     * This event carries the raw LLM output before parsing.
+     */
+    data: TrajectoryExecutorResponseEvent.Data;
+
+    event: 'ExecutorResponseEvent';
+  }
+
+  export namespace TrajectoryExecutorResponseEvent {
+    /**
+     * Executor has received LLM response, ready for parsing.
+     *
+     * This event carries the raw LLM output before parsing.
+     */
+    export interface Data {
+      response_text: string;
+
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
+    }
+  }
+
+  export interface TrajectoryExecutorActionEvent {
+    /**
+     * Executor action selection event with thought process.
+     *
+     * This event is streamed to frontend/logging but NOT used for workflow
+     * coordination between ExecutorAgent and DroidAgent.
+     *
+     * For workflow coordination, see ExecutorInputEvent in droid/events.py
+     */
+    data: TrajectoryExecutorActionEvent.Data;
+
+    event: 'ExecutorActionEvent';
+  }
+
+  export namespace TrajectoryExecutorActionEvent {
+    /**
+     * Executor action selection event with thought process.
+     *
+     * This event is streamed to frontend/logging but NOT used for workflow
+     * coordination between ExecutorAgent and DroidAgent.
+     *
+     * For workflow coordination, see ExecutorInputEvent in droid/events.py
+     */
+    export interface Data {
+      action_json: string;
+
+      description: string;
+
+      thought: string;
+
+      full_response?: string;
+    }
+  }
+
+  export interface TrajectoryExecutorActionResultEvent {
+    /**
+     * Executor action result event with full debug information.
+     *
+     * This event is streamed to frontend/logging but NOT used for workflow
+     * coordination between ExecutorAgent and DroidAgent.
+     *
+     * For workflow coordination, see ExecutorResultEvent in droid/events.py
+     */
+    data: TrajectoryExecutorActionResultEvent.Data;
+
+    event: 'ExecutorActionResultEvent';
+  }
+
+  export namespace TrajectoryExecutorActionResultEvent {
+    /**
+     * Executor action result event with full debug information.
+     *
+     * This event is streamed to frontend/logging but NOT used for workflow
+     * coordination between ExecutorAgent and DroidAgent.
+     *
+     * For workflow coordination, see ExecutorResultEvent in droid/events.py
+     */
+    export interface Data {
+      action: { [key: string]: unknown };
+
+      error: string;
+
+      outcome: boolean;
+
+      summary: string;
+
+      action_json?: string;
+
+      full_response?: string;
+
+      thought?: string;
+    }
+  }
+
+  export interface TrajectoryScripterInputEvent {
+    /**
+     * Input to LLM (chat history).
+     */
+    data: TrajectoryScripterInputEvent.Data;
+
+    event: 'ScripterInputEvent';
+  }
+
+  export namespace TrajectoryScripterInputEvent {
+    /**
+     * Input to LLM (chat history).
+     */
+    export interface Data {
+      input: Array<unknown>;
+    }
+  }
+
+  export interface TrajectoryScripterThinkingEvent {
+    /**
+     * LLM generated thought + code.
+     */
+    data: TrajectoryScripterThinkingEvent.Data;
+
+    event: 'ScripterThinkingEvent';
+  }
+
+  export namespace TrajectoryScripterThinkingEvent {
+    /**
+     * LLM generated thought + code.
+     */
+    export interface Data {
+      thoughts: string;
+
+      code?: string | null;
+
+      full_response?: string;
+
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
+    }
+  }
+
+  export interface TrajectoryScripterExecutionEvent {
+    /**
+     * Trigger code execution.
+     */
+    data: TrajectoryScripterExecutionEvent.Data;
+
+    event: 'ScripterExecutionEvent';
+  }
+
+  export namespace TrajectoryScripterExecutionEvent {
+    /**
+     * Trigger code execution.
+     */
+    export interface Data {
+      code: string;
+    }
+  }
+
+  export interface TrajectoryScripterExecutionResultEvent {
+    /**
+     * Code execution result.
+     */
+    data: TrajectoryScripterExecutionResultEvent.Data;
+
+    event: 'ScripterExecutionResultEvent';
+  }
+
+  export namespace TrajectoryScripterExecutionResultEvent {
+    /**
+     * Code execution result.
+     */
+    export interface Data {
+      output: string;
+    }
+  }
+
+  export interface TrajectoryScripterEndEvent {
+    /**
+     * Script agent finished.
+     */
+    data: TrajectoryScripterEndEvent.Data;
+
+    event: 'ScripterEndEvent';
+  }
+
+  export namespace TrajectoryScripterEndEvent {
+    /**
+     * Script agent finished.
+     */
+    export interface Data {
+      message: string;
+
+      success: boolean;
+
+      code_executions?: number;
+    }
+  }
+
+  export interface TrajectoryTextManipulatorInputEvent {
+    /**
+     * Trigger TextManipulatorAgent workflow for text manipulation
+     */
+    data: TrajectoryTextManipulatorInputEvent.Data;
+
+    event: 'TextManipulatorInputEvent';
+  }
+
+  export namespace TrajectoryTextManipulatorInputEvent {
+    /**
+     * Trigger TextManipulatorAgent workflow for text manipulation
+     */
+    export interface Data {
+      task: string;
+    }
+  }
+
+  export interface TrajectoryTextManipulatorResultEvent {
+    data: TrajectoryTextManipulatorResultEvent.Data;
+
+    event: 'TextManipulatorResultEvent';
+  }
+
+  export namespace TrajectoryTextManipulatorResultEvent {
+    export interface Data {
+      code_ran: string;
+
+      task: string;
+
+      text_to_type: string;
+    }
   }
 }
 
@@ -513,58 +1275,75 @@ export interface TaskListParams {
 }
 
 export interface TaskRunParams {
+  llmModel: LlmModel;
+
   task: string;
 
-  credentials?: { [key: string]: { [key: string]: string } };
+  apps?: Array<string>;
+
+  credentials?: Array<TaskRunParams.Credential>;
+
+  executionTimeout?: number;
 
   files?: Array<string>;
 
-  libraryApps?: Array<string>;
-
-  llmModel?: LlmModel;
-
   maxSteps?: number;
+
+  outputSchema?: { [key: string]: unknown } | null;
 
   reasoning?: boolean;
 
-  reflection?: boolean;
-
   temperature?: number;
 
-  timeout?: number;
-
-  uploadedApps?: Array<string>;
-
   vision?: boolean;
+
+  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+}
+
+export namespace TaskRunParams {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
 }
 
 export interface TaskRunStreamedParams {
+  llmModel: LlmModel;
+
   task: string;
 
-  credentials?: { [key: string]: { [key: string]: string } };
+  apps?: Array<string>;
+
+  credentials?: Array<TaskRunStreamedParams.Credential>;
+
+  executionTimeout?: number;
 
   files?: Array<string>;
 
-  libraryApps?: Array<string>;
-
-  llmModel?: LlmModel;
-
   maxSteps?: number;
+
+  outputSchema?: { [key: string]: unknown } | null;
 
   reasoning?: boolean;
 
-  reflection?: boolean;
-
   temperature?: number;
 
-  timeout?: number;
-
-  uploadedApps?: Array<string>;
-
   vision?: boolean;
+
+  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+}
+
+export namespace TaskRunStreamedParams {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
 }
 
 Tasks.Screenshots = Screenshots;
+Tasks.UiStates = UiStates;
 
 export declare namespace Tasks {
   export {
@@ -588,5 +1367,11 @@ export declare namespace Tasks {
     type MediaResponse as MediaResponse,
     type ScreenshotListResponse as ScreenshotListResponse,
     type ScreenshotRetrieveParams as ScreenshotRetrieveParams,
+  };
+
+  export {
+    UiStates as UiStates,
+    type UiStateListResponse as UiStateListResponse,
+    type UiStateRetrieveParams as UiStateRetrieveParams,
   };
 }
