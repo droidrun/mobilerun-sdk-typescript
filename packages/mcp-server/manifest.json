@@ -12,7 +12,7 @@
     "url": "git+https://github.com/droidrun/cloud-sdk-typescript.git"
   },
   "homepage": "https://github.com/droidrun/cloud-sdk-typescript/tree/main/packages/mcp-server#readme",
-  "documentation": "https://docs.droidrun.ai/api-reference",
+  "documentation": "https://docs.mobilerun.ai",
   "server": {
     "type": "node",
     "entry_point": "index.js",
