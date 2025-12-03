@@ -88,7 +88,6 @@ export function initMcpServer(params: {
   };
 
   let client = new MobilerunCloud({
-    ...{ environment: (readEnv('MOBILERUN_CLOUD_ENVIRONMENT') || undefined) as any },
     logger,
     ...params.clientOptions,
     defaultHeaders: {

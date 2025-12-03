@@ -10,7 +10,6 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export MOBILERUN_CLOUD_API_KEY="My API Key"
-export MOBILERUN_CLOUD_ENVIRONMENT="production"
 npx -y mobilerun-cloud-mcp@latest
 ```
 
@@ -28,8 +27,7 @@ For clients with a configuration JSON, it might look something like this:
       "command": "npx",
       "args": ["-y", "mobilerun-cloud-mcp", "--client=claude", "--tools=dynamic"],
       "env": {
-        "MOBILERUN_CLOUD_API_KEY": "My API Key",
-        "MOBILERUN_CLOUD_ENVIRONMENT": "production"
+        "MOBILERUN_CLOUD_API_KEY": "My API Key"
       }
     }
   }
