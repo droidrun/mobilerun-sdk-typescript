@@ -68,7 +68,7 @@ export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['MOBILERUN_CLOUD_BASE_URL'].
+   * Defaults to process.env['MOBILERUN_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -122,7 +122,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['MOBILERUN_CLOUD_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['MOBILERUN_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -135,9 +135,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Mobilerun Cloud API.
+ * API Client for interfacing with the Mobilerun API.
  */
-export class MobilerunCloud {
+export class Mobilerun {
   apiKey: string | null;
 
   baseURL: string;
@@ -153,10 +153,10 @@ export class MobilerunCloud {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Mobilerun Cloud API.
+   * API Client for interfacing with the Mobilerun API.
    *
    * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_CLOUD_API_KEY'] ?? null]
-   * @param {string} [opts.baseURL=process.env['MOBILERUN_CLOUD_BASE_URL'] ?? https://api.mobilerun.ai/v1] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['MOBILERUN_BASE_URL'] ?? https://api.mobilerun.ai/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -165,7 +165,7 @@ export class MobilerunCloud {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('MOBILERUN_CLOUD_BASE_URL'),
+    baseURL = readEnv('MOBILERUN_BASE_URL'),
     apiKey = readEnv('MOBILERUN_CLOUD_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
@@ -176,14 +176,14 @@ export class MobilerunCloud {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? MobilerunCloud.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? Mobilerun.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('MOBILERUN_CLOUD_LOG'), "process.env['MOBILERUN_CLOUD_LOG']", this) ??
+      parseLogLevel(readEnv('MOBILERUN_LOG'), "process.env['MOBILERUN_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -258,7 +258,7 @@ export class MobilerunCloud {
         if (value === null) {
           return `${encodeURIComponent(key)}=`;
         }
-        throw new Errors.MobilerunCloudError(
+        throw new Errors.MobilerunError(
           `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
         );
       })
@@ -730,10 +730,10 @@ export class MobilerunCloud {
     }
   }
 
-  static MobilerunCloud = this;
+  static Mobilerun = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static MobilerunCloudError = Errors.MobilerunCloudError;
+  static MobilerunError = Errors.MobilerunError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -755,12 +755,12 @@ export class MobilerunCloud {
   hooks: API.Hooks = new API.Hooks(this);
 }
 
-MobilerunCloud.Tasks = Tasks;
-MobilerunCloud.Apps = Apps;
-MobilerunCloud.Credentials = Credentials;
-MobilerunCloud.Hooks = Hooks;
+Mobilerun.Tasks = Tasks;
+Mobilerun.Apps = Apps;
+Mobilerun.Credentials = Credentials;
+Mobilerun.Hooks = Hooks;
 
-export declare namespace MobilerunCloud {
+export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
 
   export {

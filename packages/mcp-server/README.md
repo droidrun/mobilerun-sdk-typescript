@@ -1,4 +1,4 @@
-# Mobilerun Cloud TypeScript MCP Server
+# Mobilerun TypeScript MCP Server
 
 It is generated with [Stainless](https://www.stainless.com/).
 

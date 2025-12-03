@@ -3,7 +3,7 @@
 import { Metadata, asErrorResult, asTextContentResult } from 'mobilerun-cloud-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import MobilerunCloud from '@mobilerun/sdk';
+import Mobilerun from '@mobilerun/sdk';
 
 export const metadata: Metadata = {
   resource: 'tasks',
@@ -32,12 +32,12 @@ export const tool: Tool = {
   },
 };
 
-export const handler = async (client: MobilerunCloud, args: Record<string, unknown> | undefined) => {
+export const handler = async (client: Mobilerun, args: Record<string, unknown> | undefined) => {
   const { task_id, ...body } = args as any;
   try {
     return asTextContentResult(await client.tasks.getTrajectory(task_id));
   } catch (error) {
-    if (error instanceof MobilerunCloud.APIError) {
+    if (error instanceof Mobilerun.APIError) {
       return asErrorResult(error.message);
     }
     throw error;

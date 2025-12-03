@@ -4,7 +4,7 @@ import { isJqError, maybeFilter } from 'mobilerun-cloud-mcp/filtering';
 import { Metadata, asErrorResult, asTextContentResult } from 'mobilerun-cloud-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import MobilerunCloud from '@mobilerun/sdk';
+import Mobilerun from '@mobilerun/sdk';
 
 export const metadata: Metadata = {
   resource: 'tasks',
@@ -40,12 +40,12 @@ export const tool: Tool = {
   },
 };
 
-export const handler = async (client: MobilerunCloud, args: Record<string, unknown> | undefined) => {
+export const handler = async (client: Mobilerun, args: Record<string, unknown> | undefined) => {
   const { task_id, jq_filter, ...body } = args as any;
   try {
     return asTextContentResult(await maybeFilter(jq_filter, await client.tasks.getStatus(task_id)));
   } catch (error) {
-    if (error instanceof MobilerunCloud.APIError || isJqError(error)) {
+    if (error instanceof Mobilerun.APIError || isJqError(error)) {
       return asErrorResult(error.message);
     }
     throw error;
