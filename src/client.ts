@@ -59,28 +59,11 @@ import {
 } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
 
-const environments = {
-  production: 'https://api.mobilerun.ai/v1',
-  staging: 'https://staging-api.droidrun.ai/v1',
-  dev: 'https://dev-api.droidrun.ai/v1',
-};
-type Environment = keyof typeof environments;
-
 export interface ClientOptions {
   /**
    * Defaults to process.env['MOBILERUN_CLOUD_API_KEY'].
    */
   apiKey?: string | null | undefined;
-
-  /**
-   * Specifies the environment to use for the API.
-   *
-   * Each environment maps to a different base URL:
-   * - `production` corresponds to `https://api.mobilerun.ai/v1`
-   * - `staging` corresponds to `https://staging-api.droidrun.ai/v1`
-   * - `dev` corresponds to `https://dev-api.droidrun.ai/v1`
-   */
-  environment?: Environment | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -173,7 +156,6 @@ export class MobilerunCloud {
    * API Client for interfacing with the Mobilerun Cloud API.
    *
    * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_CLOUD_API_KEY'] ?? null]
-   * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
    * @param {string} [opts.baseURL=process.env['MOBILERUN_CLOUD_BASE_URL'] ?? https://api.mobilerun.ai/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -190,17 +172,10 @@ export class MobilerunCloud {
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL,
-      environment: opts.environment ?? 'production',
+      baseURL: baseURL || `https://api.mobilerun.ai/v1`,
     };
 
-    if (baseURL && opts.environment) {
-      throw new Errors.MobilerunCloudError(
-        'Ambiguous URL; The `baseURL` option (or MOBILERUN_CLOUD_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
-      );
-    }
-
-    this.baseURL = options.baseURL || environments[options.environment || 'production'];
+    this.baseURL = options.baseURL!;
     this.timeout = options.timeout ?? MobilerunCloud.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
@@ -226,8 +201,7 @@ export class MobilerunCloud {
   withOptions(options: Partial<ClientOptions>): this {
     const client = new (this.constructor as any as new (props: ClientOptions) => typeof this)({
       ...this._options,
-      environment: options.environment ? options.environment : undefined,
-      baseURL: options.environment ? undefined : this.baseURL,
+      baseURL: this.baseURL,
       maxRetries: this.maxRetries,
       timeout: this.timeout,
       logger: this.logger,
@@ -244,7 +218,7 @@ export class MobilerunCloud {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== environments[this._options.environment || 'production'];
+    return this.baseURL !== 'https://api.mobilerun.ai/v1';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {

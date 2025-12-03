@@ -24,7 +24,6 @@ import MobilerunCloud from '@mobilerun/sdk';
 
 const client = new MobilerunCloud({
   apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
-  environment: 'staging', // or 'production' | 'dev'; defaults to 'production'
 });
 
 const tasks = await client.tasks.list();
@@ -42,7 +41,6 @@ import MobilerunCloud from '@mobilerun/sdk';
 
 const client = new MobilerunCloud({
   apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
-  environment: 'staging', // or 'production' | 'dev'; defaults to 'production'
 });
 
 const tasks: MobilerunCloud.TaskListResponse = await client.tasks.list();
