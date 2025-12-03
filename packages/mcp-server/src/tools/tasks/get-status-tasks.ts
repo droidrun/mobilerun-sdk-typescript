@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { isJqError, maybeFilter } from 'mobilerun-cloud-mcp/filtering';
-import { Metadata, asErrorResult, asTextContentResult } from 'mobilerun-cloud-mcp/tools/types';
+import { isJqError, maybeFilter } from 'mobilerun-mcp/filtering';
+import { Metadata, asErrorResult, asTextContentResult } from 'mobilerun-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import Mobilerun from '@mobilerun/sdk';

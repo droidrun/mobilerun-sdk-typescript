@@ -10,7 +10,7 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export MOBILERUN_CLOUD_API_KEY="My API Key"
-npx -y mobilerun-cloud-mcp@latest
+npx -y mobilerun-mcp@latest
 ```
 
 ### Via MCP Client
@@ -25,7 +25,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "mobilerun_sdk_api": {
       "command": "npx",
-      "args": ["-y", "mobilerun-cloud-mcp", "--client=claude", "--tools=dynamic"],
+      "args": ["-y", "mobilerun-mcp", "--client=claude", "--tools=dynamic"],
       "env": {
         "MOBILERUN_CLOUD_API_KEY": "My API Key"
       }
@@ -39,14 +39,14 @@ For clients with a configuration JSON, it might look something like this:
 If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
 in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=mobilerun-cloud-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm1vYmlsZXJ1bi1jbG91ZC1tY3AiXSwiZW52Ijp7Ik1PQklMRVJVTl9DTE9VRF9BUElfS0VZIjoiU2V0IHlvdXIgTU9CSUxFUlVOX0NMT1VEX0FQSV9LRVkgaGVyZS4ifX0)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=mobilerun-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm1vYmlsZXJ1bi1tY3AiXSwiZW52Ijp7Ik1PQklMRVJVTl9DTE9VRF9BUElfS0VZIjoiU2V0IHlvdXIgTU9CSUxFUlVOX0NMT1VEX0FQSV9LRVkgaGVyZS4ifX0)
 
 ### VS Code
 
 If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
 in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
 
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22mobilerun-cloud-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22mobilerun-cloud-mcp%22%5D%2C%22env%22%3A%7B%22MOBILERUN_CLOUD_API_KEY%22%3A%22Set%20your%20MOBILERUN_CLOUD_API_KEY%20here.%22%7D%7D)
+[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22mobilerun-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22mobilerun-mcp%22%5D%2C%22env%22%3A%7B%22MOBILERUN_CLOUD_API_KEY%22%3A%22Set%20your%20MOBILERUN_CLOUD_API_KEY%20here.%22%7D%7D)
 
 ### Claude Code
 
@@ -54,7 +54,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add --transport stdio mobilerun_sdk_api --env MOBILERUN_CLOUD_API_KEY="Your MOBILERUN_CLOUD_API_KEY here." -- npx -y mobilerun-cloud-mcp
+claude mcp add --transport stdio mobilerun_sdk_api --env MOBILERUN_CLOUD_API_KEY="Your MOBILERUN_CLOUD_API_KEY here." -- npx -y mobilerun-mcp
 ```
 
 ## Exposing endpoints to your MCP Client
@@ -205,10 +205,10 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 
 ```js
 // Import the server, generated endpoints, or the init function
-import { server, endpoints, init } from "mobilerun-cloud-mcp/server";
+import { server, endpoints, init } from "mobilerun-mcp/server";
 
 // import a specific tool
-import retrieveTasks from "mobilerun-cloud-mcp/tools/tasks/retrieve-tasks";
+import retrieveTasks from "mobilerun-mcp/tools/tasks/retrieve-tasks";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
