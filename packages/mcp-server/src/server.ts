@@ -34,7 +34,7 @@ export const newMcpServer = () =>
   new McpServer(
     {
       name: 'mobilerun_sdk_api',
-      version: '0.4.0',
+      version: '1.0.0',
     },
     { capabilities: { tools: {}, logging: {} } },
   );
