@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/droidrun/cloud-sdk-typescript.git"
+    "url": "git+https://github.com/droidrun/mobilerun-sdk-typescript.git"
   },
-  "homepage": "https://github.com/droidrun/cloud-sdk-typescript/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/droidrun/mobilerun-sdk-typescript/tree/main/packages/mcp-server#readme",
   "documentation": "https://docs.mobilerun.ai",
   "server": {
     "type": "node",
