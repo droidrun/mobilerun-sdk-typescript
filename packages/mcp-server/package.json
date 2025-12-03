@@ -8,10 +8,10 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/droidrun/cloud-sdk-typescript.git",
+    "url": "git+https://github.com/droidrun/mobilerun-sdk-typescript.git",
     "directory": "packages/mcp-server"
   },
-  "homepage": "https://github.com/droidrun/cloud-sdk-typescript/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/droidrun/mobilerun-sdk-typescript/tree/main/packages/mcp-server#readme",
   "license": "Apache-2.0",
   "packageManager": "pnpm@10.14.0",
   "private": false,
