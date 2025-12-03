@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "mobilerun-cloud-mcp/*": ["./src/*"],
-      "mobilerun-cloud-mcp": ["./src/index.ts"]
+      "mobilerun-mcp/*": ["./src/*"],
+      "mobilerun-mcp": ["./src/index.ts"]
     },
     "noEmit": true,
 

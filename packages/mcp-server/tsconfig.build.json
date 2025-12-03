@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "mobilerun-cloud-mcp/*": ["./dist/src/*"],
-      "mobilerun-cloud-mcp": ["./dist/src/index.ts"]
+      "mobilerun-mcp/*": ["./dist/src/*"],
+      "mobilerun-mcp": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
