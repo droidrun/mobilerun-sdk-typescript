@@ -1,12 +1,12 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { MobilerunCloud as default } from './client';
+export { Mobilerun as default } from './client';
 
 export { type Uploadable, toFile } from './core/uploads';
 export { APIPromise } from './core/api-promise';
-export { MobilerunCloud, type ClientOptions } from './client';
+export { Mobilerun, type ClientOptions } from './client';
 export {
-  MobilerunCloudError,
+  MobilerunError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,

@@ -11,7 +11,7 @@ import {
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import { ClientOptions } from '@mobilerun/sdk';
-import MobilerunCloud from '@mobilerun/sdk';
+import Mobilerun from '@mobilerun/sdk';
 import {
   applyCompatibilityTransformations,
   ClientCapabilities,
@@ -87,7 +87,7 @@ export function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
-  let client = new MobilerunCloud({
+  let client = new Mobilerun({
     logger,
     ...params.clientOptions,
     defaultHeaders: {
@@ -178,7 +178,7 @@ export async function selectTools(endpoints: Endpoint[], options?: McpOptions): 
 export async function executeHandler(
   tool: Tool,
   handler: HandlerFunction,
-  client: MobilerunCloud,
+  client: Mobilerun,
   args: Record<string, unknown> | undefined,
   compatibilityOptions?: Partial<ClientCapabilities>,
 ) {

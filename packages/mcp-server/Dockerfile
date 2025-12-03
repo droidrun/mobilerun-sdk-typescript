@@ -1,4 +1,4 @@
-# Dockerfile for Mobilerun Cloud MCP Server
+# Dockerfile for Mobilerun MCP Server
     #
     # This Dockerfile builds a Docker image for the MCP Server.
     #

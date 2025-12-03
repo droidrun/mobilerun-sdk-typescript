@@ -1,4 +1,4 @@
-import MobilerunCloud from '@mobilerun/sdk';
+import Mobilerun from '@mobilerun/sdk';
 import { Endpoint, asTextContentResult, ToolCallResult } from './tools/types';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import { z } from 'zod';
@@ -38,11 +38,11 @@ export function dynamicTools(endpoints: Endpoint[]): Endpoint[] {
     },
     tool: {
       name: 'list_api_endpoints',
-      description: 'List or search for all endpoints in the Mobilerun Cloud TypeScript API',
+      description: 'List or search for all endpoints in the Mobilerun TypeScript API',
       inputSchema: zodToInputSchema(listEndpointsSchema),
     },
     handler: async (
-      client: MobilerunCloud,
+      client: Mobilerun,
       args: Record<string, unknown> | undefined,
     ): Promise<ToolCallResult> => {
       const query = args && listEndpointsSchema.parse(args).search_query?.trim();
@@ -85,10 +85,10 @@ export function dynamicTools(endpoints: Endpoint[]): Endpoint[] {
     tool: {
       name: 'get_api_endpoint_schema',
       description:
-        'Get the schema for an endpoint in the Mobilerun Cloud TypeScript API. You can use the schema returned by this tool to invoke an endpoint with the `invoke_api_endpoint` tool.',
+        'Get the schema for an endpoint in the Mobilerun TypeScript API. You can use the schema returned by this tool to invoke an endpoint with the `invoke_api_endpoint` tool.',
       inputSchema: zodToInputSchema(getEndpointSchema),
     },
-    handler: async (client: MobilerunCloud, args: Record<string, unknown> | undefined) => {
+    handler: async (client: Mobilerun, args: Record<string, unknown> | undefined) => {
       if (!args) {
         throw new Error('No endpoint provided');
       }
@@ -120,11 +120,11 @@ export function dynamicTools(endpoints: Endpoint[]): Endpoint[] {
     tool: {
       name: 'invoke_api_endpoint',
       description:
-        'Invoke an endpoint in the Mobilerun Cloud TypeScript API. Note: use the `list_api_endpoints` tool to get the list of endpoints and `get_api_endpoint_schema` tool to get the schema for an endpoint.',
+        'Invoke an endpoint in the Mobilerun TypeScript API. Note: use the `list_api_endpoints` tool to get the list of endpoints and `get_api_endpoint_schema` tool to get the schema for an endpoint.',
       inputSchema: zodToInputSchema(invokeEndpointSchema),
     },
     handler: async (
-      client: MobilerunCloud,
+      client: Mobilerun,
       args: Record<string, unknown> | undefined,
     ): Promise<ToolCallResult> => {
       if (!args) {

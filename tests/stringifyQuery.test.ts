@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { MobilerunCloud } from '@mobilerun/sdk';
+import { Mobilerun } from '@mobilerun/sdk';
 
-const { stringifyQuery } = MobilerunCloud.prototype as any;
+const { stringifyQuery } = Mobilerun.prototype as any;
 
 describe(stringifyQuery, () => {
   for (const [input, expected] of [
