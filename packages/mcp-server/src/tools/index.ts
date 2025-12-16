@@ -26,6 +26,7 @@ import delete_packages_credentials_credentials from './credentials/packages/cred
 import create_credentials_packages_credentials_fields from './credentials/packages/credentials/fields/create-credentials-packages-credentials-fields';
 import update_credentials_packages_credentials_fields from './credentials/packages/credentials/fields/update-credentials-packages-credentials-fields';
 import delete_credentials_packages_credentials_fields from './credentials/packages/credentials/fields/delete-credentials-packages-credentials-fields';
+import retrieve_hooks from './hooks/retrieve-hooks';
 import update_hooks from './hooks/update-hooks';
 import list_hooks from './hooks/list-hooks';
 import get_sample_data_hooks from './hooks/get-sample-data-hooks';
@@ -61,6 +62,7 @@ addEndpoint(delete_packages_credentials_credentials);
 addEndpoint(create_credentials_packages_credentials_fields);
 addEndpoint(update_credentials_packages_credentials_fields);
 addEndpoint(delete_credentials_packages_credentials_fields);
+addEndpoint(retrieve_hooks);
 addEndpoint(update_hooks);
 addEndpoint(list_hooks);
 addEndpoint(get_sample_data_hooks);

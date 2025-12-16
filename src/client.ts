@@ -22,6 +22,7 @@ import {
   HookListParams,
   HookListResponse,
   HookPerformResponse,
+  HookRetrieveResponse,
   HookSubscribeParams,
   HookSubscribeResponse,
   HookUnsubscribeResponse,
@@ -786,6 +787,7 @@ export declare namespace Mobilerun {
 
   export {
     Hooks as Hooks,
+    type HookRetrieveResponse as HookRetrieveResponse,
     type HookUpdateResponse as HookUpdateResponse,
     type HookListResponse as HookListResponse,
     type HookGetSampleDataResponse as HookGetSampleDataResponse,
