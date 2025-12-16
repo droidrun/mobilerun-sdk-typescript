@@ -56,6 +56,11 @@ export const tool: Tool = {
           required: ['credentialNames', 'packageName'],
         },
       },
+      deviceId: {
+        type: 'string',
+        title: 'Deviceid',
+        description: 'The ID of the device to run the task on.',
+      },
       executionTimeout: {
         type: 'integer',
         title: 'Executiontimeout',
