@@ -112,6 +112,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/hooks.ts">HookRetrieveResponse</a></code>
 - <code><a href="./src/resources/hooks.ts">HookUpdateResponse</a></code>
 - <code><a href="./src/resources/hooks.ts">HookListResponse</a></code>
 - <code><a href="./src/resources/hooks.ts">HookGetSampleDataResponse</a></code>
@@ -121,6 +122,7 @@ Types:
 
 Methods:
 
+- <code title="get /hooks/{hook_id}">client.hooks.<a href="./src/resources/hooks.ts">retrieve</a>(hookID) -> HookRetrieveResponse</code>
 - <code title="post /hooks/{hook_id}/edit">client.hooks.<a href="./src/resources/hooks.ts">update</a>(hookID, { ...params }) -> HookUpdateResponse</code>
 - <code title="get /hooks/">client.hooks.<a href="./src/resources/hooks.ts">list</a>({ ...params }) -> HookListResponse</code>
 - <code title="get /hooks/sample">client.hooks.<a href="./src/resources/hooks.ts">getSampleData</a>() -> HookGetSampleDataResponse</code>

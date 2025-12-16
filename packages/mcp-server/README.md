@@ -288,6 +288,7 @@ The following tools are available in this MCP server.
 
 ### Resource `hooks`:
 
+- `retrieve_hooks` (`read`): Get a hook subscription by id.
 - `update_hooks` (`write`): Edit a hook subscription (events or state).
 
   Allows updating the events filter and/or the state of a hook.
