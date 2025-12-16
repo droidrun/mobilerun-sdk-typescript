@@ -261,6 +261,42 @@ The following tools are available in this MCP server.
 - `retrieve_tasks_ui_states` (`read`): Get Task Ui State
 - `list_tasks_ui_states` (`read`): Get Task Ui States
 
+### Resource `devices`:
+
+- `create_devices` (`write`): Provision a new device
+- `retrieve_devices` (`read`): Get device info
+- `list_devices` (`read`): List devices
+- `terminate_devices` (`write`): Terminate a device
+- `wait_ready_devices` (`read`): Wait for device to be ready
+
+### Resource `devices.actions`:
+
+- `swipe_devices_actions` (`write`): Swipe
+- `tap_devices_actions` (`write`): Tap by coordinates
+
+### Resource `devices.state`:
+
+- `screenshot_devices_state` (`read`): Take screenshot
+- `time_devices_state` (`read`): Device time
+- `ui_devices_state` (`read`): UI state
+
+### Resource `devices.apps`:
+
+- `list_devices_apps` (`read`): List apps
+- `delete_devices_apps` (`write`): Delete app
+- `install_devices_apps` (`write`): Install app
+- `start_devices_apps` (`write`): Start app
+
+### Resource `devices.packages`:
+
+- `list_devices_packages` (`read`): List packages
+
+### Resource `devices.keyboard`:
+
+- `clear_devices_keyboard` (`write`): Clear input
+- `key_devices_keyboard` (`write`): Input key
+- `write_devices_keyboard` (`write`): Input text
+
 ### Resource `apps`:
 
 - `list_apps` (`read`): Retrieves a paginated list of apps with filtering and search capabilities
