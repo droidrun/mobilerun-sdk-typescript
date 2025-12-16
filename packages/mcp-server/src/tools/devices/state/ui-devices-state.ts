@@ -23,14 +23,11 @@ export const tool: Tool = {
       deviceId: {
         type: 'string',
       },
-      'X-User-ID': {
-        type: 'string',
-      },
       filter: {
         type: 'boolean',
       },
     },
-    required: ['deviceId', 'X-User-ID'],
+    required: ['deviceId'],
   },
   annotations: {
     readOnlyHint: true,

@@ -26,11 +26,8 @@ export const tool: Tool = {
       packageName: {
         type: 'string',
       },
-      'X-User-ID': {
-        type: 'string',
-      },
     },
-    required: ['deviceId', 'packageName', 'X-User-ID'],
+    required: ['deviceId', 'packageName'],
   },
   annotations: {
     idempotentHint: true,

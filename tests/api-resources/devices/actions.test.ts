@@ -16,7 +16,6 @@ describe('resource actions', () => {
       endY: 0,
       startX: 0,
       startY: 0,
-      'X-User-ID': 'X-User-ID',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -35,13 +34,12 @@ describe('resource actions', () => {
       endY: 0,
       startX: 0,
       startY: 0,
-      'X-User-ID': 'X-User-ID',
     });
   });
 
   // Prism tests are disabled
   test.skip('tap: only required params', async () => {
-    const responsePromise = client.devices.actions.tap('deviceId', { x: 0, y: 0, 'X-User-ID': 'X-User-ID' });
+    const responsePromise = client.devices.actions.tap('deviceId', { x: 0, y: 0 });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -53,6 +51,6 @@ describe('resource actions', () => {
 
   // Prism tests are disabled
   test.skip('tap: required and optional params', async () => {
-    const response = await client.devices.actions.tap('deviceId', { x: 0, y: 0, 'X-User-ID': 'X-User-ID' });
+    const response = await client.devices.actions.tap('deviceId', { x: 0, y: 0 });
   });
 });

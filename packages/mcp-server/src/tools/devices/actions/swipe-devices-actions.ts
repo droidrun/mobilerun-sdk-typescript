@@ -38,11 +38,8 @@ export const tool: Tool = {
       startY: {
         type: 'integer',
       },
-      'X-User-ID': {
-        type: 'string',
-      },
     },
-    required: ['deviceId', 'duration', 'endX', 'endY', 'startX', 'startY', 'X-User-ID'],
+    required: ['deviceId', 'duration', 'endX', 'endY', 'startX', 'startY'],
   },
   annotations: {},
 };

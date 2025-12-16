@@ -9,8 +9,8 @@ const client = new Mobilerun({
 
 describe('resource state', () => {
   // Prism tests are disabled
-  test.skip('screenshot: only required params', async () => {
-    const responsePromise = client.devices.state.screenshot('deviceId', { 'X-User-ID': 'X-User-ID' });
+  test.skip('screenshot', async () => {
+    const responsePromise = client.devices.state.screenshot('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,16 +21,20 @@ describe('resource state', () => {
   });
 
   // Prism tests are disabled
-  test.skip('screenshot: required and optional params', async () => {
-    const response = await client.devices.state.screenshot('deviceId', {
-      'X-User-ID': 'X-User-ID',
-      hideOverlay: true,
-    });
+  test.skip('screenshot: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.state.screenshot(
+        'deviceId',
+        { hideOverlay: true },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Prism tests are disabled
-  test.skip('time: only required params', async () => {
-    const responsePromise = client.devices.state.time('deviceId', { 'X-User-ID': 'X-User-ID' });
+  test.skip('time', async () => {
+    const responsePromise = client.devices.state.time('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -41,13 +45,8 @@ describe('resource state', () => {
   });
 
   // Prism tests are disabled
-  test.skip('time: required and optional params', async () => {
-    const response = await client.devices.state.time('deviceId', { 'X-User-ID': 'X-User-ID' });
-  });
-
-  // Prism tests are disabled
-  test.skip('ui: only required params', async () => {
-    const responsePromise = client.devices.state.ui('deviceId', { 'X-User-ID': 'X-User-ID' });
+  test.skip('ui', async () => {
+    const responsePromise = client.devices.state.ui('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -58,7 +57,10 @@ describe('resource state', () => {
   });
 
   // Prism tests are disabled
-  test.skip('ui: required and optional params', async () => {
-    const response = await client.devices.state.ui('deviceId', { 'X-User-ID': 'X-User-ID', filter: true });
+  test.skip('ui: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.state.ui('deviceId', { filter: true }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 });

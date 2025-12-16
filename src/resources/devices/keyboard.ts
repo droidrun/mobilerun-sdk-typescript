@@ -10,76 +10,46 @@ export class Keyboard extends APIResource {
   /**
    * Clear input
    */
-  clear(deviceID: string, params: KeyboardClearParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-User-ID': xUserID } = params;
+  clear(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/devices/${deviceID}/keyboard`, {
       ...options,
-      headers: buildHeaders([{ Accept: '*/*', 'X-User-ID': xUserID }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
   /**
    * Input key
    */
-  key(deviceID: string, params: KeyboardKeyParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-User-ID': xUserID, ...body } = params;
+  key(deviceID: string, body: KeyboardKeyParams, options?: RequestOptions): APIPromise<void> {
     return this._client.put(path`/devices/${deviceID}/keyboard`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*', 'X-User-ID': xUserID }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
   /**
    * Input text
    */
-  write(deviceID: string, params: KeyboardWriteParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-User-ID': xUserID, ...body } = params;
+  write(deviceID: string, body: KeyboardWriteParams, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/keyboard`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*', 'X-User-ID': xUserID }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 }
 
-export interface KeyboardClearParams {
-  'X-User-ID': string;
-}
-
 export interface KeyboardKeyParams {
-  /**
-   * Body param:
-   */
   key: number;
-
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
 }
 
 export interface KeyboardWriteParams {
-  /**
-   * Body param:
-   */
   clear: boolean;
 
-  /**
-   * Body param:
-   */
   text: string;
-
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
 }
 
 export declare namespace Keyboard {
-  export {
-    type KeyboardClearParams as KeyboardClearParams,
-    type KeyboardKeyParams as KeyboardKeyParams,
-    type KeyboardWriteParams as KeyboardWriteParams,
-  };
+  export { type KeyboardKeyParams as KeyboardKeyParams, type KeyboardWriteParams as KeyboardWriteParams };
 }

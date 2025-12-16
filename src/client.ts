@@ -36,9 +36,6 @@ import {
   DeviceCreateParams,
   DeviceListParams,
   DeviceListResponse,
-  DeviceRetrieveParams,
-  DeviceTerminateParams,
-  DeviceWaitReadyParams,
   Devices,
 } from './resources/devices/devices';
 import {
@@ -798,10 +795,7 @@ export declare namespace Mobilerun {
     type Device as Device,
     type DeviceListResponse as DeviceListResponse,
     type DeviceCreateParams as DeviceCreateParams,
-    type DeviceRetrieveParams as DeviceRetrieveParams,
     type DeviceListParams as DeviceListParams,
-    type DeviceTerminateParams as DeviceTerminateParams,
-    type DeviceWaitReadyParams as DeviceWaitReadyParams,
   };
 
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };

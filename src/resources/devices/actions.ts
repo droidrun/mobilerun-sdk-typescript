@@ -10,75 +10,42 @@ export class Actions extends APIResource {
   /**
    * Swipe
    */
-  swipe(deviceID: string, params: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-User-ID': xUserID, ...body } = params;
+  swipe(deviceID: string, body: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/swipe`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*', 'X-User-ID': xUserID }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
   /**
    * Tap by coordinates
    */
-  tap(deviceID: string, params: ActionTapParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-User-ID': xUserID, ...body } = params;
+  tap(deviceID: string, body: ActionTapParams, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/tap`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*', 'X-User-ID': xUserID }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 }
 
 export interface ActionSwipeParams {
-  /**
-   * Body param:
-   */
   duration: number;
 
-  /**
-   * Body param:
-   */
   endX: number;
 
-  /**
-   * Body param:
-   */
   endY: number;
 
-  /**
-   * Body param:
-   */
   startX: number;
 
-  /**
-   * Body param:
-   */
   startY: number;
-
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
 }
 
 export interface ActionTapParams {
-  /**
-   * Body param:
-   */
   x: number;
 
-  /**
-   * Body param:
-   */
   y: number;
-
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
 }
 
 export declare namespace Actions {

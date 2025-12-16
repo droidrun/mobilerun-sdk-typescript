@@ -9,8 +9,8 @@ const client = new Mobilerun({
 
 describe('resource keyboard', () => {
   // Prism tests are disabled
-  test.skip('clear: only required params', async () => {
-    const responsePromise = client.devices.keyboard.clear('deviceId', { 'X-User-ID': 'X-User-ID' });
+  test.skip('clear', async () => {
+    const responsePromise = client.devices.keyboard.clear('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,13 +21,8 @@ describe('resource keyboard', () => {
   });
 
   // Prism tests are disabled
-  test.skip('clear: required and optional params', async () => {
-    const response = await client.devices.keyboard.clear('deviceId', { 'X-User-ID': 'X-User-ID' });
-  });
-
-  // Prism tests are disabled
   test.skip('key: only required params', async () => {
-    const responsePromise = client.devices.keyboard.key('deviceId', { key: 0, 'X-User-ID': 'X-User-ID' });
+    const responsePromise = client.devices.keyboard.key('deviceId', { key: 0 });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -39,16 +34,12 @@ describe('resource keyboard', () => {
 
   // Prism tests are disabled
   test.skip('key: required and optional params', async () => {
-    const response = await client.devices.keyboard.key('deviceId', { key: 0, 'X-User-ID': 'X-User-ID' });
+    const response = await client.devices.keyboard.key('deviceId', { key: 0 });
   });
 
   // Prism tests are disabled
   test.skip('write: only required params', async () => {
-    const responsePromise = client.devices.keyboard.write('deviceId', {
-      clear: true,
-      text: 'text',
-      'X-User-ID': 'X-User-ID',
-    });
+    const responsePromise = client.devices.keyboard.write('deviceId', { clear: true, text: 'text' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -60,10 +51,6 @@ describe('resource keyboard', () => {
 
   // Prism tests are disabled
   test.skip('write: required and optional params', async () => {
-    const response = await client.devices.keyboard.write('deviceId', {
-      clear: true,
-      text: 'text',
-      'X-User-ID': 'X-User-ID',
-    });
+    const response = await client.devices.keyboard.write('deviceId', { clear: true, text: 'text' });
   });
 });

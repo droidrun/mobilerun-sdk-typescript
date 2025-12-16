@@ -25,9 +25,6 @@ export const tool: Tool = {
       deviceId: {
         type: 'string',
       },
-      'X-User-ID': {
-        type: 'string',
-      },
       jq_filter: {
         type: 'string',
         title: 'jq Filter',
@@ -35,7 +32,7 @@ export const tool: Tool = {
           'A jq filter to apply to the response to include certain fields. Consult the output schema in the tool description to see the fields that are available.\n\nFor example: to include only the `name` field in every object of a results array, you can provide ".results[].name".\n\nFor more information, see the [jq documentation](https://jqlang.org/manual/).',
       },
     },
-    required: ['deviceId', 'X-User-ID'],
+    required: ['deviceId'],
   },
   annotations: {
     readOnlyHint: true,
@@ -45,7 +42,7 @@ export const tool: Tool = {
 export const handler = async (client: Mobilerun, args: Record<string, unknown> | undefined) => {
   const { deviceId, jq_filter, ...body } = args as any;
   try {
-    return asTextContentResult(await maybeFilter(jq_filter, await client.devices.retrieve(deviceId, body)));
+    return asTextContentResult(await maybeFilter(jq_filter, await client.devices.retrieve(deviceId)));
   } catch (error) {
     if (error instanceof Mobilerun.APIError || isJqError(error)) {
       return asErrorResult(error.message);

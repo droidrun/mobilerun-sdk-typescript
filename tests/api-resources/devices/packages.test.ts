@@ -9,8 +9,8 @@ const client = new Mobilerun({
 
 describe('resource packages', () => {
   // Prism tests are disabled
-  test.skip('list: only required params', async () => {
-    const responsePromise = client.devices.packages.list('deviceId', { 'X-User-ID': 'X-User-ID' });
+  test.skip('list', async () => {
+    const responsePromise = client.devices.packages.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,10 +21,14 @@ describe('resource packages', () => {
   });
 
   // Prism tests are disabled
-  test.skip('list: required and optional params', async () => {
-    const response = await client.devices.packages.list('deviceId', {
-      'X-User-ID': 'X-User-ID',
-      includeSystemPackages: true,
-    });
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.packages.list(
+        'deviceId',
+        { includeSystemPackages: true },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 });
