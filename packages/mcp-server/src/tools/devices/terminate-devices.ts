@@ -23,11 +23,8 @@ export const tool: Tool = {
       deviceId: {
         type: 'string',
       },
-      'X-User-ID': {
-        type: 'string',
-      },
     },
-    required: ['deviceId', 'X-User-ID'],
+    required: ['deviceId'],
   },
   annotations: {
     idempotentHint: true,
@@ -36,7 +33,7 @@ export const tool: Tool = {
 
 export const handler = async (client: Mobilerun, args: Record<string, unknown> | undefined) => {
   const { deviceId, ...body } = args as any;
-  const response = await client.devices.terminate(deviceId, body).asResponse();
+  const response = await client.devices.terminate(deviceId).asResponse();
   return asTextContentResult(await response.text());
 };
 

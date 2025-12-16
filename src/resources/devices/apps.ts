@@ -12,38 +12,32 @@ export class Apps extends APIResource {
    */
   list(
     deviceID: string,
-    params: AppListParams,
+    query: AppListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<AppListResponse | null> {
-    const { 'X-User-ID': xUserID, ...query } = params;
-    return this._client.get(path`/devices/${deviceID}/apps`, {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'X-User-ID': xUserID }, options?.headers]),
-    });
+    return this._client.get(path`/devices/${deviceID}/apps`, { query, ...options });
   }
 
   /**
    * Delete app
    */
   delete(packageName: string, params: AppDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, 'X-User-ID': xUserID, ...body } = params;
+    const { deviceId, ...body } = params;
     return this._client.delete(path`/devices/${deviceId}/apps/${packageName}`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*', 'X-User-ID': xUserID }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
   /**
    * Install app
    */
-  install(deviceID: string, params: AppInstallParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-User-ID': xUserID, ...body } = params;
+  install(deviceID: string, body: AppInstallParams, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/apps`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*', 'X-User-ID': xUserID }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
@@ -51,11 +45,11 @@ export class Apps extends APIResource {
    * Start app
    */
   start(packageName: string, params: AppStartParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, 'X-User-ID': xUserID, ...body } = params;
+    const { deviceId, ...body } = params;
     return this._client.put(path`/devices/${deviceId}/apps/${packageName}`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*', 'X-User-ID': xUserID }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 }
@@ -77,39 +71,15 @@ export namespace AppListResponse {
 }
 
 export interface AppListParams {
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
-
-  /**
-   * Query param:
-   */
   includeSystemApps?: boolean;
 }
 
 export interface AppDeleteParams {
-  /**
-   * Path param:
-   */
   deviceId: string;
-
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
 }
 
 export interface AppInstallParams {
-  /**
-   * Body param:
-   */
   packageName: string;
-
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
 }
 
 export interface AppStartParams {
@@ -117,11 +87,6 @@ export interface AppStartParams {
    * Path param:
    */
   deviceId: string;
-
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
 
   /**
    * Body param:

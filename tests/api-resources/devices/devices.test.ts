@@ -10,11 +10,7 @@ const client = new Mobilerun({
 describe('resource devices', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.devices.create({
-      apps: ['string'],
-      files: ['string'],
-      'X-User-ID': 'X-User-ID',
-    });
+    const responsePromise = client.devices.create({ apps: ['string'], files: ['string'] });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -29,15 +25,14 @@ describe('resource devices', () => {
     const response = await client.devices.create({
       apps: ['string'],
       files: ['string'],
-      'X-User-ID': 'X-User-ID',
       country: 'country',
       name: 'name',
     });
   });
 
   // Prism tests are disabled
-  test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.devices.retrieve('deviceId', { 'X-User-ID': 'X-User-ID' });
+  test.skip('retrieve', async () => {
+    const responsePromise = client.devices.retrieve('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,13 +43,8 @@ describe('resource devices', () => {
   });
 
   // Prism tests are disabled
-  test.skip('retrieve: required and optional params', async () => {
-    const response = await client.devices.retrieve('deviceId', { 'X-User-ID': 'X-User-ID' });
-  });
-
-  // Prism tests are disabled
-  test.skip('list: only required params', async () => {
-    const responsePromise = client.devices.list({ 'X-User-ID': 'X-User-ID' });
+  test.skip('list', async () => {
+    const responsePromise = client.devices.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -65,21 +55,26 @@ describe('resource devices', () => {
   });
 
   // Prism tests are disabled
-  test.skip('list: required and optional params', async () => {
-    const response = await client.devices.list({
-      'X-User-ID': 'X-User-ID',
-      country: 'country',
-      orderBy: 'id',
-      orderByDirection: 'asc',
-      page: 0,
-      pageSize: 0,
-      state: 'creating',
-    });
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.list(
+        {
+          country: 'country',
+          orderBy: 'id',
+          orderByDirection: 'asc',
+          page: 0,
+          pageSize: 0,
+          state: 'creating',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Prism tests are disabled
-  test.skip('terminate: only required params', async () => {
-    const responsePromise = client.devices.terminate('deviceId', { 'X-User-ID': 'X-User-ID' });
+  test.skip('terminate', async () => {
+    const responsePromise = client.devices.terminate('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -90,13 +85,8 @@ describe('resource devices', () => {
   });
 
   // Prism tests are disabled
-  test.skip('terminate: required and optional params', async () => {
-    const response = await client.devices.terminate('deviceId', { 'X-User-ID': 'X-User-ID' });
-  });
-
-  // Prism tests are disabled
-  test.skip('waitReady: only required params', async () => {
-    const responsePromise = client.devices.waitReady('deviceId', { 'X-User-ID': 'X-User-ID' });
+  test.skip('waitReady', async () => {
+    const responsePromise = client.devices.waitReady('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -104,10 +94,5 @@ describe('resource devices', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('waitReady: required and optional params', async () => {
-    const response = await client.devices.waitReady('deviceId', { 'X-User-ID': 'X-User-ID' });
   });
 });

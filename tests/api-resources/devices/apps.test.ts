@@ -9,8 +9,8 @@ const client = new Mobilerun({
 
 describe('resource apps', () => {
   // Prism tests are disabled
-  test.skip('list: only required params', async () => {
-    const responsePromise = client.devices.apps.list('deviceId', { 'X-User-ID': 'X-User-ID' });
+  test.skip('list', async () => {
+    const responsePromise = client.devices.apps.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,19 +21,16 @@ describe('resource apps', () => {
   });
 
   // Prism tests are disabled
-  test.skip('list: required and optional params', async () => {
-    const response = await client.devices.apps.list('deviceId', {
-      'X-User-ID': 'X-User-ID',
-      includeSystemApps: true,
-    });
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.apps.list('deviceId', { includeSystemApps: true }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Prism tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.devices.apps.delete('packageName', {
-      deviceId: 'deviceId',
-      'X-User-ID': 'X-User-ID',
-    });
+    const responsePromise = client.devices.apps.delete('packageName', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -45,18 +42,12 @@ describe('resource apps', () => {
 
   // Prism tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.devices.apps.delete('packageName', {
-      deviceId: 'deviceId',
-      'X-User-ID': 'X-User-ID',
-    });
+    const response = await client.devices.apps.delete('packageName', { deviceId: 'deviceId' });
   });
 
   // Prism tests are disabled
   test.skip('install: only required params', async () => {
-    const responsePromise = client.devices.apps.install('deviceId', {
-      packageName: 'packageName',
-      'X-User-ID': 'X-User-ID',
-    });
+    const responsePromise = client.devices.apps.install('deviceId', { packageName: 'packageName' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -68,18 +59,12 @@ describe('resource apps', () => {
 
   // Prism tests are disabled
   test.skip('install: required and optional params', async () => {
-    const response = await client.devices.apps.install('deviceId', {
-      packageName: 'packageName',
-      'X-User-ID': 'X-User-ID',
-    });
+    const response = await client.devices.apps.install('deviceId', { packageName: 'packageName' });
   });
 
   // Prism tests are disabled
   test.skip('start: only required params', async () => {
-    const responsePromise = client.devices.apps.start('packageName', {
-      deviceId: 'deviceId',
-      'X-User-ID': 'X-User-ID',
-    });
+    const responsePromise = client.devices.apps.start('packageName', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -93,7 +78,6 @@ describe('resource apps', () => {
   test.skip('start: required and optional params', async () => {
     const response = await client.devices.apps.start('packageName', {
       deviceId: 'deviceId',
-      'X-User-ID': 'X-User-ID',
       activity: 'activity',
     });
   });

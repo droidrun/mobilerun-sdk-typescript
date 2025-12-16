@@ -26,11 +26,8 @@ export const tool: Tool = {
       key: {
         type: 'integer',
       },
-      'X-User-ID': {
-        type: 'string',
-      },
     },
-    required: ['deviceId', 'key', 'X-User-ID'],
+    required: ['deviceId', 'key'],
   },
   annotations: {
     idempotentHint: true,

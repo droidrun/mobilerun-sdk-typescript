@@ -13,7 +13,7 @@ import {
   Apps,
 } from './apps';
 import * as KeyboardAPI from './keyboard';
-import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
+import { Keyboard, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as StateAPI from './state';
@@ -21,7 +21,6 @@ import {
   State,
   StateScreenshotParams,
   StateScreenshotResponse,
-  StateTimeParams,
   StateTimeResponse,
   StateUiParams,
   StateUiResponse,
@@ -41,58 +40,42 @@ export class Devices extends APIResource {
   /**
    * Provision a new device
    */
-  create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
-    const { 'X-User-ID': xUserID, ...body } = params;
-    return this._client.post('/devices', {
-      body,
-      ...options,
-      headers: buildHeaders([{ 'X-User-ID': xUserID }, options?.headers]),
-    });
+  create(body: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
+    return this._client.post('/devices', { body, ...options });
   }
 
   /**
    * Get device info
    */
-  retrieve(deviceID: string, params: DeviceRetrieveParams, options?: RequestOptions): APIPromise<Device> {
-    const { 'X-User-ID': xUserID } = params;
-    return this._client.get(path`/devices/${deviceID}`, {
-      ...options,
-      headers: buildHeaders([{ 'X-User-ID': xUserID }, options?.headers]),
-    });
+  retrieve(deviceID: string, options?: RequestOptions): APIPromise<Device> {
+    return this._client.get(path`/devices/${deviceID}`, options);
   }
 
   /**
    * List devices
    */
-  list(params: DeviceListParams, options?: RequestOptions): APIPromise<DeviceListResponse> {
-    const { 'X-User-ID': xUserID, ...query } = params;
-    return this._client.get('/devices', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'X-User-ID': xUserID }, options?.headers]),
-    });
+  list(
+    query: DeviceListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<DeviceListResponse> {
+    return this._client.get('/devices', { query, ...options });
   }
 
   /**
    * Terminate a device
    */
-  terminate(deviceID: string, params: DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-User-ID': xUserID } = params;
+  terminate(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/devices/${deviceID}`, {
       ...options,
-      headers: buildHeaders([{ Accept: '*/*', 'X-User-ID': xUserID }, options?.headers]),
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
   /**
    * Wait for device to be ready
    */
-  waitReady(deviceID: string, params: DeviceWaitReadyParams, options?: RequestOptions): APIPromise<Device> {
-    const { 'X-User-ID': xUserID } = params;
-    return this._client.get(path`/devices/${deviceID}/wait`, {
-      ...options,
-      headers: buildHeaders([{ 'X-User-ID': xUserID }, options?.headers]),
-    });
+  waitReady(deviceID: string, options?: RequestOptions): APIPromise<Device> {
+    return this._client.get(path`/devices/${deviceID}/wait`, options);
   }
 }
 
@@ -155,79 +138,27 @@ export namespace DeviceListResponse {
 }
 
 export interface DeviceCreateParams {
-  /**
-   * Body param:
-   */
   apps: Array<string> | null;
 
-  /**
-   * Body param:
-   */
   files: Array<string> | null;
 
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
-
-  /**
-   * Body param:
-   */
   country?: string;
 
-  /**
-   * Body param:
-   */
   name?: string;
 }
 
-export interface DeviceRetrieveParams {
-  'X-User-ID': string;
-}
-
 export interface DeviceListParams {
-  /**
-   * Header param:
-   */
-  'X-User-ID': string;
-
-  /**
-   * Query param:
-   */
   country?: string;
 
-  /**
-   * Query param:
-   */
   orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt';
 
-  /**
-   * Query param:
-   */
   orderByDirection?: 'asc' | 'desc';
 
-  /**
-   * Query param:
-   */
   page?: number;
 
-  /**
-   * Query param:
-   */
   pageSize?: number;
 
-  /**
-   * Query param:
-   */
   state?: 'creating' | 'assigned' | 'ready' | 'terminated' | 'unknown';
-}
-
-export interface DeviceTerminateParams {
-  'X-User-ID': string;
-}
-
-export interface DeviceWaitReadyParams {
-  'X-User-ID': string;
 }
 
 Devices.Actions = Actions;
@@ -241,10 +172,7 @@ export declare namespace Devices {
     type Device as Device,
     type DeviceListResponse as DeviceListResponse,
     type DeviceCreateParams as DeviceCreateParams,
-    type DeviceRetrieveParams as DeviceRetrieveParams,
     type DeviceListParams as DeviceListParams,
-    type DeviceTerminateParams as DeviceTerminateParams,
-    type DeviceWaitReadyParams as DeviceWaitReadyParams,
   };
 
   export {
@@ -259,7 +187,6 @@ export declare namespace Devices {
     type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
-    type StateTimeParams as StateTimeParams,
     type StateUiParams as StateUiParams,
   };
 
@@ -280,7 +207,6 @@ export declare namespace Devices {
 
   export {
     Keyboard as Keyboard,
-    type KeyboardClearParams as KeyboardClearParams,
     type KeyboardKeyParams as KeyboardKeyParams,
     type KeyboardWriteParams as KeyboardWriteParams,
   };

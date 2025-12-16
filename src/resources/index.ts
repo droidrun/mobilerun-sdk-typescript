@@ -7,10 +7,7 @@ export {
   type Device,
   type DeviceListResponse,
   type DeviceCreateParams,
-  type DeviceRetrieveParams,
   type DeviceListParams,
-  type DeviceTerminateParams,
-  type DeviceWaitReadyParams,
 } from './devices/devices';
 export {
   Hooks,

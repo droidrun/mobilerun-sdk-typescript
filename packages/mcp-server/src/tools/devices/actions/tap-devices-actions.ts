@@ -29,11 +29,8 @@ export const tool: Tool = {
       y: {
         type: 'integer',
       },
-      'X-User-ID': {
-        type: 'string',
-      },
     },
-    required: ['deviceId', 'x', 'y', 'X-User-ID'],
+    required: ['deviceId', 'x', 'y'],
   },
   annotations: {},
 };
