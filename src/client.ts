@@ -32,6 +32,16 @@ import {
 } from './resources/hooks';
 import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
 import {
+  Device,
+  DeviceCreateParams,
+  DeviceListParams,
+  DeviceListResponse,
+  DeviceRetrieveParams,
+  DeviceTerminateParams,
+  DeviceWaitReadyParams,
+  Devices,
+} from './resources/devices/devices';
+import {
   LlmModel,
   Task,
   TaskCreate,
@@ -751,12 +761,14 @@ export class Mobilerun {
   static toFile = Uploads.toFile;
 
   tasks: API.Tasks = new API.Tasks(this);
+  devices: API.Devices = new API.Devices(this);
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
   hooks: API.Hooks = new API.Hooks(this);
 }
 
 Mobilerun.Tasks = Tasks;
+Mobilerun.Devices = Devices;
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Hooks = Hooks;
@@ -779,6 +791,17 @@ export declare namespace Mobilerun {
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
+  };
+
+  export {
+    Devices as Devices,
+    type Device as Device,
+    type DeviceListResponse as DeviceListResponse,
+    type DeviceCreateParams as DeviceCreateParams,
+    type DeviceRetrieveParams as DeviceRetrieveParams,
+    type DeviceListParams as DeviceListParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
+    type DeviceWaitReadyParams as DeviceWaitReadyParams,
   };
 
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
