@@ -156,6 +156,11 @@ export interface TaskCreate {
 
   credentials?: Array<TaskCreate.Credential>;
 
+  /**
+   * The ID of the device to run the task on.
+   */
+  deviceId?: string | null;
+
   executionTimeout?: number;
 
   files?: Array<string>;
@@ -1283,6 +1288,11 @@ export interface TaskRunParams {
 
   credentials?: Array<TaskRunParams.Credential>;
 
+  /**
+   * The ID of the device to run the task on.
+   */
+  deviceId?: string | null;
+
   executionTimeout?: number;
 
   files?: Array<string>;
@@ -1316,6 +1326,11 @@ export interface TaskRunStreamedParams {
   apps?: Array<string>;
 
   credentials?: Array<TaskRunStreamedParams.Credential>;
+
+  /**
+   * The ID of the device to run the task on.
+   */
+  deviceId?: string | null;
 
   executionTimeout?: number;
 
