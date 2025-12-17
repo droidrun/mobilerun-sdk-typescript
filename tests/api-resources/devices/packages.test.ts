@@ -26,7 +26,7 @@ describe('resource packages', () => {
     await expect(
       client.devices.packages.list(
         'deviceId',
-        { includeSystemPackages: true },
+        { includeSystemPackages: true, 'X-Device-Display-ID': 'X-Device-Display-ID' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);

@@ -38,6 +38,9 @@ export const tool: Tool = {
       startY: {
         type: 'integer',
       },
+      'X-Device-Display-ID': {
+        type: 'string',
+      },
     },
     required: ['deviceId', 'duration', 'endX', 'endY', 'startX', 'startY'],
   },

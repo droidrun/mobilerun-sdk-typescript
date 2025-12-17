@@ -26,7 +26,7 @@ describe('resource state', () => {
     await expect(
       client.devices.state.screenshot(
         'deviceId',
-        { hideOverlay: true },
+        { hideOverlay: true, 'X-Device-Display-ID': 'X-Device-Display-ID' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
@@ -45,6 +45,18 @@ describe('resource state', () => {
   });
 
   // Prism tests are disabled
+  test.skip('time: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.state.time(
+        'deviceId',
+        { 'X-Device-Display-ID': 'X-Device-Display-ID' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Prism tests are disabled
   test.skip('ui', async () => {
     const responsePromise = client.devices.state.ui('deviceId');
     const rawResponse = await responsePromise.asResponse();
@@ -60,7 +72,11 @@ describe('resource state', () => {
   test.skip('ui: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.devices.state.ui('deviceId', { filter: true }, { path: '/_stainless_unknown_path' }),
+      client.devices.state.ui(
+        'deviceId',
+        { filter: true, 'X-Device-Display-ID': 'X-Device-Display-ID' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 });

@@ -13,7 +13,7 @@ import {
   Apps,
 } from './apps';
 import * as KeyboardAPI from './keyboard';
-import { Keyboard, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
+import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as StateAPI from './state';
@@ -21,6 +21,7 @@ import {
   State,
   StateScreenshotParams,
   StateScreenshotResponse,
+  StateTimeParams,
   StateTimeResponse,
   StateUiParams,
   StateUiResponse,
@@ -187,6 +188,7 @@ export declare namespace Devices {
     type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
+    type StateTimeParams as StateTimeParams,
     type StateUiParams as StateUiParams,
   };
 
@@ -207,6 +209,7 @@ export declare namespace Devices {
 
   export {
     Keyboard as Keyboard,
+    type KeyboardClearParams as KeyboardClearParams,
     type KeyboardKeyParams as KeyboardKeyParams,
     type KeyboardWriteParams as KeyboardWriteParams,
   };

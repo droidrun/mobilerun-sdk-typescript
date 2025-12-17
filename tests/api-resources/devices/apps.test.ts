@@ -24,7 +24,11 @@ describe('resource apps', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.devices.apps.list('deviceId', { includeSystemApps: true }, { path: '/_stainless_unknown_path' }),
+      client.devices.apps.list(
+        'deviceId',
+        { includeSystemApps: true, 'X-Device-Display-ID': 'X-Device-Display-ID' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
@@ -42,7 +46,10 @@ describe('resource apps', () => {
 
   // Prism tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.devices.apps.delete('packageName', { deviceId: 'deviceId' });
+    const response = await client.devices.apps.delete('packageName', {
+      deviceId: 'deviceId',
+      'X-Device-Display-ID': 'X-Device-Display-ID',
+    });
   });
 
   // Prism tests are disabled
@@ -59,7 +66,10 @@ describe('resource apps', () => {
 
   // Prism tests are disabled
   test.skip('install: required and optional params', async () => {
-    const response = await client.devices.apps.install('deviceId', { packageName: 'packageName' });
+    const response = await client.devices.apps.install('deviceId', {
+      packageName: 'packageName',
+      'X-Device-Display-ID': 'X-Device-Display-ID',
+    });
   });
 
   // Prism tests are disabled
@@ -79,6 +89,7 @@ describe('resource apps', () => {
     const response = await client.devices.apps.start('packageName', {
       deviceId: 'deviceId',
       activity: 'activity',
+      'X-Device-Display-ID': 'X-Device-Display-ID',
     });
   });
 });

@@ -26,6 +26,9 @@ export const tool: Tool = {
       packageName: {
         type: 'string',
       },
+      'X-Device-Display-ID': {
+        type: 'string',
+      },
     },
     required: ['deviceId', 'packageName'],
   },

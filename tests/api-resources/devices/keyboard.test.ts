@@ -21,6 +21,18 @@ describe('resource keyboard', () => {
   });
 
   // Prism tests are disabled
+  test.skip('clear: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.keyboard.clear(
+        'deviceId',
+        { 'X-Device-Display-ID': 'X-Device-Display-ID' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Prism tests are disabled
   test.skip('key: only required params', async () => {
     const responsePromise = client.devices.keyboard.key('deviceId', { key: 0 });
     const rawResponse = await responsePromise.asResponse();
@@ -34,7 +46,10 @@ describe('resource keyboard', () => {
 
   // Prism tests are disabled
   test.skip('key: required and optional params', async () => {
-    const response = await client.devices.keyboard.key('deviceId', { key: 0 });
+    const response = await client.devices.keyboard.key('deviceId', {
+      key: 0,
+      'X-Device-Display-ID': 'X-Device-Display-ID',
+    });
   });
 
   // Prism tests are disabled
@@ -51,6 +66,10 @@ describe('resource keyboard', () => {
 
   // Prism tests are disabled
   test.skip('write: required and optional params', async () => {
-    const response = await client.devices.keyboard.write('deviceId', { clear: true, text: 'text' });
+    const response = await client.devices.keyboard.write('deviceId', {
+      clear: true,
+      text: 'text',
+      'X-Device-Display-ID': 'X-Device-Display-ID',
+    });
   });
 });

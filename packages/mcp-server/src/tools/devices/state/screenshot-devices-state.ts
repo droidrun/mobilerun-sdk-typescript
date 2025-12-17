@@ -28,6 +28,9 @@ export const tool: Tool = {
       hideOverlay: {
         type: 'boolean',
       },
+      'X-Device-Display-ID': {
+        type: 'string',
+      },
       jq_filter: {
         type: 'string',
         title: 'jq Filter',

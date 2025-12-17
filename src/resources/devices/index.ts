@@ -16,7 +16,12 @@ export {
   type DeviceCreateParams,
   type DeviceListParams,
 } from './devices';
-export { Keyboard, type KeyboardKeyParams, type KeyboardWriteParams } from './keyboard';
+export {
+  Keyboard,
+  type KeyboardClearParams,
+  type KeyboardKeyParams,
+  type KeyboardWriteParams,
+} from './keyboard';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
 export {
   State,
@@ -24,5 +29,6 @@ export {
   type StateTimeResponse,
   type StateUiResponse,
   type StateScreenshotParams,
+  type StateTimeParams,
   type StateUiParams,
 } from './state';

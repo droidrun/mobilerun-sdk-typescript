@@ -28,6 +28,9 @@ export const tool: Tool = {
       includeSystemApps: {
         type: 'boolean',
       },
+      'X-Device-Display-ID': {
+        type: 'string',
+      },
       jq_filter: {
         type: 'string',
         title: 'jq Filter',

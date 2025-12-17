@@ -10,46 +10,98 @@ export class Keyboard extends APIResource {
   /**
    * Clear input
    */
-  clear(deviceID: string, options?: RequestOptions): APIPromise<void> {
+  clear(
+    deviceID: string,
+    params: KeyboardClearParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
     return this._client.delete(path`/devices/${deviceID}/keyboard`, {
       ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+        },
+        options?.headers,
+      ]),
     });
   }
 
   /**
    * Input key
    */
-  key(deviceID: string, body: KeyboardKeyParams, options?: RequestOptions): APIPromise<void> {
+  key(deviceID: string, params: KeyboardKeyParams, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
     return this._client.put(path`/devices/${deviceID}/keyboard`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+        },
+        options?.headers,
+      ]),
     });
   }
 
   /**
    * Input text
    */
-  write(deviceID: string, body: KeyboardWriteParams, options?: RequestOptions): APIPromise<void> {
+  write(deviceID: string, params: KeyboardWriteParams, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
     return this._client.post(path`/devices/${deviceID}/keyboard`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+        },
+        options?.headers,
+      ]),
     });
   }
 }
 
+export interface KeyboardClearParams {
+  'X-Device-Display-ID'?: string;
+}
+
 export interface KeyboardKeyParams {
+  /**
+   * Body param:
+   */
   key: number;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: string;
 }
 
 export interface KeyboardWriteParams {
+  /**
+   * Body param:
+   */
   clear: boolean;
 
+  /**
+   * Body param:
+   */
   text: string;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: string;
 }
 
 export declare namespace Keyboard {
-  export { type KeyboardKeyParams as KeyboardKeyParams, type KeyboardWriteParams as KeyboardWriteParams };
+  export {
+    type KeyboardClearParams as KeyboardClearParams,
+    type KeyboardKeyParams as KeyboardKeyParams,
+    type KeyboardWriteParams as KeyboardWriteParams,
+  };
 }

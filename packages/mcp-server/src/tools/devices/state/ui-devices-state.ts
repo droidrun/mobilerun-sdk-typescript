@@ -26,6 +26,9 @@ export const tool: Tool = {
       filter: {
         type: 'boolean',
       },
+      'X-Device-Display-ID': {
+        type: 'string',
+      },
     },
     required: ['deviceId'],
   },
