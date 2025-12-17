@@ -26,7 +26,7 @@ export const tool: Tool = {
         type: 'string',
       },
       'X-Device-Display-ID': {
-        type: 'string',
+        type: 'integer',
       },
       jq_filter: {
         type: 'string',

@@ -20,7 +20,11 @@ export class Packages extends APIResource {
       query,
       ...options,
       headers: buildHeaders([
-        { ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined) },
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
         options?.headers,
       ]),
     });
@@ -38,7 +42,7 @@ export interface PackageListParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export declare namespace Packages {

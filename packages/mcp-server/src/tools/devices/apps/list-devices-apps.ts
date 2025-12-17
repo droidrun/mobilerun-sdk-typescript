@@ -29,7 +29,7 @@ export const tool: Tool = {
         type: 'boolean',
       },
       'X-Device-Display-ID': {
-        type: 'string',
+        type: 'integer',
       },
       jq_filter: {
         type: 'string',

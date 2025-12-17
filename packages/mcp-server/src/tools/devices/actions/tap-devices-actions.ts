@@ -30,7 +30,7 @@ export const tool: Tool = {
         type: 'integer',
       },
       'X-Device-Display-ID': {
-        type: 'string',
+        type: 'integer',
       },
     },
     required: ['deviceId', 'x', 'y'],

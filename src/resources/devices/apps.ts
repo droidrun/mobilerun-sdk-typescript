@@ -20,7 +20,11 @@ export class Apps extends APIResource {
       query,
       ...options,
       headers: buildHeaders([
-        { ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined) },
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
         options?.headers,
       ]),
     });
@@ -37,7 +41,9 @@ export class Apps extends APIResource {
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
         },
         options?.headers,
       ]),
@@ -55,7 +61,9 @@ export class Apps extends APIResource {
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
         },
         options?.headers,
       ]),
@@ -73,7 +81,9 @@ export class Apps extends APIResource {
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
         },
         options?.headers,
       ]),
@@ -106,7 +116,7 @@ export interface AppListParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export interface AppDeleteParams {
@@ -118,7 +128,7 @@ export interface AppDeleteParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export interface AppInstallParams {
@@ -130,7 +140,7 @@ export interface AppInstallParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export interface AppStartParams {
@@ -147,7 +157,7 @@ export interface AppStartParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export declare namespace Apps {
