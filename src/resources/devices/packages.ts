@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -11,17 +12,33 @@ export class Packages extends APIResource {
    */
   list(
     deviceID: string,
-    query: PackageListParams | null | undefined = {},
+    params: PackageListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<PackageListResponse | null> {
-    return this._client.get(path`/devices/${deviceID}/packages`, { query, ...options });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/packages`, {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
 export type PackageListResponse = Array<string>;
 
 export interface PackageListParams {
+  /**
+   * Query param:
+   */
   includeSystemPackages?: boolean;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: string;
 }
 
 export declare namespace Packages {

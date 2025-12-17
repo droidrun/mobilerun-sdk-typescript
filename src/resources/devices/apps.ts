@@ -12,32 +12,53 @@ export class Apps extends APIResource {
    */
   list(
     deviceID: string,
-    query: AppListParams | null | undefined = {},
+    params: AppListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<AppListResponse | null> {
-    return this._client.get(path`/devices/${deviceID}/apps`, { query, ...options });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/apps`, {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
    * Delete app
    */
   delete(packageName: string, params: AppDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, ...body } = params;
+    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
     return this._client.delete(path`/devices/${deviceId}/apps/${packageName}`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+        },
+        options?.headers,
+      ]),
     });
   }
 
   /**
    * Install app
    */
-  install(deviceID: string, body: AppInstallParams, options?: RequestOptions): APIPromise<void> {
+  install(deviceID: string, params: AppInstallParams, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
     return this._client.post(path`/devices/${deviceID}/apps`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+        },
+        options?.headers,
+      ]),
     });
   }
 
@@ -45,11 +66,17 @@ export class Apps extends APIResource {
    * Start app
    */
   start(packageName: string, params: AppStartParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, ...body } = params;
+    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
     return this._client.put(path`/devices/${deviceId}/apps/${packageName}`, {
       body,
       ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+        },
+        options?.headers,
+      ]),
     });
   }
 }
@@ -71,15 +98,39 @@ export namespace AppListResponse {
 }
 
 export interface AppListParams {
+  /**
+   * Query param:
+   */
   includeSystemApps?: boolean;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: string;
 }
 
 export interface AppDeleteParams {
+  /**
+   * Path param:
+   */
   deviceId: string;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: string;
 }
 
 export interface AppInstallParams {
+  /**
+   * Body param:
+   */
   packageName: string;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: string;
 }
 
 export interface AppStartParams {
@@ -92,6 +143,11 @@ export interface AppStartParams {
    * Body param:
    */
   activity?: string;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: string;
 }
 
 export declare namespace Apps {

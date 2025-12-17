@@ -29,6 +29,9 @@ export const tool: Tool = {
       text: {
         type: 'string',
       },
+      'X-Device-Display-ID': {
+        type: 'string',
+      },
     },
     required: ['deviceId', 'clear', 'text'],
   },

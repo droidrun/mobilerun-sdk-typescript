@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -11,17 +12,36 @@ export class State extends APIResource {
    */
   screenshot(
     deviceID: string,
-    query: StateScreenshotParams | null | undefined = {},
+    params: StateScreenshotParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<string> {
-    return this._client.get(path`/devices/${deviceID}/screenshot`, { query, ...options });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/screenshot`, {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
    * Device time
    */
-  time(deviceID: string, options?: RequestOptions): APIPromise<string> {
-    return this._client.get(path`/devices/${deviceID}/time`, options);
+  time(
+    deviceID: string,
+    params: StateTimeParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/time`, {
+      ...options,
+      headers: buildHeaders([
+        { ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -29,10 +49,18 @@ export class State extends APIResource {
    */
   ui(
     deviceID: string,
-    query: StateUiParams | null | undefined = {},
+    params: StateUiParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<unknown> {
-    return this._client.get(path`/devices/${deviceID}/ui-state`, { query, ...options });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/ui-state`, {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -43,11 +71,31 @@ export type StateTimeResponse = string;
 export type StateUiResponse = unknown;
 
 export interface StateScreenshotParams {
+  /**
+   * Query param:
+   */
   hideOverlay?: boolean;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: string;
+}
+
+export interface StateTimeParams {
+  'X-Device-Display-ID'?: string;
 }
 
 export interface StateUiParams {
+  /**
+   * Query param:
+   */
   filter?: boolean;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: string;
 }
 
 export declare namespace State {
@@ -56,6 +104,7 @@ export declare namespace State {
     type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
+    type StateTimeParams as StateTimeParams,
     type StateUiParams as StateUiParams,
   };
 }

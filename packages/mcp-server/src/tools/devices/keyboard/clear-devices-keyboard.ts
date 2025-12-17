@@ -23,6 +23,9 @@ export const tool: Tool = {
       deviceId: {
         type: 'string',
       },
+      'X-Device-Display-ID': {
+        type: 'string',
+      },
     },
     required: ['deviceId'],
   },
@@ -33,7 +36,7 @@ export const tool: Tool = {
 
 export const handler = async (client: Mobilerun, args: Record<string, unknown> | undefined) => {
   const { deviceId, ...body } = args as any;
-  const response = await client.devices.keyboard.clear(deviceId).asResponse();
+  const response = await client.devices.keyboard.clear(deviceId, body).asResponse();
   return asTextContentResult(await response.text());
 };
 
