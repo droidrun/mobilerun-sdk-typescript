@@ -61,6 +61,11 @@ export const tool: Tool = {
         title: 'Deviceid',
         description: 'The ID of the device to run the task on.',
       },
+      displayId: {
+        type: 'integer',
+        title: 'Displayid',
+        description: 'The display ID of the device to run the task on.',
+      },
       executionTimeout: {
         type: 'integer',
         title: 'Executiontimeout',
