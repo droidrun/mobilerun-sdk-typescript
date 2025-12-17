@@ -20,7 +20,7 @@ export class State extends APIResource {
   /**
    * Device time
    */
-  time(deviceID: string, options?: RequestOptions): APIPromise<StateTimeResponse> {
+  time(deviceID: string, options?: RequestOptions): APIPromise<string> {
     return this._client.get(path`/devices/${deviceID}/time`, options);
   }
 
