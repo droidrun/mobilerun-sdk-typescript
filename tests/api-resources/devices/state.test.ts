@@ -26,7 +26,7 @@ describe('resource state', () => {
     await expect(
       client.devices.state.screenshot(
         'deviceId',
-        { hideOverlay: true, 'X-Device-Display-ID': 'X-Device-Display-ID' },
+        { hideOverlay: true, 'X-Device-Display-ID': 0 },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
@@ -50,7 +50,7 @@ describe('resource state', () => {
     await expect(
       client.devices.state.time(
         'deviceId',
-        { 'X-Device-Display-ID': 'X-Device-Display-ID' },
+        { 'X-Device-Display-ID': 0 },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
@@ -74,7 +74,7 @@ describe('resource state', () => {
     await expect(
       client.devices.state.ui(
         'deviceId',
-        { filter: true, 'X-Device-Display-ID': 'X-Device-Display-ID' },
+        { filter: true, 'X-Device-Display-ID': 0 },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);

@@ -18,7 +18,9 @@ export class Actions extends APIResource {
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
         },
         options?.headers,
       ]),
@@ -36,7 +38,9 @@ export class Actions extends APIResource {
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
         },
         options?.headers,
       ]),
@@ -73,7 +77,7 @@ export interface ActionSwipeParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export interface ActionTapParams {
@@ -90,7 +94,7 @@ export interface ActionTapParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export declare namespace Actions {

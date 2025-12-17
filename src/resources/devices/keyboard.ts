@@ -21,7 +21,9 @@ export class Keyboard extends APIResource {
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
         },
         options?.headers,
       ]),
@@ -39,7 +41,9 @@ export class Keyboard extends APIResource {
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
         },
         options?.headers,
       ]),
@@ -57,7 +61,9 @@ export class Keyboard extends APIResource {
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID != null ? { 'X-Device-Display-ID': xDeviceDisplayID } : undefined),
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
         },
         options?.headers,
       ]),
@@ -66,7 +72,7 @@ export class Keyboard extends APIResource {
 }
 
 export interface KeyboardClearParams {
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export interface KeyboardKeyParams {
@@ -78,7 +84,7 @@ export interface KeyboardKeyParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export interface KeyboardWriteParams {
@@ -95,7 +101,7 @@ export interface KeyboardWriteParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: string;
+  'X-Device-Display-ID'?: number;
 }
 
 export declare namespace Keyboard {
