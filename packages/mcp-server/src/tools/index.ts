@@ -4,6 +4,18 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 
 export { Metadata, Endpoint, HandlerFunction };
 
+import retrieve_tasks from './tasks/retrieve-tasks';
+import list_tasks from './tasks/list-tasks';
+import attach_tasks from './tasks/attach-tasks';
+import get_status_tasks from './tasks/get-status-tasks';
+import get_trajectory_tasks from './tasks/get-trajectory-tasks';
+import run_tasks from './tasks/run-tasks';
+import run_streamed_tasks from './tasks/run-streamed-tasks';
+import stop_tasks from './tasks/stop-tasks';
+import retrieve_tasks_screenshots from './tasks/screenshots/retrieve-tasks-screenshots';
+import list_tasks_screenshots from './tasks/screenshots/list-tasks-screenshots';
+import retrieve_tasks_ui_states from './tasks/ui-states/retrieve-tasks-ui-states';
+import list_tasks_ui_states from './tasks/ui-states/list-tasks-ui-states';
 import create_devices from './devices/create-devices';
 import retrieve_devices from './devices/retrieve-devices';
 import list_devices from './devices/list-devices';
@@ -33,6 +45,13 @@ import delete_packages_credentials_credentials from './credentials/packages/cred
 import create_credentials_packages_credentials_fields from './credentials/packages/credentials/fields/create-credentials-packages-credentials-fields';
 import update_credentials_packages_credentials_fields from './credentials/packages/credentials/fields/update-credentials-packages-credentials-fields';
 import delete_credentials_packages_credentials_fields from './credentials/packages/credentials/fields/delete-credentials-packages-credentials-fields';
+import retrieve_hooks from './hooks/retrieve-hooks';
+import update_hooks from './hooks/update-hooks';
+import list_hooks from './hooks/list-hooks';
+import get_sample_data_hooks from './hooks/get-sample-data-hooks';
+import perform_hooks from './hooks/perform-hooks';
+import subscribe_hooks from './hooks/subscribe-hooks';
+import unsubscribe_hooks from './hooks/unsubscribe-hooks';
 
 export const endpoints: Endpoint[] = [];
 
@@ -40,6 +59,18 @@ function addEndpoint(endpoint: Endpoint) {
   endpoints.push(endpoint);
 }
 
+addEndpoint(retrieve_tasks);
+addEndpoint(list_tasks);
+addEndpoint(attach_tasks);
+addEndpoint(get_status_tasks);
+addEndpoint(get_trajectory_tasks);
+addEndpoint(run_tasks);
+addEndpoint(run_streamed_tasks);
+addEndpoint(stop_tasks);
+addEndpoint(retrieve_tasks_screenshots);
+addEndpoint(list_tasks_screenshots);
+addEndpoint(retrieve_tasks_ui_states);
+addEndpoint(list_tasks_ui_states);
 addEndpoint(create_devices);
 addEndpoint(retrieve_devices);
 addEndpoint(list_devices);
@@ -69,6 +100,13 @@ addEndpoint(delete_packages_credentials_credentials);
 addEndpoint(create_credentials_packages_credentials_fields);
 addEndpoint(update_credentials_packages_credentials_fields);
 addEndpoint(delete_credentials_packages_credentials_fields);
+addEndpoint(retrieve_hooks);
+addEndpoint(update_hooks);
+addEndpoint(list_hooks);
+addEndpoint(get_sample_data_hooks);
+addEndpoint(perform_hooks);
+addEndpoint(subscribe_hooks);
+addEndpoint(unsubscribe_hooks);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';
