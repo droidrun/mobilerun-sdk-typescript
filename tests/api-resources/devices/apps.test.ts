@@ -26,7 +26,7 @@ describe('resource apps', () => {
     await expect(
       client.devices.apps.list(
         'deviceId',
-        { includeSystemApps: true, 'X-Device-Display-ID,omitempty': 0 },
+        { includeSystemApps: true, 'X-Device-Display-ID': 0 },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
@@ -48,7 +48,7 @@ describe('resource apps', () => {
   test.skip('delete: required and optional params', async () => {
     const response = await client.devices.apps.delete('packageName', {
       deviceId: 'deviceId',
-      'X-Device-Display-ID,omitempty': 0,
+      'X-Device-Display-ID': 0,
     });
   });
 
@@ -68,7 +68,7 @@ describe('resource apps', () => {
   test.skip('install: required and optional params', async () => {
     const response = await client.devices.apps.install('deviceId', {
       packageName: 'packageName',
-      'X-Device-Display-ID,omitempty': 0,
+      'X-Device-Display-ID': 0,
     });
   });
 
@@ -89,7 +89,7 @@ describe('resource apps', () => {
     const response = await client.devices.apps.start('packageName', {
       deviceId: 'deviceId',
       activity: 'activity',
-      'X-Device-Display-ID,omitempty': 0,
+      'X-Device-Display-ID': 0,
     });
   });
 });

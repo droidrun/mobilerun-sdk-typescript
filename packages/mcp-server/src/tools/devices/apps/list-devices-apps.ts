@@ -28,7 +28,7 @@ export const tool: Tool = {
       includeSystemApps: {
         type: 'boolean',
       },
-      'X-Device-Display-ID,omitempty': {
+      'X-Device-Display-ID': {
         type: 'integer',
       },
       jq_filter: {
