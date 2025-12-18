@@ -9,6 +9,23 @@ const client = new Mobilerun({
 
 describe('resource actions', () => {
   // Prism tests are disabled
+  test.skip('global: only required params', async () => {
+    const responsePromise = client.devices.actions.global('deviceId', { action: 0 });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('global: required and optional params', async () => {
+    const response = await client.devices.actions.global('deviceId', { action: 0, 'X-Device-Display-ID': 0 });
+  });
+
+  // Prism tests are disabled
   test.skip('swipe: only required params', async () => {
     const responsePromise = client.devices.actions.swipe('deviceId', {
       duration: 0,

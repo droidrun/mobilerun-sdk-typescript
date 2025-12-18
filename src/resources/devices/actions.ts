@@ -8,6 +8,26 @@ import { path } from '../../internal/utils/path';
 
 export class Actions extends APIResource {
   /**
+   * Perform a global action
+   */
+  global(deviceID: string, params: ActionGlobalParams, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    return this._client.post(path`/devices/${deviceID}/global`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Swipe
    */
   swipe(deviceID: string, params: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
@@ -46,6 +66,18 @@ export class Actions extends APIResource {
       ]),
     });
   }
+}
+
+export interface ActionGlobalParams {
+  /**
+   * Body param:
+   */
+  action: number;
+
+  /**
+   * Header param:
+   */
+  'X-Device-Display-ID'?: number | null;
 }
 
 export interface ActionSwipeParams {
@@ -98,5 +130,9 @@ export interface ActionTapParams {
 }
 
 export declare namespace Actions {
-  export { type ActionSwipeParams as ActionSwipeParams, type ActionTapParams as ActionTapParams };
+  export {
+    type ActionGlobalParams as ActionGlobalParams,
+    type ActionSwipeParams as ActionSwipeParams,
+    type ActionTapParams as ActionTapParams,
+  };
 }

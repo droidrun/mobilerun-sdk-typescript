@@ -271,6 +271,7 @@ The following tools are available in this MCP server.
 
 ### Resource `devices.actions`:
 
+- `global_devices_actions` (`write`): Perform a global action
 - `swipe_devices_actions` (`write`): Swipe
 - `tap_devices_actions` (`write`): Tap by coordinates
 

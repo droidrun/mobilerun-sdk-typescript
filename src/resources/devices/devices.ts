@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as ActionsAPI from './actions';
-import { ActionSwipeParams, ActionTapParams, Actions } from './actions';
+import { ActionGlobalParams, ActionSwipeParams, ActionTapParams, Actions } from './actions';
 import * as AppsAPI from './apps';
 import {
   AppDeleteParams,
@@ -178,6 +178,7 @@ export declare namespace Devices {
 
   export {
     Actions as Actions,
+    type ActionGlobalParams as ActionGlobalParams,
     type ActionSwipeParams as ActionSwipeParams,
     type ActionTapParams as ActionTapParams,
   };
