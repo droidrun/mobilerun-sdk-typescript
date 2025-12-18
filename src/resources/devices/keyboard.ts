@@ -72,7 +72,7 @@ export class Keyboard extends APIResource {
 }
 
 export interface KeyboardClearParams {
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export interface KeyboardKeyParams {
@@ -84,7 +84,7 @@ export interface KeyboardKeyParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export interface KeyboardWriteParams {
@@ -101,7 +101,7 @@ export interface KeyboardWriteParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export declare namespace Keyboard {

@@ -116,7 +116,7 @@ export interface AppListParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export interface AppDeleteParams {
@@ -128,7 +128,7 @@ export interface AppDeleteParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export interface AppInstallParams {
@@ -140,7 +140,7 @@ export interface AppInstallParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export interface AppStartParams {
@@ -157,7 +157,7 @@ export interface AppStartParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export declare namespace Apps {
