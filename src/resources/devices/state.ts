@@ -15,14 +15,14 @@ export class State extends APIResource {
     params: StateScreenshotParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...query } = params ?? {};
     return this._client.get(path`/devices/${deviceID}/screenshot`, {
       query,
       ...options,
       headers: buildHeaders([
         {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -38,13 +38,13 @@ export class State extends APIResource {
     params: StateTimeParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty } = params ?? {};
     return this._client.get(path`/devices/${deviceID}/time`, {
       ...options,
       headers: buildHeaders([
         {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -60,14 +60,14 @@ export class State extends APIResource {
     params: StateUiParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<unknown> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...query } = params ?? {};
     return this._client.get(path`/devices/${deviceID}/ui-state`, {
       query,
       ...options,
       headers: buildHeaders([
         {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -91,11 +91,11 @@ export interface StateScreenshotParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export interface StateTimeParams {
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export interface StateUiParams {
@@ -107,7 +107,7 @@ export interface StateUiParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export declare namespace State {

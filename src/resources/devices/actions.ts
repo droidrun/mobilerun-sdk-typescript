@@ -11,15 +11,15 @@ export class Actions extends APIResource {
    * Perform a global action
    */
   global(deviceID: string, params: ActionGlobalParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...body } = params;
     return this._client.post(path`/devices/${deviceID}/global`, {
       body,
       ...options,
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -31,15 +31,15 @@ export class Actions extends APIResource {
    * Swipe
    */
   swipe(deviceID: string, params: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...body } = params;
     return this._client.post(path`/devices/${deviceID}/swipe`, {
       body,
       ...options,
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -51,15 +51,15 @@ export class Actions extends APIResource {
    * Tap by coordinates
    */
   tap(deviceID: string, params: ActionTapParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...body } = params;
     return this._client.post(path`/devices/${deviceID}/tap`, {
       body,
       ...options,
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -77,7 +77,7 @@ export interface ActionGlobalParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export interface ActionSwipeParams {
@@ -109,7 +109,7 @@ export interface ActionSwipeParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export interface ActionTapParams {
@@ -126,7 +126,7 @@ export interface ActionTapParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export declare namespace Actions {

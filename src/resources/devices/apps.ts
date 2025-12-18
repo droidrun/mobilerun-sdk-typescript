@@ -15,14 +15,14 @@ export class Apps extends APIResource {
     params: AppListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<AppListResponse | null> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...query } = params ?? {};
     return this._client.get(path`/devices/${deviceID}/apps`, {
       query,
       ...options,
       headers: buildHeaders([
         {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -34,15 +34,15 @@ export class Apps extends APIResource {
    * Delete app
    */
   delete(packageName: string, params: AppDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    const { deviceId, 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...body } = params;
     return this._client.delete(path`/devices/${deviceId}/apps/${packageName}`, {
       body,
       ...options,
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -54,15 +54,15 @@ export class Apps extends APIResource {
    * Install app
    */
   install(deviceID: string, params: AppInstallParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...body } = params;
     return this._client.post(path`/devices/${deviceID}/apps`, {
       body,
       ...options,
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -74,15 +74,15 @@ export class Apps extends APIResource {
    * Start app
    */
   start(packageName: string, params: AppStartParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    const { deviceId, 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...body } = params;
     return this._client.put(path`/devices/${deviceId}/apps/${packageName}`, {
       body,
       ...options,
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -116,7 +116,7 @@ export interface AppListParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export interface AppDeleteParams {
@@ -128,7 +128,7 @@ export interface AppDeleteParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export interface AppInstallParams {
@@ -140,7 +140,7 @@ export interface AppInstallParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export interface AppStartParams {
@@ -157,7 +157,7 @@ export interface AppStartParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export declare namespace Apps {

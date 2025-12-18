@@ -22,7 +22,10 @@ describe('resource actions', () => {
 
   // Prism tests are disabled
   test.skip('global: required and optional params', async () => {
-    const response = await client.devices.actions.global('deviceId', { action: 0, 'X-Device-Display-ID': 0 });
+    const response = await client.devices.actions.global('deviceId', {
+      action: 0,
+      'X-Device-Display-ID,omitempty': 0,
+    });
   });
 
   // Prism tests are disabled
@@ -51,7 +54,7 @@ describe('resource actions', () => {
       endY: 0,
       startX: 0,
       startY: 0,
-      'X-Device-Display-ID': 0,
+      'X-Device-Display-ID,omitempty': 0,
     });
   });
 
@@ -69,6 +72,10 @@ describe('resource actions', () => {
 
   // Prism tests are disabled
   test.skip('tap: required and optional params', async () => {
-    const response = await client.devices.actions.tap('deviceId', { x: 0, y: 0, 'X-Device-Display-ID': 0 });
+    const response = await client.devices.actions.tap('deviceId', {
+      x: 0,
+      y: 0,
+      'X-Device-Display-ID,omitempty': 0,
+    });
   });
 });
