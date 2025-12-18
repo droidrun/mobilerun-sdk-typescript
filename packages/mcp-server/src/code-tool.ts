@@ -35,7 +35,10 @@ export async function codeTool() {
       headers: {
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
-        client_envs: JSON.stringify({ MOBILERUN_CLOUD_API_KEY: readEnv('MOBILERUN_CLOUD_API_KEY') }),
+        client_envs: JSON.stringify({
+          MOBILERUN_CLOUD_API_KEY: readEnv('MOBILERUN_CLOUD_API_KEY'),
+          MOBILERUN_BASE_URL: readEnv('MOBILERUN_BASE_URL'),
+        }),
       },
       body: JSON.stringify({
         project_name: 'droidrun-cloud',
