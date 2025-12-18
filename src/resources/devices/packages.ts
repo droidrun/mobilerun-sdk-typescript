@@ -15,14 +15,14 @@ export class Packages extends APIResource {
     params: PackageListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<PackageListResponse | null> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...query } = params ?? {};
     return this._client.get(path`/devices/${deviceID}/packages`, {
       query,
       ...options,
       headers: buildHeaders([
         {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -42,7 +42,7 @@ export interface PackageListParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export declare namespace Packages {

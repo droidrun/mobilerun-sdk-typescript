@@ -23,7 +23,7 @@ export const tool: Tool = {
       deviceId: {
         type: 'string',
       },
-      'X-Device-Display-ID': {
+      'X-Device-Display-ID,omitempty': {
         type: 'integer',
       },
     },

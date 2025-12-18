@@ -15,14 +15,14 @@ export class Keyboard extends APIResource {
     params: KeyboardClearParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty } = params ?? {};
     return this._client.delete(path`/devices/${deviceID}/keyboard`, {
       ...options,
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -34,15 +34,15 @@ export class Keyboard extends APIResource {
    * Input key
    */
   key(deviceID: string, params: KeyboardKeyParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...body } = params;
     return this._client.put(path`/devices/${deviceID}/keyboard`, {
       body,
       ...options,
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -54,15 +54,15 @@ export class Keyboard extends APIResource {
    * Input text
    */
   write(deviceID: string, params: KeyboardWriteParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    const { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty, ...body } = params;
     return this._client.post(path`/devices/${deviceID}/keyboard`, {
       body,
       ...options,
       headers: buildHeaders([
         {
           Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          ...(xDeviceDisplayIDOmitempty?.toString() != null ?
+            { 'X-Device-Display-ID,omitempty': xDeviceDisplayIDOmitempty?.toString() }
           : undefined),
         },
         options?.headers,
@@ -72,7 +72,7 @@ export class Keyboard extends APIResource {
 }
 
 export interface KeyboardClearParams {
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export interface KeyboardKeyParams {
@@ -84,7 +84,7 @@ export interface KeyboardKeyParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export interface KeyboardWriteParams {
@@ -101,7 +101,7 @@ export interface KeyboardWriteParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number | null;
+  'X-Device-Display-ID,omitempty'?: number;
 }
 
 export declare namespace Keyboard {

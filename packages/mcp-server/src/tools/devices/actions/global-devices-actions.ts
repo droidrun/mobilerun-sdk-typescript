@@ -26,7 +26,7 @@ export const tool: Tool = {
       action: {
         type: 'integer',
       },
-      'X-Device-Display-ID': {
+      'X-Device-Display-ID,omitempty': {
         type: 'integer',
       },
     },
