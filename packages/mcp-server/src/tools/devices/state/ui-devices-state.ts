@@ -26,7 +26,7 @@ export const tool: Tool = {
       filter: {
         type: 'boolean',
       },
-      'X-Device-Display-ID,omitempty': {
+      'X-Device-Display-ID': {
         type: 'integer',
       },
     },

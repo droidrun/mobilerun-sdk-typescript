@@ -39,7 +39,7 @@ export const tool: Tool = {
       startY: {
         type: 'integer',
       },
-      'X-Device-Display-ID,omitempty': {
+      'X-Device-Display-ID': {
         type: 'integer',
       },
     },

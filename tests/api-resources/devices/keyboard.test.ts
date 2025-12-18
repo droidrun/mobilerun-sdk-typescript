@@ -26,7 +26,7 @@ describe('resource keyboard', () => {
     await expect(
       client.devices.keyboard.clear(
         'deviceId',
-        { 'X-Device-Display-ID,omitempty': 0 },
+        { 'X-Device-Display-ID': 0 },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
@@ -46,10 +46,7 @@ describe('resource keyboard', () => {
 
   // Prism tests are disabled
   test.skip('key: required and optional params', async () => {
-    const response = await client.devices.keyboard.key('deviceId', {
-      key: 0,
-      'X-Device-Display-ID,omitempty': 0,
-    });
+    const response = await client.devices.keyboard.key('deviceId', { key: 0, 'X-Device-Display-ID': 0 });
   });
 
   // Prism tests are disabled
@@ -69,7 +66,7 @@ describe('resource keyboard', () => {
     const response = await client.devices.keyboard.write('deviceId', {
       clear: true,
       text: 'text',
-      'X-Device-Display-ID,omitempty': 0,
+      'X-Device-Display-ID': 0,
     });
   });
 });
