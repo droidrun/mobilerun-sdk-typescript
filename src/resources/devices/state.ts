@@ -91,11 +91,11 @@ export interface StateScreenshotParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export interface StateTimeParams {
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export interface StateUiParams {
@@ -107,7 +107,7 @@ export interface StateUiParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export declare namespace State {

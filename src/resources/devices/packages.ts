@@ -42,7 +42,7 @@ export interface PackageListParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export declare namespace Packages {

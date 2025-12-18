@@ -77,7 +77,7 @@ export interface ActionSwipeParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export interface ActionTapParams {
@@ -94,7 +94,7 @@ export interface ActionTapParams {
   /**
    * Header param:
    */
-  'X-Device-Display-ID'?: number;
+  'X-Device-Display-ID'?: number | null;
 }
 
 export declare namespace Actions {
