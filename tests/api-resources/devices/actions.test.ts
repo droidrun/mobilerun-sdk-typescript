@@ -31,7 +31,7 @@ describe('resource actions', () => {
   // Prism tests are disabled
   test.skip('swipe: only required params', async () => {
     const responsePromise = client.devices.actions.swipe('deviceId', {
-      duration: 0,
+      duration: 10,
       endX: 0,
       endY: 0,
       startX: 0,
@@ -49,7 +49,7 @@ describe('resource actions', () => {
   // Prism tests are disabled
   test.skip('swipe: required and optional params', async () => {
     const response = await client.devices.actions.swipe('deviceId', {
-      duration: 0,
+      duration: 10,
       endX: 0,
       endY: 0,
       startX: 0,

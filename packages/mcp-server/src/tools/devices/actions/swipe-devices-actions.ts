@@ -25,6 +25,7 @@ export const tool: Tool = {
       },
       duration: {
         type: 'integer',
+        description: 'Swipe duration in milliseconds',
       },
       endX: {
         type: 'integer',
