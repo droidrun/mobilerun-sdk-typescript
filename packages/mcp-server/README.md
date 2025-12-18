@@ -208,7 +208,7 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 import { server, endpoints, init } from "mobilerun-mcp/server";
 
 // import a specific tool
-import retrieveTasks from "mobilerun-mcp/tools/tasks/retrieve-tasks";
+import createDevices from "mobilerun-mcp/tools/devices/create-devices";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -233,33 +233,12 @@ const myCustomEndpoint = {
 };
 
 // initialize the server with your custom endpoints
-init({ server: myServer, endpoints: [retrieveTasks, myCustomEndpoint] });
+init({ server: myServer, endpoints: [createDevices, myCustomEndpoint] });
 ```
 
 ## Available Tools
 
 The following tools are available in this MCP server.
-
-### Resource `tasks`:
-
-- `retrieve_tasks` (`read`): Get Task
-- `list_tasks` (`read`): List all tasks you've created so far
-- `attach_tasks` (`read`): Attach Task
-- `get_status_tasks` (`read`): Get the status of a task. If device is provided, return the status of the specific device. Otherwise, return the status of all devices.
-- `get_trajectory_tasks` (`read`): Get the trajectory of a task.
-- `run_tasks` (`write`): Run Task
-- `run_streamed_tasks` (`write`): Run Streamed Task
-- `stop_tasks` (`write`): Stop Task
-
-### Resource `tasks.screenshots`:
-
-- `retrieve_tasks_screenshots` (`read`): Get Task Screenshot
-- `list_tasks_screenshots` (`read`): Get Task Screenshots
-
-### Resource `tasks.ui_states`:
-
-- `retrieve_tasks_ui_states` (`read`): Get Task Ui State
-- `list_tasks_ui_states` (`read`): Get Task Ui States
 
 ### Resource `devices`:
 
@@ -322,18 +301,3 @@ The following tools are available in this MCP server.
 - `create_credentials_packages_credentials_fields` (`write`): Add a new field to an existing credential
 - `update_credentials_packages_credentials_fields` (`write`): Update the value of a credential field
 - `delete_credentials_packages_credentials_fields` (`write`): Delete a field from a credential
-
-### Resource `hooks`:
-
-- `retrieve_hooks` (`read`): Get a hook subscription by id.
-- `update_hooks` (`write`): Edit a hook subscription (events or state).
-
-  Allows updating the events filter and/or the state of a hook.
-
-- `list_hooks` (`read`): List hooks belonging to the requesting user (paginated).
-- `get_sample_data_hooks` (`read`): Get sample hook data for Zapier Perform List (testing/field mapping).
-- `perform_hooks` (`write`): Zapier Perform endpoint - processes webhook payloads.
-- `subscribe_hooks` (`write`): Subscribe the current user to a webhook URL. Returns subscription id.
-- `unsubscribe_hooks` (`write`): Unsubscribe a previously created subscription by id.
-
-  Marks the subscription as DELETED if it belongs to the user.
