@@ -82,7 +82,7 @@ export interface ActionGlobalParams {
 
 export interface ActionSwipeParams {
   /**
-   * Body param:
+   * Body param: Swipe duration in milliseconds
    */
   duration: number;
 
