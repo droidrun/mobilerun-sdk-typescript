@@ -57,7 +57,7 @@ export class Hooks extends APIResource {
   /**
    * Unsubscribe a previously created subscription by id.
    *
-   * Marks the subscription as DELETED if it belongs to the user.
+   * Permanently deletes the subscription if it belongs to the user.
    */
   unsubscribe(hookID: string, options?: RequestOptions): APIPromise<HookUnsubscribeResponse> {
     return this._client.post(path`/hooks/${hookID}/unsubscribe`, options);
