@@ -101,14 +101,14 @@ export interface Device {
 
   streamUrl: string;
 
+  taskCount: number;
+
   updatedAt: string;
 
   /**
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
-
-  taskId?: string;
 }
 
 export interface DeviceListResponse {
