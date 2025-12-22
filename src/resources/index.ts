@@ -2,7 +2,13 @@
 
 export { Apps, type AppListResponse, type AppListParams } from './apps';
 export { Credentials, type CredentialListResponse } from './credentials/credentials';
-export { Devices } from './devices/devices';
+export {
+  Devices,
+  type Device,
+  type DeviceListResponse,
+  type DeviceCreateParams,
+  type DeviceListParams,
+} from './devices/devices';
 export {
   Hooks,
   type HookRetrieveResponse,
