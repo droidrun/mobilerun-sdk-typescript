@@ -97,6 +97,8 @@ export interface Device {
 
   state: string;
 
+  stateMessage: string;
+
   streamToken: string;
 
   streamUrl: string;
