@@ -164,7 +164,7 @@ export interface TaskCreate {
   /**
    * The display ID of the device to run the task on.
    */
-  displayId?: number | null;
+  displayId?: number;
 
   executionTimeout?: number;
 
@@ -1240,7 +1240,7 @@ export interface TaskRunParams {
   /**
    * The display ID of the device to run the task on.
    */
-  displayId?: number | null;
+  displayId?: number;
 
   executionTimeout?: number;
 
@@ -1284,7 +1284,7 @@ export interface TaskRunStreamedParams {
   /**
    * The display ID of the device to run the task on.
    */
-  displayId?: number | null;
+  displayId?: number;
 
   executionTimeout?: number;
 
