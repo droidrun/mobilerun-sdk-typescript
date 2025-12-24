@@ -22,11 +22,13 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun();
+const client = new Mobilerun({
+  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
+});
 
-const device = await client.devices.create({ apps: ['string'], files: ['string'] });
+const tasks = await client.tasks.list();
 
-console.log(device.id);
+console.log(tasks.items);
 ```
 
 ### Request & Response types
@@ -37,10 +39,11 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun();
+const client = new Mobilerun({
+  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
+});
 
-const params: Mobilerun.DeviceCreateParams = { apps: ['string'], files: ['string'] };
-const device: Mobilerun.Device = await client.devices.create(params);
+const tasks: Mobilerun.TaskListResponse = await client.tasks.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -53,7 +56,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const device = await client.devices.create({ apps: ['string'], files: ['string'] }).catch(async (err) => {
+const tasks = await client.tasks.list().catch(async (err) => {
   if (err instanceof Mobilerun.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -93,7 +96,7 @@ const client = new Mobilerun({
 });
 
 // Or, configure per-request:
-await client.devices.create({ apps: ['string'], files: ['string'] }, {
+await client.tasks.list({
   maxRetries: 5,
 });
 ```
@@ -110,7 +113,7 @@ const client = new Mobilerun({
 });
 
 // Override per-request:
-await client.devices.create({ apps: ['string'], files: ['string'] }, {
+await client.tasks.list({
   timeout: 5 * 1000,
 });
 ```
@@ -133,15 +136,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Mobilerun();
 
-const response = await client.devices.create({ apps: ['string'], files: ['string'] }).asResponse();
+const response = await client.tasks.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: device, response: raw } = await client.devices
-  .create({ apps: ['string'], files: ['string'] })
-  .withResponse();
+const { data: tasks, response: raw } = await client.tasks.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(device.id);
+console.log(tasks.items);
 ```
 
 ### Logging
@@ -221,7 +222,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.devices.create({
+client.tasks.list({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

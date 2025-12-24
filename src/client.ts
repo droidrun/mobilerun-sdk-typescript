@@ -17,7 +17,19 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { AppListParams, AppListResponse, Apps } from './resources/apps';
-import { Hooks } from './resources/hooks';
+import {
+  HookGetSampleDataResponse,
+  HookListParams,
+  HookListResponse,
+  HookPerformResponse,
+  HookRetrieveResponse,
+  HookSubscribeParams,
+  HookSubscribeResponse,
+  HookUnsubscribeResponse,
+  HookUpdateParams,
+  HookUpdateResponse,
+  Hooks,
+} from './resources/hooks';
 import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
 import {
   Device,
@@ -26,7 +38,22 @@ import {
   DeviceListResponse,
   Devices,
 } from './resources/devices/devices';
-import { Tasks } from './resources/tasks/tasks';
+import {
+  LlmModel,
+  Task,
+  TaskCreate,
+  TaskGetStatusResponse,
+  TaskGetTrajectoryResponse,
+  TaskListParams,
+  TaskListResponse,
+  TaskRetrieveResponse,
+  TaskRunParams,
+  TaskRunResponse,
+  TaskRunStreamedParams,
+  TaskStatus,
+  TaskStopResponse,
+  Tasks,
+} from './resources/tasks/tasks';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -746,7 +773,22 @@ Mobilerun.Hooks = Hooks;
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Tasks as Tasks };
+  export {
+    Tasks as Tasks,
+    type LlmModel as LlmModel,
+    type Task as Task,
+    type TaskCreate as TaskCreate,
+    type TaskStatus as TaskStatus,
+    type TaskRetrieveResponse as TaskRetrieveResponse,
+    type TaskListResponse as TaskListResponse,
+    type TaskGetStatusResponse as TaskGetStatusResponse,
+    type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
+    type TaskRunResponse as TaskRunResponse,
+    type TaskStopResponse as TaskStopResponse,
+    type TaskListParams as TaskListParams,
+    type TaskRunParams as TaskRunParams,
+    type TaskRunStreamedParams as TaskRunStreamedParams,
+  };
 
   export {
     Devices as Devices,
@@ -760,5 +802,17 @@ export declare namespace Mobilerun {
 
   export { Credentials as Credentials, type CredentialListResponse as CredentialListResponse };
 
-  export { Hooks as Hooks };
+  export {
+    Hooks as Hooks,
+    type HookRetrieveResponse as HookRetrieveResponse,
+    type HookUpdateResponse as HookUpdateResponse,
+    type HookListResponse as HookListResponse,
+    type HookGetSampleDataResponse as HookGetSampleDataResponse,
+    type HookPerformResponse as HookPerformResponse,
+    type HookSubscribeResponse as HookSubscribeResponse,
+    type HookUnsubscribeResponse as HookUnsubscribeResponse,
+    type HookUpdateParams as HookUpdateParams,
+    type HookListParams as HookListParams,
+    type HookSubscribeParams as HookSubscribeParams,
+  };
 }
