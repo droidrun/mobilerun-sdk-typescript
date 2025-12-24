@@ -277,10 +277,11 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryPlanCreatedEvent
     | TaskGetTrajectoryResponse.TrajectoryPlanInputEvent
     | TaskGetTrajectoryResponse.TrajectoryPlanThinkingEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskThinkingEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskEndEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActResponseEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActCodeEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActOutputEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActEndEvent
     | TaskGetTrajectoryResponse.TrajectoryCodeActExecuteEvent
     | TaskGetTrajectoryResponse.TrajectoryCodeActResultEvent
     | TaskGetTrajectoryResponse.TrajectoryTapActionEvent
@@ -547,16 +548,25 @@ export namespace TaskGetTrajectoryResponse {
     event: 'PlanThinkingEvent';
   }
 
-  export interface TrajectoryTaskThinkingEvent {
+  export interface TrajectoryCodeActInputEvent {
+    /**
+     * Input ready for LLM.
+     */
+    data: unknown;
+
+    event: 'CodeActInputEvent';
+  }
+
+  export interface TrajectoryCodeActResponseEvent {
     /**
      * LLM response received.
      */
-    data: TrajectoryTaskThinkingEvent.Data;
+    data: TrajectoryCodeActResponseEvent.Data;
 
-    event: 'TaskThinkingEvent';
+    event: 'CodeActResponseEvent';
   }
 
-  export namespace TrajectoryTaskThinkingEvent {
+  export namespace TrajectoryCodeActResponseEvent {
     /**
      * LLM response received.
      */
@@ -581,16 +591,16 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
-  export interface TrajectoryTaskExecutionEvent {
+  export interface TrajectoryCodeActCodeEvent {
     /**
      * Code ready to execute (internal event).
      */
-    data: TrajectoryTaskExecutionEvent.Data;
+    data: TrajectoryCodeActCodeEvent.Data;
 
-    event: 'TaskExecutionEvent';
+    event: 'CodeActCodeEvent';
   }
 
-  export namespace TrajectoryTaskExecutionEvent {
+  export namespace TrajectoryCodeActCodeEvent {
     /**
      * Code ready to execute (internal event).
      */
@@ -599,16 +609,16 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
-  export interface TrajectoryTaskExecutionResultEvent {
+  export interface TrajectoryCodeActOutputEvent {
     /**
      * Code execution result (internal event).
      */
-    data: TrajectoryTaskExecutionResultEvent.Data;
+    data: TrajectoryCodeActOutputEvent.Data;
 
-    event: 'TaskExecutionResultEvent';
+    event: 'CodeActOutputEvent';
   }
 
-  export namespace TrajectoryTaskExecutionResultEvent {
+  export namespace TrajectoryCodeActOutputEvent {
     /**
      * Code execution result (internal event).
      */
@@ -617,16 +627,16 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
-  export interface TrajectoryTaskEndEvent {
+  export interface TrajectoryCodeActEndEvent {
     /**
      * CodeAct finished.
      */
-    data: TrajectoryTaskEndEvent.Data;
+    data: TrajectoryCodeActEndEvent.Data;
 
-    event: 'TaskEndEvent';
+    event: 'CodeActEndEvent';
   }
 
-  export namespace TrajectoryTaskEndEvent {
+  export namespace TrajectoryCodeActEndEvent {
     /**
      * CodeAct finished.
      */
