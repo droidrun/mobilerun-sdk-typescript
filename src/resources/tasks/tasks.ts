@@ -266,6 +266,7 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryCancelEvent
     | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent
     | TaskGetTrajectoryResponse.TrajectoryStartEvent
+    | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent
     | TaskGetTrajectoryResponse.TrajectoryStopEvent
     | TaskGetTrajectoryResponse.TrajectoryResultEvent
     | TaskGetTrajectoryResponse.TrajectoryManagerInputEvent
@@ -371,6 +372,26 @@ export namespace TaskGetTrajectoryResponse {
     data: unknown;
 
     event: 'StartEvent';
+  }
+
+  export interface TrajectoryFinalizeEvent {
+    /**
+     * Trigger finalization.
+     */
+    data: TrajectoryFinalizeEvent.Data;
+
+    event: 'FinalizeEvent';
+  }
+
+  export namespace TrajectoryFinalizeEvent {
+    /**
+     * Trigger finalization.
+     */
+    export interface Data {
+      reason: string;
+
+      success: boolean;
+    }
   }
 
   export interface TrajectoryStopEvent {
