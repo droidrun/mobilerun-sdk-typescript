@@ -41,8 +41,9 @@ export class Devices extends APIResource {
   /**
    * Provision a new device
    */
-  create(body: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
-    return this._client.post('/devices', { body, ...options });
+  create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
+    const { deviceType, provider, ...body } = params;
+    return this._client.post('/devices', { query: { deviceType, provider }, body, ...options });
   }
 
   /**
@@ -141,12 +142,34 @@ export namespace DeviceListResponse {
 }
 
 export interface DeviceCreateParams {
+  /**
+   * Body param:
+   */
   apps: Array<string> | null;
 
+  /**
+   * Body param:
+   */
   files: Array<string> | null;
 
+  /**
+   * Query param:
+   */
+  deviceType?: 'temporary_personal_phone' | 'physical_phone';
+
+  /**
+   * Query param:
+   */
+  provider?: 'limrun' | 'remote';
+
+  /**
+   * Body param:
+   */
   country?: string;
 
+  /**
+   * Body param:
+   */
   name?: string;
 }
 

@@ -25,6 +25,8 @@ describe('resource devices', () => {
     const response = await client.devices.create({
       apps: ['string'],
       files: ['string'],
+      deviceType: 'temporary_personal_phone',
+      provider: 'limrun',
       country: 'country',
       name: 'name',
     });
