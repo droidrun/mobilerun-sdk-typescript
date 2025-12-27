@@ -26,6 +26,8 @@ import {
   StateUiParams,
   StateUiResponse,
 } from './state';
+import * as TasksAPI from './tasks';
+import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -37,6 +39,7 @@ export class Devices extends APIResource {
   apps: AppsAPI.Apps = new AppsAPI.Apps(this._client);
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
   keyboard: KeyboardAPI.Keyboard = new KeyboardAPI.Keyboard(this._client);
+  tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
 
   /**
    * Provision a new device
@@ -192,6 +195,7 @@ Devices.State = State;
 Devices.Apps = Apps;
 Devices.Packages = Packages;
 Devices.Keyboard = Keyboard;
+Devices.Tasks = Tasks;
 
 export declare namespace Devices {
   export {
@@ -239,4 +243,6 @@ export declare namespace Devices {
     type KeyboardKeyParams as KeyboardKeyParams,
     type KeyboardWriteParams as KeyboardWriteParams,
   };
+
+  export { Tasks as Tasks, type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
 }
