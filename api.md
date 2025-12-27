@@ -115,6 +115,16 @@ Methods:
 - <code title="put /devices/{deviceId}/keyboard">client.devices.keyboard.<a href="./src/resources/devices/keyboard.ts">key</a>(deviceID, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/keyboard">client.devices.keyboard.<a href="./src/resources/devices/keyboard.ts">write</a>(deviceID, { ...params }) -> void</code>
 
+## Tasks
+
+Types:
+
+- <code><a href="./src/resources/devices/tasks.ts">TaskListResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/{deviceId}/tasks">client.devices.tasks.<a href="./src/resources/devices/tasks.ts">list</a>(deviceID, { ...params }) -> TaskListResponse</code>
+
 # Apps
 
 Types:
