@@ -89,7 +89,8 @@ export type LlmModel =
   | 'google/gemini-3-pro-preview'
   | 'anthropic/claude-sonnet-4.5'
   | 'minimax/minimax-m2'
-  | 'moonshotai/kimi-k2-thinking';
+  | 'moonshotai/kimi-k2-thinking'
+  | 'qwen/qwen-3.8b';
 
 export interface Task {
   deviceId: string;
