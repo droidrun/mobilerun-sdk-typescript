@@ -90,7 +90,7 @@ export type LlmModel =
   | 'anthropic/claude-sonnet-4.5'
   | 'minimax/minimax-m2'
   | 'moonshotai/kimi-k2-thinking'
-  | 'qwen/qwen-3.8b';
+  | 'qwen/qwen3-8b';
 
 export interface Task {
   deviceId: string;
