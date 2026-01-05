@@ -158,12 +158,12 @@ export interface DeviceCreateParams {
   /**
    * Query param:
    */
-  deviceType?: 'temporary_personal_phone' | 'physical_phone';
+  deviceType?: 'temporary_personal_phone' | 'physical_phone' | 'roidrun_phone';
 
   /**
    * Query param:
    */
-  provider?: 'limrun' | 'remote';
+  provider?: 'limrun' | 'remote' | 'roidrun';
 
   /**
    * Body param:
