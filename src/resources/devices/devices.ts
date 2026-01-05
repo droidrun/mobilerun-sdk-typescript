@@ -158,7 +158,7 @@ export interface DeviceCreateParams {
   /**
    * Query param:
    */
-  deviceType?: 'temporary_personal_phone' | 'physical_phone' | 'roidrun_phone';
+  deviceType?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
 
   /**
    * Query param:
