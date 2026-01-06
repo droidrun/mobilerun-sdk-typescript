@@ -54,7 +54,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add --transport stdio mobilerun_sdk_api --env MOBILERUN_CLOUD_API_KEY="Your MOBILERUN_CLOUD_API_KEY here." -- npx -y mobilerun-mcp
+claude mcp add mobilerun_mcp_api --env MOBILERUN_CLOUD_API_KEY="Your MOBILERUN_CLOUD_API_KEY here." -- npx -y mobilerun-mcp
 ```
 
 ## Code Mode
