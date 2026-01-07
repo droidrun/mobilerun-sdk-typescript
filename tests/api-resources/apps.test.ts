@@ -25,7 +25,14 @@ describe('resource apps', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.apps.list(
-        { order: 'asc', page: 1, pageSize: 1, query: 'query', sortBy: 'createdAt', source: 'all' },
+        {
+          order: 'asc',
+          page: 1,
+          pageSize: 1,
+          query: 'query',
+          sortBy: 'createdAt',
+          source: 'all',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
