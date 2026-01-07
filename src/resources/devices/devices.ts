@@ -95,9 +95,13 @@ export interface Device {
 
   createdAt: string;
 
+  deviceType: string;
+
   files: Array<string> | null;
 
   name: string;
+
+  provider: string;
 
   state: string;
 
