@@ -26,7 +26,12 @@ describe('resource tasks', () => {
     await expect(
       client.devices.tasks.list(
         'deviceId',
-        { orderBy: 'id', orderByDirection: 'asc', page: 0, pageSize: 0 },
+        {
+          orderBy: 'id',
+          orderByDirection: 'asc',
+          page: 0,
+          pageSize: 0,
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
