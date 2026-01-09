@@ -39,7 +39,6 @@ import {
   Devices,
 } from './resources/devices/devices';
 import {
-  ElementNode,
   LlmModel,
   Task,
   TaskCreate,
@@ -776,7 +775,6 @@ export declare namespace Mobilerun {
 
   export {
     Tasks as Tasks,
-    type ElementNode as ElementNode,
     type LlmModel as LlmModel,
     type Task as Task,
     type TaskCreate as TaskCreate,

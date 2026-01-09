@@ -24,7 +24,6 @@ export {
 } from './hooks';
 export {
   Tasks,
-  type ElementNode,
   type LlmModel,
   type Task,
   type TaskCreate,

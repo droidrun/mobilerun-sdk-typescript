@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as TasksAPI from '../tasks/tasks';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -82,7 +81,7 @@ export type StateScreenshotResponse = string;
 export type StateTimeResponse = string;
 
 export interface StateUiResponse {
-  a11y_tree: TasksAPI.ElementNode;
+  a11y_tree: unknown;
 
   device_context: StateUiResponse.DeviceContext;
 
