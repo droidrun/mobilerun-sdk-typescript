@@ -31,15 +31,8 @@ import {
   Hooks,
 } from './resources/hooks';
 import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
+import { Devices } from './resources/devices/devices';
 import {
-  Device,
-  DeviceCreateParams,
-  DeviceListParams,
-  DeviceListResponse,
-  Devices,
-} from './resources/devices/devices';
-import {
-  ElementNode,
   LlmModel,
   Task,
   TaskCreate,
@@ -776,7 +769,6 @@ export declare namespace Mobilerun {
 
   export {
     Tasks as Tasks,
-    type ElementNode as ElementNode,
     type LlmModel as LlmModel,
     type Task as Task,
     type TaskCreate as TaskCreate,
@@ -792,13 +784,7 @@ export declare namespace Mobilerun {
     type TaskRunStreamedParams as TaskRunStreamedParams,
   };
 
-  export {
-    Devices as Devices,
-    type Device as Device,
-    type DeviceListResponse as DeviceListResponse,
-    type DeviceCreateParams as DeviceCreateParams,
-    type DeviceListParams as DeviceListParams,
-  };
+  export { Devices as Devices };
 
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
 
