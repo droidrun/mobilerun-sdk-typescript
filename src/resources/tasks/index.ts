@@ -8,6 +8,7 @@ export {
 } from './screenshots';
 export {
   Tasks,
+  type ElementNode,
   type LlmModel,
   type Task,
   type TaskCreate,
