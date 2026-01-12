@@ -9,8 +9,8 @@ const client = new Mobilerun({
 
 describe('resource devices', () => {
   // Prism tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.devices.create({ apps: ['string'], files: ['string'] });
+  test.skip('create', async () => {
+    const responsePromise = client.devices.create({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,18 +18,6 @@ describe('resource devices', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.devices.create({
-      apps: ['string'],
-      files: ['string'],
-      deviceType: 'device_slot',
-      provider: 'limrun',
-      country: 'country',
-      name: 'name',
-    });
   });
 
   // Prism tests are disabled
@@ -63,11 +51,14 @@ describe('resource devices', () => {
       client.devices.list(
         {
           country: 'country',
+          name: 'name',
           orderBy: 'id',
           orderByDirection: 'asc',
           page: 0,
           pageSize: 0,
+          provider: 'limrun',
           state: 'creating',
+          type: 'device_slot',
         },
         { path: '/_stainless_unknown_path' },
       ),

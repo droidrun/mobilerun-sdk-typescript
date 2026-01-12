@@ -119,6 +119,8 @@ export interface Device {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
+
+  userId?: string;
 }
 
 export interface DeviceListResponse {
@@ -150,16 +152,6 @@ export namespace DeviceListResponse {
 
 export interface DeviceCreateParams {
   /**
-   * Body param:
-   */
-  apps: Array<string> | null;
-
-  /**
-   * Body param:
-   */
-  files: Array<string> | null;
-
-  /**
    * Query param:
    */
   deviceType?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
@@ -172,16 +164,45 @@ export interface DeviceCreateParams {
   /**
    * Body param:
    */
+  apps?: Array<string> | null;
+
+  /**
+   * Body param:
+   */
   country?: string;
 
   /**
    * Body param:
    */
+  files?: Array<string> | null;
+
+  /**
+   * Body param:
+   */
   name?: string;
+
+  /**
+   * Body param:
+   */
+  proxy?: DeviceCreateParams.Proxy;
+}
+
+export namespace DeviceCreateParams {
+  export interface Proxy {
+    host: string;
+
+    password: string;
+
+    port: number;
+
+    user: string;
+  }
 }
 
 export interface DeviceListParams {
   country?: string;
+
+  name?: string;
 
   orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt';
 
@@ -191,7 +212,11 @@ export interface DeviceListParams {
 
   pageSize?: number;
 
+  provider?: 'limrun' | 'personal' | 'remote' | 'roidrun';
+
   state?: 'creating' | 'assigned' | 'ready' | 'terminated' | 'unknown';
+
+  type?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
 }
 
 Devices.Actions = Actions;
