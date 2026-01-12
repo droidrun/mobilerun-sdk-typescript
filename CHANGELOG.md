@@ -1,5 +1,82 @@
 # Changelog
 
+## 2.0.0 (2026-01-12)
+
+Full Changelog: [v1.0.0...v2.0.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v1.0.0...v2.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **mcp:** remove deprecated tool schemes
+* **mcp:** **Migration:** To migrate, simply modify the command used to invoke the MCP server. Currently, the only supported tool scheme is code mode. Now, starting the server with just `node /path/to/mcp/server` or `npx package-name` will invoke code tools: changing your command to one of these is likely all you will need to do.
+
+### Features
+
+* **api:** add devices.actions.global ([3035e7f](https://github.com/droidrun/mobilerun-sdk-typescript/commit/3035e7f940b331d68223b7a33ad11d10fd0c6003))
+* **api:** add devices.tasks.list ([cf55256](https://github.com/droidrun/mobilerun-sdk-typescript/commit/cf5525602f68469edc6ac36df2498eb3b21ae442))
+* **api:** add hooks retrieve endpoint ([0398b81](https://github.com/droidrun/mobilerun-sdk-typescript/commit/0398b8132d12cd497a02709ecb9528f716f0bb6f))
+* **api:** api update ([622dadf](https://github.com/droidrun/mobilerun-sdk-typescript/commit/622dadf4951fa6bcd016543174534465599ca8ba))
+* **api:** api update ([474ac86](https://github.com/droidrun/mobilerun-sdk-typescript/commit/474ac8669d680c3173bc55b783e4415c7b897053))
+* **api:** api update ([1c3b984](https://github.com/droidrun/mobilerun-sdk-typescript/commit/1c3b984e33218dacaa9dd78ce9a9289509b288d7))
+* **api:** api update ([5331340](https://github.com/droidrun/mobilerun-sdk-typescript/commit/53313409f627579a8434da469669889e229ac4f7))
+* **api:** api update ([204b6dc](https://github.com/droidrun/mobilerun-sdk-typescript/commit/204b6dc48528acb1808e56d371e46bbf3d44b45f))
+* **api:** api update ([875fca3](https://github.com/droidrun/mobilerun-sdk-typescript/commit/875fca34d6fa76c8b0ecbc6775e975d10c81d5d1))
+* **api:** api update ([b361794](https://github.com/droidrun/mobilerun-sdk-typescript/commit/b361794d4a859734efff24e9b90ec9ee1d3057c3))
+* **api:** api update ([5f8a9bd](https://github.com/droidrun/mobilerun-sdk-typescript/commit/5f8a9bd34e4e48ba42b92551fae9e04180fbf88a))
+* **api:** api update ([d3437a7](https://github.com/droidrun/mobilerun-sdk-typescript/commit/d3437a7c313bede8c6a79576d73791e8ade7bd69))
+* **api:** api update ([467128e](https://github.com/droidrun/mobilerun-sdk-typescript/commit/467128ed47e7110e38b9798bffb06aa315dff441))
+* **api:** api update ([6fc9b96](https://github.com/droidrun/mobilerun-sdk-typescript/commit/6fc9b964924ec2f8002a27b1713eb8685cb495df))
+* **api:** api update ([5794561](https://github.com/droidrun/mobilerun-sdk-typescript/commit/5794561a8c70cc4892b1f8303656d6a742789322))
+* **api:** api update ([bf36bbd](https://github.com/droidrun/mobilerun-sdk-typescript/commit/bf36bbd62643f99f92bb71f2836b8bdf326a980f))
+* **api:** api update ([0c2aff9](https://github.com/droidrun/mobilerun-sdk-typescript/commit/0c2aff978984b8f77e1ae2369328526a102450d0))
+* **api:** api update ([613f1cd](https://github.com/droidrun/mobilerun-sdk-typescript/commit/613f1cd01b97f50fc3e21c7615905639741d9ec4))
+* **api:** api update ([1004afa](https://github.com/droidrun/mobilerun-sdk-typescript/commit/1004afaaa87df7108c2c90a8ea906a339d202879))
+* **api:** api update ([013f533](https://github.com/droidrun/mobilerun-sdk-typescript/commit/013f53389594eeda8abe90a4bb2058d8cb6880c8))
+* **api:** api update ([29c3a94](https://github.com/droidrun/mobilerun-sdk-typescript/commit/29c3a94733f16b54de18145bc0aaef6aec88a77d))
+* **api:** api update ([39013e1](https://github.com/droidrun/mobilerun-sdk-typescript/commit/39013e13c5030656d5eda44a985b7811db406312))
+* **api:** api update ([18a613a](https://github.com/droidrun/mobilerun-sdk-typescript/commit/18a613a1c13fdee6736c0aaa18633dd1301e1bd2))
+* **api:** api update ([9543a30](https://github.com/droidrun/mobilerun-sdk-typescript/commit/9543a30f6cd728830dc5b0b33557a6112e6551ed))
+* **api:** api update ([8490b23](https://github.com/droidrun/mobilerun-sdk-typescript/commit/8490b2383356dc927458d19c95b298dc021a5163))
+* **api:** api update ([6740d4b](https://github.com/droidrun/mobilerun-sdk-typescript/commit/6740d4b152a2979530c7ebf7e301fcff4853eeec))
+* **api:** api update ([0ba0f45](https://github.com/droidrun/mobilerun-sdk-typescript/commit/0ba0f45faed0658b90c12b790558dd0391105466))
+* **api:** api update ([ea02114](https://github.com/droidrun/mobilerun-sdk-typescript/commit/ea02114ab87ea9fdcdc77d9a281daaaa1e73586b))
+* **api:** api update ([e94bb3b](https://github.com/droidrun/mobilerun-sdk-typescript/commit/e94bb3be010321272003d618f053aa05f016ca3e))
+* **api:** api update ([d9d915b](https://github.com/droidrun/mobilerun-sdk-typescript/commit/d9d915bb21e10a33df124753cc1b5b4472ce8522))
+* **api:** api update ([b7950ff](https://github.com/droidrun/mobilerun-sdk-typescript/commit/b7950ff0a7e6202bbae9973e7c012badd08b5644))
+* **api:** api update ([c3b4929](https://github.com/droidrun/mobilerun-sdk-typescript/commit/c3b492937a8d70e0d327ce85e879761ce9355fe5))
+* **api:** api update ([08072e5](https://github.com/droidrun/mobilerun-sdk-typescript/commit/08072e5e50a272162ed8cf3f99cb1c7e8d05554f))
+* **api:** api update ([7af3fec](https://github.com/droidrun/mobilerun-sdk-typescript/commit/7af3fecc259f28124c0cdea3c5b4f3cb7ad2ab74))
+* **api:** api update ([1581b8a](https://github.com/droidrun/mobilerun-sdk-typescript/commit/1581b8a40138f69f01bcfddaf65b140d16590dc1))
+* **api:** api update ([8d5270c](https://github.com/droidrun/mobilerun-sdk-typescript/commit/8d5270c28a2c95b85c9312417b2098329cf90648))
+* **api:** api update ([7ea9fb8](https://github.com/droidrun/mobilerun-sdk-typescript/commit/7ea9fb8e67aca4b310e088228228293d26096013))
+* **api:** devices methods ([f19fca9](https://github.com/droidrun/mobilerun-sdk-typescript/commit/f19fca9bc38679cdb4f5ddc908cb38094627aa42))
+* **mcp:** add typescript check to code execution tool ([355158b](https://github.com/droidrun/mobilerun-sdk-typescript/commit/355158b34329d00a3443622cf1935779bdd3b52b))
+
+
+### Bug Fixes
+
+* **mcp:** add client instantiation options to code tool ([7de8435](https://github.com/droidrun/mobilerun-sdk-typescript/commit/7de8435e92e930b6ea212480cf0bd48952b71b61))
+* **mcp:** correct code tool api output types ([64ca460](https://github.com/droidrun/mobilerun-sdk-typescript/commit/64ca4606cb12b88fce483183874251e77fa0074b))
+* **mcp:** fix options parsing ([ab1843d](https://github.com/droidrun/mobilerun-sdk-typescript/commit/ab1843d584f3bb81c699fd52991d2febf44c273f))
+* **mcp:** pass base url to code tool ([53997c5](https://github.com/droidrun/mobilerun-sdk-typescript/commit/53997c5f24a9b2d3c65f3969747a1f2f55bde73f))
+* **mcp:** update code tool prompt ([eaeb3a9](https://github.com/droidrun/mobilerun-sdk-typescript/commit/eaeb3a9d2cad65ea54c853bd76318f1367ce87b9))
+* **models:** add element node stainless config ([e99b19f](https://github.com/droidrun/mobilerun-sdk-typescript/commit/e99b19f45d77598fb722add80bea2930a1456202))
+
+
+### Chores
+
+* break long lines in snippets into multiline ([ad0b059](https://github.com/droidrun/mobilerun-sdk-typescript/commit/ad0b059ffc31777357eef61456b910a177b6bf40))
+* **internal:** codegen related update ([997201e](https://github.com/droidrun/mobilerun-sdk-typescript/commit/997201ec50a58258fd4cf05b1e1370afd357640c))
+* **internal:** codegen related update ([b5ac8a2](https://github.com/droidrun/mobilerun-sdk-typescript/commit/b5ac8a2eacd4429b54a729790a166a3e8b9be8fa))
+* **internal:** escape package name in pnpm workspace file ([273a577](https://github.com/droidrun/mobilerun-sdk-typescript/commit/273a57728cc8914abc95b8cd80c7b6482a7d2f15))
+* **internal:** fix dockerfile ([4f89806](https://github.com/droidrun/mobilerun-sdk-typescript/commit/4f89806573438c9aeb2c557beeb1de11944cb163))
+* **mcp:** remove deprecated tool schemes ([e5c7979](https://github.com/droidrun/mobilerun-sdk-typescript/commit/e5c7979e98d255b31929ada9d6bf4739eca7f566))
+* use latest @modelcontextprotocol/sdk ([73f83dd](https://github.com/droidrun/mobilerun-sdk-typescript/commit/73f83dd1200ea1adc53ff33fb74867c833320724))
+
+
+### Documentation
+
+* prominently feature MCP server setup in root SDK readmes ([3e64a3c](https://github.com/droidrun/mobilerun-sdk-typescript/commit/3e64a3c8f3751c1c10e7a41045594789868ed986))
+
 ## 1.0.0 (2025-12-03)
 
 Full Changelog: [v0.4.0...v1.0.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v0.4.0...v1.0.0)

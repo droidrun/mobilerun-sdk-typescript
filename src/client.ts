@@ -22,6 +22,7 @@ import {
   HookListParams,
   HookListResponse,
   HookPerformResponse,
+  HookRetrieveResponse,
   HookSubscribeParams,
   HookSubscribeResponse,
   HookUnsubscribeResponse,
@@ -30,6 +31,13 @@ import {
   Hooks,
 } from './resources/hooks';
 import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
+import {
+  Device,
+  DeviceCreateParams,
+  DeviceListParams,
+  DeviceListResponse,
+  Devices,
+} from './resources/devices/devices';
 import {
   LlmModel,
   Task,
@@ -750,12 +758,14 @@ export class Mobilerun {
   static toFile = Uploads.toFile;
 
   tasks: API.Tasks = new API.Tasks(this);
+  devices: API.Devices = new API.Devices(this);
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
   hooks: API.Hooks = new API.Hooks(this);
 }
 
 Mobilerun.Tasks = Tasks;
+Mobilerun.Devices = Devices;
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Hooks = Hooks;
@@ -780,12 +790,21 @@ export declare namespace Mobilerun {
     type TaskRunStreamedParams as TaskRunStreamedParams,
   };
 
+  export {
+    Devices as Devices,
+    type Device as Device,
+    type DeviceListResponse as DeviceListResponse,
+    type DeviceCreateParams as DeviceCreateParams,
+    type DeviceListParams as DeviceListParams,
+  };
+
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
 
   export { Credentials as Credentials, type CredentialListResponse as CredentialListResponse };
 
   export {
     Hooks as Hooks,
+    type HookRetrieveResponse as HookRetrieveResponse,
     type HookUpdateResponse as HookUpdateResponse,
     type HookListResponse as HookListResponse,
     type HookGetSampleDataResponse as HookGetSampleDataResponse,

@@ -8,6 +8,13 @@ import { path } from '../internal/utils/path';
 
 export class Hooks extends APIResource {
   /**
+   * Get a hook subscription by id.
+   */
+  retrieve(hookID: string, options?: RequestOptions): APIPromise<HookRetrieveResponse> {
+    return this._client.get(path`/hooks/${hookID}`, options);
+  }
+
+  /**
    * Edit a hook subscription (events or state).
    *
    * Allows updating the events filter and/or the state of a hook.
@@ -50,11 +57,29 @@ export class Hooks extends APIResource {
   /**
    * Unsubscribe a previously created subscription by id.
    *
-   * Marks the subscription as DELETED if it belongs to the user.
+   * Permanently deletes the subscription if it belongs to the user.
    */
   unsubscribe(hookID: string, options?: RequestOptions): APIPromise<HookUnsubscribeResponse> {
     return this._client.post(path`/hooks/${hookID}/unsubscribe`, options);
   }
+}
+
+export interface HookRetrieveResponse {
+  service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other';
+
+  url: string;
+
+  userId: string;
+
+  id?: string;
+
+  createdAt?: string;
+
+  events?: Array<TasksAPI.TaskStatus>;
+
+  state?: 'active' | 'disabled' | 'deleted';
+
+  updatedAt?: string;
 }
 
 /**
@@ -282,6 +307,7 @@ export interface HookSubscribeParams {
 
 export declare namespace Hooks {
   export {
+    type HookRetrieveResponse as HookRetrieveResponse,
     type HookUpdateResponse as HookUpdateResponse,
     type HookListResponse as HookListResponse,
     type HookGetSampleDataResponse as HookGetSampleDataResponse,

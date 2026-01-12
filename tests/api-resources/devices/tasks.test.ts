@@ -7,10 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource apps', () => {
+describe('resource tasks', () => {
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.apps.list();
+    const responsePromise = client.devices.tasks.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,14 +24,13 @@ describe('resource apps', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.apps.list(
+      client.devices.tasks.list(
+        'deviceId',
         {
-          order: 'asc',
-          page: 1,
-          pageSize: 1,
-          query: 'query',
-          sortBy: 'createdAt',
-          source: 'all',
+          orderBy: 'id',
+          orderByDirection: 'asc',
+          page: 0,
+          pageSize: 0,
         },
         { path: '/_stainless_unknown_path' },
       ),

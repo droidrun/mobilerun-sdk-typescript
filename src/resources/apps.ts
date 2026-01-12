@@ -14,21 +14,27 @@ export class Apps extends APIResource {
 }
 
 export interface AppListResponse {
-  apps: Array<AppListResponse.App>;
+  count: AppListResponse.Count;
 
-  availableCount: number;
+  items: Array<AppListResponse.Item>;
 
-  queuedCount: number;
-
-  storeCount: number;
-
-  totalCount: number;
-
-  uploadCount: number;
+  pagination: AppListResponse.Pagination;
 }
 
 export namespace AppListResponse {
-  export interface App {
+  export interface Count {
+    availableCount: number;
+
+    queuedCount: number;
+
+    storeCount: number;
+
+    totalCount: number;
+
+    uploadCount: number;
+  }
+
+  export interface Item {
     id: string;
 
     categoryName: string | null;
@@ -321,6 +327,20 @@ export namespace AppListResponse {
     versionCode: number | null;
 
     versionName: string;
+  }
+
+  export interface Pagination {
+    hasNext: boolean;
+
+    hasPrev: boolean;
+
+    page: number;
+
+    pages: number;
+
+    pageSize: number;
+
+    total: number;
   }
 }
 

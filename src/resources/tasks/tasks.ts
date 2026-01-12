@@ -89,7 +89,8 @@ export type LlmModel =
   | 'google/gemini-3-pro-preview'
   | 'anthropic/claude-sonnet-4.5'
   | 'minimax/minimax-m2'
-  | 'moonshotai/kimi-k2-thinking';
+  | 'moonshotai/kimi-k2-thinking'
+  | 'qwen/qwen3-8b';
 
 export interface Task {
   deviceId: string;
@@ -155,6 +156,16 @@ export interface TaskCreate {
   apps?: Array<string>;
 
   credentials?: Array<TaskCreate.Credential>;
+
+  /**
+   * The ID of the device to run the task on.
+   */
+  deviceId?: string | null;
+
+  /**
+   * The display ID of the device to run the task on.
+   */
+  displayId?: number;
 
   executionTimeout?: number;
 
@@ -256,7 +267,6 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryCancelEvent
     | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent
     | TaskGetTrajectoryResponse.TrajectoryStartEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskRunnerEvent
     | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent
     | TaskGetTrajectoryResponse.TrajectoryStopEvent
     | TaskGetTrajectoryResponse.TrajectoryResultEvent
@@ -269,10 +279,11 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryPlanCreatedEvent
     | TaskGetTrajectoryResponse.TrajectoryPlanInputEvent
     | TaskGetTrajectoryResponse.TrajectoryPlanThinkingEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskThinkingEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskExecutionResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryTaskEndEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActResponseEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActCodeEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActOutputEvent
+    | TaskGetTrajectoryResponse.TrajectoryCodeActEndEvent
     | TaskGetTrajectoryResponse.TrajectoryCodeActExecuteEvent
     | TaskGetTrajectoryResponse.TrajectoryCodeActResultEvent
     | TaskGetTrajectoryResponse.TrajectoryTapActionEvent
@@ -364,19 +375,19 @@ export namespace TaskGetTrajectoryResponse {
     event: 'StartEvent';
   }
 
-  export interface TrajectoryTaskRunnerEvent {
-    data: unknown;
-
-    event: 'TaskRunnerEvent';
-  }
-
   export interface TrajectoryFinalizeEvent {
+    /**
+     * Trigger finalization.
+     */
     data: TrajectoryFinalizeEvent.Data;
 
     event: 'FinalizeEvent';
   }
 
   export namespace TrajectoryFinalizeEvent {
+    /**
+     * Trigger finalization.
+     */
     export interface Data {
       reason: string;
 
@@ -477,10 +488,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryExecutorResultEvent {
     /**
-     * Coordination event from ExecutorAgent to DroidAgent.
-     *
-     * Used for workflow step routing only (NOT streamed to frontend). For internal
-     * events with thought/action_json metadata, see ExecutorActionResultEvent.
+     * Executor finished with action result.
      */
     data: TrajectoryExecutorResultEvent.Data;
 
@@ -489,10 +497,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryExecutorResultEvent {
     /**
-     * Coordination event from ExecutorAgent to DroidAgent.
-     *
-     * Used for workflow step routing only (NOT streamed to frontend). For internal
-     * events with thought/action_json metadata, see ExecutorActionResultEvent.
+     * Executor finished with action result.
      */
     export interface Data {
       action: { [key: string]: unknown };
@@ -502,8 +507,6 @@ export namespace TaskGetTrajectoryResponse {
       outcome: boolean;
 
       summary: string;
-
-      full_response?: string;
     }
   }
 
@@ -527,9 +530,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryScripterExecutorResultEvent {
     /**
-     * Coordination event from ScripterAgent to DroidAgent.
-     *
-     * Used for workflow step routing only (NOT streamed to frontend).
+     * Scripter finished.
      */
     data: TrajectoryScripterExecutorResultEvent.Data;
 
@@ -538,9 +539,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryScripterExecutorResultEvent {
     /**
-     * Coordination event from ScripterAgent to DroidAgent.
-     *
-     * Used for workflow step routing only (NOT streamed to frontend).
+     * Scripter finished.
      */
     export interface Data {
       code_executions: number;
@@ -571,17 +570,32 @@ export namespace TaskGetTrajectoryResponse {
     event: 'PlanThinkingEvent';
   }
 
-  export interface TrajectoryTaskThinkingEvent {
-    data: TrajectoryTaskThinkingEvent.Data;
+  export interface TrajectoryCodeActInputEvent {
+    /**
+     * Input ready for LLM.
+     */
+    data: unknown;
 
-    event: 'TaskThinkingEvent';
+    event: 'CodeActInputEvent';
   }
 
-  export namespace TrajectoryTaskThinkingEvent {
-    export interface Data {
-      code?: string | null;
+  export interface TrajectoryCodeActResponseEvent {
+    /**
+     * LLM response received.
+     */
+    data: TrajectoryCodeActResponseEvent.Data;
 
-      thoughts?: string | null;
+    event: 'CodeActResponseEvent';
+  }
+
+  export namespace TrajectoryCodeActResponseEvent {
+    /**
+     * LLM response received.
+     */
+    export interface Data {
+      thought: string;
+
+      code?: string | null;
 
       usage?: Data.Usage | null;
     }
@@ -599,45 +613,61 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
-  export interface TrajectoryTaskExecutionEvent {
-    data: TrajectoryTaskExecutionEvent.Data;
+  export interface TrajectoryCodeActCodeEvent {
+    /**
+     * Code ready to execute (internal event).
+     */
+    data: TrajectoryCodeActCodeEvent.Data;
 
-    event: 'TaskExecutionEvent';
+    event: 'CodeActCodeEvent';
   }
 
-  export namespace TrajectoryTaskExecutionEvent {
+  export namespace TrajectoryCodeActCodeEvent {
+    /**
+     * Code ready to execute (internal event).
+     */
     export interface Data {
       code: string;
-
-      globals?: { [key: string]: string };
-
-      locals?: { [key: string]: string };
     }
   }
 
-  export interface TrajectoryTaskExecutionResultEvent {
-    data: TrajectoryTaskExecutionResultEvent.Data;
+  export interface TrajectoryCodeActOutputEvent {
+    /**
+     * Code execution result (internal event).
+     */
+    data: TrajectoryCodeActOutputEvent.Data;
 
-    event: 'TaskExecutionResultEvent';
+    event: 'CodeActOutputEvent';
   }
 
-  export namespace TrajectoryTaskExecutionResultEvent {
+  export namespace TrajectoryCodeActOutputEvent {
+    /**
+     * Code execution result (internal event).
+     */
     export interface Data {
       output: string;
     }
   }
 
-  export interface TrajectoryTaskEndEvent {
-    data: TrajectoryTaskEndEvent.Data;
+  export interface TrajectoryCodeActEndEvent {
+    /**
+     * CodeAct finished.
+     */
+    data: TrajectoryCodeActEndEvent.Data;
 
-    event: 'TaskEndEvent';
+    event: 'CodeActEndEvent';
   }
 
-  export namespace TrajectoryTaskEndEvent {
+  export namespace TrajectoryCodeActEndEvent {
+    /**
+     * CodeAct finished.
+     */
     export interface Data {
       reason: string;
 
       success: boolean;
+
+      code_executions?: number;
     }
   }
 
@@ -693,7 +723,7 @@ export namespace TaskGetTrajectoryResponse {
 
       element_bounds?: string;
 
-      element_index?: number;
+      element_index?: number | null;
 
       element_text?: string;
     }
@@ -825,7 +855,7 @@ export namespace TaskGetTrajectoryResponse {
 
       package: string;
 
-      activity?: string;
+      activity?: string | null;
     }
   }
 
@@ -867,7 +897,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryManagerContextEvent {
     /**
-     * Manager context prepared, ready for LLM call
+     * Context prepared, ready for LLM call.
      */
     data: unknown;
 
@@ -876,9 +906,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryManagerResponseEvent {
     /**
-     * Manager has received LLM response, ready for parsing.
-     *
-     * This event carries the raw validated LLM output before parsing.
+     * LLM response received, ready for parsing.
      */
     data: TrajectoryManagerResponseEvent.Data;
 
@@ -887,12 +915,10 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryManagerResponseEvent {
     /**
-     * Manager has received LLM response, ready for parsing.
-     *
-     * This event carries the raw validated LLM output before parsing.
+     * LLM response received, ready for parsing.
      */
     export interface Data {
-      output_planning: string;
+      response: string;
 
       usage?: Data.Usage | null;
     }
@@ -912,12 +938,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryManagerPlanDetailsEvent {
     /**
-     * Manager planning event with full state and metadata.
-     *
-     * This event is streamed to frontend/logging but NOT used for workflow
-     * coordination between ManagerAgent and DroidAgent.
-     *
-     * For workflow coordination, see ManagerPlanEvent in droid/events.py
+     * Plan parsed and ready (internal event with full details).
      */
     data: TrajectoryManagerPlanDetailsEvent.Data;
 
@@ -926,25 +947,22 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryManagerPlanDetailsEvent {
     /**
-     * Manager planning event with full state and metadata.
-     *
-     * This event is streamed to frontend/logging but NOT used for workflow
-     * coordination between ManagerAgent and DroidAgent.
-     *
-     * For workflow coordination, see ManagerPlanEvent in droid/events.py
+     * Plan parsed and ready (internal event with full details).
      */
     export interface Data {
-      current_subgoal: string;
-
       plan: string;
+
+      subgoal: string;
 
       thought: string;
 
+      answer?: string;
+
       full_response?: string;
 
-      manager_answer?: string;
-
       memory_update?: string;
+
+      progress_summary?: string;
 
       success?: boolean | null;
     }
@@ -952,7 +970,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryExecutorContextEvent {
     /**
-     * Executor context prepared, ready for LLM call
+     * Context prepared, ready for LLM call.
      */
     data: TrajectoryExecutorContextEvent.Data;
 
@@ -961,20 +979,16 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryExecutorContextEvent {
     /**
-     * Executor context prepared, ready for LLM call
+     * Context prepared, ready for LLM call.
      */
     export interface Data {
-      messages: Array<unknown>;
-
       subgoal: string;
     }
   }
 
   export interface TrajectoryExecutorResponseEvent {
     /**
-     * Executor has received LLM response, ready for parsing.
-     *
-     * This event carries the raw LLM output before parsing.
+     * LLM response received, ready for parsing.
      */
     data: TrajectoryExecutorResponseEvent.Data;
 
@@ -983,12 +997,10 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryExecutorResponseEvent {
     /**
-     * Executor has received LLM response, ready for parsing.
-     *
-     * This event carries the raw LLM output before parsing.
+     * LLM response received, ready for parsing.
      */
     export interface Data {
-      response_text: string;
+      response: string;
 
       usage?: Data.Usage | null;
     }
@@ -1008,12 +1020,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryExecutorActionEvent {
     /**
-     * Executor action selection event with thought process.
-     *
-     * This event is streamed to frontend/logging but NOT used for workflow
-     * coordination between ExecutorAgent and DroidAgent.
-     *
-     * For workflow coordination, see ExecutorInputEvent in droid/events.py
+     * Action parsed, ready to execute.
      */
     data: TrajectoryExecutorActionEvent.Data;
 
@@ -1022,12 +1029,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryExecutorActionEvent {
     /**
-     * Executor action selection event with thought process.
-     *
-     * This event is streamed to frontend/logging but NOT used for workflow
-     * coordination between ExecutorAgent and DroidAgent.
-     *
-     * For workflow coordination, see ExecutorInputEvent in droid/events.py
+     * Action parsed, ready to execute.
      */
     export interface Data {
       action_json: string;
@@ -1042,12 +1044,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryExecutorActionResultEvent {
     /**
-     * Executor action result event with full debug information.
-     *
-     * This event is streamed to frontend/logging but NOT used for workflow
-     * coordination between ExecutorAgent and DroidAgent.
-     *
-     * For workflow coordination, see ExecutorResultEvent in droid/events.py
+     * Action execution result (internal event with full details).
      */
     data: TrajectoryExecutorActionResultEvent.Data;
 
@@ -1056,23 +1053,16 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryExecutorActionResultEvent {
     /**
-     * Executor action result event with full debug information.
-     *
-     * This event is streamed to frontend/logging but NOT used for workflow
-     * coordination between ExecutorAgent and DroidAgent.
-     *
-     * For workflow coordination, see ExecutorResultEvent in droid/events.py
+     * Action execution result (internal event with full details).
      */
     export interface Data {
       action: { [key: string]: unknown };
 
       error: string;
 
-      outcome: boolean;
+      success: boolean;
 
       summary: string;
-
-      action_json?: string;
 
       full_response?: string;
 
@@ -1082,25 +1072,16 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryScripterInputEvent {
     /**
-     * Input to LLM (chat history).
+     * Input ready for LLM.
      */
-    data: TrajectoryScripterInputEvent.Data;
+    data: unknown;
 
     event: 'ScripterInputEvent';
   }
 
-  export namespace TrajectoryScripterInputEvent {
-    /**
-     * Input to LLM (chat history).
-     */
-    export interface Data {
-      input: Array<unknown>;
-    }
-  }
-
   export interface TrajectoryScripterThinkingEvent {
     /**
-     * LLM generated thought + code.
+     * LLM response received.
      */
     data: TrajectoryScripterThinkingEvent.Data;
 
@@ -1109,10 +1090,10 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryScripterThinkingEvent {
     /**
-     * LLM generated thought + code.
+     * LLM response received.
      */
     export interface Data {
-      thoughts: string;
+      thought: string;
 
       code?: string | null;
 
@@ -1136,7 +1117,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryScripterExecutionEvent {
     /**
-     * Trigger code execution.
+     * Code ready to execute.
      */
     data: TrajectoryScripterExecutionEvent.Data;
 
@@ -1145,7 +1126,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryScripterExecutionEvent {
     /**
-     * Trigger code execution.
+     * Code ready to execute.
      */
     export interface Data {
       code: string;
@@ -1172,7 +1153,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryScripterEndEvent {
     /**
-     * Script agent finished.
+     * Scripter finished.
      */
     data: TrajectoryScripterEndEvent.Data;
 
@@ -1181,7 +1162,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryScripterEndEvent {
     /**
-     * Script agent finished.
+     * Scripter finished.
      */
     export interface Data {
       message: string;
@@ -1283,6 +1264,16 @@ export interface TaskRunParams {
 
   credentials?: Array<TaskRunParams.Credential>;
 
+  /**
+   * The ID of the device to run the task on.
+   */
+  deviceId?: string | null;
+
+  /**
+   * The display ID of the device to run the task on.
+   */
+  displayId?: number;
+
   executionTimeout?: number;
 
   files?: Array<string>;
@@ -1316,6 +1307,16 @@ export interface TaskRunStreamedParams {
   apps?: Array<string>;
 
   credentials?: Array<TaskRunStreamedParams.Credential>;
+
+  /**
+   * The ID of the device to run the task on.
+   */
+  deviceId?: string | null;
+
+  /**
+   * The display ID of the device to run the task on.
+   */
+  displayId?: number;
 
   executionTimeout?: number;
 
