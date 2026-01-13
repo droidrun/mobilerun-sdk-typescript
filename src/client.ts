@@ -33,6 +33,7 @@ import {
 import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
 import {
   Device,
+  DeviceCountResponse,
   DeviceCreateParams,
   DeviceListParams,
   DeviceListResponse,
@@ -794,6 +795,7 @@ export declare namespace Mobilerun {
     Devices as Devices,
     type Device as Device,
     type DeviceListResponse as DeviceListResponse,
+    type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
   };
