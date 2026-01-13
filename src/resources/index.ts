@@ -6,6 +6,7 @@ export {
   Devices,
   type Device,
   type DeviceListResponse,
+  type DeviceCountResponse,
   type DeviceCreateParams,
   type DeviceListParams,
 } from './devices/devices';

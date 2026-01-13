@@ -67,6 +67,13 @@ export class Devices extends APIResource {
   }
 
   /**
+   * Count claimed devices
+   */
+  count(options?: RequestOptions): APIPromise<DeviceCountResponse> {
+    return this._client.get('/devices/count', options);
+  }
+
+  /**
    * Terminate a device
    */
   terminate(deviceID: string, options?: RequestOptions): APIPromise<void> {
@@ -150,6 +157,21 @@ export namespace DeviceListResponse {
   }
 }
 
+export interface DeviceCountResponse {
+  limrun: number;
+
+  personal: number;
+
+  remote: number;
+
+  roidrun: number;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
 export interface DeviceCreateParams {
   /**
    * Query param:
@@ -230,6 +252,7 @@ export declare namespace Devices {
   export {
     type Device as Device,
     type DeviceListResponse as DeviceListResponse,
+    type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
   };
