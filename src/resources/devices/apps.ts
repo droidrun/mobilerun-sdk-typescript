@@ -109,53 +109,53 @@ export namespace AppListResponse {
 
 export interface AppListParams {
   /**
-   * Query param:
+   * Query param
    */
   includeSystemApps?: boolean;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }
 
 export interface AppDeleteParams {
   /**
-   * Path param:
+   * Path param
    */
   deviceId: string;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }
 
 export interface AppInstallParams {
   /**
-   * Body param:
+   * Body param
    */
   packageName: string;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }
 
 export interface AppStartParams {
   /**
-   * Path param:
+   * Path param
    */
   deviceId: string;
 
   /**
-   * Body param:
+   * Body param
    */
   activity?: string;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }

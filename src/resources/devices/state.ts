@@ -163,12 +163,12 @@ export namespace StateUiResponse {
 
 export interface StateScreenshotParams {
   /**
-   * Query param:
+   * Query param
    */
   hideOverlay?: boolean;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }
@@ -179,12 +179,12 @@ export interface StateTimeParams {
 
 export interface StateUiParams {
   /**
-   * Query param:
+   * Query param
    */
   filter?: boolean;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }

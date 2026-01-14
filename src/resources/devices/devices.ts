@@ -174,37 +174,37 @@ export interface DeviceCountResponse {
 
 export interface DeviceCreateParams {
   /**
-   * Query param:
+   * Query param
    */
   deviceType?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
 
   /**
-   * Query param:
+   * Query param
    */
   provider?: 'limrun' | 'remote' | 'roidrun';
 
   /**
-   * Body param:
+   * Body param
    */
   apps?: Array<string> | null;
 
   /**
-   * Body param:
+   * Body param
    */
   country?: string;
 
   /**
-   * Body param:
+   * Body param
    */
   files?: Array<string> | null;
 
   /**
-   * Body param:
+   * Body param
    */
   name?: string;
 
   /**
-   * Body param:
+   * Body param
    */
   proxy?: DeviceCreateParams.Proxy;
 }

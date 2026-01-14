@@ -77,29 +77,29 @@ export interface KeyboardClearParams {
 
 export interface KeyboardKeyParams {
   /**
-   * Body param:
+   * Body param
    */
   key: number;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }
 
 export interface KeyboardWriteParams {
   /**
-   * Body param:
+   * Body param
    */
   clear: boolean;
 
   /**
-   * Body param:
+   * Body param
    */
   text: string;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }
