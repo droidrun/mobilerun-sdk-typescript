@@ -93,12 +93,12 @@ export interface FieldDeleteResponse {
 
 export interface FieldCreateParams {
   /**
-   * Path param:
+   * Path param
    */
   packageName: string;
 
   /**
-   * Body param:
+   * Body param
    */
   fieldType:
     | 'email'
@@ -110,24 +110,24 @@ export interface FieldCreateParams {
     | 'backup_codes';
 
   /**
-   * Body param:
+   * Body param
    */
   value: string;
 }
 
 export interface FieldUpdateParams {
   /**
-   * Path param:
+   * Path param
    */
   packageName: string;
 
   /**
-   * Path param:
+   * Path param
    */
   credentialName: string;
 
   /**
-   * Body param:
+   * Body param
    */
   value: string;
 }

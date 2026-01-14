@@ -70,12 +70,12 @@ export class Actions extends APIResource {
 
 export interface ActionGlobalParams {
   /**
-   * Body param:
+   * Body param
    */
   action: number;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }
@@ -87,44 +87,44 @@ export interface ActionSwipeParams {
   duration: number;
 
   /**
-   * Body param:
+   * Body param
    */
   endX: number;
 
   /**
-   * Body param:
+   * Body param
    */
   endY: number;
 
   /**
-   * Body param:
+   * Body param
    */
   startX: number;
 
   /**
-   * Body param:
+   * Body param
    */
   startY: number;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }
 
 export interface ActionTapParams {
   /**
-   * Body param:
+   * Body param
    */
   x: number;
 
   /**
-   * Body param:
+   * Body param
    */
   y: number;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }

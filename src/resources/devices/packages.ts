@@ -35,12 +35,12 @@ export type PackageListResponse = Array<string>;
 
 export interface PackageListParams {
   /**
-   * Query param:
+   * Query param
    */
   includeSystemPackages?: boolean;
 
   /**
-   * Header param:
+   * Header param
    */
   'X-Device-Display-ID'?: number;
 }
