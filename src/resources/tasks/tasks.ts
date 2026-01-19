@@ -59,8 +59,8 @@ export class Tasks extends APIResource {
   /**
    * Run Task
    */
-  run(body: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
-    return this._client.post('/tasks/', { body, ...options });
+  run(options?: RequestOptions): APIPromise<TaskRunResponse> {
+    return this._client.post('/tasks/', options);
   }
 
   /**
@@ -1257,50 +1257,6 @@ export interface TaskListParams {
   status?: TaskStatus | null;
 }
 
-export interface TaskRunParams {
-  llmModel: LlmModel;
-
-  task: string;
-
-  apps?: Array<string>;
-
-  credentials?: Array<TaskRunParams.Credential>;
-
-  /**
-   * The ID of the device to run the task on.
-   */
-  deviceId?: string | null;
-
-  /**
-   * The display ID of the device to run the task on.
-   */
-  displayId?: number;
-
-  executionTimeout?: number;
-
-  files?: Array<string>;
-
-  maxSteps?: number;
-
-  outputSchema?: { [key: string]: unknown } | null;
-
-  reasoning?: boolean;
-
-  temperature?: number;
-
-  vision?: boolean;
-
-  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
-}
-
-export namespace TaskRunParams {
-  export interface Credential {
-    credentialNames: Array<string>;
-
-    packageName: string;
-  }
-}
-
 export interface TaskRunStreamedParams {
   llmModel: LlmModel;
 
@@ -1361,7 +1317,6 @@ export declare namespace Tasks {
     type TaskRunResponse as TaskRunResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
-    type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
   };
 
