@@ -48,7 +48,6 @@ import {
   TaskListParams,
   TaskListResponse,
   TaskRetrieveResponse,
-  TaskRunParams,
   TaskRunResponse,
   TaskRunStreamedParams,
   TaskStatus,
@@ -787,7 +786,6 @@ export declare namespace Mobilerun {
     type TaskRunResponse as TaskRunResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
-    type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
   };
 

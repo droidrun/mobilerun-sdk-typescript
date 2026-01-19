@@ -87,8 +87,8 @@ describe('resource tasks', () => {
   });
 
   // Prism tests are disabled
-  test.skip('run: only required params', async () => {
-    const responsePromise = client.tasks.run({ llmModel: 'openai/gpt-5.1', task: 'x' });
+  test.skip('run', async () => {
+    const responsePromise = client.tasks.run();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -96,26 +96,6 @@ describe('resource tasks', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('run: required and optional params', async () => {
-    const response = await client.tasks.run({
-      llmModel: 'openai/gpt-5.1',
-      task: 'x',
-      apps: ['string'],
-      credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
-      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-      displayId: 0,
-      executionTimeout: 0,
-      files: ['string'],
-      maxSteps: 0,
-      outputSchema: { foo: 'bar' },
-      reasoning: true,
-      temperature: 0,
-      vision: true,
-      vpnCountry: 'US',
-    });
   });
 
   // Prism tests are disabled
