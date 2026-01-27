@@ -16,6 +16,7 @@ export {
   type DeviceCountResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceTerminateParams,
 } from './devices';
 export {
   Keyboard,

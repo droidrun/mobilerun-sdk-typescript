@@ -18,19 +18,49 @@ export class Credentials extends APIResource {
   /**
    * List all credentials for the authenticated user
    */
-  list(options?: RequestOptions): APIPromise<CredentialListResponse> {
-    return this._client.get('/credentials', options);
+  list(
+    query: CredentialListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CredentialListResponse> {
+    return this._client.get('/credentials', { query, ...options });
   }
 }
 
 export interface CredentialListResponse {
-  data: Array<CredentialsCredentialsAPI.Credential>;
+  items: Array<CredentialsCredentialsAPI.Credential>;
+
+  pagination: CredentialListResponse.Pagination;
+}
+
+export namespace CredentialListResponse {
+  export interface Pagination {
+    hasNext: boolean;
+
+    hasPrev: boolean;
+
+    page: number;
+
+    pages: number;
+
+    pageSize: number;
+
+    total: number;
+  }
+}
+
+export interface CredentialListParams {
+  page?: number;
+
+  pageSize?: number;
 }
 
 Credentials.Packages = Packages;
 
 export declare namespace Credentials {
-  export { type CredentialListResponse as CredentialListResponse };
+  export {
+    type CredentialListResponse as CredentialListResponse,
+    type CredentialListParams as CredentialListParams,
+  };
 
   export {
     Packages as Packages,

@@ -79,7 +79,7 @@ describe('resource devices', () => {
 
   // Prism tests are disabled
   test.skip('terminate', async () => {
-    const responsePromise = client.devices.terminate('deviceId');
+    const responsePromise = client.devices.terminate('deviceId', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
