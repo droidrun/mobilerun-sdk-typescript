@@ -76,8 +76,9 @@ export class Devices extends APIResource {
   /**
    * Terminate a device
    */
-  terminate(deviceID: string, options?: RequestOptions): APIPromise<void> {
+  terminate(deviceID: string, body: DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/devices/${deviceID}`, {
+      body,
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -120,6 +121,8 @@ export interface Device {
 
   taskCount: number;
 
+  terminatesAt: string | null;
+
   updatedAt: string;
 
   /**
@@ -157,20 +160,7 @@ export namespace DeviceListResponse {
   }
 }
 
-export interface DeviceCountResponse {
-  limrun: number;
-
-  personal: number;
-
-  remote: number;
-
-  roidrun: number;
-
-  /**
-   * A URL to the JSON Schema for this object.
-   */
-  $schema?: string;
-}
+export type DeviceCountResponse = { [key: string]: number };
 
 export interface DeviceCreateParams {
   /**
@@ -241,6 +231,12 @@ export interface DeviceListParams {
   type?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
 }
 
+export interface DeviceTerminateParams {
+  previousDeviceId?: string;
+
+  terminateAt?: string;
+}
+
 Devices.Actions = Actions;
 Devices.State = State;
 Devices.Apps = Apps;
@@ -255,6 +251,7 @@ export declare namespace Devices {
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
   };
 
   export {

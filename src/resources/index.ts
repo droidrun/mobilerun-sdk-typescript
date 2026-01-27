@@ -1,7 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export { Apps, type AppListResponse, type AppListParams } from './apps';
-export { Credentials, type CredentialListResponse } from './credentials/credentials';
+export {
+  Credentials,
+  type CredentialListResponse,
+  type CredentialListParams,
+} from './credentials/credentials';
 export {
   Devices,
   type Device,
@@ -9,6 +13,7 @@ export {
   type DeviceCountResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceTerminateParams,
 } from './devices/devices';
 export {
   Hooks,

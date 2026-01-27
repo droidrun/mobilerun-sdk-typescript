@@ -30,13 +30,18 @@ import {
   HookUpdateResponse,
   Hooks,
 } from './resources/hooks';
-import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
+import {
+  CredentialListParams,
+  CredentialListResponse,
+  Credentials,
+} from './resources/credentials/credentials';
 import {
   Device,
   DeviceCountResponse,
   DeviceCreateParams,
   DeviceListParams,
   DeviceListResponse,
+  DeviceTerminateParams,
   Devices,
 } from './resources/devices/devices';
 import {
@@ -796,11 +801,16 @@ export declare namespace Mobilerun {
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
   };
 
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
 
-  export { Credentials as Credentials, type CredentialListResponse as CredentialListResponse };
+  export {
+    Credentials as Credentials,
+    type CredentialListResponse as CredentialListResponse,
+    type CredentialListParams as CredentialListParams,
+  };
 
   export {
     Hooks as Hooks,
