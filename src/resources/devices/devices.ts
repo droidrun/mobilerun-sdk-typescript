@@ -166,12 +166,16 @@ export interface DeviceCreateParams {
   /**
    * Query param
    */
-  deviceType?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
+  deviceType?:
+    | 'device_slot'
+    | 'dedicated_emulated_device'
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device';
 
   /**
    * Query param
    */
-  provider?: 'limrun' | 'remote' | 'roidrun';
+  provider?: 'limrun' | 'physical' | 'premium' | 'roidrun';
 
   /**
    * Body param
