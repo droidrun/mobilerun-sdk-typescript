@@ -6,8 +6,8 @@ on:
       - next
 
 jobs:
-  deploy:
-    name: Deploy Docker-MCP to GCloud
+  build:
+    name: Build Docker-MCP
     runs-on: ubuntu-latest
     environment: 
       # <branch>  -> <github environment>
@@ -42,3 +42,33 @@ jobs:
             default=${{ env.SSH_AUTH_SOCK }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  
+  deploy:
+    name: Deploy Cloud
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      fail-fast: false
+    environment:
+      name: ${{ github.ref_name == 'next' && 'develop' || (github.ref_name == 'main' && 'prod' || github.ref_name) }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ vars.CLUSTER }}
+          location: ${{ vars.REGION }}
+          project_id: ${{ vars.PROJECT_ID }}
+
+      - name: Restart Kubernetes deployment
+        run: kubectl rollout restart deployment/${{ vars.K8S_DEPLOYMENT_NAME }} -n ${{ vars.K8S_NAMESPACE }}
+
