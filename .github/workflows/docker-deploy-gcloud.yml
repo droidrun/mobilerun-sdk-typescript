@@ -38,7 +38,7 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: ${{ vars.IMAGE_REGION }}-docker.pkg.dev/${{ vars.IMAGE_PROJECT_ID }}/droidrun/${{ vars.IMAGE_NAME }}:dev
-        #   ssh: |
-        #     default=${{ env.SSH_AUTH_SOCK }}
+          ssh: |
+            default=${{ env.SSH_AUTH_SOCK }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
