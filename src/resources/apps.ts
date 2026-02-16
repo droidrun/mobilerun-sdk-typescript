@@ -308,6 +308,8 @@ export namespace AppListResponse {
 
     packageName: string;
 
+    privacyPolicyUrl: string | null;
+
     queuedAt: string | null;
 
     ratingCount: number | null;

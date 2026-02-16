@@ -57,7 +57,7 @@ describe('resource devices', () => {
           page: 0,
           pageSize: 0,
           provider: 'limrun',
-          state: 'creating',
+          state: ['creating'],
           type: 'device_slot',
         },
         { path: '/_stainless_unknown_path' },
