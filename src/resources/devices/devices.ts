@@ -230,7 +230,7 @@ export interface DeviceListParams {
 
   provider?: 'limrun' | 'personal' | 'remote' | 'roidrun';
 
-  state?: 'creating' | 'assigned' | 'ready' | 'terminated' | 'unknown';
+  state?: Array<'creating' | 'assigned' | 'ready' | 'disconnected' | 'terminated' | 'unknown'> | null;
 
   type?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
 }
