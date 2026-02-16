@@ -17,12 +17,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/tasks/{task_id}',
   },
   {
-    clientCallName: 'client.tasks.list',
-    fullyQualifiedName: 'tasks.list',
-    httpMethod: 'get',
-    httpPath: '/tasks/',
-  },
-  {
     clientCallName: 'client.tasks.attach',
     fullyQualifiedName: 'tasks.attach',
     httpMethod: 'get',
@@ -39,12 +33,6 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'tasks.getTrajectory',
     httpMethod: 'get',
     httpPath: '/tasks/{task_id}/trajectory',
-  },
-  {
-    clientCallName: 'client.tasks.run',
-    fullyQualifiedName: 'tasks.run',
-    httpMethod: 'post',
-    httpPath: '/tasks/',
   },
   {
     clientCallName: 'client.tasks.runStreamed',
@@ -279,12 +267,6 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'hooks.update',
     httpMethod: 'post',
     httpPath: '/hooks/{hook_id}/edit',
-  },
-  {
-    clientCallName: 'client.hooks.list',
-    fullyQualifiedName: 'hooks.list',
-    httpMethod: 'get',
-    httpPath: '/hooks/',
   },
   {
     clientCallName: 'client.hooks.getSampleData',

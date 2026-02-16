@@ -22,16 +22,6 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * List all tasks you've created so far
-   */
-  list(
-    query: TaskListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TaskListResponse> {
-    return this._client.get('/tasks/', { query, ...options });
-  }
-
-  /**
    * Attach Task
    */
   attach(taskID: string, options?: RequestOptions): APIPromise<void> {
@@ -42,8 +32,7 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * Get the status of a task. If device is provided, return the status of the
-   * specific device. Otherwise, return the status of all devices.
+   * Get the status of a task.
    */
   getStatus(taskID: string, options?: RequestOptions): APIPromise<TaskGetStatusResponse> {
     return this._client.get(path`/tasks/${taskID}/status`, options);
@@ -57,18 +46,10 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * Run Task
-   */
-  run(options?: RequestOptions): APIPromise<TaskRunResponse> {
-    return this._client.post('/tasks/', options);
-  }
-
-  /**
    * Run Streamed Task
    */
-  runStreamed(body: TaskRunStreamedParams, options?: RequestOptions): APIPromise<void> {
+  runStreamed(options?: RequestOptions): APIPromise<void> {
     return this._client.post('/tasks/stream', {
-      body,
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -111,6 +92,8 @@ export interface Task {
 
   credentials?: Array<Task.Credential>;
 
+  displayId?: number;
+
   executionTimeout?: number;
 
   files?: Array<string>;
@@ -125,6 +108,8 @@ export interface Task {
 
   reasoning?: boolean;
 
+  sandboxId?: string | null;
+
   status?: TaskStatus;
 
   steps?: number | null;
@@ -132,6 +117,8 @@ export interface Task {
   succeeded?: boolean | null;
 
   temperature?: number;
+
+  tmpDevice?: boolean;
 
   trajectory?: Array<{ [key: string]: unknown }>;
 
@@ -150,50 +137,6 @@ export namespace Task {
   }
 }
 
-export interface TaskCreate {
-  llmModel: LlmModel;
-
-  task: string;
-
-  apps?: Array<string>;
-
-  credentials?: Array<TaskCreate.Credential>;
-
-  /**
-   * The ID of the device to run the task on.
-   */
-  deviceId?: string | null;
-
-  /**
-   * The display ID of the device to run the task on.
-   */
-  displayId?: number;
-
-  executionTimeout?: number;
-
-  files?: Array<string>;
-
-  maxSteps?: number;
-
-  outputSchema?: { [key: string]: unknown } | null;
-
-  reasoning?: boolean;
-
-  temperature?: number;
-
-  vision?: boolean;
-
-  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
-}
-
-export namespace TaskCreate {
-  export interface Credential {
-    credentialNames: Array<string>;
-
-    packageName: string;
-  }
-}
-
 export type TaskStatus = 'created' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
 
 export interface TaskRetrieveResponse {
@@ -201,55 +144,6 @@ export interface TaskRetrieveResponse {
    * The task
    */
   task: Task;
-}
-
-export interface TaskListResponse {
-  /**
-   * The paginated items
-   */
-  items: Array<Task>;
-
-  /**
-   * Pagination metadata
-   */
-  pagination: TaskListResponse.Pagination;
-}
-
-export namespace TaskListResponse {
-  /**
-   * Pagination metadata
-   */
-  export interface Pagination {
-    /**
-     * Whether there is a next page
-     */
-    hasNext: boolean;
-
-    /**
-     * Whether there is a previous page
-     */
-    hasPrev: boolean;
-
-    /**
-     * Current page number (1-based)
-     */
-    page: number;
-
-    /**
-     * Total number of pages
-     */
-    pages: number;
-
-    /**
-     * Number of items per page
-     */
-    pageSize: number;
-
-    /**
-     * Total number of items
-     */
-    total: number;
-  }
 }
 
 export interface TaskGetStatusResponse {
@@ -424,9 +318,31 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryResultEvent {
-    data: { [key: string]: unknown };
+    /**
+     * Lazy wrapper — avoids importing droidrun at module level.
+     *
+     * The worker uses droidrun's ResultEvent directly; this model only exists so the
+     * API OpenAPI schema can reference it without the heavy droidrun import.
+     */
+    data: TrajectoryResultEvent.Data;
 
     event: 'ResultEvent';
+  }
+
+  export namespace TrajectoryResultEvent {
+    /**
+     * Lazy wrapper — avoids importing droidrun at module level.
+     *
+     * The worker uses droidrun's ResultEvent directly; this model only exists so the
+     * API OpenAPI schema can reference it without the heavy droidrun import.
+     */
+    export interface Data {
+      steps?: number | null;
+
+      structured_output?: { [key: string]: unknown } | unknown | null;
+
+      success?: boolean | null;
+    }
   }
 
   export interface TrajectoryManagerInputEvent {
@@ -1210,95 +1126,11 @@ export namespace TaskGetTrajectoryResponse {
   }
 }
 
-export interface TaskRunResponse {
-  /**
-   * The ID of the task
-   */
-  id: string;
-
-  /**
-   * The token of the stream
-   */
-  token: string;
-
-  /**
-   * The URL of the stream
-   */
-  streamUrl: string;
-}
-
 export interface TaskStopResponse {
   /**
    * Whether the task was cancelled
    */
   cancelled: boolean;
-}
-
-export interface TaskListParams {
-  orderBy?: 'id' | 'createdAt' | 'finishedAt' | 'status' | null;
-
-  orderByDirection?: 'asc' | 'desc';
-
-  /**
-   * Page number (1-based). If provided, returns paginated results.
-   */
-  page?: number | null;
-
-  /**
-   * Number of items per page
-   */
-  pageSize?: number;
-
-  /**
-   * Search in task description.
-   */
-  query?: string | null;
-
-  status?: TaskStatus | null;
-}
-
-export interface TaskRunStreamedParams {
-  llmModel: LlmModel;
-
-  task: string;
-
-  apps?: Array<string>;
-
-  credentials?: Array<TaskRunStreamedParams.Credential>;
-
-  /**
-   * The ID of the device to run the task on.
-   */
-  deviceId?: string | null;
-
-  /**
-   * The display ID of the device to run the task on.
-   */
-  displayId?: number;
-
-  executionTimeout?: number;
-
-  files?: Array<string>;
-
-  maxSteps?: number;
-
-  outputSchema?: { [key: string]: unknown } | null;
-
-  reasoning?: boolean;
-
-  temperature?: number;
-
-  vision?: boolean;
-
-  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
-}
-
-export namespace TaskRunStreamedParams {
-  export interface Credential {
-    credentialNames: Array<string>;
-
-    packageName: string;
-  }
 }
 
 Tasks.Screenshots = Screenshots;
@@ -1308,16 +1140,11 @@ export declare namespace Tasks {
   export {
     type LlmModel as LlmModel,
     type Task as Task,
-    type TaskCreate as TaskCreate,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,
-    type TaskListResponse as TaskListResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,
     type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
-    type TaskRunResponse as TaskRunResponse,
     type TaskStopResponse as TaskStopResponse,
-    type TaskListParams as TaskListParams,
-    type TaskRunStreamedParams as TaskRunStreamedParams,
   };
 
   export {

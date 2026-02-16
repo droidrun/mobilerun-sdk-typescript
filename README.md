@@ -31,13 +31,11 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
-});
+const client = new Mobilerun();
 
-const tasks = await client.tasks.list();
+const task = await client.tasks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
 
-console.log(tasks.items);
+console.log(task.task);
 ```
 
 ### Request & Response types
@@ -48,11 +46,11 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
-});
+const client = new Mobilerun();
 
-const tasks: Mobilerun.TaskListResponse = await client.tasks.list();
+const task: Mobilerun.TaskRetrieveResponse = await client.tasks.retrieve(
+  '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -65,15 +63,17 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const tasks = await client.tasks.list().catch(async (err) => {
-  if (err instanceof Mobilerun.APIError) {
-    console.log(err.status); // 400
-    console.log(err.name); // BadRequestError
-    console.log(err.headers); // {server: 'nginx', ...}
-  } else {
-    throw err;
-  }
-});
+const task = await client.tasks
+  .retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')
+  .catch(async (err) => {
+    if (err instanceof Mobilerun.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 ```
 
 Error codes are as follows:
@@ -105,7 +105,7 @@ const client = new Mobilerun({
 });
 
 // Or, configure per-request:
-await client.tasks.list({
+await client.tasks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
   maxRetries: 5,
 });
 ```
@@ -122,7 +122,7 @@ const client = new Mobilerun({
 });
 
 // Override per-request:
-await client.tasks.list({
+await client.tasks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
   timeout: 5 * 1000,
 });
 ```
@@ -145,13 +145,15 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Mobilerun();
 
-const response = await client.tasks.list().asResponse();
+const response = await client.tasks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: tasks, response: raw } = await client.tasks.list().withResponse();
+const { data: task, response: raw } = await client.tasks
+  .retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(tasks.items);
+console.log(task.task);
 ```
 
 ### Logging
@@ -231,7 +233,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.tasks.list({
+client.tasks.retrieve({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
