@@ -24,16 +24,6 @@ export class Hooks extends APIResource {
   }
 
   /**
-   * List hooks belonging to the requesting user (paginated).
-   */
-  list(
-    query: HookListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<HookListResponse> {
-    return this._client.get('/hooks/', { query, ...options });
-  }
-
-  /**
    * Get sample hook data for Zapier Perform List (testing/field mapping).
    */
   getSampleData(options?: RequestOptions): APIPromise<HookGetSampleDataResponse> {
@@ -110,73 +100,6 @@ export interface HookUpdateResponse {
    * List of subscribed events
    */
   events?: Array<string> | null;
-}
-
-export interface HookListResponse {
-  /**
-   * The paginated items
-   */
-  items: Array<HookListResponse.Item>;
-
-  /**
-   * Pagination metadata
-   */
-  pagination: HookListResponse.Pagination;
-}
-
-export namespace HookListResponse {
-  export interface Item {
-    service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other';
-
-    url: string;
-
-    userId: string;
-
-    id?: string;
-
-    createdAt?: string;
-
-    events?: Array<TasksAPI.TaskStatus>;
-
-    state?: 'active' | 'disabled' | 'deleted';
-
-    updatedAt?: string;
-  }
-
-  /**
-   * Pagination metadata
-   */
-  export interface Pagination {
-    /**
-     * Whether there is a next page
-     */
-    hasNext: boolean;
-
-    /**
-     * Whether there is a previous page
-     */
-    hasPrev: boolean;
-
-    /**
-     * Current page number (1-based)
-     */
-    page: number;
-
-    /**
-     * Total number of pages
-     */
-    pages: number;
-
-    /**
-     * Number of items per page
-     */
-    pageSize: number;
-
-    /**
-     * Total number of items
-     */
-    total: number;
-  }
 }
 
 export type HookGetSampleDataResponse = Array<HookGetSampleDataResponse.HookGetSampleDataResponseItem>;
@@ -277,16 +200,6 @@ export interface HookUpdateParams {
   state?: string | null;
 }
 
-export interface HookListParams {
-  orderBy?: string | null;
-
-  orderByDirection?: 'asc' | 'desc';
-
-  page?: number;
-
-  pageSize?: number;
-}
-
 export interface HookSubscribeParams {
   /**
    * The webhook URL to send notifications to
@@ -309,13 +222,11 @@ export declare namespace Hooks {
   export {
     type HookRetrieveResponse as HookRetrieveResponse,
     type HookUpdateResponse as HookUpdateResponse,
-    type HookListResponse as HookListResponse,
     type HookGetSampleDataResponse as HookGetSampleDataResponse,
     type HookPerformResponse as HookPerformResponse,
     type HookSubscribeResponse as HookSubscribeResponse,
     type HookUnsubscribeResponse as HookUnsubscribeResponse,
     type HookUpdateParams as HookUpdateParams,
-    type HookListParams as HookListParams,
     type HookSubscribeParams as HookSubscribeParams,
   };
 }
