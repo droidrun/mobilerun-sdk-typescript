@@ -15,9 +15,9 @@ For example:
 
 \`\`\`
 async function run(client) {
-  const task = await client.tasks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+  const tasks = await client.tasks.list();
 
-  console.log(task.task);
+  console.log(tasks.items);
 }
 \`\`\`
 
