@@ -31,7 +31,9 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun();
+const client = new Mobilerun({
+  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
+});
 
 const task = await client.tasks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
 
@@ -46,7 +48,9 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun();
+const client = new Mobilerun({
+  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
+});
 
 const task: Mobilerun.TaskRetrieveResponse = await client.tasks.retrieve(
   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
