@@ -10,6 +10,7 @@ import {
   AppListParams,
   AppListResponse,
   AppStartParams,
+  AppUpdateParams,
   Apps,
 } from './apps';
 import * as KeyboardAPI from './keyboard';
@@ -278,6 +279,7 @@ export declare namespace Devices {
   export {
     Apps as Apps,
     type AppListResponse as AppListResponse,
+    type AppUpdateParams as AppUpdateParams,
     type AppListParams as AppListParams,
     type AppDeleteParams as AppDeleteParams,
     type AppInstallParams as AppInstallParams,

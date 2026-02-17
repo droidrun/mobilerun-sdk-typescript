@@ -20,6 +20,8 @@ import { APIPromise } from './core/api-promise';
 import { AppListParams, AppListResponse, Apps } from './resources/apps';
 import {
   HookGetSampleDataResponse,
+  HookListParams,
+  HookListResponse,
   HookPerformResponse,
   HookRetrieveResponse,
   HookSubscribeParams,
@@ -48,7 +50,10 @@ import {
   Task,
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
+  TaskListParams,
+  TaskListResponse,
   TaskRetrieveResponse,
+  TaskRunResponse,
   TaskStatus,
   TaskStopResponse,
   Tasks,
@@ -769,9 +774,12 @@ export declare namespace Mobilerun {
     type Task as Task,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,
+    type TaskListResponse as TaskListResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,
     type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
+    type TaskRunResponse as TaskRunResponse,
     type TaskStopResponse as TaskStopResponse,
+    type TaskListParams as TaskListParams,
   };
 
   export {
@@ -796,11 +804,13 @@ export declare namespace Mobilerun {
     Hooks as Hooks,
     type HookRetrieveResponse as HookRetrieveResponse,
     type HookUpdateResponse as HookUpdateResponse,
+    type HookListResponse as HookListResponse,
     type HookGetSampleDataResponse as HookGetSampleDataResponse,
     type HookPerformResponse as HookPerformResponse,
     type HookSubscribeResponse as HookSubscribeResponse,
     type HookUnsubscribeResponse as HookUnsubscribeResponse,
     type HookUpdateParams as HookUpdateParams,
+    type HookListParams as HookListParams,
     type HookSubscribeParams as HookSubscribeParams,
   };
 }

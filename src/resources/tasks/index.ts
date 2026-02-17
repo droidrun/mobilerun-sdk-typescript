@@ -12,8 +12,11 @@ export {
   type Task,
   type TaskStatus,
   type TaskRetrieveResponse,
+  type TaskListResponse,
   type TaskGetStatusResponse,
   type TaskGetTrajectoryResponse,
+  type TaskRunResponse,
   type TaskStopResponse,
+  type TaskListParams,
 } from './tasks';
 export { UiStates, type UiStateListResponse, type UiStateRetrieveParams } from './ui-states';

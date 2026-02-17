@@ -17,6 +17,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/tasks/{task_id}',
   },
   {
+    clientCallName: 'client.tasks.list',
+    fullyQualifiedName: 'tasks.list',
+    httpMethod: 'get',
+    httpPath: '/tasks',
+  },
+  {
     clientCallName: 'client.tasks.attach',
     fullyQualifiedName: 'tasks.attach',
     httpMethod: 'get',
@@ -33,6 +39,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'tasks.getTrajectory',
     httpMethod: 'get',
     httpPath: '/tasks/{task_id}/trajectory',
+  },
+  {
+    clientCallName: 'client.tasks.run',
+    fullyQualifiedName: 'tasks.run',
+    httpMethod: 'post',
+    httpPath: '/tasks',
   },
   {
     clientCallName: 'client.tasks.runStreamed',
@@ -141,6 +153,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'devices.state.ui',
     httpMethod: 'get',
     httpPath: '/devices/{deviceId}/ui-state',
+  },
+  {
+    clientCallName: 'client.devices.apps.update',
+    fullyQualifiedName: 'devices.apps.update',
+    httpMethod: 'patch',
+    httpPath: '/devices/{deviceId}/apps/{packageName}',
   },
   {
     clientCallName: 'client.devices.apps.list',
@@ -267,6 +285,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'hooks.update',
     httpMethod: 'post',
     httpPath: '/hooks/{hook_id}/edit',
+  },
+  {
+    clientCallName: 'client.hooks.list',
+    fullyQualifiedName: 'hooks.list',
+    httpMethod: 'get',
+    httpPath: '/hooks',
   },
   {
     clientCallName: 'client.hooks.getSampleData',
