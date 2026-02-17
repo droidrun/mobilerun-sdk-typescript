@@ -19,11 +19,13 @@ export {
   Hooks,
   type HookRetrieveResponse,
   type HookUpdateResponse,
+  type HookListResponse,
   type HookGetSampleDataResponse,
   type HookPerformResponse,
   type HookSubscribeResponse,
   type HookUnsubscribeResponse,
   type HookUpdateParams,
+  type HookListParams,
   type HookSubscribeParams,
 } from './hooks';
 export {
@@ -32,7 +34,10 @@ export {
   type Task,
   type TaskStatus,
   type TaskRetrieveResponse,
+  type TaskListResponse,
   type TaskGetStatusResponse,
   type TaskGetTrajectoryResponse,
+  type TaskRunResponse,
   type TaskStopResponse,
+  type TaskListParams,
 } from './tasks/tasks';

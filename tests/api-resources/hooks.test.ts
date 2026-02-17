@@ -33,6 +33,34 @@ describe('resource hooks', () => {
   });
 
   // Prism tests are disabled
+  test.skip('list', async () => {
+    const responsePromise = client.hooks.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.hooks.list(
+        {
+          orderBy: 'orderBy',
+          orderByDirection: 'asc',
+          page: 1,
+          pageSize: 1,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Prism tests are disabled
   test.skip('getSampleData', async () => {
     const responsePromise = client.hooks.getSampleData();
     const rawResponse = await responsePromise.asResponse();

@@ -22,6 +22,16 @@ export class Tasks extends APIResource {
   }
 
   /**
+   * List all tasks you've created so far
+   */
+  list(
+    query: TaskListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TaskListResponse> {
+    return this._client.get('/tasks', { query, ...options });
+  }
+
+  /**
    * Attach Task
    */
   attach(taskID: string, options?: RequestOptions): APIPromise<void> {
@@ -43,6 +53,13 @@ export class Tasks extends APIResource {
    */
   getTrajectory(taskID: string, options?: RequestOptions): APIPromise<TaskGetTrajectoryResponse> {
     return this._client.get(path`/tasks/${taskID}/trajectory`, options);
+  }
+
+  /**
+   * Run Task
+   */
+  run(options?: RequestOptions): APIPromise<TaskRunResponse> {
+    return this._client.post('/tasks', options);
   }
 
   /**
@@ -144,6 +161,55 @@ export interface TaskRetrieveResponse {
    * The task
    */
   task: Task;
+}
+
+export interface TaskListResponse {
+  /**
+   * The paginated items
+   */
+  items: Array<Task>;
+
+  /**
+   * Pagination metadata
+   */
+  pagination: TaskListResponse.Pagination;
+}
+
+export namespace TaskListResponse {
+  /**
+   * Pagination metadata
+   */
+  export interface Pagination {
+    /**
+     * Whether there is a next page
+     */
+    hasNext: boolean;
+
+    /**
+     * Whether there is a previous page
+     */
+    hasPrev: boolean;
+
+    /**
+     * Current page number (1-based)
+     */
+    page: number;
+
+    /**
+     * Total number of pages
+     */
+    pages: number;
+
+    /**
+     * Number of items per page
+     */
+    pageSize: number;
+
+    /**
+     * Total number of items
+     */
+    total: number;
+  }
 }
 
 export interface TaskGetStatusResponse {
@@ -1126,11 +1192,51 @@ export namespace TaskGetTrajectoryResponse {
   }
 }
 
+export interface TaskRunResponse {
+  /**
+   * The ID of the task
+   */
+  id: string;
+
+  /**
+   * The token of the stream
+   */
+  token: string;
+
+  /**
+   * The URL of the stream
+   */
+  streamUrl: string;
+}
+
 export interface TaskStopResponse {
   /**
    * Whether the task was cancelled
    */
   cancelled: boolean;
+}
+
+export interface TaskListParams {
+  orderBy?: 'id' | 'createdAt' | 'finishedAt' | 'status' | null;
+
+  orderByDirection?: 'asc' | 'desc';
+
+  /**
+   * Page number (1-based). If provided, returns paginated results.
+   */
+  page?: number | null;
+
+  /**
+   * Number of items per page
+   */
+  pageSize?: number;
+
+  /**
+   * Search in task description.
+   */
+  query?: string | null;
+
+  status?: TaskStatus | null;
 }
 
 Tasks.Screenshots = Screenshots;
@@ -1142,9 +1248,12 @@ export declare namespace Tasks {
     type Task as Task,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,
+    type TaskListResponse as TaskListResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,
     type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
+    type TaskRunResponse as TaskRunResponse,
     type TaskStopResponse as TaskStopResponse,
+    type TaskListParams as TaskListParams,
   };
 
   export {

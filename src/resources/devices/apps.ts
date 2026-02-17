@@ -8,6 +8,26 @@ import { path } from '../../internal/utils/path';
 
 export class Apps extends APIResource {
   /**
+   * Stop app
+   */
+  update(packageName: string, params: AppUpdateParams, options?: RequestOptions): APIPromise<void> {
+    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    return this._client.patch(path`/devices/${deviceId}/apps/${packageName}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * List apps
    */
   list(
@@ -107,6 +127,18 @@ export namespace AppListResponse {
   }
 }
 
+export interface AppUpdateParams {
+  /**
+   * Path param
+   */
+  deviceId: string;
+
+  /**
+   * Header param
+   */
+  'X-Device-Display-ID'?: number;
+}
+
 export interface AppListParams {
   /**
    * Query param
@@ -163,6 +195,7 @@ export interface AppStartParams {
 export declare namespace Apps {
   export {
     type AppListResponse as AppListResponse,
+    type AppUpdateParams as AppUpdateParams,
     type AppListParams as AppListParams,
     type AppDeleteParams as AppDeleteParams,
     type AppInstallParams as AppInstallParams,
