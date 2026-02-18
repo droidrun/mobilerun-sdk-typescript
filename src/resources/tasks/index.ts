@@ -18,5 +18,7 @@ export {
   type TaskRunResponse,
   type TaskStopResponse,
   type TaskListParams,
+  type TaskRunParams,
+  type TaskRunStreamedParams,
 } from './tasks';
 export { UiStates, type UiStateListResponse, type UiStateRetrieveParams } from './ui-states';

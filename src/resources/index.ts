@@ -40,4 +40,6 @@ export {
   type TaskRunResponse,
   type TaskStopResponse,
   type TaskListParams,
+  type TaskRunParams,
+  type TaskRunStreamedParams,
 } from './tasks/tasks';
