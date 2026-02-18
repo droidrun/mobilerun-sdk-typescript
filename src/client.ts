@@ -31,6 +31,7 @@ import {
   HookUpdateResponse,
   Hooks,
 } from './resources/hooks';
+import { ModelListResponse, Models } from './resources/models';
 import {
   CredentialListParams,
   CredentialListResponse,
@@ -767,6 +768,7 @@ export class Mobilerun {
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
   hooks: API.Hooks = new API.Hooks(this);
+  models: API.Models = new API.Models(this);
 }
 
 Mobilerun.Tasks = Tasks;
@@ -774,6 +776,7 @@ Mobilerun.Devices = Devices;
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Hooks = Hooks;
+Mobilerun.Models = Models;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
@@ -825,4 +828,6 @@ export declare namespace Mobilerun {
     type HookListParams as HookListParams,
     type HookSubscribeParams as HookSubscribeParams,
   };
+
+  export { Models as Models, type ModelListResponse as ModelListResponse };
 }

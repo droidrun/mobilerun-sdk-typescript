@@ -28,6 +28,7 @@ export {
   type HookListParams,
   type HookSubscribeParams,
 } from './hooks';
+export { Models, type ModelListResponse } from './models';
 export {
   Tasks,
   type LlmModel,

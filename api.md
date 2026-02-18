@@ -209,3 +209,13 @@ Methods:
 - <code title="post /hooks/perform">client.hooks.<a href="./src/resources/hooks.ts">perform</a>() -> HookPerformResponse</code>
 - <code title="post /hooks/subscribe">client.hooks.<a href="./src/resources/hooks.ts">subscribe</a>({ ...params }) -> HookSubscribeResponse</code>
 - <code title="post /hooks/{hook_id}/unsubscribe">client.hooks.<a href="./src/resources/hooks.ts">unsubscribe</a>(hookID) -> HookUnsubscribeResponse</code>
+
+# Models
+
+Types:
+
+- <code><a href="./src/resources/models.ts">ModelListResponse</a></code>
+
+Methods:
+
+- <code title="get /models">client.models.<a href="./src/resources/models.ts">list</a>() -> ModelListResponse</code>
