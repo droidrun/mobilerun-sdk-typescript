@@ -316,6 +316,12 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'post',
     httpPath: '/hooks/{hook_id}/unsubscribe',
   },
+  {
+    clientCallName: 'client.models.list',
+    fullyQualifiedName: 'models.list',
+    httpMethod: 'get',
+    httpPath: '/models',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {
