@@ -8,7 +8,6 @@ export {
 } from './screenshots';
 export {
   Tasks,
-  type LlmModel,
   type Task,
   type TaskStatus,
   type TaskRetrieveResponse,

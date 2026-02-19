@@ -2,7 +2,6 @@
 
 Types:
 
-- <code><a href="./src/resources/tasks/tasks.ts">LlmModel</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">Task</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskStatus</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskRetrieveResponse</a></code>
@@ -206,7 +205,7 @@ Methods:
 - <code title="post /hooks/{hook_id}/edit">client.hooks.<a href="./src/resources/hooks.ts">update</a>(hookID, { ...params }) -> HookUpdateResponse</code>
 - <code title="get /hooks">client.hooks.<a href="./src/resources/hooks.ts">list</a>({ ...params }) -> HookListResponse</code>
 - <code title="get /hooks/sample">client.hooks.<a href="./src/resources/hooks.ts">getSampleData</a>() -> HookGetSampleDataResponse</code>
-- <code title="post /hooks/perform">client.hooks.<a href="./src/resources/hooks.ts">perform</a>() -> HookPerformResponse</code>
+- <code title="post /hooks/perform">client.hooks.<a href="./src/resources/hooks.ts">perform</a>({ ...params }) -> HookPerformResponse</code>
 - <code title="post /hooks/subscribe">client.hooks.<a href="./src/resources/hooks.ts">subscribe</a>({ ...params }) -> HookSubscribeResponse</code>
 - <code title="post /hooks/{hook_id}/unsubscribe">client.hooks.<a href="./src/resources/hooks.ts">unsubscribe</a>(hookID) -> HookUnsubscribeResponse</code>
 
