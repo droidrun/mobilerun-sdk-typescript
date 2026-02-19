@@ -4,6 +4,7 @@ export { Actions, type ActionGlobalParams, type ActionSwipeParams, type ActionTa
 export {
   Apps,
   type AppListResponse,
+  type AppUpdateParams,
   type AppListParams,
   type AppDeleteParams,
   type AppInstallParams,
@@ -13,8 +14,10 @@ export {
   Devices,
   type Device,
   type DeviceListResponse,
+  type DeviceCountResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceTerminateParams,
 } from './devices';
 export {
   Keyboard,

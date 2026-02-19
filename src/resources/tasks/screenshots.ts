@@ -7,7 +7,7 @@ import { path } from '../../internal/utils/path';
 
 export class Screenshots extends APIResource {
   /**
-   * Get Task Screenshot
+   * Get a specific screenshot by index.
    */
   retrieve(
     index: number,
@@ -19,7 +19,7 @@ export class Screenshots extends APIResource {
   }
 
   /**
-   * Get Task Screenshots
+   * List all screenshot URLs for a task.
    */
   list(taskID: string, options?: RequestOptions): APIPromise<ScreenshotListResponse> {
     return this._client.get(path`/tasks/${taskID}/screenshots`, options);

@@ -11,6 +11,7 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
@@ -21,6 +22,7 @@ import {
   HookGetSampleDataResponse,
   HookListParams,
   HookListResponse,
+  HookPerformParams,
   HookPerformResponse,
   HookRetrieveResponse,
   HookSubscribeParams,
@@ -30,18 +32,23 @@ import {
   HookUpdateResponse,
   Hooks,
 } from './resources/hooks';
-import { CredentialListResponse, Credentials } from './resources/credentials/credentials';
+import { ModelListResponse, Models } from './resources/models';
+import {
+  CredentialListParams,
+  CredentialListResponse,
+  Credentials,
+} from './resources/credentials/credentials';
 import {
   Device,
+  DeviceCountResponse,
   DeviceCreateParams,
   DeviceListParams,
   DeviceListResponse,
+  DeviceTerminateParams,
   Devices,
 } from './resources/devices/devices';
 import {
-  LlmModel,
   Task,
-  TaskCreate,
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
   TaskListParams,
@@ -253,24 +260,8 @@ export class Mobilerun {
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
-  /**
-   * Basic re-implementation of `qs.stringify` for primitive types.
-   */
   protected stringifyQuery(query: Record<string, unknown>): string {
-    return Object.entries(query)
-      .filter(([_, value]) => typeof value !== 'undefined')
-      .map(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-        if (value === null) {
-          return `${encodeURIComponent(key)}=`;
-        }
-        throw new Errors.MobilerunError(
-          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
-        );
-      })
-      .join('&');
+    return qs.stringify(query, { arrayFormat: 'comma' });
   }
 
   private getUserAgent(): string {
@@ -491,7 +482,7 @@ export class Mobilerun {
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
-      const errJSON = safeJSON(errText);
+      const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
       loggerFor(this).debug(
@@ -532,9 +523,10 @@ export class Mobilerun {
     controller: AbortController,
   ): Promise<Response> {
     const { signal, method, ...options } = init || {};
-    if (signal) signal.addEventListener('abort', () => controller.abort());
+    const abort = this._makeAbort(controller);
+    if (signal) signal.addEventListener('abort', abort, { once: true });
 
-    const timeout = setTimeout(() => controller.abort(), ms);
+    const timeout = setTimeout(abort, ms);
 
     const isReadableBody =
       ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
@@ -701,6 +693,12 @@ export class Mobilerun {
     return headers.values;
   }
 
+  private _makeAbort(controller: AbortController) {
+    // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
+    //       would capture all request options, and cause a memory leak.
+    return () => controller.abort();
+  }
+
   private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
@@ -733,6 +731,14 @@ export class Mobilerun {
         (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))
     ) {
       return { bodyHeaders: undefined, body: Shims.ReadableStreamFrom(body as AsyncIterable<Uint8Array>) };
+    } else if (
+      typeof body === 'object' &&
+      headers.values.get('content-type') === 'application/x-www-form-urlencoded'
+    ) {
+      return {
+        bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: this.stringifyQuery(body as Record<string, unknown>),
+      };
     } else {
       return this.#encoder({ body, headers });
     }
@@ -762,6 +768,7 @@ export class Mobilerun {
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
   hooks: API.Hooks = new API.Hooks(this);
+  models: API.Models = new API.Models(this);
 }
 
 Mobilerun.Tasks = Tasks;
@@ -769,15 +776,14 @@ Mobilerun.Devices = Devices;
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Hooks = Hooks;
+Mobilerun.Models = Models;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
 
   export {
     Tasks as Tasks,
-    type LlmModel as LlmModel,
     type Task as Task,
-    type TaskCreate as TaskCreate,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,
     type TaskListResponse as TaskListResponse,
@@ -794,13 +800,19 @@ export declare namespace Mobilerun {
     Devices as Devices,
     type Device as Device,
     type DeviceListResponse as DeviceListResponse,
+    type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
   };
 
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
 
-  export { Credentials as Credentials, type CredentialListResponse as CredentialListResponse };
+  export {
+    Credentials as Credentials,
+    type CredentialListResponse as CredentialListResponse,
+    type CredentialListParams as CredentialListParams,
+  };
 
   export {
     Hooks as Hooks,
@@ -813,6 +825,9 @@ export declare namespace Mobilerun {
     type HookUnsubscribeResponse as HookUnsubscribeResponse,
     type HookUpdateParams as HookUpdateParams,
     type HookListParams as HookListParams,
+    type HookPerformParams as HookPerformParams,
     type HookSubscribeParams as HookSubscribeParams,
   };
+
+  export { Models as Models, type ModelListResponse as ModelListResponse };
 }

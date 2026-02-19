@@ -73,8 +73,8 @@ describe('resource hooks', () => {
   });
 
   // Prism tests are disabled
-  test.skip('perform', async () => {
-    const responsePromise = client.hooks.perform();
+  test.skip('perform: only required params', async () => {
+    const responsePromise = client.hooks.perform({ body: { foo: 'bar' } });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -82,6 +82,11 @@ describe('resource hooks', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('perform: required and optional params', async () => {
+    const response = await client.hooks.perform({ body: { foo: 'bar' } });
   });
 
   // Prism tests are disabled

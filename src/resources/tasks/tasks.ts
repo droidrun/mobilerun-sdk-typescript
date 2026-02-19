@@ -15,24 +15,24 @@ export class Tasks extends APIResource {
   uiStates: UiStatesAPI.UiStates = new UiStatesAPI.UiStates(this._client);
 
   /**
-   * Get Task
+   * Get full details of a task by ID.
    */
   retrieve(taskID: string, options?: RequestOptions): APIPromise<TaskRetrieveResponse> {
     return this._client.get(path`/tasks/${taskID}`, options);
   }
 
   /**
-   * List all tasks you've created so far
+   * List tasks with optional filtering, sorting, and pagination.
    */
   list(
     query: TaskListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<TaskListResponse> {
-    return this._client.get('/tasks/', { query, ...options });
+    return this._client.get('/tasks', { query, ...options });
   }
 
   /**
-   * Attach Task
+   * Attach to a running task and receive its events as an SSE stream.
    */
   attach(taskID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.get(path`/tasks/${taskID}/attach`, {
@@ -42,8 +42,7 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * Get the status of a task. If device is provided, return the status of the
-   * specific device. Otherwise, return the status of all devices.
+   * Get the status of a task.
    */
   getStatus(taskID: string, options?: RequestOptions): APIPromise<TaskGetStatusResponse> {
     return this._client.get(path`/tasks/${taskID}/status`, options);
@@ -57,14 +56,16 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * Run Task
+   * Create and dispatch a new agent task. Returns the task ID and device stream
+   * details.
    */
   run(body: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
-    return this._client.post('/tasks/', { body, ...options });
+    return this._client.post('/tasks', { body, ...options });
   }
 
   /**
-   * Run Streamed Task
+   * Create and dispatch a new agent task, returning an SSE stream of task events.
+   * Cancels the task if the client disconnects.
    */
   runStreamed(body: TaskRunStreamedParams, options?: RequestOptions): APIPromise<void> {
     return this._client.post('/tasks/stream', {
@@ -75,27 +76,21 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * Stop Task
+   * Cancel a running task. Returns an error if the task is already in a terminal
+   * state.
    */
   stop(taskID: string, options?: RequestOptions): APIPromise<TaskStopResponse> {
     return this._client.post(path`/tasks/${taskID}/cancel`, options);
   }
 }
 
-export type LlmModel =
-  | 'openai/gpt-5'
-  | 'google/gemini-2.5-flash'
-  | 'google/gemini-2.5-pro'
-  | 'google/gemini-3-pro-preview'
-  | 'anthropic/claude-sonnet-4.5'
-  | 'minimax/minimax-m2'
-  | 'moonshotai/kimi-k2-thinking'
-  | 'qwen/qwen3-8b';
-
 export interface Task {
   deviceId: string;
 
-  llmModel: LlmModel;
+  /**
+   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+   */
+  llmModel: string;
 
   task: string;
 
@@ -108,6 +103,8 @@ export interface Task {
   createdAt?: string;
 
   credentials?: Array<Task.Credential>;
+
+  displayId?: number;
 
   executionTimeout?: number;
 
@@ -125,11 +122,15 @@ export interface Task {
 
   status?: TaskStatus;
 
+  stealth?: boolean;
+
   steps?: number | null;
 
   succeeded?: boolean | null;
 
   temperature?: number;
+
+  tmpDevice?: boolean;
 
   trajectory?: Array<{ [key: string]: unknown }>;
 
@@ -141,50 +142,6 @@ export interface Task {
 }
 
 export namespace Task {
-  export interface Credential {
-    credentialNames: Array<string>;
-
-    packageName: string;
-  }
-}
-
-export interface TaskCreate {
-  llmModel: LlmModel;
-
-  task: string;
-
-  apps?: Array<string>;
-
-  credentials?: Array<TaskCreate.Credential>;
-
-  /**
-   * The ID of the device to run the task on.
-   */
-  deviceId?: string | null;
-
-  /**
-   * The display ID of the device to run the task on.
-   */
-  displayId?: number;
-
-  executionTimeout?: number;
-
-  files?: Array<string>;
-
-  maxSteps?: number;
-
-  outputSchema?: { [key: string]: unknown } | null;
-
-  reasoning?: boolean;
-
-  temperature?: number;
-
-  vision?: boolean;
-
-  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
-}
-
-export namespace TaskCreate {
   export interface Credential {
     credentialNames: Array<string>;
 
@@ -274,26 +231,15 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryManagerPlanEvent
     | TaskGetTrajectoryResponse.TrajectoryExecutorInputEvent
     | TaskGetTrajectoryResponse.TrajectoryExecutorResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryScripterExecutorInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryScripterExecutorResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryPlanCreatedEvent
-    | TaskGetTrajectoryResponse.TrajectoryPlanInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryPlanThinkingEvent
-    | TaskGetTrajectoryResponse.TrajectoryCodeActInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryCodeActResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryCodeActCodeEvent
-    | TaskGetTrajectoryResponse.TrajectoryCodeActOutputEvent
-    | TaskGetTrajectoryResponse.TrajectoryCodeActEndEvent
-    | TaskGetTrajectoryResponse.TrajectoryCodeActExecuteEvent
-    | TaskGetTrajectoryResponse.TrajectoryCodeActResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryTapActionEvent
-    | TaskGetTrajectoryResponse.TrajectorySwipeActionEvent
-    | TaskGetTrajectoryResponse.TrajectoryDragActionEvent
-    | TaskGetTrajectoryResponse.TrajectoryInputTextActionEvent
-    | TaskGetTrajectoryResponse.TrajectoryKeyPressActionEvent
-    | TaskGetTrajectoryResponse.TrajectoryStartAppEvent
+    | TaskGetTrajectoryResponse.TrajectoryFastAgentInputEvent
+    | TaskGetTrajectoryResponse.TrajectoryFastAgentResponseEvent
+    | TaskGetTrajectoryResponse.TrajectoryFastAgentToolCallEvent
+    | TaskGetTrajectoryResponse.TrajectoryFastAgentOutputEvent
+    | TaskGetTrajectoryResponse.TrajectoryFastAgentEndEvent
+    | TaskGetTrajectoryResponse.TrajectoryFastAgentExecuteEvent
+    | TaskGetTrajectoryResponse.TrajectoryFastAgentResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryToolExecutionEvent
     | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent
-    | TaskGetTrajectoryResponse.TrajectoryWaitEvent
     | TaskGetTrajectoryResponse.TrajectoryManagerContextEvent
     | TaskGetTrajectoryResponse.TrajectoryManagerResponseEvent
     | TaskGetTrajectoryResponse.TrajectoryManagerPlanDetailsEvent
@@ -301,13 +247,7 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent
     | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent
     | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryScripterInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryScripterThinkingEvent
-    | TaskGetTrajectoryResponse.TrajectoryScripterExecutionEvent
-    | TaskGetTrajectoryResponse.TrajectoryScripterExecutionResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryScripterEndEvent
-    | TaskGetTrajectoryResponse.TrajectoryTextManipulatorInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryTextManipulatorResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryUnknownEvent
   >;
 }
 
@@ -422,9 +362,31 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryResultEvent {
-    data: { [key: string]: unknown };
+    /**
+     * Lazy wrapper — avoids importing droidrun at module level.
+     *
+     * The worker uses droidrun's ResultEvent directly; this model only exists so the
+     * API OpenAPI schema can reference it without the heavy droidrun import.
+     */
+    data: TrajectoryResultEvent.Data;
 
     event: 'ResultEvent';
+  }
+
+  export namespace TrajectoryResultEvent {
+    /**
+     * Lazy wrapper — avoids importing droidrun at module level.
+     *
+     * The worker uses droidrun's ResultEvent directly; this model only exists so the
+     * API OpenAPI schema can reference it without the heavy droidrun import.
+     */
+    export interface Data {
+      steps?: number | null;
+
+      structured_output?: { [key: string]: unknown } | null;
+
+      success?: boolean | null;
+    }
   }
 
   export interface TrajectoryManagerInputEvent {
@@ -462,7 +424,7 @@ export namespace TaskGetTrajectoryResponse {
 
       thought: string;
 
-      manager_answer?: string;
+      answer?: string;
 
       success?: boolean | null;
     }
@@ -510,85 +472,25 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
-  export interface TrajectoryScripterExecutorInputEvent {
-    /**
-     * Trigger ScripterAgent workflow for off-device operations
-     */
-    data: TrajectoryScripterExecutorInputEvent.Data;
-
-    event: 'ScripterExecutorInputEvent';
-  }
-
-  export namespace TrajectoryScripterExecutorInputEvent {
-    /**
-     * Trigger ScripterAgent workflow for off-device operations
-     */
-    export interface Data {
-      task: string;
-    }
-  }
-
-  export interface TrajectoryScripterExecutorResultEvent {
-    /**
-     * Scripter finished.
-     */
-    data: TrajectoryScripterExecutorResultEvent.Data;
-
-    event: 'ScripterExecutorResultEvent';
-  }
-
-  export namespace TrajectoryScripterExecutorResultEvent {
-    /**
-     * Scripter finished.
-     */
-    export interface Data {
-      code_executions: number;
-
-      message: string;
-
-      success: boolean;
-
-      task: string;
-    }
-  }
-
-  export interface TrajectoryPlanCreatedEvent {
-    data: { [key: string]: unknown };
-
-    event: 'PlanCreatedEvent';
-  }
-
-  export interface TrajectoryPlanInputEvent {
-    data: { [key: string]: unknown };
-
-    event: 'PlanInputEvent';
-  }
-
-  export interface TrajectoryPlanThinkingEvent {
-    data: { [key: string]: unknown };
-
-    event: 'PlanThinkingEvent';
-  }
-
-  export interface TrajectoryCodeActInputEvent {
+  export interface TrajectoryFastAgentInputEvent {
     /**
      * Input ready for LLM.
      */
     data: unknown;
 
-    event: 'CodeActInputEvent';
+    event: 'FastAgentInputEvent';
   }
 
-  export interface TrajectoryCodeActResponseEvent {
+  export interface TrajectoryFastAgentResponseEvent {
     /**
      * LLM response received.
      */
-    data: TrajectoryCodeActResponseEvent.Data;
+    data: TrajectoryFastAgentResponseEvent.Data;
 
-    event: 'CodeActResponseEvent';
+    event: 'FastAgentResponseEvent';
   }
 
-  export namespace TrajectoryCodeActResponseEvent {
+  export namespace TrajectoryFastAgentResponseEvent {
     /**
      * LLM response received.
      */
@@ -613,83 +515,83 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
-  export interface TrajectoryCodeActCodeEvent {
+  export interface TrajectoryFastAgentToolCallEvent {
     /**
-     * Code ready to execute (internal event).
+     * Tool calls ready to execute.
      */
-    data: TrajectoryCodeActCodeEvent.Data;
+    data: TrajectoryFastAgentToolCallEvent.Data;
 
-    event: 'CodeActCodeEvent';
+    event: 'FastAgentToolCallEvent';
   }
 
-  export namespace TrajectoryCodeActCodeEvent {
+  export namespace TrajectoryFastAgentToolCallEvent {
     /**
-     * Code ready to execute (internal event).
+     * Tool calls ready to execute.
      */
     export interface Data {
-      code: string;
+      tool_calls_repr: string;
     }
   }
 
-  export interface TrajectoryCodeActOutputEvent {
+  export interface TrajectoryFastAgentOutputEvent {
     /**
-     * Code execution result (internal event).
+     * Tool execution result.
      */
-    data: TrajectoryCodeActOutputEvent.Data;
+    data: TrajectoryFastAgentOutputEvent.Data;
 
-    event: 'CodeActOutputEvent';
+    event: 'FastAgentOutputEvent';
   }
 
-  export namespace TrajectoryCodeActOutputEvent {
+  export namespace TrajectoryFastAgentOutputEvent {
     /**
-     * Code execution result (internal event).
+     * Tool execution result.
      */
     export interface Data {
       output: string;
     }
   }
 
-  export interface TrajectoryCodeActEndEvent {
+  export interface TrajectoryFastAgentEndEvent {
     /**
-     * CodeAct finished.
+     * FastAgent finished.
      */
-    data: TrajectoryCodeActEndEvent.Data;
+    data: TrajectoryFastAgentEndEvent.Data;
 
-    event: 'CodeActEndEvent';
+    event: 'FastAgentEndEvent';
   }
 
-  export namespace TrajectoryCodeActEndEvent {
+  export namespace TrajectoryFastAgentEndEvent {
     /**
-     * CodeAct finished.
+     * FastAgent finished.
      */
     export interface Data {
       reason: string;
 
       success: boolean;
 
-      code_executions?: number;
+      tool_call_count?: number;
     }
   }
 
-  export interface TrajectoryCodeActExecuteEvent {
-    data: TrajectoryCodeActExecuteEvent.Data;
+  export interface TrajectoryFastAgentExecuteEvent {
+    data: TrajectoryFastAgentExecuteEvent.Data;
 
-    event: 'CodeActExecuteEvent';
+    event: 'FastAgentExecuteEvent';
   }
 
-  export namespace TrajectoryCodeActExecuteEvent {
+  export namespace TrajectoryFastAgentExecuteEvent {
     export interface Data {
       instruction: string;
     }
   }
 
-  export interface TrajectoryCodeActResultEvent {
-    data: TrajectoryCodeActResultEvent.Data;
+  export interface TrajectoryFastAgentResultEvent {
+    data: TrajectoryFastAgentResultEvent.Data;
 
-    event: 'CodeActResultEvent';
+    event: 'FastAgentResultEvent';
   }
 
-  export namespace TrajectoryCodeActResultEvent {
+  export namespace TrajectoryFastAgentResultEvent {
     export interface Data {
       instruction: string;
 
@@ -699,163 +601,27 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
-  export interface TrajectoryTapActionEvent {
+  export interface TrajectoryToolExecutionEvent {
     /**
-     * Event for tap actions with coordinates
+     * Emitted after every tool call dispatched through ToolRegistry.
      */
-    data: TrajectoryTapActionEvent.Data;
+    data: TrajectoryToolExecutionEvent.Data;
 
-    event: 'TapActionEvent';
+    event: 'ToolExecutionEvent';
   }
 
-  export namespace TrajectoryTapActionEvent {
+  export namespace TrajectoryToolExecutionEvent {
     /**
-     * Event for tap actions with coordinates
+     * Emitted after every tool call dispatched through ToolRegistry.
      */
     export interface Data {
-      action_type: string;
+      success: boolean;
 
-      description: string;
+      summary: string;
 
-      x: number;
+      tool_args: { [key: string]: unknown };
 
-      y: number;
-
-      element_bounds?: string;
-
-      element_index?: number | null;
-
-      element_text?: string;
-    }
-  }
-
-  export interface TrajectorySwipeActionEvent {
-    /**
-     * Event for swipe actions with coordinates
-     */
-    data: TrajectorySwipeActionEvent.Data;
-
-    event: 'SwipeActionEvent';
-  }
-
-  export namespace TrajectorySwipeActionEvent {
-    /**
-     * Event for swipe actions with coordinates
-     */
-    export interface Data {
-      action_type: string;
-
-      description: string;
-
-      duration_ms: number;
-
-      end_x: number;
-
-      end_y: number;
-
-      start_x: number;
-
-      start_y: number;
-    }
-  }
-
-  export interface TrajectoryDragActionEvent {
-    /**
-     * Event for drag actions with coordinates
-     */
-    data: TrajectoryDragActionEvent.Data;
-
-    event: 'DragActionEvent';
-  }
-
-  export namespace TrajectoryDragActionEvent {
-    /**
-     * Event for drag actions with coordinates
-     */
-    export interface Data {
-      action_type: string;
-
-      description: string;
-
-      duration_ms: number;
-
-      end_x: number;
-
-      end_y: number;
-
-      start_x: number;
-
-      start_y: number;
-    }
-  }
-
-  export interface TrajectoryInputTextActionEvent {
-    /**
-     * Event for text input actions
-     */
-    data: TrajectoryInputTextActionEvent.Data;
-
-    event: 'InputTextActionEvent';
-  }
-
-  export namespace TrajectoryInputTextActionEvent {
-    /**
-     * Event for text input actions
-     */
-    export interface Data {
-      action_type: string;
-
-      description: string;
-
-      text: string;
-    }
-  }
-
-  export interface TrajectoryKeyPressActionEvent {
-    /**
-     * Event for key press actions
-     */
-    data: TrajectoryKeyPressActionEvent.Data;
-
-    event: 'KeyPressActionEvent';
-  }
-
-  export namespace TrajectoryKeyPressActionEvent {
-    /**
-     * Event for key press actions
-     */
-    export interface Data {
-      action_type: string;
-
-      description: string;
-
-      keycode: number;
-
-      key_name?: string;
-    }
-  }
-
-  export interface TrajectoryStartAppEvent {
-    /**
-     * "Event for starting an app
-     */
-    data: TrajectoryStartAppEvent.Data;
-
-    event: 'StartAppEvent';
-  }
-
-  export namespace TrajectoryStartAppEvent {
-    /**
-     * "Event for starting an app
-     */
-    export interface Data {
-      action_type: string;
-
-      description: string;
-
-      package: string;
-
-      activity?: string | null;
+      tool_name: string;
     }
   }
 
@@ -870,28 +636,6 @@ export namespace TaskGetTrajectoryResponse {
       index: number;
 
       url: string;
-    }
-  }
-
-  export interface TrajectoryWaitEvent {
-    /**
-     * Event for wait/sleep actions
-     */
-    data: TrajectoryWaitEvent.Data;
-
-    event: 'WaitEvent';
-  }
-
-  export namespace TrajectoryWaitEvent {
-    /**
-     * Event for wait/sleep actions
-     */
-    export interface Data {
-      action_type: string;
-
-      description: string;
-
-      duration: number;
     }
   }
 
@@ -1070,141 +814,10 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
-  export interface TrajectoryScripterInputEvent {
-    /**
-     * Input ready for LLM.
-     */
-    data: unknown;
+  export interface TrajectoryUnknownEvent {
+    event: string;
 
-    event: 'ScripterInputEvent';
-  }
-
-  export interface TrajectoryScripterThinkingEvent {
-    /**
-     * LLM response received.
-     */
-    data: TrajectoryScripterThinkingEvent.Data;
-
-    event: 'ScripterThinkingEvent';
-  }
-
-  export namespace TrajectoryScripterThinkingEvent {
-    /**
-     * LLM response received.
-     */
-    export interface Data {
-      thought: string;
-
-      code?: string | null;
-
-      full_response?: string;
-
-      usage?: Data.Usage | null;
-    }
-
-    export namespace Data {
-      export interface Usage {
-        request_tokens: number;
-
-        requests: number;
-
-        response_tokens: number;
-
-        total_tokens: number;
-      }
-    }
-  }
-
-  export interface TrajectoryScripterExecutionEvent {
-    /**
-     * Code ready to execute.
-     */
-    data: TrajectoryScripterExecutionEvent.Data;
-
-    event: 'ScripterExecutionEvent';
-  }
-
-  export namespace TrajectoryScripterExecutionEvent {
-    /**
-     * Code ready to execute.
-     */
-    export interface Data {
-      code: string;
-    }
-  }
-
-  export interface TrajectoryScripterExecutionResultEvent {
-    /**
-     * Code execution result.
-     */
-    data: TrajectoryScripterExecutionResultEvent.Data;
-
-    event: 'ScripterExecutionResultEvent';
-  }
-
-  export namespace TrajectoryScripterExecutionResultEvent {
-    /**
-     * Code execution result.
-     */
-    export interface Data {
-      output: string;
-    }
-  }
-
-  export interface TrajectoryScripterEndEvent {
-    /**
-     * Scripter finished.
-     */
-    data: TrajectoryScripterEndEvent.Data;
-
-    event: 'ScripterEndEvent';
-  }
-
-  export namespace TrajectoryScripterEndEvent {
-    /**
-     * Scripter finished.
-     */
-    export interface Data {
-      message: string;
-
-      success: boolean;
-
-      code_executions?: number;
-    }
-  }
-
-  export interface TrajectoryTextManipulatorInputEvent {
-    /**
-     * Trigger TextManipulatorAgent workflow for text manipulation
-     */
-    data: TrajectoryTextManipulatorInputEvent.Data;
-
-    event: 'TextManipulatorInputEvent';
-  }
-
-  export namespace TrajectoryTextManipulatorInputEvent {
-    /**
-     * Trigger TextManipulatorAgent workflow for text manipulation
-     */
-    export interface Data {
-      task: string;
-    }
-  }
-
-  export interface TrajectoryTextManipulatorResultEvent {
-    data: TrajectoryTextManipulatorResultEvent.Data;
-
-    event: 'TextManipulatorResultEvent';
-  }
-
-  export namespace TrajectoryTextManipulatorResultEvent {
-    export interface Data {
-      code_ran: string;
-
-      task: string;
-
-      text_to_type: string;
-    }
+    data?: { [key: string]: unknown };
   }
 }
 
@@ -1256,7 +869,10 @@ export interface TaskListParams {
 }
 
 export interface TaskRunParams {
-  llmModel: LlmModel;
+  /**
+   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+   */
+  llmModel: string;
 
   task: string;
 
@@ -1284,6 +900,8 @@ export interface TaskRunParams {
 
   reasoning?: boolean;
 
+  stealth?: boolean;
+
   temperature?: number;
 
   vision?: boolean;
@@ -1300,7 +918,10 @@ export namespace TaskRunParams {
 }
 
 export interface TaskRunStreamedParams {
-  llmModel: LlmModel;
+  /**
+   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+   */
+  llmModel: string;
 
   task: string;
 
@@ -1328,6 +949,8 @@ export interface TaskRunStreamedParams {
 
   reasoning?: boolean;
 
+  stealth?: boolean;
+
   temperature?: number;
 
   vision?: boolean;
@@ -1348,9 +971,7 @@ Tasks.UiStates = UiStates;
 
 export declare namespace Tasks {
   export {
-    type LlmModel as LlmModel,
     type Task as Task,
-    type TaskCreate as TaskCreate,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,
     type TaskListResponse as TaskListResponse,

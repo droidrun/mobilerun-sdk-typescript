@@ -10,6 +10,7 @@ import {
   AppListParams,
   AppListResponse,
   AppStartParams,
+  AppUpdateParams,
   Apps,
 } from './apps';
 import * as KeyboardAPI from './keyboard';
@@ -67,10 +68,18 @@ export class Devices extends APIResource {
   }
 
   /**
+   * Count claimed devices
+   */
+  count(options?: RequestOptions): APIPromise<DeviceCountResponse> {
+    return this._client.get('/devices/count', options);
+  }
+
+  /**
    * Terminate a device
    */
-  terminate(deviceID: string, options?: RequestOptions): APIPromise<void> {
+  terminate(deviceID: string, body: DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/devices/${deviceID}`, {
+      body,
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -113,6 +122,8 @@ export interface Device {
 
   taskCount: number;
 
+  terminatesAt: string | null;
+
   updatedAt: string;
 
   /**
@@ -150,39 +161,45 @@ export namespace DeviceListResponse {
   }
 }
 
+export type DeviceCountResponse = { [key: string]: number };
+
 export interface DeviceCreateParams {
   /**
-   * Query param:
+   * Query param
    */
-  deviceType?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
+  deviceType?:
+    | 'device_slot'
+    | 'dedicated_emulated_device'
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device';
 
   /**
-   * Query param:
+   * Query param
    */
-  provider?: 'limrun' | 'remote' | 'roidrun';
+  provider?: 'limrun' | 'physical' | 'premium' | 'roidrun';
 
   /**
-   * Body param:
+   * Body param
    */
   apps?: Array<string> | null;
 
   /**
-   * Body param:
+   * Body param
    */
   country?: string;
 
   /**
-   * Body param:
+   * Body param
    */
   files?: Array<string> | null;
 
   /**
-   * Body param:
+   * Body param
    */
   name?: string;
 
   /**
-   * Body param:
+   * Body param
    */
   proxy?: DeviceCreateParams.Proxy;
 }
@@ -214,9 +231,15 @@ export interface DeviceListParams {
 
   provider?: 'limrun' | 'personal' | 'remote' | 'roidrun';
 
-  state?: 'creating' | 'assigned' | 'ready' | 'terminated' | 'unknown';
+  state?: Array<'creating' | 'assigned' | 'ready' | 'disconnected' | 'terminated' | 'unknown'> | null;
 
   type?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
+}
+
+export interface DeviceTerminateParams {
+  previousDeviceId?: string;
+
+  terminateAt?: string;
 }
 
 Devices.Actions = Actions;
@@ -230,8 +253,10 @@ export declare namespace Devices {
   export {
     type Device as Device,
     type DeviceListResponse as DeviceListResponse,
+    type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
   };
 
   export {
@@ -254,6 +279,7 @@ export declare namespace Devices {
   export {
     Apps as Apps,
     type AppListResponse as AppListResponse,
+    type AppUpdateParams as AppUpdateParams,
     type AppListParams as AppListParams,
     type AppDeleteParams as AppDeleteParams,
     type AppInstallParams as AppInstallParams,

@@ -57,7 +57,7 @@ describe('resource devices', () => {
           page: 0,
           pageSize: 0,
           provider: 'limrun',
-          state: 'creating',
+          state: ['creating'],
           type: 'device_slot',
         },
         { path: '/_stainless_unknown_path' },
@@ -66,8 +66,20 @@ describe('resource devices', () => {
   });
 
   // Prism tests are disabled
+  test.skip('count', async () => {
+    const responsePromise = client.devices.count();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
   test.skip('terminate', async () => {
-    const responsePromise = client.devices.terminate('deviceId');
+    const responsePromise = client.devices.terminate('deviceId', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
