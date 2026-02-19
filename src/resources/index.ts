@@ -32,8 +32,10 @@ export {
 export { Models, type ModelListResponse } from './models';
 export {
   Tasks,
+  type PackageCredentials,
   type Task,
   type TaskStatus,
+  type UsageResult,
   type TaskRetrieveResponse,
   type TaskListResponse,
   type TaskGetStatusResponse,

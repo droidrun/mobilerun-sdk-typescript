@@ -2,8 +2,10 @@
 
 Types:
 
+- <code><a href="./src/resources/tasks/tasks.ts">PackageCredentials</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">Task</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskStatus</a></code>
+- <code><a href="./src/resources/tasks/tasks.ts">UsageResult</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskRetrieveResponse</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskListResponse</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskGetStatusResponse</a></code>
