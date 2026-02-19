@@ -1,6 +1,6 @@
 {
   "name": "@mobilerun/sdk",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "The official TypeScript library for the Mobilerun API",
   "author": "Mobilerun <support@droidrun.ai>",
   "types": "dist/index.d.ts",

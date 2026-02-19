@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.2.0 (2026-02-19)
+
+Full Changelog: [v2.1.0...v2.2.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v2.1.0...v2.2.0)
+
+### Features
+
+* **api:** manual updates ([de892a6](https://github.com/droidrun/mobilerun-sdk-typescript/commit/de892a61a46e9d41f7da969e755e265e7aebd685))
+* **api:** manual updates ([701b8ba](https://github.com/droidrun/mobilerun-sdk-typescript/commit/701b8ba74b7ecf57e325c8384ac544423a4cc571))
+* trigger on main pull request ([a6c5df1](https://github.com/droidrun/mobilerun-sdk-typescript/commit/a6c5df14ca4cae112807e078910b39ad4fd5ec2a))
+
 ## 2.1.0 (2026-02-19)
 
 Full Changelog: [v2.0.0...v2.1.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v2.0.0...v2.1.0)

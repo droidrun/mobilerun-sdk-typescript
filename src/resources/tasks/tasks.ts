@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as TasksAPI from './tasks';
 import * as ScreenshotsAPI from './screenshots';
 import { MediaResponse, ScreenshotListResponse, ScreenshotRetrieveParams, Screenshots } from './screenshots';
 import * as UiStatesAPI from './ui-states';
@@ -84,6 +85,12 @@ export class Tasks extends APIResource {
   }
 }
 
+export interface PackageCredentials {
+  credentialNames: Array<string>;
+
+  packageName: string;
+}
+
 export interface Task {
   deviceId: string;
 
@@ -102,7 +109,7 @@ export interface Task {
 
   createdAt?: string;
 
-  credentials?: Array<Task.Credential>;
+  credentials?: Array<PackageCredentials>;
 
   displayId?: number;
 
@@ -141,15 +148,17 @@ export interface Task {
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
 }
 
-export namespace Task {
-  export interface Credential {
-    credentialNames: Array<string>;
-
-    packageName: string;
-  }
-}
-
 export type TaskStatus = 'created' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
+
+export interface UsageResult {
+  request_tokens: number;
+
+  requests: number;
+
+  response_tokens: number;
+
+  total_tokens: number;
+}
 
 export interface TaskRetrieveResponse {
   /**
@@ -499,19 +508,7 @@ export namespace TaskGetTrajectoryResponse {
 
       code?: string | null;
 
-      usage?: Data.Usage | null;
-    }
-
-    export namespace Data {
-      export interface Usage {
-        request_tokens: number;
-
-        requests: number;
-
-        response_tokens: number;
-
-        total_tokens: number;
-      }
+      usage?: TasksAPI.UsageResult | null;
     }
   }
 
@@ -664,19 +661,7 @@ export namespace TaskGetTrajectoryResponse {
     export interface Data {
       response: string;
 
-      usage?: Data.Usage | null;
-    }
-
-    export namespace Data {
-      export interface Usage {
-        request_tokens: number;
-
-        requests: number;
-
-        response_tokens: number;
-
-        total_tokens: number;
-      }
+      usage?: TasksAPI.UsageResult | null;
     }
   }
 
@@ -746,19 +731,7 @@ export namespace TaskGetTrajectoryResponse {
     export interface Data {
       response: string;
 
-      usage?: Data.Usage | null;
-    }
-
-    export namespace Data {
-      export interface Usage {
-        request_tokens: number;
-
-        requests: number;
-
-        response_tokens: number;
-
-        total_tokens: number;
-      }
+      usage?: TasksAPI.UsageResult | null;
     }
   }
 
@@ -878,7 +851,7 @@ export interface TaskRunParams {
 
   apps?: Array<string>;
 
-  credentials?: Array<TaskRunParams.Credential>;
+  credentials?: Array<PackageCredentials>;
 
   /**
    * The ID of the device to run the task on.
@@ -907,14 +880,6 @@ export interface TaskRunParams {
   vision?: boolean;
 
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
-}
-
-export namespace TaskRunParams {
-  export interface Credential {
-    credentialNames: Array<string>;
-
-    packageName: string;
-  }
 }
 
 export interface TaskRunStreamedParams {
@@ -927,7 +892,7 @@ export interface TaskRunStreamedParams {
 
   apps?: Array<string>;
 
-  credentials?: Array<TaskRunStreamedParams.Credential>;
+  credentials?: Array<PackageCredentials>;
 
   /**
    * The ID of the device to run the task on.
@@ -958,21 +923,15 @@ export interface TaskRunStreamedParams {
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
 }
 
-export namespace TaskRunStreamedParams {
-  export interface Credential {
-    credentialNames: Array<string>;
-
-    packageName: string;
-  }
-}
-
 Tasks.Screenshots = Screenshots;
 Tasks.UiStates = UiStates;
 
 export declare namespace Tasks {
   export {
+    type PackageCredentials as PackageCredentials,
     type Task as Task,
     type TaskStatus as TaskStatus,
+    type UsageResult as UsageResult,
     type TaskRetrieveResponse as TaskRetrieveResponse,
     type TaskListResponse as TaskListResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,

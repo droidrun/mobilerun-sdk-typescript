@@ -5,7 +5,11 @@ on:
     branches:
       - next
       - main
-
+  pull_request:
+    types: [closed]
+    branches:
+      - main  
+      
 jobs:
   build:
     name: Build Docker-MCP (${{ matrix.environment }})
