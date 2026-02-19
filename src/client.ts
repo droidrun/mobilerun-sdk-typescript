@@ -48,6 +48,7 @@ import {
   Devices,
 } from './resources/devices/devices';
 import {
+  PackageCredentials,
   Task,
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
@@ -60,6 +61,7 @@ import {
   TaskStatus,
   TaskStopResponse,
   Tasks,
+  UsageResult,
 } from './resources/tasks/tasks';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -783,8 +785,10 @@ export declare namespace Mobilerun {
 
   export {
     Tasks as Tasks,
+    type PackageCredentials as PackageCredentials,
     type Task as Task,
     type TaskStatus as TaskStatus,
+    type UsageResult as UsageResult,
     type TaskRetrieveResponse as TaskRetrieveResponse,
     type TaskListResponse as TaskListResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,
