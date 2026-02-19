@@ -8,7 +8,7 @@ import { path } from '../../internal/utils/path';
 
 export class UiStates extends APIResource {
   /**
-   * Get Task Ui State
+   * Get a specific UI state by index.
    */
   retrieve(
     index: number,
@@ -20,7 +20,7 @@ export class UiStates extends APIResource {
   }
 
   /**
-   * Get Task Ui States
+   * List all UI state URLs for a task.
    */
   list(taskID: string, options?: RequestOptions): APIPromise<UiStateListResponse> {
     return this._client.get(path`/tasks/${taskID}/ui_states`, options);

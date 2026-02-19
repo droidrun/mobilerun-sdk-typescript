@@ -43,8 +43,9 @@ export class Hooks extends APIResource {
   /**
    * Zapier Perform endpoint - processes webhook payloads.
    */
-  perform(options?: RequestOptions): APIPromise<HookPerformResponse> {
-    return this._client.post('/hooks/perform', options);
+  perform(params: HookPerformParams, options?: RequestOptions): APIPromise<HookPerformResponse> {
+    const { body } = params;
+    return this._client.post('/hooks/perform', { body: body, ...options });
   }
 
   /**
@@ -287,6 +288,10 @@ export interface HookListParams {
   pageSize?: number;
 }
 
+export interface HookPerformParams {
+  body: { [key: string]: unknown };
+}
+
 export interface HookSubscribeParams {
   /**
    * The webhook URL to send notifications to
@@ -316,6 +321,7 @@ export declare namespace Hooks {
     type HookUnsubscribeResponse as HookUnsubscribeResponse,
     type HookUpdateParams as HookUpdateParams,
     type HookListParams as HookListParams,
+    type HookPerformParams as HookPerformParams,
     type HookSubscribeParams as HookSubscribeParams,
   };
 }

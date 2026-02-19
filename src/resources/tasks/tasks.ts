@@ -15,14 +15,14 @@ export class Tasks extends APIResource {
   uiStates: UiStatesAPI.UiStates = new UiStatesAPI.UiStates(this._client);
 
   /**
-   * Get Task
+   * Get full details of a task by ID.
    */
   retrieve(taskID: string, options?: RequestOptions): APIPromise<TaskRetrieveResponse> {
     return this._client.get(path`/tasks/${taskID}`, options);
   }
 
   /**
-   * List all tasks you've created so far
+   * List tasks with optional filtering, sorting, and pagination.
    */
   list(
     query: TaskListParams | null | undefined = {},
@@ -32,7 +32,7 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * Attach Task
+   * Attach to a running task and receive its events as an SSE stream.
    */
   attach(taskID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.get(path`/tasks/${taskID}/attach`, {
@@ -56,14 +56,16 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * Run Task
+   * Create and dispatch a new agent task. Returns the task ID and device stream
+   * details.
    */
   run(body: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
     return this._client.post('/tasks', { body, ...options });
   }
 
   /**
-   * Run Streamed Task
+   * Create and dispatch a new agent task, returning an SSE stream of task events.
+   * Cancels the task if the client disconnects.
    */
   runStreamed(body: TaskRunStreamedParams, options?: RequestOptions): APIPromise<void> {
     return this._client.post('/tasks/stream', {
@@ -74,29 +76,21 @@ export class Tasks extends APIResource {
   }
 
   /**
-   * Stop Task
+   * Cancel a running task. Returns an error if the task is already in a terminal
+   * state.
    */
   stop(taskID: string, options?: RequestOptions): APIPromise<TaskStopResponse> {
     return this._client.post(path`/tasks/${taskID}/cancel`, options);
   }
 }
 
-export type LlmModel =
-  | 'openai/gpt-5.1'
-  | 'openai/gpt-5.2'
-  | 'google/gemini-2.5-flash'
-  | 'google/gemini-2.5-pro'
-  | 'google/gemini-3-flash'
-  | 'google/gemini-3-pro-preview'
-  | 'anthropic/claude-sonnet-4.5'
-  | 'minimax/minimax-m2'
-  | 'moonshotai/kimi-k2-thinking'
-  | 'qwen/qwen3-8b';
-
 export interface Task {
   deviceId: string;
 
-  llmModel: LlmModel;
+  /**
+   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+   */
+  llmModel: string;
 
   task: string;
 
@@ -875,7 +869,10 @@ export interface TaskListParams {
 }
 
 export interface TaskRunParams {
-  llmModel: LlmModel;
+  /**
+   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+   */
+  llmModel: string;
 
   task: string;
 
@@ -921,7 +918,10 @@ export namespace TaskRunParams {
 }
 
 export interface TaskRunStreamedParams {
-  llmModel: LlmModel;
+  /**
+   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+   */
+  llmModel: string;
 
   task: string;
 
@@ -971,7 +971,6 @@ Tasks.UiStates = UiStates;
 
 export declare namespace Tasks {
   export {
-    type LlmModel as LlmModel,
     type Task as Task,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,

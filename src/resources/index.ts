@@ -26,12 +26,12 @@ export {
   type HookUnsubscribeResponse,
   type HookUpdateParams,
   type HookListParams,
+  type HookPerformParams,
   type HookSubscribeParams,
 } from './hooks';
 export { Models, type ModelListResponse } from './models';
 export {
   Tasks,
-  type LlmModel,
   type Task,
   type TaskStatus,
   type TaskRetrieveResponse,

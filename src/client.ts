@@ -22,6 +22,7 @@ import {
   HookGetSampleDataResponse,
   HookListParams,
   HookListResponse,
+  HookPerformParams,
   HookPerformResponse,
   HookRetrieveResponse,
   HookSubscribeParams,
@@ -47,7 +48,6 @@ import {
   Devices,
 } from './resources/devices/devices';
 import {
-  LlmModel,
   Task,
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
@@ -783,7 +783,6 @@ export declare namespace Mobilerun {
 
   export {
     Tasks as Tasks,
-    type LlmModel as LlmModel,
     type Task as Task,
     type TaskStatus as TaskStatus,
     type TaskRetrieveResponse as TaskRetrieveResponse,
@@ -826,6 +825,7 @@ export declare namespace Mobilerun {
     type HookUnsubscribeResponse as HookUnsubscribeResponse,
     type HookUpdateParams as HookUpdateParams,
     type HookListParams as HookListParams,
+    type HookPerformParams as HookPerformParams,
     type HookSubscribeParams as HookSubscribeParams,
   };
 

@@ -88,7 +88,7 @@ describe('resource tasks', () => {
 
   // Prism tests are disabled
   test.skip('run: only required params', async () => {
-    const responsePromise = client.tasks.run({ llmModel: 'openai/gpt-5.1', task: 'x' });
+    const responsePromise = client.tasks.run({ llmModel: 'llmModel', task: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -101,7 +101,7 @@ describe('resource tasks', () => {
   // Prism tests are disabled
   test.skip('run: required and optional params', async () => {
     const response = await client.tasks.run({
-      llmModel: 'openai/gpt-5.1',
+      llmModel: 'llmModel',
       task: 'x',
       apps: ['string'],
       credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
@@ -121,7 +121,7 @@ describe('resource tasks', () => {
 
   // Prism tests are disabled
   test.skip('runStreamed: only required params', async () => {
-    const responsePromise = client.tasks.runStreamed({ llmModel: 'openai/gpt-5.1', task: 'x' });
+    const responsePromise = client.tasks.runStreamed({ llmModel: 'llmModel', task: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -134,7 +134,7 @@ describe('resource tasks', () => {
   // Prism tests are disabled
   test.skip('runStreamed: required and optional params', async () => {
     const response = await client.tasks.runStreamed({
-      llmModel: 'openai/gpt-5.1',
+      llmModel: 'llmModel',
       task: 'x',
       apps: ['string'],
       credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
