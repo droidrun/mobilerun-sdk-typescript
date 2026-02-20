@@ -176,7 +176,7 @@ export interface DeviceCreateParams {
   /**
    * Query param
    */
-  provider?: 'limrun' | 'physical' | 'premium' | 'roidrun';
+  provider?: 'limrun' | 'physical' | 'premium';
 
   /**
    * Body param
@@ -229,7 +229,7 @@ export interface DeviceListParams {
 
   pageSize?: number;
 
-  provider?: 'limrun' | 'personal' | 'remote' | 'roidrun';
+  provider?: 'limrun' | 'personal' | 'remote';
 
   state?: Array<'creating' | 'assigned' | 'ready' | 'disconnected' | 'terminated' | 'unknown'> | null;
 
