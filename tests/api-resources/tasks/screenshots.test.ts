@@ -8,7 +8,7 @@ const client = new Mobilerun({
 });
 
 describe('resource screenshots', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
     const responsePromise = client.tasks.screenshots.retrieve(0, {
       task_id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
@@ -22,14 +22,14 @@ describe('resource screenshots', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
     const response = await client.tasks.screenshots.retrieve(0, {
       task_id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.tasks.screenshots.list('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();

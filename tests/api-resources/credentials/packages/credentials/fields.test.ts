@@ -8,7 +8,7 @@ const client = new Mobilerun({
 });
 
 describe('resource fields', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.credentials.packages.credentials.fields.create('credentialName', {
       packageName: 'packageName',
@@ -24,7 +24,7 @@ describe('resource fields', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.credentials.packages.credentials.fields.create('credentialName', {
       packageName: 'packageName',
@@ -33,7 +33,7 @@ describe('resource fields', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.credentials.packages.credentials.fields.update('email', {
       packageName: 'packageName',
@@ -49,7 +49,7 @@ describe('resource fields', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.credentials.packages.credentials.fields.update('email', {
       packageName: 'packageName',
@@ -58,7 +58,7 @@ describe('resource fields', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.credentials.packages.credentials.fields.delete('email', {
       packageName: 'packageName',
@@ -73,7 +73,7 @@ describe('resource fields', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.credentials.packages.credentials.fields.delete('email', {
       packageName: 'packageName',
