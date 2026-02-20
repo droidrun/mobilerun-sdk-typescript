@@ -8,7 +8,7 @@ const client = new Mobilerun({
 });
 
 describe('resource hooks', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve', async () => {
     const responsePromise = client.hooks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource hooks', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update', async () => {
     const responsePromise = client.hooks.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {});
     const rawResponse = await responsePromise.asResponse();
@@ -32,7 +32,7 @@ describe('resource hooks', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.hooks.list();
     const rawResponse = await responsePromise.asResponse();
@@ -44,7 +44,7 @@ describe('resource hooks', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -60,7 +60,7 @@ describe('resource hooks', () => {
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getSampleData', async () => {
     const responsePromise = client.hooks.getSampleData();
     const rawResponse = await responsePromise.asResponse();
@@ -72,7 +72,7 @@ describe('resource hooks', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('perform: only required params', async () => {
     const responsePromise = client.hooks.perform({ body: { foo: 'bar' } });
     const rawResponse = await responsePromise.asResponse();
@@ -84,12 +84,12 @@ describe('resource hooks', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('perform: required and optional params', async () => {
     const response = await client.hooks.perform({ body: { foo: 'bar' } });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('subscribe: only required params', async () => {
     const responsePromise = client.hooks.subscribe({ targetUrl: 'https://example.com' });
     const rawResponse = await responsePromise.asResponse();
@@ -101,7 +101,7 @@ describe('resource hooks', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('subscribe: required and optional params', async () => {
     const response = await client.hooks.subscribe({
       targetUrl: 'https://example.com',
@@ -110,7 +110,7 @@ describe('resource hooks', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('unsubscribe', async () => {
     const responsePromise = client.hooks.unsubscribe('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();

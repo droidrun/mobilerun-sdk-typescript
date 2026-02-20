@@ -8,7 +8,7 @@ const client = new Mobilerun({
 });
 
 describe('resource keyboard', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('clear', async () => {
     const responsePromise = client.devices.keyboard.clear('deviceId');
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource keyboard', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('clear: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -32,7 +32,7 @@ describe('resource keyboard', () => {
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('key: only required params', async () => {
     const responsePromise = client.devices.keyboard.key('deviceId', { key: 0 });
     const rawResponse = await responsePromise.asResponse();
@@ -44,12 +44,12 @@ describe('resource keyboard', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('key: required and optional params', async () => {
     const response = await client.devices.keyboard.key('deviceId', { key: 0, 'X-Device-Display-ID': 0 });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('write: only required params', async () => {
     const responsePromise = client.devices.keyboard.write('deviceId', { clear: true, text: 'text' });
     const rawResponse = await responsePromise.asResponse();
@@ -61,7 +61,7 @@ describe('resource keyboard', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('write: required and optional params', async () => {
     const response = await client.devices.keyboard.write('deviceId', {
       clear: true,

@@ -8,7 +8,7 @@ const client = new Mobilerun({
 });
 
 describe('resource actions', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('global: only required params', async () => {
     const responsePromise = client.devices.actions.global('deviceId', { action: 0 });
     const rawResponse = await responsePromise.asResponse();
@@ -20,12 +20,12 @@ describe('resource actions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('global: required and optional params', async () => {
     const response = await client.devices.actions.global('deviceId', { action: 0, 'X-Device-Display-ID': 0 });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('swipe: only required params', async () => {
     const responsePromise = client.devices.actions.swipe('deviceId', {
       duration: 10,
@@ -43,7 +43,7 @@ describe('resource actions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('swipe: required and optional params', async () => {
     const response = await client.devices.actions.swipe('deviceId', {
       duration: 10,
@@ -55,7 +55,7 @@ describe('resource actions', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('tap: only required params', async () => {
     const responsePromise = client.devices.actions.tap('deviceId', { x: 0, y: 0 });
     const rawResponse = await responsePromise.asResponse();
@@ -67,7 +67,7 @@ describe('resource actions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('tap: required and optional params', async () => {
     const response = await client.devices.actions.tap('deviceId', {
       x: 0,
