@@ -45,7 +45,7 @@ async function main() {
       await launchStreamableHTTPServer({
         mcpOptions: options,
         debug: options.debug,
-        port: options.port ?? options.socket,
+        port: options.socket ?? options.port,
       });
       break;
   }
