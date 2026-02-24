@@ -60,7 +60,7 @@ $ yarn link @mobilerun/sdk
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @mobilerun/sdk
+$ pnpm link --global @mobilerun/sdk
 ```
 
 ## Running tests
