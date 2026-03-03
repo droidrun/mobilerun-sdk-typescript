@@ -11,6 +11,9 @@ import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Tasks API
+ */
 export class Tasks extends APIResource {
   screenshots: ScreenshotsAPI.Screenshots = new ScreenshotsAPI.Screenshots(this._client);
   uiStates: UiStatesAPI.UiStates = new UiStatesAPI.UiStates(this._client);
