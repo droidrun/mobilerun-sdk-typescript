@@ -765,10 +765,16 @@ export class Mobilerun {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * Tasks API
+   */
   tasks: API.Tasks = new API.Tasks(this);
   devices: API.Devices = new API.Devices(this);
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
+  /**
+   * Webhooks API
+   */
   hooks: API.Hooks = new API.Hooks(this);
   models: API.Models = new API.Models(this);
 }

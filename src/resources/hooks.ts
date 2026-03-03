@@ -6,6 +6,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Webhooks API
+ */
 export class Hooks extends APIResource {
   /**
    * Get a hook subscription by id.
