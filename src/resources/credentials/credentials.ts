@@ -8,7 +8,7 @@ import {
   PackageListResponse,
   Packages,
 } from './packages/packages';
-import * as CredentialsCredentialsAPI from './packages/credentials/credentials';
+import * as PackagesCredentialsAPI from './packages/credentials/credentials';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -27,7 +27,7 @@ export class Credentials extends APIResource {
 }
 
 export interface CredentialListResponse {
-  items: Array<CredentialsCredentialsAPI.Credential>;
+  items: Array<PackagesCredentialsAPI.Credential>;
 
   pagination: CredentialListResponse.Pagination;
 }
