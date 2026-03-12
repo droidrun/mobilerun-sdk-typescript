@@ -17,6 +17,7 @@ export {
   type TaskGetStatusResponse,
   type TaskGetTrajectoryResponse,
   type TaskRunResponse,
+  type TaskRunStreamedResponse,
   type TaskStopResponse,
   type TaskListParams,
   type TaskRunParams,
