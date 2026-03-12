@@ -38,7 +38,15 @@ import {
   CredentialListResponse,
   Credentials,
 } from './resources/credentials/credentials';
-import { Devices } from './resources/devices/devices';
+import {
+  Device,
+  DeviceCountResponse,
+  DeviceCreateParams,
+  DeviceListParams,
+  DeviceListResponse,
+  DeviceTerminateParams,
+  Devices,
+} from './resources/devices/devices';
 import {
   PackageCredentials,
   Task,
@@ -255,9 +263,6 @@ export class Mobilerun {
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
-  /**
-   * Basic re-implementation of `qs.stringify` for primitive types.
-   */
   protected stringifyQuery(query: object | Record<string, unknown>): string {
     return stringifyQuery(query);
   }
@@ -804,7 +809,15 @@ export declare namespace Mobilerun {
     type TaskRunStreamedParams as TaskRunStreamedParams,
   };
 
-  export { Devices as Devices };
+  export {
+    Devices as Devices,
+    type Device as Device,
+    type DeviceListResponse as DeviceListResponse,
+    type DeviceCountResponse as DeviceCountResponse,
+    type DeviceCreateParams as DeviceCreateParams,
+    type DeviceListParams as DeviceListParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
+  };
 
   export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
 

@@ -6,7 +6,15 @@ export {
   type CredentialListResponse,
   type CredentialListParams,
 } from './credentials/credentials';
-export { Devices } from './devices/devices';
+export {
+  Devices,
+  type Device,
+  type DeviceListResponse,
+  type DeviceCountResponse,
+  type DeviceCreateParams,
+  type DeviceListParams,
+  type DeviceTerminateParams,
+} from './devices/devices';
 export {
   Hooks,
   type HookRetrieveResponse,
