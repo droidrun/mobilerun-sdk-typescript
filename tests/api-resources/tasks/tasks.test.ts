@@ -88,7 +88,7 @@ describe('resource tasks', () => {
 
   // Mock server tests are disabled
   test.skip('run: only required params', async () => {
-    const responsePromise = client.tasks.run({ llmModel: 'llmModel', task: 'x' });
+    const responsePromise = client.tasks.run({ deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', task: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -101,14 +101,15 @@ describe('resource tasks', () => {
   // Mock server tests are disabled
   test.skip('run: required and optional params', async () => {
     const response = await client.tasks.run({
-      llmModel: 'llmModel',
+      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       task: 'x',
+      agentId: 0,
       apps: ['string'],
       credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
-      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       displayId: 0,
       executionTimeout: 0,
       files: ['string'],
+      llmModel: 'llmModel',
       maxSteps: 0,
       outputSchema: { foo: 'bar' },
       reasoning: true,
@@ -121,7 +122,10 @@ describe('resource tasks', () => {
 
   // Mock server tests are disabled
   test.skip('runStreamed: only required params', async () => {
-    const responsePromise = client.tasks.runStreamed({ llmModel: 'llmModel', task: 'x' });
+    const responsePromise = client.tasks.runStreamed({
+      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      task: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -134,14 +138,15 @@ describe('resource tasks', () => {
   // Mock server tests are disabled
   test.skip('runStreamed: required and optional params', async () => {
     const response = await client.tasks.runStreamed({
-      llmModel: 'llmModel',
+      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       task: 'x',
+      agentId: 0,
       apps: ['string'],
       credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
-      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       displayId: 0,
       executionTimeout: 0,
       files: ['string'],
+      llmModel: 'llmModel',
       maxSteps: 0,
       outputSchema: { foo: 'bar' },
       reasoning: true,
