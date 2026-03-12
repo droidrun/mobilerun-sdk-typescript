@@ -2,17 +2,37 @@
 
 import { APIResource } from '../../core/resource';
 import * as ActionsAPI from './actions';
-import { Actions } from './actions';
+import { ActionGlobalParams, ActionSwipeParams, ActionTapParams, Actions } from './actions';
 import * as AppsAPI from './apps';
-import { Apps } from './apps';
+import {
+  AppDeleteParams,
+  AppInstallParams,
+  AppListParams,
+  AppListResponse,
+  AppStartParams,
+  AppUpdateParams,
+  Apps,
+} from './apps';
 import * as KeyboardAPI from './keyboard';
-import { Keyboard } from './keyboard';
+import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
 import * as PackagesAPI from './packages';
-import { Packages } from './packages';
+import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as StateAPI from './state';
-import { State } from './state';
+import {
+  State,
+  StateScreenshotParams,
+  StateScreenshotResponse,
+  StateTimeParams,
+  StateTimeResponse,
+  StateUiParams,
+  StateUiResponse,
+} from './state';
 import * as TasksAPI from './tasks';
-import { Tasks } from './tasks';
+import { TaskListParams, TaskListResponse, Tasks } from './tasks';
+import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
+import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
 
 export class Devices extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
@@ -21,6 +41,242 @@ export class Devices extends APIResource {
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
   keyboard: KeyboardAPI.Keyboard = new KeyboardAPI.Keyboard(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
+
+  /**
+   * Provision a new device
+   */
+  create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
+    const { deviceType, ...body } = params;
+    return this._client.post('/devices', { query: { deviceType }, body, ...options });
+  }
+
+  /**
+   * Get device info
+   */
+  retrieve(deviceID: string, options?: RequestOptions): APIPromise<Device> {
+    return this._client.get(path`/devices/${deviceID}`, options);
+  }
+
+  /**
+   * List devices
+   */
+  list(
+    query: DeviceListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<DeviceListResponse> {
+    return this._client.get('/devices', { query, ...options });
+  }
+
+  /**
+   * Count claimed devices
+   */
+  count(options?: RequestOptions): APIPromise<DeviceCountResponse> {
+    return this._client.get('/devices/count', options);
+  }
+
+  /**
+   * Terminate a device
+   */
+  terminate(deviceID: string, body: DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/devices/${deviceID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+
+  /**
+   * Wait for device to be ready
+   */
+  waitReady(deviceID: string, options?: RequestOptions): APIPromise<Device> {
+    return this._client.get(path`/devices/${deviceID}/wait`, options);
+  }
+}
+
+export interface Device {
+  id: string;
+
+  assignedAt: string | null;
+
+  createdAt: string;
+
+  name: string;
+
+  state: string;
+
+  stateMessage: string;
+
+  streamUrl: string;
+
+  taskCount: number;
+
+  terminatesAt: string | null;
+
+  type: string;
+
+  updatedAt: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  streamToken?: string;
+
+  userId?: string;
+}
+
+export interface DeviceListResponse {
+  items: Array<Device> | null;
+
+  pagination: DeviceListResponse.Pagination;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export namespace DeviceListResponse {
+  export interface Pagination {
+    hasNext: boolean;
+
+    hasPrev: boolean;
+
+    page: number;
+
+    pages: number;
+
+    pageSize: number;
+
+    total: number;
+  }
+}
+
+export type DeviceCountResponse = { [key: string]: number };
+
+export interface DeviceCreateParams {
+  /**
+   * Query param
+   */
+  deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
+
+  /**
+   * Body param
+   */
+  apps?: Array<string> | null;
+
+  /**
+   * Body param
+   */
+  carrier?: DeviceCreateParams.Carrier;
+
+  /**
+   * Body param
+   */
+  files?: Array<string> | null;
+
+  /**
+   * Body param
+   */
+  identifiers?: DeviceCreateParams.Identifiers;
+
+  /**
+   * Body param
+   */
+  name?: string;
+
+  /**
+   * Body param
+   */
+  proxy?: DeviceCreateParams.Proxy;
+
+  /**
+   * Body param
+   */
+  smartIp?: boolean;
+}
+
+export namespace DeviceCreateParams {
+  export interface Carrier {
+    GsmOperatorAlpha: string;
+
+    GsmOperatorNumeric: number;
+
+    GsmSimOperatorAlpha: string;
+
+    GsmSimOperatorIsoCountry: string;
+
+    GsmSimOperatorNumeric: number;
+
+    PersistSysTimezone: string;
+  }
+
+  export interface Identifiers {
+    BootloaderSerialNumber: string;
+
+    IdentifierAndroidID: string;
+
+    IdentifierAppSetID: string;
+
+    IdentifierBluetoothMAC: string;
+
+    IdentifierGAID: string;
+
+    IdentifierGSFID: string;
+
+    IdentifierICCID: string;
+
+    IdentifierIMEI: string;
+
+    IdentifierIMSI: string;
+
+    IdentifierMediaDRMID: string;
+
+    IdentifierMEID: string;
+
+    IdentifierPhoneNumber: string;
+
+    IdentifierSerial: string;
+
+    IdentifierWifiMAC: string;
+
+    SerialNumber: string;
+  }
+
+  export interface Proxy {
+    host: string;
+
+    password: string;
+
+    port: number;
+
+    user: string;
+  }
+}
+
+export interface DeviceListParams {
+  country?: string;
+
+  name?: string;
+
+  orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt';
+
+  orderByDirection?: 'asc' | 'desc';
+
+  page?: number;
+
+  pageSize?: number;
+
+  state?: Array<'creating' | 'assigned' | 'ready' | 'disconnected' | 'terminated' | 'unknown'> | null;
+
+  type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
+}
+
+export interface DeviceTerminateParams {
+  previousDeviceId?: string;
+
+  terminateAt?: string;
 }
 
 Devices.Actions = Actions;
@@ -31,15 +287,54 @@ Devices.Keyboard = Keyboard;
 Devices.Tasks = Tasks;
 
 export declare namespace Devices {
-  export { Actions as Actions };
+  export {
+    type Device as Device,
+    type DeviceListResponse as DeviceListResponse,
+    type DeviceCountResponse as DeviceCountResponse,
+    type DeviceCreateParams as DeviceCreateParams,
+    type DeviceListParams as DeviceListParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
+  };
 
-  export { State as State };
+  export {
+    Actions as Actions,
+    type ActionGlobalParams as ActionGlobalParams,
+    type ActionSwipeParams as ActionSwipeParams,
+    type ActionTapParams as ActionTapParams,
+  };
 
-  export { Apps as Apps };
+  export {
+    State as State,
+    type StateScreenshotResponse as StateScreenshotResponse,
+    type StateTimeResponse as StateTimeResponse,
+    type StateUiResponse as StateUiResponse,
+    type StateScreenshotParams as StateScreenshotParams,
+    type StateTimeParams as StateTimeParams,
+    type StateUiParams as StateUiParams,
+  };
 
-  export { Packages as Packages };
+  export {
+    Apps as Apps,
+    type AppListResponse as AppListResponse,
+    type AppUpdateParams as AppUpdateParams,
+    type AppListParams as AppListParams,
+    type AppDeleteParams as AppDeleteParams,
+    type AppInstallParams as AppInstallParams,
+    type AppStartParams as AppStartParams,
+  };
 
-  export { Keyboard as Keyboard };
+  export {
+    Packages as Packages,
+    type PackageListResponse as PackageListResponse,
+    type PackageListParams as PackageListParams,
+  };
 
-  export { Tasks as Tasks };
+  export {
+    Keyboard as Keyboard,
+    type KeyboardClearParams as KeyboardClearParams,
+    type KeyboardKeyParams as KeyboardKeyParams,
+    type KeyboardWriteParams as KeyboardWriteParams,
+  };
+
+  export { Tasks as Tasks, type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
 }

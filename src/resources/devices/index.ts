@@ -1,9 +1,38 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Actions } from './actions';
-export { Apps } from './apps';
-export { Devices } from './devices';
-export { Keyboard } from './keyboard';
-export { Packages } from './packages';
-export { State } from './state';
-export { Tasks } from './tasks';
+export { Actions, type ActionGlobalParams, type ActionSwipeParams, type ActionTapParams } from './actions';
+export {
+  Apps,
+  type AppListResponse,
+  type AppUpdateParams,
+  type AppListParams,
+  type AppDeleteParams,
+  type AppInstallParams,
+  type AppStartParams,
+} from './apps';
+export {
+  Devices,
+  type Device,
+  type DeviceListResponse,
+  type DeviceCountResponse,
+  type DeviceCreateParams,
+  type DeviceListParams,
+  type DeviceTerminateParams,
+} from './devices';
+export {
+  Keyboard,
+  type KeyboardClearParams,
+  type KeyboardKeyParams,
+  type KeyboardWriteParams,
+} from './keyboard';
+export { Packages, type PackageListResponse, type PackageListParams } from './packages';
+export {
+  State,
+  type StateScreenshotResponse,
+  type StateTimeResponse,
+  type StateUiResponse,
+  type StateScreenshotParams,
+  type StateTimeParams,
+  type StateUiParams,
+} from './state';
+export { Tasks, type TaskListResponse, type TaskListParams } from './tasks';
