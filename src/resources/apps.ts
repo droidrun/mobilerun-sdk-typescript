@@ -291,8 +291,7 @@ export namespace AppListResponse {
       | 'YE'
       | 'ZM'
       | 'ZW'
-      | 'AX'
-      | null;
+      | 'AX';
 
     createdAt: string | null;
 
@@ -302,7 +301,7 @@ export namespace AppListResponse {
 
     displayName: string;
 
-    externalIds: Array<string> | null;
+    expectedFiles: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
     iconURL: string;
 
@@ -320,13 +319,19 @@ export namespace AppListResponse {
 
     source: 'uploaded' | 'store';
 
+    status: 'queued' | 'available' | 'failed';
+
+    stealthTier: 'tier1' | 'tier2' | 'tier3' | null;
+
     targetSdk: number | null;
+
+    type: 'android' | 'ios';
 
     updatedAt: string | null;
 
     userId: string | null;
 
-    versionCode: number | null;
+    versionCode: number;
 
     versionName: string;
   }
