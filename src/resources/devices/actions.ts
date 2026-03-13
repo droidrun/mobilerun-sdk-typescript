@@ -107,6 +107,11 @@ export interface ActionSwipeParams {
   startY: number;
 
   /**
+   * Body param
+   */
+  stealth?: boolean;
+
+  /**
    * Header param
    */
   'X-Device-Display-ID'?: number;
@@ -122,6 +127,11 @@ export interface ActionTapParams {
    * Body param
    */
   y: number;
+
+  /**
+   * Body param
+   */
+  stealth?: boolean;
 
   /**
    * Header param
