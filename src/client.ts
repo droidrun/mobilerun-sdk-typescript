@@ -17,7 +17,21 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { AgentListResponse, Agents } from './resources/agents';
 import { AppListParams, AppListResponse, Apps } from './resources/apps';
+import {
+  CarrierCreateParams,
+  CarrierCreateResponse,
+  CarrierDeleteResponse,
+  CarrierListParams,
+  CarrierListResponse,
+  CarrierLookupParams,
+  CarrierLookupResponse,
+  CarrierRetrieveResponse,
+  CarrierUpdateParams,
+  CarrierUpdateResponse,
+  Carriers,
+} from './resources/carriers';
 import {
   HookGetSampleDataResponse,
   HookListParams,
@@ -33,6 +47,29 @@ import {
   Hooks,
 } from './resources/hooks';
 import { ModelListResponse, Models } from './resources/models';
+import {
+  DeviceSpec,
+  ProfileCreateParams,
+  ProfileCreateResponse,
+  ProfileDeleteResponse,
+  ProfileListParams,
+  ProfileListResponse,
+  ProfileRetrieveResponse,
+  ProfileUpdateParams,
+  ProfileUpdateResponse,
+  Profiles,
+} from './resources/profiles';
+import {
+  Proxies,
+  ProxyConfig,
+  ProxyCreateParams,
+  ProxyCreateResponse,
+  ProxyDeleteResponse,
+  ProxyListResponse,
+  ProxyRetrieveResponse,
+  ProxyUpdateParams,
+  ProxyUpdateResponse,
+} from './resources/proxies';
 import {
   CredentialListParams,
   CredentialListResponse,
@@ -59,6 +96,8 @@ import {
   TaskRunResponse,
   TaskRunStreamedParams,
   TaskRunStreamedResponse,
+  TaskSendMessageParams,
+  TaskSendMessageResponse,
   TaskStatus,
   TaskStopResponse,
   Tasks,
@@ -771,6 +810,13 @@ export class Mobilerun {
    * Tasks API
    */
   tasks: API.Tasks = new API.Tasks(this);
+  /**
+   * Agents API
+   */
+  agents: API.Agents = new API.Agents(this);
+  proxies: API.Proxies = new API.Proxies(this);
+  carriers: API.Carriers = new API.Carriers(this);
+  profiles: API.Profiles = new API.Profiles(this);
   devices: API.Devices = new API.Devices(this);
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
@@ -782,6 +828,10 @@ export class Mobilerun {
 }
 
 Mobilerun.Tasks = Tasks;
+Mobilerun.Agents = Agents;
+Mobilerun.Proxies = Proxies;
+Mobilerun.Carriers = Carriers;
+Mobilerun.Profiles = Profiles;
 Mobilerun.Devices = Devices;
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
@@ -803,10 +853,53 @@ export declare namespace Mobilerun {
     type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
     type TaskRunResponse as TaskRunResponse,
     type TaskRunStreamedResponse as TaskRunStreamedResponse,
+    type TaskSendMessageResponse as TaskSendMessageResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
+    type TaskSendMessageParams as TaskSendMessageParams,
+  };
+
+  export { Agents as Agents, type AgentListResponse as AgentListResponse };
+
+  export {
+    Proxies as Proxies,
+    type ProxyConfig as ProxyConfig,
+    type ProxyCreateResponse as ProxyCreateResponse,
+    type ProxyRetrieveResponse as ProxyRetrieveResponse,
+    type ProxyUpdateResponse as ProxyUpdateResponse,
+    type ProxyListResponse as ProxyListResponse,
+    type ProxyDeleteResponse as ProxyDeleteResponse,
+    type ProxyCreateParams as ProxyCreateParams,
+    type ProxyUpdateParams as ProxyUpdateParams,
+  };
+
+  export {
+    Carriers as Carriers,
+    type CarrierCreateResponse as CarrierCreateResponse,
+    type CarrierRetrieveResponse as CarrierRetrieveResponse,
+    type CarrierUpdateResponse as CarrierUpdateResponse,
+    type CarrierListResponse as CarrierListResponse,
+    type CarrierDeleteResponse as CarrierDeleteResponse,
+    type CarrierLookupResponse as CarrierLookupResponse,
+    type CarrierCreateParams as CarrierCreateParams,
+    type CarrierUpdateParams as CarrierUpdateParams,
+    type CarrierListParams as CarrierListParams,
+    type CarrierLookupParams as CarrierLookupParams,
+  };
+
+  export {
+    Profiles as Profiles,
+    type DeviceSpec as DeviceSpec,
+    type ProfileCreateResponse as ProfileCreateResponse,
+    type ProfileRetrieveResponse as ProfileRetrieveResponse,
+    type ProfileUpdateResponse as ProfileUpdateResponse,
+    type ProfileListResponse as ProfileListResponse,
+    type ProfileDeleteResponse as ProfileDeleteResponse,
+    type ProfileCreateParams as ProfileCreateParams,
+    type ProfileUpdateParams as ProfileUpdateParams,
+    type ProfileListParams as ProfileListParams,
   };
 
   export {
@@ -843,4 +936,12 @@ export declare namespace Mobilerun {
   };
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
+
+  export type Config = API.Config;
+  export type DeviceCarrier = API.DeviceCarrier;
+  export type DeviceIdentifiers = API.DeviceIdentifiers;
+  export type Meta = API.Meta;
+  export type Pagination = API.Pagination;
+  export type PaginationMeta = API.PaginationMeta;
+  export type PermissionSet = API.PermissionSet;
 }

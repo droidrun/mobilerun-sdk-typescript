@@ -158,6 +158,25 @@ describe('resource tasks', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('sendMessage: only required params', async () => {
+    const responsePromise = client.tasks.sendMessage('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      message: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('sendMessage: required and optional params', async () => {
+    const response = await client.tasks.sendMessage('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { message: 'x' });
+  });
+
+  // Mock server tests are disabled
   test.skip('stop', async () => {
     const responsePromise = client.tasks.stop('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();

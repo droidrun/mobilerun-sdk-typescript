@@ -20,14 +20,38 @@ export {
   type DeviceTerminateParams,
 } from './devices';
 export {
+  Files,
+  type FileListResponse,
+  type FileDownloadResponse,
+  type FileListParams,
+  type FileDeleteParams,
+  type FileDownloadParams,
+  type FileUploadParams,
+} from './files';
+export {
   Keyboard,
   type KeyboardClearParams,
   type KeyboardKeyParams,
   type KeyboardWriteParams,
 } from './keyboard';
+export {
+  Location,
+  type LocationRetrieveResponse,
+  type LocationRetrieveParams,
+  type LocationUpdateParams,
+} from './location';
+export {
+  Overlay,
+  type OverlayRetrieveResponse,
+  type OverlayRetrieveParams,
+  type OverlayUpdateParams,
+} from './overlay';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
+export { Profile, type ProfileApplyParams } from './profile';
+export { Proxy, type ProxyConnectParams, type ProxyDisconnectParams } from './proxy';
 export {
   State,
+  type Rect,
   type StateScreenshotResponse,
   type StateTimeResponse,
   type StateUiResponse,
@@ -36,3 +60,10 @@ export {
   type StateUiParams,
 } from './state';
 export { Tasks, type TaskListResponse, type TaskListParams } from './tasks';
+export { Time, type TimeUpdateParams } from './time';
+export {
+  Timezone,
+  type TimezoneRetrieveResponse,
+  type TimezoneRetrieveParams,
+  type TimezoneUpdateParams,
+} from './timezone';

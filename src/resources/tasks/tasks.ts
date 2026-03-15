@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as TasksAPI from './tasks';
+import * as Shared from '../shared';
 import * as ScreenshotsAPI from './screenshots';
 import { MediaResponse, ScreenshotListResponse, ScreenshotRetrieveParams, Screenshots } from './screenshots';
 import * as UiStatesAPI from './ui-states';
@@ -73,6 +74,18 @@ export class Tasks extends APIResource {
    */
   runStreamed(body: TaskRunStreamedParams, options?: RequestOptions): APIPromise<unknown> {
     return this._client.post('/tasks/stream', { body, ...options });
+  }
+
+  /**
+   * Send a message to a running agent task. The message ID is delivered via SSE
+   * (UserMessageEvent with action=queued).
+   */
+  sendMessage(
+    taskID: string,
+    body: TaskSendMessageParams,
+    options?: RequestOptions,
+  ): APIPromise<TaskSendMessageResponse> {
+    return this._client.post(path`/tasks/${taskID}/message`, { body, ...options });
   }
 
   /**
@@ -179,44 +192,7 @@ export interface TaskListResponse {
   /**
    * Pagination metadata
    */
-  pagination: TaskListResponse.Pagination;
-}
-
-export namespace TaskListResponse {
-  /**
-   * Pagination metadata
-   */
-  export interface Pagination {
-    /**
-     * Whether there is a next page
-     */
-    hasNext: boolean;
-
-    /**
-     * Whether there is a previous page
-     */
-    hasPrev: boolean;
-
-    /**
-     * Current page number (1-based)
-     */
-    page: number;
-
-    /**
-     * Total number of pages
-     */
-    pages: number;
-
-    /**
-     * Number of items per page
-     */
-    pageSize: number;
-
-    /**
-     * Total number of items
-     */
-    total: number;
-  }
+  pagination: Shared.PaginationMeta;
 }
 
 export interface TaskGetStatusResponse {
@@ -863,6 +839,13 @@ export interface TaskRunResponse {
 
 export type TaskRunStreamedResponse = unknown;
 
+export interface TaskSendMessageResponse {
+  /**
+   * Whether the message was queued for delivery
+   */
+  sent: boolean;
+}
+
 export interface TaskStopResponse {
   /**
    * Whether the task was cancelled
@@ -975,6 +958,13 @@ export interface TaskRunStreamedParams {
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
 }
 
+export interface TaskSendMessageParams {
+  /**
+   * Message to send to the running agent
+   */
+  message: string;
+}
+
 Tasks.Screenshots = Screenshots;
 Tasks.UiStates = UiStates;
 
@@ -990,10 +980,12 @@ export declare namespace Tasks {
     type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
     type TaskRunResponse as TaskRunResponse,
     type TaskRunStreamedResponse as TaskRunStreamedResponse,
+    type TaskSendMessageResponse as TaskSendMessageResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
+    type TaskSendMessageParams as TaskSendMessageParams,
   };
 
   export {

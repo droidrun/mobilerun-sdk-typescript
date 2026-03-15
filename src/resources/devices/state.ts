@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as StateAPI from './state';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -76,6 +77,12 @@ export class State extends APIResource {
   }
 }
 
+export interface Rect {
+  height: number;
+
+  width: number;
+}
+
 export type StateScreenshotResponse = string;
 
 export type StateTimeResponse = string;
@@ -99,9 +106,9 @@ export namespace StateUiResponse {
 
     filtering_params: DeviceContext.FilteringParams;
 
-    screen_bounds: DeviceContext.ScreenBounds;
+    screen_bounds: StateAPI.Rect;
 
-    screenSize: DeviceContext.ScreenSize;
+    screenSize: StateAPI.Rect;
   }
 
   export namespace DeviceContext {
@@ -121,18 +128,6 @@ export namespace StateUiResponse {
       min_element_size: number;
 
       overlay_offset: number;
-    }
-
-    export interface ScreenBounds {
-      height: number;
-
-      width: number;
-    }
-
-    export interface ScreenSize {
-      height: number;
-
-      width: number;
     }
   }
 
@@ -191,6 +186,7 @@ export interface StateUiParams {
 
 export declare namespace State {
   export {
+    type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
     type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
