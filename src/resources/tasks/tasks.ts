@@ -149,6 +149,11 @@ export interface Task {
 
   steps?: number | null;
 
+  /**
+   * LLM model used by sub-agent roles: executor, app_opener, structured_output
+   */
+  subagentModel?: string;
+
   succeeded?: boolean | null;
 
   temperature?: number;
@@ -907,6 +912,11 @@ export interface TaskRunParams {
 
   stealth?: boolean;
 
+  /**
+   * LLM model used by sub-agent roles: executor, app_opener, structured_output
+   */
+  subagentModel?: string;
+
   temperature?: number;
 
   vision?: boolean;
@@ -950,6 +960,11 @@ export interface TaskRunStreamedParams {
   reasoning?: boolean;
 
   stealth?: boolean;
+
+  /**
+   * LLM model used by sub-agent roles: executor, app_opener, structured_output
+   */
+  subagentModel?: string;
 
   temperature?: number;
 
