@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -18,7 +19,7 @@ export interface AppListResponse {
 
   items: Array<AppListResponse.Item>;
 
-  pagination: AppListResponse.Pagination;
+  pagination: Shared.Pagination;
 }
 
 export namespace AppListResponse {
@@ -334,20 +335,6 @@ export namespace AppListResponse {
     versionCode: number;
 
     versionName: string;
-  }
-
-  export interface Pagination {
-    hasNext: boolean;
-
-    hasPrev: boolean;
-
-    page: number;
-
-    pages: number;
-
-    pageSize: number;
-
-    total: number;
   }
 }
 

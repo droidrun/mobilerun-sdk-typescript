@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as Shared from '../shared';
 import * as PackagesAPI from './packages/packages';
 import {
   PackageCreateParams,
@@ -29,23 +30,7 @@ export class Credentials extends APIResource {
 export interface CredentialListResponse {
   items: Array<PackagesCredentialsAPI.Credential>;
 
-  pagination: CredentialListResponse.Pagination;
-}
-
-export namespace CredentialListResponse {
-  export interface Pagination {
-    hasNext: boolean;
-
-    hasPrev: boolean;
-
-    page: number;
-
-    pages: number;
-
-    pageSize: number;
-
-    total: number;
-  }
+  pagination: Shared.Pagination;
 }
 
 export interface CredentialListParams {
