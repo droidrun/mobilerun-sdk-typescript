@@ -34,6 +34,8 @@ export namespace AgentListResponse {
 
     reasoning: boolean;
 
+    subagentModel: string | null;
+
     vision: boolean;
   }
 }
