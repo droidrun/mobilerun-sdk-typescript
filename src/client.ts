@@ -20,16 +20,13 @@ import { APIPromise } from './core/api-promise';
 import { AgentListResponse, Agents } from './resources/agents';
 import { AppListParams, AppListResponse, Apps } from './resources/apps';
 import {
+  Carrier,
   CarrierCreateParams,
-  CarrierCreateResponse,
   CarrierDeleteResponse,
   CarrierListParams,
   CarrierListResponse,
   CarrierLookupParams,
-  CarrierLookupResponse,
-  CarrierRetrieveResponse,
   CarrierUpdateParams,
-  CarrierUpdateResponse,
   Carriers,
 } from './resources/carriers';
 import {
@@ -48,15 +45,12 @@ import {
 } from './resources/hooks';
 import { ModelListResponse, Models } from './resources/models';
 import {
-  DeviceSpec,
+  Profile,
   ProfileCreateParams,
-  ProfileCreateResponse,
   ProfileDeleteResponse,
   ProfileListParams,
   ProfileListResponse,
-  ProfileRetrieveResponse,
   ProfileUpdateParams,
-  ProfileUpdateResponse,
   Profiles,
 } from './resources/profiles';
 import {
@@ -877,12 +871,9 @@ export declare namespace Mobilerun {
 
   export {
     Carriers as Carriers,
-    type CarrierCreateResponse as CarrierCreateResponse,
-    type CarrierRetrieveResponse as CarrierRetrieveResponse,
-    type CarrierUpdateResponse as CarrierUpdateResponse,
+    type Carrier as Carrier,
     type CarrierListResponse as CarrierListResponse,
     type CarrierDeleteResponse as CarrierDeleteResponse,
-    type CarrierLookupResponse as CarrierLookupResponse,
     type CarrierCreateParams as CarrierCreateParams,
     type CarrierUpdateParams as CarrierUpdateParams,
     type CarrierListParams as CarrierListParams,
@@ -891,10 +882,7 @@ export declare namespace Mobilerun {
 
   export {
     Profiles as Profiles,
-    type DeviceSpec as DeviceSpec,
-    type ProfileCreateResponse as ProfileCreateResponse,
-    type ProfileRetrieveResponse as ProfileRetrieveResponse,
-    type ProfileUpdateResponse as ProfileUpdateResponse,
+    type Profile as Profile,
     type ProfileListResponse as ProfileListResponse,
     type ProfileDeleteResponse as ProfileDeleteResponse,
     type ProfileCreateParams as ProfileCreateParams,
@@ -940,6 +928,7 @@ export declare namespace Mobilerun {
   export type Config = API.Config;
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
+  export type DeviceSpec = API.DeviceSpec;
   export type Meta = API.Meta;
   export type Pagination = API.Pagination;
   export type PaginationMeta = API.PaginationMeta;

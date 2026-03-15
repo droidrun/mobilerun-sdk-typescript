@@ -5,12 +5,9 @@ export { Agents, type AgentListResponse } from './agents';
 export { Apps, type AppListResponse, type AppListParams } from './apps';
 export {
   Carriers,
-  type CarrierCreateResponse,
-  type CarrierRetrieveResponse,
-  type CarrierUpdateResponse,
+  type Carrier,
   type CarrierListResponse,
   type CarrierDeleteResponse,
-  type CarrierLookupResponse,
   type CarrierCreateParams,
   type CarrierUpdateParams,
   type CarrierListParams,
@@ -47,10 +44,7 @@ export {
 export { Models, type ModelListResponse } from './models';
 export {
   Profiles,
-  type DeviceSpec,
-  type ProfileCreateResponse,
-  type ProfileRetrieveResponse,
-  type ProfileUpdateResponse,
+  type Profile,
   type ProfileListResponse,
   type ProfileDeleteResponse,
   type ProfileCreateParams,

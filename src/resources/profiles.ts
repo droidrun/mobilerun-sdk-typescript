@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as ProfilesAPI from './profiles';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
@@ -11,25 +10,21 @@ export class Profiles extends APIResource {
   /**
    * Create a new device profile
    */
-  create(body: ProfileCreateParams, options?: RequestOptions): APIPromise<ProfileCreateResponse> {
+  create(body: ProfileCreateParams, options?: RequestOptions): APIPromise<Profile> {
     return this._client.post('/profiles', { body, ...options });
   }
 
   /**
    * Get device profile by ID
    */
-  retrieve(profileID: string, options?: RequestOptions): APIPromise<ProfileRetrieveResponse> {
+  retrieve(profileID: string, options?: RequestOptions): APIPromise<Profile> {
     return this._client.get(path`/profiles/${profileID}`, options);
   }
 
   /**
    * Update a device profile
    */
-  update(
-    profileID: string,
-    body: ProfileUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<ProfileUpdateResponse> {
+  update(profileID: string, body: ProfileUpdateParams, options?: RequestOptions): APIPromise<Profile> {
     return this._client.put(path`/profiles/${profileID}`, { body, ...options });
   }
 
@@ -51,73 +46,14 @@ export class Profiles extends APIResource {
   }
 }
 
-export interface DeviceSpec {
-  /**
-   * A URL to the JSON Schema for this object.
-   */
-  $schema?: string;
-
-  apps?: Array<string> | null;
-
-  carrier?: Shared.DeviceCarrier;
-
-  files?: Array<string> | null;
-
-  identifiers?: Shared.DeviceIdentifiers;
-
-  name?: string;
-
-  proxy?: Shared.Config;
-
-  smartIp?: boolean;
-}
-
-export interface ProfileCreateResponse {
+export interface Profile {
   id: string;
 
   createdAt: string;
 
   name: string;
 
-  spec: DeviceSpec;
-
-  updatedAt: string;
-
-  userId: string;
-
-  /**
-   * A URL to the JSON Schema for this object.
-   */
-  $schema?: string;
-}
-
-export interface ProfileRetrieveResponse {
-  id: string;
-
-  createdAt: string;
-
-  name: string;
-
-  spec: DeviceSpec;
-
-  updatedAt: string;
-
-  userId: string;
-
-  /**
-   * A URL to the JSON Schema for this object.
-   */
-  $schema?: string;
-}
-
-export interface ProfileUpdateResponse {
-  id: string;
-
-  createdAt: string;
-
-  name: string;
-
-  spec: DeviceSpec;
+  spec: Shared.DeviceSpec;
 
   updatedAt: string;
 
@@ -130,7 +66,7 @@ export interface ProfileUpdateResponse {
 }
 
 export interface ProfileListResponse {
-  items: Array<ProfileListResponse.Item> | null;
+  items: Array<Profile> | null;
 
   pagination: Shared.Meta;
 
@@ -138,27 +74,6 @@ export interface ProfileListResponse {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
-}
-
-export namespace ProfileListResponse {
-  export interface Item {
-    id: string;
-
-    createdAt: string;
-
-    name: string;
-
-    spec: ProfilesAPI.DeviceSpec;
-
-    updatedAt: string;
-
-    userId: string;
-
-    /**
-     * A URL to the JSON Schema for this object.
-     */
-    $schema?: string;
-  }
 }
 
 export interface ProfileDeleteResponse {
@@ -179,7 +94,7 @@ export interface ProfileCreateParams {
   /**
    * Device specification
    */
-  spec: DeviceSpec;
+  spec: Shared.DeviceSpec;
 }
 
 export interface ProfileUpdateParams {
@@ -191,7 +106,7 @@ export interface ProfileUpdateParams {
   /**
    * Device specification
    */
-  spec: DeviceSpec;
+  spec: Shared.DeviceSpec;
 }
 
 export interface ProfileListParams {
@@ -208,10 +123,7 @@ export interface ProfileListParams {
 
 export declare namespace Profiles {
   export {
-    type DeviceSpec as DeviceSpec,
-    type ProfileCreateResponse as ProfileCreateResponse,
-    type ProfileRetrieveResponse as ProfileRetrieveResponse,
-    type ProfileUpdateResponse as ProfileUpdateResponse,
+    type Profile as Profile,
     type ProfileListResponse as ProfileListResponse,
     type ProfileDeleteResponse as ProfileDeleteResponse,
     type ProfileCreateParams as ProfileCreateParams,

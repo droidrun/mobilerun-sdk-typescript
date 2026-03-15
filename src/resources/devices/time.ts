@@ -10,7 +10,7 @@ export class Time extends APIResource {
   /**
    * Set device time
    */
-  update(deviceID: string, params: TimeUpdateParams, options?: RequestOptions): APIPromise<void> {
+  setTime(deviceID: string, params: TimeSetTimeParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
     return this._client.post(path`/devices/${deviceID}/time`, {
       body,
@@ -26,9 +26,84 @@ export class Time extends APIResource {
       ]),
     });
   }
+
+  /**
+   * Set device timezone
+   */
+  setTimezone(deviceID: string, params: TimeSetTimezoneParams, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    return this._client.post(path`/devices/${deviceID}/timezone`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Device time
+   */
+  time(
+    deviceID: string,
+    params: TimeTimeParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/time`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Get device timezone
+   */
+  timezone(
+    deviceID: string,
+    params: TimeTimezoneParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TimeTimezoneResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/timezone`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
 }
 
-export interface TimeUpdateParams {
+export type TimeTimeResponse = string;
+
+export interface TimeTimezoneResponse {
+  timezone: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export interface TimeSetTimeParams {
   /**
    * Body param
    */
@@ -40,6 +115,33 @@ export interface TimeUpdateParams {
   'X-Device-Display-ID'?: number;
 }
 
+export interface TimeSetTimezoneParams {
+  /**
+   * Body param
+   */
+  timezone: string;
+
+  /**
+   * Header param
+   */
+  'X-Device-Display-ID'?: number;
+}
+
+export interface TimeTimeParams {
+  'X-Device-Display-ID'?: number;
+}
+
+export interface TimeTimezoneParams {
+  'X-Device-Display-ID'?: number;
+}
+
 export declare namespace Time {
-  export { type TimeUpdateParams as TimeUpdateParams };
+  export {
+    type TimeTimeResponse as TimeTimeResponse,
+    type TimeTimezoneResponse as TimeTimezoneResponse,
+    type TimeSetTimeParams as TimeSetTimeParams,
+    type TimeSetTimezoneParams as TimeSetTimezoneParams,
+    type TimeTimeParams as TimeTimeParams,
+    type TimeTimezoneParams as TimeTimezoneParams,
+  };
 }

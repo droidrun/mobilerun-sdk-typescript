@@ -56,6 +56,27 @@ export interface DeviceIdentifiers {
   SerialNumber: string;
 }
 
+export interface DeviceSpec {
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  apps?: Array<string> | null;
+
+  carrier?: DeviceCarrier;
+
+  files?: Array<string> | null;
+
+  identifiers?: DeviceIdentifiers;
+
+  name?: string;
+
+  proxy?: Config;
+
+  smartIp?: boolean;
+}
+
 export interface Meta {
   hasNext: boolean;
 
