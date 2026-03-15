@@ -8,7 +8,7 @@ const client = new Mobilerun({
 });
 
 describe('resource models', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.models.list();
     const rawResponse = await responsePromise.asResponse();

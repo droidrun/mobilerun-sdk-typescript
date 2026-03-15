@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -21,7 +22,7 @@ export class Tasks extends APIResource {
 export interface TaskListResponse {
   items: Array<TaskListResponse.Item> | null;
 
-  pagination: TaskListResponse.Pagination;
+  pagination: Shared.Meta;
 
   /**
    * A URL to the JSON Schema for this object.
@@ -36,20 +37,6 @@ export namespace TaskListResponse {
     taskId: string;
 
     updatedAt: string;
-  }
-
-  export interface Pagination {
-    hasNext: boolean;
-
-    hasPrev: boolean;
-
-    page: number;
-
-    pages: number;
-
-    pageSize: number;
-
-    total: number;
   }
 }
 

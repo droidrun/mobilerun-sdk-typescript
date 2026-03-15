@@ -37,6 +37,11 @@ export interface PackageListParams {
   /**
    * Query param
    */
+  includeProtectedPackages?: boolean;
+
+  /**
+   * Query param
+   */
   includeSystemPackages?: boolean;
 
   /**

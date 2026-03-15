@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -18,7 +19,7 @@ export interface AppListResponse {
 
   items: Array<AppListResponse.Item>;
 
-  pagination: AppListResponse.Pagination;
+  pagination: Shared.Pagination;
 }
 
 export namespace AppListResponse {
@@ -291,8 +292,7 @@ export namespace AppListResponse {
       | 'YE'
       | 'ZM'
       | 'ZW'
-      | 'AX'
-      | null;
+      | 'AX';
 
     createdAt: string | null;
 
@@ -302,7 +302,7 @@ export namespace AppListResponse {
 
     displayName: string;
 
-    externalIds: Array<string> | null;
+    expectedFiles: string | number | boolean | { [key: string]: unknown } | Array<unknown> | null;
 
     iconURL: string;
 
@@ -320,29 +320,21 @@ export namespace AppListResponse {
 
     source: 'uploaded' | 'store';
 
+    status: 'queued' | 'available' | 'failed';
+
+    stealthTier: 'tier1' | 'tier2' | 'tier3' | null;
+
     targetSdk: number | null;
+
+    type: 'android' | 'ios';
 
     updatedAt: string | null;
 
     userId: string | null;
 
-    versionCode: number | null;
+    versionCode: number;
 
     versionName: string;
-  }
-
-  export interface Pagination {
-    hasNext: boolean;
-
-    hasPrev: boolean;
-
-    page: number;
-
-    pages: number;
-
-    pageSize: number;
-
-    total: number;
   }
 }
 

@@ -1,11 +1,15 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as Shared from './shared';
 import * as TasksAPI from './tasks/tasks';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Webhooks API
+ */
 export class Hooks extends APIResource {
   /**
    * Get a hook subscription by id.
@@ -122,7 +126,7 @@ export interface HookListResponse {
   /**
    * Pagination metadata
    */
-  pagination: HookListResponse.Pagination;
+  pagination: Shared.PaginationMeta;
 }
 
 export namespace HookListResponse {
@@ -142,41 +146,6 @@ export namespace HookListResponse {
     state?: 'active' | 'disabled' | 'deleted';
 
     updatedAt?: string;
-  }
-
-  /**
-   * Pagination metadata
-   */
-  export interface Pagination {
-    /**
-     * Whether there is a next page
-     */
-    hasNext: boolean;
-
-    /**
-     * Whether there is a previous page
-     */
-    hasPrev: boolean;
-
-    /**
-     * Current page number (1-based)
-     */
-    page: number;
-
-    /**
-     * Total number of pages
-     */
-    pages: number;
-
-    /**
-     * Number of items per page
-     */
-    pageSize: number;
-
-    /**
-     * Total number of items
-     */
-    total: number;
   }
 }
 

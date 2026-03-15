@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as TasksAPI from './tasks';
+import * as Shared from '../shared';
 import * as ScreenshotsAPI from './screenshots';
 import { MediaResponse, ScreenshotListResponse, ScreenshotRetrieveParams, Screenshots } from './screenshots';
 import * as UiStatesAPI from './ui-states';
@@ -11,6 +12,9 @@ import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Tasks API
+ */
 export class Tasks extends APIResource {
   screenshots: ScreenshotsAPI.Screenshots = new ScreenshotsAPI.Screenshots(this._client);
   uiStates: UiStatesAPI.UiStates = new UiStatesAPI.UiStates(this._client);
@@ -68,12 +72,20 @@ export class Tasks extends APIResource {
    * Create and dispatch a new agent task, returning an SSE stream of task events.
    * Cancels the task if the client disconnects.
    */
-  runStreamed(body: TaskRunStreamedParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.post('/tasks/stream', {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+  runStreamed(body: TaskRunStreamedParams, options?: RequestOptions): APIPromise<unknown> {
+    return this._client.post('/tasks/stream', { body, ...options });
+  }
+
+  /**
+   * Send a message to a running agent task. The message ID is delivered via SSE
+   * (UserMessageEvent with action=queued).
+   */
+  sendMessage(
+    taskID: string,
+    body: TaskSendMessageParams,
+    options?: RequestOptions,
+  ): APIPromise<TaskSendMessageResponse> {
+    return this._client.post(path`/tasks/${taskID}/message`, { body, ...options });
   }
 
   /**
@@ -105,6 +117,8 @@ export interface Task {
 
   id?: string;
 
+  agentId?: number;
+
   apps?: Array<string>;
 
   createdAt?: string;
@@ -120,6 +134,8 @@ export interface Task {
   finishedAt?: string | null;
 
   maxSteps?: number;
+
+  message?: string | null;
 
   output?: { [key: string]: unknown } | null;
 
@@ -176,44 +192,7 @@ export interface TaskListResponse {
   /**
    * Pagination metadata
    */
-  pagination: TaskListResponse.Pagination;
-}
-
-export namespace TaskListResponse {
-  /**
-   * Pagination metadata
-   */
-  export interface Pagination {
-    /**
-     * Whether there is a next page
-     */
-    hasNext: boolean;
-
-    /**
-     * Whether there is a previous page
-     */
-    hasPrev: boolean;
-
-    /**
-     * Current page number (1-based)
-     */
-    page: number;
-
-    /**
-     * Total number of pages
-     */
-    pages: number;
-
-    /**
-     * Number of items per page
-     */
-    pageSize: number;
-
-    /**
-     * Total number of items
-     */
-    total: number;
-  }
+  pagination: Shared.PaginationMeta;
 }
 
 export interface TaskGetStatusResponse {
@@ -221,6 +200,31 @@ export interface TaskGetStatusResponse {
    * The status of the task
    */
   status: TaskStatus;
+
+  /**
+   * The last agent response (FastAgentResponseEvent or ManagerPlanEvent)
+   */
+  lastResponse?: { [key: string]: unknown } | null;
+
+  /**
+   * The agent's final answer or failure reason
+   */
+  message?: string | null;
+
+  /**
+   * Structured output if outputSchema was set
+   */
+  output?: { [key: string]: unknown } | null;
+
+  /**
+   * Number of steps taken
+   */
+  steps?: number | null;
+
+  /**
+   * Whether the task succeeded
+   */
+  succeeded?: boolean | null;
 }
 
 export interface TaskGetTrajectoryResponse {
@@ -256,6 +260,7 @@ export interface TaskGetTrajectoryResponse {
     | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent
     | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent
     | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent
+    | TaskGetTrajectoryResponse.TrajectoryUserMessageEvent
     | TaskGetTrajectoryResponse.TrajectoryUnknownEvent
   >;
 }
@@ -270,8 +275,6 @@ export namespace TaskGetTrajectoryResponse {
   export namespace TrajectoryCreatedEvent {
     export interface Data {
       id: string;
-
-      token: string;
 
       streamUrl: string;
     }
@@ -390,6 +393,8 @@ export namespace TaskGetTrajectoryResponse {
      * API OpenAPI schema can reference it without the heavy droidrun import.
      */
     export interface Data {
+      message?: string | null;
+
       steps?: number | null;
 
       structured_output?: { [key: string]: unknown } | null;
@@ -787,6 +792,32 @@ export namespace TaskGetTrajectoryResponse {
     }
   }
 
+  export interface TrajectoryUserMessageEvent {
+    /**
+     * Tracks the lifecycle of an external user message: queued → applied | dropped.
+     */
+    data: TrajectoryUserMessageEvent.Data;
+
+    event: 'UserMessageEvent';
+  }
+
+  export namespace TrajectoryUserMessageEvent {
+    /**
+     * Tracks the lifecycle of an external user message: queued → applied | dropped.
+     */
+    export interface Data {
+      action: string;
+
+      message_ids: Array<string>;
+
+      consumer?: string | null;
+
+      reason?: string | null;
+
+      step_number?: number | null;
+    }
+  }
+
   export interface TrajectoryUnknownEvent {
     event: string;
 
@@ -801,14 +832,18 @@ export interface TaskRunResponse {
   id: string;
 
   /**
-   * The token of the stream
-   */
-  token: string;
-
-  /**
    * The URL of the stream
    */
   streamUrl: string;
+}
+
+export type TaskRunStreamedResponse = unknown;
+
+export interface TaskSendMessageResponse {
+  /**
+   * Whether the message was queued for delivery
+   */
+  sent: boolean;
 }
 
 export interface TaskStopResponse {
@@ -823,14 +858,8 @@ export interface TaskListParams {
 
   orderByDirection?: 'asc' | 'desc';
 
-  /**
-   * Page number (1-based). If provided, returns paginated results.
-   */
-  page?: number | null;
+  page?: number;
 
-  /**
-   * Number of items per page
-   */
   pageSize?: number;
 
   /**
@@ -843,20 +872,17 @@ export interface TaskListParams {
 
 export interface TaskRunParams {
   /**
-   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+   * The ID of the device to run the task on.
    */
-  llmModel: string;
+  deviceId: string;
 
   task: string;
+
+  agentId?: number;
 
   apps?: Array<string>;
 
   credentials?: Array<PackageCredentials>;
-
-  /**
-   * The ID of the device to run the task on.
-   */
-  deviceId?: string | null;
 
   /**
    * The display ID of the device to run the task on.
@@ -866,6 +892,12 @@ export interface TaskRunParams {
   executionTimeout?: number;
 
   files?: Array<string>;
+
+  /**
+   * The LLM model identifier to use for the task (e.g.
+   * 'google/gemini-3.1-flash-lite-preview')
+   */
+  llmModel?: string;
 
   maxSteps?: number;
 
@@ -884,20 +916,17 @@ export interface TaskRunParams {
 
 export interface TaskRunStreamedParams {
   /**
-   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+   * The ID of the device to run the task on.
    */
-  llmModel: string;
+  deviceId: string;
 
   task: string;
+
+  agentId?: number;
 
   apps?: Array<string>;
 
   credentials?: Array<PackageCredentials>;
-
-  /**
-   * The ID of the device to run the task on.
-   */
-  deviceId?: string | null;
 
   /**
    * The display ID of the device to run the task on.
@@ -907,6 +936,12 @@ export interface TaskRunStreamedParams {
   executionTimeout?: number;
 
   files?: Array<string>;
+
+  /**
+   * The LLM model identifier to use for the task (e.g.
+   * 'google/gemini-3.1-flash-lite-preview')
+   */
+  llmModel?: string;
 
   maxSteps?: number;
 
@@ -923,6 +958,13 @@ export interface TaskRunStreamedParams {
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
 }
 
+export interface TaskSendMessageParams {
+  /**
+   * Message to send to the running agent
+   */
+  message: string;
+}
+
 Tasks.Screenshots = Screenshots;
 Tasks.UiStates = UiStates;
 
@@ -937,10 +979,13 @@ export declare namespace Tasks {
     type TaskGetStatusResponse as TaskGetStatusResponse,
     type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
     type TaskRunResponse as TaskRunResponse,
+    type TaskRunStreamedResponse as TaskRunStreamedResponse,
+    type TaskSendMessageResponse as TaskSendMessageResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
+    type TaskSendMessageParams as TaskSendMessageParams,
   };
 
   export {

@@ -143,6 +143,11 @@ export interface AppListParams {
   /**
    * Query param
    */
+  includeProtectedApps?: boolean;
+
+  /**
+   * Query param
+   */
   includeSystemApps?: boolean;
 
   /**

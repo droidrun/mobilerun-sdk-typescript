@@ -5,6 +5,9 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Tasks API
+ */
 export class Screenshots extends APIResource {
   /**
    * Get a specific screenshot by index.

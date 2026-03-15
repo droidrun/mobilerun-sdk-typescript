@@ -11,13 +11,24 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
-import * as qs from './internal/qs';
+import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { AgentListResponse, Agents } from './resources/agents';
 import { AppListParams, AppListResponse, Apps } from './resources/apps';
+import {
+  Carrier,
+  CarrierCreateParams,
+  CarrierDeleteResponse,
+  CarrierListParams,
+  CarrierListResponse,
+  CarrierLookupParams,
+  CarrierUpdateParams,
+  Carriers,
+} from './resources/carriers';
 import {
   HookGetSampleDataResponse,
   HookListParams,
@@ -33,6 +44,26 @@ import {
   Hooks,
 } from './resources/hooks';
 import { ModelListResponse, Models } from './resources/models';
+import {
+  Profile,
+  ProfileCreateParams,
+  ProfileDeleteResponse,
+  ProfileListParams,
+  ProfileListResponse,
+  ProfileUpdateParams,
+  Profiles,
+} from './resources/profiles';
+import {
+  Proxies,
+  ProxyConfig,
+  ProxyCreateParams,
+  ProxyCreateResponse,
+  ProxyDeleteResponse,
+  ProxyListResponse,
+  ProxyRetrieveResponse,
+  ProxyUpdateParams,
+  ProxyUpdateResponse,
+} from './resources/proxies';
 import {
   CredentialListParams,
   CredentialListResponse,
@@ -58,6 +89,9 @@ import {
   TaskRunParams,
   TaskRunResponse,
   TaskRunStreamedParams,
+  TaskRunStreamedResponse,
+  TaskSendMessageParams,
+  TaskSendMessageResponse,
   TaskStatus,
   TaskStopResponse,
   Tasks,
@@ -262,8 +296,8 @@ export class Mobilerun {
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
-  protected stringifyQuery(query: Record<string, unknown>): string {
-    return qs.stringify(query, { arrayFormat: 'comma' });
+  protected stringifyQuery(query: object | Record<string, unknown>): string {
+    return stringifyQuery(query);
   }
 
   private getUserAgent(): string {
@@ -295,12 +329,13 @@ export class Mobilerun {
       : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
 
     const defaultQuery = this.defaultQuery();
-    if (!isEmptyObj(defaultQuery)) {
-      query = { ...defaultQuery, ...query };
+    const pathQuery = Object.fromEntries(url.searchParams);
+    if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
+      query = { ...pathQuery, ...defaultQuery, ...query };
     }
 
     if (typeof query === 'object' && query && !Array.isArray(query)) {
-      url.search = this.stringifyQuery(query as Record<string, unknown>);
+      url.search = this.stringifyQuery(query);
     }
 
     return url.toString();
@@ -605,9 +640,9 @@ export class Mobilerun {
       }
     }
 
-    // If the API asks us to wait a certain amount of time (and it's a reasonable amount),
-    // just do what it says, but otherwise calculate a default
-    if (!(timeoutMillis && 0 <= timeoutMillis && timeoutMillis < 60 * 1000)) {
+    // If the API asks us to wait a certain amount of time, just do what it
+    // says, but otherwise calculate a default
+    if (timeoutMillis === undefined) {
       const maxRetries = options.maxRetries ?? this.maxRetries;
       timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
     }
@@ -739,7 +774,7 @@ export class Mobilerun {
     ) {
       return {
         bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: this.stringifyQuery(body as Record<string, unknown>),
+        body: this.stringifyQuery(body),
       };
     } else {
       return this.#encoder({ body, headers });
@@ -765,15 +800,32 @@ export class Mobilerun {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * Tasks API
+   */
   tasks: API.Tasks = new API.Tasks(this);
+  /**
+   * Agents API
+   */
+  agents: API.Agents = new API.Agents(this);
+  proxies: API.Proxies = new API.Proxies(this);
+  carriers: API.Carriers = new API.Carriers(this);
+  profiles: API.Profiles = new API.Profiles(this);
   devices: API.Devices = new API.Devices(this);
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
+  /**
+   * Webhooks API
+   */
   hooks: API.Hooks = new API.Hooks(this);
   models: API.Models = new API.Models(this);
 }
 
 Mobilerun.Tasks = Tasks;
+Mobilerun.Agents = Agents;
+Mobilerun.Proxies = Proxies;
+Mobilerun.Carriers = Carriers;
+Mobilerun.Profiles = Profiles;
 Mobilerun.Devices = Devices;
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
@@ -794,10 +846,48 @@ export declare namespace Mobilerun {
     type TaskGetStatusResponse as TaskGetStatusResponse,
     type TaskGetTrajectoryResponse as TaskGetTrajectoryResponse,
     type TaskRunResponse as TaskRunResponse,
+    type TaskRunStreamedResponse as TaskRunStreamedResponse,
+    type TaskSendMessageResponse as TaskSendMessageResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
+    type TaskSendMessageParams as TaskSendMessageParams,
+  };
+
+  export { Agents as Agents, type AgentListResponse as AgentListResponse };
+
+  export {
+    Proxies as Proxies,
+    type ProxyConfig as ProxyConfig,
+    type ProxyCreateResponse as ProxyCreateResponse,
+    type ProxyRetrieveResponse as ProxyRetrieveResponse,
+    type ProxyUpdateResponse as ProxyUpdateResponse,
+    type ProxyListResponse as ProxyListResponse,
+    type ProxyDeleteResponse as ProxyDeleteResponse,
+    type ProxyCreateParams as ProxyCreateParams,
+    type ProxyUpdateParams as ProxyUpdateParams,
+  };
+
+  export {
+    Carriers as Carriers,
+    type Carrier as Carrier,
+    type CarrierListResponse as CarrierListResponse,
+    type CarrierDeleteResponse as CarrierDeleteResponse,
+    type CarrierCreateParams as CarrierCreateParams,
+    type CarrierUpdateParams as CarrierUpdateParams,
+    type CarrierListParams as CarrierListParams,
+    type CarrierLookupParams as CarrierLookupParams,
+  };
+
+  export {
+    Profiles as Profiles,
+    type Profile as Profile,
+    type ProfileListResponse as ProfileListResponse,
+    type ProfileDeleteResponse as ProfileDeleteResponse,
+    type ProfileCreateParams as ProfileCreateParams,
+    type ProfileUpdateParams as ProfileUpdateParams,
+    type ProfileListParams as ProfileListParams,
   };
 
   export {
@@ -834,4 +924,13 @@ export declare namespace Mobilerun {
   };
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
+
+  export type Config = API.Config;
+  export type DeviceCarrier = API.DeviceCarrier;
+  export type DeviceIdentifiers = API.DeviceIdentifiers;
+  export type DeviceSpec = API.DeviceSpec;
+  export type Meta = API.Meta;
+  export type Pagination = API.Pagination;
+  export type PaginationMeta = API.PaginationMeta;
+  export type PermissionSet = API.PermissionSet;
 }

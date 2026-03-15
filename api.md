@@ -1,3 +1,16 @@
+# Shared
+
+Types:
+
+- <code><a href="./src/resources/shared.ts">Config</a></code>
+- <code><a href="./src/resources/shared.ts">DeviceCarrier</a></code>
+- <code><a href="./src/resources/shared.ts">DeviceIdentifiers</a></code>
+- <code><a href="./src/resources/shared.ts">DeviceSpec</a></code>
+- <code><a href="./src/resources/shared.ts">Meta</a></code>
+- <code><a href="./src/resources/shared.ts">Pagination</a></code>
+- <code><a href="./src/resources/shared.ts">PaginationMeta</a></code>
+- <code><a href="./src/resources/shared.ts">PermissionSet</a></code>
+
 # Tasks
 
 Types:
@@ -11,6 +24,8 @@ Types:
 - <code><a href="./src/resources/tasks/tasks.ts">TaskGetStatusResponse</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskGetTrajectoryResponse</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskRunResponse</a></code>
+- <code><a href="./src/resources/tasks/tasks.ts">TaskRunStreamedResponse</a></code>
+- <code><a href="./src/resources/tasks/tasks.ts">TaskSendMessageResponse</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskStopResponse</a></code>
 
 Methods:
@@ -21,7 +36,8 @@ Methods:
 - <code title="get /tasks/{task_id}/status">client.tasks.<a href="./src/resources/tasks/tasks.ts">getStatus</a>(taskID) -> TaskGetStatusResponse</code>
 - <code title="get /tasks/{task_id}/trajectory">client.tasks.<a href="./src/resources/tasks/tasks.ts">getTrajectory</a>(taskID) -> TaskGetTrajectoryResponse</code>
 - <code title="post /tasks">client.tasks.<a href="./src/resources/tasks/tasks.ts">run</a>({ ...params }) -> TaskRunResponse</code>
-- <code title="post /tasks/stream">client.tasks.<a href="./src/resources/tasks/tasks.ts">runStreamed</a>({ ...params }) -> void</code>
+- <code title="post /tasks/stream">client.tasks.<a href="./src/resources/tasks/tasks.ts">runStreamed</a>({ ...params }) -> unknown</code>
+- <code title="post /tasks/{task_id}/message">client.tasks.<a href="./src/resources/tasks/tasks.ts">sendMessage</a>(taskID, { ...params }) -> TaskSendMessageResponse</code>
 - <code title="post /tasks/{task_id}/cancel">client.tasks.<a href="./src/resources/tasks/tasks.ts">stop</a>(taskID) -> TaskStopResponse</code>
 
 ## Screenshots
@@ -47,6 +63,68 @@ Methods:
 - <code title="get /tasks/{task_id}/ui_states/{index}">client.tasks.uiStates.<a href="./src/resources/tasks/ui-states.ts">retrieve</a>(index, { ...params }) -> MediaResponse</code>
 - <code title="get /tasks/{task_id}/ui_states">client.tasks.uiStates.<a href="./src/resources/tasks/ui-states.ts">list</a>(taskID) -> UiStateListResponse</code>
 
+# Agents
+
+Types:
+
+- <code><a href="./src/resources/agents.ts">AgentListResponse</a></code>
+
+Methods:
+
+- <code title="get /agents">client.agents.<a href="./src/resources/agents.ts">list</a>() -> AgentListResponse</code>
+
+# Proxies
+
+Types:
+
+- <code><a href="./src/resources/proxies.ts">ProxyConfig</a></code>
+- <code><a href="./src/resources/proxies.ts">ProxyCreateResponse</a></code>
+- <code><a href="./src/resources/proxies.ts">ProxyRetrieveResponse</a></code>
+- <code><a href="./src/resources/proxies.ts">ProxyUpdateResponse</a></code>
+- <code><a href="./src/resources/proxies.ts">ProxyListResponse</a></code>
+- <code><a href="./src/resources/proxies.ts">ProxyDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /proxies">client.proxies.<a href="./src/resources/proxies.ts">create</a>({ ...params }) -> ProxyCreateResponse</code>
+- <code title="get /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">retrieve</a>(proxyID) -> ProxyRetrieveResponse</code>
+- <code title="put /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">update</a>(proxyID, { ...params }) -> ProxyUpdateResponse</code>
+- <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>() -> ProxyListResponse</code>
+- <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
+
+# Carriers
+
+Types:
+
+- <code><a href="./src/resources/carriers.ts">Carrier</a></code>
+- <code><a href="./src/resources/carriers.ts">CarrierListResponse</a></code>
+- <code><a href="./src/resources/carriers.ts">CarrierDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /carriers">client.carriers.<a href="./src/resources/carriers.ts">create</a>({ ...params }) -> Carrier</code>
+- <code title="get /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">retrieve</a>(carrierID) -> Carrier</code>
+- <code title="patch /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">update</a>(carrierID, { ...params }) -> Carrier</code>
+- <code title="get /carriers">client.carriers.<a href="./src/resources/carriers.ts">list</a>({ ...params }) -> CarrierListResponse</code>
+- <code title="delete /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">delete</a>(carrierID) -> CarrierDeleteResponse</code>
+- <code title="get /carriers/lookup">client.carriers.<a href="./src/resources/carriers.ts">lookup</a>({ ...params }) -> Carrier</code>
+
+# Profiles
+
+Types:
+
+- <code><a href="./src/resources/profiles.ts">Profile</a></code>
+- <code><a href="./src/resources/profiles.ts">ProfileListResponse</a></code>
+- <code><a href="./src/resources/profiles.ts">ProfileDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> Profile</code>
+- <code title="get /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">retrieve</a>(profileID) -> Profile</code>
+- <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> Profile</code>
+- <code title="get /profiles">client.profiles.<a href="./src/resources/profiles.ts">list</a>({ ...params }) -> ProfileListResponse</code>
+- <code title="delete /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">delete</a>(profileID) -> ProfileDeleteResponse</code>
+
 # Devices
 
 Types:
@@ -64,11 +142,70 @@ Methods:
 - <code title="delete /devices/{deviceId}">client.devices.<a href="./src/resources/devices/devices.ts">terminate</a>(deviceID, { ...params }) -> void</code>
 - <code title="get /devices/{deviceId}/wait">client.devices.<a href="./src/resources/devices/devices.ts">waitReady</a>(deviceID) -> Device</code>
 
+## Time
+
+Types:
+
+- <code><a href="./src/resources/devices/time.ts">TimeTimeResponse</a></code>
+- <code><a href="./src/resources/devices/time.ts">TimeTimezoneResponse</a></code>
+
+Methods:
+
+- <code title="post /devices/{deviceId}/time">client.devices.time.<a href="./src/resources/devices/time.ts">setTime</a>(deviceID, { ...params }) -> void</code>
+- <code title="post /devices/{deviceId}/timezone">client.devices.time.<a href="./src/resources/devices/time.ts">setTimezone</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/time">client.devices.time.<a href="./src/resources/devices/time.ts">time</a>(deviceID, { ...params }) -> string</code>
+- <code title="get /devices/{deviceId}/timezone">client.devices.time.<a href="./src/resources/devices/time.ts">timezone</a>(deviceID, { ...params }) -> TimeTimezoneResponse</code>
+
+## Profile
+
+Methods:
+
+- <code title="put /devices/{deviceId}/profile">client.devices.profile.<a href="./src/resources/devices/profile.ts">update</a>(deviceID, { ...params }) -> void</code>
+
+## Files
+
+Types:
+
+- <code><a href="./src/resources/devices/files.ts">FileInfo</a></code>
+- <code><a href="./src/resources/devices/files.ts">FileListResponse</a></code>
+- <code><a href="./src/resources/devices/files.ts">FileDownloadResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/{deviceId}/files">client.devices.files.<a href="./src/resources/devices/files.ts">list</a>(deviceID, { ...params }) -> FileListResponse</code>
+- <code title="delete /devices/{deviceId}/files">client.devices.files.<a href="./src/resources/devices/files.ts">delete</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/files/download">client.devices.files.<a href="./src/resources/devices/files.ts">download</a>(deviceID, { ...params }) -> string</code>
+- <code title="post /devices/{deviceId}/files">client.devices.files.<a href="./src/resources/devices/files.ts">upload</a>(deviceID, { ...params }) -> void</code>
+
+## Proxy
+
+Methods:
+
+- <code title="post /devices/{deviceId}/proxy">client.devices.proxy.<a href="./src/resources/devices/proxy.ts">connect</a>(deviceID, { ...params }) -> void</code>
+- <code title="delete /devices/{deviceId}/proxy">client.devices.proxy.<a href="./src/resources/devices/proxy.ts">disconnect</a>(deviceID, { ...params }) -> void</code>
+
+## Location
+
+Types:
+
+- <code><a href="./src/resources/devices/location.ts">LocationGetResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/{deviceId}/location">client.devices.location.<a href="./src/resources/devices/location.ts">get</a>(deviceID, { ...params }) -> LocationGetResponse</code>
+- <code title="post /devices/{deviceId}/location">client.devices.location.<a href="./src/resources/devices/location.ts">set</a>(deviceID, { ...params }) -> void</code>
+
 ## Actions
+
+Types:
+
+- <code><a href="./src/resources/devices/actions.ts">ActionOverlayVisibleResponse</a></code>
 
 Methods:
 
 - <code title="post /devices/{deviceId}/global">client.devices.actions.<a href="./src/resources/devices/actions.ts">global</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/overlay">client.devices.actions.<a href="./src/resources/devices/actions.ts">overlayVisible</a>(deviceID, { ...params }) -> ActionOverlayVisibleResponse</code>
+- <code title="post /devices/{deviceId}/overlay">client.devices.actions.<a href="./src/resources/devices/actions.ts">setOverlayVisible</a>(deviceID, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/swipe">client.devices.actions.<a href="./src/resources/devices/actions.ts">swipe</a>(deviceID, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/tap">client.devices.actions.<a href="./src/resources/devices/actions.ts">tap</a>(deviceID, { ...params }) -> void</code>
 
@@ -76,14 +213,13 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/devices/state.ts">Rect</a></code>
 - <code><a href="./src/resources/devices/state.ts">StateScreenshotResponse</a></code>
-- <code><a href="./src/resources/devices/state.ts">StateTimeResponse</a></code>
 - <code><a href="./src/resources/devices/state.ts">StateUiResponse</a></code>
 
 Methods:
 
 - <code title="get /devices/{deviceId}/screenshot">client.devices.state.<a href="./src/resources/devices/state.ts">screenshot</a>(deviceID, { ...params }) -> string</code>
-- <code title="get /devices/{deviceId}/time">client.devices.state.<a href="./src/resources/devices/state.ts">time</a>(deviceID, { ...params }) -> string</code>
 - <code title="get /devices/{deviceId}/ui-state">client.devices.state.<a href="./src/resources/devices/state.ts">ui</a>(deviceID, { ...params }) -> StateUiResponse</code>
 
 ## Apps

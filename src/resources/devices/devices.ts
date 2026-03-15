@@ -1,8 +1,17 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as Shared from '../shared';
 import * as ActionsAPI from './actions';
-import { ActionGlobalParams, ActionSwipeParams, ActionTapParams, Actions } from './actions';
+import {
+  ActionGlobalParams,
+  ActionOverlayVisibleParams,
+  ActionOverlayVisibleResponse,
+  ActionSetOverlayVisibleParams,
+  ActionSwipeParams,
+  ActionTapParams,
+  Actions,
+} from './actions';
 import * as AppsAPI from './apps';
 import {
   AppDeleteParams,
@@ -13,28 +22,59 @@ import {
   AppUpdateParams,
   Apps,
 } from './apps';
+import * as FilesAPI from './files';
+import {
+  FileDeleteParams,
+  FileDownloadParams,
+  FileDownloadResponse,
+  FileInfo,
+  FileListParams,
+  FileListResponse,
+  FileUploadParams,
+  Files,
+} from './files';
 import * as KeyboardAPI from './keyboard';
 import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
+import * as LocationAPI from './location';
+import { Location, LocationGetParams, LocationGetResponse, LocationSetParams } from './location';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
+import * as ProfileAPI from './profile';
+import { Profile, ProfileUpdateParams } from './profile';
+import * as ProxyAPI from './proxy';
+import { Proxy, ProxyConnectParams, ProxyDisconnectParams } from './proxy';
 import * as StateAPI from './state';
 import {
+  Rect,
   State,
   StateScreenshotParams,
   StateScreenshotResponse,
-  StateTimeParams,
-  StateTimeResponse,
   StateUiParams,
   StateUiResponse,
 } from './state';
 import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
+import * as TimeAPI from './time';
+import {
+  Time,
+  TimeSetTimeParams,
+  TimeSetTimezoneParams,
+  TimeTimeParams,
+  TimeTimeResponse,
+  TimeTimezoneParams,
+  TimeTimezoneResponse,
+} from './time';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Devices extends APIResource {
+  time: TimeAPI.Time = new TimeAPI.Time(this._client);
+  profile: ProfileAPI.Profile = new ProfileAPI.Profile(this._client);
+  files: FilesAPI.Files = new FilesAPI.Files(this._client);
+  proxy: ProxyAPI.Proxy = new ProxyAPI.Proxy(this._client);
+  location: LocationAPI.Location = new LocationAPI.Location(this._client);
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
   state: StateAPI.State = new StateAPI.State(this._client);
   apps: AppsAPI.Apps = new AppsAPI.Apps(this._client);
@@ -46,8 +86,8 @@ export class Devices extends APIResource {
    * Provision a new device
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
-    const { deviceType, provider, ...body } = params;
-    return this._client.post('/devices', { query: { deviceType, provider }, body, ...options });
+    const { deviceType, ...body } = params;
+    return this._client.post('/devices', { query: { deviceType }, body, ...options });
   }
 
   /**
@@ -96,33 +136,23 @@ export class Devices extends APIResource {
 export interface Device {
   id: string;
 
-  apps: Array<string> | null;
-
   assignedAt: string | null;
-
-  country: string;
 
   createdAt: string;
 
-  deviceType: string;
-
-  files: Array<string> | null;
-
   name: string;
-
-  provider: string;
 
   state: string;
 
   stateMessage: string;
-
-  streamToken: string;
 
   streamUrl: string;
 
   taskCount: number;
 
   terminatesAt: string | null;
+
+  type: string;
 
   updatedAt: string;
 
@@ -131,34 +161,20 @@ export interface Device {
    */
   $schema?: string;
 
+  streamToken?: string;
+
   userId?: string;
 }
 
 export interface DeviceListResponse {
   items: Array<Device> | null;
 
-  pagination: DeviceListResponse.Pagination;
+  pagination: Shared.Meta;
 
   /**
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
-}
-
-export namespace DeviceListResponse {
-  export interface Pagination {
-    hasNext: boolean;
-
-    hasPrev: boolean;
-
-    page: number;
-
-    pages: number;
-
-    pageSize: number;
-
-    total: number;
-  }
 }
 
 export type DeviceCountResponse = { [key: string]: number };
@@ -167,16 +183,7 @@ export interface DeviceCreateParams {
   /**
    * Query param
    */
-  deviceType?:
-    | 'device_slot'
-    | 'dedicated_emulated_device'
-    | 'dedicated_physical_device'
-    | 'dedicated_premium_device';
-
-  /**
-   * Query param
-   */
-  provider?: 'limrun' | 'physical' | 'premium' | 'roidrun';
+  deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
 
   /**
    * Body param
@@ -186,7 +193,7 @@ export interface DeviceCreateParams {
   /**
    * Body param
    */
-  country?: string;
+  carrier?: Shared.DeviceCarrier;
 
   /**
    * Body param
@@ -196,24 +203,22 @@ export interface DeviceCreateParams {
   /**
    * Body param
    */
+  identifiers?: Shared.DeviceIdentifiers;
+
+  /**
+   * Body param
+   */
   name?: string;
 
   /**
    * Body param
    */
-  proxy?: DeviceCreateParams.Proxy;
-}
+  proxy?: Shared.Config;
 
-export namespace DeviceCreateParams {
-  export interface Proxy {
-    host: string;
-
-    password: string;
-
-    port: number;
-
-    user: string;
-  }
+  /**
+   * Body param
+   */
+  smartIp?: boolean;
 }
 
 export interface DeviceListParams {
@@ -229,11 +234,9 @@ export interface DeviceListParams {
 
   pageSize?: number;
 
-  provider?: 'limrun' | 'personal' | 'remote' | 'roidrun';
-
   state?: Array<'creating' | 'assigned' | 'ready' | 'disconnected' | 'terminated' | 'unknown'> | null;
 
-  type?: 'device_slot' | 'dedicated_emulated_device' | 'dedicated_physical_device';
+  type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
 }
 
 export interface DeviceTerminateParams {
@@ -242,6 +245,11 @@ export interface DeviceTerminateParams {
   terminateAt?: string;
 }
 
+Devices.Time = Time;
+Devices.Profile = Profile;
+Devices.Files = Files;
+Devices.Proxy = Proxy;
+Devices.Location = Location;
 Devices.Actions = Actions;
 Devices.State = State;
 Devices.Apps = Apps;
@@ -260,19 +268,57 @@ export declare namespace Devices {
   };
 
   export {
+    Time as Time,
+    type TimeTimeResponse as TimeTimeResponse,
+    type TimeTimezoneResponse as TimeTimezoneResponse,
+    type TimeSetTimeParams as TimeSetTimeParams,
+    type TimeSetTimezoneParams as TimeSetTimezoneParams,
+    type TimeTimeParams as TimeTimeParams,
+    type TimeTimezoneParams as TimeTimezoneParams,
+  };
+
+  export { Profile as Profile, type ProfileUpdateParams as ProfileUpdateParams };
+
+  export {
+    Files as Files,
+    type FileInfo as FileInfo,
+    type FileListResponse as FileListResponse,
+    type FileDownloadResponse as FileDownloadResponse,
+    type FileListParams as FileListParams,
+    type FileDeleteParams as FileDeleteParams,
+    type FileDownloadParams as FileDownloadParams,
+    type FileUploadParams as FileUploadParams,
+  };
+
+  export {
+    Proxy as Proxy,
+    type ProxyConnectParams as ProxyConnectParams,
+    type ProxyDisconnectParams as ProxyDisconnectParams,
+  };
+
+  export {
+    Location as Location,
+    type LocationGetResponse as LocationGetResponse,
+    type LocationGetParams as LocationGetParams,
+    type LocationSetParams as LocationSetParams,
+  };
+
+  export {
     Actions as Actions,
+    type ActionOverlayVisibleResponse as ActionOverlayVisibleResponse,
     type ActionGlobalParams as ActionGlobalParams,
+    type ActionOverlayVisibleParams as ActionOverlayVisibleParams,
+    type ActionSetOverlayVisibleParams as ActionSetOverlayVisibleParams,
     type ActionSwipeParams as ActionSwipeParams,
     type ActionTapParams as ActionTapParams,
   };
 
   export {
     State as State,
+    type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
-    type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
-    type StateTimeParams as StateTimeParams,
     type StateUiParams as StateUiParams,
   };
 

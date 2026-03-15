@@ -8,7 +8,7 @@ const client = new Mobilerun({
 });
 
 describe('resource packages', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.credentials.packages.create({ packageName: 'packageName' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,12 +20,12 @@ describe('resource packages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.credentials.packages.create({ packageName: 'packageName' });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.credentials.packages.list('packageName');
     const rawResponse = await responsePromise.asResponse();

@@ -8,7 +8,7 @@ const client = new Mobilerun({
 });
 
 describe('resource credentials', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.credentials.packages.credentials.create('packageName', {
       credentialName: '26f1kl_-n-71',
@@ -23,7 +23,7 @@ describe('resource credentials', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.credentials.packages.credentials.create('packageName', {
       credentialName: '26f1kl_-n-71',
@@ -31,7 +31,7 @@ describe('resource credentials', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
     const responsePromise = client.credentials.packages.credentials.retrieve('credentialName', {
       packageName: 'packageName',
@@ -45,14 +45,14 @@ describe('resource credentials', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
     const response = await client.credentials.packages.credentials.retrieve('credentialName', {
       packageName: 'packageName',
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.credentials.packages.credentials.delete('credentialName', {
       packageName: 'packageName',
@@ -66,7 +66,7 @@ describe('resource credentials', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.credentials.packages.credentials.delete('credentialName', {
       packageName: 'packageName',

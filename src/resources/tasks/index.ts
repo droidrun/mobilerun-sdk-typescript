@@ -17,9 +17,12 @@ export {
   type TaskGetStatusResponse,
   type TaskGetTrajectoryResponse,
   type TaskRunResponse,
+  type TaskRunStreamedResponse,
+  type TaskSendMessageResponse,
   type TaskStopResponse,
   type TaskListParams,
   type TaskRunParams,
   type TaskRunStreamedParams,
+  type TaskSendMessageParams,
 } from './tasks';
 export { UiStates, type UiStateListResponse, type UiStateRetrieveParams } from './ui-states';

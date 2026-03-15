@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as StateAPI from './state';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -18,28 +19,6 @@ export class State extends APIResource {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
     return this._client.get(path`/devices/${deviceID}/screenshot`, {
       query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
-  }
-
-  /**
-   * Device time
-   */
-  time(
-    deviceID: string,
-    params: StateTimeParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/time`, {
       ...options,
       headers: buildHeaders([
         {
@@ -76,9 +55,13 @@ export class State extends APIResource {
   }
 }
 
-export type StateScreenshotResponse = string;
+export interface Rect {
+  height: number;
 
-export type StateTimeResponse = string;
+  width: number;
+}
+
+export type StateScreenshotResponse = string;
 
 export interface StateUiResponse {
   a11y_tree: unknown;
@@ -99,9 +82,9 @@ export namespace StateUiResponse {
 
     filtering_params: DeviceContext.FilteringParams;
 
-    screen_bounds: DeviceContext.ScreenBounds;
+    screen_bounds: StateAPI.Rect;
 
-    screenSize: DeviceContext.ScreenSize;
+    screenSize: StateAPI.Rect;
   }
 
   export namespace DeviceContext {
@@ -121,18 +104,6 @@ export namespace StateUiResponse {
       min_element_size: number;
 
       overlay_offset: number;
-    }
-
-    export interface ScreenBounds {
-      height: number;
-
-      width: number;
-    }
-
-    export interface ScreenSize {
-      height: number;
-
-      width: number;
     }
   }
 
@@ -173,10 +144,6 @@ export interface StateScreenshotParams {
   'X-Device-Display-ID'?: number;
 }
 
-export interface StateTimeParams {
-  'X-Device-Display-ID'?: number;
-}
-
 export interface StateUiParams {
   /**
    * Query param
@@ -191,11 +158,10 @@ export interface StateUiParams {
 
 export declare namespace State {
   export {
+    type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
-    type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
-    type StateTimeParams as StateTimeParams,
     type StateUiParams as StateUiParams,
   };
 }

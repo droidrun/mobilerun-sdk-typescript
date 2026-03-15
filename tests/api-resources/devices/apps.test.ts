@@ -8,7 +8,7 @@ const client = new Mobilerun({
 });
 
 describe('resource apps', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.devices.apps.update('packageName', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource apps', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.devices.apps.update('packageName', {
       deviceId: 'deviceId',
@@ -28,7 +28,7 @@ describe('resource apps', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.devices.apps.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
@@ -40,19 +40,23 @@ describe('resource apps', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.devices.apps.list(
         'deviceId',
-        { includeSystemApps: true, 'X-Device-Display-ID': 0 },
+        {
+          includeProtectedApps: true,
+          includeSystemApps: true,
+          'X-Device-Display-ID': 0,
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.devices.apps.delete('packageName', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
@@ -64,7 +68,7 @@ describe('resource apps', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.devices.apps.delete('packageName', {
       deviceId: 'deviceId',
@@ -72,7 +76,7 @@ describe('resource apps', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('install: only required params', async () => {
     const responsePromise = client.devices.apps.install('deviceId', { packageName: 'packageName' });
     const rawResponse = await responsePromise.asResponse();
@@ -84,7 +88,7 @@ describe('resource apps', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('install: required and optional params', async () => {
     const response = await client.devices.apps.install('deviceId', {
       packageName: 'packageName',
@@ -92,7 +96,7 @@ describe('resource apps', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('start: only required params', async () => {
     const responsePromise = client.devices.apps.start('packageName', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
@@ -104,7 +108,7 @@ describe('resource apps', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('start: required and optional params', async () => {
     const response = await client.devices.apps.start('packageName', {
       deviceId: 'deviceId',

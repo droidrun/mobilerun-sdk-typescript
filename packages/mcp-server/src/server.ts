@@ -20,7 +20,7 @@ export const newMcpServer = async (stainlessApiKey: string | undefined) =>
   new McpServer(
     {
       name: 'mobilerun_sdk_api',
-      version: '2.2.0',
+      version: '3.0.0',
     },
     {
       instructions: await getInstructions(stainlessApiKey),
@@ -37,6 +37,7 @@ export async function initMcpServer(params: {
   clientOptions?: ClientOptions;
   mcpOptions?: McpOptions;
   stainlessApiKey?: string | undefined;
+  upstreamClientEnvs?: Record<string, string> | undefined;
 }) {
   const server = params.server instanceof McpServer ? params.server.server : params.server;
 
@@ -55,14 +56,32 @@ export async function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
-  let client = new Mobilerun({
-    logger,
-    ...params.clientOptions,
-    defaultHeaders: {
-      ...params.clientOptions?.defaultHeaders,
-      'X-Stainless-MCP': 'true',
-    },
-  });
+  let _client: Mobilerun | undefined;
+  let _clientError: Error | undefined;
+  let _logLevel: 'debug' | 'info' | 'warn' | 'error' | 'off' | undefined;
+
+  const getClient = (): Mobilerun => {
+    if (_clientError) throw _clientError;
+    if (!_client) {
+      try {
+        _client = new Mobilerun({
+          logger,
+          ...params.clientOptions,
+          defaultHeaders: {
+            ...params.clientOptions?.defaultHeaders,
+            'X-Stainless-MCP': 'true',
+          },
+        });
+        if (_logLevel) {
+          _client = _client.withOptions({ logLevel: _logLevel });
+        }
+      } catch (e) {
+        _clientError = e instanceof Error ? e : new Error(String(e));
+        throw _clientError;
+      }
+    }
+    return _client;
+  };
 
   const providedTools = selectTools(params.mcpOptions);
   const toolMap = Object.fromEntries(providedTools.map((mcpTool) => [mcpTool.tool.name, mcpTool]));
@@ -80,11 +99,27 @@ export async function initMcpServer(params: {
       throw new Error(`Unknown tool: ${name}`);
     }
 
+    let client: Mobilerun;
+    try {
+      client = getClient();
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: `Failed to initialize client: ${error instanceof Error ? error.message : String(error)}`,
+          },
+        ],
+        isError: true,
+      };
+    }
+
     return executeHandler({
       handler: mcpTool.handler,
       reqContext: {
         client,
         stainlessApiKey: params.stainlessApiKey ?? params.mcpOptions?.stainlessApiKey,
+        upstreamClientEnvs: params.upstreamClientEnvs,
       },
       args,
     });
@@ -92,23 +127,28 @@ export async function initMcpServer(params: {
 
   server.setRequestHandler(SetLevelRequestSchema, async (request) => {
     const { level } = request.params;
+    let logLevel: 'debug' | 'info' | 'warn' | 'error' | 'off';
     switch (level) {
       case 'debug':
-        client = client.withOptions({ logLevel: 'debug' });
+        logLevel = 'debug';
         break;
       case 'info':
-        client = client.withOptions({ logLevel: 'info' });
+        logLevel = 'info';
         break;
       case 'notice':
       case 'warning':
-        client = client.withOptions({ logLevel: 'warn' });
+        logLevel = 'warn';
         break;
       case 'error':
-        client = client.withOptions({ logLevel: 'error' });
+        logLevel = 'error';
         break;
       default:
-        client = client.withOptions({ logLevel: 'off' });
+        logLevel = 'off';
         break;
+    }
+    _logLevel = logLevel;
+    if (_client) {
+      _client = _client.withOptions({ logLevel });
     }
     return {};
   });
@@ -118,11 +158,16 @@ export async function initMcpServer(params: {
  * Selects the tools to include in the MCP Server based on the provided options.
  */
 export function selectTools(options?: McpOptions): McpTool[] {
-  const includedTools = [
-    codeTool({
-      blockedMethods: blockedMethodsForCodeTool(options),
-    }),
-  ];
+  const includedTools = [];
+
+  if (options?.includeCodeTool ?? true) {
+    includedTools.push(
+      codeTool({
+        blockedMethods: blockedMethodsForCodeTool(options),
+        codeExecutionMode: options?.codeExecutionMode ?? 'stainless-sandbox',
+      }),
+    );
+  }
   if (options?.includeDocsTools ?? true) {
     includedTools.push(docsSearchTool);
   }

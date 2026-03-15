@@ -1,6 +1,18 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export * from './shared';
+export { Agents, type AgentListResponse } from './agents';
 export { Apps, type AppListResponse, type AppListParams } from './apps';
+export {
+  Carriers,
+  type Carrier,
+  type CarrierListResponse,
+  type CarrierDeleteResponse,
+  type CarrierCreateParams,
+  type CarrierUpdateParams,
+  type CarrierListParams,
+  type CarrierLookupParams,
+} from './carriers';
 export {
   Credentials,
   type CredentialListResponse,
@@ -31,6 +43,26 @@ export {
 } from './hooks';
 export { Models, type ModelListResponse } from './models';
 export {
+  Profiles,
+  type Profile,
+  type ProfileListResponse,
+  type ProfileDeleteResponse,
+  type ProfileCreateParams,
+  type ProfileUpdateParams,
+  type ProfileListParams,
+} from './profiles';
+export {
+  Proxies,
+  type ProxyConfig,
+  type ProxyCreateResponse,
+  type ProxyRetrieveResponse,
+  type ProxyUpdateResponse,
+  type ProxyListResponse,
+  type ProxyDeleteResponse,
+  type ProxyCreateParams,
+  type ProxyUpdateParams,
+} from './proxies';
+export {
   Tasks,
   type PackageCredentials,
   type Task,
@@ -41,8 +73,11 @@ export {
   type TaskGetStatusResponse,
   type TaskGetTrajectoryResponse,
   type TaskRunResponse,
+  type TaskRunStreamedResponse,
+  type TaskSendMessageResponse,
   type TaskStopResponse,
   type TaskListParams,
   type TaskRunParams,
   type TaskRunStreamedParams,
+  type TaskSendMessageParams,
 } from './tasks/tasks';

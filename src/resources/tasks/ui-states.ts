@@ -6,6 +6,9 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Tasks API
+ */
 export class UiStates extends APIResource {
   /**
    * Get a specific UI state by index.

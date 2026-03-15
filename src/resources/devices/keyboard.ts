@@ -91,12 +91,22 @@ export interface KeyboardWriteParams {
   /**
    * Body param
    */
-  clear: boolean;
+  text: string;
 
   /**
    * Body param
    */
-  text: string;
+  clear?: boolean;
+
+  /**
+   * Body param
+   */
+  stealth?: boolean;
+
+  /**
+   * Body param: Words per minute for stealth typing. 0 uses portal default.
+   */
+  wpm?: number;
 
   /**
    * Header param
