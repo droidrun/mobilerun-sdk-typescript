@@ -9,8 +9,8 @@ const client = new Mobilerun({
 
 describe('resource location', () => {
   // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.devices.location.retrieve('deviceId');
+  test.skip('get', async () => {
+    const responsePromise = client.devices.location.get('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,10 +21,10 @@ describe('resource location', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieve: request options and params are passed correctly', async () => {
+  test.skip('get: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.devices.location.retrieve(
+      client.devices.location.get(
         'deviceId',
         { 'X-Device-Display-ID': 0 },
         { path: '/_stainless_unknown_path' },
@@ -33,8 +33,8 @@ describe('resource location', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update: only required params', async () => {
-    const responsePromise = client.devices.location.update('deviceId', { latitude: 0, longitude: 0 });
+  test.skip('set: only required params', async () => {
+    const responsePromise = client.devices.location.set('deviceId', { latitude: 0, longitude: 0 });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -45,8 +45,8 @@ describe('resource location', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update: required and optional params', async () => {
-    const response = await client.devices.location.update('deviceId', {
+  test.skip('set: required and optional params', async () => {
+    const response = await client.devices.location.set('deviceId', {
       latitude: 0,
       longitude: 0,
       'X-Device-Display-ID': 0,

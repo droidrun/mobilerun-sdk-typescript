@@ -28,6 +28,52 @@ export class Actions extends APIResource {
   }
 
   /**
+   * Check if overlay is visible
+   */
+  overlayVisible(
+    deviceID: string,
+    params: ActionOverlayVisibleParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ActionOverlayVisibleResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/overlay`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Set overlay visibility
+   */
+  setOverlayVisible(
+    deviceID: string,
+    params: ActionSetOverlayVisibleParams,
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    return this._client.post(path`/devices/${deviceID}/overlay`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Swipe
    */
   swipe(deviceID: string, params: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
@@ -68,11 +114,36 @@ export class Actions extends APIResource {
   }
 }
 
+export interface ActionOverlayVisibleResponse {
+  visible: boolean;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
 export interface ActionGlobalParams {
   /**
    * Body param
    */
   action: number;
+
+  /**
+   * Header param
+   */
+  'X-Device-Display-ID'?: number;
+}
+
+export interface ActionOverlayVisibleParams {
+  'X-Device-Display-ID'?: number;
+}
+
+export interface ActionSetOverlayVisibleParams {
+  /**
+   * Body param
+   */
+  visible: boolean;
 
   /**
    * Header param
@@ -141,7 +212,10 @@ export interface ActionTapParams {
 
 export declare namespace Actions {
   export {
+    type ActionOverlayVisibleResponse as ActionOverlayVisibleResponse,
     type ActionGlobalParams as ActionGlobalParams,
+    type ActionOverlayVisibleParams as ActionOverlayVisibleParams,
+    type ActionSetOverlayVisibleParams as ActionSetOverlayVisibleParams,
     type ActionSwipeParams as ActionSwipeParams,
     type ActionTapParams as ActionTapParams,
   };

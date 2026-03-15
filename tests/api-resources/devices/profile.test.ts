@@ -9,8 +9,8 @@ const client = new Mobilerun({
 
 describe('resource profile', () => {
   // Mock server tests are disabled
-  test.skip('apply: only required params', async () => {
-    const responsePromise = client.devices.profile.apply('deviceId', { profileId: 'profileId' });
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.devices.profile.update('deviceId', { profileId: 'profileId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,8 +21,8 @@ describe('resource profile', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('apply: required and optional params', async () => {
-    const response = await client.devices.profile.apply('deviceId', {
+  test.skip('update: required and optional params', async () => {
+    const response = await client.devices.profile.update('deviceId', {
       profileId: 'profileId',
       'X-Device-Display-ID': 0,
     });

@@ -1,6 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Actions, type ActionGlobalParams, type ActionSwipeParams, type ActionTapParams } from './actions';
+export {
+  Actions,
+  type ActionOverlayVisibleResponse,
+  type ActionGlobalParams,
+  type ActionOverlayVisibleParams,
+  type ActionSetOverlayVisibleParams,
+  type ActionSwipeParams,
+  type ActionTapParams,
+} from './actions';
 export {
   Apps,
   type AppListResponse,
@@ -21,6 +29,7 @@ export {
 } from './devices';
 export {
   Files,
+  type FileInfo,
   type FileListResponse,
   type FileDownloadResponse,
   type FileListParams,
@@ -36,34 +45,28 @@ export {
 } from './keyboard';
 export {
   Location,
-  type LocationRetrieveResponse,
-  type LocationRetrieveParams,
-  type LocationUpdateParams,
+  type LocationGetResponse,
+  type LocationGetParams,
+  type LocationSetParams,
 } from './location';
-export {
-  Overlay,
-  type OverlayRetrieveResponse,
-  type OverlayRetrieveParams,
-  type OverlayUpdateParams,
-} from './overlay';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
-export { Profile, type ProfileApplyParams } from './profile';
+export { Profile, type ProfileUpdateParams } from './profile';
 export { Proxy, type ProxyConnectParams, type ProxyDisconnectParams } from './proxy';
 export {
   State,
   type Rect,
   type StateScreenshotResponse,
-  type StateTimeResponse,
   type StateUiResponse,
   type StateScreenshotParams,
-  type StateTimeParams,
   type StateUiParams,
 } from './state';
 export { Tasks, type TaskListResponse, type TaskListParams } from './tasks';
-export { Time, type TimeUpdateParams } from './time';
 export {
-  Timezone,
-  type TimezoneRetrieveResponse,
-  type TimezoneRetrieveParams,
-  type TimezoneUpdateParams,
-} from './timezone';
+  Time,
+  type TimeTimeResponse,
+  type TimeTimezoneResponse,
+  type TimeSetTimeParams,
+  type TimeSetTimezoneParams,
+  type TimeTimeParams,
+  type TimeTimezoneParams,
+} from './time';

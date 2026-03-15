@@ -10,7 +10,7 @@ export class Profile extends APIResource {
   /**
    * Apply a profile to a device
    */
-  apply(deviceID: string, params: ProfileApplyParams, options?: RequestOptions): APIPromise<void> {
+  update(deviceID: string, params: ProfileUpdateParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
     return this._client.put(path`/devices/${deviceID}/profile`, {
       body,
@@ -28,7 +28,7 @@ export class Profile extends APIResource {
   }
 }
 
-export interface ProfileApplyParams {
+export interface ProfileUpdateParams {
   /**
    * Body param: ID of the profile to apply
    */
@@ -41,5 +41,5 @@ export interface ProfileApplyParams {
 }
 
 export declare namespace Profile {
-  export { type ProfileApplyParams as ProfileApplyParams };
+  export { type ProfileUpdateParams as ProfileUpdateParams };
 }

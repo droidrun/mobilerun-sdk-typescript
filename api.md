@@ -5,6 +5,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">Config</a></code>
 - <code><a href="./src/resources/shared.ts">DeviceCarrier</a></code>
 - <code><a href="./src/resources/shared.ts">DeviceIdentifiers</a></code>
+- <code><a href="./src/resources/shared.ts">DeviceSpec</a></code>
 - <code><a href="./src/resources/shared.ts">Meta</a></code>
 - <code><a href="./src/resources/shared.ts">Pagination</a></code>
 - <code><a href="./src/resources/shared.ts">PaginationMeta</a></code>
@@ -95,38 +96,32 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/carriers.ts">CarrierCreateResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierRetrieveResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierUpdateResponse</a></code>
+- <code><a href="./src/resources/carriers.ts">Carrier</a></code>
 - <code><a href="./src/resources/carriers.ts">CarrierListResponse</a></code>
 - <code><a href="./src/resources/carriers.ts">CarrierDeleteResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierLookupResponse</a></code>
 
 Methods:
 
-- <code title="post /carriers">client.carriers.<a href="./src/resources/carriers.ts">create</a>({ ...params }) -> CarrierCreateResponse</code>
-- <code title="get /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">retrieve</a>(carrierID) -> CarrierRetrieveResponse</code>
-- <code title="patch /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">update</a>(carrierID, { ...params }) -> CarrierUpdateResponse</code>
+- <code title="post /carriers">client.carriers.<a href="./src/resources/carriers.ts">create</a>({ ...params }) -> Carrier</code>
+- <code title="get /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">retrieve</a>(carrierID) -> Carrier</code>
+- <code title="patch /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">update</a>(carrierID, { ...params }) -> Carrier</code>
 - <code title="get /carriers">client.carriers.<a href="./src/resources/carriers.ts">list</a>({ ...params }) -> CarrierListResponse</code>
 - <code title="delete /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">delete</a>(carrierID) -> CarrierDeleteResponse</code>
-- <code title="get /carriers/lookup">client.carriers.<a href="./src/resources/carriers.ts">lookup</a>({ ...params }) -> CarrierLookupResponse</code>
+- <code title="get /carriers/lookup">client.carriers.<a href="./src/resources/carriers.ts">lookup</a>({ ...params }) -> Carrier</code>
 
 # Profiles
 
 Types:
 
-- <code><a href="./src/resources/profiles.ts">DeviceSpec</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileCreateResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileRetrieveResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileUpdateResponse</a></code>
+- <code><a href="./src/resources/profiles.ts">Profile</a></code>
 - <code><a href="./src/resources/profiles.ts">ProfileListResponse</a></code>
 - <code><a href="./src/resources/profiles.ts">ProfileDeleteResponse</a></code>
 
 Methods:
 
-- <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> ProfileCreateResponse</code>
-- <code title="get /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">retrieve</a>(profileID) -> ProfileRetrieveResponse</code>
-- <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> ProfileUpdateResponse</code>
+- <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> Profile</code>
+- <code title="get /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">retrieve</a>(profileID) -> Profile</code>
+- <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> Profile</code>
 - <code title="get /profiles">client.profiles.<a href="./src/resources/profiles.ts">list</a>({ ...params }) -> ProfileListResponse</code>
 - <code title="delete /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">delete</a>(profileID) -> ProfileDeleteResponse</code>
 
@@ -147,33 +142,31 @@ Methods:
 - <code title="delete /devices/{deviceId}">client.devices.<a href="./src/resources/devices/devices.ts">terminate</a>(deviceID, { ...params }) -> void</code>
 - <code title="get /devices/{deviceId}/wait">client.devices.<a href="./src/resources/devices/devices.ts">waitReady</a>(deviceID) -> Device</code>
 
-## Timezone
+## Time
 
 Types:
 
-- <code><a href="./src/resources/devices/timezone.ts">TimezoneRetrieveResponse</a></code>
+- <code><a href="./src/resources/devices/time.ts">TimeTimeResponse</a></code>
+- <code><a href="./src/resources/devices/time.ts">TimeTimezoneResponse</a></code>
 
 Methods:
 
-- <code title="get /devices/{deviceId}/timezone">client.devices.timezone.<a href="./src/resources/devices/timezone.ts">retrieve</a>(deviceID, { ...params }) -> TimezoneRetrieveResponse</code>
-- <code title="post /devices/{deviceId}/timezone">client.devices.timezone.<a href="./src/resources/devices/timezone.ts">update</a>(deviceID, { ...params }) -> void</code>
-
-## Time
-
-Methods:
-
-- <code title="post /devices/{deviceId}/time">client.devices.time.<a href="./src/resources/devices/time.ts">update</a>(deviceID, { ...params }) -> void</code>
+- <code title="post /devices/{deviceId}/time">client.devices.time.<a href="./src/resources/devices/time.ts">setTime</a>(deviceID, { ...params }) -> void</code>
+- <code title="post /devices/{deviceId}/timezone">client.devices.time.<a href="./src/resources/devices/time.ts">setTimezone</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/time">client.devices.time.<a href="./src/resources/devices/time.ts">time</a>(deviceID, { ...params }) -> string</code>
+- <code title="get /devices/{deviceId}/timezone">client.devices.time.<a href="./src/resources/devices/time.ts">timezone</a>(deviceID, { ...params }) -> TimeTimezoneResponse</code>
 
 ## Profile
 
 Methods:
 
-- <code title="put /devices/{deviceId}/profile">client.devices.profile.<a href="./src/resources/devices/profile.ts">apply</a>(deviceID, { ...params }) -> void</code>
+- <code title="put /devices/{deviceId}/profile">client.devices.profile.<a href="./src/resources/devices/profile.ts">update</a>(deviceID, { ...params }) -> void</code>
 
 ## Files
 
 Types:
 
+- <code><a href="./src/resources/devices/files.ts">FileInfo</a></code>
 - <code><a href="./src/resources/devices/files.ts">FileListResponse</a></code>
 - <code><a href="./src/resources/devices/files.ts">FileDownloadResponse</a></code>
 
@@ -195,29 +188,24 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/devices/location.ts">LocationRetrieveResponse</a></code>
+- <code><a href="./src/resources/devices/location.ts">LocationGetResponse</a></code>
 
 Methods:
 
-- <code title="get /devices/{deviceId}/location">client.devices.location.<a href="./src/resources/devices/location.ts">retrieve</a>(deviceID, { ...params }) -> LocationRetrieveResponse</code>
-- <code title="post /devices/{deviceId}/location">client.devices.location.<a href="./src/resources/devices/location.ts">update</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/location">client.devices.location.<a href="./src/resources/devices/location.ts">get</a>(deviceID, { ...params }) -> LocationGetResponse</code>
+- <code title="post /devices/{deviceId}/location">client.devices.location.<a href="./src/resources/devices/location.ts">set</a>(deviceID, { ...params }) -> void</code>
 
-## Overlay
+## Actions
 
 Types:
 
-- <code><a href="./src/resources/devices/overlay.ts">OverlayRetrieveResponse</a></code>
-
-Methods:
-
-- <code title="get /devices/{deviceId}/overlay">client.devices.overlay.<a href="./src/resources/devices/overlay.ts">retrieve</a>(deviceID, { ...params }) -> OverlayRetrieveResponse</code>
-- <code title="post /devices/{deviceId}/overlay">client.devices.overlay.<a href="./src/resources/devices/overlay.ts">update</a>(deviceID, { ...params }) -> void</code>
-
-## Actions
+- <code><a href="./src/resources/devices/actions.ts">ActionOverlayVisibleResponse</a></code>
 
 Methods:
 
 - <code title="post /devices/{deviceId}/global">client.devices.actions.<a href="./src/resources/devices/actions.ts">global</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/overlay">client.devices.actions.<a href="./src/resources/devices/actions.ts">overlayVisible</a>(deviceID, { ...params }) -> ActionOverlayVisibleResponse</code>
+- <code title="post /devices/{deviceId}/overlay">client.devices.actions.<a href="./src/resources/devices/actions.ts">setOverlayVisible</a>(deviceID, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/swipe">client.devices.actions.<a href="./src/resources/devices/actions.ts">swipe</a>(deviceID, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/tap">client.devices.actions.<a href="./src/resources/devices/actions.ts">tap</a>(deviceID, { ...params }) -> void</code>
 
@@ -227,13 +215,11 @@ Types:
 
 - <code><a href="./src/resources/devices/state.ts">Rect</a></code>
 - <code><a href="./src/resources/devices/state.ts">StateScreenshotResponse</a></code>
-- <code><a href="./src/resources/devices/state.ts">StateTimeResponse</a></code>
 - <code><a href="./src/resources/devices/state.ts">StateUiResponse</a></code>
 
 Methods:
 
 - <code title="get /devices/{deviceId}/screenshot">client.devices.state.<a href="./src/resources/devices/state.ts">screenshot</a>(deviceID, { ...params }) -> string</code>
-- <code title="get /devices/{deviceId}/time">client.devices.state.<a href="./src/resources/devices/state.ts">time</a>(deviceID, { ...params }) -> string</code>
 - <code title="get /devices/{deviceId}/ui-state">client.devices.state.<a href="./src/resources/devices/state.ts">ui</a>(deviceID, { ...params }) -> StateUiResponse</code>
 
 ## Apps

@@ -3,7 +3,15 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as ActionsAPI from './actions';
-import { ActionGlobalParams, ActionSwipeParams, ActionTapParams, Actions } from './actions';
+import {
+  ActionGlobalParams,
+  ActionOverlayVisibleParams,
+  ActionOverlayVisibleResponse,
+  ActionSetOverlayVisibleParams,
+  ActionSwipeParams,
+  ActionTapParams,
+  Actions,
+} from './actions';
 import * as AppsAPI from './apps';
 import {
   AppDeleteParams,
@@ -19,6 +27,7 @@ import {
   FileDeleteParams,
   FileDownloadParams,
   FileDownloadResponse,
+  FileInfo,
   FileListParams,
   FileListResponse,
   FileUploadParams,
@@ -27,13 +36,11 @@ import {
 import * as KeyboardAPI from './keyboard';
 import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
 import * as LocationAPI from './location';
-import { Location, LocationRetrieveParams, LocationRetrieveResponse, LocationUpdateParams } from './location';
-import * as OverlayAPI from './overlay';
-import { Overlay, OverlayRetrieveParams, OverlayRetrieveResponse, OverlayUpdateParams } from './overlay';
+import { Location, LocationGetParams, LocationGetResponse, LocationSetParams } from './location';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
-import { Profile, ProfileApplyParams } from './profile';
+import { Profile, ProfileUpdateParams } from './profile';
 import * as ProxyAPI from './proxy';
 import { Proxy, ProxyConnectParams, ProxyDisconnectParams } from './proxy';
 import * as StateAPI from './state';
@@ -42,30 +49,32 @@ import {
   State,
   StateScreenshotParams,
   StateScreenshotResponse,
-  StateTimeParams,
-  StateTimeResponse,
   StateUiParams,
   StateUiResponse,
 } from './state';
 import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimeAPI from './time';
-import { Time, TimeUpdateParams } from './time';
-import * as TimezoneAPI from './timezone';
-import { Timezone, TimezoneRetrieveParams, TimezoneRetrieveResponse, TimezoneUpdateParams } from './timezone';
+import {
+  Time,
+  TimeSetTimeParams,
+  TimeSetTimezoneParams,
+  TimeTimeParams,
+  TimeTimeResponse,
+  TimeTimezoneParams,
+  TimeTimezoneResponse,
+} from './time';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Devices extends APIResource {
-  timezone: TimezoneAPI.Timezone = new TimezoneAPI.Timezone(this._client);
   time: TimeAPI.Time = new TimeAPI.Time(this._client);
   profile: ProfileAPI.Profile = new ProfileAPI.Profile(this._client);
   files: FilesAPI.Files = new FilesAPI.Files(this._client);
   proxy: ProxyAPI.Proxy = new ProxyAPI.Proxy(this._client);
   location: LocationAPI.Location = new LocationAPI.Location(this._client);
-  overlay: OverlayAPI.Overlay = new OverlayAPI.Overlay(this._client);
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
   state: StateAPI.State = new StateAPI.State(this._client);
   apps: AppsAPI.Apps = new AppsAPI.Apps(this._client);
@@ -236,13 +245,11 @@ export interface DeviceTerminateParams {
   terminateAt?: string;
 }
 
-Devices.Timezone = Timezone;
 Devices.Time = Time;
 Devices.Profile = Profile;
 Devices.Files = Files;
 Devices.Proxy = Proxy;
 Devices.Location = Location;
-Devices.Overlay = Overlay;
 Devices.Actions = Actions;
 Devices.State = State;
 Devices.Apps = Apps;
@@ -261,18 +268,20 @@ export declare namespace Devices {
   };
 
   export {
-    Timezone as Timezone,
-    type TimezoneRetrieveResponse as TimezoneRetrieveResponse,
-    type TimezoneRetrieveParams as TimezoneRetrieveParams,
-    type TimezoneUpdateParams as TimezoneUpdateParams,
+    Time as Time,
+    type TimeTimeResponse as TimeTimeResponse,
+    type TimeTimezoneResponse as TimeTimezoneResponse,
+    type TimeSetTimeParams as TimeSetTimeParams,
+    type TimeSetTimezoneParams as TimeSetTimezoneParams,
+    type TimeTimeParams as TimeTimeParams,
+    type TimeTimezoneParams as TimeTimezoneParams,
   };
 
-  export { Time as Time, type TimeUpdateParams as TimeUpdateParams };
-
-  export { Profile as Profile, type ProfileApplyParams as ProfileApplyParams };
+  export { Profile as Profile, type ProfileUpdateParams as ProfileUpdateParams };
 
   export {
     Files as Files,
+    type FileInfo as FileInfo,
     type FileListResponse as FileListResponse,
     type FileDownloadResponse as FileDownloadResponse,
     type FileListParams as FileListParams,
@@ -289,21 +298,17 @@ export declare namespace Devices {
 
   export {
     Location as Location,
-    type LocationRetrieveResponse as LocationRetrieveResponse,
-    type LocationRetrieveParams as LocationRetrieveParams,
-    type LocationUpdateParams as LocationUpdateParams,
-  };
-
-  export {
-    Overlay as Overlay,
-    type OverlayRetrieveResponse as OverlayRetrieveResponse,
-    type OverlayRetrieveParams as OverlayRetrieveParams,
-    type OverlayUpdateParams as OverlayUpdateParams,
+    type LocationGetResponse as LocationGetResponse,
+    type LocationGetParams as LocationGetParams,
+    type LocationSetParams as LocationSetParams,
   };
 
   export {
     Actions as Actions,
+    type ActionOverlayVisibleResponse as ActionOverlayVisibleResponse,
     type ActionGlobalParams as ActionGlobalParams,
+    type ActionOverlayVisibleParams as ActionOverlayVisibleParams,
+    type ActionSetOverlayVisibleParams as ActionSetOverlayVisibleParams,
     type ActionSwipeParams as ActionSwipeParams,
     type ActionTapParams as ActionTapParams,
   };
@@ -312,10 +317,8 @@ export declare namespace Devices {
     State as State,
     type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
-    type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
-    type StateTimeParams as StateTimeParams,
     type StateUiParams as StateUiParams,
   };
 

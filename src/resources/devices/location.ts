@@ -10,11 +10,11 @@ export class Location extends APIResource {
   /**
    * Get device location
    */
-  retrieve(
+  get(
     deviceID: string,
-    params: LocationRetrieveParams | null | undefined = {},
+    params: LocationGetParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<LocationRetrieveResponse> {
+  ): APIPromise<LocationGetResponse> {
     const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
     return this._client.get(path`/devices/${deviceID}/location`, {
       ...options,
@@ -32,7 +32,7 @@ export class Location extends APIResource {
   /**
    * Set device location
    */
-  update(deviceID: string, params: LocationUpdateParams, options?: RequestOptions): APIPromise<void> {
+  set(deviceID: string, params: LocationSetParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
     return this._client.post(path`/devices/${deviceID}/location`, {
       body,
@@ -50,7 +50,7 @@ export class Location extends APIResource {
   }
 }
 
-export interface LocationRetrieveResponse {
+export interface LocationGetResponse {
   latitude: number;
 
   longitude: number;
@@ -61,11 +61,11 @@ export interface LocationRetrieveResponse {
   $schema?: string;
 }
 
-export interface LocationRetrieveParams {
+export interface LocationGetParams {
   'X-Device-Display-ID'?: number;
 }
 
-export interface LocationUpdateParams {
+export interface LocationSetParams {
   /**
    * Body param
    */
@@ -84,8 +84,8 @@ export interface LocationUpdateParams {
 
 export declare namespace Location {
   export {
-    type LocationRetrieveResponse as LocationRetrieveResponse,
-    type LocationRetrieveParams as LocationRetrieveParams,
-    type LocationUpdateParams as LocationUpdateParams,
+    type LocationGetResponse as LocationGetResponse,
+    type LocationGetParams as LocationGetParams,
+    type LocationSetParams as LocationSetParams,
   };
 }
