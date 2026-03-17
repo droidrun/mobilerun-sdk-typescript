@@ -95,7 +95,7 @@ export class Time extends APIResource {
 export type TimeTimeResponse = string;
 
 export interface TimeTimezoneResponse {
-  timezone: string;
+  timezone: string | null;
 
   /**
    * A URL to the JSON Schema for this object.
