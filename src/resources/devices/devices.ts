@@ -234,7 +234,9 @@ export interface DeviceListParams {
 
   pageSize?: number;
 
-  state?: Array<'creating' | 'assigned' | 'ready' | 'disconnected' | 'terminated' | 'unknown'> | null;
+  state?: Array<
+    'creating' | 'assigned' | 'ready' | 'disconnected' | 'terminated' | 'maintenance' | 'unknown'
+  > | null;
 
   type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
 }
