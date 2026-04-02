@@ -59,6 +59,7 @@ import {
   ProxyCreateParams,
   ProxyCreateResponse,
   ProxyDeleteResponse,
+  ProxyListParams,
   ProxyListResponse,
   ProxyRetrieveResponse,
   ProxyUpdateParams,
@@ -867,6 +868,7 @@ export declare namespace Mobilerun {
     type ProxyDeleteResponse as ProxyDeleteResponse,
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
+    type ProxyListParams as ProxyListParams,
   };
 
   export {

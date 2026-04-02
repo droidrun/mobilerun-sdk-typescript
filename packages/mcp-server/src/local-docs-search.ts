@@ -650,10 +650,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'List all proxy configs for the authenticated user',
     stainlessPath: '(resource) proxies > (method) list',
     qualified: 'client.proxies.list',
+    params: ["protocol?: 'socks5' | 'wireguard';"],
     response:
-      '{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }[]; }',
+      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }",
     markdown:
-      "## list\n\n`client.proxies.list(): { data: proxy_config[]; }`\n\n**get** `/proxies`\n\nList all proxy configs for the authenticated user\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }[]; }`\n\n  - `data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.proxies.list();\n\nconsole.log(proxies);\n```",
+      "## list\n\n`client.proxies.list(protocol?: 'socks5' | 'wireguard'): { data: proxy_config[]; }`\n\n**get** `/proxies`\n\nList all proxy configs for the authenticated user\n\n### Parameters\n\n- `protocol?: 'socks5' | 'wireguard'`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.proxies.list();\n\nconsole.log(proxies);\n```",
     perLanguage: {
       cli: {
         method: 'proxies list',
@@ -662,7 +663,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Proxies.List',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxies, err := client.Proxies.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxies.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxies, err := client.Proxies.List(context.TODO(), mobileruncloud.ProxyListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxies.Data)\n}\n',
       },
       http: {
         example:
@@ -688,35 +689,35 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Create a new proxy config',
     stainlessPath: '(resource) proxies > (method) create',
     qualified: 'client.proxies.create',
-    params: ['host: string;', 'name: string;', 'password: string;', 'port: number;', 'user: string;'],
+    params: [
+      "{ host: string; name: string; password: string; port: number; protocol: 'socks5'; user: string; } | { config: string; name: string; protocol: 'wireguard'; };",
+    ],
     response:
-      '{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }; message: string; success: true; }',
-    markdown:
-      "## create\n\n`client.proxies.create(host: string, name: string, password: string, port: number, user: string): { data: proxy_config; message: string; success: true; }`\n\n**post** `/proxies`\n\nCreate a new proxy config\n\n### Parameters\n\n- `host: string`\n\n- `name: string`\n\n- `password: string`\n\n- `port: number`\n\n- `user: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }; message: string; success: true; }`\n\n  - `data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.create({\n  host: 'x',\n  name: 'xxx',\n  password: 'x',\n  port: 1,\n  user: 'x',\n});\n\nconsole.log(proxy);\n```",
+      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }",
     perLanguage: {
       cli: {
         method: 'proxies create',
         example:
-          "mobilerun-cloud proxies create \\\n  --api-key 'My API Key' \\\n  --host x \\\n  --name xxx \\\n  --password x \\\n  --port 1 \\\n  --user x",
+          "mobilerun-cloud proxies create \\\n  --api-key 'My API Key' \\\n  --host x \\\n  --name xxx \\\n  --password x \\\n  --port 1 \\\n  --protocol socks5 \\\n  --user x \\\n  --config x",
       },
       go: {
         method: 'client.Proxies.New',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxy, err := client.Proxies.New(context.TODO(), mobileruncloud.ProxyNewParams{\n\t\tHost:     "x",\n\t\tName:     "xxx",\n\t\tPassword: "x",\n\t\tPort:     1,\n\t\tUser:     "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxy.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxy, err := client.Proxies.New(context.TODO(), mobileruncloud.ProxyNewParams{\n\t\tOfSocks5: &mobileruncloud.ProxyNewParamsBodySocks5{\n\t\t\tHost:     "x",\n\t\t\tName:     "xxx",\n\t\t\tPassword: "x",\n\t\t\tPort:     1,\n\t\t\tUser:     "x",\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxy.Data)\n}\n',
       },
       http: {
         example:
-          'curl https://api.mobilerun.ai/v1/proxies \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "host": "x",\n          "name": "xxx",\n          "password": "x",\n          "port": 1,\n          "user": "x"\n        }\'',
+          'curl https://api.mobilerun.ai/v1/proxies \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "host": "x",\n          "name": "xxx",\n          "password": "x",\n          "port": 1,\n          "protocol": "socks5",\n          "user": "x"\n        }\'',
       },
       python: {
         method: 'proxies.create',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.create(\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    user="x",\n)\nprint(proxy.data)',
+          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.create(\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    protocol="socks5",\n    user="x",\n)\nprint(proxy.data)',
       },
       typescript: {
         method: 'client.proxies.create',
         example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst proxy = await client.proxies.create({\n  host: 'x',\n  name: 'xxx',\n  password: 'x',\n  port: 1,\n  user: 'x',\n});\n\nconsole.log(proxy.data);",
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst proxy = await client.proxies.create({\n  host: 'x',\n  name: 'xxx',\n  password: 'x',\n  port: 1,\n  protocol: 'socks5',\n  user: 'x',\n});\n\nconsole.log(proxy.data);",
       },
     },
   },
@@ -730,9 +731,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.proxies.retrieve',
     params: ['proxyId: string;'],
     response:
-      '{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }; }',
+      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }",
     markdown:
-      "## retrieve\n\n`client.proxies.retrieve(proxyId: string): { data: proxy_config; }`\n\n**get** `/proxies/{proxyId}`\n\nGet a specific proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }; }`\n\n  - `data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
+      "## retrieve\n\n`client.proxies.retrieve(proxyId: string): { data: proxy_config; }`\n\n**get** `/proxies/{proxyId}`\n\nGet a specific proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
     perLanguage: {
       cli: {
         method: 'proxies retrieve',
@@ -770,40 +771,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.proxies.update',
     params: [
       'proxyId: string;',
-      'host: string;',
-      'name: string;',
-      'password: string;',
-      'port: number;',
-      'user: string;',
+      "body: { host: string; name: string; password: string; port: number; protocol: 'socks5'; user: string; } | { config: string; name: string; protocol: 'wireguard'; };",
     ],
     response:
-      '{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }; message: string; success: true; }',
-    markdown:
-      "## update\n\n`client.proxies.update(proxyId: string, host: string, name: string, password: string, port: number, user: string): { data: proxy_config; message: string; success: true; }`\n\n**put** `/proxies/{proxyId}`\n\nUpdate a proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n- `host: string`\n\n- `name: string`\n\n- `password: string`\n\n- `port: number`\n\n- `user: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }; message: string; success: true; }`\n\n  - `data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {\n  host: 'x',\n  name: 'xxx',\n  password: 'x',\n  port: 1,\n  user: 'x',\n});\n\nconsole.log(proxy);\n```",
+      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }",
     perLanguage: {
       cli: {
         method: 'proxies update',
         example:
-          "mobilerun-cloud proxies update \\\n  --api-key 'My API Key' \\\n  --proxy-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e \\\n  --host x \\\n  --name xxx \\\n  --password x \\\n  --port 1 \\\n  --user x",
+          "mobilerun-cloud proxies update \\\n  --api-key 'My API Key' \\\n  --proxy-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e \\\n  --host x \\\n  --name xxx \\\n  --password x \\\n  --port 1 \\\n  --protocol socks5 \\\n  --user x \\\n  --config x",
       },
       go: {
         method: 'client.Proxies.Update',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxy, err := client.Proxies.Update(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.ProxyUpdateParams{\n\t\t\tHost:     "x",\n\t\t\tName:     "xxx",\n\t\t\tPassword: "x",\n\t\t\tPort:     1,\n\t\t\tUser:     "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxy.Data)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxy, err := client.Proxies.Update(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.ProxyUpdateParams{\n\t\t\tOfSocks5: &mobileruncloud.ProxyUpdateParamsBodySocks5{\n\t\t\t\tHost:     "x",\n\t\t\t\tName:     "xxx",\n\t\t\t\tPassword: "x",\n\t\t\t\tPort:     1,\n\t\t\t\tUser:     "x",\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxy.Data)\n}\n',
       },
       http: {
         example:
-          'curl https://api.mobilerun.ai/v1/proxies/$PROXY_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "host": "x",\n          "name": "xxx",\n          "password": "x",\n          "port": 1,\n          "user": "x"\n        }\'',
+          'curl https://api.mobilerun.ai/v1/proxies/$PROXY_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "host": "x",\n          "name": "xxx",\n          "password": "x",\n          "port": 1,\n          "protocol": "socks5",\n          "user": "x"\n        }\'',
       },
       python: {
         method: 'proxies.update',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.update(\n    proxy_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    user="x",\n)\nprint(proxy.data)',
+          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.update(\n    proxy_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    protocol="socks5",\n    user="x",\n)\nprint(proxy.data)',
       },
       typescript: {
         method: 'client.proxies.update',
         example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst proxy = await client.proxies.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {\n  host: 'x',\n  name: 'xxx',\n  password: 'x',\n  port: 1,\n  user: 'x',\n});\n\nconsole.log(proxy.data);",
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst proxy = await client.proxies.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {\n  host: 'x',\n  name: 'xxx',\n  password: 'x',\n  port: 1,\n  protocol: 'socks5',\n  user: 'x',\n});\n\nconsole.log(proxy.data);",
       },
     },
   },
@@ -817,9 +812,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.proxies.delete',
     params: ['proxyId: string;'],
     response:
-      '{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }; message: string; success: true; }',
+      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }",
     markdown:
-      "## delete\n\n`client.proxies.delete(proxyId: string): { data: proxy_config; message: string; success: true; }`\n\n**delete** `/proxies/{proxyId}`\n\nDelete a proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }; message: string; success: true; }`\n\n  - `data: { host: string; name: string; password: string; port: number; proxyId: string; user: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
+      "## delete\n\n`client.proxies.delete(proxyId: string): { data: proxy_config; message: string; success: true; }`\n\n**delete** `/proxies/{proxyId}`\n\nDelete a proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
     perLanguage: {
       cli: {
         method: 'proxies delete',
