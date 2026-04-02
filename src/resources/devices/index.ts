@@ -65,7 +65,6 @@ export {
   Time,
   type TimeTimeResponse,
   type TimeTimezoneResponse,
-  type TimeSetTimeParams,
   type TimeSetTimezoneParams,
   type TimeTimeParams,
   type TimeTimezoneParams,

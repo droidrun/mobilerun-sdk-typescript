@@ -9,26 +9,6 @@ const client = new Mobilerun({
 
 describe('resource time', () => {
   // Mock server tests are disabled
-  test.skip('setTime: only required params', async () => {
-    const responsePromise = client.devices.time.setTime('deviceId', { time: '2019-12-27T18:11:19.117Z' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('setTime: required and optional params', async () => {
-    const response = await client.devices.time.setTime('deviceId', {
-      time: '2019-12-27T18:11:19.117Z',
-      'X-Device-Display-ID': 0,
-    });
-  });
-
-  // Mock server tests are disabled
   test.skip('setTimezone: only required params', async () => {
     const responsePromise = client.devices.time.setTimezone('deviceId', { timezone: 'timezone' });
     const rawResponse = await responsePromise.asResponse();
