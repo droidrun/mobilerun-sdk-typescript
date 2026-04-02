@@ -227,12 +227,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/{deviceId}/wait',
   },
   {
-    clientCallName: 'client.devices.time.setTime',
-    fullyQualifiedName: 'devices.time.setTime',
-    httpMethod: 'post',
-    httpPath: '/devices/{deviceId}/time',
-  },
-  {
     clientCallName: 'client.devices.time.setTimezone',
     fullyQualifiedName: 'devices.time.setTimezone',
     httpMethod: 'post',

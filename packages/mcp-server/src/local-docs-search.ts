@@ -1613,44 +1613,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
-    name: 'set_time',
-    endpoint: '/devices/{deviceId}/time',
-    httpMethod: 'post',
-    summary: 'Set device time',
-    description: 'Set device time',
-    stainlessPath: '(resource) devices.time > (method) set_time',
-    qualified: 'client.devices.time.setTime',
-    params: ['deviceId: string;', 'time: string;', 'X-Device-Display-ID?: number;'],
-    markdown:
-      "## set_time\n\n`client.devices.time.setTime(deviceId: string, time: string, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/time`\n\nSet device time\n\n### Parameters\n\n- `deviceId: string`\n\n- `time: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.time.setTime('deviceId', { time: '2019-12-27T18:11:19.117Z' })\n```",
-    perLanguage: {
-      cli: {
-        method: 'time set_time',
-        example:
-          "mobilerun-cloud devices:time set-time \\\n  --api-key 'My API Key' \\\n  --device-id deviceId \\\n  --time \"'2019-12-27T18:11:19.117Z'\"",
-      },
-      go: {
-        method: 'client.Devices.Time.SetTime',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"time"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Devices.Time.SetTime(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceTimeSetTimeParams{\n\t\t\tTime: time.Now(),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/time \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "time": "2019-12-27T18:11:19.117Z"\n        }\'',
-      },
-      python: {
-        method: 'devices.time.set_time',
-        example:
-          'import os\nfrom datetime import datetime\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.time.set_time(\n    device_id="deviceId",\n    time=datetime.fromisoformat("2019-12-27T18:11:19.117"),\n)',
-      },
-      typescript: {
-        method: 'client.devices.time.setTime',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.time.setTime('deviceId', { time: '2019-12-27T18:11:19.117Z' });",
-      },
-    },
-  },
-  {
     name: 'timezone',
     endpoint: '/devices/{deviceId}/timezone',
     httpMethod: 'get',

@@ -144,7 +144,6 @@ const fuse = new Fuse(
     'client.devices.retrieve',
     'client.devices.terminate',
     'client.devices.waitReady',
-    'client.devices.time.setTime',
     'client.devices.time.setTimezone',
     'client.devices.time.time',
     'client.devices.time.timezone',

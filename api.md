@@ -150,7 +150,6 @@ Types:
 
 Methods:
 
-- <code title="post /devices/{deviceId}/time">client.devices.time.<a href="./src/resources/devices/time.ts">setTime</a>(deviceID, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/timezone">client.devices.time.<a href="./src/resources/devices/time.ts">setTimezone</a>(deviceID, { ...params }) -> void</code>
 - <code title="get /devices/{deviceId}/time">client.devices.time.<a href="./src/resources/devices/time.ts">time</a>(deviceID, { ...params }) -> string</code>
 - <code title="get /devices/{deviceId}/timezone">client.devices.time.<a href="./src/resources/devices/time.ts">timezone</a>(deviceID, { ...params }) -> TimeTimezoneResponse</code>

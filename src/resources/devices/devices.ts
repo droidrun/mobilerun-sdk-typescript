@@ -57,7 +57,6 @@ import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimeAPI from './time';
 import {
   Time,
-  TimeSetTimeParams,
   TimeSetTimezoneParams,
   TimeTimeParams,
   TimeTimeResponse,
@@ -294,7 +293,6 @@ export declare namespace Devices {
     Time as Time,
     type TimeTimeResponse as TimeTimeResponse,
     type TimeTimezoneResponse as TimeTimezoneResponse,
-    type TimeSetTimeParams as TimeSetTimeParams,
     type TimeSetTimezoneParams as TimeSetTimezoneParams,
     type TimeTimeParams as TimeTimeParams,
     type TimeTimezoneParams as TimeTimezoneParams,
