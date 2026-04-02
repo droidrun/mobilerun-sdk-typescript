@@ -34,8 +34,11 @@ export class Proxies extends APIResource {
   /**
    * List all proxy configs for the authenticated user
    */
-  list(options?: RequestOptions): APIPromise<ProxyListResponse> {
-    return this._client.get('/proxies', options);
+  list(
+    query: ProxyListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ProxyListResponse> {
+    return this._client.get('/proxies', { query, ...options });
   }
 
   /**
@@ -46,18 +49,34 @@ export class Proxies extends APIResource {
   }
 }
 
-export interface ProxyConfig {
-  host: string;
+export type ProxyConfig = ProxyConfig.Socks5ProxyConfig | ProxyConfig.WireguardProxyConfig;
 
-  name: string;
+export namespace ProxyConfig {
+  export interface Socks5ProxyConfig {
+    host: string;
 
-  password: string;
+    name: string;
 
-  port: number;
+    password: string;
 
-  proxyId: string;
+    port: number;
 
-  user: string;
+    protocol: 'socks5';
+
+    proxyId: string;
+
+    user: string;
+  }
+
+  export interface WireguardProxyConfig {
+    config: string;
+
+    name: string;
+
+    protocol: 'wireguard';
+
+    proxyId: string;
+  }
 }
 
 export interface ProxyCreateResponse {
@@ -92,28 +111,60 @@ export interface ProxyDeleteResponse {
   success: true;
 }
 
-export interface ProxyCreateParams {
-  host: string;
+export type ProxyCreateParams = ProxyCreateParams.CreateSocks5Proxy | ProxyCreateParams.CreateWireguardProxy;
 
-  name: string;
+export declare namespace ProxyCreateParams {
+  export interface CreateSocks5Proxy {
+    host: string;
 
-  password: string;
+    name: string;
 
-  port: number;
+    password: string;
 
-  user: string;
+    port: number;
+
+    protocol: 'socks5';
+
+    user: string;
+  }
+
+  export interface CreateWireguardProxy {
+    config: string;
+
+    name: string;
+
+    protocol: 'wireguard';
+  }
 }
 
-export interface ProxyUpdateParams {
-  host: string;
+export type ProxyUpdateParams = ProxyUpdateParams.UpdateSocks5Proxy | ProxyUpdateParams.UpdateWireguardProxy;
 
-  name: string;
+export declare namespace ProxyUpdateParams {
+  export interface UpdateSocks5Proxy {
+    host: string;
 
-  password: string;
+    name: string;
 
-  port: number;
+    password: string;
 
-  user: string;
+    port: number;
+
+    protocol: 'socks5';
+
+    user: string;
+  }
+
+  export interface UpdateWireguardProxy {
+    config: string;
+
+    name: string;
+
+    protocol: 'wireguard';
+  }
+}
+
+export interface ProxyListParams {
+  protocol?: 'socks5' | 'wireguard';
 }
 
 export declare namespace Proxies {
@@ -126,5 +177,6 @@ export declare namespace Proxies {
     type ProxyDeleteResponse as ProxyDeleteResponse,
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
+    type ProxyListParams as ProxyListParams,
   };
 }

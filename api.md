@@ -89,7 +89,7 @@ Methods:
 - <code title="post /proxies">client.proxies.<a href="./src/resources/proxies.ts">create</a>({ ...params }) -> ProxyCreateResponse</code>
 - <code title="get /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">retrieve</a>(proxyID) -> ProxyRetrieveResponse</code>
 - <code title="put /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">update</a>(proxyID, { ...params }) -> ProxyUpdateResponse</code>
-- <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>() -> ProxyListResponse</code>
+- <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
 - <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
 
 # Carriers

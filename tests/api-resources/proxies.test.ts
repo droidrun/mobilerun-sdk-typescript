@@ -15,6 +15,7 @@ describe('resource proxies', () => {
       name: 'xxx',
       password: 'x',
       port: 1,
+      protocol: 'socks5',
       user: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -33,6 +34,7 @@ describe('resource proxies', () => {
       name: 'xxx',
       password: 'x',
       port: 1,
+      protocol: 'socks5',
       user: 'x',
     });
   });
@@ -56,6 +58,7 @@ describe('resource proxies', () => {
       name: 'xxx',
       password: 'x',
       port: 1,
+      protocol: 'socks5',
       user: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -74,6 +77,7 @@ describe('resource proxies', () => {
       name: 'xxx',
       password: 'x',
       port: 1,
+      protocol: 'socks5',
       user: 'x',
     });
   });
@@ -88,6 +92,14 @@ describe('resource proxies', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.proxies.list({ protocol: 'socks5' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled

@@ -61,6 +61,7 @@ export {
   type ProxyDeleteResponse,
   type ProxyCreateParams,
   type ProxyUpdateParams,
+  type ProxyListParams,
 } from './proxies';
 export {
   Tasks,
