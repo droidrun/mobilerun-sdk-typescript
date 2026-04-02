@@ -42,7 +42,7 @@ import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
 import { Profile, ProfileUpdateParams } from './profile';
 import * as ProxyAPI from './proxy';
-import { Proxy, ProxyConnectParams, ProxyDisconnectParams } from './proxy';
+import { Proxy as ProxyAPIProxy, ProxyConnectParams, ProxyDisconnectParams } from './proxy';
 import * as StateAPI from './state';
 import {
   Rect,
@@ -136,6 +136,8 @@ export class Devices extends APIResource {
 export interface Device {
   id: string;
 
+  activeTaskId: string;
+
   assignedAt: string | null;
 
   createdAt: string;
@@ -213,12 +215,31 @@ export interface DeviceCreateParams {
   /**
    * Body param
    */
-  proxy?: Shared.Config;
+  proxy?: DeviceCreateParams.Proxy;
+}
 
-  /**
-   * Body param
-   */
-  smartIp?: boolean;
+export namespace DeviceCreateParams {
+  export interface Proxy {
+    name?: string;
+
+    smartIp?: boolean;
+
+    socks5?: Proxy.Socks5;
+
+    wireguard?: string;
+  }
+
+  export namespace Proxy {
+    export interface Socks5 {
+      host: string;
+
+      password: string;
+
+      port: number;
+
+      user: string;
+    }
+  }
 }
 
 export interface DeviceListParams {
@@ -250,7 +271,7 @@ export interface DeviceTerminateParams {
 Devices.Time = Time;
 Devices.Profile = Profile;
 Devices.Files = Files;
-Devices.Proxy = Proxy;
+Devices.Proxy = ProxyAPIProxy;
 Devices.Location = Location;
 Devices.Actions = Actions;
 Devices.State = State;
@@ -293,7 +314,7 @@ export declare namespace Devices {
   };
 
   export {
-    Proxy as Proxy,
+    ProxyAPIProxy as Proxy,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
   };

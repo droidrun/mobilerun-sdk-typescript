@@ -58,6 +58,11 @@ export interface ProxyConnectParams {
   host?: string;
 
   /**
+   * Body param: Proxy name (used for wireguard tunnel name)
+   */
+  name?: string;
+
+  /**
    * @deprecated Body param
    */
   password?: string;
@@ -68,19 +73,25 @@ export interface ProxyConnectParams {
   port?: number;
 
   /**
-   * Body param: Preferred new format.
-   */
-  proxy?: ProxyConnectParams.Proxy;
-
-  /**
    * Body param
    */
   smartIp?: boolean;
 
   /**
+   * Body param: SOCKS5 proxy configuration (required for socks5).
+   */
+  socks5?: ProxyConnectParams.Socks5;
+
+  /**
    * @deprecated Body param
    */
   user?: string;
+
+  /**
+   * Body param: WireGuard tunnel configuration file content (required for
+   * wireguard).
+   */
+  wireguard?: string;
 
   /**
    * Header param
@@ -90,16 +101,16 @@ export interface ProxyConnectParams {
 
 export namespace ProxyConnectParams {
   /**
-   * Preferred new format.
+   * SOCKS5 proxy configuration (required for socks5).
    */
-  export interface Proxy {
+  export interface Socks5 {
     host: string;
-
-    password: string;
 
     port: number;
 
-    user: string;
+    password?: string;
+
+    user?: string;
   }
 }
 

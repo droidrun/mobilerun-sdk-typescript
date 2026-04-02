@@ -2,7 +2,6 @@
 
 Types:
 
-- <code><a href="./src/resources/shared.ts">Config</a></code>
 - <code><a href="./src/resources/shared.ts">DeviceCarrier</a></code>
 - <code><a href="./src/resources/shared.ts">DeviceIdentifiers</a></code>
 - <code><a href="./src/resources/shared.ts">DeviceSpec</a></code>

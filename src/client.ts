@@ -927,7 +927,6 @@ export declare namespace Mobilerun {
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
-  export type Config = API.Config;
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
   export type DeviceSpec = API.DeviceSpec;
