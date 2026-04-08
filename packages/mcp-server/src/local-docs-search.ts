@@ -1575,6 +1575,46 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'set_name',
+    endpoint: '/devices/{deviceId}/name',
+    httpMethod: 'put',
+    summary: 'Update device name',
+    description: 'Update device name',
+    stainlessPath: '(resource) devices > (method) set_name',
+    qualified: 'client.devices.setName',
+    params: ['deviceId: string;', 'name: string;'],
+    response:
+      '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; streamToken?: string; userId?: string; }',
+    markdown:
+      "## set_name\n\n`client.devices.setName(deviceId: string, name: string): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; streamToken?: string; userId?: string; }`\n\n**put** `/devices/{deviceId}/name`\n\nUpdate device name\n\n### Parameters\n\n- `deviceId: string`\n\n- `name: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.setName('deviceId', { name: 'x' });\n\nconsole.log(device);\n```",
+    perLanguage: {
+      cli: {
+        method: 'devices set_name',
+        example:
+          "mobilerun-cloud devices set-name \\\n  --api-key 'My API Key' \\\n  --device-id deviceId \\\n  --name x",
+      },
+      go: {
+        method: 'client.Devices.SetName',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tdevice, err := client.Devices.SetName(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceSetNameParams{\n\t\t\tName: "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", device.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/name \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "name": "x"\n        }\'',
+      },
+      python: {
+        method: 'devices.set_name',
+        example:
+          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevice = client.devices.set_name(\n    device_id="deviceId",\n    name="x",\n)\nprint(device.id)',
+      },
+      typescript: {
+        method: 'client.devices.setName',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst device = await client.devices.setName('deviceId', { name: 'x' });\n\nconsole.log(device.id);",
+      },
+    },
+  },
+  {
     name: 'time',
     endpoint: '/devices/{deviceId}/time',
     httpMethod: 'get',
@@ -1928,6 +1968,46 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.devices.proxy.connect',
         example:
           "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.proxy.connect('deviceId');",
+      },
+    },
+  },
+  {
+    name: 'status',
+    endpoint: '/devices/{deviceId}/proxy',
+    httpMethod: 'get',
+    summary: 'Get proxy connection state',
+    description: 'Get proxy connection state',
+    stainlessPath: '(resource) devices.proxy > (method) status',
+    qualified: 'client.devices.proxy.status',
+    params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
+    response:
+      '{ connected: boolean; $schema?: string; protocol?: string; tunnel?: { name: string; state: string; }; }',
+    markdown:
+      "## status\n\n`client.devices.proxy.status(deviceId: string, X-Device-Display-ID?: number): { connected: boolean; $schema?: string; protocol?: string; tunnel?: object; }`\n\n**get** `/devices/{deviceId}/proxy`\n\nGet proxy connection state\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ connected: boolean; $schema?: string; protocol?: string; tunnel?: { name: string; state: string; }; }`\n\n  - `connected: boolean`\n  - `$schema?: string`\n  - `protocol?: string`\n  - `tunnel?: { name: string; state: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.proxy.status('deviceId');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      cli: {
+        method: 'proxy status',
+        example:
+          "mobilerun-cloud devices:proxy status \\\n  --api-key 'My API Key' \\\n  --device-id deviceId",
+      },
+      go: {
+        method: 'client.Devices.Proxy.Status',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Devices.Proxy.Status(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceProxyStatusParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Connected)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/proxy \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+      python: {
+        method: 'devices.proxy.status',
+        example:
+          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.proxy.status(\n    device_id="deviceId",\n)\nprint(response.connected)',
+      },
+      typescript: {
+        method: 'client.devices.proxy.status',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.devices.proxy.status('deviceId');\n\nconsole.log(response.connected);",
       },
     },
   },
@@ -2738,6 +2818,167 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.devices.tasks.list',
         example:
           "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst tasks = await client.devices.tasks.list('deviceId');\n\nconsole.log(tasks.items);",
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/devices/{deviceId}/esim',
+    httpMethod: 'get',
+    summary: 'List eSIM subscriptions',
+    description: 'List eSIM subscriptions',
+    stainlessPath: '(resource) devices.esim > (method) list',
+    qualified: 'client.devices.esim.list',
+    params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
+    response:
+      '{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }[]',
+    markdown:
+      "## list\n\n`client.devices.esim.list(deviceId: string, X-Device-Display-ID?: number): { carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }[]`\n\n**get** `/devices/{deviceId}/esim`\n\nList eSIM subscriptions\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst esims = await client.devices.esim.list('deviceId');\n\nconsole.log(esims);\n```",
+    perLanguage: {
+      cli: {
+        method: 'esim list',
+        example: "mobilerun-cloud devices:esim list \\\n  --api-key 'My API Key' \\\n  --device-id deviceId",
+      },
+      go: {
+        method: 'client.Devices.Esim.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tesims, err := client.Devices.Esim.List(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceEsimListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", esims)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/esim \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+      python: {
+        method: 'devices.esim.list',
+        example:
+          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nesims = client.devices.esim.list(\n    device_id="deviceId",\n)\nprint(esims)',
+      },
+      typescript: {
+        method: 'client.devices.esim.list',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst esims = await client.devices.esim.list('deviceId');\n\nconsole.log(esims);",
+      },
+    },
+  },
+  {
+    name: 'activate',
+    endpoint: '/devices/{deviceId}/esim',
+    httpMethod: 'post',
+    summary: 'Configure eSIM (download profile and/or enable subscription)',
+    description: 'Configure eSIM (download profile and/or enable subscription)',
+    stainlessPath: '(resource) devices.esim > (method) activate',
+    qualified: 'client.devices.esim.activate',
+    params: [
+      'deviceId: string;',
+      'enable: boolean;',
+      'matchingId: string;',
+      'smDpAddr: string;',
+      'X-Device-Display-ID?: number;',
+    ],
+    response:
+      '{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }',
+    markdown:
+      "## activate\n\n`client.devices.esim.activate(deviceId: string, enable: boolean, matchingId: string, smDpAddr: string, X-Device-Display-ID?: number): { carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }`\n\n**post** `/devices/{deviceId}/esim`\n\nConfigure eSIM (download profile and/or enable subscription)\n\n### Parameters\n\n- `deviceId: string`\n\n- `enable: boolean`\n\n- `matchingId: string`\n\n- `smDpAddr: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }`\n\n  - `carrier: string`\n  - `displayName: string`\n  - `iccid: string`\n  - `isEmbedded: boolean`\n  - `slot: number`\n  - `subId: number`\n  - `type: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.esim.activate('deviceId', {\n  enable: true,\n  matchingId: 'matchingId',\n  smDpAddr: 'smDpAddr',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      cli: {
+        method: 'esim activate',
+        example:
+          "mobilerun-cloud devices:esim activate \\\n  --api-key 'My API Key' \\\n  --device-id deviceId \\\n  --enable \\\n  --matching-id matchingId \\\n  --sm-dp-addr smDpAddr",
+      },
+      go: {
+        method: 'client.Devices.Esim.Activate',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Devices.Esim.Activate(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceEsimActivateParams{\n\t\t\tEnable:     true,\n\t\t\tMatchingID: "matchingId",\n\t\t\tSmDpAddr:   "smDpAddr",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Iccid)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/esim \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "enable": true,\n          "matchingId": "matchingId",\n          "smDpAddr": "smDpAddr"\n        }\'',
+      },
+      python: {
+        method: 'devices.esim.activate',
+        example:
+          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.esim.activate(\n    device_id="deviceId",\n    enable=True,\n    matching_id="matchingId",\n    sm_dp_addr="smDpAddr",\n)\nprint(response.iccid)',
+      },
+      typescript: {
+        method: 'client.devices.esim.activate',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.devices.esim.activate('deviceId', {\n  enable: true,\n  matchingId: 'matchingId',\n  smDpAddr: 'smDpAddr',\n});\n\nconsole.log(response.iccid);",
+      },
+    },
+  },
+  {
+    name: 'enable',
+    endpoint: '/devices/{deviceId}/esim',
+    httpMethod: 'put',
+    summary: 'Enable an eSIM subscription',
+    description: 'Enable an eSIM subscription',
+    stainlessPath: '(resource) devices.esim > (method) enable',
+    qualified: 'client.devices.esim.enable',
+    params: ['deviceId: string;', 'subId: number;', 'X-Device-Display-ID?: number;'],
+    markdown:
+      "## enable\n\n`client.devices.esim.enable(deviceId: string, subId: number, X-Device-Display-ID?: number): void`\n\n**put** `/devices/{deviceId}/esim`\n\nEnable an eSIM subscription\n\n### Parameters\n\n- `deviceId: string`\n\n- `subId: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.esim.enable('deviceId', { subId: 0 })\n```",
+    perLanguage: {
+      cli: {
+        method: 'esim enable',
+        example:
+          "mobilerun-cloud devices:esim enable \\\n  --api-key 'My API Key' \\\n  --device-id deviceId \\\n  --sub-id 0",
+      },
+      go: {
+        method: 'client.Devices.Esim.Enable',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Devices.Esim.Enable(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceEsimEnableParams{\n\t\t\tSubID: 0,\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/esim \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "subId": 0\n        }\'',
+      },
+      python: {
+        method: 'devices.esim.enable',
+        example:
+          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.esim.enable(\n    device_id="deviceId",\n    sub_id=0,\n)',
+      },
+      typescript: {
+        method: 'client.devices.esim.enable',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.esim.enable('deviceId', { subId: 0 });",
+      },
+    },
+  },
+  {
+    name: 'remove',
+    endpoint: '/devices/{deviceId}/esim',
+    httpMethod: 'delete',
+    summary: 'Delete eSIM subscription',
+    description: 'Delete eSIM subscription',
+    stainlessPath: '(resource) devices.esim > (method) remove',
+    qualified: 'client.devices.esim.remove',
+    params: ['deviceId: string;', 'subId: number;', 'X-Device-Display-ID?: number;'],
+    markdown:
+      "## remove\n\n`client.devices.esim.remove(deviceId: string, subId: number, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/esim`\n\nDelete eSIM subscription\n\n### Parameters\n\n- `deviceId: string`\n\n- `subId: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.esim.remove('deviceId', { subId: 0 })\n```",
+    perLanguage: {
+      cli: {
+        method: 'esim remove',
+        example:
+          "mobilerun-cloud devices:esim remove \\\n  --api-key 'My API Key' \\\n  --device-id deviceId \\\n  --sub-id 0",
+      },
+      go: {
+        method: 'client.Devices.Esim.Remove',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Devices.Esim.Remove(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceEsimRemoveParams{\n\t\t\tSubID: 0,\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/esim \\\n    -X DELETE \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+      python: {
+        method: 'devices.esim.remove',
+        example:
+          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.esim.remove(\n    device_id="deviceId",\n    sub_id=0,\n)',
+      },
+      typescript: {
+        method: 'client.devices.esim.remove',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.esim.remove('deviceId', { subId: 0 });",
       },
     },
   },

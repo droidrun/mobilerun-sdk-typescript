@@ -49,6 +49,58 @@ export class Proxy extends APIResource {
       ]),
     });
   }
+
+  /**
+   * Get proxy connection state
+   */
+  status(
+    deviceID: string,
+    params: ProxyStatusParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ProxyStatusResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/proxy`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+}
+
+export interface ProxyStatusResponse {
+  connected: boolean;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  /**
+   * Active proxy protocol (socks5 or wireguard).
+   */
+  protocol?: string;
+
+  /**
+   * WireGuard tunnel details.
+   */
+  tunnel?: ProxyStatusResponse.Tunnel;
+}
+
+export namespace ProxyStatusResponse {
+  /**
+   * WireGuard tunnel details.
+   */
+  export interface Tunnel {
+    name: string;
+
+    state: string;
+  }
 }
 
 export interface ProxyConnectParams {
@@ -118,9 +170,15 @@ export interface ProxyDisconnectParams {
   'X-Device-Display-ID'?: number;
 }
 
+export interface ProxyStatusParams {
+  'X-Device-Display-ID'?: number;
+}
+
 export declare namespace Proxy {
   export {
+    type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
+    type ProxyStatusParams as ProxyStatusParams,
   };
 }

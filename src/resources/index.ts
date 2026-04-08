@@ -25,6 +25,7 @@ export {
   type DeviceCountResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices/devices';
 export {
