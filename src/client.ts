@@ -76,6 +76,7 @@ import {
   DeviceCreateParams,
   DeviceListParams,
   DeviceListResponse,
+  DeviceSetNameParams,
   DeviceTerminateParams,
   Devices,
 } from './resources/devices/devices';
@@ -899,6 +900,7 @@ export declare namespace Mobilerun {
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 

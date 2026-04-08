@@ -22,6 +22,16 @@ import {
   AppUpdateParams,
   Apps,
 } from './apps';
+import * as EsimAPI from './esim';
+import {
+  Esim,
+  EsimActivateParams,
+  EsimActivateResponse,
+  EsimEnableParams,
+  EsimListParams,
+  EsimListResponse,
+  EsimRemoveParams,
+} from './esim';
 import * as FilesAPI from './files';
 import {
   FileDeleteParams,
@@ -42,7 +52,13 @@ import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
 import { Profile, ProfileUpdateParams } from './profile';
 import * as ProxyAPI from './proxy';
-import { Proxy as ProxyAPIProxy, ProxyConnectParams, ProxyDisconnectParams } from './proxy';
+import {
+  Proxy as ProxyAPIProxy,
+  ProxyConnectParams,
+  ProxyDisconnectParams,
+  ProxyStatusParams,
+  ProxyStatusResponse,
+} from './proxy';
 import * as StateAPI from './state';
 import {
   Rect,
@@ -80,6 +96,7 @@ export class Devices extends APIResource {
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
   keyboard: KeyboardAPI.Keyboard = new KeyboardAPI.Keyboard(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
+  esim: EsimAPI.Esim = new EsimAPI.Esim(this._client);
 
   /**
    * Provision a new device
@@ -111,6 +128,13 @@ export class Devices extends APIResource {
    */
   count(options?: RequestOptions): APIPromise<DeviceCountResponse> {
     return this._client.get('/devices/count', options);
+  }
+
+  /**
+   * Update device name
+   */
+  setName(deviceID: string, body: DeviceSetNameParams, options?: RequestOptions): APIPromise<Device> {
+    return this._client.put(path`/devices/${deviceID}/name`, { body, ...options });
   }
 
   /**
@@ -261,6 +285,10 @@ export interface DeviceListParams {
   type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
 }
 
+export interface DeviceSetNameParams {
+  name: string;
+}
+
 export interface DeviceTerminateParams {
   previousDeviceId?: string;
 
@@ -278,6 +306,7 @@ Devices.Apps = Apps;
 Devices.Packages = Packages;
 Devices.Keyboard = Keyboard;
 Devices.Tasks = Tasks;
+Devices.Esim = Esim;
 
 export declare namespace Devices {
   export {
@@ -286,6 +315,7 @@ export declare namespace Devices {
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 
@@ -313,8 +343,10 @@ export declare namespace Devices {
 
   export {
     ProxyAPIProxy as Proxy,
+    type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
+    type ProxyStatusParams as ProxyStatusParams,
   };
 
   export {
@@ -367,4 +399,14 @@ export declare namespace Devices {
   };
 
   export { Tasks as Tasks, type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
+
+  export {
+    Esim as Esim,
+    type EsimListResponse as EsimListResponse,
+    type EsimActivateResponse as EsimActivateResponse,
+    type EsimListParams as EsimListParams,
+    type EsimActivateParams as EsimActivateParams,
+    type EsimEnableParams as EsimEnableParams,
+    type EsimRemoveParams as EsimRemoveParams,
+  };
 }

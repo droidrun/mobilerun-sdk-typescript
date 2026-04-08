@@ -215,6 +215,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/count',
   },
   {
+    clientCallName: 'client.devices.setName',
+    fullyQualifiedName: 'devices.setName',
+    httpMethod: 'put',
+    httpPath: '/devices/{deviceId}/name',
+  },
+  {
     clientCallName: 'client.devices.terminate',
     fullyQualifiedName: 'devices.terminate',
     httpMethod: 'delete',
@@ -284,6 +290,12 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.devices.proxy.disconnect',
     fullyQualifiedName: 'devices.proxy.disconnect',
     httpMethod: 'delete',
+    httpPath: '/devices/{deviceId}/proxy',
+  },
+  {
+    clientCallName: 'client.devices.proxy.status',
+    fullyQualifiedName: 'devices.proxy.status',
+    httpMethod: 'get',
     httpPath: '/devices/{deviceId}/proxy',
   },
   {
@@ -399,6 +411,30 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'devices.tasks.list',
     httpMethod: 'get',
     httpPath: '/devices/{deviceId}/tasks',
+  },
+  {
+    clientCallName: 'client.devices.esim.list',
+    fullyQualifiedName: 'devices.esim.list',
+    httpMethod: 'get',
+    httpPath: '/devices/{deviceId}/esim',
+  },
+  {
+    clientCallName: 'client.devices.esim.activate',
+    fullyQualifiedName: 'devices.esim.activate',
+    httpMethod: 'post',
+    httpPath: '/devices/{deviceId}/esim',
+  },
+  {
+    clientCallName: 'client.devices.esim.enable',
+    fullyQualifiedName: 'devices.esim.enable',
+    httpMethod: 'put',
+    httpPath: '/devices/{deviceId}/esim',
+  },
+  {
+    clientCallName: 'client.devices.esim.remove',
+    fullyQualifiedName: 'devices.esim.remove',
+    httpMethod: 'delete',
+    httpPath: '/devices/{deviceId}/esim',
   },
   {
     clientCallName: 'client.apps.list',

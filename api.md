@@ -138,6 +138,7 @@ Methods:
 - <code title="get /devices/{deviceId}">client.devices.<a href="./src/resources/devices/devices.ts">retrieve</a>(deviceID) -> Device</code>
 - <code title="get /devices">client.devices.<a href="./src/resources/devices/devices.ts">list</a>({ ...params }) -> DeviceListResponse</code>
 - <code title="get /devices/count">client.devices.<a href="./src/resources/devices/devices.ts">count</a>() -> DeviceCountResponse</code>
+- <code title="put /devices/{deviceId}/name">client.devices.<a href="./src/resources/devices/devices.ts">setName</a>(deviceID, { ...params }) -> Device</code>
 - <code title="delete /devices/{deviceId}">client.devices.<a href="./src/resources/devices/devices.ts">terminate</a>(deviceID, { ...params }) -> void</code>
 - <code title="get /devices/{deviceId}/wait">client.devices.<a href="./src/resources/devices/devices.ts">waitReady</a>(deviceID) -> Device</code>
 
@@ -177,10 +178,15 @@ Methods:
 
 ## Proxy
 
+Types:
+
+- <code><a href="./src/resources/devices/proxy.ts">ProxyStatusResponse</a></code>
+
 Methods:
 
 - <code title="post /devices/{deviceId}/proxy">client.devices.proxy.<a href="./src/resources/devices/proxy.ts">connect</a>(deviceID, { ...params }) -> void</code>
 - <code title="delete /devices/{deviceId}/proxy">client.devices.proxy.<a href="./src/resources/devices/proxy.ts">disconnect</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/proxy">client.devices.proxy.<a href="./src/resources/devices/proxy.ts">status</a>(deviceID, { ...params }) -> ProxyStatusResponse</code>
 
 ## Location
 
@@ -261,6 +267,20 @@ Types:
 Methods:
 
 - <code title="get /devices/{deviceId}/tasks">client.devices.tasks.<a href="./src/resources/devices/tasks.ts">list</a>(deviceID, { ...params }) -> TaskListResponse</code>
+
+## Esim
+
+Types:
+
+- <code><a href="./src/resources/devices/esim.ts">EsimListResponse</a></code>
+- <code><a href="./src/resources/devices/esim.ts">EsimActivateResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">list</a>(deviceID, { ...params }) -> EsimListResponse | null</code>
+- <code title="post /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">activate</a>(deviceID, { ...params }) -> EsimActivateResponse</code>
+- <code title="put /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">enable</a>(deviceID, { ...params }) -> void</code>
+- <code title="delete /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">remove</a>(deviceID, { ...params }) -> void</code>
 
 # Apps
 
