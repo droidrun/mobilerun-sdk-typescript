@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import * as ProxiesAPI from './proxies';
-
 export interface DeviceCarrier {
   GsmOperatorAlpha: string;
 
@@ -64,7 +62,31 @@ export interface DeviceSpec {
 
   name?: string;
 
-  proxy?: ProxiesAPI.ProxyConfig;
+  proxy?: DeviceSpec.Proxy;
+}
+
+export namespace DeviceSpec {
+  export interface Proxy {
+    name?: string;
+
+    smartIp?: boolean;
+
+    socks5?: Proxy.Socks5;
+
+    wireguard?: string;
+  }
+
+  export namespace Proxy {
+    export interface Socks5 {
+      host: string;
+
+      password: string;
+
+      port: number;
+
+      user: string;
+    }
+  }
 }
 
 export interface Meta {

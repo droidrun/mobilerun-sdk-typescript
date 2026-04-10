@@ -2,7 +2,7 @@
 
 export * from './shared';
 export { Agents, type AgentListResponse } from './agents';
-export { Apps, type AppListResponse, type AppListParams } from './apps';
+export { Apps } from './apps';
 export {
   Carriers,
   type Carrier,
@@ -13,7 +13,11 @@ export {
   type CarrierListParams,
   type CarrierLookupParams,
 } from './carriers';
-export { Credentials } from './credentials/credentials';
+export {
+  Credentials,
+  type CredentialListResponse,
+  type CredentialListParams,
+} from './credentials/credentials';
 export {
   Devices,
   type Device,
@@ -48,7 +52,18 @@ export {
   type ProfileUpdateParams,
   type ProfileListParams,
 } from './profiles';
-export { Proxies, type ProxyConfig } from './proxies';
+export {
+  Proxies,
+  type ProxyConfig,
+  type ProxyCreateResponse,
+  type ProxyRetrieveResponse,
+  type ProxyUpdateResponse,
+  type ProxyListResponse,
+  type ProxyDeleteResponse,
+  type ProxyCreateParams,
+  type ProxyUpdateParams,
+  type ProxyListParams,
+} from './proxies';
 export {
   Tasks,
   type PackageCredentials,
