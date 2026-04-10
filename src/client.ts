@@ -18,7 +18,7 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { AgentListResponse, Agents } from './resources/agents';
-import { AppListParams, AppListResponse, Apps } from './resources/apps';
+import { Apps } from './resources/apps';
 import {
   Carrier,
   CarrierCreateParams,
@@ -53,8 +53,23 @@ import {
   ProfileUpdateParams,
   Profiles,
 } from './resources/profiles';
-import { Proxies, ProxyConfig } from './resources/proxies';
-import { Credentials } from './resources/credentials/credentials';
+import {
+  Proxies,
+  ProxyConfig,
+  ProxyCreateParams,
+  ProxyCreateResponse,
+  ProxyDeleteResponse,
+  ProxyListParams,
+  ProxyListResponse,
+  ProxyRetrieveResponse,
+  ProxyUpdateParams,
+  ProxyUpdateResponse,
+} from './resources/proxies';
+import {
+  CredentialListParams,
+  CredentialListResponse,
+  Credentials,
+} from './resources/credentials/credentials';
 import {
   Device,
   DeviceCountResponse,
@@ -844,7 +859,18 @@ export declare namespace Mobilerun {
 
   export { Agents as Agents, type AgentListResponse as AgentListResponse };
 
-  export { Proxies as Proxies, type ProxyConfig as ProxyConfig };
+  export {
+    Proxies as Proxies,
+    type ProxyConfig as ProxyConfig,
+    type ProxyCreateResponse as ProxyCreateResponse,
+    type ProxyRetrieveResponse as ProxyRetrieveResponse,
+    type ProxyUpdateResponse as ProxyUpdateResponse,
+    type ProxyListResponse as ProxyListResponse,
+    type ProxyDeleteResponse as ProxyDeleteResponse,
+    type ProxyCreateParams as ProxyCreateParams,
+    type ProxyUpdateParams as ProxyUpdateParams,
+    type ProxyListParams as ProxyListParams,
+  };
 
   export {
     Carriers as Carriers,
@@ -878,9 +904,13 @@ export declare namespace Mobilerun {
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 
-  export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
+  export { Apps as Apps };
 
-  export { Credentials as Credentials };
+  export {
+    Credentials as Credentials,
+    type CredentialListResponse as CredentialListResponse,
+    type CredentialListParams as CredentialListParams,
+  };
 
   export {
     Hooks as Hooks,
