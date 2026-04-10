@@ -179,6 +179,7 @@ const fuse = new Fuse(
     'client.devices.esim.enable',
     'client.devices.esim.list',
     'client.devices.esim.remove',
+    'client.apps.list',
     'client.credentials.list',
     'client.credentials.packages.create',
     'client.credentials.packages.list',

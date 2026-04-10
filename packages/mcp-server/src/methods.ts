@@ -437,6 +437,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/{deviceId}/esim',
   },
   {
+    clientCallName: 'client.apps.list',
+    fullyQualifiedName: 'apps.list',
+    httpMethod: 'get',
+    httpPath: '/apps',
+  },
+  {
     clientCallName: 'client.credentials.list',
     fullyQualifiedName: 'credentials.list',
     httpMethod: 'get',

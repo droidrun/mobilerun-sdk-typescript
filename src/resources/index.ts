@@ -2,7 +2,7 @@
 
 export * from './shared';
 export { Agents, type AgentListResponse } from './agents';
-export { Apps } from './apps';
+export { Apps, type AppListResponse, type AppListParams } from './apps';
 export {
   Carriers,
   type Carrier,

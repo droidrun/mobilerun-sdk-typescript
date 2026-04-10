@@ -284,6 +284,14 @@ Methods:
 
 # Apps
 
+Types:
+
+- <code><a href="./src/resources/apps.ts">AppListResponse</a></code>
+
+Methods:
+
+- <code title="get /apps">client.apps.<a href="./src/resources/apps.ts">list</a>({ ...params }) -> AppListResponse</code>
+
 # Credentials
 
 Types:
