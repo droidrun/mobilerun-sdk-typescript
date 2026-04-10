@@ -2984,6 +2984,52 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'list',
+    endpoint: '/apps',
+    httpMethod: 'get',
+    summary: 'List apps',
+    description: 'Retrieves a paginated list of apps with filtering and search capabilities',
+    stainlessPath: '(resource) apps > (method) list',
+    qualified: 'client.apps.list',
+    params: [
+      "order?: 'asc' | 'desc';",
+      'page?: number;',
+      'pageSize?: number;',
+      'query?: string;',
+      "sortBy?: 'createdAt' | 'name';",
+      "source?: 'all' | 'uploaded' | 'store' | 'queued';",
+    ],
+    response:
+      "{ count: { availableCount: number; queuedCount: number; storeCount: number; totalCount: number; uploadCount: number; }; items: { id: string; categoryName: string; country: string; createdAt: string; description: string; developerName: string; displayName: string; expectedFiles: string | number | boolean | object | object[]; iconURL: string; packageName: string; privacyPolicyUrl: string; queuedAt: string; ratingCount: number; ratingScore: string; sizeBytes: number; source: 'uploaded' | 'store'; status: 'queued' | 'available' | 'failed'; stealthTier: 'tier1' | 'tier2' | 'tier3'; targetSdk: number; type: 'android' | 'ios'; updatedAt: string; userId: string; versionCode: number; versionName: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+    markdown:
+      "## list\n\n`client.apps.list(order?: 'asc' | 'desc', page?: number, pageSize?: number, query?: string, sortBy?: 'createdAt' | 'name', source?: 'all' | 'uploaded' | 'store' | 'queued'): { count: object; items: object[]; pagination: pagination; }`\n\n**get** `/apps`\n\nRetrieves a paginated list of apps with filtering and search capabilities\n\n### Parameters\n\n- `order?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `query?: string`\n\n- `sortBy?: 'createdAt' | 'name'`\n\n- `source?: 'all' | 'uploaded' | 'store' | 'queued'`\n\n### Returns\n\n- `{ count: { availableCount: number; queuedCount: number; storeCount: number; totalCount: number; uploadCount: number; }; items: { id: string; categoryName: string; country: string; createdAt: string; description: string; developerName: string; displayName: string; expectedFiles: string | number | boolean | object | object[]; iconURL: string; packageName: string; privacyPolicyUrl: string; queuedAt: string; ratingCount: number; ratingScore: string; sizeBytes: number; source: 'uploaded' | 'store'; status: 'queued' | 'available' | 'failed'; stealthTier: 'tier1' | 'tier2' | 'tier3'; targetSdk: number; type: 'android' | 'ios'; updatedAt: string; userId: string; versionCode: number; versionName: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `count: { availableCount: number; queuedCount: number; storeCount: number; totalCount: number; uploadCount: number; }`\n  - `items: { id: string; categoryName: string; country: string; createdAt: string; description: string; developerName: string; displayName: string; expectedFiles: string | number | boolean | object | object[]; iconURL: string; packageName: string; privacyPolicyUrl: string; queuedAt: string; ratingCount: number; ratingScore: string; sizeBytes: number; source: 'uploaded' | 'store'; status: 'queued' | 'available' | 'failed'; stealthTier: 'tier1' | 'tier2' | 'tier3'; targetSdk: number; type: 'android' | 'ios'; updatedAt: string; userId: string; versionCode: number; versionName: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst apps = await client.apps.list();\n\nconsole.log(apps);\n```",
+    perLanguage: {
+      cli: {
+        method: 'apps list',
+        example: "mobilerun-cloud apps list \\\n  --api-key 'My API Key'",
+      },
+      go: {
+        method: 'client.Apps.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapps, err := client.Apps.List(context.TODO(), mobileruncloud.AppListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apps.Count)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/apps \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+      python: {
+        method: 'apps.list',
+        example:
+          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\napps = client.apps.list()\nprint(apps.count)',
+      },
+      typescript: {
+        method: 'client.apps.list',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst apps = await client.apps.list();\n\nconsole.log(apps.count);",
+      },
+    },
+  },
+  {
+    name: 'list',
     endpoint: '/credentials',
     httpMethod: 'get',
     summary: 'List all credentials for the authenticated user',
