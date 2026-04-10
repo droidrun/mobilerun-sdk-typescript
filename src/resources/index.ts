@@ -13,11 +13,7 @@ export {
   type CarrierListParams,
   type CarrierLookupParams,
 } from './carriers';
-export {
-  Credentials,
-  type CredentialListResponse,
-  type CredentialListParams,
-} from './credentials/credentials';
+export { Credentials } from './credentials/credentials';
 export {
   Devices,
   type Device,
@@ -52,18 +48,7 @@ export {
   type ProfileUpdateParams,
   type ProfileListParams,
 } from './profiles';
-export {
-  Proxies,
-  type ProxyConfig,
-  type ProxyCreateResponse,
-  type ProxyRetrieveResponse,
-  type ProxyUpdateResponse,
-  type ProxyListResponse,
-  type ProxyDeleteResponse,
-  type ProxyCreateParams,
-  type ProxyUpdateParams,
-  type ProxyListParams,
-} from './proxies';
+export { Proxies, type ProxyConfig } from './proxies';
 export {
   Tasks,
   type PackageCredentials,

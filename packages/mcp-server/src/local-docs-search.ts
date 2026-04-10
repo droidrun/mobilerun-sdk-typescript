@@ -649,206 +649,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'list',
-    endpoint: '/proxies',
-    httpMethod: 'get',
-    summary: 'List all proxy configs for the authenticated user',
-    description: 'List all proxy configs for the authenticated user',
-    stainlessPath: '(resource) proxies > (method) list',
-    qualified: 'client.proxies.list',
-    params: ["protocol?: 'socks5' | 'wireguard';"],
-    response:
-      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }",
-    markdown:
-      "## list\n\n`client.proxies.list(protocol?: 'socks5' | 'wireguard'): { data: proxy_config[]; }`\n\n**get** `/proxies`\n\nList all proxy configs for the authenticated user\n\n### Parameters\n\n- `protocol?: 'socks5' | 'wireguard'`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.proxies.list();\n\nconsole.log(proxies);\n```",
-    perLanguage: {
-      cli: {
-        method: 'proxies list',
-        example: "mobilerun-cloud proxies list \\\n  --api-key 'My API Key'",
-      },
-      go: {
-        method: 'client.Proxies.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxies, err := client.Proxies.List(context.TODO(), mobileruncloud.ProxyListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxies.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/proxies \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-      python: {
-        method: 'proxies.list',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxies = client.proxies.list()\nprint(proxies.data)',
-      },
-      typescript: {
-        method: 'client.proxies.list',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst proxies = await client.proxies.list();\n\nconsole.log(proxies.data);",
-      },
-    },
-  },
-  {
-    name: 'create',
-    endpoint: '/proxies',
-    httpMethod: 'post',
-    summary: 'Create a new proxy config',
-    description: 'Create a new proxy config',
-    stainlessPath: '(resource) proxies > (method) create',
-    qualified: 'client.proxies.create',
-    params: [
-      "{ host: string; name: string; password: string; port: number; protocol: 'socks5'; user: string; } | { config: string; name: string; protocol: 'wireguard'; };",
-    ],
-    response:
-      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }",
-    perLanguage: {
-      cli: {
-        method: 'proxies create',
-        example:
-          "mobilerun-cloud proxies create \\\n  --api-key 'My API Key' \\\n  --host x \\\n  --name xxx \\\n  --password x \\\n  --port 1 \\\n  --protocol socks5 \\\n  --user x \\\n  --config x",
-      },
-      go: {
-        method: 'client.Proxies.New',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxy, err := client.Proxies.New(context.TODO(), mobileruncloud.ProxyNewParams{\n\t\tOfSocks5: &mobileruncloud.ProxyNewParamsBodySocks5{\n\t\t\tHost:     "x",\n\t\t\tName:     "xxx",\n\t\t\tPassword: "x",\n\t\t\tPort:     1,\n\t\t\tUser:     "x",\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxy.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/proxies \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "host": "x",\n          "name": "xxx",\n          "password": "x",\n          "port": 1,\n          "protocol": "socks5",\n          "user": "x"\n        }\'',
-      },
-      python: {
-        method: 'proxies.create',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.create(\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    protocol="socks5",\n    user="x",\n)\nprint(proxy.data)',
-      },
-      typescript: {
-        method: 'client.proxies.create',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst proxy = await client.proxies.create({\n  host: 'x',\n  name: 'xxx',\n  password: 'x',\n  port: 1,\n  protocol: 'socks5',\n  user: 'x',\n});\n\nconsole.log(proxy.data);",
-      },
-    },
-  },
-  {
-    name: 'retrieve',
-    endpoint: '/proxies/{proxyId}',
-    httpMethod: 'get',
-    summary: 'Get a specific proxy config',
-    description: 'Get a specific proxy config',
-    stainlessPath: '(resource) proxies > (method) retrieve',
-    qualified: 'client.proxies.retrieve',
-    params: ['proxyId: string;'],
-    response:
-      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }",
-    markdown:
-      "## retrieve\n\n`client.proxies.retrieve(proxyId: string): { data: proxy_config; }`\n\n**get** `/proxies/{proxyId}`\n\nGet a specific proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
-    perLanguage: {
-      cli: {
-        method: 'proxies retrieve',
-        example:
-          "mobilerun-cloud proxies retrieve \\\n  --api-key 'My API Key' \\\n  --proxy-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      go: {
-        method: 'client.Proxies.Get',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxy, err := client.Proxies.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxy.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/proxies/$PROXY_ID \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-      python: {
-        method: 'proxies.retrieve',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(proxy.data)',
-      },
-      typescript: {
-        method: 'client.proxies.retrieve',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst proxy = await client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy.data);",
-      },
-    },
-  },
-  {
-    name: 'update',
-    endpoint: '/proxies/{proxyId}',
-    httpMethod: 'put',
-    summary: 'Update a proxy config',
-    description: 'Update a proxy config',
-    stainlessPath: '(resource) proxies > (method) update',
-    qualified: 'client.proxies.update',
-    params: [
-      'proxyId: string;',
-      "body: { host: string; name: string; password: string; port: number; protocol: 'socks5'; user: string; } | { config: string; name: string; protocol: 'wireguard'; };",
-    ],
-    response:
-      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }",
-    perLanguage: {
-      cli: {
-        method: 'proxies update',
-        example:
-          "mobilerun-cloud proxies update \\\n  --api-key 'My API Key' \\\n  --proxy-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e \\\n  --host x \\\n  --name xxx \\\n  --password x \\\n  --port 1 \\\n  --protocol socks5 \\\n  --user x \\\n  --config x",
-      },
-      go: {
-        method: 'client.Proxies.Update',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxy, err := client.Proxies.Update(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.ProxyUpdateParams{\n\t\t\tOfSocks5: &mobileruncloud.ProxyUpdateParamsBodySocks5{\n\t\t\t\tHost:     "x",\n\t\t\t\tName:     "xxx",\n\t\t\t\tPassword: "x",\n\t\t\t\tPort:     1,\n\t\t\t\tUser:     "x",\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxy.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/proxies/$PROXY_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "host": "x",\n          "name": "xxx",\n          "password": "x",\n          "port": 1,\n          "protocol": "socks5",\n          "user": "x"\n        }\'',
-      },
-      python: {
-        method: 'proxies.update',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.update(\n    proxy_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    protocol="socks5",\n    user="x",\n)\nprint(proxy.data)',
-      },
-      typescript: {
-        method: 'client.proxies.update',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst proxy = await client.proxies.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {\n  host: 'x',\n  name: 'xxx',\n  password: 'x',\n  port: 1,\n  protocol: 'socks5',\n  user: 'x',\n});\n\nconsole.log(proxy.data);",
-      },
-    },
-  },
-  {
-    name: 'delete',
-    endpoint: '/proxies/{proxyId}',
-    httpMethod: 'delete',
-    summary: 'Delete a proxy config',
-    description: 'Delete a proxy config',
-    stainlessPath: '(resource) proxies > (method) delete',
-    qualified: 'client.proxies.delete',
-    params: ['proxyId: string;'],
-    response:
-      "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }",
-    markdown:
-      "## delete\n\n`client.proxies.delete(proxyId: string): { data: proxy_config; message: string; success: true; }`\n\n**delete** `/proxies/{proxyId}`\n\nDelete a proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
-    perLanguage: {
-      cli: {
-        method: 'proxies delete',
-        example:
-          "mobilerun-cloud proxies delete \\\n  --api-key 'My API Key' \\\n  --proxy-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      go: {
-        method: 'client.Proxies.Delete',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproxy, err := client.Proxies.Delete(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxy.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/proxies/$PROXY_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-      python: {
-        method: 'proxies.delete',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.delete(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(proxy.data)',
-      },
-      typescript: {
-        method: 'client.proxies.delete',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst proxy = await client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy.data);",
-      },
-    },
-  },
-  {
-    name: 'list',
     endpoint: '/carriers',
     httpMethod: 'get',
     summary: 'List carriers with pagination',
@@ -1135,7 +935,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ items: { id: string; createdAt: string; name: string; spec: device_spec; updatedAt: string; userId: string; $schema?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }',
     markdown:
-      "## list\n\n`client.profiles.list(name?: string, orderBy?: 'name' | 'created_at' | 'updated_at', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number): { items: profile[]; pagination: meta; $schema?: string; }`\n\n**get** `/profiles`\n\nList device profiles\n\n### Parameters\n\n- `name?: string`\n\n- `orderBy?: 'name' | 'created_at' | 'updated_at'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { id: string; createdAt: string; name: string; spec: device_spec; updatedAt: string; userId: string; $schema?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }`\n\n  - `items: { id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: object; }; updatedAt: string; userId: string; $schema?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst profiles = await client.profiles.list();\n\nconsole.log(profiles);\n```",
+      "## list\n\n`client.profiles.list(name?: string, orderBy?: 'name' | 'created_at' | 'updated_at', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number): { items: profile[]; pagination: meta; $schema?: string; }`\n\n**get** `/profiles`\n\nList device profiles\n\n### Parameters\n\n- `name?: string`\n\n- `orderBy?: 'name' | 'created_at' | 'updated_at'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { id: string; createdAt: string; name: string; spec: device_spec; updatedAt: string; userId: string; $schema?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }`\n\n  - `items: { id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: proxy_config; }; updatedAt: string; userId: string; $schema?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst profiles = await client.profiles.list();\n\nconsole.log(profiles);\n```",
     perLanguage: {
       cli: {
         method: 'profiles list',
@@ -1172,12 +972,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.profiles.create',
     params: [
       'name: string;',
-      'spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }; };',
+      'spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: object; wireguard?: string; }; };',
     ],
     response:
-      '{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: object; }; updatedAt: string; userId: string; $schema?: string; }',
+      '{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: proxy_config; }; updatedAt: string; userId: string; $schema?: string; }',
     markdown:
-      "## create\n\n`client.profiles.create(name: string, spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: object; }): { id: string; createdAt: string; name: string; spec: device_spec; updatedAt: string; userId: string; $schema?: string; }`\n\n**post** `/profiles`\n\nCreate a new device profile\n\n### Parameters\n\n- `name: string`\n  Profile name\n\n- `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }; }`\n  Device specification\n  - `$schema?: string`\n    A URL to the JSON Schema for this object.\n  - `apps?: string[]`\n  - `carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `files?: string[]`\n  - `identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `name?: string`\n  - `proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }`\n\n### Returns\n\n- `{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: object; }; updatedAt: string; userId: string; $schema?: string; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `name: string`\n  - `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }; }`\n  - `updatedAt: string`\n  - `userId: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst profile = await client.profiles.create({\n  name: 'x',\n  spec: {},\n});\n\nconsole.log(profile);\n```",
+      "## create\n\n`client.profiles.create(name: string, spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: proxy_config; }): { id: string; createdAt: string; name: string; spec: device_spec; updatedAt: string; userId: string; $schema?: string; }`\n\n**post** `/profiles`\n\nCreate a new device profile\n\n### Parameters\n\n- `name: string`\n  Profile name\n\n- `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: object; wireguard?: string; }; }`\n  Device specification\n  - `$schema?: string`\n    A URL to the JSON Schema for this object.\n  - `apps?: string[]`\n  - `carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `files?: string[]`\n  - `identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `name?: string`\n  - `proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }`\n\n### Returns\n\n- `{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: proxy_config; }; updatedAt: string; userId: string; $schema?: string; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `name: string`\n  - `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: object; wireguard?: string; }; }`\n  - `updatedAt: string`\n  - `userId: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst profile = await client.profiles.create({\n  name: 'x',\n  spec: {},\n});\n\nconsole.log(profile);\n```",
     perLanguage: {
       cli: {
         method: 'profiles create',
@@ -1215,9 +1015,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.profiles.retrieve',
     params: ['profileId: string;'],
     response:
-      '{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: object; }; updatedAt: string; userId: string; $schema?: string; }',
+      '{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: proxy_config; }; updatedAt: string; userId: string; $schema?: string; }',
     markdown:
-      "## retrieve\n\n`client.profiles.retrieve(profileId: string): { id: string; createdAt: string; name: string; spec: device_spec; updatedAt: string; userId: string; $schema?: string; }`\n\n**get** `/profiles/{profileId}`\n\nGet device profile by ID\n\n### Parameters\n\n- `profileId: string`\n\n### Returns\n\n- `{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: object; }; updatedAt: string; userId: string; $schema?: string; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `name: string`\n  - `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }; }`\n  - `updatedAt: string`\n  - `userId: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst profile = await client.profiles.retrieve('profileId');\n\nconsole.log(profile);\n```",
+      "## retrieve\n\n`client.profiles.retrieve(profileId: string): { id: string; createdAt: string; name: string; spec: device_spec; updatedAt: string; userId: string; $schema?: string; }`\n\n**get** `/profiles/{profileId}`\n\nGet device profile by ID\n\n### Parameters\n\n- `profileId: string`\n\n### Returns\n\n- `{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: proxy_config; }; updatedAt: string; userId: string; $schema?: string; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `name: string`\n  - `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: object; wireguard?: string; }; }`\n  - `updatedAt: string`\n  - `userId: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst profile = await client.profiles.retrieve('profileId');\n\nconsole.log(profile);\n```",
     perLanguage: {
       cli: {
         method: 'profiles retrieve',
@@ -1256,12 +1056,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: [
       'profileId: string;',
       'name: string;',
-      'spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }; };',
+      'spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: object; wireguard?: string; }; };',
     ],
     response:
-      '{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: object; }; updatedAt: string; userId: string; $schema?: string; }',
+      '{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: proxy_config; }; updatedAt: string; userId: string; $schema?: string; }',
     markdown:
-      "## update\n\n`client.profiles.update(profileId: string, name: string, spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: object; }): { id: string; createdAt: string; name: string; spec: device_spec; updatedAt: string; userId: string; $schema?: string; }`\n\n**put** `/profiles/{profileId}`\n\nUpdate a device profile\n\n### Parameters\n\n- `profileId: string`\n\n- `name: string`\n  Profile name\n\n- `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }; }`\n  Device specification\n  - `$schema?: string`\n    A URL to the JSON Schema for this object.\n  - `apps?: string[]`\n  - `carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `files?: string[]`\n  - `identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `name?: string`\n  - `proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }`\n\n### Returns\n\n- `{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: object; }; updatedAt: string; userId: string; $schema?: string; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `name: string`\n  - `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }; }`\n  - `updatedAt: string`\n  - `userId: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst profile = await client.profiles.update('profileId', {\n  name: 'x',\n  spec: {},\n});\n\nconsole.log(profile);\n```",
+      "## update\n\n`client.profiles.update(profileId: string, name: string, spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: proxy_config; }): { id: string; createdAt: string; name: string; spec: device_spec; updatedAt: string; userId: string; $schema?: string; }`\n\n**put** `/profiles/{profileId}`\n\nUpdate a device profile\n\n### Parameters\n\n- `profileId: string`\n\n- `name: string`\n  Profile name\n\n- `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: object; wireguard?: string; }; }`\n  Device specification\n  - `$schema?: string`\n    A URL to the JSON Schema for this object.\n  - `apps?: string[]`\n  - `carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `files?: string[]`\n  - `identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `name?: string`\n  - `proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }`\n\n### Returns\n\n- `{ id: string; createdAt: string; name: string; spec: { $schema?: string; apps?: string[]; carrier?: device_carrier; files?: string[]; identifiers?: device_identifiers; name?: string; proxy?: proxy_config; }; updatedAt: string; userId: string; $schema?: string; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `name: string`\n  - `spec: { $schema?: string; apps?: string[]; carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; files?: string[]; identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; name?: string; proxy?: { name?: string; smartIp?: boolean; socks5?: object; wireguard?: string; }; }`\n  - `updatedAt: string`\n  - `userId: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst profile = await client.profiles.update('profileId', {\n  name: 'x',\n  spec: {},\n});\n\nconsole.log(profile);\n```",
     perLanguage: {
       cli: {
         method: 'profiles update',
@@ -1347,7 +1147,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; streamToken?: string; userId?: string; }',
     markdown:
-      "## create\n\n`client.devices.create(deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device', apps?: string[], carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }, files?: string[], identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }, name?: string, proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; streamToken?: string; userId?: string; }`\n\n**post** `/devices`\n\nProvision a new device\n\n### Parameters\n\n- `deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device'`\n\n- `apps?: string[]`\n\n- `carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `GsmOperatorAlpha: string`\n  - `GsmOperatorNumeric: number`\n  - `GsmSimOperatorAlpha: string`\n  - `GsmSimOperatorIsoCountry: string`\n  - `GsmSimOperatorNumeric: number`\n  - `PersistSysTimezone: string`\n\n- `files?: string[]`\n\n- `identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `BootloaderSerialNumber: string`\n  - `IdentifierAndroidID: string`\n  - `IdentifierAppSetID: string`\n  - `IdentifierBluetoothMAC: string`\n  - `IdentifierGAID: string`\n  - `IdentifierGSFID: string`\n  - `IdentifierICCID: string`\n  - `IdentifierIMEI: string`\n  - `IdentifierIMSI: string`\n  - `IdentifierMediaDRMID: string`\n  - `IdentifierMEID: string`\n  - `IdentifierPhoneNumber: string`\n  - `IdentifierSerial: string`\n  - `IdentifierWifiMAC: string`\n  - `SerialNumber: string`\n\n- `name?: string`\n\n- `proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }`\n  - `name?: string`\n  - `smartIp?: boolean`\n  - `socks5?: { host: string; password: string; port: number; user: string; }`\n  - `wireguard?: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.create();\n\nconsole.log(device);\n```",
+      "## create\n\n`client.devices.create(deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device', apps?: string[], carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }, files?: string[], identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }, name?: string, proxy?: { name?: string; smartIp?: boolean; socks5?: object; wireguard?: string; }): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; streamToken?: string; userId?: string; }`\n\n**post** `/devices`\n\nProvision a new device\n\n### Parameters\n\n- `deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device'`\n\n- `apps?: string[]`\n\n- `carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `GsmOperatorAlpha: string`\n  - `GsmOperatorNumeric: number`\n  - `GsmSimOperatorAlpha: string`\n  - `GsmSimOperatorIsoCountry: string`\n  - `GsmSimOperatorNumeric: number`\n  - `PersistSysTimezone: string`\n\n- `files?: string[]`\n\n- `identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `BootloaderSerialNumber: string`\n  - `IdentifierAndroidID: string`\n  - `IdentifierAppSetID: string`\n  - `IdentifierBluetoothMAC: string`\n  - `IdentifierGAID: string`\n  - `IdentifierGSFID: string`\n  - `IdentifierICCID: string`\n  - `IdentifierIMEI: string`\n  - `IdentifierIMSI: string`\n  - `IdentifierMediaDRMID: string`\n  - `IdentifierMEID: string`\n  - `IdentifierPhoneNumber: string`\n  - `IdentifierSerial: string`\n  - `IdentifierWifiMAC: string`\n  - `SerialNumber: string`\n\n- `name?: string`\n\n- `proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; wireguard?: string; }`\n  - `name?: string`\n  - `smartIp?: boolean`\n  - `socks5?: { host: string; password: string; port: number; user: string; }`\n  - `wireguard?: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.create();\n\nconsole.log(device);\n```",
     perLanguage: {
       cli: {
         method: 'devices create',
@@ -3025,368 +2825,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.apps.list',
         example:
           "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst apps = await client.apps.list();\n\nconsole.log(apps.count);",
-      },
-    },
-  },
-  {
-    name: 'list',
-    endpoint: '/credentials',
-    httpMethod: 'get',
-    summary: 'List all credentials for the authenticated user',
-    description: 'List all credentials for the authenticated user',
-    stainlessPath: '(resource) credentials > (method) list',
-    qualified: 'client.credentials.list',
-    params: ['page?: number;', 'pageSize?: number;'],
-    response:
-      '{ items: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }',
-    markdown:
-      "## list\n\n`client.credentials.list(page?: number, pageSize?: number): { items: credential[]; pagination: pagination; }`\n\n**get** `/credentials`\n\nList all credentials for the authenticated user\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credentials = await client.credentials.list();\n\nconsole.log(credentials);\n```",
-    perLanguage: {
-      cli: {
-        method: 'credentials list',
-        example: "mobilerun-cloud credentials list \\\n  --api-key 'My API Key'",
-      },
-      go: {
-        method: 'client.Credentials.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcredentials, err := client.Credentials.List(context.TODO(), mobileruncloud.CredentialListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", credentials.Items)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/credentials \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-      python: {
-        method: 'credentials.list',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredentials = client.credentials.list()\nprint(credentials.items)',
-      },
-      typescript: {
-        method: 'client.credentials.list',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst credentials = await client.credentials.list();\n\nconsole.log(credentials.items);",
-      },
-    },
-  },
-  {
-    name: 'create',
-    endpoint: '/credentials/packages',
-    httpMethod: 'post',
-    summary: 'Initialize a new package/app',
-    description: 'Initialize a new package/app',
-    stainlessPath: '(resource) credentials.packages > (method) create',
-    qualified: 'client.credentials.packages.create',
-    params: ['packageName: string;'],
-    response: '{ data: { packageName: string; }; message: string; success: true; }',
-    markdown:
-      "## create\n\n`client.credentials.packages.create(packageName: string): { data: object; message: string; success: true; }`\n\n**post** `/credentials/packages`\n\nInitialize a new package/app\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { packageName: string; }; message: string; success: true; }`\n\n  - `data: { packageName: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst _package = await client.credentials.packages.create({ packageName: 'packageName' });\n\nconsole.log(_package);\n```",
-    perLanguage: {
-      cli: {
-        method: 'packages create',
-        example:
-          "mobilerun-cloud credentials:packages create \\\n  --api-key 'My API Key' \\\n  --package-name packageName",
-      },
-      go: {
-        method: 'client.Credentials.Packages.New',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpackage_, err := client.Credentials.Packages.New(context.TODO(), mobileruncloud.CredentialPackageNewParams{\n\t\tPackageName: "packageName",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", package_.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/credentials/packages \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "packageName": "packageName"\n        }\'',
-      },
-      python: {
-        method: 'credentials.packages.create',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\npackage = client.credentials.packages.create(\n    package_name="packageName",\n)\nprint(package.data)',
-      },
-      typescript: {
-        method: 'client.credentials.packages.create',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst _package = await client.credentials.packages.create({ packageName: 'packageName' });\n\nconsole.log(_package.data);",
-      },
-    },
-  },
-  {
-    name: 'list',
-    endpoint: '/credentials/packages/{packageName}',
-    httpMethod: 'get',
-    summary: 'List credentials for a specific package',
-    description: 'List credentials for a specific package',
-    stainlessPath: '(resource) credentials.packages > (method) list',
-    qualified: 'client.credentials.packages.list',
-    params: ['packageName: string;'],
-    response:
-      '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; }',
-    markdown:
-      "## list\n\n`client.credentials.packages.list(packageName: string): { data: credential[]; }`\n\n**get** `/credentials/packages/{packageName}`\n\nList credentials for a specific package\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst packages = await client.credentials.packages.list('packageName');\n\nconsole.log(packages);\n```",
-    perLanguage: {
-      cli: {
-        method: 'packages list',
-        example:
-          "mobilerun-cloud credentials:packages list \\\n  --api-key 'My API Key' \\\n  --package-name packageName",
-      },
-      go: {
-        method: 'client.Credentials.Packages.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpackages, err := client.Credentials.Packages.List(context.TODO(), "packageName")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", packages.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/credentials/packages/$PACKAGE_NAME \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-      python: {
-        method: 'credentials.packages.list',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\npackages = client.credentials.packages.list(\n    "packageName",\n)\nprint(packages.data)',
-      },
-      typescript: {
-        method: 'client.credentials.packages.list',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst packages = await client.credentials.packages.list('packageName');\n\nconsole.log(packages.data);",
-      },
-    },
-  },
-  {
-    name: 'create',
-    endpoint: '/credentials/packages/{packageName}',
-    httpMethod: 'post',
-    summary: 'Create a credential with fields for a package',
-    description: 'Create a credential with fields for a package',
-    stainlessPath: '(resource) credentials.packages.credentials > (method) create',
-    qualified: 'client.credentials.packages.credentials.create',
-    params: [
-      'packageName: string;',
-      'credentialName: string;',
-      'fields: { fieldType: string; value: string; }[];',
-    ],
-    response:
-      '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
-    markdown:
-      "## create\n\n`client.credentials.packages.credentials.create(packageName: string, credentialName: string, fields: { fieldType: string; value: string; }[]): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}`\n\nCreate a credential with fields for a package\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fields: { fieldType: string; value: string; }[]`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.create('packageName', { credentialName: '26f1kl_-n-71', fields: [{ fieldType: 'email', value: 'x' }] });\n\nconsole.log(credential);\n```",
-    perLanguage: {
-      cli: {
-        method: 'credentials create',
-        example:
-          "mobilerun-cloud credentials:packages:credentials create \\\n  --api-key 'My API Key' \\\n  --package-name packageName \\\n  --credential-name 26f1kl_-n-71 \\\n  --field '{fieldType: email, value: x}'",
-      },
-      go: {
-        method: 'client.Credentials.Packages.Credentials.New',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcredential, err := client.Credentials.Packages.Credentials.New(\n\t\tcontext.TODO(),\n\t\t"packageName",\n\t\tmobileruncloud.CredentialPackageCredentialNewParams{\n\t\t\tCredentialName: "26f1kl_-n-71",\n\t\t\tFields: []mobileruncloud.CredentialPackageCredentialNewParamsField{{\n\t\t\t\tFieldType: "email",\n\t\t\t\tValue:     "x",\n\t\t\t}},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", credential.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/credentials/packages/$PACKAGE_NAME \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "credentialName": "26f1kl_-n-71",\n          "fields": [\n            {\n              "fieldType": "email",\n              "value": "x"\n            }\n          ]\n        }\'',
-      },
-      python: {
-        method: 'credentials.packages.credentials.create',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredential = client.credentials.packages.credentials.create(\n    package_name="packageName",\n    credential_name="26f1kl_-n-71",\n    fields=[{\n        "field_type": "email",\n        "value": "x",\n    }],\n)\nprint(credential.data)',
-      },
-      typescript: {
-        method: 'client.credentials.packages.credentials.create',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst credential = await client.credentials.packages.credentials.create('packageName', {\n  credentialName: '26f1kl_-n-71',\n  fields: [{ fieldType: 'email', value: 'x' }],\n});\n\nconsole.log(credential.data);",
-      },
-    },
-  },
-  {
-    name: 'retrieve',
-    endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}',
-    httpMethod: 'get',
-    summary: 'Get a specific credential with its fields',
-    description: 'Get a specific credential with its fields',
-    stainlessPath: '(resource) credentials.packages.credentials > (method) retrieve',
-    qualified: 'client.credentials.packages.credentials.retrieve',
-    params: ['packageName: string;', 'credentialName: string;'],
-    response:
-      '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; }',
-    markdown:
-      "## retrieve\n\n`client.credentials.packages.credentials.retrieve(packageName: string, credentialName: string): { data: credential; }`\n\n**get** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nGet a specific credential with its fields\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.retrieve('credentialName', { packageName: 'packageName' });\n\nconsole.log(credential);\n```",
-    perLanguage: {
-      cli: {
-        method: 'credentials retrieve',
-        example:
-          "mobilerun-cloud credentials:packages:credentials retrieve \\\n  --api-key 'My API Key' \\\n  --package-name packageName \\\n  --credential-name credentialName",
-      },
-      go: {
-        method: 'client.Credentials.Packages.Credentials.Get',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcredential, err := client.Credentials.Packages.Credentials.Get(\n\t\tcontext.TODO(),\n\t\t"credentialName",\n\t\tmobileruncloud.CredentialPackageCredentialGetParams{\n\t\t\tPackageName: "packageName",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", credential.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/credentials/packages/$PACKAGE_NAME/credentials/$CREDENTIAL_NAME \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-      python: {
-        method: 'credentials.packages.credentials.retrieve',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredential = client.credentials.packages.credentials.retrieve(\n    credential_name="credentialName",\n    package_name="packageName",\n)\nprint(credential.data)',
-      },
-      typescript: {
-        method: 'client.credentials.packages.credentials.retrieve',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst credential = await client.credentials.packages.credentials.retrieve('credentialName', {\n  packageName: 'packageName',\n});\n\nconsole.log(credential.data);",
-      },
-    },
-  },
-  {
-    name: 'delete',
-    endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}',
-    httpMethod: 'delete',
-    summary: 'Delete a credential and all its fields',
-    description: 'Delete a credential and all its fields',
-    stainlessPath: '(resource) credentials.packages.credentials > (method) delete',
-    qualified: 'client.credentials.packages.credentials.delete',
-    params: ['packageName: string;', 'credentialName: string;'],
-    response:
-      '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
-    markdown:
-      "## delete\n\n`client.credentials.packages.credentials.delete(packageName: string, credentialName: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nDelete a credential and all its fields\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.delete('credentialName', { packageName: 'packageName' });\n\nconsole.log(credential);\n```",
-    perLanguage: {
-      cli: {
-        method: 'credentials delete',
-        example:
-          "mobilerun-cloud credentials:packages:credentials delete \\\n  --api-key 'My API Key' \\\n  --package-name packageName \\\n  --credential-name credentialName",
-      },
-      go: {
-        method: 'client.Credentials.Packages.Credentials.Delete',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcredential, err := client.Credentials.Packages.Credentials.Delete(\n\t\tcontext.TODO(),\n\t\t"credentialName",\n\t\tmobileruncloud.CredentialPackageCredentialDeleteParams{\n\t\t\tPackageName: "packageName",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", credential.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/credentials/packages/$PACKAGE_NAME/credentials/$CREDENTIAL_NAME \\\n    -X DELETE \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-      python: {
-        method: 'credentials.packages.credentials.delete',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredential = client.credentials.packages.credentials.delete(\n    credential_name="credentialName",\n    package_name="packageName",\n)\nprint(credential.data)',
-      },
-      typescript: {
-        method: 'client.credentials.packages.credentials.delete',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst credential = await client.credentials.packages.credentials.delete('credentialName', {\n  packageName: 'packageName',\n});\n\nconsole.log(credential.data);",
-      },
-    },
-  },
-  {
-    name: 'delete',
-    endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}',
-    httpMethod: 'delete',
-    summary: 'Delete a field from a credential',
-    description: 'Delete a field from a credential',
-    stainlessPath: '(resource) credentials.packages.credentials.fields > (method) delete',
-    qualified: 'client.credentials.packages.credentials.fields.delete',
-    params: ['packageName: string;', 'credentialName: string;', 'fieldType: string;'],
-    response:
-      '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
-    markdown:
-      "## delete\n\n`client.credentials.packages.credentials.fields.delete(packageName: string, credentialName: string, fieldType: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nDelete a field from a credential\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.delete('email', { packageName: 'packageName', credentialName: 'credentialName' });\n\nconsole.log(field);\n```",
-    perLanguage: {
-      cli: {
-        method: 'fields delete',
-        example:
-          "mobilerun-cloud credentials:packages:credentials:fields delete \\\n  --api-key 'My API Key' \\\n  --package-name packageName \\\n  --credential-name credentialName \\\n  --field-type email",
-      },
-      go: {
-        method: 'client.Credentials.Packages.Credentials.Fields.Delete',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tfield, err := client.Credentials.Packages.Credentials.Fields.Delete(\n\t\tcontext.TODO(),\n\t\tmobileruncloud.CredentialPackageCredentialFieldDeleteParamsFieldTypeEmail,\n\t\tmobileruncloud.CredentialPackageCredentialFieldDeleteParams{\n\t\t\tPackageName:    "packageName",\n\t\t\tCredentialName: "credentialName",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", field.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/credentials/packages/$PACKAGE_NAME/credentials/$CREDENTIAL_NAME/fields/$FIELD_TYPE \\\n    -X DELETE \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-      python: {
-        method: 'credentials.packages.credentials.fields.delete',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfield = client.credentials.packages.credentials.fields.delete(\n    field_type="email",\n    package_name="packageName",\n    credential_name="credentialName",\n)\nprint(field.data)',
-      },
-      typescript: {
-        method: 'client.credentials.packages.credentials.fields.delete',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst field = await client.credentials.packages.credentials.fields.delete('email', {\n  packageName: 'packageName',\n  credentialName: 'credentialName',\n});\n\nconsole.log(field.data);",
-      },
-    },
-  },
-  {
-    name: 'update',
-    endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}',
-    httpMethod: 'patch',
-    summary: 'Update the value of a credential field',
-    description: 'Update the value of a credential field',
-    stainlessPath: '(resource) credentials.packages.credentials.fields > (method) update',
-    qualified: 'client.credentials.packages.credentials.fields.update',
-    params: ['packageName: string;', 'credentialName: string;', 'fieldType: string;', 'value: string;'],
-    response:
-      '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
-    markdown:
-      "## update\n\n`client.credentials.packages.credentials.fields.update(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**patch** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nUpdate the value of a credential field\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.update('email', {\n  packageName: 'packageName',\n  credentialName: 'credentialName',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
-    perLanguage: {
-      cli: {
-        method: 'fields update',
-        example:
-          "mobilerun-cloud credentials:packages:credentials:fields update \\\n  --api-key 'My API Key' \\\n  --package-name packageName \\\n  --credential-name credentialName \\\n  --field-type email \\\n  --value x",
-      },
-      go: {
-        method: 'client.Credentials.Packages.Credentials.Fields.Update',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tfield, err := client.Credentials.Packages.Credentials.Fields.Update(\n\t\tcontext.TODO(),\n\t\tmobileruncloud.CredentialPackageCredentialFieldUpdateParamsFieldTypeEmail,\n\t\tmobileruncloud.CredentialPackageCredentialFieldUpdateParams{\n\t\t\tPackageName:    "packageName",\n\t\t\tCredentialName: "credentialName",\n\t\t\tValue:          "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", field.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/credentials/packages/$PACKAGE_NAME/credentials/$CREDENTIAL_NAME/fields/$FIELD_TYPE \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "value": "x"\n        }\'',
-      },
-      python: {
-        method: 'credentials.packages.credentials.fields.update',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfield = client.credentials.packages.credentials.fields.update(\n    field_type="email",\n    package_name="packageName",\n    credential_name="credentialName",\n    value="x",\n)\nprint(field.data)',
-      },
-      typescript: {
-        method: 'client.credentials.packages.credentials.fields.update',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst field = await client.credentials.packages.credentials.fields.update('email', {\n  packageName: 'packageName',\n  credentialName: 'credentialName',\n  value: 'x',\n});\n\nconsole.log(field.data);",
-      },
-    },
-  },
-  {
-    name: 'create',
-    endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}/fields',
-    httpMethod: 'post',
-    summary: 'Add a new field to an existing credential',
-    description: 'Add a new field to an existing credential',
-    stainlessPath: '(resource) credentials.packages.credentials.fields > (method) create',
-    qualified: 'client.credentials.packages.credentials.fields.create',
-    params: ['packageName: string;', 'credentialName: string;', 'fieldType: string;', 'value: string;'],
-    response:
-      '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
-    markdown:
-      "## create\n\n`client.credentials.packages.credentials.fields.create(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}/credentials/{credentialName}/fields`\n\nAdd a new field to an existing credential\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.create('credentialName', {\n  packageName: 'packageName',\n  fieldType: 'email',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
-    perLanguage: {
-      cli: {
-        method: 'fields create',
-        example:
-          "mobilerun-cloud credentials:packages:credentials:fields create \\\n  --api-key 'My API Key' \\\n  --package-name packageName \\\n  --credential-name credentialName \\\n  --field-type email \\\n  --value x",
-      },
-      go: {
-        method: 'client.Credentials.Packages.Credentials.Fields.New',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tfield, err := client.Credentials.Packages.Credentials.Fields.New(\n\t\tcontext.TODO(),\n\t\t"credentialName",\n\t\tmobileruncloud.CredentialPackageCredentialFieldNewParams{\n\t\t\tPackageName: "packageName",\n\t\t\tFieldType:   mobileruncloud.CredentialPackageCredentialFieldNewParamsFieldTypeEmail,\n\t\t\tValue:       "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", field.Data)\n}\n',
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/credentials/packages/$PACKAGE_NAME/credentials/$CREDENTIAL_NAME/fields \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "fieldType": "email",\n          "value": "x"\n        }\'',
-      },
-      python: {
-        method: 'credentials.packages.credentials.fields.create',
-        example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfield = client.credentials.packages.credentials.fields.create(\n    credential_name="credentialName",\n    package_name="packageName",\n    field_type="email",\n    value="x",\n)\nprint(field.data)',
-      },
-      typescript: {
-        method: 'client.credentials.packages.credentials.fields.create',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst field = await client.credentials.packages.credentials.fields.create('credentialName', {\n  packageName: 'packageName',\n  fieldType: 'email',\n  value: 'x',\n});\n\nconsole.log(field.data);",
       },
     },
   },

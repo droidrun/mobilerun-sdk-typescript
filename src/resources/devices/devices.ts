@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ProxiesAPI from '../proxies';
 import * as Shared from '../shared';
 import * as ActionsAPI from './actions';
 import {
@@ -53,7 +54,7 @@ import * as ProfileAPI from './profile';
 import { Profile, ProfileUpdateParams } from './profile';
 import * as ProxyAPI from './proxy';
 import {
-  Proxy as ProxyAPIProxy,
+  Proxy,
   ProxyConnectParams,
   ProxyDisconnectParams,
   ProxyStatusParams,
@@ -238,31 +239,7 @@ export interface DeviceCreateParams {
   /**
    * Body param
    */
-  proxy?: DeviceCreateParams.Proxy;
-}
-
-export namespace DeviceCreateParams {
-  export interface Proxy {
-    name?: string;
-
-    smartIp?: boolean;
-
-    socks5?: Proxy.Socks5;
-
-    wireguard?: string;
-  }
-
-  export namespace Proxy {
-    export interface Socks5 {
-      host: string;
-
-      password: string;
-
-      port: number;
-
-      user: string;
-    }
-  }
+  proxy?: ProxiesAPI.ProxyConfig;
 }
 
 export interface DeviceListParams {
@@ -298,7 +275,7 @@ export interface DeviceTerminateParams {
 Devices.Time = Time;
 Devices.Profile = Profile;
 Devices.Files = Files;
-Devices.Proxy = ProxyAPIProxy;
+Devices.Proxy = Proxy;
 Devices.Location = Location;
 Devices.Actions = Actions;
 Devices.State = State;
@@ -342,7 +319,7 @@ export declare namespace Devices {
   };
 
   export {
-    ProxyAPIProxy as Proxy,
+    Proxy as Proxy,
     type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
