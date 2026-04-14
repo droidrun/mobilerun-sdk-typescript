@@ -1841,7 +1841,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       typescript: {
         method: 'client.devices.files.upload',
         example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.files.upload('deviceId', {\n  path: 'path',\n  file: fs.createReadStream('path/to/file'),\n});",
+          "import fs from 'fs';\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.files.upload('deviceId', {\n  path: 'path',\n  file: fs.createReadStream('path/to/file'),\n});",
       },
     },
   },
