@@ -56,6 +56,7 @@ describe('resource devices', () => {
           orderByDirection: 'asc',
           page: 0,
           pageSize: 0,
+          providerId: 'providerId',
           state: ['creating'],
           type: 'dedicated_physical_device',
         },
