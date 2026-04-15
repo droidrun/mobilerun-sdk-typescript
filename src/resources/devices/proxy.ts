@@ -77,30 +77,19 @@ export interface ProxyStatusResponse {
   connected: boolean;
 
   /**
-   * A URL to the JSON Schema for this object.
+   * Active proxy name
    */
-  $schema?: string;
+  name: string | null;
 
   /**
    * Active proxy protocol (socks5 or wireguard).
    */
-  protocol?: string;
+  protocol: string | null;
 
   /**
-   * WireGuard tunnel details.
+   * A URL to the JSON Schema for this object.
    */
-  tunnel?: ProxyStatusResponse.Tunnel;
-}
-
-export namespace ProxyStatusResponse {
-  /**
-   * WireGuard tunnel details.
-   */
-  export interface Tunnel {
-    name: string;
-
-    state: string;
-  }
+  $schema?: string;
 }
 
 export interface ProxyConnectParams {

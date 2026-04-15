@@ -186,6 +186,8 @@ export interface Device {
    */
   $schema?: string;
 
+  providerId?: string;
+
   streamToken?: string;
 
   userId?: string;
@@ -208,7 +210,11 @@ export interface DeviceCreateParams {
   /**
    * Query param
    */
-  deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
+  deviceType?:
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device'
+    | 'dedicated_emulated_device'
+    | 'dedicated_ios_device';
 
   /**
    * Body param
@@ -278,11 +284,17 @@ export interface DeviceListParams {
 
   pageSize?: number;
 
+  providerId?: string;
+
   state?: Array<
     'creating' | 'assigned' | 'ready' | 'rebooting' | 'migrating' | 'terminated' | 'maintenance' | 'unknown'
   > | null;
 
-  type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
+  type?:
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device'
+    | 'dedicated_emulated_device'
+    | 'dedicated_ios_device';
 }
 
 export interface DeviceSetNameParams {
