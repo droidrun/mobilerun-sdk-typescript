@@ -101,7 +101,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.run',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.run(\n    device_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    task="x",\n)\nprint(response.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.run(\n    device_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    task="x",\n)\nprint(response.id)',
       },
       typescript: {
         method: 'client.tasks.run',
@@ -147,7 +147,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ntasks = client.tasks.list()\nprint(tasks.items)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ntasks = client.tasks.list()\nprint(tasks.items)',
       },
       typescript: {
         method: 'client.tasks.list',
@@ -207,7 +207,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.run_streamed',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.run_streamed(\n    device_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    task="x",\n)\nprint(response)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.run_streamed(\n    device_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    task="x",\n)\nprint(response)',
       },
       typescript: {
         method: 'client.tasks.runStreamed',
@@ -246,7 +246,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.stop',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.stop(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.cancelled)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.stop(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.cancelled)',
       },
       typescript: {
         method: 'client.tasks.stop',
@@ -284,7 +284,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.attach',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.tasks.attach(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.tasks.attach(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)',
       },
       typescript: {
         method: 'client.tasks.attach',
@@ -324,7 +324,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.get_status',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.get_status(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.status)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.get_status(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.status)',
       },
       typescript: {
         method: 'client.tasks.getStatus',
@@ -364,7 +364,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.get_trajectory',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.get_trajectory(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.trajectory)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.get_trajectory(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.trajectory)',
       },
       typescript: {
         method: 'client.tasks.getTrajectory',
@@ -404,7 +404,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.retrieve',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ntask = client.tasks.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(task.task)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ntask = client.tasks.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(task.task)',
       },
       typescript: {
         method: 'client.tasks.retrieve',
@@ -444,7 +444,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.send_message',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.send_message(\n    task_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    message="x",\n)\nprint(response.sent)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.tasks.send_message(\n    task_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    message="x",\n)\nprint(response.sent)',
       },
       typescript: {
         method: 'client.tasks.sendMessage',
@@ -483,7 +483,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.screenshots.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nscreenshots = client.tasks.screenshots.list(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(screenshots.urls)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nscreenshots = client.tasks.screenshots.list(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(screenshots.urls)',
       },
       typescript: {
         method: 'client.tasks.screenshots.list',
@@ -522,7 +522,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.screenshots.retrieve',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nmedia_response = client.tasks.screenshots.retrieve(\n    index=0,\n    task_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(media_response.url)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nmedia_response = client.tasks.screenshots.retrieve(\n    index=0,\n    task_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(media_response.url)',
       },
       typescript: {
         method: 'client.tasks.screenshots.retrieve',
@@ -561,7 +561,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.ui_states.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nui_states = client.tasks.ui_states.list(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(ui_states.urls)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nui_states = client.tasks.ui_states.list(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(ui_states.urls)',
       },
       typescript: {
         method: 'client.tasks.uiStates.list',
@@ -600,7 +600,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'tasks.ui_states.retrieve',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nmedia_response = client.tasks.ui_states.retrieve(\n    index=0,\n    task_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(media_response.url)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nmedia_response = client.tasks.ui_states.retrieve(\n    index=0,\n    task_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(media_response.url)',
       },
       typescript: {
         method: 'client.tasks.uiStates.retrieve',
@@ -638,7 +638,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'agents.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nagents = client.agents.list()\nprint(agents)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nagents = client.agents.list()\nprint(agents)',
       },
       typescript: {
         method: 'client.agents.list',
@@ -677,7 +677,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'proxies.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxies = client.proxies.list()\nprint(proxies.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxies = client.proxies.list()\nprint(proxies.data)',
       },
       typescript: {
         method: 'client.proxies.list',
@@ -717,7 +717,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'proxies.create',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.create(\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    protocol="socks5",\n    user="x",\n)\nprint(proxy.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.create(\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    protocol="socks5",\n    user="x",\n)\nprint(proxy.data)',
       },
       typescript: {
         method: 'client.proxies.create',
@@ -757,7 +757,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'proxies.retrieve',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(proxy.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(proxy.data)',
       },
       typescript: {
         method: 'client.proxies.retrieve',
@@ -798,7 +798,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'proxies.update',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.update(\n    proxy_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    protocol="socks5",\n    user="x",\n)\nprint(proxy.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.update(\n    proxy_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    host="x",\n    name="xxx",\n    password="x",\n    port=1,\n    protocol="socks5",\n    user="x",\n)\nprint(proxy.data)',
       },
       typescript: {
         method: 'client.proxies.update',
@@ -838,7 +838,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'proxies.delete',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.delete(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(proxy.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nproxy = client.proxies.delete(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(proxy.data)',
       },
       typescript: {
         method: 'client.proxies.delete',
@@ -883,7 +883,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'carriers.list',
         example:
-          'from mobilerun import Mobilerun\n\nclient = Mobilerun()\ncarriers = client.carriers.list()\nprint(carriers.items)',
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\ncarriers = client.carriers.list()\nprint(carriers.items)',
       },
       typescript: {
         method: 'client.carriers.list',
@@ -940,7 +940,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'carriers.create',
         example:
-          'from mobilerun import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.create(\n    country="x",\n    mcc="x",\n    mnc="x",\n    operator="x",\n)\nprint(carrier.id)',
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.create(\n    country="x",\n    mcc="x",\n    mnc="x",\n    operator="x",\n)\nprint(carrier.id)',
       },
       typescript: {
         method: 'client.carriers.create',
@@ -978,7 +978,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'carriers.lookup',
         example:
-          'from mobilerun import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.lookup(\n    mcc="x",\n    mnc="x",\n)\nprint(carrier.id)',
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.lookup(\n    mcc="x",\n    mnc="x",\n)\nprint(carrier.id)',
       },
       typescript: {
         method: 'client.carriers.lookup',
@@ -1016,7 +1016,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'carriers.retrieve',
         example:
-          'from mobilerun import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.retrieve(\n    1,\n)\nprint(carrier.id)',
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.retrieve(\n    1,\n)\nprint(carrier.id)',
       },
       typescript: {
         method: 'client.carriers.retrieve',
@@ -1071,7 +1071,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'carriers.update',
         example:
-          'from mobilerun import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.update(\n    carrier_id=1,\n)\nprint(carrier.id)',
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.update(\n    carrier_id=1,\n)\nprint(carrier.id)',
       },
       typescript: {
         method: 'client.carriers.update',
@@ -1108,7 +1108,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'carriers.delete',
         example:
-          'from mobilerun import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.delete(\n    1,\n)\nprint(carrier.message)',
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\ncarrier = client.carriers.delete(\n    1,\n)\nprint(carrier.message)',
       },
       typescript: {
         method: 'client.carriers.delete',
@@ -1153,7 +1153,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'profiles.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofiles = client.profiles.list()\nprint(profiles.items)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofiles = client.profiles.list()\nprint(profiles.items)',
       },
       typescript: {
         method: 'client.profiles.list',
@@ -1196,7 +1196,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'profiles.create',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofile = client.profiles.create(\n    name="x",\n    spec={},\n)\nprint(profile.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofile = client.profiles.create(\n    name="x",\n    spec={},\n)\nprint(profile.id)',
       },
       typescript: {
         method: 'client.profiles.create',
@@ -1236,7 +1236,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'profiles.retrieve',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofile = client.profiles.retrieve(\n    "profileId",\n)\nprint(profile.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofile = client.profiles.retrieve(\n    "profileId",\n)\nprint(profile.id)',
       },
       typescript: {
         method: 'client.profiles.retrieve',
@@ -1280,7 +1280,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'profiles.update',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofile = client.profiles.update(\n    profile_id="profileId",\n    name="x",\n    spec={},\n)\nprint(profile.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofile = client.profiles.update(\n    profile_id="profileId",\n    name="x",\n    spec={},\n)\nprint(profile.id)',
       },
       typescript: {
         method: 'client.profiles.update',
@@ -1318,7 +1318,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'profiles.delete',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofile = client.profiles.delete(\n    "profileId",\n)\nprint(profile.message)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nprofile = client.profiles.delete(\n    "profileId",\n)\nprint(profile.message)',
       },
       typescript: {
         method: 'client.profiles.delete',
@@ -1365,7 +1365,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.create',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevice = client.devices.create()\nprint(device.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevice = client.devices.create()\nprint(device.id)',
       },
       typescript: {
         method: 'client.devices.create',
@@ -1404,7 +1404,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.wait_ready',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevice = client.devices.wait_ready(\n    "deviceId",\n)\nprint(device.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevice = client.devices.wait_ready(\n    "deviceId",\n)\nprint(device.id)',
       },
       typescript: {
         method: 'client.devices.waitReady',
@@ -1443,7 +1443,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.retrieve',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevice = client.devices.retrieve(\n    "deviceId",\n)\nprint(device.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevice = client.devices.retrieve(\n    "deviceId",\n)\nprint(device.id)',
       },
       typescript: {
         method: 'client.devices.retrieve',
@@ -1480,7 +1480,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.terminate',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.terminate(\n    device_id="deviceId",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.terminate(\n    device_id="deviceId",\n)',
       },
       typescript: {
         method: 'client.devices.terminate',
@@ -1529,7 +1529,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevices = client.devices.list()\nprint(devices.items)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevices = client.devices.list()\nprint(devices.items)',
       },
       typescript: {
         method: 'client.devices.list',
@@ -1566,7 +1566,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.count',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.count()\nprint(response)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.count()\nprint(response)',
       },
       typescript: {
         method: 'client.devices.count',
@@ -1606,7 +1606,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.set_name',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevice = client.devices.set_name(\n    device_id="deviceId",\n    name="x",\n)\nprint(device.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndevice = client.devices.set_name(\n    device_id="deviceId",\n    name="x",\n)\nprint(device.id)',
       },
       typescript: {
         method: 'client.devices.setName',
@@ -1644,7 +1644,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.time.time',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.time.time(\n    device_id="deviceId",\n)\nprint(response)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.time.time(\n    device_id="deviceId",\n)\nprint(response)',
       },
       typescript: {
         method: 'client.devices.time.time',
@@ -1683,7 +1683,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.time.timezone',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.time.timezone(\n    device_id="deviceId",\n)\nprint(response.timezone)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.time.timezone(\n    device_id="deviceId",\n)\nprint(response.timezone)',
       },
       typescript: {
         method: 'client.devices.time.timezone',
@@ -1721,7 +1721,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.time.set_timezone',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.time.set_timezone(\n    device_id="deviceId",\n    timezone="timezone",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.time.set_timezone(\n    device_id="deviceId",\n    timezone="timezone",\n)',
       },
       typescript: {
         method: 'client.devices.time.setTimezone',
@@ -1759,7 +1759,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.profile.update',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.profile.update(\n    device_id="deviceId",\n    profile_id="profileId",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.profile.update(\n    device_id="deviceId",\n    profile_id="profileId",\n)',
       },
       typescript: {
         method: 'client.devices.profile.update',
@@ -1799,7 +1799,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.files.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfiles = client.devices.files.list(\n    device_id="deviceId",\n    path="path",\n)\nprint(files.files)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfiles = client.devices.files.list(\n    device_id="deviceId",\n    path="path",\n)\nprint(files.files)',
       },
       typescript: {
         method: 'client.devices.files.list',
@@ -1837,7 +1837,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.files.upload',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.files.upload(\n    device_id="deviceId",\n    path="path",\n    file=b"Example data",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.files.upload(\n    device_id="deviceId",\n    path="path",\n    file=b"Example data",\n)',
       },
       typescript: {
         method: 'client.devices.files.upload',
@@ -1875,7 +1875,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.files.delete',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.files.delete(\n    device_id="deviceId",\n    path="path",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.files.delete(\n    device_id="deviceId",\n    path="path",\n)',
       },
       typescript: {
         method: 'client.devices.files.delete',
@@ -1914,7 +1914,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.files.download',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.files.download(\n    device_id="deviceId",\n    path="path",\n)\nprint(response)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.files.download(\n    device_id="deviceId",\n    path="path",\n)\nprint(response)',
       },
       typescript: {
         method: 'client.devices.files.download',
@@ -1963,7 +1963,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.proxy.connect',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.proxy.connect(\n    device_id="deviceId",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.proxy.connect(\n    device_id="deviceId",\n)',
       },
       typescript: {
         method: 'client.devices.proxy.connect',
@@ -2002,7 +2002,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.proxy.status',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.proxy.status(\n    device_id="deviceId",\n)\nprint(response.connected)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.proxy.status(\n    device_id="deviceId",\n)\nprint(response.connected)',
       },
       typescript: {
         method: 'client.devices.proxy.status',
@@ -2040,7 +2040,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.proxy.disconnect',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.proxy.disconnect(\n    device_id="deviceId",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.proxy.disconnect(\n    device_id="deviceId",\n)',
       },
       typescript: {
         method: 'client.devices.proxy.disconnect',
@@ -2079,7 +2079,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.location.get',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nlocation = client.devices.location.get(\n    device_id="deviceId",\n)\nprint(location.latitude)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nlocation = client.devices.location.get(\n    device_id="deviceId",\n)\nprint(location.latitude)',
       },
       typescript: {
         method: 'client.devices.location.get',
@@ -2117,7 +2117,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.location.set',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.location.set(\n    device_id="deviceId",\n    latitude=0,\n    longitude=0,\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.location.set(\n    device_id="deviceId",\n    latitude=0,\n    longitude=0,\n)',
       },
       typescript: {
         method: 'client.devices.location.set',
@@ -2161,7 +2161,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.actions.tap',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.actions.tap(\n    device_id="deviceId",\n    x=0,\n    y=0,\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.actions.tap(\n    device_id="deviceId",\n    x=0,\n    y=0,\n)',
       },
       typescript: {
         method: 'client.devices.actions.tap',
@@ -2208,7 +2208,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.actions.swipe',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.actions.swipe(\n    device_id="deviceId",\n    duration=10,\n    end_x=0,\n    end_y=0,\n    start_x=0,\n    start_y=0,\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.actions.swipe(\n    device_id="deviceId",\n    duration=10,\n    end_x=0,\n    end_y=0,\n    start_x=0,\n    start_y=0,\n)',
       },
       typescript: {
         method: 'client.devices.actions.swipe',
@@ -2246,7 +2246,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.actions.global_',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.actions.global_(\n    device_id="deviceId",\n    action=0,\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.actions.global_(\n    device_id="deviceId",\n    action=0,\n)',
       },
       typescript: {
         method: 'client.devices.actions.global',
@@ -2284,7 +2284,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.actions.set_overlay_visible',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.actions.set_overlay_visible(\n    device_id="deviceId",\n    visible=True,\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.actions.set_overlay_visible(\n    device_id="deviceId",\n    visible=True,\n)',
       },
       typescript: {
         method: 'client.devices.actions.setOverlayVisible',
@@ -2323,7 +2323,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.actions.overlay_visible',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.actions.overlay_visible(\n    device_id="deviceId",\n)\nprint(response.visible)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.actions.overlay_visible(\n    device_id="deviceId",\n)\nprint(response.visible)',
       },
       typescript: {
         method: 'client.devices.actions.overlayVisible',
@@ -2362,7 +2362,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.state.screenshot',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.state.screenshot(\n    device_id="deviceId",\n)\nprint(response)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.state.screenshot(\n    device_id="deviceId",\n)\nprint(response)',
       },
       typescript: {
         method: 'client.devices.state.screenshot',
@@ -2401,7 +2401,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.state.ui',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.state.ui(\n    device_id="deviceId",\n)\nprint(response.a11y_tree)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.state.ui(\n    device_id="deviceId",\n)\nprint(response.a11y_tree)',
       },
       typescript: {
         method: 'client.devices.state.ui',
@@ -2439,7 +2439,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.apps.install',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.install(\n    device_id="deviceId",\n    package_name="packageName",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.install(\n    device_id="deviceId",\n    package_name="packageName",\n)',
       },
       typescript: {
         method: 'client.devices.apps.install',
@@ -2483,7 +2483,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.apps.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\napps = client.devices.apps.list(\n    device_id="deviceId",\n)\nprint(apps)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\napps = client.devices.apps.list(\n    device_id="deviceId",\n)\nprint(apps)',
       },
       typescript: {
         method: 'client.devices.apps.list',
@@ -2526,7 +2526,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.apps.start',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.start(\n    package_name="packageName",\n    device_id="deviceId",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.start(\n    package_name="packageName",\n    device_id="deviceId",\n)',
       },
       typescript: {
         method: 'client.devices.apps.start',
@@ -2564,7 +2564,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.apps.delete',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.delete(\n    package_name="packageName",\n    device_id="deviceId",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.delete(\n    package_name="packageName",\n    device_id="deviceId",\n)',
       },
       typescript: {
         method: 'client.devices.apps.delete',
@@ -2602,7 +2602,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.apps.update',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.update(\n    package_name="packageName",\n    device_id="deviceId",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.update(\n    package_name="packageName",\n    device_id="deviceId",\n)',
       },
       typescript: {
         method: 'client.devices.apps.update',
@@ -2646,7 +2646,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.packages.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\npackages = client.devices.packages.list(\n    device_id="deviceId",\n)\nprint(packages)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\npackages = client.devices.packages.list(\n    device_id="deviceId",\n)\nprint(packages)',
       },
       typescript: {
         method: 'client.devices.packages.list',
@@ -2691,7 +2691,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.keyboard.write',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.keyboard.write(\n    device_id="deviceId",\n    text="text",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.keyboard.write(\n    device_id="deviceId",\n    text="text",\n)',
       },
       typescript: {
         method: 'client.devices.keyboard.write',
@@ -2729,7 +2729,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.keyboard.clear',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.keyboard.clear(\n    device_id="deviceId",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.keyboard.clear(\n    device_id="deviceId",\n)',
       },
       typescript: {
         method: 'client.devices.keyboard.clear',
@@ -2767,7 +2767,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.keyboard.key',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.keyboard.key(\n    device_id="deviceId",\n    key=0,\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.keyboard.key(\n    device_id="deviceId",\n    key=0,\n)',
       },
       typescript: {
         method: 'client.devices.keyboard.key',
@@ -2812,7 +2812,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.tasks.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ntasks = client.devices.tasks.list(\n    device_id="deviceId",\n)\nprint(tasks.items)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ntasks = client.devices.tasks.list(\n    device_id="deviceId",\n)\nprint(tasks.items)',
       },
       typescript: {
         method: 'client.devices.tasks.list',
@@ -2851,7 +2851,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.esim.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nesims = client.devices.esim.list(\n    device_id="deviceId",\n)\nprint(esims)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nesims = client.devices.esim.list(\n    device_id="deviceId",\n)\nprint(esims)',
       },
       typescript: {
         method: 'client.devices.esim.list',
@@ -2897,7 +2897,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.esim.activate',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.esim.activate(\n    device_id="deviceId",\n    enable=True,\n    matching_id="matchingId",\n    sm_dp_addr="smDpAddr",\n)\nprint(response.iccid)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.esim.activate(\n    device_id="deviceId",\n    enable=True,\n    matching_id="matchingId",\n    sm_dp_addr="smDpAddr",\n)\nprint(response.iccid)',
       },
       typescript: {
         method: 'client.devices.esim.activate',
@@ -2935,7 +2935,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.esim.enable',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.esim.enable(\n    device_id="deviceId",\n    sub_id=0,\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.esim.enable(\n    device_id="deviceId",\n    sub_id=0,\n)',
       },
       typescript: {
         method: 'client.devices.esim.enable',
@@ -2973,7 +2973,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'devices.esim.remove',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.esim.remove(\n    device_id="deviceId",\n    sub_id=0,\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.esim.remove(\n    device_id="deviceId",\n    sub_id=0,\n)',
       },
       typescript: {
         method: 'client.devices.esim.remove',
@@ -3019,7 +3019,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'apps.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\napps = client.apps.list()\nprint(apps.count)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\napps = client.apps.list()\nprint(apps.count)',
       },
       typescript: {
         method: 'client.apps.list',
@@ -3058,7 +3058,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'credentials.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredentials = client.credentials.list()\nprint(credentials.items)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredentials = client.credentials.list()\nprint(credentials.items)',
       },
       typescript: {
         method: 'client.credentials.list',
@@ -3097,7 +3097,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'credentials.packages.create',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\npackage = client.credentials.packages.create(\n    package_name="packageName",\n)\nprint(package.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\npackage = client.credentials.packages.create(\n    package_name="packageName",\n)\nprint(package.data)',
       },
       typescript: {
         method: 'client.credentials.packages.create',
@@ -3137,7 +3137,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'credentials.packages.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\npackages = client.credentials.packages.list(\n    "packageName",\n)\nprint(packages.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\npackages = client.credentials.packages.list(\n    "packageName",\n)\nprint(packages.data)',
       },
       typescript: {
         method: 'client.credentials.packages.list',
@@ -3181,7 +3181,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'credentials.packages.credentials.create',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredential = client.credentials.packages.credentials.create(\n    package_name="packageName",\n    credential_name="26f1kl_-n-71",\n    fields=[{\n        "field_type": "email",\n        "value": "x",\n    }],\n)\nprint(credential.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredential = client.credentials.packages.credentials.create(\n    package_name="packageName",\n    credential_name="26f1kl_-n-71",\n    fields=[{\n        "field_type": "email",\n        "value": "x",\n    }],\n)\nprint(credential.data)',
       },
       typescript: {
         method: 'client.credentials.packages.credentials.create',
@@ -3221,7 +3221,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'credentials.packages.credentials.retrieve',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredential = client.credentials.packages.credentials.retrieve(\n    credential_name="credentialName",\n    package_name="packageName",\n)\nprint(credential.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredential = client.credentials.packages.credentials.retrieve(\n    credential_name="credentialName",\n    package_name="packageName",\n)\nprint(credential.data)',
       },
       typescript: {
         method: 'client.credentials.packages.credentials.retrieve',
@@ -3261,7 +3261,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'credentials.packages.credentials.delete',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredential = client.credentials.packages.credentials.delete(\n    credential_name="credentialName",\n    package_name="packageName",\n)\nprint(credential.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncredential = client.credentials.packages.credentials.delete(\n    credential_name="credentialName",\n    package_name="packageName",\n)\nprint(credential.data)',
       },
       typescript: {
         method: 'client.credentials.packages.credentials.delete',
@@ -3301,7 +3301,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'credentials.packages.credentials.fields.delete',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfield = client.credentials.packages.credentials.fields.delete(\n    field_type="email",\n    package_name="packageName",\n    credential_name="credentialName",\n)\nprint(field.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfield = client.credentials.packages.credentials.fields.delete(\n    field_type="email",\n    package_name="packageName",\n    credential_name="credentialName",\n)\nprint(field.data)',
       },
       typescript: {
         method: 'client.credentials.packages.credentials.fields.delete',
@@ -3341,7 +3341,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'credentials.packages.credentials.fields.update',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfield = client.credentials.packages.credentials.fields.update(\n    field_type="email",\n    package_name="packageName",\n    credential_name="credentialName",\n    value="x",\n)\nprint(field.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfield = client.credentials.packages.credentials.fields.update(\n    field_type="email",\n    package_name="packageName",\n    credential_name="credentialName",\n    value="x",\n)\nprint(field.data)',
       },
       typescript: {
         method: 'client.credentials.packages.credentials.fields.update',
@@ -3381,7 +3381,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'credentials.packages.credentials.fields.create',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfield = client.credentials.packages.credentials.fields.create(\n    credential_name="credentialName",\n    package_name="packageName",\n    field_type="email",\n    value="x",\n)\nprint(field.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfield = client.credentials.packages.credentials.fields.create(\n    credential_name="credentialName",\n    package_name="packageName",\n    field_type="email",\n    value="x",\n)\nprint(field.data)',
       },
       typescript: {
         method: 'client.credentials.packages.credentials.fields.create',
@@ -3425,7 +3425,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'hooks.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhooks = client.hooks.list()\nprint(hooks.items)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhooks = client.hooks.list()\nprint(hooks.items)',
       },
       typescript: {
         method: 'client.hooks.list',
@@ -3463,7 +3463,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'hooks.perform',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.perform(\n    body={\n        "foo": "bar"\n    },\n)\nprint(response)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.perform(\n    body={\n        "foo": "bar"\n    },\n)\nprint(response)',
       },
       typescript: {
         method: 'client.hooks.perform',
@@ -3501,7 +3501,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'hooks.get_sample_data',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.get_sample_data()\nprint(response)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.get_sample_data()\nprint(response)',
       },
       typescript: {
         method: 'client.hooks.getSampleData',
@@ -3540,7 +3540,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'hooks.subscribe',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.subscribe(\n    target_url="https://example.com",\n)\nprint(response.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.subscribe(\n    target_url="https://example.com",\n)\nprint(response.id)',
       },
       typescript: {
         method: 'client.hooks.subscribe',
@@ -3580,7 +3580,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'hooks.update',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhook = client.hooks.update(\n    hook_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(hook.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhook = client.hooks.update(\n    hook_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(hook.id)',
       },
       typescript: {
         method: 'client.hooks.update',
@@ -3620,7 +3620,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'hooks.unsubscribe',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.unsubscribe(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.unsubscribe(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.id)',
       },
       typescript: {
         method: 'client.hooks.unsubscribe',
@@ -3660,7 +3660,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'hooks.retrieve',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhook = client.hooks.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(hook.id)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhook = client.hooks.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(hook.id)',
       },
       typescript: {
         method: 'client.hooks.retrieve',
@@ -3698,7 +3698,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       python: {
         method: 'models.list',
         example:
-          'import os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nmodels = client.models.list()\nprint(models.data)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nmodels = client.models.list()\nprint(models.data)',
       },
       typescript: {
         method: 'client.models.list',
@@ -3713,7 +3713,7 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
   {
     language: 'python',
     content:
-      '# Mobilerun Python API library\n\n<!-- prettier-ignore -->\n[![PyPI version](https://img.shields.io/pypi/v/mobilerun-sdk.svg?label=pypi%20(stable))](https://pypi.org/project/mobilerun-sdk/)\n\nThe Mobilerun Python library provides convenient access to the Mobilerun REST API from any Python 3.9+\napplication. The library includes type definitions for all request params and response fields,\nand offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Mobilerun MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40mobilerun%2Fsdk-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBtb2JpbGVydW4vc2RrLW1jcCJdLCJlbnYiOnsiTU9CSUxFUlVOX0NMT1VEX0FQSV9LRVkiOiJNeSBBUEkgS2V5In19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40mobilerun%2Fsdk-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40mobilerun%2Fsdk-mcp%22%5D%2C%22env%22%3A%7B%22MOBILERUN_CLOUD_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Documentation\n\nThe REST API documentation can be found on [docs.mobilerun.ai](https://docs.mobilerun.ai). The full API of this library can be found in [api.md](api.md).\n\n## Installation\n\n```sh\n# install from PyPI\npip install mobilerun-sdk\n```\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```python\nimport os\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\n\ntasks = client.tasks.list()\nprint(tasks.items)\n```\n\nWhile you can provide a `api_key` keyword argument,\nwe recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)\nto add `MOBILERUN_CLOUD_API_KEY="My API Key"` to your `.env` file\nso that your API Key is not stored in source control.\n\n## Async usage\n\nSimply import `AsyncMobilerun` instead of `Mobilerun` and use `await` with each API call:\n\n```python\nimport os\nimport asyncio\nfrom mobilerun import AsyncMobilerun\n\nclient = AsyncMobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\n\nasync def main() -> None:\n  tasks = await client.tasks.list()\n  print(tasks.items)\n\nasyncio.run(main())\n```\n\nFunctionality between the synchronous and asynchronous clients is otherwise identical.\n\n### With aiohttp\n\nBy default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.\n\nYou can enable this by installing `aiohttp`:\n\n```sh\n# install from PyPI\npip install mobilerun-sdk[aiohttp]\n```\n\nThen you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:\n\n```python\nimport os\nimport asyncio\nfrom mobilerun import DefaultAioHttpClient\nfrom mobilerun import AsyncMobilerun\n\nasync def main() -> None:\n  async with AsyncMobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n    http_client=DefaultAioHttpClient(),\n) as client:\n    tasks = await client.tasks.list()\n    print(tasks.items)\n\nasyncio.run(main())\n```\n\n\n\n## Using types\n\nNested request parameters are [TypedDicts](https://docs.python.org/3/library/typing.html#typing.TypedDict). Responses are [Pydantic models](https://docs.pydantic.dev) which also provide helper methods for things like:\n\n- Serializing back into JSON, `model.to_json()`\n- Converting to a dictionary, `model.to_dict()`\n\nTyped requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.\n\n\n\n## Nested params\n\nNested parameters are dictionaries, typed using `TypedDict`, for example:\n\n```python\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun()\n\nprofile = client.profiles.create(\n    name="x",\n    spec={},\n)\nprint(profile.spec)\n```\n\n## File uploads\n\nRequest parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.\n\n```python\nfrom pathlib import Path\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun()\n\nclient.devices.files.upload(\n    device_id="deviceId",\n    path="path",\n    file=Path("/path/to/file"),\n)\n```\n\nThe async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.\n\n## Handling errors\n\nWhen the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `mobilerun.APIConnectionError` is raised.\n\nWhen the API returns a non-success status code (that is, 4xx or 5xx\nresponse), a subclass of `mobilerun.APIStatusError` is raised, containing `status_code` and `response` properties.\n\nAll errors inherit from `mobilerun.APIError`.\n\n```python\nimport mobilerun\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun()\n\ntry:\n    client.tasks.list()\nexcept mobilerun.APIConnectionError as e:\n    print("The server could not be reached")\n    print(e.__cause__) # an underlying Exception, likely raised within httpx.\nexcept mobilerun.RateLimitError as e:\n    print("A 429 status code was received; we should back off a bit.")\nexcept mobilerun.APIStatusError as e:\n    print("Another non-200-range status code was received")\n    print(e.status_code)\n    print(e.response)\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors are automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors are all retried by default.\n\nYou can use the `max_retries` option to configure or disable retry settings:\n\n```python\nfrom mobilerun import Mobilerun\n\n# Configure the default for all requests:\nclient = Mobilerun(\n    # default is 2\n    max_retries=0,\n)\n\n# Or, configure per-request:\nclient.with_options(max_retries = 5).tasks.list()\n```\n\n### Timeouts\n\nBy default requests time out after 1 minute. You can configure this with a `timeout` option,\nwhich accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:\n\n```python\nfrom mobilerun import Mobilerun\n\n# Configure the default for all requests:\nclient = Mobilerun(\n    # 20 seconds (default is 1 minute)\n    timeout=20.0,\n)\n\n# More granular control:\nclient = Mobilerun(\n    timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),\n)\n\n# Override per-request:\nclient.with_options(timeout = 5.0).tasks.list()\n```\n\nOn timeout, an `APITimeoutError` is thrown.\n\nNote that requests that time out are [retried twice by default](#retries).\n\n\n\n## Advanced\n\n### Logging\n\nWe use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.\n\nYou can enable logging by setting the environment variable `MOBILERUN_LOG` to `info`.\n\n```shell\n$ export MOBILERUN_LOG=info\n```\n\nOr to `debug` for more verbose logging.\n\n### How to tell whether `None` means `null` or missing\n\nIn an API response, a field may be explicitly `null`, or missing entirely; in either case, its value is `None` in this library. You can differentiate the two cases with `.model_fields_set`:\n\n```py\nif response.my_field is None:\n  if \'my_field\' not in response.model_fields_set:\n    print(\'Got json like {}, without a "my_field" key present at all.\')\n  else:\n    print(\'Got json like {"my_field": null}.\')\n```\n\n### Accessing raw response data (e.g. headers)\n\nThe "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,\n\n```py\nfrom mobilerun import Mobilerun\n\nclient = Mobilerun()\nresponse = client.tasks.with_raw_response.list()\nprint(response.headers.get(\'X-My-Header\'))\n\ntask = response.parse()  # get the object that `tasks.list()` would have returned\nprint(task.items)\n```\n\nThese methods return an [`APIResponse`](https://github.com/droidrun/mobilerun-sdk-python/tree/main/src/mobilerun/_response.py) object.\n\nThe async client returns an [`AsyncAPIResponse`](https://github.com/droidrun/mobilerun-sdk-python/tree/main/src/mobilerun/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.\n\n#### `.with_streaming_response`\n\nThe above interface eagerly reads the full response body when you make the request, which may not always be what you want.\n\nTo stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.\n\n```python\nwith client.tasks.with_streaming_response.list() as response :\n    print(response.headers.get(\'X-My-Header\'))\n\n    for line in response.iter_lines():\n      print(line)\n```\n\nThe context manager is required so that the response will reliably be closed.\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API.\n\nIf you need to access undocumented endpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can make requests using `client.get`, `client.post`, and other\nhttp verbs. Options on the client will be respected (such as retries) when making this request.\n\n```py\nimport httpx\n\nresponse = client.post(\n    "/foo",\n    cast_to=httpx.Response,\n    body={"my_param": True},\n)\n\nprint(response.headers.get("x-foo"))\n```\n\n#### Undocumented request params\n\nIf you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you can access the extra fields like `response.unknown_prop`. You\ncan also get all the extra fields on the Pydantic model as a dict with\n[`response.model_extra`](https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel.model_extra).\n\n### Configuring the HTTP client\n\nYou can directly override the [httpx client](https://www.python-httpx.org/api/#client) to customize it for your use case, including:\n\n- Support for [proxies](https://www.python-httpx.org/advanced/proxies/)\n- Custom [transports](https://www.python-httpx.org/advanced/transports/)\n- Additional [advanced](https://www.python-httpx.org/advanced/clients/) functionality\n\n```python\nimport httpx\nfrom mobilerun import Mobilerun, DefaultHttpxClient\n\nclient = Mobilerun(\n    # Or use the `MOBILERUN_BASE_URL` env var\n    base_url="http://my.test.server.example.com:8083",\n    http_client=DefaultHttpxClient(proxy="http://my.test.proxy.example.com", transport=httpx.HTTPTransport(local_address="0.0.0.0")),\n)\n```\n\nYou can also customize the client on a per-request basis by using `with_options()`:\n\n```python\nclient.with_options(http_client=DefaultHttpxClient(...))\n```\n\n### Managing HTTP resources\n\nBy default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.\n\n```py\nfrom mobilerun import Mobilerun\n\nwith Mobilerun() as client:\n  # make requests here\n  ...\n\n# HTTP client is now closed\n```\n\n## Versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/droidrun/mobilerun-sdk-python/issues) with questions, bugs, or suggestions.\n\n### Determining the installed version\n\nIf you\'ve upgraded to the latest version but aren\'t seeing any new features you were expecting then your python environment is likely still using an older version.\n\nYou can determine the version that is being used at runtime with:\n\n```py\nimport mobilerun\nprint(mobilerun.__version__)\n```\n\n## Requirements\n\nPython 3.9 or higher.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+      '# Mobilerun Python API library\n\n<!-- prettier-ignore -->\n[![PyPI version](https://img.shields.io/pypi/v/mobilerun-sdk.svg?label=pypi%20(stable))](https://pypi.org/project/mobilerun-sdk/)\n\nThe Mobilerun Python library provides convenient access to the Mobilerun REST API from any Python 3.9+\napplication. The library includes type definitions for all request params and response fields,\nand offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Mobilerun MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40mobilerun%2Fsdk-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBtb2JpbGVydW4vc2RrLW1jcCJdLCJlbnYiOnsiTU9CSUxFUlVOX0NMT1VEX0FQSV9LRVkiOiJNeSBBUEkgS2V5In19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40mobilerun%2Fsdk-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40mobilerun%2Fsdk-mcp%22%5D%2C%22env%22%3A%7B%22MOBILERUN_CLOUD_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Documentation\n\nThe REST API documentation can be found on [docs.mobilerun.ai](https://docs.mobilerun.ai). The full API of this library can be found in [api.md](api.md).\n\n## Installation\n\n```sh\n# install from PyPI\npip install mobilerun-sdk\n```\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```python\nimport os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\n\ntasks = client.tasks.list()\nprint(tasks.items)\n```\n\nWhile you can provide a `api_key` keyword argument,\nwe recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)\nto add `MOBILERUN_CLOUD_API_KEY="My API Key"` to your `.env` file\nso that your API Key is not stored in source control.\n\n## Async usage\n\nSimply import `AsyncMobilerun` instead of `Mobilerun` and use `await` with each API call:\n\n```python\nimport os\nimport asyncio\nfrom mobilerun_sdk import AsyncMobilerun\n\nclient = AsyncMobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\n\nasync def main() -> None:\n  tasks = await client.tasks.list()\n  print(tasks.items)\n\nasyncio.run(main())\n```\n\nFunctionality between the synchronous and asynchronous clients is otherwise identical.\n\n### With aiohttp\n\nBy default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.\n\nYou can enable this by installing `aiohttp`:\n\n```sh\n# install from PyPI\npip install mobilerun-sdk[aiohttp]\n```\n\nThen you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:\n\n```python\nimport os\nimport asyncio\nfrom mobilerun_sdk import DefaultAioHttpClient\nfrom mobilerun_sdk import AsyncMobilerun\n\nasync def main() -> None:\n  async with AsyncMobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n    http_client=DefaultAioHttpClient(),\n) as client:\n    tasks = await client.tasks.list()\n    print(tasks.items)\n\nasyncio.run(main())\n```\n\n\n\n## Using types\n\nNested request parameters are [TypedDicts](https://docs.python.org/3/library/typing.html#typing.TypedDict). Responses are [Pydantic models](https://docs.pydantic.dev) which also provide helper methods for things like:\n\n- Serializing back into JSON, `model.to_json()`\n- Converting to a dictionary, `model.to_dict()`\n\nTyped requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.\n\n\n\n## Nested params\n\nNested parameters are dictionaries, typed using `TypedDict`, for example:\n\n```python\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\n\nprofile = client.profiles.create(\n    name="x",\n    spec={},\n)\nprint(profile.spec)\n```\n\n## File uploads\n\nRequest parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.\n\n```python\nfrom pathlib import Path\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\n\nclient.devices.files.upload(\n    device_id="deviceId",\n    path="path",\n    file=Path("/path/to/file"),\n)\n```\n\nThe async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.\n\n## Handling errors\n\nWhen the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `mobilerun_sdk.APIConnectionError` is raised.\n\nWhen the API returns a non-success status code (that is, 4xx or 5xx\nresponse), a subclass of `mobilerun_sdk.APIStatusError` is raised, containing `status_code` and `response` properties.\n\nAll errors inherit from `mobilerun_sdk.APIError`.\n\n```python\nimport mobilerun_sdk\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\n\ntry:\n    client.tasks.list()\nexcept mobilerun_sdk.APIConnectionError as e:\n    print("The server could not be reached")\n    print(e.__cause__) # an underlying Exception, likely raised within httpx.\nexcept mobilerun_sdk.RateLimitError as e:\n    print("A 429 status code was received; we should back off a bit.")\nexcept mobilerun_sdk.APIStatusError as e:\n    print("Another non-200-range status code was received")\n    print(e.status_code)\n    print(e.response)\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors are automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors are all retried by default.\n\nYou can use the `max_retries` option to configure or disable retry settings:\n\n```python\nfrom mobilerun_sdk import Mobilerun\n\n# Configure the default for all requests:\nclient = Mobilerun(\n    # default is 2\n    max_retries=0,\n)\n\n# Or, configure per-request:\nclient.with_options(max_retries = 5).tasks.list()\n```\n\n### Timeouts\n\nBy default requests time out after 1 minute. You can configure this with a `timeout` option,\nwhich accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:\n\n```python\nfrom mobilerun_sdk import Mobilerun\n\n# Configure the default for all requests:\nclient = Mobilerun(\n    # 20 seconds (default is 1 minute)\n    timeout=20.0,\n)\n\n# More granular control:\nclient = Mobilerun(\n    timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),\n)\n\n# Override per-request:\nclient.with_options(timeout = 5.0).tasks.list()\n```\n\nOn timeout, an `APITimeoutError` is thrown.\n\nNote that requests that time out are [retried twice by default](#retries).\n\n\n\n## Advanced\n\n### Logging\n\nWe use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.\n\nYou can enable logging by setting the environment variable `MOBILERUN_LOG` to `info`.\n\n```shell\n$ export MOBILERUN_LOG=info\n```\n\nOr to `debug` for more verbose logging.\n\n### How to tell whether `None` means `null` or missing\n\nIn an API response, a field may be explicitly `null`, or missing entirely; in either case, its value is `None` in this library. You can differentiate the two cases with `.model_fields_set`:\n\n```py\nif response.my_field is None:\n  if \'my_field\' not in response.model_fields_set:\n    print(\'Got json like {}, without a "my_field" key present at all.\')\n  else:\n    print(\'Got json like {"my_field": null}.\')\n```\n\n### Accessing raw response data (e.g. headers)\n\nThe "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,\n\n```py\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nresponse = client.tasks.with_raw_response.list()\nprint(response.headers.get(\'X-My-Header\'))\n\ntask = response.parse()  # get the object that `tasks.list()` would have returned\nprint(task.items)\n```\n\nThese methods return an [`APIResponse`](https://github.com/droidrun/mobilerun-sdk-python/tree/main/src/mobilerun_sdk/_response.py) object.\n\nThe async client returns an [`AsyncAPIResponse`](https://github.com/droidrun/mobilerun-sdk-python/tree/main/src/mobilerun_sdk/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.\n\n#### `.with_streaming_response`\n\nThe above interface eagerly reads the full response body when you make the request, which may not always be what you want.\n\nTo stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.\n\n```python\nwith client.tasks.with_streaming_response.list() as response :\n    print(response.headers.get(\'X-My-Header\'))\n\n    for line in response.iter_lines():\n      print(line)\n```\n\nThe context manager is required so that the response will reliably be closed.\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API.\n\nIf you need to access undocumented endpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can make requests using `client.get`, `client.post`, and other\nhttp verbs. Options on the client will be respected (such as retries) when making this request.\n\n```py\nimport httpx\n\nresponse = client.post(\n    "/foo",\n    cast_to=httpx.Response,\n    body={"my_param": True},\n)\n\nprint(response.headers.get("x-foo"))\n```\n\n#### Undocumented request params\n\nIf you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you can access the extra fields like `response.unknown_prop`. You\ncan also get all the extra fields on the Pydantic model as a dict with\n[`response.model_extra`](https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel.model_extra).\n\n### Configuring the HTTP client\n\nYou can directly override the [httpx client](https://www.python-httpx.org/api/#client) to customize it for your use case, including:\n\n- Support for [proxies](https://www.python-httpx.org/advanced/proxies/)\n- Custom [transports](https://www.python-httpx.org/advanced/transports/)\n- Additional [advanced](https://www.python-httpx.org/advanced/clients/) functionality\n\n```python\nimport httpx\nfrom mobilerun_sdk import Mobilerun, DefaultHttpxClient\n\nclient = Mobilerun(\n    # Or use the `MOBILERUN_BASE_URL` env var\n    base_url="http://my.test.server.example.com:8083",\n    http_client=DefaultHttpxClient(proxy="http://my.test.proxy.example.com", transport=httpx.HTTPTransport(local_address="0.0.0.0")),\n)\n```\n\nYou can also customize the client on a per-request basis by using `with_options()`:\n\n```python\nclient.with_options(http_client=DefaultHttpxClient(...))\n```\n\n### Managing HTTP resources\n\nBy default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.\n\n```py\nfrom mobilerun_sdk import Mobilerun\n\nwith Mobilerun() as client:\n  # make requests here\n  ...\n\n# HTTP client is now closed\n```\n\n## Versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/droidrun/mobilerun-sdk-python/issues) with questions, bugs, or suggestions.\n\n### Determining the installed version\n\nIf you\'ve upgraded to the latest version but aren\'t seeing any new features you were expecting then your python environment is likely still using an older version.\n\nYou can determine the version that is being used at runtime with:\n\n```py\nimport mobilerun_sdk\nprint(mobilerun_sdk.__version__)\n```\n\n## Requirements\n\nPython 3.9 or higher.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
   },
   {
     language: 'go',
