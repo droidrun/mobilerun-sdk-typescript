@@ -25,8 +25,18 @@ export {
   type DeviceCountResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices';
+export {
+  Esim,
+  type EsimListResponse,
+  type EsimActivateResponse,
+  type EsimListParams,
+  type EsimActivateParams,
+  type EsimEnableParams,
+  type EsimRemoveParams,
+} from './esim';
 export {
   Files,
   type FileInfo,
@@ -51,7 +61,13 @@ export {
 } from './location';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
 export { Profile, type ProfileUpdateParams } from './profile';
-export { Proxy, type ProxyConnectParams, type ProxyDisconnectParams } from './proxy';
+export {
+  Proxy,
+  type ProxyStatusResponse,
+  type ProxyConnectParams,
+  type ProxyDisconnectParams,
+  type ProxyStatusParams,
+} from './proxy';
 export {
   State,
   type Rect,
@@ -65,7 +81,6 @@ export {
   Time,
   type TimeTimeResponse,
   type TimeTimezoneResponse,
-  type TimeSetTimeParams,
   type TimeSetTimezoneParams,
   type TimeTimeParams,
   type TimeTimezoneParams,

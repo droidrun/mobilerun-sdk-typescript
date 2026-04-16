@@ -7,6 +7,10 @@ import ts from 'typescript';
 import { WorkerOutput } from './code-tool-types';
 import { Mobilerun, ClientOptions } from '@mobilerun/sdk';
 
+async function tseval(code: string) {
+  return import('data:application/typescript;charset=utf-8;base64,' + Buffer.from(code).toString('base64'));
+}
+
 function getRunFunctionSource(code: string): {
   type: 'declaration' | 'expression';
   client: string | undefined;
@@ -138,9 +142,9 @@ const fuse = new Fuse(
     'client.devices.create',
     'client.devices.list',
     'client.devices.retrieve',
+    'client.devices.setName',
     'client.devices.terminate',
     'client.devices.waitReady',
-    'client.devices.time.setTime',
     'client.devices.time.setTimezone',
     'client.devices.time.time',
     'client.devices.time.timezone',
@@ -151,6 +155,7 @@ const fuse = new Fuse(
     'client.devices.files.upload',
     'client.devices.proxy.connect',
     'client.devices.proxy.disconnect',
+    'client.devices.proxy.status',
     'client.devices.location.get',
     'client.devices.location.set',
     'client.devices.actions.global',
@@ -170,6 +175,10 @@ const fuse = new Fuse(
     'client.devices.keyboard.key',
     'client.devices.keyboard.write',
     'client.devices.tasks.list',
+    'client.devices.esim.activate',
+    'client.devices.esim.enable',
+    'client.devices.esim.list',
+    'client.devices.esim.remove',
     'client.apps.list',
     'client.credentials.list',
     'client.credentials.packages.create',
@@ -264,7 +273,8 @@ function makeSdkProxy<T extends object>(obj: T, { path, isBelievedBad = false }:
 
 function parseError(code: string, error: unknown): string | undefined {
   if (!(error instanceof Error)) return;
-  const message = error.name ? `${error.name}: ${error.message}` : error.message;
+  const cause = error.cause instanceof Error ? `: ${error.cause.message}` : '';
+  const message = error.name ? `${error.name}: ${error.message}${cause}` : `${error.message}${cause}`;
   try {
     // Deno uses V8; the first "<anonymous>:LINE:COLUMN" is the top of stack.
     const lineNumber = error.stack?.match(/<anonymous>:([0-9]+):[0-9]+/)?.[1];
@@ -320,7 +330,9 @@ const fetch = async (req: Request): Promise<Response> => {
 
   const log_lines: string[] = [];
   const err_lines: string[] = [];
-  const console = {
+  const originalConsole = globalThis.console;
+  globalThis.console = {
+    ...originalConsole,
     log: (...args: unknown[]) => {
       log_lines.push(util.format(...args));
     },
@@ -330,7 +342,7 @@ const fetch = async (req: Request): Promise<Response> => {
   };
   try {
     let run_ = async (client: any) => {};
-    eval(`${code}\nrun_ = run;`);
+    run_ = (await tseval(`${code}\nexport default run;`)).default;
     const result = await run_(makeSdkProxy(client, { path: ['client'] }));
     return Response.json({
       is_error: false,
@@ -348,6 +360,8 @@ const fetch = async (req: Request): Promise<Response> => {
       } satisfies WorkerOutput,
       { status: 400, statusText: 'Code execution error' },
     );
+  } finally {
+    globalThis.console = originalConsole;
   }
 };
 

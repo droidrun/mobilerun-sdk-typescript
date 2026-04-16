@@ -7,34 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource devices', () => {
-  // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.devices.create({});
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.devices.retrieve('deviceId');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
+describe('resource esim', () => {
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.devices.list();
+    const responsePromise = client.devices.esim.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,26 +24,21 @@ describe('resource devices', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.devices.list(
-        {
-          country: 'country',
-          name: 'name',
-          orderBy: 'id',
-          orderByDirection: 'asc',
-          page: 0,
-          pageSize: 0,
-          providerId: 'providerId',
-          state: ['creating'],
-          type: 'dedicated_physical_device',
-        },
+      client.devices.esim.list(
+        'deviceId',
+        { 'X-Device-Display-ID': 0 },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
-  test.skip('count', async () => {
-    const responsePromise = client.devices.count();
+  test.skip('activate: only required params', async () => {
+    const responsePromise = client.devices.esim.activate('deviceId', {
+      enable: true,
+      matchingId: 'matchingId',
+      smDpAddr: 'smDpAddr',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -78,8 +49,18 @@ describe('resource devices', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('setName: only required params', async () => {
-    const responsePromise = client.devices.setName('deviceId', { name: 'x' });
+  test.skip('activate: required and optional params', async () => {
+    const response = await client.devices.esim.activate('deviceId', {
+      enable: true,
+      matchingId: 'matchingId',
+      smDpAddr: 'smDpAddr',
+      'X-Device-Display-ID': 0,
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('enable: only required params', async () => {
+    const responsePromise = client.devices.esim.enable('deviceId', { subId: 0 });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -90,13 +71,13 @@ describe('resource devices', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('setName: required and optional params', async () => {
-    const response = await client.devices.setName('deviceId', { name: 'x' });
+  test.skip('enable: required and optional params', async () => {
+    const response = await client.devices.esim.enable('deviceId', { subId: 0, 'X-Device-Display-ID': 0 });
   });
 
   // Mock server tests are disabled
-  test.skip('terminate', async () => {
-    const responsePromise = client.devices.terminate('deviceId', {});
+  test.skip('remove: only required params', async () => {
+    const responsePromise = client.devices.esim.remove('deviceId', { subId: 0 });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -107,14 +88,7 @@ describe('resource devices', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('waitReady', async () => {
-    const responsePromise = client.devices.waitReady('deviceId');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
+  test.skip('remove: required and optional params', async () => {
+    const response = await client.devices.esim.remove('deviceId', { subId: 0, 'X-Device-Display-ID': 0 });
   });
 });

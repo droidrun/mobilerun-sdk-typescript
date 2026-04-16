@@ -49,6 +49,47 @@ export class Proxy extends APIResource {
       ]),
     });
   }
+
+  /**
+   * Get proxy connection state
+   */
+  status(
+    deviceID: string,
+    params: ProxyStatusParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ProxyStatusResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/proxy`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+}
+
+export interface ProxyStatusResponse {
+  connected: boolean;
+
+  /**
+   * Active proxy name
+   */
+  name: string | null;
+
+  /**
+   * Active proxy protocol (socks5 or wireguard).
+   */
+  protocol: string | null;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
 }
 
 export interface ProxyConnectParams {
@@ -56,6 +97,11 @@ export interface ProxyConnectParams {
    * @deprecated Body param
    */
   host?: string;
+
+  /**
+   * Body param: Proxy name (used for wireguard tunnel name)
+   */
+  name?: string;
 
   /**
    * @deprecated Body param
@@ -68,19 +114,25 @@ export interface ProxyConnectParams {
   port?: number;
 
   /**
-   * Body param: Preferred new format.
-   */
-  proxy?: ProxyConnectParams.Proxy;
-
-  /**
    * Body param
    */
   smartIp?: boolean;
 
   /**
+   * Body param: SOCKS5 proxy configuration (required for socks5).
+   */
+  socks5?: ProxyConnectParams.Socks5;
+
+  /**
    * @deprecated Body param
    */
   user?: string;
+
+  /**
+   * Body param: WireGuard tunnel configuration file content (required for
+   * wireguard).
+   */
+  wireguard?: string;
 
   /**
    * Header param
@@ -90,16 +142,16 @@ export interface ProxyConnectParams {
 
 export namespace ProxyConnectParams {
   /**
-   * Preferred new format.
+   * SOCKS5 proxy configuration (required for socks5).
    */
-  export interface Proxy {
+  export interface Socks5 {
     host: string;
-
-    password: string;
 
     port: number;
 
-    user: string;
+    password?: string;
+
+    user?: string;
   }
 }
 
@@ -107,9 +159,15 @@ export interface ProxyDisconnectParams {
   'X-Device-Display-ID'?: number;
 }
 
+export interface ProxyStatusParams {
+  'X-Device-Display-ID'?: number;
+}
+
 export declare namespace Proxy {
   export {
+    type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
+    type ProxyStatusParams as ProxyStatusParams,
   };
 }

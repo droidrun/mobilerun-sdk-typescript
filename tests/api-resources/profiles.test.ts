@@ -57,12 +57,16 @@ describe('resource profiles', () => {
         },
         name: 'name',
         proxy: {
-          host: 'host',
-          password: 'password',
-          port: 0,
-          user: 'user',
+          name: 'name',
+          smartIp: true,
+          socks5: {
+            host: 'host',
+            password: 'password',
+            port: 0,
+            user: 'user',
+          },
+          wireguard: 'wireguard',
         },
-        smartIp: true,
       },
     });
   });
@@ -128,12 +132,16 @@ describe('resource profiles', () => {
         },
         name: 'name',
         proxy: {
-          host: 'host',
-          password: 'password',
-          port: 0,
-          user: 'user',
+          name: 'name',
+          smartIp: true,
+          socks5: {
+            host: 'host',
+            password: 'password',
+            port: 0,
+            user: 'user',
+          },
+          wireguard: 'wireguard',
         },
-        smartIp: true,
       },
     });
   });

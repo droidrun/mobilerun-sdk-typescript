@@ -25,6 +25,7 @@ export {
   type DeviceCountResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices/devices';
 export {
@@ -61,6 +62,7 @@ export {
   type ProxyDeleteResponse,
   type ProxyCreateParams,
   type ProxyUpdateParams,
+  type ProxyListParams,
 } from './proxies';
 export {
   Tasks,

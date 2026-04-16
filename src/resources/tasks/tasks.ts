@@ -121,9 +121,17 @@ export interface Task {
 
   apps?: Array<string>;
 
+  cancelRequestedAt?: string | null;
+
+  claimedAt?: string | null;
+
+  continueOnFailure?: boolean;
+
   createdAt?: string;
 
   credentials?: Array<PackageCredentials>;
+
+  dispatchedAt?: string | null;
 
   displayId?: number;
 
@@ -134,6 +142,11 @@ export interface Task {
   finishedAt?: string | null;
 
   maxSteps?: number;
+
+  /**
+   * Memory namespace for cross-task personalization
+   */
+  memoryNamespace?: string;
 
   message?: string | null;
 
@@ -148,6 +161,13 @@ export interface Task {
   stealth?: boolean;
 
   steps?: number | null;
+
+  streamUrl?: string | null;
+
+  /**
+   * LLM model used by sub-agent roles: executor, app_opener, structured_output
+   */
+  subagentModel?: string;
 
   succeeded?: boolean | null;
 
@@ -164,7 +184,15 @@ export interface Task {
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
 }
 
-export type TaskStatus = 'created' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
+export type TaskStatus =
+  | 'queued'
+  | 'created'
+  | 'running'
+  | 'cancelling'
+  | 'paused'
+  | 'completed'
+  | 'failed'
+  | 'cancelled';
 
 export interface UsageResult {
   request_tokens: number;
@@ -232,6 +260,7 @@ export interface TaskGetTrajectoryResponse {
    * The trajectory of the task
    */
   trajectory: Array<
+    | TaskGetTrajectoryResponse.TrajectoryQueuedEvent
     | TaskGetTrajectoryResponse.TrajectoryCreatedEvent
     | TaskGetTrajectoryResponse.TrajectoryExceptionEvent
     | TaskGetTrajectoryResponse.TrajectoryCancelEvent
@@ -266,6 +295,26 @@ export interface TaskGetTrajectoryResponse {
 }
 
 export namespace TaskGetTrajectoryResponse {
+  export interface TrajectoryQueuedEvent {
+    /**
+     * Emitted to SSE clients when the task is waiting in the device queue.
+     */
+    data: TrajectoryQueuedEvent.Data;
+
+    event: 'QueuedEvent';
+  }
+
+  export namespace TrajectoryQueuedEvent {
+    /**
+     * Emitted to SSE clients when the task is waiting in the device queue.
+     */
+    export interface Data {
+      id: string;
+
+      status?: string;
+    }
+  }
+
   export interface TrajectoryCreatedEvent {
     data: TrajectoryCreatedEvent.Data;
 
@@ -832,9 +881,14 @@ export interface TaskRunResponse {
   id: string;
 
   /**
-   * The URL of the stream
+   * The status of the task (queued or created)
    */
-  streamUrl: string;
+  status: TaskStatus;
+
+  /**
+   * The URL of the stream (null when queued)
+   */
+  streamUrl?: string | null;
 }
 
 export type TaskRunStreamedResponse = unknown;
@@ -882,6 +936,8 @@ export interface TaskRunParams {
 
   apps?: Array<string>;
 
+  continueOnFailure?: boolean;
+
   credentials?: Array<PackageCredentials>;
 
   /**
@@ -901,11 +957,21 @@ export interface TaskRunParams {
 
   maxSteps?: number;
 
+  /**
+   * Memory namespace for cross-task personalization
+   */
+  memoryNamespace?: string;
+
   outputSchema?: { [key: string]: unknown } | null;
 
   reasoning?: boolean;
 
   stealth?: boolean;
+
+  /**
+   * LLM model used by sub-agent roles: executor, app_opener, structured_output
+   */
+  subagentModel?: string;
 
   temperature?: number;
 
@@ -926,6 +992,8 @@ export interface TaskRunStreamedParams {
 
   apps?: Array<string>;
 
+  continueOnFailure?: boolean;
+
   credentials?: Array<PackageCredentials>;
 
   /**
@@ -945,11 +1013,21 @@ export interface TaskRunStreamedParams {
 
   maxSteps?: number;
 
+  /**
+   * Memory namespace for cross-task personalization
+   */
+  memoryNamespace?: string;
+
   outputSchema?: { [key: string]: unknown } | null;
 
   reasoning?: boolean;
 
   stealth?: boolean;
+
+  /**
+   * LLM model used by sub-agent roles: executor, app_opener, structured_output
+   */
+  subagentModel?: string;
 
   temperature?: number;
 

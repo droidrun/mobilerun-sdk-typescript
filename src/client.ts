@@ -59,6 +59,7 @@ import {
   ProxyCreateParams,
   ProxyCreateResponse,
   ProxyDeleteResponse,
+  ProxyListParams,
   ProxyListResponse,
   ProxyRetrieveResponse,
   ProxyUpdateParams,
@@ -75,6 +76,7 @@ import {
   DeviceCreateParams,
   DeviceListParams,
   DeviceListResponse,
+  DeviceSetNameParams,
   DeviceTerminateParams,
   Devices,
 } from './resources/devices/devices';
@@ -867,6 +869,7 @@ export declare namespace Mobilerun {
     type ProxyDeleteResponse as ProxyDeleteResponse,
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
+    type ProxyListParams as ProxyListParams,
   };
 
   export {
@@ -897,6 +900,7 @@ export declare namespace Mobilerun {
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 
@@ -925,7 +929,6 @@ export declare namespace Mobilerun {
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
-  export type Config = API.Config;
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
   export type DeviceSpec = API.DeviceSpec;

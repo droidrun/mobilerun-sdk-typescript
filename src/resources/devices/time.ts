@@ -8,26 +8,6 @@ import { path } from '../../internal/utils/path';
 
 export class Time extends APIResource {
   /**
-   * Set device time
-   */
-  setTime(deviceID: string, params: TimeSetTimeParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/time`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
-  }
-
-  /**
    * Set device timezone
    */
   setTimezone(deviceID: string, params: TimeSetTimezoneParams, options?: RequestOptions): APIPromise<void> {
@@ -95,24 +75,12 @@ export class Time extends APIResource {
 export type TimeTimeResponse = string;
 
 export interface TimeTimezoneResponse {
-  timezone: string;
+  timezone: string | null;
 
   /**
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
-}
-
-export interface TimeSetTimeParams {
-  /**
-   * Body param
-   */
-  time: string;
-
-  /**
-   * Header param
-   */
-  'X-Device-Display-ID'?: number;
 }
 
 export interface TimeSetTimezoneParams {
@@ -139,7 +107,6 @@ export declare namespace Time {
   export {
     type TimeTimeResponse as TimeTimeResponse,
     type TimeTimezoneResponse as TimeTimezoneResponse,
-    type TimeSetTimeParams as TimeSetTimeParams,
     type TimeSetTimezoneParams as TimeSetTimezoneParams,
     type TimeTimeParams as TimeTimeParams,
     type TimeTimezoneParams as TimeTimezoneParams,

@@ -22,6 +22,16 @@ import {
   AppUpdateParams,
   Apps,
 } from './apps';
+import * as EsimAPI from './esim';
+import {
+  Esim,
+  EsimActivateParams,
+  EsimActivateResponse,
+  EsimEnableParams,
+  EsimListParams,
+  EsimListResponse,
+  EsimRemoveParams,
+} from './esim';
 import * as FilesAPI from './files';
 import {
   FileDeleteParams,
@@ -42,7 +52,13 @@ import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
 import { Profile, ProfileUpdateParams } from './profile';
 import * as ProxyAPI from './proxy';
-import { Proxy, ProxyConnectParams, ProxyDisconnectParams } from './proxy';
+import {
+  Proxy as ProxyAPIProxy,
+  ProxyConnectParams,
+  ProxyDisconnectParams,
+  ProxyStatusParams,
+  ProxyStatusResponse,
+} from './proxy';
 import * as StateAPI from './state';
 import {
   Rect,
@@ -57,7 +73,6 @@ import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimeAPI from './time';
 import {
   Time,
-  TimeSetTimeParams,
   TimeSetTimezoneParams,
   TimeTimeParams,
   TimeTimeResponse,
@@ -81,6 +96,7 @@ export class Devices extends APIResource {
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
   keyboard: KeyboardAPI.Keyboard = new KeyboardAPI.Keyboard(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
+  esim: EsimAPI.Esim = new EsimAPI.Esim(this._client);
 
   /**
    * Provision a new device
@@ -115,6 +131,13 @@ export class Devices extends APIResource {
   }
 
   /**
+   * Update device name
+   */
+  setName(deviceID: string, body: DeviceSetNameParams, options?: RequestOptions): APIPromise<Device> {
+    return this._client.put(path`/devices/${deviceID}/name`, { body, ...options });
+  }
+
+  /**
    * Terminate a device
    */
   terminate(deviceID: string, body: DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
@@ -135,6 +158,8 @@ export class Devices extends APIResource {
 
 export interface Device {
   id: string;
+
+  activeTaskId: string;
 
   assignedAt: string | null;
 
@@ -161,6 +186,8 @@ export interface Device {
    */
   $schema?: string;
 
+  providerId?: string;
+
   streamToken?: string;
 
   userId?: string;
@@ -183,7 +210,11 @@ export interface DeviceCreateParams {
   /**
    * Query param
    */
-  deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
+  deviceType?:
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device'
+    | 'dedicated_emulated_device'
+    | 'dedicated_ios_device';
 
   /**
    * Body param
@@ -213,12 +244,31 @@ export interface DeviceCreateParams {
   /**
    * Body param
    */
-  proxy?: Shared.Config;
+  proxy?: DeviceCreateParams.Proxy;
+}
 
-  /**
-   * Body param
-   */
-  smartIp?: boolean;
+export namespace DeviceCreateParams {
+  export interface Proxy {
+    name?: string;
+
+    smartIp?: boolean;
+
+    socks5?: Proxy.Socks5;
+
+    wireguard?: string;
+  }
+
+  export namespace Proxy {
+    export interface Socks5 {
+      host: string;
+
+      password: string;
+
+      port: number;
+
+      user: string;
+    }
+  }
 }
 
 export interface DeviceListParams {
@@ -234,9 +284,21 @@ export interface DeviceListParams {
 
   pageSize?: number;
 
-  state?: Array<'creating' | 'assigned' | 'ready' | 'disconnected' | 'terminated' | 'unknown'> | null;
+  providerId?: string;
 
-  type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device';
+  state?: Array<
+    'creating' | 'assigned' | 'ready' | 'rebooting' | 'migrating' | 'terminated' | 'maintenance' | 'unknown'
+  > | null;
+
+  type?:
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device'
+    | 'dedicated_emulated_device'
+    | 'dedicated_ios_device';
+}
+
+export interface DeviceSetNameParams {
+  name: string;
 }
 
 export interface DeviceTerminateParams {
@@ -248,7 +310,7 @@ export interface DeviceTerminateParams {
 Devices.Time = Time;
 Devices.Profile = Profile;
 Devices.Files = Files;
-Devices.Proxy = Proxy;
+Devices.Proxy = ProxyAPIProxy;
 Devices.Location = Location;
 Devices.Actions = Actions;
 Devices.State = State;
@@ -256,6 +318,7 @@ Devices.Apps = Apps;
 Devices.Packages = Packages;
 Devices.Keyboard = Keyboard;
 Devices.Tasks = Tasks;
+Devices.Esim = Esim;
 
 export declare namespace Devices {
   export {
@@ -264,6 +327,7 @@ export declare namespace Devices {
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 
@@ -271,7 +335,6 @@ export declare namespace Devices {
     Time as Time,
     type TimeTimeResponse as TimeTimeResponse,
     type TimeTimezoneResponse as TimeTimezoneResponse,
-    type TimeSetTimeParams as TimeSetTimeParams,
     type TimeSetTimezoneParams as TimeSetTimezoneParams,
     type TimeTimeParams as TimeTimeParams,
     type TimeTimezoneParams as TimeTimezoneParams,
@@ -291,9 +354,11 @@ export declare namespace Devices {
   };
 
   export {
-    Proxy as Proxy,
+    ProxyAPIProxy as Proxy,
+    type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
+    type ProxyStatusParams as ProxyStatusParams,
   };
 
   export {
@@ -346,4 +411,14 @@ export declare namespace Devices {
   };
 
   export { Tasks as Tasks, type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
+
+  export {
+    Esim as Esim,
+    type EsimListResponse as EsimListResponse,
+    type EsimActivateResponse as EsimActivateResponse,
+    type EsimListParams as EsimListParams,
+    type EsimActivateParams as EsimActivateParams,
+    type EsimEnableParams as EsimEnableParams,
+    type EsimRemoveParams as EsimRemoveParams,
+  };
 }
