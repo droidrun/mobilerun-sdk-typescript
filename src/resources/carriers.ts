@@ -31,10 +31,7 @@ export class Carriers extends APIResource {
   /**
    * List carriers with pagination
    */
-  list(
-    query: CarrierListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CarrierListResponse> {
+  list(query: CarrierListParams | null | undefined = {}, options?: RequestOptions): APIPromise<CarrierListResponse> {
     return this._client.get('/carriers', { query, ...options });
   }
 
@@ -322,6 +319,6 @@ export declare namespace Carriers {
     type CarrierCreateParams as CarrierCreateParams,
     type CarrierUpdateParams as CarrierUpdateParams,
     type CarrierListParams as CarrierListParams,
-    type CarrierLookupParams as CarrierLookupParams,
+    type CarrierLookupParams as CarrierLookupParams
   };
 }

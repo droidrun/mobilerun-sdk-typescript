@@ -14,85 +14,32 @@ export class Files extends APIResource {
    * List files
    */
   list(deviceID: string, params: FileListParams, options?: RequestOptions): APIPromise<FileListResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params;
-    return this._client.get(path`/devices/${deviceID}/files`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params
+    return this._client.get(path`/devices/${deviceID}/files`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Delete file
    */
   delete(deviceID: string, params: FileDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { path: path_, 'X-Device-Display-ID': xDeviceDisplayID } = params;
-    return this._client.delete(path`/devices/${deviceID}/files`, {
-      query: { path: path_ },
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { path: path_, 'X-Device-Display-ID': xDeviceDisplayID } = params
+    return this._client.delete(path`/devices/${deviceID}/files`, { query: { path: path_ }, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Download file
    */
   download(deviceID: string, params: FileDownloadParams, options?: RequestOptions): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params;
-    return this._client.get(path`/devices/${deviceID}/files/download`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params
+    return this._client.get(path`/devices/${deviceID}/files/download`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Upload file
    */
   upload(deviceID: string, params: FileUploadParams, options?: RequestOptions): APIPromise<void> {
-    const { path: path_, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(
-      path`/devices/${deviceID}/files`,
-      multipartFormRequestOptions(
-        {
-          query: { path: path_ },
-          body,
-          ...options,
-          headers: buildHeaders([
-            {
-              Accept: '*/*',
-              ...(xDeviceDisplayID?.toString() != null ?
-                { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-              : undefined),
-            },
-            options?.headers,
-          ]),
-        },
-        this._client,
-      ),
-    );
+    const { path: path_, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/files`, multipartFormRequestOptions({ query: { path: path_ }, body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) }, this._client));
   }
 }
 
@@ -153,7 +100,7 @@ export interface FileListResponse {
   $schema?: string;
 }
 
-export type FileDownloadResponse = string;
+export type FileDownloadResponse = string
 
 export interface FileListParams {
   /**
@@ -216,6 +163,6 @@ export declare namespace Files {
     type FileListParams as FileListParams,
     type FileDeleteParams as FileDeleteParams,
     type FileDownloadParams as FileDownloadParams,
-    type FileUploadParams as FileUploadParams,
+    type FileUploadParams as FileUploadParams
   };
 }

@@ -2,10 +2,7 @@
 
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource apps', () => {
   // Mock server tests are disabled
@@ -22,10 +19,7 @@ describe('resource apps', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.devices.apps.update('packageName', {
-      deviceId: 'deviceId',
-      'X-Device-Display-ID': 0,
-    });
+    const response = await client.devices.apps.update('packageName', { deviceId: 'deviceId', 'X-Device-Display-ID': 0 });
   });
 
   // Mock server tests are disabled
@@ -43,17 +37,13 @@ describe('resource apps', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.devices.apps.list(
-        'deviceId',
-        {
-          includeProtectedApps: true,
-          includeSystemApps: true,
-          'X-Device-Display-ID': 0,
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.devices.apps.list('deviceId', {
+    includeProtectedApps: true,
+    includeSystemApps: true,
+    'X-Device-Display-ID': 0,
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -70,10 +60,7 @@ describe('resource apps', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.devices.apps.delete('packageName', {
-      deviceId: 'deviceId',
-      'X-Device-Display-ID': 0,
-    });
+    const response = await client.devices.apps.delete('packageName', { deviceId: 'deviceId', 'X-Device-Display-ID': 0 });
   });
 
   // Mock server tests are disabled
@@ -90,10 +77,7 @@ describe('resource apps', () => {
 
   // Mock server tests are disabled
   test.skip('install: required and optional params', async () => {
-    const response = await client.devices.apps.install('deviceId', {
-      packageName: 'packageName',
-      'X-Device-Display-ID': 0,
-    });
+    const response = await client.devices.apps.install('deviceId', { packageName: 'packageName', 'X-Device-Display-ID': 0 });
   });
 
   // Mock server tests are disabled
@@ -111,9 +95,9 @@ describe('resource apps', () => {
   // Mock server tests are disabled
   test.skip('start: required and optional params', async () => {
     const response = await client.devices.apps.start('packageName', {
-      deviceId: 'deviceId',
-      activity: 'activity',
-      'X-Device-Display-ID': 0,
-    });
+    deviceId: 'deviceId',
+    activity: 'activity',
+    'X-Device-Display-ID': 0,
+  });
   });
 });

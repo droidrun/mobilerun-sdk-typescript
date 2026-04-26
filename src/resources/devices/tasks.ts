@@ -10,11 +10,7 @@ export class Tasks extends APIResource {
   /**
    * List tasks for a device
    */
-  list(
-    deviceID: string,
-    query: TaskListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TaskListResponse> {
+  list(deviceID: string, query: TaskListParams | null | undefined = {}, options?: RequestOptions): APIPromise<TaskListResponse> {
     return this._client.get(path`/devices/${deviceID}/tasks`, { query, ...options });
   }
 }
@@ -51,5 +47,8 @@ export interface TaskListParams {
 }
 
 export declare namespace Tasks {
-  export { type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
+  export {
+    type TaskListResponse as TaskListResponse,
+    type TaskListParams as TaskListParams
+  };
 }

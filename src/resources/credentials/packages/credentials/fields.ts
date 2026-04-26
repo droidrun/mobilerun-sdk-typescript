@@ -10,60 +10,25 @@ export class Fields extends APIResource {
   /**
    * Add a new field to an existing credential
    */
-  create(
-    credentialName: string,
-    params: FieldCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<FieldCreateResponse> {
-    const { packageName, ...body } = params;
-    return this._client.post(
-      path`/credentials/packages/${packageName}/credentials/${credentialName}/fields`,
-      { body, ...options },
-    );
+  create(credentialName: string, params: FieldCreateParams, options?: RequestOptions): APIPromise<FieldCreateResponse> {
+    const { packageName, ...body } = params
+    return this._client.post(path`/credentials/packages/${packageName}/credentials/${credentialName}/fields`, { body, ...options });
   }
 
   /**
    * Update the value of a credential field
    */
-  update(
-    fieldType:
-      | 'email'
-      | 'username'
-      | 'password'
-      | 'api_token'
-      | 'phone_number'
-      | 'two_factor_secret'
-      | 'backup_codes',
-    params: FieldUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<FieldUpdateResponse> {
-    const { packageName, credentialName, ...body } = params;
-    return this._client.patch(
-      path`/credentials/packages/${packageName}/credentials/${credentialName}/fields/${fieldType}`,
-      { body, ...options },
-    );
+  update(fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes', params: FieldUpdateParams, options?: RequestOptions): APIPromise<FieldUpdateResponse> {
+    const { packageName, credentialName, ...body } = params
+    return this._client.patch(path`/credentials/packages/${packageName}/credentials/${credentialName}/fields/${fieldType}`, { body, ...options });
   }
 
   /**
    * Delete a field from a credential
    */
-  delete(
-    fieldType:
-      | 'email'
-      | 'username'
-      | 'password'
-      | 'api_token'
-      | 'phone_number'
-      | 'two_factor_secret'
-      | 'backup_codes',
-    params: FieldDeleteParams,
-    options?: RequestOptions,
-  ): APIPromise<FieldDeleteResponse> {
-    const { packageName, credentialName } = params;
-    return this._client.delete(
-      path`/credentials/packages/${packageName}/credentials/${credentialName}/fields/${fieldType}`,
-      options,
-    );
+  delete(fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes', params: FieldDeleteParams, options?: RequestOptions): APIPromise<FieldDeleteResponse> {
+    const { packageName, credentialName } = params
+    return this._client.delete(path`/credentials/packages/${packageName}/credentials/${credentialName}/fields/${fieldType}`, options);
   }
 }
 
@@ -100,14 +65,7 @@ export interface FieldCreateParams {
   /**
    * Body param
    */
-  fieldType:
-    | 'email'
-    | 'username'
-    | 'password'
-    | 'api_token'
-    | 'phone_number'
-    | 'two_factor_secret'
-    | 'backup_codes';
+  fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
 
   /**
    * Body param
@@ -145,6 +103,6 @@ export declare namespace Fields {
     type FieldDeleteResponse as FieldDeleteResponse,
     type FieldCreateParams as FieldCreateParams,
     type FieldUpdateParams as FieldUpdateParams,
-    type FieldDeleteParams as FieldDeleteParams,
+    type FieldDeleteParams as FieldDeleteParams
   };
 }

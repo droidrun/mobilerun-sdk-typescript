@@ -31,10 +31,7 @@ export class Profiles extends APIResource {
   /**
    * List device profiles
    */
-  list(
-    query: ProfileListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ProfileListResponse> {
+  list(query: ProfileListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ProfileListResponse> {
     return this._client.get('/profiles', { query, ...options });
   }
 
@@ -128,6 +125,6 @@ export declare namespace Profiles {
     type ProfileDeleteResponse as ProfileDeleteResponse,
     type ProfileCreateParams as ProfileCreateParams,
     type ProfileUpdateParams as ProfileUpdateParams,
-    type ProfileListParams as ProfileListParams,
+    type ProfileListParams as ProfileListParams
   };
 }
