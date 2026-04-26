@@ -29,10 +29,7 @@ export class Tasks extends APIResource {
   /**
    * List tasks with optional filtering, sorting, and pagination.
    */
-  list(
-    query: TaskListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TaskListResponse> {
+  list(query: TaskListParams | null | undefined = {}, options?: RequestOptions): APIPromise<TaskListResponse> {
     return this._client.get('/tasks', { query, ...options });
   }
 
@@ -40,10 +37,7 @@ export class Tasks extends APIResource {
    * Attach to a running task and receive its events as an SSE stream.
    */
   attach(taskID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.get(path`/tasks/${taskID}/attach`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.get(path`/tasks/${taskID}/attach`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -80,11 +74,7 @@ export class Tasks extends APIResource {
    * Send a message to a running agent task. The message ID is delivered via SSE
    * (UserMessageEvent with action=queued).
    */
-  sendMessage(
-    taskID: string,
-    body: TaskSendMessageParams,
-    options?: RequestOptions,
-  ): APIPromise<TaskSendMessageResponse> {
+  sendMessage(taskID: string, body: TaskSendMessageParams, options?: RequestOptions): APIPromise<TaskSendMessageResponse> {
     return this._client.post(path`/tasks/${taskID}/message`, { body, ...options });
   }
 
@@ -184,15 +174,7 @@ export interface Task {
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
 }
 
-export type TaskStatus =
-  | 'queued'
-  | 'created'
-  | 'running'
-  | 'cancelling'
-  | 'paused'
-  | 'completed'
-  | 'failed'
-  | 'cancelled';
+export type TaskStatus = 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'
 
 export interface UsageResult {
   request_tokens: number;
@@ -259,39 +241,7 @@ export interface TaskGetTrajectoryResponse {
   /**
    * The trajectory of the task
    */
-  trajectory: Array<
-    | TaskGetTrajectoryResponse.TrajectoryQueuedEvent
-    | TaskGetTrajectoryResponse.TrajectoryCreatedEvent
-    | TaskGetTrajectoryResponse.TrajectoryExceptionEvent
-    | TaskGetTrajectoryResponse.TrajectoryCancelEvent
-    | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent
-    | TaskGetTrajectoryResponse.TrajectoryStartEvent
-    | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent
-    | TaskGetTrajectoryResponse.TrajectoryStopEvent
-    | TaskGetTrajectoryResponse.TrajectoryResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerPlanEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentToolCallEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentOutputEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentEndEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentExecuteEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryToolExecutionEvent
-    | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerContextEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerPlanDetailsEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorContextEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryUserMessageEvent
-    | TaskGetTrajectoryResponse.TrajectoryUnknownEvent
-  >;
+  trajectory: Array<TaskGetTrajectoryResponse.TrajectoryQueuedEvent | TaskGetTrajectoryResponse.TrajectoryCreatedEvent | TaskGetTrajectoryResponse.TrajectoryExceptionEvent | TaskGetTrajectoryResponse.TrajectoryCancelEvent | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent | TaskGetTrajectoryResponse.TrajectoryStartEvent | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent | TaskGetTrajectoryResponse.TrajectoryStopEvent | TaskGetTrajectoryResponse.TrajectoryResultEvent | TaskGetTrajectoryResponse.TrajectoryManagerInputEvent | TaskGetTrajectoryResponse.TrajectoryManagerPlanEvent | TaskGetTrajectoryResponse.TrajectoryExecutorInputEvent | TaskGetTrajectoryResponse.TrajectoryExecutorResultEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentInputEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentResponseEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentToolCallEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentOutputEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentEndEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentExecuteEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentResultEvent | TaskGetTrajectoryResponse.TrajectoryToolExecutionEvent | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent | TaskGetTrajectoryResponse.TrajectoryManagerContextEvent | TaskGetTrajectoryResponse.TrajectoryManagerResponseEvent | TaskGetTrajectoryResponse.TrajectoryManagerPlanDetailsEvent | TaskGetTrajectoryResponse.TrajectoryExecutorContextEvent | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent | TaskGetTrajectoryResponse.TrajectoryUserMessageEvent | TaskGetTrajectoryResponse.TrajectoryUnknownEvent>;
 }
 
 export namespace TaskGetTrajectoryResponse {
@@ -891,7 +841,7 @@ export interface TaskRunResponse {
   streamUrl?: string | null;
 }
 
-export type TaskRunStreamedResponse = unknown;
+export type TaskRunStreamedResponse = unknown
 
 export interface TaskSendMessageResponse {
   /**
@@ -1063,19 +1013,19 @@ export declare namespace Tasks {
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
-    type TaskSendMessageParams as TaskSendMessageParams,
+    type TaskSendMessageParams as TaskSendMessageParams
   };
 
   export {
     Screenshots as Screenshots,
     type MediaResponse as MediaResponse,
     type ScreenshotListResponse as ScreenshotListResponse,
-    type ScreenshotRetrieveParams as ScreenshotRetrieveParams,
+    type ScreenshotRetrieveParams as ScreenshotRetrieveParams
   };
 
   export {
     UiStates as UiStates,
     type UiStateListResponse as UiStateListResponse,
-    type UiStateRetrieveParams as UiStateRetrieveParams,
+    type UiStateRetrieveParams as UiStateRetrieveParams
   };
 }

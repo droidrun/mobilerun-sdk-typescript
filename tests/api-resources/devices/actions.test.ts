@@ -2,10 +2,7 @@
 
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource actions', () => {
   // Mock server tests are disabled
@@ -40,13 +37,9 @@ describe('resource actions', () => {
   // Mock server tests are disabled
   test.skip('overlayVisible: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.devices.actions.overlayVisible(
-        'deviceId',
-        { 'X-Device-Display-ID': 0 },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.devices.actions.overlayVisible('deviceId', { 'X-Device-Display-ID': 0 }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -63,21 +56,18 @@ describe('resource actions', () => {
 
   // Mock server tests are disabled
   test.skip('setOverlayVisible: required and optional params', async () => {
-    const response = await client.devices.actions.setOverlayVisible('deviceId', {
-      visible: true,
-      'X-Device-Display-ID': 0,
-    });
+    const response = await client.devices.actions.setOverlayVisible('deviceId', { visible: true, 'X-Device-Display-ID': 0 });
   });
 
   // Mock server tests are disabled
   test.skip('swipe: only required params', async () => {
     const responsePromise = client.devices.actions.swipe('deviceId', {
-      duration: 10,
-      endX: 0,
-      endY: 0,
-      startX: 0,
-      startY: 0,
-    });
+    duration: 10,
+    endX: 0,
+    endY: 0,
+    startX: 0,
+    startY: 0,
+  });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -90,14 +80,14 @@ describe('resource actions', () => {
   // Mock server tests are disabled
   test.skip('swipe: required and optional params', async () => {
     const response = await client.devices.actions.swipe('deviceId', {
-      duration: 10,
-      endX: 0,
-      endY: 0,
-      startX: 0,
-      startY: 0,
-      stealth: true,
-      'X-Device-Display-ID': 0,
-    });
+    duration: 10,
+    endX: 0,
+    endY: 0,
+    startX: 0,
+    startY: 0,
+    stealth: true,
+    'X-Device-Display-ID': 0,
+  });
   });
 
   // Mock server tests are disabled
@@ -115,10 +105,10 @@ describe('resource actions', () => {
   // Mock server tests are disabled
   test.skip('tap: required and optional params', async () => {
     const response = await client.devices.actions.tap('deviceId', {
-      x: 0,
-      y: 0,
-      stealth: true,
-      'X-Device-Display-ID': 0,
-    });
+    x: 0,
+    y: 0,
+    stealth: true,
+    'X-Device-Display-ID': 0,
+  });
   });
 });

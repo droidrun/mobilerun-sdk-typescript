@@ -2,18 +2,15 @@
 
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource profiles', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.profiles.create({
-      name: 'x',
-      spec: {},
-    });
+    name: 'x',
+    spec: {},
+  });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -26,49 +23,49 @@ describe('resource profiles', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.profiles.create({
-      name: 'x',
-      spec: {
-        apps: ['string'],
-        carrier: {
-          GsmOperatorAlpha: 'GsmOperatorAlpha',
-          GsmOperatorNumeric: 0,
-          GsmSimOperatorAlpha: 'GsmSimOperatorAlpha',
-          GsmSimOperatorIsoCountry: 'GsmSimOperatorIsoCountry',
-          GsmSimOperatorNumeric: 0,
-          PersistSysTimezone: 'PersistSysTimezone',
-        },
-        files: ['string'],
-        identifiers: {
-          BootloaderSerialNumber: 'BootloaderSerialNumber',
-          IdentifierAndroidID: 'IdentifierAndroidID',
-          IdentifierAppSetID: 'IdentifierAppSetID',
-          IdentifierBluetoothMAC: 'IdentifierBluetoothMAC',
-          IdentifierGAID: 'IdentifierGAID',
-          IdentifierGSFID: 'IdentifierGSFID',
-          IdentifierICCID: 'IdentifierICCID',
-          IdentifierIMEI: 'IdentifierIMEI',
-          IdentifierIMSI: 'IdentifierIMSI',
-          IdentifierMediaDRMID: 'IdentifierMediaDRMID',
-          IdentifierMEID: 'IdentifierMEID',
-          IdentifierPhoneNumber: 'IdentifierPhoneNumber',
-          IdentifierSerial: 'IdentifierSerial',
-          IdentifierWifiMAC: 'IdentifierWifiMAC',
-          SerialNumber: 'SerialNumber',
-        },
-        name: 'name',
-        proxy: {
-          name: 'name',
-          smartIp: true,
-          socks5: {
-            host: 'host',
-            password: 'password',
-            port: 0,
-            user: 'user',
-          },
-          wireguard: 'wireguard',
-        },
-      },
-    });
+    name: 'x',
+    spec: {
+    apps: ['string'],
+    carrier: {
+    GsmOperatorAlpha: 'GsmOperatorAlpha',
+    GsmOperatorNumeric: 0,
+    GsmSimOperatorAlpha: 'GsmSimOperatorAlpha',
+    GsmSimOperatorIsoCountry: 'GsmSimOperatorIsoCountry',
+    GsmSimOperatorNumeric: 0,
+    PersistSysTimezone: 'PersistSysTimezone',
+  },
+    files: ['string'],
+    identifiers: {
+    BootloaderSerialNumber: 'BootloaderSerialNumber',
+    IdentifierAndroidID: 'IdentifierAndroidID',
+    IdentifierAppSetID: 'IdentifierAppSetID',
+    IdentifierBluetoothMAC: 'IdentifierBluetoothMAC',
+    IdentifierGAID: 'IdentifierGAID',
+    IdentifierGSFID: 'IdentifierGSFID',
+    IdentifierICCID: 'IdentifierICCID',
+    IdentifierIMEI: 'IdentifierIMEI',
+    IdentifierIMSI: 'IdentifierIMSI',
+    IdentifierMediaDRMID: 'IdentifierMediaDRMID',
+    IdentifierMEID: 'IdentifierMEID',
+    IdentifierPhoneNumber: 'IdentifierPhoneNumber',
+    IdentifierSerial: 'IdentifierSerial',
+    IdentifierWifiMAC: 'IdentifierWifiMAC',
+    SerialNumber: 'SerialNumber',
+  },
+    name: 'name',
+    proxy: {
+    name: 'name',
+    smartIp: true,
+    socks5: {
+    host: 'host',
+    password: 'password',
+    port: 0,
+    user: 'user',
+  },
+    wireguard: 'wireguard',
+  },
+  },
+  });
   });
 
   // Mock server tests are disabled
@@ -86,9 +83,9 @@ describe('resource profiles', () => {
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.profiles.update('profileId', {
-      name: 'x',
-      spec: {},
-    });
+    name: 'x',
+    spec: {},
+  });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -101,49 +98,49 @@ describe('resource profiles', () => {
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.profiles.update('profileId', {
-      name: 'x',
-      spec: {
-        apps: ['string'],
-        carrier: {
-          GsmOperatorAlpha: 'GsmOperatorAlpha',
-          GsmOperatorNumeric: 0,
-          GsmSimOperatorAlpha: 'GsmSimOperatorAlpha',
-          GsmSimOperatorIsoCountry: 'GsmSimOperatorIsoCountry',
-          GsmSimOperatorNumeric: 0,
-          PersistSysTimezone: 'PersistSysTimezone',
-        },
-        files: ['string'],
-        identifiers: {
-          BootloaderSerialNumber: 'BootloaderSerialNumber',
-          IdentifierAndroidID: 'IdentifierAndroidID',
-          IdentifierAppSetID: 'IdentifierAppSetID',
-          IdentifierBluetoothMAC: 'IdentifierBluetoothMAC',
-          IdentifierGAID: 'IdentifierGAID',
-          IdentifierGSFID: 'IdentifierGSFID',
-          IdentifierICCID: 'IdentifierICCID',
-          IdentifierIMEI: 'IdentifierIMEI',
-          IdentifierIMSI: 'IdentifierIMSI',
-          IdentifierMediaDRMID: 'IdentifierMediaDRMID',
-          IdentifierMEID: 'IdentifierMEID',
-          IdentifierPhoneNumber: 'IdentifierPhoneNumber',
-          IdentifierSerial: 'IdentifierSerial',
-          IdentifierWifiMAC: 'IdentifierWifiMAC',
-          SerialNumber: 'SerialNumber',
-        },
-        name: 'name',
-        proxy: {
-          name: 'name',
-          smartIp: true,
-          socks5: {
-            host: 'host',
-            password: 'password',
-            port: 0,
-            user: 'user',
-          },
-          wireguard: 'wireguard',
-        },
-      },
-    });
+    name: 'x',
+    spec: {
+    apps: ['string'],
+    carrier: {
+    GsmOperatorAlpha: 'GsmOperatorAlpha',
+    GsmOperatorNumeric: 0,
+    GsmSimOperatorAlpha: 'GsmSimOperatorAlpha',
+    GsmSimOperatorIsoCountry: 'GsmSimOperatorIsoCountry',
+    GsmSimOperatorNumeric: 0,
+    PersistSysTimezone: 'PersistSysTimezone',
+  },
+    files: ['string'],
+    identifiers: {
+    BootloaderSerialNumber: 'BootloaderSerialNumber',
+    IdentifierAndroidID: 'IdentifierAndroidID',
+    IdentifierAppSetID: 'IdentifierAppSetID',
+    IdentifierBluetoothMAC: 'IdentifierBluetoothMAC',
+    IdentifierGAID: 'IdentifierGAID',
+    IdentifierGSFID: 'IdentifierGSFID',
+    IdentifierICCID: 'IdentifierICCID',
+    IdentifierIMEI: 'IdentifierIMEI',
+    IdentifierIMSI: 'IdentifierIMSI',
+    IdentifierMediaDRMID: 'IdentifierMediaDRMID',
+    IdentifierMEID: 'IdentifierMEID',
+    IdentifierPhoneNumber: 'IdentifierPhoneNumber',
+    IdentifierSerial: 'IdentifierSerial',
+    IdentifierWifiMAC: 'IdentifierWifiMAC',
+    SerialNumber: 'SerialNumber',
+  },
+    name: 'name',
+    proxy: {
+    name: 'name',
+    smartIp: true,
+    socks5: {
+    host: 'host',
+    password: 'password',
+    port: 0,
+    user: 'user',
+  },
+    wireguard: 'wireguard',
+  },
+  },
+  });
   });
 
   // Mock server tests are disabled
@@ -161,18 +158,15 @@ describe('resource profiles', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.profiles.list(
-        {
-          name: 'name',
-          orderBy: 'name',
-          orderByDirection: 'asc',
-          page: 0,
-          pageSize: 0,
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.profiles.list({
+    name: 'name',
+    orderBy: 'name',
+    orderByDirection: 'asc',
+    page: 0,
+    pageSize: 0,
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled

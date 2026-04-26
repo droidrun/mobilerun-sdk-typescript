@@ -16,7 +16,7 @@ export class Agents extends APIResource {
   }
 }
 
-export type AgentListResponse = Array<AgentListResponse.AgentListResponseItem>;
+export type AgentListResponse = Array<AgentListResponse.AgentListResponseItem>
 
 export namespace AgentListResponse {
   export interface AgentListResponseItem {
@@ -41,5 +41,7 @@ export namespace AgentListResponse {
 }
 
 export declare namespace Agents {
-  export { type AgentListResponse as AgentListResponse };
+  export {
+    type AgentListResponse as AgentListResponse
+  };
 }

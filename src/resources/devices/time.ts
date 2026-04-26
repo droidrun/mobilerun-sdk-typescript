@@ -11,68 +11,28 @@ export class Time extends APIResource {
    * Set device timezone
    */
   setTimezone(deviceID: string, params: TimeSetTimezoneParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/timezone`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/timezone`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Device time
    */
-  time(
-    deviceID: string,
-    params: TimeTimeParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/time`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  time(deviceID: string, params: TimeTimeParams | null | undefined = {}, options?: RequestOptions): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/time`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Get device timezone
    */
-  timezone(
-    deviceID: string,
-    params: TimeTimezoneParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TimeTimezoneResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/timezone`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  timezone(deviceID: string, params: TimeTimezoneParams | null | undefined = {}, options?: RequestOptions): APIPromise<TimeTimezoneResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/timezone`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
-export type TimeTimeResponse = string;
+export type TimeTimeResponse = string
 
 export interface TimeTimezoneResponse {
   timezone: string | null;
@@ -109,6 +69,6 @@ export declare namespace Time {
     type TimeTimezoneResponse as TimeTimezoneResponse,
     type TimeSetTimezoneParams as TimeSetTimezoneParams,
     type TimeTimeParams as TimeTimeParams,
-    type TimeTimezoneParams as TimeTimezoneParams,
+    type TimeTimezoneParams as TimeTimezoneParams
   };
 }
