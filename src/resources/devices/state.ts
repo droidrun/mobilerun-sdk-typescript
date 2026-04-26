@@ -11,47 +11,17 @@ export class State extends APIResource {
   /**
    * Take screenshot
    */
-  screenshot(
-    deviceID: string,
-    params: StateScreenshotParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/screenshot`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  screenshot(deviceID: string, params: StateScreenshotParams | null | undefined = {}, options?: RequestOptions): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/screenshot`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * UI state
    */
-  ui(
-    deviceID: string,
-    params: StateUiParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<StateUiResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/ui-state`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  ui(deviceID: string, params: StateUiParams | null | undefined = {}, options?: RequestOptions): APIPromise<StateUiResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/ui-state`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
@@ -61,7 +31,7 @@ export interface Rect {
   width: number;
 }
 
-export type StateScreenshotResponse = string;
+export type StateScreenshotResponse = string
 
 export interface StateUiResponse {
   a11y_tree: unknown;
@@ -162,6 +132,6 @@ export declare namespace State {
     type StateScreenshotResponse as StateScreenshotResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
-    type StateUiParams as StateUiParams,
+    type StateUiParams as StateUiParams
   };
 }

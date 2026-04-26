@@ -2,10 +2,7 @@
 
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource profile', () => {
   // Mock server tests are disabled
@@ -22,9 +19,6 @@ describe('resource profile', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.devices.profile.update('deviceId', {
-      profileId: 'profileId',
-      'X-Device-Display-ID': 0,
-    });
+    const response = await client.devices.profile.update('deviceId', { profileId: 'profileId', 'X-Device-Display-ID': 0 });
   });
 });

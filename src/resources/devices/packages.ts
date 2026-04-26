@@ -10,28 +10,13 @@ export class Packages extends APIResource {
   /**
    * List packages
    */
-  list(
-    deviceID: string,
-    params: PackageListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<PackageListResponse | null> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/packages`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  list(deviceID: string, params: PackageListParams | null | undefined = {}, options?: RequestOptions): APIPromise<PackageListResponse | null> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/packages`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
-export type PackageListResponse = Array<string>;
+export type PackageListResponse = Array<string>
 
 export interface PackageListParams {
   /**
@@ -51,5 +36,8 @@ export interface PackageListParams {
 }
 
 export declare namespace Packages {
-  export { type PackageListResponse as PackageListResponse, type PackageListParams as PackageListParams };
+  export {
+    type PackageListResponse as PackageListResponse,
+    type PackageListParams as PackageListParams
+  };
 }

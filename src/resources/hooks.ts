@@ -30,10 +30,7 @@ export class Hooks extends APIResource {
   /**
    * List hooks belonging to the requesting user (paginated).
    */
-  list(
-    query: HookListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<HookListResponse> {
+  list(query: HookListParams | null | undefined = {}, options?: RequestOptions): APIPromise<HookListResponse> {
     return this._client.get('/hooks', { query, ...options });
   }
 
@@ -48,7 +45,7 @@ export class Hooks extends APIResource {
    * Zapier Perform endpoint - processes webhook payloads.
    */
   perform(params: HookPerformParams, options?: RequestOptions): APIPromise<HookPerformResponse> {
-    const { body } = params;
+    const { body } = params
     return this._client.post('/hooks/perform', { body: body, ...options });
   }
 
@@ -149,7 +146,7 @@ export namespace HookListResponse {
   }
 }
 
-export type HookGetSampleDataResponse = Array<HookGetSampleDataResponse.HookGetSampleDataResponseItem>;
+export type HookGetSampleDataResponse = Array<HookGetSampleDataResponse.HookGetSampleDataResponseItem>
 
 export namespace HookGetSampleDataResponse {
   /**
@@ -188,7 +185,7 @@ export namespace HookGetSampleDataResponse {
   }
 }
 
-export type HookPerformResponse = Array<{ [key: string]: unknown }>;
+export type HookPerformResponse = Array<{ [key: string]: unknown }>
 
 /**
  * Response model after successful subscription.
@@ -291,6 +288,6 @@ export declare namespace Hooks {
     type HookUpdateParams as HookUpdateParams,
     type HookListParams as HookListParams,
     type HookPerformParams as HookPerformParams,
-    type HookSubscribeParams as HookSubscribeParams,
+    type HookSubscribeParams as HookSubscribeParams
   };
 }
