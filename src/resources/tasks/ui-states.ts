@@ -13,8 +13,12 @@ export class UiStates extends APIResource {
   /**
    * Get a specific UI state by index.
    */
-  retrieve(index: number, params: UiStateRetrieveParams, options?: RequestOptions): APIPromise<ScreenshotsAPI.MediaResponse> {
-    const { task_id } = params
+  retrieve(
+    index: number,
+    params: UiStateRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<ScreenshotsAPI.MediaResponse> {
+    const { task_id } = params;
     return this._client.get(path`/tasks/${task_id}/ui_states/${index}`, options);
   }
 
@@ -40,6 +44,6 @@ export interface UiStateRetrieveParams {
 export declare namespace UiStates {
   export {
     type UiStateListResponse as UiStateListResponse,
-    type UiStateRetrieveParams as UiStateRetrieveParams
+    type UiStateRetrieveParams as UiStateRetrieveParams,
   };
 }

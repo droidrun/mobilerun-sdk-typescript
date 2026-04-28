@@ -59,8 +59,8 @@ function getTSDiagnostics(code: string): string[] {
   const codeWithImport = [
     'import { Mobilerun } from "@mobilerun/sdk";',
     functionSource.type === 'declaration' ?
-      `async function run(${functionSource.client}: Mobilerun)` :
-      `const run: (${functionSource.client}: Mobilerun) => Promise<unknown> =`,
+      `async function run(${functionSource.client}: Mobilerun)`
+    : `const run: (${functionSource.client}: Mobilerun) => Promise<unknown> =`,
     functionSource.code,
   ].join('\n');
   const sourcePath = path.resolve('code.ts');
@@ -108,95 +108,95 @@ function getTSDiagnostics(code: string): string[] {
 
 const fuse = new Fuse(
   [
-    "client.tasks.attach",
-    "client.tasks.getStatus",
-    "client.tasks.getTrajectory",
-    "client.tasks.list",
-    "client.tasks.retrieve",
-    "client.tasks.run",
-    "client.tasks.runStreamed",
-    "client.tasks.sendMessage",
-    "client.tasks.stop",
-    "client.tasks.screenshots.list",
-    "client.tasks.screenshots.retrieve",
-    "client.tasks.uiStates.list",
-    "client.tasks.uiStates.retrieve",
-    "client.agents.list",
-    "client.proxies.create",
-    "client.proxies.delete",
-    "client.proxies.list",
-    "client.proxies.retrieve",
-    "client.proxies.update",
-    "client.carriers.create",
-    "client.carriers.delete",
-    "client.carriers.list",
-    "client.carriers.lookup",
-    "client.carriers.retrieve",
-    "client.carriers.update",
-    "client.profiles.create",
-    "client.profiles.delete",
-    "client.profiles.list",
-    "client.profiles.retrieve",
-    "client.profiles.update",
-    "client.devices.count",
-    "client.devices.create",
-    "client.devices.list",
-    "client.devices.retrieve",
-    "client.devices.setName",
-    "client.devices.terminate",
-    "client.devices.waitReady",
-    "client.devices.time.setTimezone",
-    "client.devices.time.time",
-    "client.devices.time.timezone",
-    "client.devices.profile.update",
-    "client.devices.files.delete",
-    "client.devices.files.download",
-    "client.devices.files.list",
-    "client.devices.files.upload",
-    "client.devices.proxy.connect",
-    "client.devices.proxy.disconnect",
-    "client.devices.proxy.status",
-    "client.devices.location.get",
-    "client.devices.location.set",
-    "client.devices.actions.global",
-    "client.devices.actions.overlayVisible",
-    "client.devices.actions.setOverlayVisible",
-    "client.devices.actions.swipe",
-    "client.devices.actions.tap",
-    "client.devices.state.screenshot",
-    "client.devices.state.ui",
-    "client.devices.apps.delete",
-    "client.devices.apps.install",
-    "client.devices.apps.list",
-    "client.devices.apps.start",
-    "client.devices.apps.update",
-    "client.devices.packages.list",
-    "client.devices.keyboard.clear",
-    "client.devices.keyboard.key",
-    "client.devices.keyboard.write",
-    "client.devices.tasks.list",
-    "client.devices.esim.activate",
-    "client.devices.esim.enable",
-    "client.devices.esim.list",
-    "client.devices.esim.remove",
-    "client.apps.list",
-    "client.credentials.list",
-    "client.credentials.packages.create",
-    "client.credentials.packages.list",
-    "client.credentials.packages.credentials.create",
-    "client.credentials.packages.credentials.delete",
-    "client.credentials.packages.credentials.retrieve",
-    "client.credentials.packages.credentials.fields.create",
-    "client.credentials.packages.credentials.fields.delete",
-    "client.credentials.packages.credentials.fields.update",
-    "client.hooks.getSampleData",
-    "client.hooks.list",
-    "client.hooks.perform",
-    "client.hooks.retrieve",
-    "client.hooks.subscribe",
-    "client.hooks.unsubscribe",
-    "client.hooks.update",
-    "client.models.list"
+    'client.tasks.attach',
+    'client.tasks.getStatus',
+    'client.tasks.getTrajectory',
+    'client.tasks.list',
+    'client.tasks.retrieve',
+    'client.tasks.run',
+    'client.tasks.runStreamed',
+    'client.tasks.sendMessage',
+    'client.tasks.stop',
+    'client.tasks.screenshots.list',
+    'client.tasks.screenshots.retrieve',
+    'client.tasks.uiStates.list',
+    'client.tasks.uiStates.retrieve',
+    'client.agents.list',
+    'client.proxies.create',
+    'client.proxies.delete',
+    'client.proxies.list',
+    'client.proxies.retrieve',
+    'client.proxies.update',
+    'client.carriers.create',
+    'client.carriers.delete',
+    'client.carriers.list',
+    'client.carriers.lookup',
+    'client.carriers.retrieve',
+    'client.carriers.update',
+    'client.profiles.create',
+    'client.profiles.delete',
+    'client.profiles.list',
+    'client.profiles.retrieve',
+    'client.profiles.update',
+    'client.devices.count',
+    'client.devices.create',
+    'client.devices.list',
+    'client.devices.retrieve',
+    'client.devices.setName',
+    'client.devices.terminate',
+    'client.devices.waitReady',
+    'client.devices.time.setTimezone',
+    'client.devices.time.time',
+    'client.devices.time.timezone',
+    'client.devices.profile.update',
+    'client.devices.files.delete',
+    'client.devices.files.download',
+    'client.devices.files.list',
+    'client.devices.files.upload',
+    'client.devices.proxy.connect',
+    'client.devices.proxy.disconnect',
+    'client.devices.proxy.status',
+    'client.devices.location.get',
+    'client.devices.location.set',
+    'client.devices.actions.global',
+    'client.devices.actions.overlayVisible',
+    'client.devices.actions.setOverlayVisible',
+    'client.devices.actions.swipe',
+    'client.devices.actions.tap',
+    'client.devices.state.screenshot',
+    'client.devices.state.ui',
+    'client.devices.apps.delete',
+    'client.devices.apps.install',
+    'client.devices.apps.list',
+    'client.devices.apps.start',
+    'client.devices.apps.update',
+    'client.devices.packages.list',
+    'client.devices.keyboard.clear',
+    'client.devices.keyboard.key',
+    'client.devices.keyboard.write',
+    'client.devices.tasks.list',
+    'client.devices.esim.activate',
+    'client.devices.esim.enable',
+    'client.devices.esim.list',
+    'client.devices.esim.remove',
+    'client.apps.list',
+    'client.credentials.list',
+    'client.credentials.packages.create',
+    'client.credentials.packages.list',
+    'client.credentials.packages.credentials.create',
+    'client.credentials.packages.credentials.delete',
+    'client.credentials.packages.credentials.retrieve',
+    'client.credentials.packages.credentials.fields.create',
+    'client.credentials.packages.credentials.fields.delete',
+    'client.credentials.packages.credentials.fields.update',
+    'client.hooks.getSampleData',
+    'client.hooks.list',
+    'client.hooks.perform',
+    'client.hooks.retrieve',
+    'client.hooks.subscribe',
+    'client.hooks.unsubscribe',
+    'client.hooks.update',
+    'client.models.list',
   ],
   { threshold: 1, shouldSort: true },
 );
@@ -279,7 +279,12 @@ function parseError(code: string, error: unknown): string | undefined {
     // Deno uses V8; the first "<anonymous>:LINE:COLUMN" is the top of stack.
     const lineNumber = error.stack?.match(/<anonymous>:([0-9]+):[0-9]+/)?.[1];
     // -1 for the zero-based indexing
-    const line = lineNumber && code.split('\n').at(parseInt(lineNumber, 10) - 1)?.trim();
+    const line =
+      lineNumber &&
+      code
+        .split('\n')
+        .at(parseInt(lineNumber, 10) - 1)
+        ?.trim();
     return line ? `${message}\n  at line ${lineNumber}\n    ${line}` : message;
   } catch {
     return message;
@@ -291,8 +296,9 @@ const fetch = async (req: Request): Promise<Response> => {
 
   const runFunctionSource = code ? getRunFunctionSource(code) : null;
   if (!runFunctionSource) {
-    const message = code
-      ? 'The code is missing a top-level `run` function.'
+    const message =
+      code ?
+        'The code is missing a top-level `run` function.'
       : 'The code argument is missing. Provide one containing a top-level `run` function.';
     return Response.json(
       {
@@ -337,7 +343,7 @@ const fetch = async (req: Request): Promise<Response> => {
   try {
     let run_ = async (client: any) => {};
     run_ = (await tseval(`${code}\nexport default run;`)).default;
-    const result = await run_(makeSdkProxy(client, { path: ["client"] }));
+    const result = await run_(makeSdkProxy(client, { path: ['client'] }));
     return Response.json({
       is_error: false,
       result,

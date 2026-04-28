@@ -12,8 +12,12 @@ export class Screenshots extends APIResource {
   /**
    * Get a specific screenshot by index.
    */
-  retrieve(index: number, params: ScreenshotRetrieveParams, options?: RequestOptions): APIPromise<MediaResponse> {
-    const { task_id } = params
+  retrieve(
+    index: number,
+    params: ScreenshotRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<MediaResponse> {
+    const { task_id } = params;
     return this._client.get(path`/tasks/${task_id}/screenshots/${index}`, options);
   }
 
@@ -47,6 +51,6 @@ export declare namespace Screenshots {
   export {
     type MediaResponse as MediaResponse,
     type ScreenshotListResponse as ScreenshotListResponse,
-    type ScreenshotRetrieveParams as ScreenshotRetrieveParams
+    type ScreenshotRetrieveParams as ScreenshotRetrieveParams,
   };
 }
