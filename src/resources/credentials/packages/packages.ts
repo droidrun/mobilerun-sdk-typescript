@@ -2,7 +2,16 @@
 
 import { APIResource } from '../../../core/resource';
 import * as CredentialsAPI from './credentials/credentials';
-import { Credential, CredentialCreateParams, CredentialCreateResponse, CredentialDeleteParams, CredentialDeleteResponse, CredentialRetrieveParams, CredentialRetrieveResponse, Credentials } from './credentials/credentials';
+import {
+  Credential,
+  CredentialCreateParams,
+  CredentialCreateResponse,
+  CredentialDeleteParams,
+  CredentialDeleteResponse,
+  CredentialRetrieveParams,
+  CredentialRetrieveResponse,
+  Credentials,
+} from './credentials/credentials';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -53,7 +62,7 @@ export declare namespace Packages {
   export {
     type PackageCreateResponse as PackageCreateResponse,
     type PackageListResponse as PackageListResponse,
-    type PackageCreateParams as PackageCreateParams
+    type PackageCreateParams as PackageCreateParams,
   };
 
   export {
@@ -64,6 +73,6 @@ export declare namespace Packages {
     type CredentialDeleteResponse as CredentialDeleteResponse,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialRetrieveParams as CredentialRetrieveParams,
-    type CredentialDeleteParams as CredentialDeleteParams
+    type CredentialDeleteParams as CredentialDeleteParams,
   };
 }

@@ -10,37 +10,90 @@ export class Esim extends APIResource {
   /**
    * List eSIM subscriptions
    */
-  list(deviceID: string, params: EsimListParams | null | undefined = {}, options?: RequestOptions): APIPromise<EsimListResponse | null> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
-    return this._client.get(path`/devices/${deviceID}/esim`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+  list(
+    deviceID: string,
+    params: EsimListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<EsimListResponse | null> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/esim`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
    * Configure eSIM (download profile and/or enable subscription)
    */
-  activate(deviceID: string, params: EsimActivateParams, options?: RequestOptions): APIPromise<EsimActivateResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
-    return this._client.post(path`/devices/${deviceID}/esim`, { body, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+  activate(
+    deviceID: string,
+    params: EsimActivateParams,
+    options?: RequestOptions,
+  ): APIPromise<EsimActivateResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    return this._client.post(path`/devices/${deviceID}/esim`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
    * Enable an eSIM subscription
    */
   enable(deviceID: string, params: EsimEnableParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
-    return this._client.put(path`/devices/${deviceID}/esim`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    return this._client.put(path`/devices/${deviceID}/esim`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
    * Delete eSIM subscription
    */
   remove(deviceID: string, params: EsimRemoveParams, options?: RequestOptions): APIPromise<void> {
-    const { subId, 'X-Device-Display-ID': xDeviceDisplayID } = params
-    return this._client.delete(path`/devices/${deviceID}/esim`, { query: { subId }, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+    const { subId, 'X-Device-Display-ID': xDeviceDisplayID } = params;
+    return this._client.delete(path`/devices/${deviceID}/esim`, {
+      query: { subId },
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 }
 
-export type EsimListResponse = Array<EsimListResponse.EsimListResponseItem>
+export type EsimListResponse = Array<EsimListResponse.EsimListResponseItem>;
 
 export namespace EsimListResponse {
   export interface EsimListResponseItem {
@@ -143,6 +196,6 @@ export declare namespace Esim {
     type EsimListParams as EsimListParams,
     type EsimActivateParams as EsimActivateParams,
     type EsimEnableParams as EsimEnableParams,
-    type EsimRemoveParams as EsimRemoveParams
+    type EsimRemoveParams as EsimRemoveParams,
   };
 }

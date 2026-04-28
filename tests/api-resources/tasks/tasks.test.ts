@@ -2,7 +2,10 @@
 
 import Mobilerun from '@mobilerun/sdk';
 
-const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
+const client = new Mobilerun({
+  apiKey: 'My API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource tasks', () => {
   // Mock server tests are disabled
@@ -32,16 +35,19 @@ describe('resource tasks', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.tasks.list({
-    orderBy: 'id',
-    orderByDirection: 'asc',
-    page: 1,
-    pageSize: 1,
-    query: 'query',
-    status: 'queued',
-  }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(Mobilerun.NotFoundError);
+    await expect(
+      client.tasks.list(
+        {
+          orderBy: 'id',
+          orderByDirection: 'asc',
+          page: 1,
+          pageSize: 1,
+          query: 'query',
+          status: 'queued',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -95,31 +101,34 @@ describe('resource tasks', () => {
   // Mock server tests are disabled
   test.skip('run: required and optional params', async () => {
     const response = await client.tasks.run({
-    deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-    task: 'x',
-    agentId: 0,
-    apps: ['string'],
-    continueOnFailure: true,
-    credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
-    displayId: 0,
-    executionTimeout: 0,
-    files: ['string'],
-    llmModel: 'llmModel',
-    maxSteps: 0,
-    memoryNamespace: 'memoryNamespace',
-    outputSchema: { foo: 'bar' },
-    reasoning: true,
-    stealth: true,
-    subagentModel: 'subagentModel',
-    temperature: 0,
-    vision: true,
-    vpnCountry: 'US',
-  });
+      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      task: 'x',
+      agentId: 0,
+      apps: ['string'],
+      continueOnFailure: true,
+      credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
+      displayId: 0,
+      executionTimeout: 0,
+      files: ['string'],
+      llmModel: 'llmModel',
+      maxSteps: 0,
+      memoryNamespace: 'memoryNamespace',
+      outputSchema: { foo: 'bar' },
+      reasoning: true,
+      stealth: true,
+      subagentModel: 'subagentModel',
+      temperature: 0,
+      vision: true,
+      vpnCountry: 'US',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('runStreamed: only required params', async () => {
-    const responsePromise = client.tasks.runStreamed({ deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', task: 'x' });
+    const responsePromise = client.tasks.runStreamed({
+      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      task: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -132,31 +141,33 @@ describe('resource tasks', () => {
   // Mock server tests are disabled
   test.skip('runStreamed: required and optional params', async () => {
     const response = await client.tasks.runStreamed({
-    deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-    task: 'x',
-    agentId: 0,
-    apps: ['string'],
-    continueOnFailure: true,
-    credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
-    displayId: 0,
-    executionTimeout: 0,
-    files: ['string'],
-    llmModel: 'llmModel',
-    maxSteps: 0,
-    memoryNamespace: 'memoryNamespace',
-    outputSchema: { foo: 'bar' },
-    reasoning: true,
-    stealth: true,
-    subagentModel: 'subagentModel',
-    temperature: 0,
-    vision: true,
-    vpnCountry: 'US',
-  });
+      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      task: 'x',
+      agentId: 0,
+      apps: ['string'],
+      continueOnFailure: true,
+      credentials: [{ credentialNames: ['string'], packageName: 'packageName' }],
+      displayId: 0,
+      executionTimeout: 0,
+      files: ['string'],
+      llmModel: 'llmModel',
+      maxSteps: 0,
+      memoryNamespace: 'memoryNamespace',
+      outputSchema: { foo: 'bar' },
+      reasoning: true,
+      stealth: true,
+      subagentModel: 'subagentModel',
+      temperature: 0,
+      vision: true,
+      vpnCountry: 'US',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('sendMessage: only required params', async () => {
-    const responsePromise = client.tasks.sendMessage('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { message: 'x' });
+    const responsePromise = client.tasks.sendMessage('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      message: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

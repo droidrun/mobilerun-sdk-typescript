@@ -3,13 +3,46 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as ActionsAPI from './actions';
-import { ActionGlobalParams, ActionOverlayVisibleParams, ActionOverlayVisibleResponse, ActionSetOverlayVisibleParams, ActionSwipeParams, ActionTapParams, Actions } from './actions';
+import {
+  ActionGlobalParams,
+  ActionOverlayVisibleParams,
+  ActionOverlayVisibleResponse,
+  ActionSetOverlayVisibleParams,
+  ActionSwipeParams,
+  ActionTapParams,
+  Actions,
+} from './actions';
 import * as AppsAPI from './apps';
-import { AppDeleteParams, AppInstallParams, AppListParams, AppListResponse, AppStartParams, AppUpdateParams, Apps } from './apps';
+import {
+  AppDeleteParams,
+  AppInstallParams,
+  AppListParams,
+  AppListResponse,
+  AppStartParams,
+  AppUpdateParams,
+  Apps,
+} from './apps';
 import * as EsimAPI from './esim';
-import { Esim, EsimActivateParams, EsimActivateResponse, EsimEnableParams, EsimListParams, EsimListResponse, EsimRemoveParams } from './esim';
+import {
+  Esim,
+  EsimActivateParams,
+  EsimActivateResponse,
+  EsimEnableParams,
+  EsimListParams,
+  EsimListResponse,
+  EsimRemoveParams,
+} from './esim';
 import * as FilesAPI from './files';
-import { FileDeleteParams, FileDownloadParams, FileDownloadResponse, FileInfo, FileListParams, FileListResponse, FileUploadParams, Files } from './files';
+import {
+  FileDeleteParams,
+  FileDownloadParams,
+  FileDownloadResponse,
+  FileInfo,
+  FileListParams,
+  FileListResponse,
+  FileUploadParams,
+  Files,
+} from './files';
 import * as KeyboardAPI from './keyboard';
 import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
 import * as LocationAPI from './location';
@@ -19,13 +52,33 @@ import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
 import { Profile, ProfileUpdateParams } from './profile';
 import * as ProxyAPI from './proxy';
-import { Proxy as ProxyAPIProxy, ProxyConnectParams, ProxyDisconnectParams, ProxyStatusParams, ProxyStatusResponse } from './proxy';
+import {
+  Proxy as ProxyAPIProxy,
+  ProxyConnectParams,
+  ProxyDisconnectParams,
+  ProxyStatusParams,
+  ProxyStatusResponse,
+} from './proxy';
 import * as StateAPI from './state';
-import { Rect, State, StateScreenshotParams, StateScreenshotResponse, StateUiParams, StateUiResponse } from './state';
+import {
+  Rect,
+  State,
+  StateScreenshotParams,
+  StateScreenshotResponse,
+  StateUiParams,
+  StateUiResponse,
+} from './state';
 import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimeAPI from './time';
-import { Time, TimeSetTimezoneParams, TimeTimeParams, TimeTimeResponse, TimeTimezoneParams, TimeTimezoneResponse } from './time';
+import {
+  Time,
+  TimeSetTimezoneParams,
+  TimeTimeParams,
+  TimeTimeResponse,
+  TimeTimezoneParams,
+  TimeTimezoneResponse,
+} from './time';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -49,7 +102,7 @@ export class Devices extends APIResource {
    * Provision a new device
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
-    const { deviceType, ...body } = params
+    const { deviceType, ...body } = params;
     return this._client.post('/devices', { query: { deviceType }, body, ...options });
   }
 
@@ -63,7 +116,10 @@ export class Devices extends APIResource {
   /**
    * List devices
    */
-  list(query: DeviceListParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeviceListResponse> {
+  list(
+    query: DeviceListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<DeviceListResponse> {
     return this._client.get('/devices', { query, ...options });
   }
 
@@ -85,7 +141,11 @@ export class Devices extends APIResource {
    * Terminate a device
    */
   terminate(deviceID: string, body: DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/devices/${deviceID}`, { body, ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
+    return this._client.delete(path`/devices/${deviceID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -144,13 +204,17 @@ export interface DeviceListResponse {
   $schema?: string;
 }
 
-export type DeviceCountResponse = { [key: string]: number }
+export type DeviceCountResponse = { [key: string]: number };
 
 export interface DeviceCreateParams {
   /**
    * Query param
    */
-  deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device' | 'dedicated_ios_device';
+  deviceType?:
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device'
+    | 'dedicated_emulated_device'
+    | 'dedicated_ios_device';
 
   /**
    * Body param
@@ -222,9 +286,15 @@ export interface DeviceListParams {
 
   providerId?: string;
 
-  state?: Array<'creating' | 'assigned' | 'ready' | 'rebooting' | 'migrating' | 'terminated' | 'maintenance' | 'unknown'> | null;
+  state?: Array<
+    'creating' | 'assigned' | 'ready' | 'rebooting' | 'migrating' | 'terminated' | 'maintenance' | 'unknown'
+  > | null;
 
-  type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_emulated_device' | 'dedicated_ios_device';
+  type?:
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device'
+    | 'dedicated_emulated_device'
+    | 'dedicated_ios_device';
 }
 
 export interface DeviceSetNameParams {
@@ -258,7 +328,7 @@ export declare namespace Devices {
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
     type DeviceSetNameParams as DeviceSetNameParams,
-    type DeviceTerminateParams as DeviceTerminateParams
+    type DeviceTerminateParams as DeviceTerminateParams,
   };
 
   export {
@@ -267,13 +337,10 @@ export declare namespace Devices {
     type TimeTimezoneResponse as TimeTimezoneResponse,
     type TimeSetTimezoneParams as TimeSetTimezoneParams,
     type TimeTimeParams as TimeTimeParams,
-    type TimeTimezoneParams as TimeTimezoneParams
+    type TimeTimezoneParams as TimeTimezoneParams,
   };
 
-  export {
-    Profile as Profile,
-    type ProfileUpdateParams as ProfileUpdateParams
-  };
+  export { Profile as Profile, type ProfileUpdateParams as ProfileUpdateParams };
 
   export {
     Files as Files,
@@ -283,7 +350,7 @@ export declare namespace Devices {
     type FileListParams as FileListParams,
     type FileDeleteParams as FileDeleteParams,
     type FileDownloadParams as FileDownloadParams,
-    type FileUploadParams as FileUploadParams
+    type FileUploadParams as FileUploadParams,
   };
 
   export {
@@ -291,14 +358,14 @@ export declare namespace Devices {
     type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
-    type ProxyStatusParams as ProxyStatusParams
+    type ProxyStatusParams as ProxyStatusParams,
   };
 
   export {
     Location as Location,
     type LocationGetResponse as LocationGetResponse,
     type LocationGetParams as LocationGetParams,
-    type LocationSetParams as LocationSetParams
+    type LocationSetParams as LocationSetParams,
   };
 
   export {
@@ -308,7 +375,7 @@ export declare namespace Devices {
     type ActionOverlayVisibleParams as ActionOverlayVisibleParams,
     type ActionSetOverlayVisibleParams as ActionSetOverlayVisibleParams,
     type ActionSwipeParams as ActionSwipeParams,
-    type ActionTapParams as ActionTapParams
+    type ActionTapParams as ActionTapParams,
   };
 
   export {
@@ -317,7 +384,7 @@ export declare namespace Devices {
     type StateScreenshotResponse as StateScreenshotResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
-    type StateUiParams as StateUiParams
+    type StateUiParams as StateUiParams,
   };
 
   export {
@@ -327,27 +394,23 @@ export declare namespace Devices {
     type AppListParams as AppListParams,
     type AppDeleteParams as AppDeleteParams,
     type AppInstallParams as AppInstallParams,
-    type AppStartParams as AppStartParams
+    type AppStartParams as AppStartParams,
   };
 
   export {
     Packages as Packages,
     type PackageListResponse as PackageListResponse,
-    type PackageListParams as PackageListParams
+    type PackageListParams as PackageListParams,
   };
 
   export {
     Keyboard as Keyboard,
     type KeyboardClearParams as KeyboardClearParams,
     type KeyboardKeyParams as KeyboardKeyParams,
-    type KeyboardWriteParams as KeyboardWriteParams
+    type KeyboardWriteParams as KeyboardWriteParams,
   };
 
-  export {
-    Tasks as Tasks,
-    type TaskListResponse as TaskListResponse,
-    type TaskListParams as TaskListParams
-  };
+  export { Tasks as Tasks, type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
 
   export {
     Esim as Esim,
@@ -356,6 +419,6 @@ export declare namespace Devices {
     type EsimListParams as EsimListParams,
     type EsimActivateParams as EsimActivateParams,
     type EsimEnableParams as EsimEnableParams,
-    type EsimRemoveParams as EsimRemoveParams
+    type EsimRemoveParams as EsimRemoveParams,
   };
 }

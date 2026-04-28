@@ -11,24 +11,65 @@ export class Proxy extends APIResource {
    * Connect proxy
    */
   connect(deviceID: string, params: ProxyConnectParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
-    return this._client.post(path`/devices/${deviceID}/proxy`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    return this._client.post(path`/devices/${deviceID}/proxy`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
    * Disconnect proxy
    */
-  disconnect(deviceID: string, params: ProxyDisconnectParams | null | undefined = {}, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
-    return this._client.delete(path`/devices/${deviceID}/proxy`, { ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+  disconnect(
+    deviceID: string,
+    params: ProxyDisconnectParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.delete(path`/devices/${deviceID}/proxy`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
    * Get proxy connection state
    */
-  status(deviceID: string, params: ProxyStatusParams | null | undefined = {}, options?: RequestOptions): APIPromise<ProxyStatusResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
-    return this._client.get(path`/devices/${deviceID}/proxy`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+  status(
+    deviceID: string,
+    params: ProxyStatusParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ProxyStatusResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/proxy`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -127,6 +168,6 @@ export declare namespace Proxy {
     type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
-    type ProxyStatusParams as ProxyStatusParams
+    type ProxyStatusParams as ProxyStatusParams,
   };
 }

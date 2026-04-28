@@ -2,7 +2,15 @@
 
 import { APIResource } from '../../../../core/resource';
 import * as FieldsAPI from './fields';
-import { FieldCreateParams, FieldCreateResponse, FieldDeleteParams, FieldDeleteResponse, FieldUpdateParams, FieldUpdateResponse, Fields } from './fields';
+import {
+  FieldCreateParams,
+  FieldCreateResponse,
+  FieldDeleteParams,
+  FieldDeleteResponse,
+  FieldUpdateParams,
+  FieldUpdateResponse,
+  Fields,
+} from './fields';
 import { APIPromise } from '../../../../core/api-promise';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
@@ -13,24 +21,42 @@ export class Credentials extends APIResource {
   /**
    * Create a credential with fields for a package
    */
-  create(packageName: string, body: CredentialCreateParams, options?: RequestOptions): APIPromise<CredentialCreateResponse> {
+  create(
+    packageName: string,
+    body: CredentialCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<CredentialCreateResponse> {
     return this._client.post(path`/credentials/packages/${packageName}`, { body, ...options });
   }
 
   /**
    * Get a specific credential with its fields
    */
-  retrieve(credentialName: string, params: CredentialRetrieveParams, options?: RequestOptions): APIPromise<CredentialRetrieveResponse> {
-    const { packageName } = params
-    return this._client.get(path`/credentials/packages/${packageName}/credentials/${credentialName}`, options);
+  retrieve(
+    credentialName: string,
+    params: CredentialRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<CredentialRetrieveResponse> {
+    const { packageName } = params;
+    return this._client.get(
+      path`/credentials/packages/${packageName}/credentials/${credentialName}`,
+      options,
+    );
   }
 
   /**
    * Delete a credential and all its fields
    */
-  delete(credentialName: string, params: CredentialDeleteParams, options?: RequestOptions): APIPromise<CredentialDeleteResponse> {
-    const { packageName } = params
-    return this._client.delete(path`/credentials/packages/${packageName}/credentials/${credentialName}`, options);
+  delete(
+    credentialName: string,
+    params: CredentialDeleteParams,
+    options?: RequestOptions,
+  ): APIPromise<CredentialDeleteResponse> {
+    const { packageName } = params;
+    return this._client.delete(
+      path`/credentials/packages/${packageName}/credentials/${credentialName}`,
+      options,
+    );
   }
 }
 
@@ -48,7 +74,14 @@ export interface Credential {
 
 export namespace Credential {
   export interface Field {
-    fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
+    fieldType:
+      | 'email'
+      | 'username'
+      | 'password'
+      | 'api_token'
+      | 'phone_number'
+      | 'two_factor_secret'
+      | 'backup_codes';
 
     value: string;
   }
@@ -82,7 +115,14 @@ export interface CredentialCreateParams {
 
 export namespace CredentialCreateParams {
   export interface Field {
-    fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
+    fieldType:
+      | 'email'
+      | 'username'
+      | 'password'
+      | 'api_token'
+      | 'phone_number'
+      | 'two_factor_secret'
+      | 'backup_codes';
 
     value: string;
   }
@@ -106,7 +146,7 @@ export declare namespace Credentials {
     type CredentialDeleteResponse as CredentialDeleteResponse,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialRetrieveParams as CredentialRetrieveParams,
-    type CredentialDeleteParams as CredentialDeleteParams
+    type CredentialDeleteParams as CredentialDeleteParams,
   };
 
   export {
@@ -116,6 +156,6 @@ export declare namespace Credentials {
     type FieldDeleteResponse as FieldDeleteResponse,
     type FieldCreateParams as FieldCreateParams,
     type FieldUpdateParams as FieldUpdateParams,
-    type FieldDeleteParams as FieldDeleteParams
+    type FieldDeleteParams as FieldDeleteParams,
   };
 }

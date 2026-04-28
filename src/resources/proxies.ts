@@ -23,14 +23,21 @@ export class Proxies extends APIResource {
   /**
    * Update a proxy config
    */
-  update(proxyID: string, body: ProxyUpdateParams, options?: RequestOptions): APIPromise<ProxyUpdateResponse> {
+  update(
+    proxyID: string,
+    body: ProxyUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<ProxyUpdateResponse> {
     return this._client.put(path`/proxies/${proxyID}`, { body, ...options });
   }
 
   /**
    * List all proxy configs for the authenticated user
    */
-  list(query: ProxyListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ProxyListResponse> {
+  list(
+    query: ProxyListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ProxyListResponse> {
     return this._client.get('/proxies', { query, ...options });
   }
 
@@ -42,7 +49,7 @@ export class Proxies extends APIResource {
   }
 }
 
-export type ProxyConfig = ProxyConfig.Socks5ProxyConfig | ProxyConfig.WireguardProxyConfig
+export type ProxyConfig = ProxyConfig.Socks5ProxyConfig | ProxyConfig.WireguardProxyConfig;
 
 export namespace ProxyConfig {
   export interface Socks5ProxyConfig {
@@ -104,7 +111,7 @@ export interface ProxyDeleteResponse {
   success: true;
 }
 
-export type ProxyCreateParams = ProxyCreateParams.CreateSocks5Proxy | ProxyCreateParams.CreateWireguardProxy
+export type ProxyCreateParams = ProxyCreateParams.CreateSocks5Proxy | ProxyCreateParams.CreateWireguardProxy;
 
 export declare namespace ProxyCreateParams {
   export interface CreateSocks5Proxy {
@@ -130,7 +137,7 @@ export declare namespace ProxyCreateParams {
   }
 }
 
-export type ProxyUpdateParams = ProxyUpdateParams.UpdateSocks5Proxy | ProxyUpdateParams.UpdateWireguardProxy
+export type ProxyUpdateParams = ProxyUpdateParams.UpdateSocks5Proxy | ProxyUpdateParams.UpdateWireguardProxy;
 
 export declare namespace ProxyUpdateParams {
   export interface UpdateSocks5Proxy {
@@ -170,6 +177,6 @@ export declare namespace Proxies {
     type ProxyDeleteResponse as ProxyDeleteResponse,
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
-    type ProxyListParams as ProxyListParams
+    type ProxyListParams as ProxyListParams,
   };
 }
