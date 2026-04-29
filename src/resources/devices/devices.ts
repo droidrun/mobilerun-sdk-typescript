@@ -46,7 +46,12 @@ import {
 import * as KeyboardAPI from './keyboard';
 import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
 import * as LocationAPI from './location';
-import { Location, LocationGetParams, LocationGetResponse, LocationSetParams } from './location';
+import {
+  Location as LocationAPILocation,
+  LocationGetParams,
+  LocationGetResponse,
+  LocationSetParams,
+} from './location';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
@@ -102,8 +107,8 @@ export class Devices extends APIResource {
    * Provision a new device
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
-    const { deviceType, ...body } = params;
-    return this._client.post('/devices', { query: { deviceType }, body, ...options });
+    const { query_country, deviceType, ...body } = params;
+    return this._client.post('/devices', { query: { country: query_country, deviceType }, body, ...options });
   }
 
   /**
@@ -208,6 +213,12 @@ export type DeviceCountResponse = { [key: string]: number };
 
 export interface DeviceCreateParams {
   /**
+   * Query param: ISO 3166-1 alpha-2 country code. If omitted the system picks the
+   * country with the most availability.
+   */
+  query_country?: string;
+
+  /**
    * Query param
    */
   deviceType?:
@@ -215,6 +226,11 @@ export interface DeviceCreateParams {
     | 'dedicated_premium_device'
     | 'dedicated_emulated_device'
     | 'dedicated_ios_device';
+
+  /**
+   * Body param
+   */
+  androidVersion?: number;
 
   /**
    * Body param
@@ -229,6 +245,11 @@ export interface DeviceCreateParams {
   /**
    * Body param
    */
+  body_country?: string;
+
+  /**
+   * Body param
+   */
   files?: Array<string> | null;
 
   /**
@@ -239,23 +260,42 @@ export interface DeviceCreateParams {
   /**
    * Body param
    */
+  locale?: string;
+
+  /**
+   * Body param
+   */
+  location?: DeviceCreateParams.Location;
+
+  /**
+   * Body param
+   */
   name?: string;
 
   /**
    * Body param
    */
   proxy?: DeviceCreateParams.Proxy;
+
+  /**
+   * Body param
+   */
+  timezone?: string;
 }
 
 export namespace DeviceCreateParams {
+  export interface Location {
+    latitude: number;
+
+    longitude: number;
+  }
+
   export interface Proxy {
     name?: string;
 
     smartIp?: boolean;
 
     socks5?: Proxy.Socks5;
-
-    wireguard?: string;
   }
 
   export namespace Proxy {
@@ -311,7 +351,7 @@ Devices.Time = Time;
 Devices.Profile = Profile;
 Devices.Files = Files;
 Devices.Proxy = ProxyAPIProxy;
-Devices.Location = Location;
+Devices.Location = LocationAPILocation;
 Devices.Actions = Actions;
 Devices.State = State;
 Devices.Apps = Apps;
@@ -362,7 +402,7 @@ export declare namespace Devices {
   };
 
   export {
-    Location as Location,
+    LocationAPILocation as Location,
     type LocationGetResponse as LocationGetResponse,
     type LocationGetParams as LocationGetParams,
     type LocationSetParams as LocationSetParams,

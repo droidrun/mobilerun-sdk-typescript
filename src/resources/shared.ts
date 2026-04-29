@@ -52,28 +52,47 @@ export interface DeviceSpec {
    */
   $schema?: string;
 
+  androidVersion?: number;
+
   apps?: Array<string> | null;
 
   carrier?: DeviceCarrier;
+
+  country?: string;
 
   files?: Array<string> | null;
 
   identifiers?: DeviceIdentifiers;
 
+  locale?: string;
+
+  location?: DeviceSpec.Location;
+
   name?: string;
 
   proxy?: DeviceSpec.Proxy;
+
+  timezone?: string;
 }
 
 export namespace DeviceSpec {
+  export interface Location {
+    latitude: number;
+
+    longitude: number;
+
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    $schema?: string;
+  }
+
   export interface Proxy {
     name?: string;
 
     smartIp?: boolean;
 
     socks5?: Proxy.Socks5;
-
-    wireguard?: string;
   }
 
   export namespace Proxy {
