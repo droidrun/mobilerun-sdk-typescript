@@ -28,6 +28,7 @@ describe('resource profiles', () => {
     const response = await client.profiles.create({
       name: 'x',
       spec: {
+        androidVersion: 0,
         apps: ['string'],
         carrier: {
           GsmOperatorAlpha: 'GsmOperatorAlpha',
@@ -37,6 +38,7 @@ describe('resource profiles', () => {
           GsmSimOperatorNumeric: 0,
           PersistSysTimezone: 'PersistSysTimezone',
         },
+        country: 'country',
         files: ['string'],
         identifiers: {
           BootloaderSerialNumber: 'BootloaderSerialNumber',
@@ -55,6 +57,8 @@ describe('resource profiles', () => {
           IdentifierWifiMAC: 'IdentifierWifiMAC',
           SerialNumber: 'SerialNumber',
         },
+        locale: 'locale',
+        location: { latitude: 0, longitude: 0 },
         name: 'name',
         proxy: {
           name: 'name',
@@ -65,8 +69,8 @@ describe('resource profiles', () => {
             port: 0,
             user: 'user',
           },
-          wireguard: 'wireguard',
         },
+        timezone: 'timezone',
       },
     });
   });
@@ -103,6 +107,7 @@ describe('resource profiles', () => {
     const response = await client.profiles.update('profileId', {
       name: 'x',
       spec: {
+        androidVersion: 0,
         apps: ['string'],
         carrier: {
           GsmOperatorAlpha: 'GsmOperatorAlpha',
@@ -112,6 +117,7 @@ describe('resource profiles', () => {
           GsmSimOperatorNumeric: 0,
           PersistSysTimezone: 'PersistSysTimezone',
         },
+        country: 'country',
         files: ['string'],
         identifiers: {
           BootloaderSerialNumber: 'BootloaderSerialNumber',
@@ -130,6 +136,8 @@ describe('resource profiles', () => {
           IdentifierWifiMAC: 'IdentifierWifiMAC',
           SerialNumber: 'SerialNumber',
         },
+        locale: 'locale',
+        location: { latitude: 0, longitude: 0 },
         name: 'name',
         proxy: {
           name: 'name',
@@ -140,8 +148,8 @@ describe('resource profiles', () => {
             port: 0,
             user: 'user',
           },
-          wireguard: 'wireguard',
         },
+        timezone: 'timezone',
       },
     });
   });
