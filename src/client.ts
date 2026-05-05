@@ -30,13 +30,16 @@ import {
   Apps,
 } from './resources/apps';
 import {
-  Carrier,
   CarrierCreateParams,
+  CarrierCreateResponse,
   CarrierDeleteResponse,
   CarrierListParams,
   CarrierListResponse,
   CarrierLookupParams,
+  CarrierLookupResponse,
+  CarrierRetrieveResponse,
   CarrierUpdateParams,
+  CarrierUpdateResponse,
   Carriers,
 } from './resources/carriers';
 import {
@@ -875,9 +878,12 @@ export declare namespace Mobilerun {
 
   export {
     Carriers as Carriers,
-    type Carrier as Carrier,
+    type CarrierCreateResponse as CarrierCreateResponse,
+    type CarrierRetrieveResponse as CarrierRetrieveResponse,
+    type CarrierUpdateResponse as CarrierUpdateResponse,
     type CarrierListResponse as CarrierListResponse,
     type CarrierDeleteResponse as CarrierDeleteResponse,
+    type CarrierLookupResponse as CarrierLookupResponse,
     type CarrierCreateParams as CarrierCreateParams,
     type CarrierUpdateParams as CarrierUpdateParams,
     type CarrierListParams as CarrierListParams,

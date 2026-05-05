@@ -46,18 +46,21 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/carriers.ts">Carrier</a></code>
+- <code><a href="./src/resources/carriers.ts">CarrierCreateResponse</a></code>
+- <code><a href="./src/resources/carriers.ts">CarrierRetrieveResponse</a></code>
+- <code><a href="./src/resources/carriers.ts">CarrierUpdateResponse</a></code>
 - <code><a href="./src/resources/carriers.ts">CarrierListResponse</a></code>
 - <code><a href="./src/resources/carriers.ts">CarrierDeleteResponse</a></code>
+- <code><a href="./src/resources/carriers.ts">CarrierLookupResponse</a></code>
 
 Methods:
 
-- <code title="post /carriers">client.carriers.<a href="./src/resources/carriers.ts">create</a>({ ...params }) -> Carrier</code>
-- <code title="get /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">retrieve</a>(carrierID) -> Carrier</code>
-- <code title="patch /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">update</a>(carrierID, { ...params }) -> Carrier</code>
+- <code title="post /carriers">client.carriers.<a href="./src/resources/carriers.ts">create</a>({ ...params }) -> CarrierCreateResponse</code>
+- <code title="get /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">retrieve</a>(carrierID) -> CarrierRetrieveResponse</code>
+- <code title="patch /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">update</a>(carrierID, { ...params }) -> CarrierUpdateResponse</code>
 - <code title="get /carriers">client.carriers.<a href="./src/resources/carriers.ts">list</a>({ ...params }) -> CarrierListResponse</code>
 - <code title="delete /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">delete</a>(carrierID) -> CarrierDeleteResponse</code>
-- <code title="get /carriers/lookup">client.carriers.<a href="./src/resources/carriers.ts">lookup</a>({ ...params }) -> Carrier</code>
+- <code title="get /carriers/lookup">client.carriers.<a href="./src/resources/carriers.ts">lookup</a>({ ...params }) -> CarrierLookupResponse</code>
 
 # Credentials
 

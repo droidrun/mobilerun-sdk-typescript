@@ -15,9 +15,12 @@ export {
 } from './apps';
 export {
   Carriers,
-  type Carrier,
+  type CarrierCreateResponse,
+  type CarrierRetrieveResponse,
+  type CarrierUpdateResponse,
   type CarrierListResponse,
   type CarrierDeleteResponse,
+  type CarrierLookupResponse,
   type CarrierCreateParams,
   type CarrierUpdateParams,
   type CarrierListParams,
