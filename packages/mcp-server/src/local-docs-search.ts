@@ -89,6 +89,138 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'confirm_upload',
+    endpoint: '/apps/{id}/confirm-upload',
+    httpMethod: 'post',
+    summary: 'Confirm successful app upload',
+    description: 'Verifies the APK file exists in R2 and sets the app status to available.',
+    stainlessPath: '(resource) apps > (method) confirm_upload',
+    qualified: 'client.apps.confirmUpload',
+    params: ['id: string;'],
+    response: '{ message: string; success: true; }',
+    markdown:
+      "## confirm_upload\n\n`client.apps.confirmUpload(id: string): { message: string; success: true; }`\n\n**post** `/apps/{id}/confirm-upload`\n\nVerifies the APK file exists in R2 and sets the app status to available.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ message: string; success: true; }`\n\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.apps.confirmUpload('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.apps.confirmUpload',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.apps.confirmUpload('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.message);",
+      },
+      python: {
+        method: 'apps.confirm_upload',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.apps.confirm_upload(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.message)',
+      },
+      go: {
+        method: 'client.Apps.ConfirmUpload',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Apps.ConfirmUpload(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Message)\n}\n',
+      },
+      cli: {
+        method: 'apps confirm_upload',
+        example:
+          "mobilerun-cloud apps confirm-upload \\\n  --api-key 'My API Key' \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/apps/$ID/confirm-upload \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create_signed_upload_url',
+    endpoint: '/apps/create-signed-upload-url',
+    httpMethod: 'post',
+    summary: 'Create a signed R2 upload URL for an app',
+    description: 'Creates or updates an app and returns pre-signed Cloudflare R2 upload URLs for each file',
+    stainlessPath: '(resource) apps > (method) create_signed_upload_url',
+    qualified: 'client.apps.createSignedUploadURL',
+    params: [
+      'displayName: string;',
+      'files: { fileName: string; contentType?: string; }[];',
+      'packageName: string;',
+      'sizeBytes: number;',
+      'targetSdk: number;',
+      'versionCode: number;',
+      'versionName: string;',
+      'categoryName?: string;',
+      'country?: string;',
+      'description?: string;',
+      'developerName?: string;',
+      'iconURL?: string;',
+      'ratingCount?: number;',
+      'ratingScore?: number;',
+    ],
+    response: '{ id: string; r2UploadUrls: { fileName: string; r2UploadUrl: string; }[]; }',
+    markdown:
+      "## create_signed_upload_url\n\n`client.apps.createSignedUploadURL(displayName: string, files: { fileName: string; contentType?: string; }[], packageName: string, sizeBytes: number, targetSdk: number, versionCode: number, versionName: string, categoryName?: string, country?: string, description?: string, developerName?: string, iconURL?: string, ratingCount?: number, ratingScore?: number): { id: string; r2UploadUrls: object[]; }`\n\n**post** `/apps/create-signed-upload-url`\n\nCreates or updates an app and returns pre-signed Cloudflare R2 upload URLs for each file\n\n### Parameters\n\n- `displayName: string`\n\n- `files: { fileName: string; contentType?: string; }[]`\n\n- `packageName: string`\n\n- `sizeBytes: number`\n\n- `targetSdk: number`\n\n- `versionCode: number`\n\n- `versionName: string`\n\n- `categoryName?: string`\n\n- `country?: string`\n  Country code for Search Results\n\n- `description?: string`\n\n- `developerName?: string`\n\n- `iconURL?: string`\n\n- `ratingCount?: number`\n\n- `ratingScore?: number`\n\n### Returns\n\n- `{ id: string; r2UploadUrls: { fileName: string; r2UploadUrl: string; }[]; }`\n\n  - `id: string`\n  - `r2UploadUrls: { fileName: string; r2UploadUrl: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.apps.createSignedUploadURL({\n  displayName: 'displayName',\n  files: [{ fileName: 'x' }],\n  packageName: 'packageName',\n  sizeBytes: 0,\n  targetSdk: 0,\n  versionCode: 0,\n  versionName: 'versionName',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.apps.createSignedUploadURL',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.apps.createSignedUploadURL({\n  displayName: 'displayName',\n  files: [{ fileName: 'x' }],\n  packageName: 'packageName',\n  sizeBytes: 0,\n  targetSdk: 0,\n  versionCode: 0,\n  versionName: 'versionName',\n});\n\nconsole.log(response.id);",
+      },
+      python: {
+        method: 'apps.create_signed_upload_url',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.apps.create_signed_upload_url(\n    display_name="displayName",\n    files=[{\n        "file_name": "x"\n    }],\n    package_name="packageName",\n    size_bytes=0,\n    target_sdk=0,\n    version_code=0,\n    version_name="versionName",\n)\nprint(response.id)',
+      },
+      go: {
+        method: 'client.Apps.NewSignedUploadURL',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Apps.NewSignedUploadURL(context.TODO(), mobileruncloud.AppNewSignedUploadURLParams{\n\t\tDisplayName: "displayName",\n\t\tFiles: []mobileruncloud.AppNewSignedUploadURLParamsFile{{\n\t\t\tFileName: "x",\n\t\t}},\n\t\tPackageName: "packageName",\n\t\tSizeBytes:   0,\n\t\tTargetSDK:   0,\n\t\tVersionCode: 0,\n\t\tVersionName: "versionName",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      cli: {
+        method: 'apps create_signed_upload_url',
+        example:
+          "mobilerun-cloud apps create-signed-upload-url \\\n  --api-key 'My API Key' \\\n  --display-name displayName \\\n  --file '{fileName: x}' \\\n  --package-name packageName \\\n  --size-bytes 0 \\\n  --target-sdk 0 \\\n  --version-code 0 \\\n  --version-name versionName",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/apps/create-signed-upload-url \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "displayName": "displayName",\n          "files": [\n            {\n              "fileName": "x"\n            }\n          ],\n          "packageName": "packageName",\n          "sizeBytes": 0,\n          "targetSdk": 0,\n          "versionCode": 0,\n          "versionName": "versionName",\n          "country": "US"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/apps/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete uploaded app',
+    description: 'Deletes an uploaded app by ID. Removes files from R2 storage and the database entry.',
+    stainlessPath: '(resource) apps > (method) delete',
+    qualified: 'client.apps.delete',
+    params: ['id: string;'],
+    response: '{ message: string; success: true; }',
+    markdown:
+      "## delete\n\n`client.apps.delete(id: string): { message: string; success: true; }`\n\n**delete** `/apps/{id}`\n\nDeletes an uploaded app by ID. Removes files from R2 storage and the database entry.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ message: string; success: true; }`\n\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst app = await client.apps.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(app);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.apps.delete',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst app = await client.apps.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(app.message);",
+      },
+      python: {
+        method: 'apps.delete',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\napp = client.apps.delete(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(app.message)',
+      },
+      go: {
+        method: 'client.Apps.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapp, err := client.Apps.Delete(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", app.Message)\n}\n',
+      },
+      cli: {
+        method: 'apps delete',
+        example:
+          "mobilerun-cloud apps delete \\\n  --api-key 'My API Key' \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/apps/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'list',
     endpoint: '/apps',
     httpMethod: 'get',
@@ -131,6 +263,85 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.mobilerun.ai/v1/apps \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'mark_failed',
+    endpoint: '/apps/{id}/mark-failed',
+    httpMethod: 'post',
+    summary: 'Mark app upload as failed',
+    description: 'Sets the app status to failed.',
+    stainlessPath: '(resource) apps > (method) mark_failed',
+    qualified: 'client.apps.markFailed',
+    params: ['id: string;'],
+    response: '{ message: string; success: true; }',
+    markdown:
+      "## mark_failed\n\n`client.apps.markFailed(id: string): { message: string; success: true; }`\n\n**post** `/apps/{id}/mark-failed`\n\nSets the app status to failed.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ message: string; success: true; }`\n\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.apps.markFailed('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.apps.markFailed',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.apps.markFailed('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.message);",
+      },
+      python: {
+        method: 'apps.mark_failed',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.apps.mark_failed(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.message)',
+      },
+      go: {
+        method: 'client.Apps.MarkFailed',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Apps.MarkFailed(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Message)\n}\n',
+      },
+      cli: {
+        method: 'apps mark_failed',
+        example:
+          "mobilerun-cloud apps mark-failed \\\n  --api-key 'My API Key' \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/apps/$ID/mark-failed \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/apps/{id}',
+    httpMethod: 'get',
+    summary: 'Get app by ID',
+    description: 'Retrieves an app by its ID',
+    stainlessPath: '(resource) apps > (method) retrieve',
+    qualified: 'client.apps.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ data: { id: string; categoryName: string; country: string; createdAt: string; description: string; developerName: string; displayName: string; expectedFiles: string | number | boolean | object | object[]; iconURL: string; packageName: string; privacyPolicyUrl: string; queuedAt: string; ratingCount: number; ratingScore: string; sizeBytes: number; source: 'uploaded' | 'store'; status: 'queued' | 'available' | 'failed'; stealthTier: 'tier1' | 'tier2' | 'tier3'; targetSdk: number; type: 'android' | 'ios'; updatedAt: string; userId: string; versionCode: number; versionName: string; }; }",
+    markdown:
+      "## retrieve\n\n`client.apps.retrieve(id: string): { data: object; }`\n\n**get** `/apps/{id}`\n\nRetrieves an app by its ID\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { id: string; categoryName: string; country: string; createdAt: string; description: string; developerName: string; displayName: string; expectedFiles: string | number | boolean | object | object[]; iconURL: string; packageName: string; privacyPolicyUrl: string; queuedAt: string; ratingCount: number; ratingScore: string; sizeBytes: number; source: 'uploaded' | 'store'; status: 'queued' | 'available' | 'failed'; stealthTier: 'tier1' | 'tier2' | 'tier3'; targetSdk: number; type: 'android' | 'ios'; updatedAt: string; userId: string; versionCode: number; versionName: string; }; }`\n\n  - `data: { id: string; categoryName: string; country: string; createdAt: string; description: string; developerName: string; displayName: string; expectedFiles: string | number | boolean | object | object[]; iconURL: string; packageName: string; privacyPolicyUrl: string; queuedAt: string; ratingCount: number; ratingScore: string; sizeBytes: number; source: 'uploaded' | 'store'; status: 'queued' | 'available' | 'failed'; stealthTier: 'tier1' | 'tier2' | 'tier3'; targetSdk: number; type: 'android' | 'ios'; updatedAt: string; userId: string; versionCode: number; versionName: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst app = await client.apps.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(app);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.apps.retrieve',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst app = await client.apps.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(app.data);",
+      },
+      python: {
+        method: 'apps.retrieve',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\napp = client.apps.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(app.data)',
+      },
+      go: {
+        method: 'client.Apps.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapp, err := client.Apps.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", app.Data)\n}\n',
+      },
+      cli: {
+        method: 'apps retrieve',
+        example:
+          "mobilerun-cloud apps retrieve \\\n  --api-key 'My API Key' \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/apps/$ID \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
       },
     },
   },

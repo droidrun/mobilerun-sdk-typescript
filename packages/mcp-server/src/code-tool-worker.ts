@@ -109,7 +109,12 @@ function getTSDiagnostics(code: string): string[] {
 const fuse = new Fuse(
   [
     'client.agents.list',
+    'client.apps.confirmUpload',
+    'client.apps.createSignedUploadURL',
+    'client.apps.delete',
     'client.apps.list',
+    'client.apps.markFailed',
+    'client.apps.retrieve',
     'client.carriers.create',
     'client.carriers.delete',
     'client.carriers.list',

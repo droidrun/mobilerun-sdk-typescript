@@ -2,7 +2,17 @@
 
 export * from './shared';
 export { Agents, type AgentListResponse } from './agents';
-export { Apps, type AppListResponse, type AppListParams } from './apps';
+export {
+  Apps,
+  type AppRetrieveResponse,
+  type AppListResponse,
+  type AppDeleteResponse,
+  type AppConfirmUploadResponse,
+  type AppCreateSignedUploadURLResponse,
+  type AppMarkFailedResponse,
+  type AppListParams,
+  type AppCreateSignedUploadURLParams,
+} from './apps';
 export {
   Carriers,
   type Carrier,
