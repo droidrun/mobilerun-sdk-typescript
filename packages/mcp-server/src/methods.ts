@@ -17,10 +17,40 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/agents',
   },
   {
+    clientCallName: 'client.apps.retrieve',
+    fullyQualifiedName: 'apps.retrieve',
+    httpMethod: 'get',
+    httpPath: '/apps/{id}',
+  },
+  {
     clientCallName: 'client.apps.list',
     fullyQualifiedName: 'apps.list',
     httpMethod: 'get',
     httpPath: '/apps',
+  },
+  {
+    clientCallName: 'client.apps.delete',
+    fullyQualifiedName: 'apps.delete',
+    httpMethod: 'delete',
+    httpPath: '/apps/{id}',
+  },
+  {
+    clientCallName: 'client.apps.confirmUpload',
+    fullyQualifiedName: 'apps.confirmUpload',
+    httpMethod: 'post',
+    httpPath: '/apps/{id}/confirm-upload',
+  },
+  {
+    clientCallName: 'client.apps.createSignedUploadURL',
+    fullyQualifiedName: 'apps.createSignedUploadURL',
+    httpMethod: 'post',
+    httpPath: '/apps/create-signed-upload-url',
+  },
+  {
+    clientCallName: 'client.apps.markFailed',
+    fullyQualifiedName: 'apps.markFailed',
+    httpMethod: 'post',
+    httpPath: '/apps/{id}/mark-failed',
   },
   {
     clientCallName: 'client.carriers.create',

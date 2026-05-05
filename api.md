@@ -26,11 +26,21 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/apps.ts">AppRetrieveResponse</a></code>
 - <code><a href="./src/resources/apps.ts">AppListResponse</a></code>
+- <code><a href="./src/resources/apps.ts">AppDeleteResponse</a></code>
+- <code><a href="./src/resources/apps.ts">AppConfirmUploadResponse</a></code>
+- <code><a href="./src/resources/apps.ts">AppCreateSignedUploadURLResponse</a></code>
+- <code><a href="./src/resources/apps.ts">AppMarkFailedResponse</a></code>
 
 Methods:
 
+- <code title="get /apps/{id}">client.apps.<a href="./src/resources/apps.ts">retrieve</a>(id) -> AppRetrieveResponse</code>
 - <code title="get /apps">client.apps.<a href="./src/resources/apps.ts">list</a>({ ...params }) -> AppListResponse</code>
+- <code title="delete /apps/{id}">client.apps.<a href="./src/resources/apps.ts">delete</a>(id) -> AppDeleteResponse</code>
+- <code title="post /apps/{id}/confirm-upload">client.apps.<a href="./src/resources/apps.ts">confirmUpload</a>(id) -> AppConfirmUploadResponse</code>
+- <code title="post /apps/create-signed-upload-url">client.apps.<a href="./src/resources/apps.ts">createSignedUploadURL</a>({ ...params }) -> AppCreateSignedUploadURLResponse</code>
+- <code title="post /apps/{id}/mark-failed">client.apps.<a href="./src/resources/apps.ts">markFailed</a>(id) -> AppMarkFailedResponse</code>
 
 # Carriers
 

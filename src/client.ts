@@ -18,7 +18,17 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { AgentListResponse, Agents } from './resources/agents';
-import { AppListParams, AppListResponse, Apps } from './resources/apps';
+import {
+  AppConfirmUploadResponse,
+  AppCreateSignedUploadURLParams,
+  AppCreateSignedUploadURLResponse,
+  AppDeleteResponse,
+  AppListParams,
+  AppListResponse,
+  AppMarkFailedResponse,
+  AppRetrieveResponse,
+  Apps,
+} from './resources/apps';
 import {
   Carrier,
   CarrierCreateParams,
@@ -851,7 +861,17 @@ export declare namespace Mobilerun {
 
   export { Agents as Agents, type AgentListResponse as AgentListResponse };
 
-  export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
+  export {
+    Apps as Apps,
+    type AppRetrieveResponse as AppRetrieveResponse,
+    type AppListResponse as AppListResponse,
+    type AppDeleteResponse as AppDeleteResponse,
+    type AppConfirmUploadResponse as AppConfirmUploadResponse,
+    type AppCreateSignedUploadURLResponse as AppCreateSignedUploadURLResponse,
+    type AppMarkFailedResponse as AppMarkFailedResponse,
+    type AppListParams as AppListParams,
+    type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
+  };
 
   export {
     Carriers as Carriers,
