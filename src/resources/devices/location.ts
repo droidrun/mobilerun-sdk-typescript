@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -14,7 +15,7 @@ export class Location extends APIResource {
     deviceID: string,
     params: LocationGetParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<LocationGetResponse> {
+  ): APIPromise<Shared.Location> {
     const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
     return this._client.get(path`/devices/${deviceID}/location`, {
       ...options,
@@ -50,17 +51,6 @@ export class Location extends APIResource {
   }
 }
 
-export interface LocationGetResponse {
-  latitude: number;
-
-  longitude: number;
-
-  /**
-   * A URL to the JSON Schema for this object.
-   */
-  $schema?: string;
-}
-
 export interface LocationGetParams {
   'X-Device-Display-ID'?: number;
 }
@@ -83,9 +73,5 @@ export interface LocationSetParams {
 }
 
 export declare namespace Location {
-  export {
-    type LocationGetResponse as LocationGetResponse,
-    type LocationGetParams as LocationGetParams,
-    type LocationSetParams as LocationSetParams,
-  };
+  export { type LocationGetParams as LocationGetParams, type LocationSetParams as LocationSetParams };
 }

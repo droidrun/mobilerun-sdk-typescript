@@ -46,12 +46,7 @@ import {
 import * as KeyboardAPI from './keyboard';
 import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
 import * as LocationAPI from './location';
-import {
-  Location as LocationAPILocation,
-  LocationGetParams,
-  LocationGetResponse,
-  LocationSetParams,
-} from './location';
+import { Location, LocationGetParams, LocationSetParams } from './location';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
@@ -90,18 +85,18 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Devices extends APIResource {
-  time: TimeAPI.Time = new TimeAPI.Time(this._client);
-  profile: ProfileAPI.Profile = new ProfileAPI.Profile(this._client);
-  files: FilesAPI.Files = new FilesAPI.Files(this._client);
-  proxy: ProxyAPI.Proxy = new ProxyAPI.Proxy(this._client);
-  location: LocationAPI.Location = new LocationAPI.Location(this._client);
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
-  state: StateAPI.State = new StateAPI.State(this._client);
   apps: AppsAPI.Apps = new AppsAPI.Apps(this._client);
-  packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
-  keyboard: KeyboardAPI.Keyboard = new KeyboardAPI.Keyboard(this._client);
-  tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
   esim: EsimAPI.Esim = new EsimAPI.Esim(this._client);
+  files: FilesAPI.Files = new FilesAPI.Files(this._client);
+  keyboard: KeyboardAPI.Keyboard = new KeyboardAPI.Keyboard(this._client);
+  location: LocationAPI.Location = new LocationAPI.Location(this._client);
+  packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
+  profile: ProfileAPI.Profile = new ProfileAPI.Profile(this._client);
+  proxy: ProxyAPI.Proxy = new ProxyAPI.Proxy(this._client);
+  state: StateAPI.State = new StateAPI.State(this._client);
+  tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
+  time: TimeAPI.Time = new TimeAPI.Time(this._client);
 
   /**
    * Provision a new device
@@ -265,7 +260,7 @@ export interface DeviceCreateParams {
   /**
    * Body param
    */
-  location?: DeviceCreateParams.Location;
+  location?: Shared.Location;
 
   /**
    * Body param
@@ -284,30 +279,12 @@ export interface DeviceCreateParams {
 }
 
 export namespace DeviceCreateParams {
-  export interface Location {
-    latitude: number;
-
-    longitude: number;
-  }
-
   export interface Proxy {
     name?: string;
 
     smartIp?: boolean;
 
-    socks5?: Proxy.Socks5;
-  }
-
-  export namespace Proxy {
-    export interface Socks5 {
-      host: string;
-
-      password: string;
-
-      port: number;
-
-      user: string;
-    }
+    socks5?: Shared.Socks5;
   }
 }
 
@@ -347,18 +324,18 @@ export interface DeviceTerminateParams {
   terminateAt?: string;
 }
 
-Devices.Time = Time;
-Devices.Profile = Profile;
-Devices.Files = Files;
-Devices.Proxy = ProxyAPIProxy;
-Devices.Location = LocationAPILocation;
 Devices.Actions = Actions;
-Devices.State = State;
 Devices.Apps = Apps;
-Devices.Packages = Packages;
-Devices.Keyboard = Keyboard;
-Devices.Tasks = Tasks;
 Devices.Esim = Esim;
+Devices.Files = Files;
+Devices.Keyboard = Keyboard;
+Devices.Location = Location;
+Devices.Packages = Packages;
+Devices.Profile = Profile;
+Devices.Proxy = ProxyAPIProxy;
+Devices.State = State;
+Devices.Tasks = Tasks;
+Devices.Time = Time;
 
 export declare namespace Devices {
   export {
@@ -372,43 +349,6 @@ export declare namespace Devices {
   };
 
   export {
-    Time as Time,
-    type TimeTimeResponse as TimeTimeResponse,
-    type TimeTimezoneResponse as TimeTimezoneResponse,
-    type TimeSetTimezoneParams as TimeSetTimezoneParams,
-    type TimeTimeParams as TimeTimeParams,
-    type TimeTimezoneParams as TimeTimezoneParams,
-  };
-
-  export { Profile as Profile, type ProfileUpdateParams as ProfileUpdateParams };
-
-  export {
-    Files as Files,
-    type FileInfo as FileInfo,
-    type FileListResponse as FileListResponse,
-    type FileDownloadResponse as FileDownloadResponse,
-    type FileListParams as FileListParams,
-    type FileDeleteParams as FileDeleteParams,
-    type FileDownloadParams as FileDownloadParams,
-    type FileUploadParams as FileUploadParams,
-  };
-
-  export {
-    ProxyAPIProxy as Proxy,
-    type ProxyStatusResponse as ProxyStatusResponse,
-    type ProxyConnectParams as ProxyConnectParams,
-    type ProxyDisconnectParams as ProxyDisconnectParams,
-    type ProxyStatusParams as ProxyStatusParams,
-  };
-
-  export {
-    LocationAPILocation as Location,
-    type LocationGetResponse as LocationGetResponse,
-    type LocationGetParams as LocationGetParams,
-    type LocationSetParams as LocationSetParams,
-  };
-
-  export {
     Actions as Actions,
     type ActionOverlayVisibleResponse as ActionOverlayVisibleResponse,
     type ActionGlobalParams as ActionGlobalParams,
@@ -416,15 +356,6 @@ export declare namespace Devices {
     type ActionSetOverlayVisibleParams as ActionSetOverlayVisibleParams,
     type ActionSwipeParams as ActionSwipeParams,
     type ActionTapParams as ActionTapParams,
-  };
-
-  export {
-    State as State,
-    type Rect as Rect,
-    type StateScreenshotResponse as StateScreenshotResponse,
-    type StateUiResponse as StateUiResponse,
-    type StateScreenshotParams as StateScreenshotParams,
-    type StateUiParams as StateUiParams,
   };
 
   export {
@@ -438,9 +369,24 @@ export declare namespace Devices {
   };
 
   export {
-    Packages as Packages,
-    type PackageListResponse as PackageListResponse,
-    type PackageListParams as PackageListParams,
+    Esim as Esim,
+    type EsimListResponse as EsimListResponse,
+    type EsimActivateResponse as EsimActivateResponse,
+    type EsimListParams as EsimListParams,
+    type EsimActivateParams as EsimActivateParams,
+    type EsimEnableParams as EsimEnableParams,
+    type EsimRemoveParams as EsimRemoveParams,
+  };
+
+  export {
+    Files as Files,
+    type FileInfo as FileInfo,
+    type FileListResponse as FileListResponse,
+    type FileDownloadResponse as FileDownloadResponse,
+    type FileListParams as FileListParams,
+    type FileDeleteParams as FileDeleteParams,
+    type FileDownloadParams as FileDownloadParams,
+    type FileUploadParams as FileUploadParams,
   };
 
   export {
@@ -450,15 +396,45 @@ export declare namespace Devices {
     type KeyboardWriteParams as KeyboardWriteParams,
   };
 
+  export {
+    Location as Location,
+    type LocationGetParams as LocationGetParams,
+    type LocationSetParams as LocationSetParams,
+  };
+
+  export {
+    Packages as Packages,
+    type PackageListResponse as PackageListResponse,
+    type PackageListParams as PackageListParams,
+  };
+
+  export { Profile as Profile, type ProfileUpdateParams as ProfileUpdateParams };
+
+  export {
+    ProxyAPIProxy as Proxy,
+    type ProxyStatusResponse as ProxyStatusResponse,
+    type ProxyConnectParams as ProxyConnectParams,
+    type ProxyDisconnectParams as ProxyDisconnectParams,
+    type ProxyStatusParams as ProxyStatusParams,
+  };
+
+  export {
+    State as State,
+    type Rect as Rect,
+    type StateScreenshotResponse as StateScreenshotResponse,
+    type StateUiResponse as StateUiResponse,
+    type StateScreenshotParams as StateScreenshotParams,
+    type StateUiParams as StateUiParams,
+  };
+
   export { Tasks as Tasks, type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
 
   export {
-    Esim as Esim,
-    type EsimListResponse as EsimListResponse,
-    type EsimActivateResponse as EsimActivateResponse,
-    type EsimListParams as EsimListParams,
-    type EsimActivateParams as EsimActivateParams,
-    type EsimEnableParams as EsimEnableParams,
-    type EsimRemoveParams as EsimRemoveParams,
+    Time as Time,
+    type TimeTimeResponse as TimeTimeResponse,
+    type TimeTimezoneResponse as TimeTimezoneResponse,
+    type TimeSetTimezoneParams as TimeSetTimezoneParams,
+    type TimeTimeParams as TimeTimeParams,
+    type TimeTimezoneParams as TimeTimezoneParams,
   };
 }

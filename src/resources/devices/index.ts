@@ -53,12 +53,7 @@ export {
   type KeyboardKeyParams,
   type KeyboardWriteParams,
 } from './keyboard';
-export {
-  Location,
-  type LocationGetResponse,
-  type LocationGetParams,
-  type LocationSetParams,
-} from './location';
+export { Location, type LocationGetParams, type LocationSetParams } from './location';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
 export { Profile, type ProfileUpdateParams } from './profile';
 export {
