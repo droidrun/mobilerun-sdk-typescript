@@ -815,39 +815,111 @@ export class Mobilerun {
   static toFile = Uploads.toFile;
 
   /**
-   * Tasks API
-   */
-  tasks: API.Tasks = new API.Tasks(this);
-  /**
    * Agents API
    */
   agents: API.Agents = new API.Agents(this);
-  proxies: API.Proxies = new API.Proxies(this);
-  carriers: API.Carriers = new API.Carriers(this);
-  profiles: API.Profiles = new API.Profiles(this);
-  devices: API.Devices = new API.Devices(this);
   apps: API.Apps = new API.Apps(this);
+  carriers: API.Carriers = new API.Carriers(this);
   credentials: API.Credentials = new API.Credentials(this);
+  devices: API.Devices = new API.Devices(this);
   /**
    * Webhooks API
    */
   hooks: API.Hooks = new API.Hooks(this);
   models: API.Models = new API.Models(this);
+  profiles: API.Profiles = new API.Profiles(this);
+  proxies: API.Proxies = new API.Proxies(this);
+  /**
+   * Tasks API
+   */
+  tasks: API.Tasks = new API.Tasks(this);
 }
 
-Mobilerun.Tasks = Tasks;
 Mobilerun.Agents = Agents;
-Mobilerun.Proxies = Proxies;
-Mobilerun.Carriers = Carriers;
-Mobilerun.Profiles = Profiles;
-Mobilerun.Devices = Devices;
 Mobilerun.Apps = Apps;
+Mobilerun.Carriers = Carriers;
 Mobilerun.Credentials = Credentials;
+Mobilerun.Devices = Devices;
 Mobilerun.Hooks = Hooks;
 Mobilerun.Models = Models;
+Mobilerun.Profiles = Profiles;
+Mobilerun.Proxies = Proxies;
+Mobilerun.Tasks = Tasks;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
+
+  export { Agents as Agents, type AgentListResponse as AgentListResponse };
+
+  export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
+
+  export {
+    Carriers as Carriers,
+    type Carrier as Carrier,
+    type CarrierListResponse as CarrierListResponse,
+    type CarrierDeleteResponse as CarrierDeleteResponse,
+    type CarrierCreateParams as CarrierCreateParams,
+    type CarrierUpdateParams as CarrierUpdateParams,
+    type CarrierListParams as CarrierListParams,
+    type CarrierLookupParams as CarrierLookupParams,
+  };
+
+  export {
+    Credentials as Credentials,
+    type CredentialListResponse as CredentialListResponse,
+    type CredentialListParams as CredentialListParams,
+  };
+
+  export {
+    Devices as Devices,
+    type Device as Device,
+    type DeviceListResponse as DeviceListResponse,
+    type DeviceCountResponse as DeviceCountResponse,
+    type DeviceCreateParams as DeviceCreateParams,
+    type DeviceListParams as DeviceListParams,
+    type DeviceSetNameParams as DeviceSetNameParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
+  };
+
+  export {
+    Hooks as Hooks,
+    type HookRetrieveResponse as HookRetrieveResponse,
+    type HookUpdateResponse as HookUpdateResponse,
+    type HookListResponse as HookListResponse,
+    type HookGetSampleDataResponse as HookGetSampleDataResponse,
+    type HookPerformResponse as HookPerformResponse,
+    type HookSubscribeResponse as HookSubscribeResponse,
+    type HookUnsubscribeResponse as HookUnsubscribeResponse,
+    type HookUpdateParams as HookUpdateParams,
+    type HookListParams as HookListParams,
+    type HookPerformParams as HookPerformParams,
+    type HookSubscribeParams as HookSubscribeParams,
+  };
+
+  export { Models as Models, type ModelListResponse as ModelListResponse };
+
+  export {
+    Profiles as Profiles,
+    type Profile as Profile,
+    type ProfileListResponse as ProfileListResponse,
+    type ProfileDeleteResponse as ProfileDeleteResponse,
+    type ProfileCreateParams as ProfileCreateParams,
+    type ProfileUpdateParams as ProfileUpdateParams,
+    type ProfileListParams as ProfileListParams,
+  };
+
+  export {
+    Proxies as Proxies,
+    type ProxyConfig as ProxyConfig,
+    type ProxyCreateResponse as ProxyCreateResponse,
+    type ProxyRetrieveResponse as ProxyRetrieveResponse,
+    type ProxyUpdateResponse as ProxyUpdateResponse,
+    type ProxyListResponse as ProxyListResponse,
+    type ProxyDeleteResponse as ProxyDeleteResponse,
+    type ProxyCreateParams as ProxyCreateParams,
+    type ProxyUpdateParams as ProxyUpdateParams,
+    type ProxyListParams as ProxyListParams,
+  };
 
   export {
     Tasks as Tasks,
@@ -869,83 +941,13 @@ export declare namespace Mobilerun {
     type TaskSendMessageParams as TaskSendMessageParams,
   };
 
-  export { Agents as Agents, type AgentListResponse as AgentListResponse };
-
-  export {
-    Proxies as Proxies,
-    type ProxyConfig as ProxyConfig,
-    type ProxyCreateResponse as ProxyCreateResponse,
-    type ProxyRetrieveResponse as ProxyRetrieveResponse,
-    type ProxyUpdateResponse as ProxyUpdateResponse,
-    type ProxyListResponse as ProxyListResponse,
-    type ProxyDeleteResponse as ProxyDeleteResponse,
-    type ProxyCreateParams as ProxyCreateParams,
-    type ProxyUpdateParams as ProxyUpdateParams,
-    type ProxyListParams as ProxyListParams,
-  };
-
-  export {
-    Carriers as Carriers,
-    type Carrier as Carrier,
-    type CarrierListResponse as CarrierListResponse,
-    type CarrierDeleteResponse as CarrierDeleteResponse,
-    type CarrierCreateParams as CarrierCreateParams,
-    type CarrierUpdateParams as CarrierUpdateParams,
-    type CarrierListParams as CarrierListParams,
-    type CarrierLookupParams as CarrierLookupParams,
-  };
-
-  export {
-    Profiles as Profiles,
-    type Profile as Profile,
-    type ProfileListResponse as ProfileListResponse,
-    type ProfileDeleteResponse as ProfileDeleteResponse,
-    type ProfileCreateParams as ProfileCreateParams,
-    type ProfileUpdateParams as ProfileUpdateParams,
-    type ProfileListParams as ProfileListParams,
-  };
-
-  export {
-    Devices as Devices,
-    type Device as Device,
-    type DeviceListResponse as DeviceListResponse,
-    type DeviceCountResponse as DeviceCountResponse,
-    type DeviceCreateParams as DeviceCreateParams,
-    type DeviceListParams as DeviceListParams,
-    type DeviceSetNameParams as DeviceSetNameParams,
-    type DeviceTerminateParams as DeviceTerminateParams,
-  };
-
-  export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
-
-  export {
-    Credentials as Credentials,
-    type CredentialListResponse as CredentialListResponse,
-    type CredentialListParams as CredentialListParams,
-  };
-
-  export {
-    Hooks as Hooks,
-    type HookRetrieveResponse as HookRetrieveResponse,
-    type HookUpdateResponse as HookUpdateResponse,
-    type HookListResponse as HookListResponse,
-    type HookGetSampleDataResponse as HookGetSampleDataResponse,
-    type HookPerformResponse as HookPerformResponse,
-    type HookSubscribeResponse as HookSubscribeResponse,
-    type HookUnsubscribeResponse as HookUnsubscribeResponse,
-    type HookUpdateParams as HookUpdateParams,
-    type HookListParams as HookListParams,
-    type HookPerformParams as HookPerformParams,
-    type HookSubscribeParams as HookSubscribeParams,
-  };
-
-  export { Models as Models, type ModelListResponse as ModelListResponse };
-
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
   export type DeviceSpec = API.DeviceSpec;
+  export type Location = API.Location;
   export type Meta = API.Meta;
   export type Pagination = API.Pagination;
   export type PaginationMeta = API.PaginationMeta;
   export type PermissionSet = API.PermissionSet;
+  export type Socks5 = API.Socks5;
 }

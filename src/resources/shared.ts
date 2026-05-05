@@ -1,5 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import * as Shared from './shared';
+
 export interface DeviceCarrier {
   GsmOperatorAlpha: string;
 
@@ -66,7 +68,7 @@ export interface DeviceSpec {
 
   locale?: string;
 
-  location?: DeviceSpec.Location;
+  location?: Location;
 
   name?: string;
 
@@ -76,36 +78,24 @@ export interface DeviceSpec {
 }
 
 export namespace DeviceSpec {
-  export interface Location {
-    latitude: number;
-
-    longitude: number;
-
-    /**
-     * A URL to the JSON Schema for this object.
-     */
-    $schema?: string;
-  }
-
   export interface Proxy {
     name?: string;
 
     smartIp?: boolean;
 
-    socks5?: Proxy.Socks5;
+    socks5?: Shared.Socks5;
   }
+}
 
-  export namespace Proxy {
-    export interface Socks5 {
-      host: string;
+export interface Location {
+  latitude: number;
 
-      password: string;
+  longitude: number;
 
-      port: number;
-
-      user: string;
-    }
-  }
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
 }
 
 export interface Meta {
@@ -177,4 +167,14 @@ export interface PermissionSet {
   read: boolean;
 
   write: boolean;
+}
+
+export interface Socks5 {
+  host: string;
+
+  password: string;
+
+  port: number;
+
+  user: string;
 }
