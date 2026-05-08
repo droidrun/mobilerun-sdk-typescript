@@ -41,9 +41,10 @@ describe('resource apps', () => {
           order: 'asc',
           page: 1,
           pageSize: 1,
+          platform: 'all',
           query: 'query',
           sortBy: 'createdAt',
-          source: 'all',
+          status: 'all',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -77,13 +78,12 @@ describe('resource apps', () => {
   // Mock server tests are disabled
   test.skip('createSignedUploadURL: only required params', async () => {
     const responsePromise = client.apps.createSignedUploadURL({
-      displayName: 'displayName',
-      files: [{ fileName: 'x' }],
-      packageName: 'packageName',
+      bundleId: 'x',
+      displayName: 'x',
+      files: [{ contentType: 'x', fileName: 'x' }],
       sizeBytes: 0,
-      targetSdk: 0,
       versionCode: 0,
-      versionName: 'versionName',
+      versionName: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -97,20 +97,18 @@ describe('resource apps', () => {
   // Mock server tests are disabled
   test.skip('createSignedUploadURL: required and optional params', async () => {
     const response = await client.apps.createSignedUploadURL({
-      displayName: 'displayName',
-      files: [{ fileName: 'x', contentType: 'contentType' }],
-      packageName: 'packageName',
+      bundleId: 'x',
+      displayName: 'x',
+      files: [{ contentType: 'x', fileName: 'x' }],
       sizeBytes: 0,
-      targetSdk: 0,
       versionCode: 0,
-      versionName: 'versionName',
-      categoryName: 'categoryName',
+      versionName: 'x',
       country: 'US',
       description: 'description',
       developerName: 'developerName',
       iconURL: 'iconURL',
-      ratingCount: 0,
-      ratingScore: 0,
+      platform: 'android',
+      targetSdk: 0,
     });
   });
 
