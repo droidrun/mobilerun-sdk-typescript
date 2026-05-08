@@ -102,8 +102,12 @@ export class Devices extends APIResource {
    * Provision a new device
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
-    const { query_country, deviceType, ...body } = params;
-    return this._client.post('/devices', { query: { country: query_country, deviceType }, body, ...options });
+    const { query_country, deviceType, profileId, ...body } = params;
+    return this._client.post('/devices', {
+      query: { country: query_country, deviceType, profileId },
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -221,6 +225,11 @@ export interface DeviceCreateParams {
     | 'dedicated_premium_device'
     | 'dedicated_emulated_device'
     | 'dedicated_ios_device';
+
+  /**
+   * Query param: Profile ID to use as device spec
+   */
+  profileId?: string;
 
   /**
    * Body param

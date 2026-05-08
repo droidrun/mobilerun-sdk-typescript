@@ -74,6 +74,8 @@ export interface StateUiResponse {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
+
+  ime_tree?: unknown;
 }
 
 export namespace StateUiResponse {
