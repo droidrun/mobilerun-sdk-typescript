@@ -5,6 +5,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Network Proxies
+ */
 export class Proxies extends APIResource {
   /**
    * Create a new proxy config

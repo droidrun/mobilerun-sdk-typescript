@@ -15,6 +15,9 @@ import { APIPromise } from '../../../../core/api-promise';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
 
+/**
+ * Vault & Secrets
+ */
 export class Credentials extends APIResource {
   fields: FieldsAPI.Fields = new FieldsAPI.Fields(this._client);
 

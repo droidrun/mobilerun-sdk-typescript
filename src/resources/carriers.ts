@@ -6,6 +6,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Mobile Carriers
+ */
 export class Carriers extends APIResource {
   /**
    * Create a new carrier
