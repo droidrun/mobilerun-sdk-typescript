@@ -831,16 +831,31 @@ export class Mobilerun {
    * Agents API
    */
   agents: API.Agents = new API.Agents(this);
-  apps: API.Apps = new API.Apps(this);
-  carriers: API.Carriers = new API.Carriers(this);
-  credentials: API.Credentials = new API.Credentials(this);
-  devices: API.Devices = new API.Devices(this);
   /**
-   * Webhooks API
+   * App Management
    */
+  apps: API.Apps = new API.Apps(this);
+  /**
+   * Mobile Carriers
+   */
+  carriers: API.Carriers = new API.Carriers(this);
+  /**
+   * Vault & Secrets
+   */
+  credentials: API.Credentials = new API.Credentials(this);
+  /**
+   * Device Management
+   */
+  devices: API.Devices = new API.Devices(this);
   hooks: API.Hooks = new API.Hooks(this);
+  /**
+   * LLM Models
+   */
   models: API.Models = new API.Models(this);
   profiles: API.Profiles = new API.Profiles(this);
+  /**
+   * Network Proxies
+   */
   proxies: API.Proxies = new API.Proxies(this);
   /**
    * Tasks API

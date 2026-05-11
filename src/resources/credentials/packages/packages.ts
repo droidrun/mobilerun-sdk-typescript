@@ -16,6 +16,9 @@ import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
+/**
+ * Vault & Secrets
+ */
 export class Packages extends APIResource {
   credentials: CredentialsAPI.Credentials = new CredentialsAPI.Credentials(this._client);
 

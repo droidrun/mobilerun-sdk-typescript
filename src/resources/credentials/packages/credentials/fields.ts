@@ -6,6 +6,9 @@ import { APIPromise } from '../../../../core/api-promise';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
 
+/**
+ * Vault & Secrets
+ */
 export class Fields extends APIResource {
   /**
    * Add a new field to an existing credential

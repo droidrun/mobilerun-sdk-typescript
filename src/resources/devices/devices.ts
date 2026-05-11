@@ -84,6 +84,9 @@ import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Device Management
+ */
 export class Devices extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
   apps: AppsAPI.Apps = new AppsAPI.Apps(this._client);
