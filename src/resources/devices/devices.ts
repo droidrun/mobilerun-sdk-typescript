@@ -316,7 +316,15 @@ export interface DeviceListParams {
   providerId?: string;
 
   state?: Array<
-    'creating' | 'assigned' | 'ready' | 'rebooting' | 'migrating' | 'terminated' | 'maintenance' | 'unknown'
+    | 'creating'
+    | 'assigned'
+    | 'ready'
+    | 'rebooting'
+    | 'migrating'
+    | 'resetting'
+    | 'terminated'
+    | 'maintenance'
+    | 'unknown'
   > | null;
 
   type?:

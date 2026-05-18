@@ -152,12 +152,19 @@ export interface EsimActivateParams {
   /**
    * Body param
    */
-  matchingId: string;
+  smDpAddr: string;
+
+  /**
+   * Body param: Optional carrier-issued confirmation code (the 4th LPA segment).
+   * Required only for plans whose SM-DP+ challenges the device for one. Requires
+   * matchingId — the LPA spec only interprets segment 4 when segment 3 is present.
+   */
+  confirmationCode?: string;
 
   /**
    * Body param
    */
-  smDpAddr: string;
+  matchingId?: string;
 
   /**
    * Header param

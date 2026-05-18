@@ -168,16 +168,42 @@ export interface AppDeleteParams {
   'X-Device-Display-ID'?: number;
 }
 
-export interface AppInstallParams {
-  /**
-   * Body param
-   */
-  packageName: string;
+export type AppInstallParams = AppInstallParams.Variant0 | AppInstallParams.Variant1;
 
-  /**
-   * Header param
-   */
-  'X-Device-Display-ID'?: number;
+export declare namespace AppInstallParams {
+  export interface Variant0 {
+    /**
+     * Body param: iOS bundle identifier (e.g. com.example.app)
+     */
+    bundleId: string;
+
+    /**
+     * Body param: Android package name (e.g. com.example.app)
+     */
+    packageName?: string;
+
+    /**
+     * Header param
+     */
+    'X-Device-Display-ID'?: number;
+  }
+
+  export interface Variant1 {
+    /**
+     * Body param: Android package name (e.g. com.example.app)
+     */
+    packageName: string;
+
+    /**
+     * Body param: iOS bundle identifier (e.g. com.example.app)
+     */
+    bundleId?: string;
+
+    /**
+     * Header param
+     */
+    'X-Device-Display-ID'?: number;
+  }
 }
 
 export interface AppStartParams {
