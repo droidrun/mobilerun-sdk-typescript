@@ -34,11 +34,7 @@ describe('resource esim', () => {
 
   // Mock server tests are disabled
   test.skip('activate: only required params', async () => {
-    const responsePromise = client.devices.esim.activate('deviceId', {
-      enable: true,
-      matchingId: 'matchingId',
-      smDpAddr: 'smDpAddr',
-    });
+    const responsePromise = client.devices.esim.activate('deviceId', { enable: true, smDpAddr: 'smDpAddr' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -52,8 +48,9 @@ describe('resource esim', () => {
   test.skip('activate: required and optional params', async () => {
     const response = await client.devices.esim.activate('deviceId', {
       enable: true,
-      matchingId: 'matchingId',
       smDpAddr: 'smDpAddr',
+      confirmationCode: 'confirmationCode',
+      matchingId: 'matchingId',
       'X-Device-Display-ID': 0,
     });
   });

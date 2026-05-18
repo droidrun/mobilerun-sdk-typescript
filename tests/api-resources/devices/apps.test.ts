@@ -78,7 +78,7 @@ describe('resource apps', () => {
 
   // Mock server tests are disabled
   test.skip('install: only required params', async () => {
-    const responsePromise = client.devices.apps.install('deviceId', { packageName: 'packageName' });
+    const responsePromise = client.devices.apps.install('deviceId', { bundleId: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -91,7 +91,8 @@ describe('resource apps', () => {
   // Mock server tests are disabled
   test.skip('install: required and optional params', async () => {
     const response = await client.devices.apps.install('deviceId', {
-      packageName: 'packageName',
+      bundleId: 'x',
+      packageName: 'x',
       'X-Device-Display-ID': 0,
     });
   });
