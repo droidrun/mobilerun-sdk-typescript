@@ -131,6 +131,8 @@ export interface Task {
 
   credentials?: Array<PackageCredentials>;
 
+  creditsUsed?: number | null;
+
   dispatchedAt?: string | null;
 
   displayId?: number;
@@ -215,12 +217,98 @@ export interface TaskListResponse {
   /**
    * The paginated items
    */
-  items: Array<Task>;
+  items: Array<TaskListResponse.Item>;
 
   /**
    * Pagination metadata
    */
   pagination: Shared.PaginationMeta;
+}
+
+export namespace TaskListResponse {
+  /**
+   * Task representation for list endpoints — omits the large trajectory field.
+   */
+  export interface Item {
+    id: string;
+
+    deviceId: string;
+
+    displayId: number;
+
+    /**
+     * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+     */
+    llmModel: string;
+
+    status: TasksAPI.TaskStatus;
+
+    task: string;
+
+    tmpDevice: boolean;
+
+    userId: string;
+
+    agentId?: number;
+
+    apps?: Array<string>;
+
+    cancelRequestedAt?: string | null;
+
+    claimedAt?: string | null;
+
+    continueOnFailure?: boolean;
+
+    createdAt?: string;
+
+    credentials?: Array<TasksAPI.PackageCredentials>;
+
+    creditsUsed?: number | null;
+
+    dispatchedAt?: string | null;
+
+    executionTimeout?: number;
+
+    files?: Array<string>;
+
+    finishedAt?: string | null;
+
+    maxSteps?: number;
+
+    /**
+     * Memory namespace for cross-task personalization
+     */
+    memoryNamespace?: string;
+
+    message?: string | null;
+
+    output?: { [key: string]: unknown } | null;
+
+    outputSchema?: { [key: string]: unknown } | null;
+
+    reasoning?: boolean;
+
+    stealth?: boolean;
+
+    steps?: number | null;
+
+    streamUrl?: string | null;
+
+    /**
+     * LLM model used by sub-agent roles: executor, app_opener, structured_output
+     */
+    subagentModel?: string;
+
+    succeeded?: boolean | null;
+
+    temperature?: number;
+
+    updatedAt?: string;
+
+    vision?: boolean;
+
+    vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+  }
 }
 
 export interface TaskGetStatusResponse {
