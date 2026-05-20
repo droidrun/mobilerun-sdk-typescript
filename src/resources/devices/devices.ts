@@ -223,11 +223,7 @@ export interface DeviceCreateParams {
   /**
    * Query param
    */
-  deviceType?:
-    | 'dedicated_physical_device'
-    | 'dedicated_premium_device'
-    | 'dedicated_emulated_device'
-    | 'dedicated_ios_device';
+  deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device';
 
   /**
    * Query param: Profile ID to use as device spec
@@ -327,11 +323,7 @@ export interface DeviceListParams {
     | 'unknown'
   > | null;
 
-  type?:
-    | 'dedicated_physical_device'
-    | 'dedicated_premium_device'
-    | 'dedicated_emulated_device'
-    | 'dedicated_ios_device';
+  type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device';
 }
 
 export interface DeviceSetNameParams {
