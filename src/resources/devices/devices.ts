@@ -72,15 +72,8 @@ import {
 } from './state';
 import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
-import * as TimeAPI from './time';
-import {
-  Time,
-  TimeSetTimezoneParams,
-  TimeTimeParams,
-  TimeTimeResponse,
-  TimeTimezoneParams,
-  TimeTimezoneResponse,
-} from './time';
+import * as TimezoneAPI from './timezone';
+import { Timezone, TimezoneGetParams, TimezoneGetResponse, TimezoneSetParams } from './timezone';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -101,7 +94,7 @@ export class Devices extends APIResource {
   proxy: ProxyAPI.Proxy = new ProxyAPI.Proxy(this._client);
   state: StateAPI.State = new StateAPI.State(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
-  time: TimeAPI.Time = new TimeAPI.Time(this._client);
+  timezone: TimezoneAPI.Timezone = new TimezoneAPI.Timezone(this._client);
 
   /**
    * Provision a new device
@@ -349,7 +342,7 @@ Devices.Profile = Profile;
 Devices.Proxy = ProxyAPIProxy;
 Devices.State = State;
 Devices.Tasks = Tasks;
-Devices.Time = Time;
+Devices.Timezone = Timezone;
 
 export declare namespace Devices {
   export {
@@ -446,11 +439,9 @@ export declare namespace Devices {
   export { Tasks as Tasks, type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
 
   export {
-    Time as Time,
-    type TimeTimeResponse as TimeTimeResponse,
-    type TimeTimezoneResponse as TimeTimezoneResponse,
-    type TimeSetTimezoneParams as TimeSetTimezoneParams,
-    type TimeTimeParams as TimeTimeParams,
-    type TimeTimezoneParams as TimeTimezoneParams,
+    Timezone as Timezone,
+    type TimezoneGetResponse as TimezoneGetResponse,
+    type TimezoneGetParams as TimezoneGetParams,
+    type TimezoneSetParams as TimezoneSetParams,
   };
 }

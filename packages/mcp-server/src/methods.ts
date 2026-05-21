@@ -377,21 +377,15 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/{deviceId}/tasks',
   },
   {
-    clientCallName: 'client.devices.time.setTimezone',
-    fullyQualifiedName: 'devices.time.setTimezone',
-    httpMethod: 'post',
+    clientCallName: 'client.devices.timezone.get',
+    fullyQualifiedName: 'devices.timezone.get',
+    httpMethod: 'get',
     httpPath: '/devices/{deviceId}/timezone',
   },
   {
-    clientCallName: 'client.devices.time.time',
-    fullyQualifiedName: 'devices.time.time',
-    httpMethod: 'get',
-    httpPath: '/devices/{deviceId}/time',
-  },
-  {
-    clientCallName: 'client.devices.time.timezone',
-    fullyQualifiedName: 'devices.time.timezone',
-    httpMethod: 'get',
+    clientCallName: 'client.devices.timezone.set',
+    fullyQualifiedName: 'devices.timezone.set',
+    httpMethod: 'post',
     httpPath: '/devices/{deviceId}/timezone',
   },
   {

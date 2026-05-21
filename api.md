@@ -256,18 +256,16 @@ Methods:
 
 - <code title="get /devices/{deviceId}/tasks">client.devices.tasks.<a href="./src/resources/devices/tasks.ts">list</a>(deviceID, { ...params }) -> TaskListResponse</code>
 
-## Time
+## Timezone
 
 Types:
 
-- <code><a href="./src/resources/devices/time.ts">TimeTimeResponse</a></code>
-- <code><a href="./src/resources/devices/time.ts">TimeTimezoneResponse</a></code>
+- <code><a href="./src/resources/devices/timezone.ts">TimezoneGetResponse</a></code>
 
 Methods:
 
-- <code title="post /devices/{deviceId}/timezone">client.devices.time.<a href="./src/resources/devices/time.ts">setTimezone</a>(deviceID, { ...params }) -> void</code>
-- <code title="get /devices/{deviceId}/time">client.devices.time.<a href="./src/resources/devices/time.ts">time</a>(deviceID, { ...params }) -> string</code>
-- <code title="get /devices/{deviceId}/timezone">client.devices.time.<a href="./src/resources/devices/time.ts">timezone</a>(deviceID, { ...params }) -> TimeTimezoneResponse</code>
+- <code title="get /devices/{deviceId}/timezone">client.devices.timezone.<a href="./src/resources/devices/timezone.ts">get</a>(deviceID, { ...params }) -> TimezoneGetResponse</code>
+- <code title="post /devices/{deviceId}/timezone">client.devices.timezone.<a href="./src/resources/devices/timezone.ts">set</a>(deviceID, { ...params }) -> void</code>
 
 # Hooks
 

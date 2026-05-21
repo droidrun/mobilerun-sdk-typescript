@@ -75,10 +75,8 @@ export {
 } from './state';
 export { Tasks, type TaskListResponse, type TaskListParams } from './tasks';
 export {
-  Time,
-  type TimeTimeResponse,
-  type TimeTimezoneResponse,
-  type TimeSetTimezoneParams,
-  type TimeTimeParams,
-  type TimeTimezoneParams,
-} from './time';
+  Timezone,
+  type TimezoneGetResponse,
+  type TimezoneGetParams,
+  type TimezoneSetParams,
+} from './timezone';
