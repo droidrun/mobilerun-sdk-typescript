@@ -67,8 +67,10 @@ export {
   State,
   type Rect,
   type StateScreenshotResponse,
+  type StateTimeResponse,
   type StateUiResponse,
   type StateScreenshotParams,
+  type StateTimeParams,
   type StateUiParams,
 } from './state';
 export { Tasks, type TaskListResponse, type TaskListParams } from './tasks';

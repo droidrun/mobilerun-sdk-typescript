@@ -32,6 +32,28 @@ export class State extends APIResource {
   }
 
   /**
+   * Device time
+   */
+  time(
+    deviceID: string,
+    params: StateTimeParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/time`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * UI state
    */
   ui(
@@ -62,6 +84,8 @@ export interface Rect {
 }
 
 export type StateScreenshotResponse = string;
+
+export type StateTimeResponse = string;
 
 export interface StateUiResponse {
   a11y_tree: unknown;
@@ -146,6 +170,10 @@ export interface StateScreenshotParams {
   'X-Device-Display-ID'?: number;
 }
 
+export interface StateTimeParams {
+  'X-Device-Display-ID'?: number;
+}
+
 export interface StateUiParams {
   /**
    * Query param
@@ -162,8 +190,10 @@ export declare namespace State {
   export {
     type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
+    type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
+    type StateTimeParams as StateTimeParams,
     type StateUiParams as StateUiParams,
   };
 }

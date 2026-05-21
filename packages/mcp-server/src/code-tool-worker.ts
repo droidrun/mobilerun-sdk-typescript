@@ -166,6 +166,7 @@ const fuse = new Fuse(
     'client.devices.proxy.disconnect',
     'client.devices.proxy.status',
     'client.devices.state.screenshot',
+    'client.devices.state.time',
     'client.devices.state.ui',
     'client.devices.tasks.list',
     'client.devices.time.setTimezone',
