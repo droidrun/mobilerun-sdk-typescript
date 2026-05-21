@@ -36,8 +36,10 @@ export {
   type Device,
   type DeviceListResponse,
   type DeviceCountResponse,
+  type DeviceFingerprintResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceFingerprintParams,
   type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices/devices';

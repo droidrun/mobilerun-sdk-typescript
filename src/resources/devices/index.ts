@@ -23,8 +23,10 @@ export {
   type Device,
   type DeviceListResponse,
   type DeviceCountResponse,
+  type DeviceFingerprintResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceFingerprintParams,
   type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices';
@@ -32,11 +34,14 @@ export {
   Esim,
   type EsimListResponse,
   type EsimActivateResponse,
+  type EsimStatusResponse,
   type EsimListParams,
   type EsimActivateParams,
   type EsimEnableParams,
   type EsimRemoveParams,
-} from './esim';
+  type EsimSetRoamingParams,
+  type EsimStatusParams,
+} from './esim/index';
 export {
   Files,
   type FileInfo,
@@ -53,6 +58,12 @@ export {
   type KeyboardKeyParams,
   type KeyboardWriteParams,
 } from './keyboard';
+export {
+  Language,
+  type LanguageGetResponse,
+  type LanguageGetParams,
+  type LanguageSetParams,
+} from './language';
 export { Location, type LocationGetParams, type LocationSetParams } from './location';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
 export { Profile, type ProfileUpdateParams } from './profile';

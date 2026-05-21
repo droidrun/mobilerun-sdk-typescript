@@ -22,16 +22,6 @@ import {
   AppUpdateParams,
   Apps,
 } from './apps';
-import * as EsimAPI from './esim';
-import {
-  Esim,
-  EsimActivateParams,
-  EsimActivateResponse,
-  EsimEnableParams,
-  EsimListParams,
-  EsimListResponse,
-  EsimRemoveParams,
-} from './esim';
 import * as FilesAPI from './files';
 import {
   FileDeleteParams,
@@ -45,6 +35,8 @@ import {
 } from './files';
 import * as KeyboardAPI from './keyboard';
 import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
+import * as LanguageAPI from './language';
+import { Language, LanguageGetParams, LanguageGetResponse, LanguageSetParams } from './language';
 import * as LocationAPI from './location';
 import { Location, LocationGetParams, LocationSetParams } from './location';
 import * as PackagesAPI from './packages';
@@ -74,14 +66,24 @@ import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimezoneAPI from './timezone';
 import { Timezone, TimezoneGetParams, TimezoneGetResponse, TimezoneSetParams } from './timezone';
+import * as EsimAPI from './esim/esim';
+import {
+  Esim,
+  EsimActivateParams,
+  EsimActivateResponse,
+  EsimEnableParams,
+  EsimListParams,
+  EsimListResponse,
+  EsimRemoveParams,
+  EsimSetRoamingParams,
+  EsimStatusParams,
+  EsimStatusResponse,
+} from './esim/esim';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
-/**
- * Device Management
- */
 export class Devices extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
   apps: AppsAPI.Apps = new AppsAPI.Apps(this._client);
@@ -95,6 +97,7 @@ export class Devices extends APIResource {
   state: StateAPI.State = new StateAPI.State(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
   timezone: TimezoneAPI.Timezone = new TimezoneAPI.Timezone(this._client);
+  language: LanguageAPI.Language = new LanguageAPI.Language(this._client);
 
   /**
    * Provision a new device
@@ -130,6 +133,49 @@ export class Devices extends APIResource {
    */
   count(options?: RequestOptions): APIPromise<DeviceCountResponse> {
     return this._client.get('/devices/count', options);
+  }
+
+  /**
+   * Device fingerprint snapshot
+   */
+  fingerprint(
+    deviceID: string,
+    params: DeviceFingerprintParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<DeviceFingerprintResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/fingerprint`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Reboot a device
+   */
+  reboot(deviceID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.post(path`/devices/${deviceID}/reboot`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+
+  /**
+   * Reset a device to a fresh state (VMOS one-click new device; non-VMOS providers
+   * return 404)
+   */
+  reset(deviceID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.post(path`/devices/${deviceID}/reset`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -207,6 +253,47 @@ export interface DeviceListResponse {
 }
 
 export type DeviceCountResponse = { [key: string]: number };
+
+export interface DeviceFingerprintResponse {
+  carrier: Shared.DeviceCarrier;
+
+  display: DeviceFingerprintResponse.Display;
+
+  identifiers: Shared.DeviceIdentifiers;
+
+  model: DeviceFingerprintResponse.Model;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export namespace DeviceFingerprintResponse {
+  export interface Display {
+    densityDpi?: number;
+
+    height?: number;
+
+    width?: number;
+  }
+
+  export interface Model {
+    aospVersion?: string;
+
+    brand?: string;
+
+    device?: string;
+
+    hardware?: string;
+
+    imageRepository?: string;
+
+    manufacturer?: string;
+
+    model?: string;
+  }
+}
 
 export interface DeviceCreateParams {
   /**
@@ -321,6 +408,10 @@ export interface DeviceListParams {
   type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device';
 }
 
+export interface DeviceFingerprintParams {
+  'X-Device-Display-ID'?: number;
+}
+
 export interface DeviceSetNameParams {
   name: string;
 }
@@ -343,14 +434,17 @@ Devices.Proxy = ProxyAPIProxy;
 Devices.State = State;
 Devices.Tasks = Tasks;
 Devices.Timezone = Timezone;
+Devices.Language = Language;
 
 export declare namespace Devices {
   export {
     type Device as Device,
     type DeviceListResponse as DeviceListResponse,
     type DeviceCountResponse as DeviceCountResponse,
+    type DeviceFingerprintResponse as DeviceFingerprintResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceFingerprintParams as DeviceFingerprintParams,
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
@@ -379,10 +473,13 @@ export declare namespace Devices {
     Esim as Esim,
     type EsimListResponse as EsimListResponse,
     type EsimActivateResponse as EsimActivateResponse,
+    type EsimStatusResponse as EsimStatusResponse,
     type EsimListParams as EsimListParams,
     type EsimActivateParams as EsimActivateParams,
     type EsimEnableParams as EsimEnableParams,
     type EsimRemoveParams as EsimRemoveParams,
+    type EsimSetRoamingParams as EsimSetRoamingParams,
+    type EsimStatusParams as EsimStatusParams,
   };
 
   export {
@@ -443,5 +540,12 @@ export declare namespace Devices {
     type TimezoneGetResponse as TimezoneGetResponse,
     type TimezoneGetParams as TimezoneGetParams,
     type TimezoneSetParams as TimezoneSetParams,
+  };
+
+  export {
+    Language as Language,
+    type LanguageGetResponse as LanguageGetResponse,
+    type LanguageGetParams as LanguageGetParams,
+    type LanguageSetParams as LanguageSetParams,
   };
 }

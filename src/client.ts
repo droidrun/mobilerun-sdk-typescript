@@ -87,6 +87,8 @@ import {
   Device,
   DeviceCountResponse,
   DeviceCreateParams,
+  DeviceFingerprintParams,
+  DeviceFingerprintResponse,
   DeviceListParams,
   DeviceListResponse,
   DeviceSetNameParams,
@@ -843,9 +845,6 @@ export class Mobilerun {
    * Vault & Secrets
    */
   credentials: API.Credentials = new API.Credentials(this);
-  /**
-   * Device Management
-   */
   devices: API.Devices = new API.Devices(this);
   hooks: API.Hooks = new API.Hooks(this);
   /**
@@ -916,8 +915,10 @@ export declare namespace Mobilerun {
     type Device as Device,
     type DeviceListResponse as DeviceListResponse,
     type DeviceCountResponse as DeviceCountResponse,
+    type DeviceFingerprintResponse as DeviceFingerprintResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
+    type DeviceFingerprintParams as DeviceFingerprintParams,
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
