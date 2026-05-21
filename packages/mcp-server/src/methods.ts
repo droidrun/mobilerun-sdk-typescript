@@ -167,6 +167,24 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/count',
   },
   {
+    clientCallName: 'client.devices.fingerprint',
+    fullyQualifiedName: 'devices.fingerprint',
+    httpMethod: 'get',
+    httpPath: '/devices/{deviceId}/fingerprint',
+  },
+  {
+    clientCallName: 'client.devices.reboot',
+    fullyQualifiedName: 'devices.reboot',
+    httpMethod: 'post',
+    httpPath: '/devices/{deviceId}/reboot',
+  },
+  {
+    clientCallName: 'client.devices.reset',
+    fullyQualifiedName: 'devices.reset',
+    httpMethod: 'post',
+    httpPath: '/devices/{deviceId}/reset',
+  },
+  {
     clientCallName: 'client.devices.setName',
     fullyQualifiedName: 'devices.setName',
     httpMethod: 'put',
@@ -267,6 +285,36 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'devices.esim.remove',
     httpMethod: 'delete',
     httpPath: '/devices/{deviceId}/esim',
+  },
+  {
+    clientCallName: 'client.devices.esim.setRoaming',
+    fullyQualifiedName: 'devices.esim.setRoaming',
+    httpMethod: 'put',
+    httpPath: '/devices/{deviceId}/esim/roaming',
+  },
+  {
+    clientCallName: 'client.devices.esim.status',
+    fullyQualifiedName: 'devices.esim.status',
+    httpMethod: 'get',
+    httpPath: '/devices/{deviceId}/esim/status',
+  },
+  {
+    clientCallName: 'client.devices.esim.apn.create',
+    fullyQualifiedName: 'devices.esim.apn.create',
+    httpMethod: 'post',
+    httpPath: '/devices/{deviceId}/esim/apn',
+  },
+  {
+    clientCallName: 'client.devices.esim.apn.list',
+    fullyQualifiedName: 'devices.esim.apn.list',
+    httpMethod: 'get',
+    httpPath: '/devices/{deviceId}/esim/apn',
+  },
+  {
+    clientCallName: 'client.devices.esim.apn.select',
+    fullyQualifiedName: 'devices.esim.apn.select',
+    httpMethod: 'put',
+    httpPath: '/devices/{deviceId}/esim/apn',
   },
   {
     clientCallName: 'client.devices.files.list',
@@ -387,6 +435,18 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'devices.timezone.set',
     httpMethod: 'post',
     httpPath: '/devices/{deviceId}/timezone',
+  },
+  {
+    clientCallName: 'client.devices.language.get',
+    fullyQualifiedName: 'devices.language.get',
+    httpMethod: 'get',
+    httpPath: '/devices/{deviceId}/language',
+  },
+  {
+    clientCallName: 'client.devices.language.set',
+    fullyQualifiedName: 'devices.language.set',
+    httpMethod: 'post',
+    httpPath: '/devices/{deviceId}/language',
   },
   {
     clientCallName: 'client.hooks.retrieve',

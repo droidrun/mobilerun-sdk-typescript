@@ -120,6 +120,7 @@ Types:
 - <code><a href="./src/resources/devices/devices.ts">Device</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceListResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceCountResponse</a></code>
+- <code><a href="./src/resources/devices/devices.ts">DeviceFingerprintResponse</a></code>
 
 Methods:
 
@@ -127,6 +128,9 @@ Methods:
 - <code title="get /devices/{deviceId}">client.devices.<a href="./src/resources/devices/devices.ts">retrieve</a>(deviceID) -> Device</code>
 - <code title="get /devices">client.devices.<a href="./src/resources/devices/devices.ts">list</a>({ ...params }) -> DeviceListResponse</code>
 - <code title="get /devices/count">client.devices.<a href="./src/resources/devices/devices.ts">count</a>() -> DeviceCountResponse</code>
+- <code title="get /devices/{deviceId}/fingerprint">client.devices.<a href="./src/resources/devices/devices.ts">fingerprint</a>(deviceID, { ...params }) -> DeviceFingerprintResponse</code>
+- <code title="post /devices/{deviceId}/reboot">client.devices.<a href="./src/resources/devices/devices.ts">reboot</a>(deviceID) -> void</code>
+- <code title="post /devices/{deviceId}/reset">client.devices.<a href="./src/resources/devices/devices.ts">reset</a>(deviceID) -> void</code>
 - <code title="put /devices/{deviceId}/name">client.devices.<a href="./src/resources/devices/devices.ts">setName</a>(deviceID, { ...params }) -> Device</code>
 - <code title="delete /devices/{deviceId}">client.devices.<a href="./src/resources/devices/devices.ts">terminate</a>(deviceID, { ...params }) -> void</code>
 - <code title="get /devices/{deviceId}/wait">client.devices.<a href="./src/resources/devices/devices.ts">waitReady</a>(deviceID) -> Device</code>
@@ -163,15 +167,30 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/devices/esim.ts">EsimListResponse</a></code>
-- <code><a href="./src/resources/devices/esim.ts">EsimActivateResponse</a></code>
+- <code><a href="./src/resources/devices/esim/esim.ts">EsimListResponse</a></code>
+- <code><a href="./src/resources/devices/esim/esim.ts">EsimActivateResponse</a></code>
+- <code><a href="./src/resources/devices/esim/esim.ts">EsimStatusResponse</a></code>
 
 Methods:
 
-- <code title="get /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">list</a>(deviceID, { ...params }) -> EsimListResponse | null</code>
-- <code title="post /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">activate</a>(deviceID, { ...params }) -> EsimActivateResponse</code>
-- <code title="put /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">enable</a>(deviceID, { ...params }) -> void</code>
-- <code title="delete /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">remove</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">list</a>(deviceID, { ...params }) -> EsimListResponse | null</code>
+- <code title="post /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">activate</a>(deviceID, { ...params }) -> EsimActivateResponse</code>
+- <code title="put /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">enable</a>(deviceID, { ...params }) -> void</code>
+- <code title="delete /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">remove</a>(deviceID, { ...params }) -> void</code>
+- <code title="put /devices/{deviceId}/esim/roaming">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">setRoaming</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/esim/status">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">status</a>(deviceID, { ...params }) -> EsimStatusResponse | null</code>
+
+### Apn
+
+Types:
+
+- <code><a href="./src/resources/devices/esim/apn.ts">ApnListResponse</a></code>
+
+Methods:
+
+- <code title="post /devices/{deviceId}/esim/apn">client.devices.esim.apn.<a href="./src/resources/devices/esim/apn.ts">create</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/esim/apn">client.devices.esim.apn.<a href="./src/resources/devices/esim/apn.ts">list</a>(deviceID, { ...params }) -> ApnListResponse | null</code>
+- <code title="put /devices/{deviceId}/esim/apn">client.devices.esim.apn.<a href="./src/resources/devices/esim/apn.ts">select</a>(deviceID, { ...params }) -> void</code>
 
 ## Files
 
@@ -266,6 +285,17 @@ Methods:
 
 - <code title="get /devices/{deviceId}/timezone">client.devices.timezone.<a href="./src/resources/devices/timezone.ts">get</a>(deviceID, { ...params }) -> TimezoneGetResponse</code>
 - <code title="post /devices/{deviceId}/timezone">client.devices.timezone.<a href="./src/resources/devices/timezone.ts">set</a>(deviceID, { ...params }) -> void</code>
+
+## Language
+
+Types:
+
+- <code><a href="./src/resources/devices/language.ts">LanguageGetResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/{deviceId}/language">client.devices.language.<a href="./src/resources/devices/language.ts">get</a>(deviceID, { ...params }) -> LanguageGetResponse</code>
+- <code title="post /devices/{deviceId}/language">client.devices.language.<a href="./src/resources/devices/language.ts">set</a>(deviceID, { ...params }) -> void</code>
 
 # Hooks
 
