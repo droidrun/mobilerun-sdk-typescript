@@ -2566,36 +2566,36 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
-    name: 'set_timezone',
+    name: 'set',
     endpoint: '/devices/{deviceId}/timezone',
     httpMethod: 'post',
     summary: 'Set device timezone',
     description: 'Set device timezone',
-    stainlessPath: '(resource) devices.time > (method) set_timezone',
-    qualified: 'client.devices.time.setTimezone',
+    stainlessPath: '(resource) devices.timezone > (method) set',
+    qualified: 'client.devices.timezone.set',
     params: ['deviceId: string;', 'timezone: string;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## set_timezone\n\n`client.devices.time.setTimezone(deviceId: string, timezone: string, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/timezone`\n\nSet device timezone\n\n### Parameters\n\n- `deviceId: string`\n\n- `timezone: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.time.setTimezone('deviceId', { timezone: 'timezone' })\n```",
+      "## set\n\n`client.devices.timezone.set(deviceId: string, timezone: string, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/timezone`\n\nSet device timezone\n\n### Parameters\n\n- `deviceId: string`\n\n- `timezone: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.timezone.set('deviceId', { timezone: 'timezone' })\n```",
     perLanguage: {
       typescript: {
-        method: 'client.devices.time.setTimezone',
+        method: 'client.devices.timezone.set',
         example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.time.setTimezone('deviceId', { timezone: 'timezone' });",
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.timezone.set('deviceId', { timezone: 'timezone' });",
       },
       python: {
-        method: 'devices.time.set_timezone',
+        method: 'devices.timezone.set',
         example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.time.set_timezone(\n    device_id="deviceId",\n    timezone="timezone",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.timezone.set(\n    device_id="deviceId",\n    timezone="timezone",\n)',
       },
       go: {
-        method: 'client.Devices.Time.SetTimezone',
+        method: 'client.Devices.Timezone.Set',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Devices.Time.SetTimezone(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceTimeSetTimezoneParams{\n\t\t\tTimezone: "timezone",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Devices.Timezone.Set(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceTimezoneSetParams{\n\t\t\tTimezone: "timezone",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       cli: {
-        method: 'time set_timezone',
+        method: 'timezone set',
         example:
-          "mobilerun-cloud devices:time set-timezone \\\n  --api-key 'My API Key' \\\n  --device-id deviceId \\\n  --timezone timezone",
+          "mobilerun-cloud devices:timezone set \\\n  --api-key 'My API Key' \\\n  --device-id deviceId \\\n  --timezone timezone",
       },
       http: {
         example:
@@ -2604,75 +2604,37 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
-    name: 'time',
-    endpoint: '/devices/{deviceId}/time',
-    httpMethod: 'get',
-    summary: 'Device time',
-    description: 'Device time',
-    stainlessPath: '(resource) devices.time > (method) time',
-    qualified: 'client.devices.time.time',
-    params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
-    response: 'string',
-    markdown:
-      "## time\n\n`client.devices.time.time(deviceId: string, X-Device-Display-ID?: number): string`\n\n**get** `/devices/{deviceId}/time`\n\nDevice time\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.time.time('deviceId');\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.devices.time.time',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.devices.time.time('deviceId');\n\nconsole.log(response);",
-      },
-      python: {
-        method: 'devices.time.time',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.time.time(\n    device_id="deviceId",\n)\nprint(response)',
-      },
-      go: {
-        method: 'client.Devices.Time.Time',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Devices.Time.Time(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceTimeTimeParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
-      },
-      cli: {
-        method: 'time time',
-        example: "mobilerun-cloud devices:time time \\\n  --api-key 'My API Key' \\\n  --device-id deviceId",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/time \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'timezone',
+    name: 'get',
     endpoint: '/devices/{deviceId}/timezone',
     httpMethod: 'get',
     summary: 'Get device timezone',
     description: 'Get device timezone',
-    stainlessPath: '(resource) devices.time > (method) timezone',
-    qualified: 'client.devices.time.timezone',
+    stainlessPath: '(resource) devices.timezone > (method) get',
+    qualified: 'client.devices.timezone.get',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     response: '{ timezone: string; $schema?: string; }',
     markdown:
-      "## timezone\n\n`client.devices.time.timezone(deviceId: string, X-Device-Display-ID?: number): { timezone: string; $schema?: string; }`\n\n**get** `/devices/{deviceId}/timezone`\n\nGet device timezone\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ timezone: string; $schema?: string; }`\n\n  - `timezone: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.time.timezone('deviceId');\n\nconsole.log(response);\n```",
+      "## get\n\n`client.devices.timezone.get(deviceId: string, X-Device-Display-ID?: number): { timezone: string; $schema?: string; }`\n\n**get** `/devices/{deviceId}/timezone`\n\nGet device timezone\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ timezone: string; $schema?: string; }`\n\n  - `timezone: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst timezone = await client.devices.timezone.get('deviceId');\n\nconsole.log(timezone);\n```",
     perLanguage: {
       typescript: {
-        method: 'client.devices.time.timezone',
+        method: 'client.devices.timezone.get',
         example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.devices.time.timezone('deviceId');\n\nconsole.log(response.timezone);",
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst timezone = await client.devices.timezone.get('deviceId');\n\nconsole.log(timezone.timezone);",
       },
       python: {
-        method: 'devices.time.timezone',
+        method: 'devices.timezone.get',
         example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.time.timezone(\n    device_id="deviceId",\n)\nprint(response.timezone)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ntimezone = client.devices.timezone.get(\n    device_id="deviceId",\n)\nprint(timezone.timezone)',
       },
       go: {
-        method: 'client.Devices.Time.Timezone',
+        method: 'client.Devices.Timezone.Get',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Devices.Time.Timezone(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceTimeTimezoneParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Timezone)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\ttimezone, err := client.Devices.Timezone.Get(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceTimezoneGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", timezone.Timezone)\n}\n',
       },
       cli: {
-        method: 'time timezone',
+        method: 'timezone get',
         example:
-          "mobilerun-cloud devices:time timezone \\\n  --api-key 'My API Key' \\\n  --device-id deviceId",
+          "mobilerun-cloud devices:timezone get \\\n  --api-key 'My API Key' \\\n  --device-id deviceId",
       },
       http: {
         example:
