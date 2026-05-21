@@ -237,11 +237,13 @@ Types:
 
 - <code><a href="./src/resources/devices/state.ts">Rect</a></code>
 - <code><a href="./src/resources/devices/state.ts">StateScreenshotResponse</a></code>
+- <code><a href="./src/resources/devices/state.ts">StateTimeResponse</a></code>
 - <code><a href="./src/resources/devices/state.ts">StateUiResponse</a></code>
 
 Methods:
 
 - <code title="get /devices/{deviceId}/screenshot">client.devices.state.<a href="./src/resources/devices/state.ts">screenshot</a>(deviceID, { ...params }) -> string</code>
+- <code title="get /devices/{deviceId}/time">client.devices.state.<a href="./src/resources/devices/state.ts">time</a>(deviceID, { ...params }) -> string</code>
 - <code title="get /devices/{deviceId}/ui-state">client.devices.state.<a href="./src/resources/devices/state.ts">ui</a>(deviceID, { ...params }) -> StateUiResponse</code>
 
 ## Tasks

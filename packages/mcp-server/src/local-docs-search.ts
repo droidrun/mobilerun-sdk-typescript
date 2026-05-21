@@ -2483,6 +2483,44 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'time',
+    endpoint: '/devices/{deviceId}/time',
+    httpMethod: 'get',
+    summary: 'Device time',
+    description: 'Device time',
+    stainlessPath: '(resource) devices.state > (method) time',
+    qualified: 'client.devices.state.time',
+    params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
+    response: 'string',
+    markdown:
+      "## time\n\n`client.devices.state.time(deviceId: string, X-Device-Display-ID?: number): string`\n\n**get** `/devices/{deviceId}/time`\n\nDevice time\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.state.time('deviceId');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.devices.state.time',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.devices.state.time('deviceId');\n\nconsole.log(response);",
+      },
+      python: {
+        method: 'devices.state.time',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.devices.state.time(\n    device_id="deviceId",\n)\nprint(response)',
+      },
+      go: {
+        method: 'client.Devices.State.Time',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Devices.State.Time(\n\t\tcontext.TODO(),\n\t\t"deviceId",\n\t\tmobileruncloud.DeviceStateTimeParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      cli: {
+        method: 'state time',
+        example: "mobilerun-cloud devices:state time \\\n  --api-key 'My API Key' \\\n  --device-id deviceId",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/time \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'list',
     endpoint: '/devices/{deviceId}/tasks',
     httpMethod: 'get',

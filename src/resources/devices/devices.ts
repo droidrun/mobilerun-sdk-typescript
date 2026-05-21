@@ -65,6 +65,8 @@ import {
   State,
   StateScreenshotParams,
   StateScreenshotResponse,
+  StateTimeParams,
+  StateTimeResponse,
   StateUiParams,
   StateUiResponse,
 } from './state';
@@ -434,8 +436,10 @@ export declare namespace Devices {
     State as State,
     type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
+    type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
+    type StateTimeParams as StateTimeParams,
     type StateUiParams as StateUiParams,
   };
 

@@ -359,6 +359,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/{deviceId}/screenshot',
   },
   {
+    clientCallName: 'client.devices.state.time',
+    fullyQualifiedName: 'devices.state.time',
+    httpMethod: 'get',
+    httpPath: '/devices/{deviceId}/time',
+  },
+  {
     clientCallName: 'client.devices.state.ui',
     fullyQualifiedName: 'devices.state.ui',
     httpMethod: 'get',
