@@ -103,6 +103,7 @@ describe('resource tasks', () => {
     const response = await client.tasks.run({
       deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       task: 'x',
+      accessibility: true,
       agentId: 0,
       apps: ['string'],
       continueOnFailure: true,
@@ -143,6 +144,7 @@ describe('resource tasks', () => {
     const response = await client.tasks.runStreamed({
       deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       task: 'x',
+      accessibility: true,
       agentId: 0,
       apps: ['string'],
       continueOnFailure: true,
