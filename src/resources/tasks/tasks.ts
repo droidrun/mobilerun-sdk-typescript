@@ -117,6 +117,8 @@ export interface Task {
 
   id?: string;
 
+  accessibility?: boolean;
+
   agentId?: number;
 
   apps?: Array<string>;
@@ -248,6 +250,8 @@ export namespace TaskListResponse {
     tmpDevice: boolean;
 
     userId: string;
+
+    accessibility?: boolean;
 
     agentId?: number;
 
@@ -551,7 +555,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryManagerPlanEvent {
     /**
-     * Coordination event from ManagerAgent to DroidAgent.
+     * Coordination event from ManagerAgent to MobileAgent.
      *
      * Used for workflow step routing only (NOT streamed to frontend). For internal
      * events with memory_update metadata, see ManagerPlanDetailsEvent.
@@ -563,7 +567,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryManagerPlanEvent {
     /**
-     * Coordination event from ManagerAgent to DroidAgent.
+     * Coordination event from ManagerAgent to MobileAgent.
      *
      * Used for workflow step routing only (NOT streamed to frontend). For internal
      * events with memory_update metadata, see ManagerPlanDetailsEvent.
@@ -1020,6 +1024,8 @@ export interface TaskRunParams {
 
   task: string;
 
+  accessibility?: boolean;
+
   agentId?: number;
 
   apps?: Array<string>;
@@ -1039,7 +1045,7 @@ export interface TaskRunParams {
 
   /**
    * The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.1-flash-lite-preview')
+   * 'google/gemini-3.1-flash-lite')
    */
   llmModel?: string;
 
@@ -1076,6 +1082,8 @@ export interface TaskRunStreamedParams {
 
   task: string;
 
+  accessibility?: boolean;
+
   agentId?: number;
 
   apps?: Array<string>;
@@ -1095,7 +1103,7 @@ export interface TaskRunStreamedParams {
 
   /**
    * The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.1-flash-lite-preview')
+   * 'google/gemini-3.1-flash-lite')
    */
   llmModel?: string;
 
