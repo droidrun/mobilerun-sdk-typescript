@@ -31,6 +31,7 @@ Types:
 - <code><a href="./src/resources/apps.ts">AppDeleteResponse</a></code>
 - <code><a href="./src/resources/apps.ts">AppConfirmUploadResponse</a></code>
 - <code><a href="./src/resources/apps.ts">AppCreateSignedUploadURLResponse</a></code>
+- <code><a href="./src/resources/apps.ts">AppListVersionsResponse</a></code>
 - <code><a href="./src/resources/apps.ts">AppMarkFailedResponse</a></code>
 
 Methods:
@@ -40,6 +41,7 @@ Methods:
 - <code title="delete /apps/{id}">client.apps.<a href="./src/resources/apps.ts">delete</a>(id) -> AppDeleteResponse</code>
 - <code title="post /apps/{id}/confirm-upload">client.apps.<a href="./src/resources/apps.ts">confirmUpload</a>(id) -> AppConfirmUploadResponse</code>
 - <code title="post /apps/create-signed-upload-url">client.apps.<a href="./src/resources/apps.ts">createSignedUploadURL</a>({ ...params }) -> AppCreateSignedUploadURLResponse</code>
+- <code title="get /apps/{id}/versions">client.apps.<a href="./src/resources/apps.ts">listVersions</a>(id) -> AppListVersionsResponse</code>
 - <code title="post /apps/{id}/mark-failed">client.apps.<a href="./src/resources/apps.ts">markFailed</a>(id) -> AppMarkFailedResponse</code>
 
 # Carriers
@@ -157,11 +159,11 @@ Types:
 
 Methods:
 
-- <code title="patch /devices/{deviceId}/apps/{packageName}">client.devices.apps.<a href="./src/resources/devices/apps.ts">update</a>(packageName, { ...params }) -> void</code>
 - <code title="get /devices/{deviceId}/apps">client.devices.apps.<a href="./src/resources/devices/apps.ts">list</a>(deviceID, { ...params }) -> AppListResponse | null</code>
 - <code title="delete /devices/{deviceId}/apps/{packageName}">client.devices.apps.<a href="./src/resources/devices/apps.ts">delete</a>(packageName, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/apps">client.devices.apps.<a href="./src/resources/devices/apps.ts">install</a>(deviceID, { ...params }) -> void</code>
 - <code title="put /devices/{deviceId}/apps/{packageName}">client.devices.apps.<a href="./src/resources/devices/apps.ts">start</a>(packageName, { ...params }) -> void</code>
+- <code title="patch /devices/{deviceId}/apps/{packageName}">client.devices.apps.<a href="./src/resources/devices/apps.ts">stop</a>(packageName, { ...params }) -> void</code>
 
 ## Esim
 
@@ -307,6 +309,7 @@ Types:
 - <code><a href="./src/resources/hooks.ts">HookGetSampleDataResponse</a></code>
 - <code><a href="./src/resources/hooks.ts">HookPerformResponse</a></code>
 - <code><a href="./src/resources/hooks.ts">HookSubscribeResponse</a></code>
+- <code><a href="./src/resources/hooks.ts">HookTestResponse</a></code>
 - <code><a href="./src/resources/hooks.ts">HookUnsubscribeResponse</a></code>
 
 Methods:
@@ -317,6 +320,7 @@ Methods:
 - <code title="get /hooks/sample">client.hooks.<a href="./src/resources/hooks.ts">getSampleData</a>() -> HookGetSampleDataResponse</code>
 - <code title="post /hooks/perform">client.hooks.<a href="./src/resources/hooks.ts">perform</a>({ ...params }) -> HookPerformResponse</code>
 - <code title="post /hooks/subscribe">client.hooks.<a href="./src/resources/hooks.ts">subscribe</a>({ ...params }) -> HookSubscribeResponse</code>
+- <code title="post /hooks/{hook_id}/test">client.hooks.<a href="./src/resources/hooks.ts">test</a>(hookID, { ...params }) -> HookTestResponse</code>
 - <code title="post /hooks/{hook_id}/unsubscribe">client.hooks.<a href="./src/resources/hooks.ts">unsubscribe</a>(hookID) -> HookUnsubscribeResponse</code>
 
 # Models
@@ -355,6 +359,7 @@ Types:
 - <code><a href="./src/resources/proxies.ts">ProxyUpdateResponse</a></code>
 - <code><a href="./src/resources/proxies.ts">ProxyListResponse</a></code>
 - <code><a href="./src/resources/proxies.ts">ProxyDeleteResponse</a></code>
+- <code><a href="./src/resources/proxies.ts">ProxyLookupResponse</a></code>
 
 Methods:
 
@@ -363,6 +368,7 @@ Methods:
 - <code title="put /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">update</a>(proxyID, { ...params }) -> ProxyUpdateResponse</code>
 - <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
 - <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
+- <code title="post /proxies/lookup">client.proxies.<a href="./src/resources/proxies.ts">lookup</a>({ ...params }) -> ProxyLookupResponse</code>
 
 # Tasks
 

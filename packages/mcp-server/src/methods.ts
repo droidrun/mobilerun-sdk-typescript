@@ -47,6 +47,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/apps/create-signed-upload-url',
   },
   {
+    clientCallName: 'client.apps.listVersions',
+    fullyQualifiedName: 'apps.listVersions',
+    httpMethod: 'get',
+    httpPath: '/apps/{id}/versions',
+  },
+  {
     clientCallName: 'client.apps.markFailed',
     fullyQualifiedName: 'apps.markFailed',
     httpMethod: 'post',
@@ -233,12 +239,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/{deviceId}/tap',
   },
   {
-    clientCallName: 'client.devices.apps.update',
-    fullyQualifiedName: 'devices.apps.update',
-    httpMethod: 'patch',
-    httpPath: '/devices/{deviceId}/apps/{packageName}',
-  },
-  {
     clientCallName: 'client.devices.apps.list',
     fullyQualifiedName: 'devices.apps.list',
     httpMethod: 'get',
@@ -260,6 +260,12 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.devices.apps.start',
     fullyQualifiedName: 'devices.apps.start',
     httpMethod: 'put',
+    httpPath: '/devices/{deviceId}/apps/{packageName}',
+  },
+  {
+    clientCallName: 'client.devices.apps.stop',
+    fullyQualifiedName: 'devices.apps.stop',
+    httpMethod: 'patch',
     httpPath: '/devices/{deviceId}/apps/{packageName}',
   },
   {
@@ -485,6 +491,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/hooks/subscribe',
   },
   {
+    clientCallName: 'client.hooks.test',
+    fullyQualifiedName: 'hooks.test',
+    httpMethod: 'post',
+    httpPath: '/hooks/{hook_id}/test',
+  },
+  {
     clientCallName: 'client.hooks.unsubscribe',
     fullyQualifiedName: 'hooks.unsubscribe',
     httpMethod: 'post',
@@ -555,6 +567,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'proxies.delete',
     httpMethod: 'delete',
     httpPath: '/proxies/{proxyId}',
+  },
+  {
+    clientCallName: 'client.proxies.lookup',
+    fullyQualifiedName: 'proxies.lookup',
+    httpMethod: 'post',
+    httpPath: '/proxies/lookup',
   },
   {
     clientCallName: 'client.tasks.retrieve',
