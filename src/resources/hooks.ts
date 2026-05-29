@@ -57,6 +57,16 @@ export class Hooks extends APIResource {
   }
 
   /**
+   * Send a test event to a webhook endpoint.
+   *
+   * Delivers a sample payload to the hook's URL with a single attempt (no retries)
+   * for fast feedback.
+   */
+  test(hookID: string, body: HookTestParams, options?: RequestOptions): APIPromise<HookTestResponse> {
+    return this._client.post(path`/hooks/${hookID}/test`, { body, ...options });
+  }
+
+  /**
    * Unsubscribe a previously created subscription by id.
    *
    * Permanently deletes the subscription if it belongs to the user.
@@ -218,6 +228,31 @@ export interface HookSubscribeResponse {
 }
 
 /**
+ * Response after attempting test delivery.
+ */
+export interface HookTestResponse {
+  /**
+   * The hook ID
+   */
+  id: string;
+
+  /**
+   * Whether delivery succeeded (2xx)
+   */
+  success: boolean;
+
+  /**
+   * Error message if delivery failed
+   */
+  error?: string | null;
+
+  /**
+   * HTTP status from target
+   */
+  statusCode?: number | null;
+}
+
+/**
  * Response model after successful unsubscription.
  */
 export interface HookUnsubscribeResponse {
@@ -276,6 +311,13 @@ export interface HookSubscribeParams {
   service?: string | null;
 }
 
+export interface HookTestParams {
+  /**
+   * Event type to simulate (default: completed)
+   */
+  event?: string | null;
+}
+
 export declare namespace Hooks {
   export {
     type HookRetrieveResponse as HookRetrieveResponse,
@@ -284,10 +326,12 @@ export declare namespace Hooks {
     type HookGetSampleDataResponse as HookGetSampleDataResponse,
     type HookPerformResponse as HookPerformResponse,
     type HookSubscribeResponse as HookSubscribeResponse,
+    type HookTestResponse as HookTestResponse,
     type HookUnsubscribeResponse as HookUnsubscribeResponse,
     type HookUpdateParams as HookUpdateParams,
     type HookListParams as HookListParams,
     type HookPerformParams as HookPerformParams,
     type HookSubscribeParams as HookSubscribeParams,
+    type HookTestParams as HookTestParams,
   };
 }

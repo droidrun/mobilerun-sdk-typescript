@@ -9,6 +9,7 @@ export {
   type AppDeleteResponse,
   type AppConfirmUploadResponse,
   type AppCreateSignedUploadURLResponse,
+  type AppListVersionsResponse,
   type AppMarkFailedResponse,
   type AppListParams,
   type AppCreateSignedUploadURLParams,
@@ -51,11 +52,13 @@ export {
   type HookGetSampleDataResponse,
   type HookPerformResponse,
   type HookSubscribeResponse,
+  type HookTestResponse,
   type HookUnsubscribeResponse,
   type HookUpdateParams,
   type HookListParams,
   type HookPerformParams,
   type HookSubscribeParams,
+  type HookTestParams,
 } from './hooks';
 export { Models, type ModelListResponse } from './models';
 export {
@@ -75,9 +78,11 @@ export {
   type ProxyUpdateResponse,
   type ProxyListResponse,
   type ProxyDeleteResponse,
+  type ProxyLookupResponse,
   type ProxyCreateParams,
   type ProxyUpdateParams,
   type ProxyListParams,
+  type ProxyLookupParams,
 } from './proxies';
 export {
   Tasks,

@@ -12,11 +12,11 @@ export {
 export {
   Apps,
   type AppListResponse,
-  type AppUpdateParams,
   type AppListParams,
   type AppDeleteParams,
   type AppInstallParams,
   type AppStartParams,
+  type AppStopParams,
 } from './apps';
 export {
   Devices,

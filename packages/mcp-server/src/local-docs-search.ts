@@ -346,6 +346,46 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'list_versions',
+    endpoint: '/apps/{id}/versions',
+    httpMethod: 'get',
+    summary: 'List versions for an app',
+    description: 'Retrieves all versions of an app visible to the user (own uploads + system versions)',
+    stainlessPath: '(resource) apps > (method) list_versions',
+    qualified: 'client.apps.listVersions',
+    params: ['id: string;'],
+    response:
+      "{ data: { id: string; appId: string; country: string; createdAt: string; queuedAt: string; sizeBytes: number; source: 'user' | 'system' | 'portal'; status: 'queued' | 'available' | 'failed'; targetSdk: number; updatedAt: string; userId: string; versionCode: number; versionName: string; }[]; }",
+    markdown:
+      "## list_versions\n\n`client.apps.listVersions(id: string): { data: object[]; }`\n\n**get** `/apps/{id}/versions`\n\nRetrieves all versions of an app visible to the user (own uploads + system versions)\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { id: string; appId: string; country: string; createdAt: string; queuedAt: string; sizeBytes: number; source: 'user' | 'system' | 'portal'; status: 'queued' | 'available' | 'failed'; targetSdk: number; updatedAt: string; userId: string; versionCode: number; versionName: string; }[]; }`\n\n  - `data: { id: string; appId: string; country: string; createdAt: string; queuedAt: string; sizeBytes: number; source: 'user' | 'system' | 'portal'; status: 'queued' | 'available' | 'failed'; targetSdk: number; updatedAt: string; userId: string; versionCode: number; versionName: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.apps.listVersions('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.apps.listVersions',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.apps.listVersions('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.data);",
+      },
+      python: {
+        method: 'apps.list_versions',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.apps.list_versions(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.data)',
+      },
+      go: {
+        method: 'client.Apps.ListVersions',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Apps.ListVersions(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      cli: {
+        method: 'apps list_versions',
+        example:
+          "mobilerun-cloud apps list-versions \\\n  --api-key 'My API Key' \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/apps/$ID/versions \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'create',
     endpoint: '/carriers',
     httpMethod: 'post',
@@ -1758,36 +1798,36 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
-    name: 'update',
+    name: 'stop',
     endpoint: '/devices/{deviceId}/apps/{packageName}',
     httpMethod: 'patch',
     summary: 'Stop app',
     description: 'Stop app',
-    stainlessPath: '(resource) devices.apps > (method) update',
-    qualified: 'client.devices.apps.update',
+    stainlessPath: '(resource) devices.apps > (method) stop',
+    qualified: 'client.devices.apps.stop',
     params: ['deviceId: string;', 'packageName: string;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## update\n\n`client.devices.apps.update(deviceId: string, packageName: string, X-Device-Display-ID?: number): void`\n\n**patch** `/devices/{deviceId}/apps/{packageName}`\n\nStop app\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.update('packageName', { deviceId: 'deviceId' })\n```",
+      "## stop\n\n`client.devices.apps.stop(deviceId: string, packageName: string, X-Device-Display-ID?: number): void`\n\n**patch** `/devices/{deviceId}/apps/{packageName}`\n\nStop app\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.stop('packageName', { deviceId: 'deviceId' })\n```",
     perLanguage: {
       typescript: {
-        method: 'client.devices.apps.update',
+        method: 'client.devices.apps.stop',
         example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.apps.update('packageName', { deviceId: 'deviceId' });",
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.devices.apps.stop('packageName', { deviceId: 'deviceId' });",
       },
       python: {
-        method: 'devices.apps.update',
+        method: 'devices.apps.stop',
         example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.update(\n    package_name="packageName",\n    device_id="deviceId",\n)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.devices.apps.stop(\n    package_name="packageName",\n    device_id="deviceId",\n)',
       },
       go: {
-        method: 'client.Devices.Apps.Update',
+        method: 'client.Devices.Apps.Stop',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Devices.Apps.Update(\n\t\tcontext.TODO(),\n\t\t"packageName",\n\t\tmobileruncloud.DeviceAppUpdateParams{\n\t\t\tDeviceID: "deviceId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Devices.Apps.Stop(\n\t\tcontext.TODO(),\n\t\t"packageName",\n\t\tmobileruncloud.DeviceAppStopParams{\n\t\t\tDeviceID: "deviceId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       cli: {
-        method: 'apps update',
+        method: 'apps stop',
         example:
-          "mobilerun-cloud devices:apps update \\\n  --api-key 'My API Key' \\\n  --device-id deviceId \\\n  --package-name packageName",
+          "mobilerun-cloud devices:apps stop \\\n  --api-key 'My API Key' \\\n  --device-id deviceId \\\n  --package-name packageName",
       },
       http: {
         example:
@@ -3318,6 +3358,46 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'test',
+    endpoint: '/hooks/{hook_id}/test',
+    httpMethod: 'post',
+    summary: 'Test Hook',
+    description:
+      "Send a test event to a webhook endpoint.\n\nDelivers a sample payload to the hook's URL with a single attempt\n(no retries) for fast feedback.",
+    stainlessPath: '(resource) hooks > (method) test',
+    qualified: 'client.hooks.test',
+    params: ['hook_id: string;', 'event?: string;'],
+    response: '{ id: string; success: boolean; error?: string; statusCode?: number; }',
+    markdown:
+      "## test\n\n`client.hooks.test(hook_id: string, event?: string): { id: string; success: boolean; error?: string; statusCode?: number; }`\n\n**post** `/hooks/{hook_id}/test`\n\nSend a test event to a webhook endpoint.\n\nDelivers a sample payload to the hook's URL with a single attempt\n(no retries) for fast feedback.\n\n### Parameters\n\n- `hook_id: string`\n\n- `event?: string`\n  Event type to simulate (default: completed)\n\n### Returns\n\n- `{ id: string; success: boolean; error?: string; statusCode?: number; }`\n  Response after attempting test delivery.\n\n  - `id: string`\n  - `success: boolean`\n  - `error?: string`\n  - `statusCode?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.test('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.hooks.test',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.test('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.id);",
+      },
+      python: {
+        method: 'hooks.test',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.test(\n    hook_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.id)',
+      },
+      go: {
+        method: 'client.Hooks.Test',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.Test(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.HookTestParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      cli: {
+        method: 'hooks test',
+        example:
+          "mobilerun-cloud hooks test \\\n  --api-key 'My API Key' \\\n  --hook-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+      },
+      http: {
+        example:
+          "curl https://api.mobilerun.ai/v1/hooks/$HOOK_ID/test \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $MOBILERUN_CLOUD_API_KEY\" \\\n    -d '{}'",
+      },
+    },
+  },
+  {
     name: 'list',
     endpoint: '/models',
     httpMethod: 'get',
@@ -3762,6 +3842,46 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.mobilerun.ai/v1/proxies/$PROXY_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "host": "x",\n          "name": "xxx",\n          "password": "x",\n          "port": 1,\n          "protocol": "socks5",\n          "user": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'lookup',
+    endpoint: '/proxies/lookup',
+    httpMethod: 'post',
+    summary: 'Lookup proxy location',
+    description: 'Lookup proxy location',
+    stainlessPath: '(resource) proxies > (method) lookup',
+    qualified: 'client.proxies.lookup',
+    params: ['socks5: { host: string; port: number; password?: string; user?: string; };'],
+    response:
+      '{ ip: string; isMobile: boolean; latitude: number; longitude: number; $schema?: string; carrier?: { mcc?: string; mnc?: string; name?: string; }; city?: string; country?: string; countryCode?: string; region?: string; timezone?: string; }',
+    markdown:
+      "## lookup\n\n`client.proxies.lookup(socks5: { host: string; port: number; password?: string; user?: string; }): { ip: string; isMobile: boolean; latitude: number; longitude: number; $schema?: string; carrier?: object; city?: string; country?: string; countryCode?: string; region?: string; timezone?: string; }`\n\n**post** `/proxies/lookup`\n\nLookup proxy location\n\n### Parameters\n\n- `socks5: { host: string; port: number; password?: string; user?: string; }`\n  SOCKS5 proxy configuration.\n  - `host: string`\n  - `port: number`\n  - `password?: string`\n  - `user?: string`\n\n### Returns\n\n- `{ ip: string; isMobile: boolean; latitude: number; longitude: number; $schema?: string; carrier?: { mcc?: string; mnc?: string; name?: string; }; city?: string; country?: string; countryCode?: string; region?: string; timezone?: string; }`\n\n  - `ip: string`\n  - `isMobile: boolean`\n  - `latitude: number`\n  - `longitude: number`\n  - `$schema?: string`\n  - `carrier?: { mcc?: string; mnc?: string; name?: string; }`\n  - `city?: string`\n  - `country?: string`\n  - `countryCode?: string`\n  - `region?: string`\n  - `timezone?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.proxies.lookup({ socks5: { host: 'host', port: 1 } });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.proxies.lookup',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.proxies.lookup({ socks5: { host: 'host', port: 1 } });\n\nconsole.log(response.ip);",
+      },
+      python: {
+        method: 'proxies.lookup',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.proxies.lookup(\n    socks5={\n        "host": "host",\n        "port": 1,\n    },\n)\nprint(response.ip)',
+      },
+      go: {
+        method: 'client.Proxies.Lookup',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Proxies.Lookup(context.TODO(), mobileruncloud.ProxyLookupParams{\n\t\tSocks5: mobileruncloud.ProxyLookupParamsSocks5{\n\t\t\tHost: "host",\n\t\t\tPort: 1,\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.IP)\n}\n',
+      },
+      cli: {
+        method: 'proxies lookup',
+        example:
+          "mobilerun-cloud proxies lookup \\\n  --api-key 'My API Key' \\\n  --socks5 '{host: host, port: 1}'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/proxies/lookup \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "socks5": {\n            "host": "host",\n            "port": 1\n          }\n        }\'',
       },
     },
   },

@@ -25,6 +25,7 @@ import {
   AppDeleteResponse,
   AppListParams,
   AppListResponse,
+  AppListVersionsResponse,
   AppMarkFailedResponse,
   AppRetrieveResponse,
   Apps,
@@ -51,6 +52,8 @@ import {
   HookRetrieveResponse,
   HookSubscribeParams,
   HookSubscribeResponse,
+  HookTestParams,
+  HookTestResponse,
   HookUnsubscribeResponse,
   HookUpdateParams,
   HookUpdateResponse,
@@ -74,6 +77,8 @@ import {
   ProxyDeleteResponse,
   ProxyListParams,
   ProxyListResponse,
+  ProxyLookupParams,
+  ProxyLookupResponse,
   ProxyRetrieveResponse,
   ProxyUpdateParams,
   ProxyUpdateResponse,
@@ -885,6 +890,7 @@ export declare namespace Mobilerun {
     type AppDeleteResponse as AppDeleteResponse,
     type AppConfirmUploadResponse as AppConfirmUploadResponse,
     type AppCreateSignedUploadURLResponse as AppCreateSignedUploadURLResponse,
+    type AppListVersionsResponse as AppListVersionsResponse,
     type AppMarkFailedResponse as AppMarkFailedResponse,
     type AppListParams as AppListParams,
     type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
@@ -931,11 +937,13 @@ export declare namespace Mobilerun {
     type HookGetSampleDataResponse as HookGetSampleDataResponse,
     type HookPerformResponse as HookPerformResponse,
     type HookSubscribeResponse as HookSubscribeResponse,
+    type HookTestResponse as HookTestResponse,
     type HookUnsubscribeResponse as HookUnsubscribeResponse,
     type HookUpdateParams as HookUpdateParams,
     type HookListParams as HookListParams,
     type HookPerformParams as HookPerformParams,
     type HookSubscribeParams as HookSubscribeParams,
+    type HookTestParams as HookTestParams,
   };
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
@@ -958,9 +966,11 @@ export declare namespace Mobilerun {
     type ProxyUpdateResponse as ProxyUpdateResponse,
     type ProxyListResponse as ProxyListResponse,
     type ProxyDeleteResponse as ProxyDeleteResponse,
+    type ProxyLookupResponse as ProxyLookupResponse,
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
+    type ProxyLookupParams as ProxyLookupParams,
   };
 
   export {
