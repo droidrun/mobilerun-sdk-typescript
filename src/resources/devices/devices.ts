@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ProxiesAPI from '../proxies';
 import * as Shared from '../shared';
 import * as ActionsAPI from './actions';
 import {
@@ -45,7 +46,7 @@ import * as ProfileAPI from './profile';
 import { Profile, ProfileUpdateParams } from './profile';
 import * as ProxyAPI from './proxy';
 import {
-  Proxy as ProxyAPIProxy,
+  Proxy,
   ProxyConnectParams,
   ProxyDisconnectParams,
   ProxyStatusParams,
@@ -360,22 +361,12 @@ export interface DeviceCreateParams {
   /**
    * Body param
    */
-  proxy?: DeviceCreateParams.Proxy;
+  proxy?: ProxiesAPI.ProxyConfig;
 
   /**
    * Body param
    */
   timezone?: string;
-}
-
-export namespace DeviceCreateParams {
-  export interface Proxy {
-    name?: string;
-
-    smartIp?: boolean;
-
-    socks5?: Shared.Socks5;
-  }
 }
 
 export interface DeviceListParams {
@@ -430,7 +421,7 @@ Devices.Keyboard = Keyboard;
 Devices.Location = Location;
 Devices.Packages = Packages;
 Devices.Profile = Profile;
-Devices.Proxy = ProxyAPIProxy;
+Devices.Proxy = Proxy;
 Devices.State = State;
 Devices.Tasks = Tasks;
 Devices.Timezone = Timezone;
@@ -515,7 +506,7 @@ export declare namespace Devices {
   export { Profile as Profile, type ProfileUpdateParams as ProfileUpdateParams };
 
   export {
-    ProxyAPIProxy as Proxy,
+    Proxy as Proxy,
     type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,

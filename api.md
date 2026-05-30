@@ -7,7 +7,6 @@ Types:
 - <code><a href="./src/resources/shared.ts">DeviceSpec</a></code>
 - <code><a href="./src/resources/shared.ts">Location</a></code>
 - <code><a href="./src/resources/shared.ts">Meta</a></code>
-- <code><a href="./src/resources/shared.ts">Pagination</a></code>
 - <code><a href="./src/resources/shared.ts">PaginationMeta</a></code>
 - <code><a href="./src/resources/shared.ts">PermissionSet</a></code>
 - <code><a href="./src/resources/shared.ts">Socks5</a></code>
@@ -23,26 +22,6 @@ Methods:
 - <code title="get /agents">client.agents.<a href="./src/resources/agents.ts">list</a>() -> AgentListResponse</code>
 
 # Apps
-
-Types:
-
-- <code><a href="./src/resources/apps.ts">AppRetrieveResponse</a></code>
-- <code><a href="./src/resources/apps.ts">AppListResponse</a></code>
-- <code><a href="./src/resources/apps.ts">AppDeleteResponse</a></code>
-- <code><a href="./src/resources/apps.ts">AppConfirmUploadResponse</a></code>
-- <code><a href="./src/resources/apps.ts">AppCreateSignedUploadURLResponse</a></code>
-- <code><a href="./src/resources/apps.ts">AppListVersionsResponse</a></code>
-- <code><a href="./src/resources/apps.ts">AppMarkFailedResponse</a></code>
-
-Methods:
-
-- <code title="get /apps/{id}">client.apps.<a href="./src/resources/apps.ts">retrieve</a>(id) -> AppRetrieveResponse</code>
-- <code title="get /apps">client.apps.<a href="./src/resources/apps.ts">list</a>({ ...params }) -> AppListResponse</code>
-- <code title="delete /apps/{id}">client.apps.<a href="./src/resources/apps.ts">delete</a>(id) -> AppDeleteResponse</code>
-- <code title="post /apps/{id}/confirm-upload">client.apps.<a href="./src/resources/apps.ts">confirmUpload</a>(id) -> AppConfirmUploadResponse</code>
-- <code title="post /apps/create-signed-upload-url">client.apps.<a href="./src/resources/apps.ts">createSignedUploadURL</a>({ ...params }) -> AppCreateSignedUploadURLResponse</code>
-- <code title="get /apps/{id}/versions">client.apps.<a href="./src/resources/apps.ts">listVersions</a>(id) -> AppListVersionsResponse</code>
-- <code title="post /apps/{id}/mark-failed">client.apps.<a href="./src/resources/apps.ts">markFailed</a>(id) -> AppMarkFailedResponse</code>
 
 # Carriers
 
@@ -66,54 +45,11 @@ Methods:
 
 # Credentials
 
-Types:
-
-- <code><a href="./src/resources/credentials/credentials.ts">CredentialListResponse</a></code>
-
-Methods:
-
-- <code title="get /credentials">client.credentials.<a href="./src/resources/credentials/credentials.ts">list</a>({ ...params }) -> CredentialListResponse</code>
-
 ## Packages
-
-Types:
-
-- <code><a href="./src/resources/credentials/packages/packages.ts">PackageCreateResponse</a></code>
-- <code><a href="./src/resources/credentials/packages/packages.ts">PackageListResponse</a></code>
-
-Methods:
-
-- <code title="post /credentials/packages">client.credentials.packages.<a href="./src/resources/credentials/packages/packages.ts">create</a>({ ...params }) -> PackageCreateResponse</code>
-- <code title="get /credentials/packages/{packageName}">client.credentials.packages.<a href="./src/resources/credentials/packages/packages.ts">list</a>(packageName) -> PackageListResponse</code>
 
 ### Credentials
 
-Types:
-
-- <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">Credential</a></code>
-- <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">CredentialCreateResponse</a></code>
-- <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">CredentialRetrieveResponse</a></code>
-- <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">CredentialDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /credentials/packages/{packageName}">client.credentials.packages.credentials.<a href="./src/resources/credentials/packages/credentials/credentials.ts">create</a>(packageName, { ...params }) -> CredentialCreateResponse</code>
-- <code title="get /credentials/packages/{packageName}/credentials/{credentialName}">client.credentials.packages.credentials.<a href="./src/resources/credentials/packages/credentials/credentials.ts">retrieve</a>(credentialName, { ...params }) -> CredentialRetrieveResponse</code>
-- <code title="delete /credentials/packages/{packageName}/credentials/{credentialName}">client.credentials.packages.credentials.<a href="./src/resources/credentials/packages/credentials/credentials.ts">delete</a>(credentialName, { ...params }) -> CredentialDeleteResponse</code>
-
 #### Fields
-
-Types:
-
-- <code><a href="./src/resources/credentials/packages/credentials/fields.ts">FieldCreateResponse</a></code>
-- <code><a href="./src/resources/credentials/packages/credentials/fields.ts">FieldUpdateResponse</a></code>
-- <code><a href="./src/resources/credentials/packages/credentials/fields.ts">FieldDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /credentials/packages/{packageName}/credentials/{credentialName}/fields">client.credentials.packages.credentials.fields.<a href="./src/resources/credentials/packages/credentials/fields.ts">create</a>(credentialName, { ...params }) -> FieldCreateResponse</code>
-- <code title="patch /credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}">client.credentials.packages.credentials.fields.<a href="./src/resources/credentials/packages/credentials/fields.ts">update</a>(fieldType, { ...params }) -> FieldUpdateResponse</code>
-- <code title="delete /credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}">client.credentials.packages.credentials.fields.<a href="./src/resources/credentials/packages/credentials/fields.ts">delete</a>(fieldType, { ...params }) -> FieldDeleteResponse</code>
 
 # Devices
 
@@ -354,20 +290,10 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/proxies.ts">ProxyConfig</a></code>
-- <code><a href="./src/resources/proxies.ts">ProxyCreateResponse</a></code>
-- <code><a href="./src/resources/proxies.ts">ProxyRetrieveResponse</a></code>
-- <code><a href="./src/resources/proxies.ts">ProxyUpdateResponse</a></code>
-- <code><a href="./src/resources/proxies.ts">ProxyListResponse</a></code>
-- <code><a href="./src/resources/proxies.ts">ProxyDeleteResponse</a></code>
 - <code><a href="./src/resources/proxies.ts">ProxyLookupResponse</a></code>
 
 Methods:
 
-- <code title="post /proxies">client.proxies.<a href="./src/resources/proxies.ts">create</a>({ ...params }) -> ProxyCreateResponse</code>
-- <code title="get /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">retrieve</a>(proxyID) -> ProxyRetrieveResponse</code>
-- <code title="put /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">update</a>(proxyID, { ...params }) -> ProxyUpdateResponse</code>
-- <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
-- <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
 - <code title="post /proxies/lookup">client.proxies.<a href="./src/resources/proxies.ts">lookup</a>({ ...params }) -> ProxyLookupResponse</code>
 
 # Tasks
