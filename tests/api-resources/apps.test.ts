@@ -7,41 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource proxies', () => {
-  // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.proxies.create({
-      host: 'x',
-      name: 'xxx',
-      password: 'x',
-      port: 1,
-      protocol: 'socks5',
-      user: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.proxies.create({
-      host: 'x',
-      name: 'xxx',
-      password: 'x',
-      port: 1,
-      protocol: 'socks5',
-      user: 'x',
-    });
-  });
-
+describe('resource apps', () => {
   // Mock server tests are disabled
   test.skip('retrieve', async () => {
-    const responsePromise = client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const responsePromise = client.apps.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,42 +18,11 @@ describe('resource proxies', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: only required params', async () => {
-    const responsePromise = client.proxies.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      host: 'x',
-      name: 'xxx',
-      password: 'x',
-      port: 1,
-      protocol: 'socks5',
-      user: 'x',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: required and optional params', async () => {
-    const response = await client.proxies.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      host: 'x',
-      name: 'xxx',
-      password: 'x',
-      port: 1,
-      protocol: 'socks5',
-      user: 'x',
-    });
   });
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.proxies.list();
+    const responsePromise = client.apps.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -98,13 +36,24 @@ describe('resource proxies', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.proxies.list({ protocol: 'socks5' }, { path: '/_stainless_unknown_path' }),
+      client.apps.list(
+        {
+          order: 'asc',
+          page: 1,
+          pageSize: 1,
+          platform: 'all',
+          query: 'query',
+          sortBy: 'createdAt',
+          status: 'all',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
   test.skip('delete', async () => {
-    const responsePromise = client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const responsePromise = client.apps.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -115,8 +64,8 @@ describe('resource proxies', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('lookup: only required params', async () => {
-    const responsePromise = client.proxies.lookup({ socks5: { host: 'host', port: 1 } });
+  test.skip('confirmUpload', async () => {
+    const responsePromise = client.apps.confirmUpload('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -127,14 +76,63 @@ describe('resource proxies', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('lookup: required and optional params', async () => {
-    const response = await client.proxies.lookup({
-      socks5: {
-        host: 'host',
-        port: 1,
-        password: 'password',
-        user: 'user',
-      },
+  test.skip('createSignedUploadURL: only required params', async () => {
+    const responsePromise = client.apps.createSignedUploadURL({
+      bundleId: 'x',
+      displayName: 'x',
+      files: [{ contentType: 'x', fileName: 'x' }],
+      sizeBytes: 0,
+      versionCode: 0,
+      versionName: 'x',
     });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('createSignedUploadURL: required and optional params', async () => {
+    const response = await client.apps.createSignedUploadURL({
+      bundleId: 'x',
+      displayName: 'x',
+      files: [{ contentType: 'x', fileName: 'x' }],
+      sizeBytes: 0,
+      versionCode: 0,
+      versionName: 'x',
+      country: 'US',
+      description: 'description',
+      developerName: 'developerName',
+      iconURL: 'iconURL',
+      platform: 'android',
+      targetSdk: 0,
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('listVersions', async () => {
+    const responsePromise = client.apps.listVersions('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('markFailed', async () => {
+    const responsePromise = client.apps.markFailed('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

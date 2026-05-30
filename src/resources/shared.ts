@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import * as ProxiesAPI from './proxies';
+import * as Shared from './shared';
 
 export interface DeviceCarrier {
   GsmOperatorAlpha: string;
@@ -72,9 +72,19 @@ export interface DeviceSpec {
 
   name?: string;
 
-  proxy?: ProxiesAPI.ProxyConfig;
+  proxy?: DeviceSpec.Proxy;
 
   timezone?: string;
+}
+
+export namespace DeviceSpec {
+  export interface Proxy {
+    name?: string;
+
+    smartIp?: boolean;
+
+    socks5?: Shared.Socks5;
+  }
 }
 
 export interface Location {
@@ -89,6 +99,20 @@ export interface Location {
 }
 
 export interface Meta {
+  hasNext: boolean;
+
+  hasPrev: boolean;
+
+  page: number;
+
+  pages: number;
+
+  pageSize: number;
+
+  total: number;
+}
+
+export interface Pagination {
   hasNext: boolean;
 
   hasPrev: boolean;

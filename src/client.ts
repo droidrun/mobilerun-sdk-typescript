@@ -18,7 +18,18 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { AgentListResponse, Agents } from './resources/agents';
-import { Apps } from './resources/apps';
+import {
+  AppConfirmUploadResponse,
+  AppCreateSignedUploadURLParams,
+  AppCreateSignedUploadURLResponse,
+  AppDeleteResponse,
+  AppListParams,
+  AppListResponse,
+  AppListVersionsResponse,
+  AppMarkFailedResponse,
+  AppRetrieveResponse,
+  Apps,
+} from './resources/apps';
 import {
   CarrierCreateParams,
   CarrierCreateResponse,
@@ -58,8 +69,25 @@ import {
   ProfileUpdateParams,
   Profiles,
 } from './resources/profiles';
-import { Proxies, ProxyConfig, ProxyLookupParams, ProxyLookupResponse } from './resources/proxies';
-import { Credentials } from './resources/credentials/credentials';
+import {
+  Proxies,
+  ProxyConfig,
+  ProxyCreateParams,
+  ProxyCreateResponse,
+  ProxyDeleteResponse,
+  ProxyListParams,
+  ProxyListResponse,
+  ProxyLookupParams,
+  ProxyLookupResponse,
+  ProxyRetrieveResponse,
+  ProxyUpdateParams,
+  ProxyUpdateResponse,
+} from './resources/proxies';
+import {
+  CredentialListParams,
+  CredentialListResponse,
+  Credentials,
+} from './resources/credentials/credentials';
 import {
   Device,
   DeviceCountResponse,
@@ -810,16 +838,28 @@ export class Mobilerun {
    * Agents API
    */
   agents: API.Agents = new API.Agents(this);
+  /**
+   * App Management
+   */
   apps: API.Apps = new API.Apps(this);
+  /**
+   * Mobile Carriers
+   */
   carriers: API.Carriers = new API.Carriers(this);
+  /**
+   * Vault & Secrets
+   */
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
-  /**
-   * Webhooks API
-   */
   hooks: API.Hooks = new API.Hooks(this);
+  /**
+   * LLM Models
+   */
   models: API.Models = new API.Models(this);
   profiles: API.Profiles = new API.Profiles(this);
+  /**
+   * Network Proxies
+   */
   proxies: API.Proxies = new API.Proxies(this);
   /**
    * Tasks API
@@ -843,7 +883,18 @@ export declare namespace Mobilerun {
 
   export { Agents as Agents, type AgentListResponse as AgentListResponse };
 
-  export { Apps as Apps };
+  export {
+    Apps as Apps,
+    type AppRetrieveResponse as AppRetrieveResponse,
+    type AppListResponse as AppListResponse,
+    type AppDeleteResponse as AppDeleteResponse,
+    type AppConfirmUploadResponse as AppConfirmUploadResponse,
+    type AppCreateSignedUploadURLResponse as AppCreateSignedUploadURLResponse,
+    type AppListVersionsResponse as AppListVersionsResponse,
+    type AppMarkFailedResponse as AppMarkFailedResponse,
+    type AppListParams as AppListParams,
+    type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
+  };
 
   export {
     Carriers as Carriers,
@@ -859,7 +910,11 @@ export declare namespace Mobilerun {
     type CarrierLookupParams as CarrierLookupParams,
   };
 
-  export { Credentials as Credentials };
+  export {
+    Credentials as Credentials,
+    type CredentialListResponse as CredentialListResponse,
+    type CredentialListParams as CredentialListParams,
+  };
 
   export {
     Devices as Devices,
@@ -906,7 +961,15 @@ export declare namespace Mobilerun {
   export {
     Proxies as Proxies,
     type ProxyConfig as ProxyConfig,
+    type ProxyCreateResponse as ProxyCreateResponse,
+    type ProxyRetrieveResponse as ProxyRetrieveResponse,
+    type ProxyUpdateResponse as ProxyUpdateResponse,
+    type ProxyListResponse as ProxyListResponse,
+    type ProxyDeleteResponse as ProxyDeleteResponse,
     type ProxyLookupResponse as ProxyLookupResponse,
+    type ProxyCreateParams as ProxyCreateParams,
+    type ProxyUpdateParams as ProxyUpdateParams,
+    type ProxyListParams as ProxyListParams,
     type ProxyLookupParams as ProxyLookupParams,
   };
 
@@ -935,6 +998,7 @@ export declare namespace Mobilerun {
   export type DeviceSpec = API.DeviceSpec;
   export type Location = API.Location;
   export type Meta = API.Meta;
+  export type Pagination = API.Pagination;
   export type PaginationMeta = API.PaginationMeta;
   export type PermissionSet = API.PermissionSet;
   export type Socks5 = API.Socks5;
