@@ -88,9 +88,11 @@ export type StateScreenshotResponse = string;
 export type StateTimeResponse = string;
 
 export interface StateUiResponse {
-  a11y_tree: unknown;
+  a11y_tree: StateUiResponse.A11yTree;
 
   device_context: StateUiResponse.DeviceContext;
+
+  ime_tree: StateUiResponse.ImeTree;
 
   phone_state: StateUiResponse.PhoneState;
 
@@ -98,19 +100,63 @@ export interface StateUiResponse {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
-
-  ime_tree?: unknown;
 }
 
 export namespace StateUiResponse {
+  export interface A11yTree {
+    boundsInScreen: A11yTree.BoundsInScreen;
+
+    children: Array<unknown> | null;
+
+    className: string;
+
+    contentDescription: string;
+
+    isCheckable: boolean;
+
+    isChecked: boolean;
+
+    isClickable: boolean;
+
+    isEnabled: boolean;
+
+    isFocusable: boolean;
+
+    isFocused: boolean;
+
+    isLongClickable: boolean;
+
+    isPassword: boolean;
+
+    isScrollable: boolean;
+
+    isSelected: boolean;
+
+    packageName: string;
+
+    resourceId: string;
+
+    text: string;
+  }
+
+  export namespace A11yTree {
+    export interface BoundsInScreen {
+      bottom: number;
+
+      left: number;
+
+      right: number;
+
+      top: number;
+    }
+  }
+
   export interface DeviceContext {
     display_metrics: DeviceContext.DisplayMetrics;
 
     filtering_params: DeviceContext.FilteringParams;
 
     screen_bounds: StateAPI.Rect;
-
-    screenSize: StateAPI.Rect;
   }
 
   export namespace DeviceContext {
@@ -130,6 +176,54 @@ export namespace StateUiResponse {
       min_element_size: number;
 
       overlay_offset: number;
+    }
+  }
+
+  export interface ImeTree {
+    boundsInScreen: ImeTree.BoundsInScreen;
+
+    children: Array<unknown> | null;
+
+    className: string;
+
+    contentDescription: string;
+
+    isCheckable: boolean;
+
+    isChecked: boolean;
+
+    isClickable: boolean;
+
+    isEnabled: boolean;
+
+    isFocusable: boolean;
+
+    isFocused: boolean;
+
+    isLongClickable: boolean;
+
+    isPassword: boolean;
+
+    isScrollable: boolean;
+
+    isSelected: boolean;
+
+    packageName: string;
+
+    resourceId: string;
+
+    text: string;
+  }
+
+  export namespace ImeTree {
+    export interface BoundsInScreen {
+      bottom: number;
+
+      left: number;
+
+      right: number;
+
+      top: number;
     }
   }
 
