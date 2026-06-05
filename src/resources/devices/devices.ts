@@ -168,8 +168,7 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Reset a device to a fresh state (VMOS one-click new device; non-VMOS providers
-   * return 404)
+   * Reset a device to a fresh state
    */
   reset(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/reset`, {
