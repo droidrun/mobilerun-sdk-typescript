@@ -182,6 +182,8 @@ export interface FlowListParams {
 
   search?: string;
 
+  status?: Array<'healthy' | 'failing' | 'blocked'>;
+
   triggerId?: string;
 }
 

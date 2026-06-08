@@ -123,6 +123,7 @@ describe('resource flows', () => {
           page: 1,
           pageSize: 1,
           search: 'search',
+          status: ['healthy'],
           triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
         },
         { path: '/_stainless_unknown_path' },
