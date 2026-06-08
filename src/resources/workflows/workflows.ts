@@ -96,6 +96,10 @@ export class Workflows extends APIResource {
 export interface Flow {
   id: string;
 
+  blockedAt: string | null;
+
+  consecutiveFailures: number;
+
   cooldownScope: 'flow' | 'device';
 
   cooldownSeconds: number | null;
@@ -106,9 +110,15 @@ export interface Flow {
 
   enabled: boolean;
 
+  lastFailureAt: string | null;
+
+  lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | null;
+
   lastTriggeredAt: string | null;
 
   name: string;
+
+  status: 'healthy' | 'failing' | 'blocked';
 
   triggerId: string;
 
