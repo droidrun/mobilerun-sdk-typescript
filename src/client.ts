@@ -119,6 +119,7 @@ import {
   Tasks,
   UsageResult,
 } from './resources/tasks/tasks';
+import { Flow, Workflows } from './resources/workflows/workflows';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -865,6 +866,7 @@ export class Mobilerun {
    * Tasks API
    */
   tasks: API.Tasks = new API.Tasks(this);
+  workflows: API.Workflows = new API.Workflows(this);
 }
 
 Mobilerun.Agents = Agents;
@@ -877,6 +879,7 @@ Mobilerun.Models = Models;
 Mobilerun.Profiles = Profiles;
 Mobilerun.Proxies = Proxies;
 Mobilerun.Tasks = Tasks;
+Mobilerun.Workflows = Workflows;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
@@ -992,6 +995,8 @@ export declare namespace Mobilerun {
     type TaskRunStreamedParams as TaskRunStreamedParams,
     type TaskSendMessageParams as TaskSendMessageParams,
   };
+
+  export { Workflows as Workflows, type Flow as Flow };
 
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
