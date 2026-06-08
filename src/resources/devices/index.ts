@@ -76,6 +76,7 @@ export {
 } from './proxy';
 export {
   State,
+  type A11YNode,
   type Rect,
   type StateScreenshotResponse,
   type StateTimeResponse,

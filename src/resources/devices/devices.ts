@@ -53,6 +53,7 @@ import {
 } from './proxy';
 import * as StateAPI from './state';
 import {
+  A11YNode,
   Rect,
   State,
   StateScreenshotParams,
@@ -523,6 +524,7 @@ export declare namespace Devices {
 
   export {
     State as State,
+    type A11YNode as A11YNode,
     type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
     type StateTimeResponse as StateTimeResponse,
