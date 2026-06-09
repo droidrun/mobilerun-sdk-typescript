@@ -21,6 +21,7 @@ export {
   type FlowListResponse,
   type FlowDeleteResponse,
   type FlowCloneResponse,
+  type FlowUnblockResponse,
   type FlowCreateParams,
   type FlowUpdateParams,
   type FlowListParams,

@@ -11,10 +11,94 @@ export type SdkMethod = {
 
 export const sdkMethods: SdkMethod[] = [
   {
-    clientCallName: 'client.agents.list',
-    fullyQualifiedName: 'agents.list',
+    clientCallName: 'client.agents.chat.deliverPermission',
+    fullyQualifiedName: 'agents.chat.deliverPermission',
+    httpMethod: 'post',
+    httpPath: '/agents/chat/permission',
+  },
+  {
+    clientCallName: 'client.agents.chat.getChatState',
+    fullyQualifiedName: 'agents.chat.getChatState',
     httpMethod: 'get',
-    httpPath: '/agents',
+    httpPath: '/agents/chat/state',
+  },
+  {
+    clientCallName: 'client.agents.chat.listSlashCommands',
+    fullyQualifiedName: 'agents.chat.listSlashCommands',
+    httpMethod: 'get',
+    httpPath: '/agents/chat/slash-commands',
+  },
+  {
+    clientCallName: 'client.agents.chat.rehydrateChat',
+    fullyQualifiedName: 'agents.chat.rehydrateChat',
+    httpMethod: 'get',
+    httpPath: '/agents/chat/messages',
+  },
+  {
+    clientCallName: 'client.agents.chat.abort.forceClear',
+    fullyQualifiedName: 'agents.chat.abort.forceClear',
+    httpMethod: 'post',
+    httpPath: '/agents/chat/abort/force',
+  },
+  {
+    clientCallName: 'client.agents.chat.abort.perform',
+    fullyQualifiedName: 'agents.chat.abort.perform',
+    httpMethod: 'post',
+    httpPath: '/agents/chat/abort',
+  },
+  {
+    clientCallName: 'client.agents.chat.question.deliverAnswer',
+    fullyQualifiedName: 'agents.chat.question.deliverAnswer',
+    httpMethod: 'post',
+    httpPath: '/agents/chat/question',
+  },
+  {
+    clientCallName: 'client.agents.chat.question.dismiss',
+    fullyQualifiedName: 'agents.chat.question.dismiss',
+    httpMethod: 'post',
+    httpPath: '/agents/chat/question/reject',
+  },
+  {
+    clientCallName: 'client.agents.files.listFiles',
+    fullyQualifiedName: 'agents.files.listFiles',
+    httpMethod: 'get',
+    httpPath: '/agents/files',
+  },
+  {
+    clientCallName: 'client.agents.files.mintUploadURL',
+    fullyQualifiedName: 'agents.files.mintUploadURL',
+    httpMethod: 'post',
+    httpPath: '/agents/files/upload-url',
+  },
+  {
+    clientCallName: 'client.agents.files.fileID.cancelPendingUpload',
+    fullyQualifiedName: 'agents.files.fileID.cancelPendingUpload',
+    httpMethod: 'delete',
+    httpPath: '/agents/files/:fileId/pending',
+  },
+  {
+    clientCallName: 'client.agents.files.fileID.confirmUpload',
+    fullyQualifiedName: 'agents.files.fileID.confirmUpload',
+    httpMethod: 'post',
+    httpPath: '/agents/files/:fileId/confirm',
+  },
+  {
+    clientCallName: 'client.agents.files.fileID.deleteFile',
+    fullyQualifiedName: 'agents.files.fileID.deleteFile',
+    httpMethod: 'delete',
+    httpPath: '/agents/files/:fileId',
+  },
+  {
+    clientCallName: 'client.agents.files.fileID.downloadFile',
+    fullyQualifiedName: 'agents.files.fileID.downloadFile',
+    httpMethod: 'get',
+    httpPath: '/agents/files/:fileId/download',
+  },
+  {
+    clientCallName: 'client.agents.files.fileID.updateMetadata',
+    fullyQualifiedName: 'agents.files.fileID.updateMetadata',
+    httpMethod: 'patch',
+    httpPath: '/agents/files/:fileId',
   },
   {
     clientCallName: 'client.apps.retrieve',
@@ -777,6 +861,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'workflows.flows.clone',
     httpMethod: 'post',
     httpPath: '/flows/{flowId}/clone',
+  },
+  {
+    clientCallName: 'client.workflows.flows.unblock',
+    fullyQualifiedName: 'workflows.flows.unblock',
+    httpMethod: 'post',
+    httpPath: '/flows/{flowId}/unblock',
   },
   {
     clientCallName: 'client.workflows.flows.actions.list',

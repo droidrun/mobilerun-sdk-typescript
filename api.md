@@ -14,13 +14,74 @@ Types:
 
 # Agents
 
+## Chat
+
 Types:
 
-- <code><a href="./src/resources/agents.ts">AgentListResponse</a></code>
+- <code><a href="./src/resources/agents/chat/chat.ts">ChatDeliverPermissionResponse</a></code>
+- <code><a href="./src/resources/agents/chat/chat.ts">ChatGetChatStateResponse</a></code>
+- <code><a href="./src/resources/agents/chat/chat.ts">ChatListSlashCommandsResponse</a></code>
+- <code><a href="./src/resources/agents/chat/chat.ts">ChatRehydrateChatResponse</a></code>
 
 Methods:
 
-- <code title="get /agents">client.agents.<a href="./src/resources/agents.ts">list</a>() -> AgentListResponse</code>
+- <code title="post /agents/chat/permission">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">deliverPermission</a>({ ...params }) -> ChatDeliverPermissionResponse</code>
+- <code title="get /agents/chat/state">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">getChatState</a>() -> ChatGetChatStateResponse</code>
+- <code title="get /agents/chat/slash-commands">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">listSlashCommands</a>() -> ChatListSlashCommandsResponse</code>
+- <code title="get /agents/chat/messages">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">rehydrateChat</a>() -> ChatRehydrateChatResponse</code>
+
+### Abort
+
+Types:
+
+- <code><a href="./src/resources/agents/chat/abort.ts">AbortForceClearResponse</a></code>
+- <code><a href="./src/resources/agents/chat/abort.ts">AbortPerformResponse</a></code>
+
+Methods:
+
+- <code title="post /agents/chat/abort/force">client.agents.chat.abort.<a href="./src/resources/agents/chat/abort.ts">forceClear</a>() -> AbortForceClearResponse</code>
+- <code title="post /agents/chat/abort">client.agents.chat.abort.<a href="./src/resources/agents/chat/abort.ts">perform</a>() -> AbortPerformResponse</code>
+
+### Question
+
+Types:
+
+- <code><a href="./src/resources/agents/chat/question.ts">QuestionDeliverAnswerResponse</a></code>
+- <code><a href="./src/resources/agents/chat/question.ts">QuestionDismissResponse</a></code>
+
+Methods:
+
+- <code title="post /agents/chat/question">client.agents.chat.question.<a href="./src/resources/agents/chat/question.ts">deliverAnswer</a>({ ...params }) -> QuestionDeliverAnswerResponse</code>
+- <code title="post /agents/chat/question/reject">client.agents.chat.question.<a href="./src/resources/agents/chat/question.ts">dismiss</a>({ ...params }) -> QuestionDismissResponse</code>
+
+## Files
+
+Types:
+
+- <code><a href="./src/resources/agents/files/files.ts">FileListFilesResponse</a></code>
+- <code><a href="./src/resources/agents/files/files.ts">FileMintUploadURLResponse</a></code>
+
+Methods:
+
+- <code title="get /agents/files">client.agents.files.<a href="./src/resources/agents/files/files.ts">listFiles</a>({ ...params }) -> FileListFilesResponse</code>
+- <code title="post /agents/files/upload-url">client.agents.files.<a href="./src/resources/agents/files/files.ts">mintUploadURL</a>({ ...params }) -> FileMintUploadURLResponse</code>
+
+### FileID
+
+Types:
+
+- <code><a href="./src/resources/agents/files/file-id.ts">FileIDCancelPendingUploadResponse</a></code>
+- <code><a href="./src/resources/agents/files/file-id.ts">FileIDConfirmUploadResponse</a></code>
+- <code><a href="./src/resources/agents/files/file-id.ts">FileIDDeleteFileResponse</a></code>
+- <code><a href="./src/resources/agents/files/file-id.ts">FileIDUpdateMetadataResponse</a></code>
+
+Methods:
+
+- <code title="delete /agents/files/:fileId/pending">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">cancelPendingUpload</a>() -> FileIDCancelPendingUploadResponse</code>
+- <code title="post /agents/files/:fileId/confirm">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">confirmUpload</a>() -> FileIDConfirmUploadResponse</code>
+- <code title="delete /agents/files/:fileId">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">deleteFile</a>() -> FileIDDeleteFileResponse</code>
+- <code title="get /agents/files/:fileId/download">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">downloadFile</a>() -> void</code>
+- <code title="patch /agents/files/:fileId">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">updateMetadata</a>({ ...params }) -> FileIDUpdateMetadataResponse</code>
 
 # Apps
 
@@ -505,6 +566,7 @@ Types:
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowListResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowDeleteResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowCloneResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowUnblockResponse</a></code>
 
 Methods:
 
@@ -514,6 +576,7 @@ Methods:
 - <code title="get /flows">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">list</a>({ ...params }) -> FlowListResponse</code>
 - <code title="delete /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">delete</a>(flowID) -> FlowDeleteResponse</code>
 - <code title="post /flows/{flowId}/clone">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">clone</a>(flowID, { ...params }) -> FlowCloneResponse</code>
+- <code title="post /flows/{flowId}/unblock">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">unblock</a>(flowID) -> FlowUnblockResponse</code>
 
 ### Actions
 
