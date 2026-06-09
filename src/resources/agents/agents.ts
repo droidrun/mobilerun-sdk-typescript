@@ -18,16 +18,58 @@ import {
   FileMintUploadURLResponse,
   Files,
 } from './files/files';
+import * as TelegramAPI from './telegram/telegram';
+import { Telegram, TelegramReceiveUpdateParams } from './telegram/telegram';
+import { APIPromise } from '../../core/api-promise';
+import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Agents API
+ */
 export class Agents extends APIResource {
   chat: ChatAPI.Chat = new ChatAPI.Chat(this._client);
   files: FilesAPI.Files = new FilesAPI.Files(this._client);
+  telegram: TelegramAPI.Telegram = new TelegramAPI.Telegram(this._client);
+
+  /**
+   * List all available agents with their default configurations.
+   */
+  list(options?: RequestOptions): APIPromise<AgentListResponse> {
+    return this._client.get('/agents', options);
+  }
+}
+
+export type AgentListResponse = Array<AgentListResponse.AgentListResponseItem>;
+
+export namespace AgentListResponse {
+  export interface AgentListResponseItem {
+    id: number;
+
+    description: string | null;
+
+    icon: string;
+
+    llmModel: string;
+
+    maxSteps: number;
+
+    name: string;
+
+    reasoning: boolean;
+
+    subagentModel: string | null;
+
+    vision: boolean;
+  }
 }
 
 Agents.Chat = Chat;
 Agents.Files = Files;
+Agents.Telegram = Telegram;
 
 export declare namespace Agents {
+  export { type AgentListResponse as AgentListResponse };
+
   export {
     Chat as Chat,
     type ChatDeliverPermissionResponse as ChatDeliverPermissionResponse,
@@ -44,4 +86,6 @@ export declare namespace Agents {
     type FileListFilesParams as FileListFilesParams,
     type FileMintUploadURLParams as FileMintUploadURLParams,
   };
+
+  export { Telegram as Telegram, type TelegramReceiveUpdateParams as TelegramReceiveUpdateParams };
 }

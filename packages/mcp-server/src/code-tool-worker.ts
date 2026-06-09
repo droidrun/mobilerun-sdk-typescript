@@ -108,6 +108,7 @@ function getTSDiagnostics(code: string): string[] {
 
 const fuse = new Fuse(
   [
+    'client.agents.list',
     'client.agents.chat.deliverPermission',
     'client.agents.chat.getChatState',
     'client.agents.chat.listSlashCommands',
@@ -123,6 +124,10 @@ const fuse = new Fuse(
     'client.agents.files.fileID.deleteFile',
     'client.agents.files.fileID.downloadFile',
     'client.agents.files.fileID.updateMetadata',
+    'client.agents.telegram.receiveUpdate',
+    'client.agents.telegram.bots.list',
+    'client.agents.telegram.bots.requestLink',
+    'client.agents.telegram.bots.revokeLink',
     'client.apps.confirmUpload',
     'client.apps.createSignedUploadURL',
     'client.apps.delete',
