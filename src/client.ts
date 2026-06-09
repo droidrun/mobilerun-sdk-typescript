@@ -83,6 +83,7 @@ import {
   ProxyUpdateResponse,
 } from './resources/proxies';
 import { Agents } from './resources/agents/agents';
+import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
   CredentialListResponse,
@@ -859,6 +860,7 @@ export class Mobilerun {
    * Network Proxies
    */
   proxies: API.Proxies = new API.Proxies(this);
+  connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
    */
@@ -875,6 +877,7 @@ Mobilerun.Hooks = Hooks;
 Mobilerun.Models = Models;
 Mobilerun.Profiles = Profiles;
 Mobilerun.Proxies = Proxies;
+Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
 
@@ -972,6 +975,8 @@ export declare namespace Mobilerun {
     type ProxyListParams as ProxyListParams,
     type ProxyLookupParams as ProxyLookupParams,
   };
+
+  export { Connect as Connect };
 
   export {
     Tasks as Tasks,

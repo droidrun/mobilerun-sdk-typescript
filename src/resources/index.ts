@@ -27,6 +27,7 @@ export {
   type CarrierListParams,
   type CarrierLookupParams,
 } from './carriers';
+export { Connect } from './connect/connect';
 export {
   Credentials,
   type CredentialListResponse,

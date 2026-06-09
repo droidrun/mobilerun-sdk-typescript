@@ -4223,6 +4223,558 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'list',
+    endpoint: '/connect/countries',
+    httpMethod: 'get',
+    summary: 'List available proxy countries',
+    description: 'Lookup of countries that can be selected when creating a proxy.',
+    stainlessPath: '(resource) connect.countries > (method) list',
+    qualified: 'client.connect.countries.list',
+    params: ['page?: number;', 'pageSize?: number;', "type?: 'residential';"],
+    response:
+      "{ items: { code: string; name: string; proxyTypes: 'residential'[]; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+    markdown:
+      "## list\n\n`client.connect.countries.list(page?: number, pageSize?: number, type?: 'residential'): { items: object[]; pagination: object; }`\n\n**get** `/connect/countries`\n\nLookup of countries that can be selected when creating a proxy.\n\n### Parameters\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n- `type?: 'residential'`\n  Filter to countries offering this proxy type.\n\n### Returns\n\n- `{ items: { code: string; name: string; proxyTypes: 'residential'[]; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of countries.\n\n  - `items: { code: string; name: string; proxyTypes: 'residential'[]; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst countries = await client.connect.countries.list();\n\nconsole.log(countries);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.countries.list',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst countries = await client.connect.countries.list();\n\nconsole.log(countries.items);",
+      },
+      python: {
+        method: 'connect.countries.list',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncountries = client.connect.countries.list()\nprint(countries.items)',
+      },
+      go: {
+        method: 'client.Connect.Countries.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcountries, err := client.Connect.Countries.List(context.TODO(), mobileruncloud.ConnectCountryListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", countries.Items)\n}\n',
+      },
+      cli: {
+        method: 'countries list',
+        example: "mobilerun-cloud connect:countries list \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/connect/countries \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/connect/proxies',
+    httpMethod: 'get',
+    summary: "List the caller's proxies",
+    description:
+      'Returns proxies owned by the user identified by the X-User-ID header. Credentials are omitted from the list.',
+    stainlessPath: '(resource) connect.proxies > (method) list',
+    qualified: 'client.connect.proxies.list',
+    params: ['country?: string;', 'page?: number;', 'pageSize?: number;'],
+    response:
+      "{ items: { id: string; country: string; createdAt: string; host: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+    markdown:
+      "## list\n\n`client.connect.proxies.list(country?: string, page?: number, pageSize?: number): { items: object[]; pagination: object; }`\n\n**get** `/connect/proxies`\n\nReturns proxies owned by the user identified by the X-User-ID header. Credentials are omitted from the list.\n\n### Parameters\n\n- `country?: string`\n  Filter to proxies in this country (ISO 3166-1 alpha-2, lowercase).\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n### Returns\n\n- `{ items: { id: string; country: string; createdAt: string; host: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of proxies.\n\n  - `items: { id: string; country: string; createdAt: string; host: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.connect.proxies.list();\n\nconsole.log(proxies);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.proxies.list',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.connect.proxies.list();\n\nconsole.log(proxies.items);",
+      },
+      python: {
+        method: 'connect.proxies.list',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nproxies = client.connect.proxies.list()\nprint(proxies.items)',
+      },
+      go: {
+        method: 'client.Connect.Proxies.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tproxies, err := client.Connect.Proxies.List(context.TODO(), mobileruncloud.ConnectProxyListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxies.Items)\n}\n',
+      },
+      cli: {
+        method: 'proxies list',
+        example: 'mobilerun-cloud connect:proxies list',
+      },
+      http: {
+        example: 'curl https://api.mobilerun.ai/v1/connect/proxies',
+      },
+    },
+  },
+  {
+    name: 'buy',
+    endpoint: '/connect/proxies',
+    httpMethod: 'post',
+    summary: 'Create a proxy',
+    description: 'Provisions a proxy for the caller in the selected country.',
+    stainlessPath: '(resource) connect.proxies > (method) buy',
+    qualified: 'client.connect.proxies.buy',
+    params: ['country: string;', "type?: 'residential';"],
+    response:
+      "{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }",
+    markdown:
+      "## buy\n\n`client.connect.proxies.buy(country: string, type?: 'residential'): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }`\n\n**post** `/connect/proxies`\n\nProvisions a proxy for the caller in the selected country.\n\n### Parameters\n\n- `country: string`\n  ISO 3166-1 alpha-2 country code to provision the proxy in.\n\n- `type?: 'residential'`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'residential'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.buy({ country: 'country' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.proxies.buy',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.buy({ country: 'country' });\n\nconsole.log(response.id);",
+      },
+      python: {
+        method: 'connect.proxies.buy',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nresponse = client.connect.proxies.buy(\n    country="country",\n)\nprint(response.id)',
+      },
+      go: {
+        method: 'client.Connect.Proxies.Buy',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tresponse, err := client.Connect.Proxies.Buy(context.TODO(), mobileruncloud.ConnectProxyBuyParams{\n\t\tCountry: "country",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      cli: {
+        method: 'proxies buy',
+        example: 'mobilerun-cloud connect:proxies buy \\\n  --country country',
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/connect/proxies \\\n    -H \'Content-Type: application/json\' \\\n    -d \'{\n          "country": "country"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/connect/proxies/{id}',
+    httpMethod: 'get',
+    summary: 'Get a proxy by ID, including its password',
+    description: 'Get a proxy by ID, including its password',
+    stainlessPath: '(resource) connect.proxies > (method) retrieve',
+    qualified: 'client.connect.proxies.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }",
+    markdown:
+      "## retrieve\n\n`client.connect.proxies.retrieve(id: string): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }`\n\n**get** `/connect/proxies/{id}`\n\nGet a proxy by ID, including its password\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'residential'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.connect.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.proxies.retrieve',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.connect.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy.id);",
+      },
+      python: {
+        method: 'connect.proxies.retrieve',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nproxy = client.connect.proxies.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(proxy.id)',
+      },
+      go: {
+        method: 'client.Connect.Proxies.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tproxy, err := client.Connect.Proxies.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", proxy.ID)\n}\n',
+      },
+      cli: {
+        method: 'proxies retrieve',
+        example: 'mobilerun-cloud connect:proxies retrieve \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      },
+      http: {
+        example: 'curl https://api.mobilerun.ai/v1/connect/proxies/$ID',
+      },
+    },
+  },
+  {
+    name: 'cancel',
+    endpoint: '/connect/proxies/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete a proxy',
+    description: 'Delete a proxy',
+    stainlessPath: '(resource) connect.proxies > (method) cancel',
+    qualified: 'client.connect.proxies.cancel',
+    params: ['id: string;'],
+    markdown:
+      "## cancel\n\n`client.connect.proxies.cancel(id: string): void`\n\n**delete** `/connect/proxies/{id}`\n\nDelete a proxy\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.proxies.cancel('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.proxies.cancel',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.proxies.cancel('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');",
+      },
+      python: {
+        method: 'connect.proxies.cancel',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nclient.connect.proxies.cancel(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)',
+      },
+      go: {
+        method: 'client.Connect.Proxies.Cancel',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\terr := client.Connect.Proxies.Cancel(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'proxies cancel',
+        example: 'mobilerun-cloud connect:proxies cancel \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      },
+      http: {
+        example: 'curl https://api.mobilerun.ai/v1/connect/proxies/$ID \\\n    -X DELETE',
+      },
+    },
+  },
+  {
+    name: 'ping',
+    endpoint: '/connect/proxies/{id}/ping',
+    httpMethod: 'get',
+    summary: 'Latency reading for a proxy',
+    description:
+      'Returns the most recent cached network-latency measurement for the proxy, sampled periodically by connecting through the proxy to a fixed target. `latency` is null when no measurement is available yet (e.g. the proxy is not active, or it has not been sampled since coming online).',
+    stainlessPath: '(resource) connect.proxies > (method) ping',
+    qualified: 'client.connect.proxies.ping',
+    params: ['id: string;'],
+    response:
+      '{ latency: { avgMs: number; jitterMs: number; maxMs: number; measuredAt: string; minMs: number; packetLoss: number; samples: number; target: string; }; proxyId: string; }',
+    markdown:
+      "## ping\n\n`client.connect.proxies.ping(id: string): { latency: object; proxyId: string; }`\n\n**get** `/connect/proxies/{id}/ping`\n\nReturns the most recent cached network-latency measurement for the proxy, sampled periodically by connecting through the proxy to a fixed target. `latency` is null when no measurement is available yet (e.g. the proxy is not active, or it has not been sampled since coming online).\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ latency: { avgMs: number; jitterMs: number; maxMs: number; measuredAt: string; minMs: number; packetLoss: number; samples: number; target: string; }; proxyId: string; }`\n  The latest cached latency reading for a proxy.\n\n  - `latency: { avgMs: number; jitterMs: number; maxMs: number; measuredAt: string; minMs: number; packetLoss: number; samples: number; target: string; }`\n  - `proxyId: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.ping('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.proxies.ping',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.ping('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.latency);",
+      },
+      python: {
+        method: 'connect.proxies.ping',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nresponse = client.connect.proxies.ping(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.latency)',
+      },
+      go: {
+        method: 'client.Connect.Proxies.Ping',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tresponse, err := client.Connect.Proxies.Ping(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Latency)\n}\n',
+      },
+      cli: {
+        method: 'proxies ping',
+        example: 'mobilerun-cloud connect:proxies ping \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      },
+      http: {
+        example: 'curl https://api.mobilerun.ai/v1/connect/proxies/$ID/ping',
+      },
+    },
+  },
+  {
+    name: 'list_connections',
+    endpoint: '/connect/proxies/{id}/connections',
+    httpMethod: 'get',
+    summary: 'List connections routed through a proxy',
+    description:
+      "Returns the connection history recorded for this proxy, one item per connection (aggregated across the connection's lifetime). Supports filtering on every property plus ordering and pagination. Returns 503 when the connection-insights backend is disabled or unreachable.",
+    stainlessPath: '(resource) connect.proxies > (method) list_connections',
+    qualified: 'client.connect.proxies.listConnections',
+    params: [
+      'id: string;',
+      'closeReason?: string;',
+      'country?: string;',
+      'dstHost?: string;',
+      'dstPort?: number;',
+      'endedAfter?: string;',
+      'endedBefore?: string;',
+      'maxBytesIn?: number;',
+      'maxBytesOut?: number;',
+      'maxDurationMs?: number;',
+      'maxTotalBytes?: number;',
+      'minBytesIn?: number;',
+      'minBytesOut?: number;',
+      'minDurationMs?: number;',
+      'minTotalBytes?: number;',
+      "order?: 'asc' | 'desc';",
+      "orderBy?: 'startedAt' | 'endedAt' | 'bytesIn' | 'bytesOut' | 'totalBytes' | 'durationMs';",
+      'page?: number;',
+      'pageSize?: number;',
+      "protocol?: 'tcp' | 'udp' | 'unknown';",
+      'provider?: string;',
+      'sessionId?: string;',
+      'startedAfter?: string;',
+      'startedBefore?: string;',
+      "status?: 'active' | 'closed';",
+      'userId?: string;',
+    ],
+    response:
+      "{ items: { bytesIn: number; bytesOut: number; country: string; dstHost: string; dstPort: number; durationMs: number; endedAt: string; protocol: 'tcp' | 'udp' | 'unknown'; provider: string; proxyId: string; sessionId: string; srcIp: string; startedAt: string; status: 'active' | 'closed'; totalBytes: number; userId: string; closeReason?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+    markdown:
+      "## list_connections\n\n`client.connect.proxies.listConnections(id: string, closeReason?: string, country?: string, dstHost?: string, dstPort?: number, endedAfter?: string, endedBefore?: string, maxBytesIn?: number, maxBytesOut?: number, maxDurationMs?: number, maxTotalBytes?: number, minBytesIn?: number, minBytesOut?: number, minDurationMs?: number, minTotalBytes?: number, order?: 'asc' | 'desc', orderBy?: 'startedAt' | 'endedAt' | 'bytesIn' | 'bytesOut' | 'totalBytes' | 'durationMs', page?: number, pageSize?: number, protocol?: 'tcp' | 'udp' | 'unknown', provider?: string, sessionId?: string, startedAfter?: string, startedBefore?: string, status?: 'active' | 'closed', userId?: string): { items: object[]; pagination: object; }`\n\n**get** `/connect/proxies/{id}/connections`\n\nReturns the connection history recorded for this proxy, one item per connection (aggregated across the connection's lifetime). Supports filtering on every property plus ordering and pagination. Returns 503 when the connection-insights backend is disabled or unreachable.\n\n### Parameters\n\n- `id: string`\n\n- `closeReason?: string`\n  Filter to connections that closed with this reason (closed connections only).\n\n- `country?: string`\n  Filter to connections served from this upstream country (ISO 3166-1 alpha-2).\n\n- `dstHost?: string`\n  Filter to connections to this destination host (exact match).\n\n- `dstPort?: number`\n  Filter to connections to this destination port.\n\n- `endedAfter?: string`\n  Filter to connections whose last activity was at or after this time (inclusive).\n\n- `endedBefore?: string`\n  Filter to connections whose last activity was at or before this time (inclusive).\n\n- `maxBytesIn?: number`\n  Filter to connections with at most this many bytes received from upstream.\n\n- `maxBytesOut?: number`\n  Filter to connections with at most this many bytes sent to upstream.\n\n- `maxDurationMs?: number`\n  Filter to connections lasting at most this many milliseconds.\n\n- `maxTotalBytes?: number`\n  Filter to connections with at most this much total traffic (bytesIn + bytesOut).\n\n- `minBytesIn?: number`\n  Filter to connections with at least this many bytes received from upstream.\n\n- `minBytesOut?: number`\n  Filter to connections with at least this many bytes sent to upstream.\n\n- `minDurationMs?: number`\n  Filter to connections lasting at least this many milliseconds.\n\n- `minTotalBytes?: number`\n  Filter to connections with at least this much total traffic (bytesIn + bytesOut).\n\n- `order?: 'asc' | 'desc'`\n  Sort direction.\n\n- `orderBy?: 'startedAt' | 'endedAt' | 'bytesIn' | 'bytesOut' | 'totalBytes' | 'durationMs'`\n  Property to order the results by.\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n- `protocol?: 'tcp' | 'udp' | 'unknown'`\n  Filter to connections of this transport protocol.\n\n- `provider?: string`\n  Filter to connections served by this upstream provider.\n\n- `sessionId?: string`\n  Filter to a single connection by its session id.\n\n- `startedAfter?: string`\n  Filter to connections that started at or after this time (inclusive).\n\n- `startedBefore?: string`\n  Filter to connections that started at or before this time (inclusive).\n\n- `status?: 'active' | 'closed'`\n  Filter by connection status.\n\n- `userId?: string`\n  Filter to connections made by this user.\n\n### Returns\n\n- `{ items: { bytesIn: number; bytesOut: number; country: string; dstHost: string; dstPort: number; durationMs: number; endedAt: string; protocol: 'tcp' | 'udp' | 'unknown'; provider: string; proxyId: string; sessionId: string; srcIp: string; startedAt: string; status: 'active' | 'closed'; totalBytes: number; userId: string; closeReason?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of connections.\n\n  - `items: { bytesIn: number; bytesOut: number; country: string; dstHost: string; dstPort: number; durationMs: number; endedAt: string; protocol: 'tcp' | 'udp' | 'unknown'; provider: string; proxyId: string; sessionId: string; srcIp: string; startedAt: string; status: 'active' | 'closed'; totalBytes: number; userId: string; closeReason?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.listConnections('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.proxies.listConnections',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.listConnections(\n  '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n);\n\nconsole.log(response.items);",
+      },
+      python: {
+        method: 'connect.proxies.list_connections',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nresponse = client.connect.proxies.list_connections(\n    id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.items)',
+      },
+      go: {
+        method: 'client.Connect.Proxies.ListConnections',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tresponse, err := client.Connect.Proxies.ListConnections(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.ConnectProxyListConnectionsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Items)\n}\n',
+      },
+      cli: {
+        method: 'proxies list_connections',
+        example:
+          'mobilerun-cloud connect:proxies list-connections \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      },
+      http: {
+        example: 'curl https://api.mobilerun.ai/v1/connect/proxies/$ID/connections',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/connect/users',
+    httpMethod: 'get',
+    summary: "List the caller's SOCKS5 users",
+    description: 'Returns SOCKS5 users owned by the caller. Passwords are omitted from the list.',
+    stainlessPath: '(resource) connect.users > (method) list',
+    qualified: 'client.connect.users.list',
+    params: ['page?: number;', 'pageSize?: number;', 'proxyId?: string;'],
+    response:
+      '{ items: { id: string; createdAt: string; username: string; proxyId?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }',
+    markdown:
+      "## list\n\n`client.connect.users.list(page?: number, pageSize?: number, proxyId?: string): { items: object[]; pagination: object; }`\n\n**get** `/connect/users`\n\nReturns SOCKS5 users owned by the caller. Passwords are omitted from the list.\n\n### Parameters\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n- `proxyId?: string`\n  Filter to users bound to this proxy. Users not bound to it (including unbound users) are excluded.\n\n### Returns\n\n- `{ items: { id: string; createdAt: string; username: string; proxyId?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of SOCKS5 users.\n\n  - `items: { id: string; createdAt: string; username: string; proxyId?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst users = await client.connect.users.list();\n\nconsole.log(users);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.users.list',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst users = await client.connect.users.list();\n\nconsole.log(users.items);",
+      },
+      python: {
+        method: 'connect.users.list',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nusers = client.connect.users.list()\nprint(users.items)',
+      },
+      go: {
+        method: 'client.Connect.Users.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tusers, err := client.Connect.Users.List(context.TODO(), mobileruncloud.ConnectUserListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", users.Items)\n}\n',
+      },
+      cli: {
+        method: 'users list',
+        example: 'mobilerun-cloud connect:users list',
+      },
+      http: {
+        example: 'curl https://api.mobilerun.ai/v1/connect/users',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/connect/users',
+    httpMethod: 'post',
+    summary: 'Create a SOCKS5 user',
+    description:
+      'Creates a SOCKS5 credential, optionally bound to a proxy for dedicated routing. Username and password are generated when omitted.',
+    stainlessPath: '(resource) connect.users > (method) create',
+    qualified: 'client.connect.users.create',
+    params: ['password?: string;', 'proxyId?: string;', 'username?: string;'],
+    response: '{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }',
+    markdown:
+      "## create\n\n`client.connect.users.create(password?: string, proxyId?: string, username?: string): { id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n\n**post** `/connect/users`\n\nCreates a SOCKS5 credential, optionally bound to a proxy for dedicated routing. Username and password are generated when omitted.\n\n### Parameters\n\n- `password?: string`\n  Desired SOCKS5 password, 1-255 bytes (RFC 1929). Generated when omitted.\n\n- `proxyId?: string`\n  Proxy to bind the user to for dedicated routing.\n\n- `username?: string`\n  Desired SOCKS5 username, 1-255 bytes (RFC 1929). Generated when omitted.\n\n### Returns\n\n- `{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n  A SOCKS5 user including its password. Returned only on create and single-user reads.\n\n  - `id: string`\n  - `createdAt: string`\n  - `password: string`\n  - `username: string`\n  - `proxyId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.create();\n\nconsole.log(user);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.users.create',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.create();\n\nconsole.log(user.id);",
+      },
+      python: {
+        method: 'connect.users.create',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nuser = client.connect.users.create()\nprint(user.id)',
+      },
+      go: {
+        method: 'client.Connect.Users.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tuser, err := client.Connect.Users.New(context.TODO(), mobileruncloud.ConnectUserNewParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", user.ID)\n}\n',
+      },
+      cli: {
+        method: 'users create',
+        example: 'mobilerun-cloud connect:users create',
+      },
+      http: {
+        example:
+          "curl https://api.mobilerun.ai/v1/connect/users \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/connect/users/{id}',
+    httpMethod: 'get',
+    summary: 'Get a SOCKS5 user by ID, including its password',
+    description: 'Get a SOCKS5 user by ID, including its password',
+    stainlessPath: '(resource) connect.users > (method) retrieve',
+    qualified: 'client.connect.users.retrieve',
+    params: ['id: string;'],
+    response: '{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }',
+    markdown:
+      "## retrieve\n\n`client.connect.users.retrieve(id: string): { id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n\n**get** `/connect/users/{id}`\n\nGet a SOCKS5 user by ID, including its password\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n  A SOCKS5 user including its password. Returned only on create and single-user reads.\n\n  - `id: string`\n  - `createdAt: string`\n  - `password: string`\n  - `username: string`\n  - `proxyId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(user);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.users.retrieve',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(user.id);",
+      },
+      python: {
+        method: 'connect.users.retrieve',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nuser = client.connect.users.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(user.id)',
+      },
+      go: {
+        method: 'client.Connect.Users.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tuser, err := client.Connect.Users.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", user.ID)\n}\n',
+      },
+      cli: {
+        method: 'users retrieve',
+        example: 'mobilerun-cloud connect:users retrieve \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      },
+      http: {
+        example: 'curl https://api.mobilerun.ai/v1/connect/users/$ID',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/connect/users/{id}',
+    httpMethod: 'patch',
+    summary: 'Update a SOCKS5 user',
+    description: 'Rebind the user to a different proxy (or detach it by passing null).',
+    stainlessPath: '(resource) connect.users > (method) update',
+    qualified: 'client.connect.users.update',
+    params: ['id: string;', 'proxyId?: string;'],
+    response: '{ id: string; createdAt: string; username: string; proxyId?: string; }',
+    markdown:
+      "## update\n\n`client.connect.users.update(id: string, proxyId?: string): { id: string; createdAt: string; username: string; proxyId?: string; }`\n\n**patch** `/connect/users/{id}`\n\nRebind the user to a different proxy (or detach it by passing null).\n\n### Parameters\n\n- `id: string`\n\n- `proxyId?: string`\n  Proxy to rebind to, or null to detach. Omit to leave the user's current binding unchanged — only an explicit null detaches.\n\n### Returns\n\n- `{ id: string; createdAt: string; username: string; proxyId?: string; }`\n  A SOCKS5 credential without its password.\n\n  - `id: string`\n  - `createdAt: string`\n  - `username: string`\n  - `proxyId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(user);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.users.update',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(user.id);",
+      },
+      python: {
+        method: 'connect.users.update',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nuser = client.connect.users.update(\n    id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(user.id)',
+      },
+      go: {
+        method: 'client.Connect.Users.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tuser, err := client.Connect.Users.Update(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.ConnectUserUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", user.ID)\n}\n',
+      },
+      cli: {
+        method: 'users update',
+        example: 'mobilerun-cloud connect:users update \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      },
+      http: {
+        example:
+          "curl https://api.mobilerun.ai/v1/connect/users/$ID \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -d '{}'",
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/connect/users/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete a SOCKS5 user',
+    description: 'Delete a SOCKS5 user',
+    stainlessPath: '(resource) connect.users > (method) delete',
+    qualified: 'client.connect.users.delete',
+    params: ['id: string;'],
+    markdown:
+      "## delete\n\n`client.connect.users.delete(id: string): void`\n\n**delete** `/connect/users/{id}`\n\nDelete a SOCKS5 user\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.users.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.users.delete',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.users.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');",
+      },
+      python: {
+        method: 'connect.users.delete',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nclient.connect.users.delete(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)',
+      },
+      go: {
+        method: 'client.Connect.Users.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\terr := client.Connect.Users.Delete(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'users delete',
+        example: 'mobilerun-cloud connect:users delete \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      },
+      http: {
+        example: 'curl https://api.mobilerun.ai/v1/connect/users/$ID \\\n    -X DELETE',
+      },
+    },
+  },
+  {
+    name: 'list_connections',
+    endpoint: '/connect/users/{id}/connections',
+    httpMethod: 'get',
+    summary: 'List connections made by a SOCKS5 user',
+    description:
+      "Returns the connection history recorded for this user, one item per connection (aggregated across the connection's lifetime). Supports filtering on every property plus ordering and pagination. Returns 503 when the connection-insights backend is disabled or unreachable.",
+    stainlessPath: '(resource) connect.users > (method) list_connections',
+    qualified: 'client.connect.users.listConnections',
+    params: [
+      'id: string;',
+      'closeReason?: string;',
+      'country?: string;',
+      'dstHost?: string;',
+      'dstPort?: number;',
+      'endedAfter?: string;',
+      'endedBefore?: string;',
+      'maxBytesIn?: number;',
+      'maxBytesOut?: number;',
+      'maxDurationMs?: number;',
+      'maxTotalBytes?: number;',
+      'minBytesIn?: number;',
+      'minBytesOut?: number;',
+      'minDurationMs?: number;',
+      'minTotalBytes?: number;',
+      "order?: 'asc' | 'desc';",
+      "orderBy?: 'startedAt' | 'endedAt' | 'bytesIn' | 'bytesOut' | 'totalBytes' | 'durationMs';",
+      'page?: number;',
+      'pageSize?: number;',
+      "protocol?: 'tcp' | 'udp' | 'unknown';",
+      'provider?: string;',
+      'proxyId?: string;',
+      'sessionId?: string;',
+      'startedAfter?: string;',
+      'startedBefore?: string;',
+      "status?: 'active' | 'closed';",
+    ],
+    response:
+      "{ items: { bytesIn: number; bytesOut: number; country: string; dstHost: string; dstPort: number; durationMs: number; endedAt: string; protocol: 'tcp' | 'udp' | 'unknown'; provider: string; proxyId: string; sessionId: string; srcIp: string; startedAt: string; status: 'active' | 'closed'; totalBytes: number; userId: string; closeReason?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+    markdown:
+      "## list_connections\n\n`client.connect.users.listConnections(id: string, closeReason?: string, country?: string, dstHost?: string, dstPort?: number, endedAfter?: string, endedBefore?: string, maxBytesIn?: number, maxBytesOut?: number, maxDurationMs?: number, maxTotalBytes?: number, minBytesIn?: number, minBytesOut?: number, minDurationMs?: number, minTotalBytes?: number, order?: 'asc' | 'desc', orderBy?: 'startedAt' | 'endedAt' | 'bytesIn' | 'bytesOut' | 'totalBytes' | 'durationMs', page?: number, pageSize?: number, protocol?: 'tcp' | 'udp' | 'unknown', provider?: string, proxyId?: string, sessionId?: string, startedAfter?: string, startedBefore?: string, status?: 'active' | 'closed'): { items: object[]; pagination: object; }`\n\n**get** `/connect/users/{id}/connections`\n\nReturns the connection history recorded for this user, one item per connection (aggregated across the connection's lifetime). Supports filtering on every property plus ordering and pagination. Returns 503 when the connection-insights backend is disabled or unreachable.\n\n### Parameters\n\n- `id: string`\n\n- `closeReason?: string`\n  Filter to connections that closed with this reason (closed connections only).\n\n- `country?: string`\n  Filter to connections served from this upstream country (ISO 3166-1 alpha-2).\n\n- `dstHost?: string`\n  Filter to connections to this destination host (exact match).\n\n- `dstPort?: number`\n  Filter to connections to this destination port.\n\n- `endedAfter?: string`\n  Filter to connections whose last activity was at or after this time (inclusive).\n\n- `endedBefore?: string`\n  Filter to connections whose last activity was at or before this time (inclusive).\n\n- `maxBytesIn?: number`\n  Filter to connections with at most this many bytes received from upstream.\n\n- `maxBytesOut?: number`\n  Filter to connections with at most this many bytes sent to upstream.\n\n- `maxDurationMs?: number`\n  Filter to connections lasting at most this many milliseconds.\n\n- `maxTotalBytes?: number`\n  Filter to connections with at most this much total traffic (bytesIn + bytesOut).\n\n- `minBytesIn?: number`\n  Filter to connections with at least this many bytes received from upstream.\n\n- `minBytesOut?: number`\n  Filter to connections with at least this many bytes sent to upstream.\n\n- `minDurationMs?: number`\n  Filter to connections lasting at least this many milliseconds.\n\n- `minTotalBytes?: number`\n  Filter to connections with at least this much total traffic (bytesIn + bytesOut).\n\n- `order?: 'asc' | 'desc'`\n  Sort direction.\n\n- `orderBy?: 'startedAt' | 'endedAt' | 'bytesIn' | 'bytesOut' | 'totalBytes' | 'durationMs'`\n  Property to order the results by.\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n- `protocol?: 'tcp' | 'udp' | 'unknown'`\n  Filter to connections of this transport protocol.\n\n- `provider?: string`\n  Filter to connections served by this upstream provider.\n\n- `proxyId?: string`\n  Filter to connections routed through this proxy.\n\n- `sessionId?: string`\n  Filter to a single connection by its session id.\n\n- `startedAfter?: string`\n  Filter to connections that started at or after this time (inclusive).\n\n- `startedBefore?: string`\n  Filter to connections that started at or before this time (inclusive).\n\n- `status?: 'active' | 'closed'`\n  Filter by connection status.\n\n### Returns\n\n- `{ items: { bytesIn: number; bytesOut: number; country: string; dstHost: string; dstPort: number; durationMs: number; endedAt: string; protocol: 'tcp' | 'udp' | 'unknown'; provider: string; proxyId: string; sessionId: string; srcIp: string; startedAt: string; status: 'active' | 'closed'; totalBytes: number; userId: string; closeReason?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of connections.\n\n  - `items: { bytesIn: number; bytesOut: number; country: string; dstHost: string; dstPort: number; durationMs: number; endedAt: string; protocol: 'tcp' | 'udp' | 'unknown'; provider: string; proxyId: string; sessionId: string; srcIp: string; startedAt: string; status: 'active' | 'closed'; totalBytes: number; userId: string; closeReason?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.users.listConnections('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.connect.users.listConnections',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.users.listConnections('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.items);",
+      },
+      python: {
+        method: 'connect.users.list_connections',
+        example:
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nresponse = client.connect.users.list_connections(\n    id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.items)',
+      },
+      go: {
+        method: 'client.Connect.Users.ListConnections',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tresponse, err := client.Connect.Users.ListConnections(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.ConnectUserListConnectionsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Items)\n}\n',
+      },
+      cli: {
+        method: 'users list_connections',
+        example:
+          'mobilerun-cloud connect:users list-connections \\\n  --id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      },
+      http: {
+        example: 'curl https://api.mobilerun.ai/v1/connect/users/$ID/connections',
+      },
+    },
+  },
+  {
     name: 'attach',
     endpoint: '/tasks/{task_id}/attach',
     httpMethod: 'get',

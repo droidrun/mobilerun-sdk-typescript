@@ -417,6 +417,56 @@ Methods:
 - <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
 - <code title="post /proxies/lookup">client.proxies.<a href="./src/resources/proxies.ts">lookup</a>({ ...params }) -> ProxyLookupResponse</code>
 
+# Connect
+
+## Countries
+
+Types:
+
+- <code><a href="./src/resources/connect/countries.ts">CountryListResponse</a></code>
+
+Methods:
+
+- <code title="get /connect/countries">client.connect.countries.<a href="./src/resources/connect/countries.ts">list</a>({ ...params }) -> CountryListResponse</code>
+
+## Proxies
+
+Types:
+
+- <code><a href="./src/resources/connect/proxies.ts">ProxyRetrieveResponse</a></code>
+- <code><a href="./src/resources/connect/proxies.ts">ProxyListResponse</a></code>
+- <code><a href="./src/resources/connect/proxies.ts">ProxyBuyResponse</a></code>
+- <code><a href="./src/resources/connect/proxies.ts">ProxyListConnectionsResponse</a></code>
+- <code><a href="./src/resources/connect/proxies.ts">ProxyPingResponse</a></code>
+
+Methods:
+
+- <code title="get /connect/proxies/{id}">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">retrieve</a>(id) -> ProxyRetrieveResponse</code>
+- <code title="get /connect/proxies">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
+- <code title="post /connect/proxies">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">buy</a>({ ...params }) -> ProxyBuyResponse</code>
+- <code title="delete /connect/proxies/{id}">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">cancel</a>(id) -> void</code>
+- <code title="get /connect/proxies/{id}/connections">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">listConnections</a>(id, { ...params }) -> ProxyListConnectionsResponse</code>
+- <code title="get /connect/proxies/{id}/ping">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">ping</a>(id) -> ProxyPingResponse</code>
+
+## Users
+
+Types:
+
+- <code><a href="./src/resources/connect/users.ts">UserCreateResponse</a></code>
+- <code><a href="./src/resources/connect/users.ts">UserRetrieveResponse</a></code>
+- <code><a href="./src/resources/connect/users.ts">UserUpdateResponse</a></code>
+- <code><a href="./src/resources/connect/users.ts">UserListResponse</a></code>
+- <code><a href="./src/resources/connect/users.ts">UserListConnectionsResponse</a></code>
+
+Methods:
+
+- <code title="post /connect/users">client.connect.users.<a href="./src/resources/connect/users.ts">create</a>({ ...params }) -> UserCreateResponse</code>
+- <code title="get /connect/users/{id}">client.connect.users.<a href="./src/resources/connect/users.ts">retrieve</a>(id) -> UserRetrieveResponse</code>
+- <code title="patch /connect/users/{id}">client.connect.users.<a href="./src/resources/connect/users.ts">update</a>(id, { ...params }) -> UserUpdateResponse</code>
+- <code title="get /connect/users">client.connect.users.<a href="./src/resources/connect/users.ts">list</a>({ ...params }) -> UserListResponse</code>
+- <code title="delete /connect/users/{id}">client.connect.users.<a href="./src/resources/connect/users.ts">delete</a>(id) -> void</code>
+- <code title="get /connect/users/{id}/connections">client.connect.users.<a href="./src/resources/connect/users.ts">listConnections</a>(id, { ...params }) -> UserListConnectionsResponse</code>
+
 # Tasks
 
 Types:
