@@ -34,14 +34,11 @@ export {
   Esim,
   type EsimListResponse,
   type EsimActivateResponse,
-  type EsimStatusResponse,
   type EsimListParams,
   type EsimActivateParams,
   type EsimEnableParams,
   type EsimRemoveParams,
-  type EsimSetRoamingParams,
-  type EsimStatusParams,
-} from './esim/index';
+} from './esim';
 export {
   Files,
   type FileInfo,

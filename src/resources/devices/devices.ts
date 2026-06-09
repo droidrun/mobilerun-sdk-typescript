@@ -22,6 +22,16 @@ import {
   AppStopParams,
   Apps,
 } from './apps';
+import * as EsimAPI from './esim';
+import {
+  Esim,
+  EsimActivateParams,
+  EsimActivateResponse,
+  EsimEnableParams,
+  EsimListParams,
+  EsimListResponse,
+  EsimRemoveParams,
+} from './esim';
 import * as FilesAPI from './files';
 import {
   FileDeleteParams,
@@ -67,19 +77,6 @@ import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimezoneAPI from './timezone';
 import { Timezone, TimezoneGetParams, TimezoneGetResponse, TimezoneSetParams } from './timezone';
-import * as EsimAPI from './esim/esim';
-import {
-  Esim,
-  EsimActivateParams,
-  EsimActivateResponse,
-  EsimEnableParams,
-  EsimListParams,
-  EsimListResponse,
-  EsimRemoveParams,
-  EsimSetRoamingParams,
-  EsimStatusParams,
-  EsimStatusResponse,
-} from './esim/esim';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -473,13 +470,10 @@ export declare namespace Devices {
     Esim as Esim,
     type EsimListResponse as EsimListResponse,
     type EsimActivateResponse as EsimActivateResponse,
-    type EsimStatusResponse as EsimStatusResponse,
     type EsimListParams as EsimListParams,
     type EsimActivateParams as EsimActivateParams,
     type EsimEnableParams as EsimEnableParams,
     type EsimRemoveParams as EsimRemoveParams,
-    type EsimSetRoamingParams as EsimSetRoamingParams,
-    type EsimStatusParams as EsimStatusParams,
   };
 
   export {
