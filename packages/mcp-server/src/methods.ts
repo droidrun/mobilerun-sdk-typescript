@@ -41,6 +41,24 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/agents/chat/messages',
   },
   {
+    clientCallName: 'client.agents.chat.sendMessage',
+    fullyQualifiedName: 'agents.chat.sendMessage',
+    httpMethod: 'post',
+    httpPath: '/agents/chat/message',
+  },
+  {
+    clientCallName: 'client.agents.chat.sendPrompt',
+    fullyQualifiedName: 'agents.chat.sendPrompt',
+    httpMethod: 'post',
+    httpPath: '/agents/chat/prompt',
+  },
+  {
+    clientCallName: 'client.agents.chat.subscribeEvents',
+    fullyQualifiedName: 'agents.chat.subscribeEvents',
+    httpMethod: 'get',
+    httpPath: '/agents/chat/events',
+  },
+  {
     clientCallName: 'client.agents.chat.abort.forceClear',
     fullyQualifiedName: 'agents.chat.abort.forceClear',
     httpMethod: 'post',

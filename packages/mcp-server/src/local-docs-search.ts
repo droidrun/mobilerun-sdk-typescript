@@ -241,6 +241,128 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'send_prompt',
+    endpoint: '/agents/chat/prompt',
+    httpMethod: 'post',
+    summary: 'Send a chat prompt; receive streamed agent events',
+    description: 'Send a chat prompt; streams agent events.',
+    stainlessPath: '(resource) agents.chat > (method) send_prompt',
+    qualified: 'client.agents.chat.sendPrompt',
+    params: [
+      "messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; metadata?: object; }[];",
+      'id?: string;',
+      'agent?: string;',
+      'context?: string;',
+      'fileIds?: string[];',
+      'metadata?: object;',
+      "trigger?: 'submit-message' | 'regenerate-message';",
+    ],
+    response: 'string',
+    markdown:
+      "## send_prompt\n\n`client.agents.chat.sendPrompt(messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; metadata?: object; }[], id?: string, agent?: string, context?: string, fileIds?: string[], metadata?: object, trigger?: 'submit-message' | 'regenerate-message'): string`\n\n**post** `/agents/chat/prompt`\n\nSend a chat prompt; streams agent events.\n\n### Parameters\n\n- `messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; metadata?: object; }[]`\n\n- `id?: string`\n\n- `agent?: string`\n\n- `context?: string`\n\n- `fileIds?: string[]`\n\n- `metadata?: object`\n\n- `trigger?: 'submit-message' | 'regenerate-message'`\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst stream = await client.agents.chat.sendPrompt({ messages: [{\n  id: 'id',\n  parts: [{ type: 'type' }],\n  role: 'user',\n}] });\nfor await (const chatSendPromptResponse of stream) {\n  console.log(chatSendPromptResponse);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.sendPrompt',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.sendPrompt({\n  messages: [\n    {\n      id: 'id',\n      parts: [{ type: 'type' }],\n      role: 'user',\n    },\n  ],\n});\n\nconsole.log(response);",
+      },
+      python: {
+        method: 'agents.chat.send_prompt',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfor chat in client.agents.chat.send_prompt(\n    messages=[{\n        "id": "id",\n        "parts": [{\n            "type": "type"\n        }],\n        "role": "user",\n    }],\n):\n  print(chat)',
+      },
+      go: {
+        method: 'client.Agents.Chat.SendPrompt',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tstream := client.Agents.Chat.SendPromptStreaming(context.TODO(), mobileruncloud.AgentChatSendPromptParams{\n\t\tMessages: []mobileruncloud.AgentChatSendPromptParamsMessage{{\n\t\t\tID: "id",\n\t\t\tParts: []mobileruncloud.AgentChatSendPromptParamsMessagePart{{\n\t\t\t\tType: "type",\n\t\t\t}},\n\t\t\tRole: "user",\n\t\t}},\n\t})\n\tfor stream.Next() {\n\t\tfmt.Printf("%+v\\n", stream.Current())\n\t}\n\terr := stream.Err()\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'chat send_prompt',
+        example:
+          "mobilerun-cloud agents:chat send-prompt \\\n  --api-key 'My API Key' \\\n  --message '{id: id, parts: [{type: type}], role: user}'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/prompt \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "messages": [\n            {\n              "id": "id",\n              "parts": [\n                {\n                  "type": "type"\n                }\n              ],\n              "role": "user"\n            }\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'send_message',
+    endpoint: '/agents/chat/message',
+    httpMethod: 'post',
+    summary: 'Send a single user message via direct API',
+    description: 'Send a single user message (direct API). Content-negotiated: SSE or JSON.',
+    stainlessPath: '(resource) agents.chat > (method) send_message',
+    qualified: 'client.agents.chat.sendMessage',
+    params: ['message: string;', 'agent?: string;'],
+    response: '{ assistantText: string; errorText?: string; }',
+    markdown:
+      "## send_message\n\n`client.agents.chat.sendMessage(message: string, agent?: string): { assistantText: string; errorText?: string; }`\n\n**post** `/agents/chat/message`\n\nSend a single user message (direct API). Content-negotiated: SSE or JSON.\n\n### Parameters\n\n- `message: string`\n\n- `agent?: string`\n\n### Returns\n\n- `{ assistantText: string; errorText?: string; }`\n\n  - `assistantText: string`\n  - `errorText?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.sendMessage({ message: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.sendMessage',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.sendMessage({ message: 'x' });\n\nconsole.log(response.assistantText);",
+      },
+      python: {
+        method: 'agents.chat.send_message',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.send_message(\n    message="x",\n)\nprint(response.assistant_text)',
+      },
+      go: {
+        method: 'client.Agents.Chat.SendMessage',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.SendMessage(context.TODO(), mobileruncloud.AgentChatSendMessageParams{\n\t\tMessage: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.AssistantText)\n}\n',
+      },
+      cli: {
+        method: 'chat send_message',
+        example: "mobilerun-cloud agents:chat send-message \\\n  --api-key 'My API Key' \\\n  --message x",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/message \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "message": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'subscribe_events',
+    endpoint: '/agents/chat/events',
+    httpMethod: 'get',
+    summary: 'Subscribe to out-of-band chat-change notifications',
+    description: 'SSE channel for chat-change notifications.',
+    stainlessPath: '(resource) agents.chat > (method) subscribe_events',
+    qualified: 'client.agents.chat.subscribeEvents',
+    response: 'string',
+    markdown:
+      "## subscribe_events\n\n`client.agents.chat.subscribeEvents(): string`\n\n**get** `/agents/chat/events`\n\nSSE channel for chat-change notifications.\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst stream = await client.agents.chat.subscribeEvents();\nfor await (const chatSubscribeEventsResponse of stream) {\n  console.log(chatSubscribeEventsResponse);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.subscribeEvents',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.subscribeEvents();\n\nconsole.log(response);",
+      },
+      python: {
+        method: 'agents.chat.subscribe_events',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nfor chat in client.agents.chat.subscribe_events():\n  print(chat)',
+      },
+      go: {
+        method: 'client.Agents.Chat.SubscribeEvents',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tstream := client.Agents.Chat.SubscribeEventsStreaming(context.TODO())\n\tfor stream.Next() {\n\t\tfmt.Printf("%+v\\n", stream.Current())\n\t}\n\terr := stream.Err()\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'chat subscribe_events',
+        example: "mobilerun-cloud agents:chat subscribe-events \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/events \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
     name: 'perform',
     endpoint: '/agents/chat/abort',
     httpMethod: 'post',

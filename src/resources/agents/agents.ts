@@ -9,6 +9,11 @@ import {
   ChatGetChatStateResponse,
   ChatListSlashCommandsResponse,
   ChatRehydrateChatResponse,
+  ChatSendMessageParams,
+  ChatSendMessageResponse,
+  ChatSendPromptParams,
+  ChatSendPromptResponse,
+  ChatSubscribeEventsResponse,
 } from './chat/chat';
 import * as FilesAPI from './files/files';
 import {
@@ -76,7 +81,12 @@ export declare namespace Agents {
     type ChatGetChatStateResponse as ChatGetChatStateResponse,
     type ChatListSlashCommandsResponse as ChatListSlashCommandsResponse,
     type ChatRehydrateChatResponse as ChatRehydrateChatResponse,
+    type ChatSendMessageResponse as ChatSendMessageResponse,
+    type ChatSendPromptResponse as ChatSendPromptResponse,
+    type ChatSubscribeEventsResponse as ChatSubscribeEventsResponse,
     type ChatDeliverPermissionParams as ChatDeliverPermissionParams,
+    type ChatSendMessageParams as ChatSendMessageParams,
+    type ChatSendPromptParams as ChatSendPromptParams,
   };
 
   export {
