@@ -14,14 +14,6 @@ Types:
 
 # Agents
 
-Types:
-
-- <code><a href="./src/resources/agents/agents.ts">AgentListResponse</a></code>
-
-Methods:
-
-- <code title="get /agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>() -> AgentListResponse</code>
-
 ## Chat
 
 Types:
@@ -30,9 +22,6 @@ Types:
 - <code><a href="./src/resources/agents/chat/chat.ts">ChatGetChatStateResponse</a></code>
 - <code><a href="./src/resources/agents/chat/chat.ts">ChatListSlashCommandsResponse</a></code>
 - <code><a href="./src/resources/agents/chat/chat.ts">ChatRehydrateChatResponse</a></code>
-- <code><a href="./src/resources/agents/chat/chat.ts">ChatSendMessageResponse</a></code>
-- <code><a href="./src/resources/agents/chat/chat.ts">ChatSendPromptResponse</a></code>
-- <code><a href="./src/resources/agents/chat/chat.ts">ChatSubscribeEventsResponse</a></code>
 
 Methods:
 
@@ -40,9 +29,6 @@ Methods:
 - <code title="get /agents/chat/state">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">getChatState</a>() -> ChatGetChatStateResponse</code>
 - <code title="get /agents/chat/slash-commands">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">listSlashCommands</a>() -> ChatListSlashCommandsResponse</code>
 - <code title="get /agents/chat/messages">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">rehydrateChat</a>() -> ChatRehydrateChatResponse</code>
-- <code title="post /agents/chat/message">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">sendMessage</a>({ ...params }) -> ChatSendMessageResponse</code>
-- <code title="post /agents/chat/prompt">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">sendPrompt</a>({ ...params }) -> string</code>
-- <code title="get /agents/chat/events">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">subscribeEvents</a>() -> string</code>
 
 ### Abort
 
@@ -96,26 +82,6 @@ Methods:
 - <code title="delete /agents/files/:fileId">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">deleteFile</a>() -> FileIDDeleteFileResponse</code>
 - <code title="get /agents/files/:fileId/download">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">downloadFile</a>() -> void</code>
 - <code title="patch /agents/files/:fileId">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">updateMetadata</a>({ ...params }) -> FileIDUpdateMetadataResponse</code>
-
-## Telegram
-
-Methods:
-
-- <code title="post /agents/telegram/webhook">client.agents.telegram.<a href="./src/resources/agents/telegram/telegram.ts">receiveUpdate</a>({ ...params }) -> void</code>
-
-### Bots
-
-Types:
-
-- <code><a href="./src/resources/agents/telegram/bots.ts">BotListResponse</a></code>
-- <code><a href="./src/resources/agents/telegram/bots.ts">BotRequestLinkResponse</a></code>
-- <code><a href="./src/resources/agents/telegram/bots.ts">BotRevokeLinkResponse</a></code>
-
-Methods:
-
-- <code title="get /agents/telegram/bots">client.agents.telegram.bots.<a href="./src/resources/agents/telegram/bots.ts">list</a>() -> BotListResponse</code>
-- <code title="post /agents/telegram/bots/connect">client.agents.telegram.bots.<a href="./src/resources/agents/telegram/bots.ts">requestLink</a>() -> BotRequestLinkResponse</code>
-- <code title="post /agents/telegram/bots/{id}/revoke">client.agents.telegram.bots.<a href="./src/resources/agents/telegram/bots.ts">revokeLink</a>(id) -> BotRevokeLinkResponse</code>
 
 # Apps
 
@@ -264,30 +230,15 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/devices/esim/esim.ts">EsimListResponse</a></code>
-- <code><a href="./src/resources/devices/esim/esim.ts">EsimActivateResponse</a></code>
-- <code><a href="./src/resources/devices/esim/esim.ts">EsimStatusResponse</a></code>
+- <code><a href="./src/resources/devices/esim.ts">EsimListResponse</a></code>
+- <code><a href="./src/resources/devices/esim.ts">EsimActivateResponse</a></code>
 
 Methods:
 
-- <code title="get /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">list</a>(deviceID, { ...params }) -> EsimListResponse | null</code>
-- <code title="post /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">activate</a>(deviceID, { ...params }) -> EsimActivateResponse</code>
-- <code title="put /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">enable</a>(deviceID, { ...params }) -> void</code>
-- <code title="delete /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">remove</a>(deviceID, { ...params }) -> void</code>
-- <code title="put /devices/{deviceId}/esim/roaming">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">setRoaming</a>(deviceID, { ...params }) -> void</code>
-- <code title="get /devices/{deviceId}/esim/status">client.devices.esim.<a href="./src/resources/devices/esim/esim.ts">status</a>(deviceID, { ...params }) -> EsimStatusResponse | null</code>
-
-### Apn
-
-Types:
-
-- <code><a href="./src/resources/devices/esim/apn.ts">ApnListResponse</a></code>
-
-Methods:
-
-- <code title="post /devices/{deviceId}/esim/apn">client.devices.esim.apn.<a href="./src/resources/devices/esim/apn.ts">create</a>(deviceID, { ...params }) -> void</code>
-- <code title="get /devices/{deviceId}/esim/apn">client.devices.esim.apn.<a href="./src/resources/devices/esim/apn.ts">list</a>(deviceID, { ...params }) -> ApnListResponse | null</code>
-- <code title="put /devices/{deviceId}/esim/apn">client.devices.esim.apn.<a href="./src/resources/devices/esim/apn.ts">select</a>(deviceID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">list</a>(deviceID, { ...params }) -> EsimListResponse | null</code>
+- <code title="post /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">activate</a>(deviceID, { ...params }) -> EsimActivateResponse</code>
+- <code title="put /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">enable</a>(deviceID, { ...params }) -> void</code>
+- <code title="delete /devices/{deviceId}/esim">client.devices.esim.<a href="./src/resources/devices/esim.ts">remove</a>(deviceID, { ...params }) -> void</code>
 
 ## Files
 

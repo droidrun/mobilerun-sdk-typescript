@@ -11,12 +11,6 @@ export type SdkMethod = {
 
 export const sdkMethods: SdkMethod[] = [
   {
-    clientCallName: 'client.agents.list',
-    fullyQualifiedName: 'agents.list',
-    httpMethod: 'get',
-    httpPath: '/agents',
-  },
-  {
     clientCallName: 'client.agents.chat.deliverPermission',
     fullyQualifiedName: 'agents.chat.deliverPermission',
     httpMethod: 'post',
@@ -39,24 +33,6 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'agents.chat.rehydrateChat',
     httpMethod: 'get',
     httpPath: '/agents/chat/messages',
-  },
-  {
-    clientCallName: 'client.agents.chat.sendMessage',
-    fullyQualifiedName: 'agents.chat.sendMessage',
-    httpMethod: 'post',
-    httpPath: '/agents/chat/message',
-  },
-  {
-    clientCallName: 'client.agents.chat.sendPrompt',
-    fullyQualifiedName: 'agents.chat.sendPrompt',
-    httpMethod: 'post',
-    httpPath: '/agents/chat/prompt',
-  },
-  {
-    clientCallName: 'client.agents.chat.subscribeEvents',
-    fullyQualifiedName: 'agents.chat.subscribeEvents',
-    httpMethod: 'get',
-    httpPath: '/agents/chat/events',
   },
   {
     clientCallName: 'client.agents.chat.abort.forceClear',
@@ -123,30 +99,6 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'agents.files.fileID.updateMetadata',
     httpMethod: 'patch',
     httpPath: '/agents/files/:fileId',
-  },
-  {
-    clientCallName: 'client.agents.telegram.receiveUpdate',
-    fullyQualifiedName: 'agents.telegram.receiveUpdate',
-    httpMethod: 'post',
-    httpPath: '/agents/telegram/webhook',
-  },
-  {
-    clientCallName: 'client.agents.telegram.bots.list',
-    fullyQualifiedName: 'agents.telegram.bots.list',
-    httpMethod: 'get',
-    httpPath: '/agents/telegram/bots',
-  },
-  {
-    clientCallName: 'client.agents.telegram.bots.requestLink',
-    fullyQualifiedName: 'agents.telegram.bots.requestLink',
-    httpMethod: 'post',
-    httpPath: '/agents/telegram/bots/connect',
-  },
-  {
-    clientCallName: 'client.agents.telegram.bots.revokeLink',
-    fullyQualifiedName: 'agents.telegram.bots.revokeLink',
-    httpMethod: 'post',
-    httpPath: '/agents/telegram/bots/{id}/revoke',
   },
   {
     clientCallName: 'client.apps.retrieve',
@@ -423,36 +375,6 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'devices.esim.remove',
     httpMethod: 'delete',
     httpPath: '/devices/{deviceId}/esim',
-  },
-  {
-    clientCallName: 'client.devices.esim.setRoaming',
-    fullyQualifiedName: 'devices.esim.setRoaming',
-    httpMethod: 'put',
-    httpPath: '/devices/{deviceId}/esim/roaming',
-  },
-  {
-    clientCallName: 'client.devices.esim.status',
-    fullyQualifiedName: 'devices.esim.status',
-    httpMethod: 'get',
-    httpPath: '/devices/{deviceId}/esim/status',
-  },
-  {
-    clientCallName: 'client.devices.esim.apn.create',
-    fullyQualifiedName: 'devices.esim.apn.create',
-    httpMethod: 'post',
-    httpPath: '/devices/{deviceId}/esim/apn',
-  },
-  {
-    clientCallName: 'client.devices.esim.apn.list',
-    fullyQualifiedName: 'devices.esim.apn.list',
-    httpMethod: 'get',
-    httpPath: '/devices/{deviceId}/esim/apn',
-  },
-  {
-    clientCallName: 'client.devices.esim.apn.select',
-    fullyQualifiedName: 'devices.esim.apn.select',
-    httpMethod: 'put',
-    httpPath: '/devices/{deviceId}/esim/apn',
   },
   {
     clientCallName: 'client.devices.files.list',
