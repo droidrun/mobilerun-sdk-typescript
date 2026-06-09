@@ -30,6 +30,9 @@ Types:
 - <code><a href="./src/resources/agents/chat/chat.ts">ChatGetChatStateResponse</a></code>
 - <code><a href="./src/resources/agents/chat/chat.ts">ChatListSlashCommandsResponse</a></code>
 - <code><a href="./src/resources/agents/chat/chat.ts">ChatRehydrateChatResponse</a></code>
+- <code><a href="./src/resources/agents/chat/chat.ts">ChatSendMessageResponse</a></code>
+- <code><a href="./src/resources/agents/chat/chat.ts">ChatSendPromptResponse</a></code>
+- <code><a href="./src/resources/agents/chat/chat.ts">ChatSubscribeEventsResponse</a></code>
 
 Methods:
 
@@ -37,6 +40,9 @@ Methods:
 - <code title="get /agents/chat/state">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">getChatState</a>() -> ChatGetChatStateResponse</code>
 - <code title="get /agents/chat/slash-commands">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">listSlashCommands</a>() -> ChatListSlashCommandsResponse</code>
 - <code title="get /agents/chat/messages">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">rehydrateChat</a>() -> ChatRehydrateChatResponse</code>
+- <code title="post /agents/chat/message">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">sendMessage</a>({ ...params }) -> ChatSendMessageResponse</code>
+- <code title="post /agents/chat/prompt">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">sendPrompt</a>({ ...params }) -> string</code>
+- <code title="get /agents/chat/events">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">subscribeEvents</a>() -> string</code>
 
 ### Abort
 

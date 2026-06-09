@@ -12,6 +12,8 @@ import {
   QuestionDismissResponse,
 } from './question';
 import { APIPromise } from '../../../core/api-promise';
+import { Stream } from '../../../core/streaming';
+import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
 
 export class Chat extends APIResource {
@@ -49,6 +51,39 @@ export class Chat extends APIResource {
    */
   rehydrateChat(options?: RequestOptions): APIPromise<ChatRehydrateChatResponse> {
     return this._client.get('/agents/chat/messages', options);
+  }
+
+  /**
+   * Send a single user message (direct API). Content-negotiated: SSE or JSON.
+   */
+  sendMessage(body: ChatSendMessageParams, options?: RequestOptions): APIPromise<ChatSendMessageResponse> {
+    return this._client.post('/agents/chat/message', { body, ...options });
+  }
+
+  /**
+   * Send a chat prompt; streams agent events.
+   */
+  sendPrompt(
+    body: ChatSendPromptParams,
+    options?: RequestOptions,
+  ): APIPromise<Stream<ChatSendPromptResponse>> {
+    return this._client.post('/agents/chat/prompt', {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: 'text/event-stream' }, options?.headers]),
+      stream: true,
+    }) as APIPromise<Stream<ChatSendPromptResponse>>;
+  }
+
+  /**
+   * SSE channel for chat-change notifications.
+   */
+  subscribeEvents(options?: RequestOptions): APIPromise<Stream<ChatSubscribeEventsResponse>> {
+    return this._client.get('/agents/chat/events', {
+      ...options,
+      headers: buildHeaders([{ Accept: 'text/event-stream' }, options?.headers]),
+      stream: true,
+    }) as APIPromise<Stream<ChatSubscribeEventsResponse>>;
   }
 }
 
@@ -113,10 +148,64 @@ export namespace ChatRehydrateChatResponse {
   }
 }
 
+export interface ChatSendMessageResponse {
+  assistantText: string;
+
+  errorText?: string;
+}
+
+export type ChatSendPromptResponse = string;
+
+export type ChatSubscribeEventsResponse = string;
+
 export interface ChatDeliverPermissionParams {
   permissionId: string;
 
   response: 'once' | 'always' | 'reject';
+}
+
+export interface ChatSendMessageParams {
+  message: string;
+
+  agent?: string;
+}
+
+export interface ChatSendPromptParams {
+  messages: Array<ChatSendPromptParams.Message>;
+
+  id?: string;
+
+  agent?: string;
+
+  context?: string;
+
+  fileIds?: Array<string>;
+
+  metadata?: { [key: string]: unknown };
+
+  trigger?: 'submit-message' | 'regenerate-message';
+
+  [k: string]: unknown;
+}
+
+export namespace ChatSendPromptParams {
+  export interface Message {
+    id: string;
+
+    parts: Array<Message.Part>;
+
+    role: 'user' | 'assistant' | 'system';
+
+    metadata?: { [key: string]: unknown };
+  }
+
+  export namespace Message {
+    export interface Part {
+      type: string;
+
+      [k: string]: unknown;
+    }
+  }
 }
 
 Chat.Abort = Abort;
@@ -128,7 +217,12 @@ export declare namespace Chat {
     type ChatGetChatStateResponse as ChatGetChatStateResponse,
     type ChatListSlashCommandsResponse as ChatListSlashCommandsResponse,
     type ChatRehydrateChatResponse as ChatRehydrateChatResponse,
+    type ChatSendMessageResponse as ChatSendMessageResponse,
+    type ChatSendPromptResponse as ChatSendPromptResponse,
+    type ChatSubscribeEventsResponse as ChatSubscribeEventsResponse,
     type ChatDeliverPermissionParams as ChatDeliverPermissionParams,
+    type ChatSendMessageParams as ChatSendMessageParams,
+    type ChatSendPromptParams as ChatSendPromptParams,
   };
 
   export {

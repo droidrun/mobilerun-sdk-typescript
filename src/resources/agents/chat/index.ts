@@ -7,7 +7,12 @@ export {
   type ChatGetChatStateResponse,
   type ChatListSlashCommandsResponse,
   type ChatRehydrateChatResponse,
+  type ChatSendMessageResponse,
+  type ChatSendPromptResponse,
+  type ChatSubscribeEventsResponse,
   type ChatDeliverPermissionParams,
+  type ChatSendMessageParams,
+  type ChatSendPromptParams,
 } from './chat';
 export {
   Question,
