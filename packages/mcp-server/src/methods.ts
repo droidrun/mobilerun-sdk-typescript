@@ -11,6 +11,12 @@ export type SdkMethod = {
 
 export const sdkMethods: SdkMethod[] = [
   {
+    clientCallName: 'client.agents.list',
+    fullyQualifiedName: 'agents.list',
+    httpMethod: 'get',
+    httpPath: '/agents',
+  },
+  {
     clientCallName: 'client.agents.chat.deliverPermission',
     fullyQualifiedName: 'agents.chat.deliverPermission',
     httpMethod: 'post',
@@ -99,6 +105,30 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'agents.files.fileID.updateMetadata',
     httpMethod: 'patch',
     httpPath: '/agents/files/:fileId',
+  },
+  {
+    clientCallName: 'client.agents.telegram.receiveUpdate',
+    fullyQualifiedName: 'agents.telegram.receiveUpdate',
+    httpMethod: 'post',
+    httpPath: '/agents/telegram/webhook',
+  },
+  {
+    clientCallName: 'client.agents.telegram.bots.list',
+    fullyQualifiedName: 'agents.telegram.bots.list',
+    httpMethod: 'get',
+    httpPath: '/agents/telegram/bots',
+  },
+  {
+    clientCallName: 'client.agents.telegram.bots.requestLink',
+    fullyQualifiedName: 'agents.telegram.bots.requestLink',
+    httpMethod: 'post',
+    httpPath: '/agents/telegram/bots/connect',
+  },
+  {
+    clientCallName: 'client.agents.telegram.bots.revokeLink',
+    fullyQualifiedName: 'agents.telegram.bots.revokeLink',
+    httpMethod: 'post',
+    httpPath: '/agents/telegram/bots/{id}/revoke',
   },
   {
     clientCallName: 'client.apps.retrieve',

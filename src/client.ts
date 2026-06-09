@@ -82,7 +82,7 @@ import {
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
-import { Agents } from './resources/agents/agents';
+import { AgentListResponse, Agents } from './resources/agents/agents';
 import {
   CredentialListParams,
   CredentialListResponse,
@@ -835,6 +835,9 @@ export class Mobilerun {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * Agents API
+   */
   agents: API.Agents = new API.Agents(this);
   /**
    * App Management
@@ -881,7 +884,7 @@ Mobilerun.Workflows = Workflows;
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Agents as Agents };
+  export { Agents as Agents, type AgentListResponse as AgentListResponse };
 
   export {
     Apps as Apps,

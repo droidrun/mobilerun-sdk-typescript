@@ -14,6 +14,14 @@ Types:
 
 # Agents
 
+Types:
+
+- <code><a href="./src/resources/agents/agents.ts">AgentListResponse</a></code>
+
+Methods:
+
+- <code title="get /agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>() -> AgentListResponse</code>
+
 ## Chat
 
 Types:
@@ -82,6 +90,26 @@ Methods:
 - <code title="delete /agents/files/:fileId">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">deleteFile</a>() -> FileIDDeleteFileResponse</code>
 - <code title="get /agents/files/:fileId/download">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">downloadFile</a>() -> void</code>
 - <code title="patch /agents/files/:fileId">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">updateMetadata</a>({ ...params }) -> FileIDUpdateMetadataResponse</code>
+
+## Telegram
+
+Methods:
+
+- <code title="post /agents/telegram/webhook">client.agents.telegram.<a href="./src/resources/agents/telegram/telegram.ts">receiveUpdate</a>({ ...params }) -> void</code>
+
+### Bots
+
+Types:
+
+- <code><a href="./src/resources/agents/telegram/bots.ts">BotListResponse</a></code>
+- <code><a href="./src/resources/agents/telegram/bots.ts">BotRequestLinkResponse</a></code>
+- <code><a href="./src/resources/agents/telegram/bots.ts">BotRevokeLinkResponse</a></code>
+
+Methods:
+
+- <code title="get /agents/telegram/bots">client.agents.telegram.bots.<a href="./src/resources/agents/telegram/bots.ts">list</a>() -> BotListResponse</code>
+- <code title="post /agents/telegram/bots/connect">client.agents.telegram.bots.<a href="./src/resources/agents/telegram/bots.ts">requestLink</a>() -> BotRequestLinkResponse</code>
+- <code title="post /agents/telegram/bots/{id}/revoke">client.agents.telegram.bots.<a href="./src/resources/agents/telegram/bots.ts">revokeLink</a>(id) -> BotRevokeLinkResponse</code>
 
 # Apps
 

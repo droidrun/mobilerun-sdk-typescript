@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Agents } from './agents';
+export { Agents, type AgentListResponse } from './agents';
 export {
   Chat,
   type ChatDeliverPermissionResponse,
@@ -16,3 +16,4 @@ export {
   type FileListFilesParams,
   type FileMintUploadURLParams,
 } from './files/index';
+export { Telegram, type TelegramReceiveUpdateParams } from './telegram/index';
