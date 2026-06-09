@@ -75,6 +75,14 @@ export class Flows extends APIResource {
   ): APIPromise<FlowCloneResponse> {
     return this._client.post(path`/flows/${flowID}/clone`, { body, ...options });
   }
+
+  /**
+   * Clear a flow's blocked status after fixing the underlying issue. Idempotent —
+   * safe to call on already-healthy flows.
+   */
+  unblock(flowID: string, options?: RequestOptions): APIPromise<FlowUnblockResponse> {
+    return this._client.post(path`/flows/${flowID}/unblock`, options);
+  }
 }
 
 export interface FlowActionOverrides {
@@ -118,6 +126,10 @@ export interface FlowDeleteResponse {
 }
 
 export interface FlowCloneResponse {
+  data: WorkflowsAPI.Flow;
+}
+
+export interface FlowUnblockResponse {
   data: WorkflowsAPI.Flow;
 }
 
@@ -203,6 +215,7 @@ export declare namespace Flows {
     type FlowListResponse as FlowListResponse,
     type FlowDeleteResponse as FlowDeleteResponse,
     type FlowCloneResponse as FlowCloneResponse,
+    type FlowUnblockResponse as FlowUnblockResponse,
     type FlowCreateParams as FlowCreateParams,
     type FlowUpdateParams as FlowUpdateParams,
     type FlowListParams as FlowListParams,

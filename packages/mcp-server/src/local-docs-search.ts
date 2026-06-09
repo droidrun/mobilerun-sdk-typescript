@@ -51,40 +51,582 @@ type SearchResult = {
 
 const EMBEDDED_METHODS: MethodEntry[] = [
   {
-    name: 'list',
-    endpoint: '/agents',
+    name: 'rehydrate_chat',
+    endpoint: '/agents/chat/messages',
     httpMethod: 'get',
-    summary: 'Get Agents',
-    description: 'List all available agents with their default configurations.',
-    stainlessPath: '(resource) agents > (method) list',
-    qualified: 'client.agents.list',
+    summary: "Rehydrate the user's single chat from the orchestrator display cache",
+    description: "Rehydrate the user's chat history. Does not wake a hibernated machine.",
+    stainlessPath: '(resource) agents.chat > (method) rehydrate_chat',
+    qualified: 'client.agents.chat.rehydrateChat',
     response:
-      '{ id: number; description: string; icon: string; llmModel: string; maxSteps: number; name: string; reasoning: boolean; subagentModel: string; vision: boolean; }[]',
+      "{ messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; source?: 'cloud' | 'telegram' | 'api' | 'workflow'; synthetic?: boolean; }[]; turnActive: boolean; }",
     markdown:
-      "## list\n\n`client.agents.list(): { id: number; description: string; icon: string; llmModel: string; maxSteps: number; name: string; reasoning: boolean; subagentModel: string; vision: boolean; }[]`\n\n**get** `/agents`\n\nList all available agents with their default configurations.\n\n### Returns\n\n- `{ id: number; description: string; icon: string; llmModel: string; maxSteps: number; name: string; reasoning: boolean; subagentModel: string; vision: boolean; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst agents = await client.agents.list();\n\nconsole.log(agents);\n```",
+      "## rehydrate_chat\n\n`client.agents.chat.rehydrateChat(): { messages: object[]; turnActive: boolean; }`\n\n**get** `/agents/chat/messages`\n\nRehydrate the user's chat history. Does not wake a hibernated machine.\n\n### Returns\n\n- `{ messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; source?: 'cloud' | 'telegram' | 'api' | 'workflow'; synthetic?: boolean; }[]; turnActive: boolean; }`\n\n  - `messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; source?: 'cloud' | 'telegram' | 'api' | 'workflow'; synthetic?: boolean; }[]`\n  - `turnActive: boolean`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.rehydrateChat();\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
-        method: 'client.agents.list',
+        method: 'client.agents.chat.rehydrateChat',
         example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst agents = await client.agents.list();\n\nconsole.log(agents);",
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.rehydrateChat();\n\nconsole.log(response.messages);",
       },
       python: {
-        method: 'agents.list',
+        method: 'agents.chat.rehydrate_chat',
         example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nagents = client.agents.list()\nprint(agents)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.rehydrate_chat()\nprint(response.messages)',
       },
       go: {
-        method: 'client.Agents.List',
+        method: 'client.Agents.Chat.RehydrateChat',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagents, err := client.Agents.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agents)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.RehydrateChat(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Messages)\n}\n',
       },
       cli: {
-        method: 'agents list',
-        example: "mobilerun-cloud agents list \\\n  --api-key 'My API Key'",
+        method: 'chat rehydrate_chat',
+        example: "mobilerun-cloud agents:chat rehydrate-chat \\\n  --api-key 'My API Key'",
       },
       http: {
         example:
-          'curl https://api.mobilerun.ai/v1/agents \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+          'curl https://api.mobilerun.ai/v1/agents/chat/messages \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get_chat_state',
+    endpoint: '/agents/chat/state',
+    httpMethod: 'get',
+    summary: 'Snapshot of in-flight activity for the caller',
+    description:
+      'Advisory snapshot of in-flight activity for the caller. Returns boolean flags for an interactive chat turn, a background workflow run, and a pending graceful abort. Intended for FE UI before deciding to invoke /chat/abort/force.',
+    stainlessPath: '(resource) agents.chat > (method) get_chat_state',
+    qualified: 'client.agents.chat.getChatState',
+    response: '{ abortRequested: boolean; chatActive: boolean; workflowActive: boolean; }',
+    markdown:
+      "## get_chat_state\n\n`client.agents.chat.getChatState(): { abortRequested: boolean; chatActive: boolean; workflowActive: boolean; }`\n\n**get** `/agents/chat/state`\n\nAdvisory snapshot of in-flight activity for the caller. Returns boolean flags for an interactive chat turn, a background workflow run, and a pending graceful abort. Intended for FE UI before deciding to invoke /chat/abort/force.\n\n### Returns\n\n- `{ abortRequested: boolean; chatActive: boolean; workflowActive: boolean; }`\n\n  - `abortRequested: boolean`\n  - `chatActive: boolean`\n  - `workflowActive: boolean`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.getChatState();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.getChatState',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.getChatState();\n\nconsole.log(response.abortRequested);",
+      },
+      python: {
+        method: 'agents.chat.get_chat_state',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.get_chat_state()\nprint(response.abort_requested)',
+      },
+      go: {
+        method: 'client.Agents.Chat.GetChatState',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.GetChatState(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.AbortRequested)\n}\n',
+      },
+      cli: {
+        method: 'chat get_chat_state',
+        example: "mobilerun-cloud agents:chat get-chat-state \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/state \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list_slash_commands',
+    endpoint: '/agents/chat/slash-commands',
+    httpMethod: 'get',
+    summary: 'List the chat slash-command catalog',
+    description: 'List the chat slash-command catalog.',
+    stainlessPath: '(resource) agents.chat > (method) list_slash_commands',
+    qualified: 'client.agents.chat.listSlashCommands',
+    response: '{ commands: { name: string; summary: string; args?: string; }[]; }',
+    markdown:
+      "## list_slash_commands\n\n`client.agents.chat.listSlashCommands(): { commands: object[]; }`\n\n**get** `/agents/chat/slash-commands`\n\nList the chat slash-command catalog.\n\n### Returns\n\n- `{ commands: { name: string; summary: string; args?: string; }[]; }`\n\n  - `commands: { name: string; summary: string; args?: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.listSlashCommands();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.listSlashCommands',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.listSlashCommands();\n\nconsole.log(response.commands);",
+      },
+      python: {
+        method: 'agents.chat.list_slash_commands',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.list_slash_commands()\nprint(response.commands)',
+      },
+      go: {
+        method: 'client.Agents.Chat.ListSlashCommands',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.ListSlashCommands(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Commands)\n}\n',
+      },
+      cli: {
+        method: 'chat list_slash_commands',
+        example: "mobilerun-cloud agents:chat list-slash-commands \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/slash-commands \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'deliver_permission',
+    endpoint: '/agents/chat/permission',
+    httpMethod: 'post',
+    summary: "Deliver a HITL approval/rejection to the user's active chat session",
+    description: 'Deliver a HITL approval/rejection for an in-flight turn.',
+    stainlessPath: '(resource) agents.chat > (method) deliver_permission',
+    qualified: 'client.agents.chat.deliverPermission',
+    params: ['permissionId: string;', "response: 'once' | 'always' | 'reject';"],
+    response: '{ ok: true; }',
+    markdown:
+      "## deliver_permission\n\n`client.agents.chat.deliverPermission(permissionId: string, response: 'once' | 'always' | 'reject'): { ok: true; }`\n\n**post** `/agents/chat/permission`\n\nDeliver a HITL approval/rejection for an in-flight turn.\n\n### Parameters\n\n- `permissionId: string`\n\n- `response: 'once' | 'always' | 'reject'`\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.deliverPermission({ permissionId: 'x', response: 'once' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.deliverPermission',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.deliverPermission({\n  permissionId: 'x',\n  response: 'once',\n});\n\nconsole.log(response.ok);",
+      },
+      python: {
+        method: 'agents.chat.deliver_permission',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.deliver_permission(\n    permission_id="x",\n    response="once",\n)\nprint(response.ok)',
+      },
+      go: {
+        method: 'client.Agents.Chat.DeliverPermission',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.DeliverPermission(context.TODO(), mobileruncloud.AgentChatDeliverPermissionParams{\n\t\tPermissionID: "x",\n\t\tResponse:     mobileruncloud.AgentChatDeliverPermissionParamsResponseOnce,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Ok)\n}\n',
+      },
+      cli: {
+        method: 'chat deliver_permission',
+        example:
+          "mobilerun-cloud agents:chat deliver-permission \\\n  --api-key 'My API Key' \\\n  --permission-id x \\\n  --response once",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/permission \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "permissionId": "x",\n          "response": "once"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'perform',
+    endpoint: '/agents/chat/abort',
+    httpMethod: 'post',
+    summary: 'Abort the currently in-flight chat turn for this user',
+    description: 'Abort the in-flight chat turn. Idempotent.',
+    stainlessPath: '(resource) agents.chat.abort > (method) perform',
+    qualified: 'client.agents.chat.abort.perform',
+    response: '{ ok: true; }',
+    markdown:
+      "## perform\n\n`client.agents.chat.abort.perform(): { ok: true; }`\n\n**post** `/agents/chat/abort`\n\nAbort the in-flight chat turn. Idempotent.\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.abort.perform();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.abort.perform',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.abort.perform();\n\nconsole.log(response.ok);",
+      },
+      python: {
+        method: 'agents.chat.abort.perform',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.abort.perform()\nprint(response.ok)',
+      },
+      go: {
+        method: 'client.Agents.Chat.Abort.Perform',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.Abort.Perform(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Ok)\n}\n',
+      },
+      cli: {
+        method: 'abort perform',
+        example: "mobilerun-cloud agents:chat:abort perform \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/abort \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'force_clear',
+    endpoint: '/agents/chat/abort/force',
+    httpMethod: 'post',
+    summary: 'Force-clear stuck in-flight chat state for this user',
+    description:
+      'Unconditionally clears the in-flight chat state for the caller. Idempotent escape hatch when /chat/abort cannot settle.',
+    stainlessPath: '(resource) agents.chat.abort > (method) force_clear',
+    qualified: 'client.agents.chat.abort.forceClear',
+    response: '{ cleared: number; ok: true; }',
+    markdown:
+      "## force_clear\n\n`client.agents.chat.abort.forceClear(): { cleared: number; ok: true; }`\n\n**post** `/agents/chat/abort/force`\n\nUnconditionally clears the in-flight chat state for the caller. Idempotent escape hatch when /chat/abort cannot settle.\n\n### Returns\n\n- `{ cleared: number; ok: true; }`\n\n  - `cleared: number`\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.abort.forceClear();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.abort.forceClear',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.abort.forceClear();\n\nconsole.log(response.cleared);",
+      },
+      python: {
+        method: 'agents.chat.abort.force_clear',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.abort.force_clear()\nprint(response.cleared)',
+      },
+      go: {
+        method: 'client.Agents.Chat.Abort.ForceClear',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.Abort.ForceClear(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Cleared)\n}\n',
+      },
+      cli: {
+        method: 'abort force_clear',
+        example: "mobilerun-cloud agents:chat:abort force-clear \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/abort/force \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'deliver_answer',
+    endpoint: '/agents/chat/question',
+    httpMethod: 'post',
+    summary: "Deliver a question answer to the user's active chat session",
+    description:
+      "Forward the user's answers to kilo's `/question/{id}/reply` for an in-flight turn. Idempotent via the `idempotency-key` header.",
+    stainlessPath: '(resource) agents.chat.question > (method) deliver_answer',
+    qualified: 'client.agents.chat.question.deliverAnswer',
+    params: ['answers: { label: string; } | { custom: string; }[][];', 'questionId: string;'],
+    response: '{ ok: true; }',
+    markdown:
+      "## deliver_answer\n\n`client.agents.chat.question.deliverAnswer(answers: { label: string; } | { custom: string; }[][], questionId: string): { ok: true; }`\n\n**post** `/agents/chat/question`\n\nForward the user's answers to kilo's `/question/{id}/reply` for an in-flight turn. Idempotent via the `idempotency-key` header.\n\n### Parameters\n\n- `answers: { label: string; } | { custom: string; }[][]`\n\n- `questionId: string`\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.question.deliverAnswer({ answers: [[{ label: 'x' }]], questionId: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.question.deliverAnswer',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.question.deliverAnswer({\n  answers: [[{ label: 'x' }]],\n  questionId: 'x',\n});\n\nconsole.log(response.ok);",
+      },
+      python: {
+        method: 'agents.chat.question.deliver_answer',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.question.deliver_answer(\n    answers=[[{\n        "label": "x"\n    }]],\n    question_id="x",\n)\nprint(response.ok)',
+      },
+      go: {
+        method: 'client.Agents.Chat.Question.DeliverAnswer',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.Question.DeliverAnswer(context.TODO(), mobileruncloud.AgentChatQuestionDeliverAnswerParams{\n\t\tAnswers: [][]mobileruncloud.AgentChatQuestionDeliverAnswerParamsAnswerUnion{{{\n\t\t\tOfAgentChatQuestionDeliverAnswersAnswerLabel: &mobileruncloud.AgentChatQuestionDeliverAnswerParamsAnswerLabel{\n\t\t\t\tLabel: "x",\n\t\t\t},\n\t\t}}},\n\t\tQuestionID: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Ok)\n}\n',
+      },
+      cli: {
+        method: 'question deliver_answer',
+        example:
+          "mobilerun-cloud agents:chat:question deliver-answer \\\n  --api-key 'My API Key' \\\n  --answer '[{label: x}]' \\\n  --question-id x",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/question \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "answers": [\n            [\n              {\n                "label": "x"\n              }\n            ]\n          ],\n          "questionId": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'dismiss',
+    endpoint: '/agents/chat/question/reject',
+    httpMethod: 'post',
+    summary: 'Dismiss an outstanding question without answering',
+    description:
+      "Forward a reject to kilo's `/question/{id}/reject`. Already-resolved questions return 200 (no-op) so multi-tab dismiss stays idempotent.",
+    stainlessPath: '(resource) agents.chat.question > (method) dismiss',
+    qualified: 'client.agents.chat.question.dismiss',
+    params: ['questionId: string;'],
+    response: '{ ok: true; }',
+    markdown:
+      "## dismiss\n\n`client.agents.chat.question.dismiss(questionId: string): { ok: true; }`\n\n**post** `/agents/chat/question/reject`\n\nForward a reject to kilo's `/question/{id}/reject`. Already-resolved questions return 200 (no-op) so multi-tab dismiss stays idempotent.\n\n### Parameters\n\n- `questionId: string`\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.question.dismiss({ questionId: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.chat.question.dismiss',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.question.dismiss({ questionId: 'x' });\n\nconsole.log(response.ok);",
+      },
+      python: {
+        method: 'agents.chat.question.dismiss',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.question.dismiss(\n    question_id="x",\n)\nprint(response.ok)',
+      },
+      go: {
+        method: 'client.Agents.Chat.Question.Dismiss',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.Question.Dismiss(context.TODO(), mobileruncloud.AgentChatQuestionDismissParams{\n\t\tQuestionID: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Ok)\n}\n',
+      },
+      cli: {
+        method: 'question dismiss',
+        example:
+          "mobilerun-cloud agents:chat:question dismiss \\\n  --api-key 'My API Key' \\\n  --question-id x",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/chat/question/reject \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "questionId": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'mint_upload_url',
+    endpoint: '/agents/files/upload-url',
+    httpMethod: 'post',
+    summary: 'Mint a presigned PUT URL for a user file upload',
+    description: 'Mint a presigned PUT URL for a user file upload',
+    stainlessPath: '(resource) agents.files > (method) mint_upload_url',
+    qualified: 'client.agents.files.mintUploadURL',
+    params: [
+      'filename: string;',
+      'mimeType: string;',
+      'sizeBytes: number;',
+      "zone?: 'user' | 'skills';",
+      'Idempotency-Key?: string;',
+    ],
+    response: '{ expiresAt: string; fileId: string; putUrl: string; }',
+    markdown:
+      "## mint_upload_url\n\n`client.agents.files.mintUploadURL(filename: string, mimeType: string, sizeBytes: number, zone?: 'user' | 'skills', Idempotency-Key?: string): { expiresAt: string; fileId: string; putUrl: string; }`\n\n**post** `/agents/files/upload-url`\n\nMint a presigned PUT URL for a user file upload\n\n### Parameters\n\n- `filename: string`\n\n- `mimeType: string`\n\n- `sizeBytes: number`\n\n- `zone?: 'user' | 'skills'`\n\n- `Idempotency-Key?: string`\n\n### Returns\n\n- `{ expiresAt: string; fileId: string; putUrl: string; }`\n\n  - `expiresAt: string`\n  - `fileId: string`\n  - `putUrl: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.files.mintUploadURL({\n  filename: 'x',\n  mimeType: 'x',\n  sizeBytes: 1,\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.files.mintUploadURL',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.files.mintUploadURL({\n  filename: 'x',\n  mimeType: 'x',\n  sizeBytes: 1,\n});\n\nconsole.log(response.expiresAt);",
+      },
+      python: {
+        method: 'agents.files.mint_upload_url',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.files.mint_upload_url(\n    filename="x",\n    mime_type="x",\n    size_bytes=1,\n)\nprint(response.expires_at)',
+      },
+      go: {
+        method: 'client.Agents.Files.MintUploadURL',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Files.MintUploadURL(context.TODO(), mobileruncloud.AgentFileMintUploadURLParams{\n\t\tFilename:  "x",\n\t\tMimeType:  "x",\n\t\tSizeBytes: 1,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ExpiresAt)\n}\n',
+      },
+      cli: {
+        method: 'files mint_upload_url',
+        example:
+          "mobilerun-cloud agents:files mint-upload-url \\\n  --api-key 'My API Key' \\\n  --filename x \\\n  --mime-type x \\\n  --size-bytes 1",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/files/upload-url \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "filename": "x",\n          "mimeType": "x",\n          "sizeBytes": 1\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list_files',
+    endpoint: '/agents/files',
+    httpMethod: 'get',
+    summary: "List the user's ready files, optionally filtered by zone",
+    description: "List the user's ready files, optionally filtered by zone",
+    stainlessPath: '(resource) agents.files > (method) list_files',
+    qualified: 'client.agents.files.listFiles',
+    params: ["zone?: 'user' | 'agent' | 'workflow' | 'skills';"],
+    response:
+      "{ files: { createdAt: string; createdBy: 'user' | 'agent' | 'workflow'; displayName: string; enabled: boolean; fileId: string; filename: string; mimeType: string; sizeBytes: number; zone: 'user' | 'agent' | 'workflow' | 'skills'; }[]; quota: { currentBytes: number; quotaBytes: number; }; }",
+    markdown:
+      "## list_files\n\n`client.agents.files.listFiles(zone?: 'user' | 'agent' | 'workflow' | 'skills'): { files: object[]; quota: object; }`\n\n**get** `/agents/files`\n\nList the user's ready files, optionally filtered by zone\n\n### Parameters\n\n- `zone?: 'user' | 'agent' | 'workflow' | 'skills'`\n\n### Returns\n\n- `{ files: { createdAt: string; createdBy: 'user' | 'agent' | 'workflow'; displayName: string; enabled: boolean; fileId: string; filename: string; mimeType: string; sizeBytes: number; zone: 'user' | 'agent' | 'workflow' | 'skills'; }[]; quota: { currentBytes: number; quotaBytes: number; }; }`\n\n  - `files: { createdAt: string; createdBy: 'user' | 'agent' | 'workflow'; displayName: string; enabled: boolean; fileId: string; filename: string; mimeType: string; sizeBytes: number; zone: 'user' | 'agent' | 'workflow' | 'skills'; }[]`\n  - `quota: { currentBytes: number; quotaBytes: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.files.listFiles();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.files.listFiles',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.files.listFiles();\n\nconsole.log(response.files);",
+      },
+      python: {
+        method: 'agents.files.list_files',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.files.list_files()\nprint(response.files)',
+      },
+      go: {
+        method: 'client.Agents.Files.ListFiles',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Files.ListFiles(context.TODO(), mobileruncloud.AgentFileListFilesParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Files)\n}\n',
+      },
+      cli: {
+        method: 'files list_files',
+        example: "mobilerun-cloud agents:files list-files \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/files \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'confirm_upload',
+    endpoint: '/agents/files/:fileId/confirm',
+    httpMethod: 'post',
+    summary: 'Confirm a file upload by server-side HEAD validation',
+    description: 'Confirm a file upload by server-side HEAD validation',
+    stainlessPath: '(resource) agents.files.file_id > (method) confirm_upload',
+    qualified: 'client.agents.files.fileID.confirmUpload',
+    response:
+      "{ actualSizeBytes: number; createdAt: string; createdBy: 'user' | 'agent' | 'workflow'; displayName: string; enabled: boolean; fileId: string; filename: string; mimeType: string; sizeBytes: number; state: 'ready'; zone: 'user' | 'agent' | 'workflow' | 'skills'; }",
+    markdown:
+      "## confirm_upload\n\n`client.agents.files.fileID.confirmUpload(): { actualSizeBytes: number; createdAt: string; createdBy: 'user' | 'agent' | 'workflow'; displayName: string; enabled: boolean; fileId: string; filename: string; mimeType: string; sizeBytes: number; state: 'ready'; zone: 'user' | 'agent' | 'workflow' | 'skills'; }`\n\n**post** `/agents/files/:fileId/confirm`\n\nConfirm a file upload by server-side HEAD validation\n\n### Returns\n\n- `{ actualSizeBytes: number; createdAt: string; createdBy: 'user' | 'agent' | 'workflow'; displayName: string; enabled: boolean; fileId: string; filename: string; mimeType: string; sizeBytes: number; state: 'ready'; zone: 'user' | 'agent' | 'workflow' | 'skills'; }`\n\n  - `actualSizeBytes: number`\n  - `createdAt: string`\n  - `createdBy: 'user' | 'agent' | 'workflow'`\n  - `displayName: string`\n  - `enabled: boolean`\n  - `fileId: string`\n  - `filename: string`\n  - `mimeType: string`\n  - `sizeBytes: number`\n  - `state: 'ready'`\n  - `zone: 'user' | 'agent' | 'workflow' | 'skills'`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.files.fileID.confirmUpload();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.files.fileID.confirmUpload',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.files.fileID.confirmUpload();\n\nconsole.log(response.actualSizeBytes);",
+      },
+      python: {
+        method: 'agents.files.file_id.confirm_upload',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.files.file_id.confirm_upload()\nprint(response.actual_size_bytes)',
+      },
+      go: {
+        method: 'client.Agents.Files.FileID.ConfirmUpload',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Files.FileID.ConfirmUpload(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ActualSizeBytes)\n}\n',
+      },
+      cli: {
+        method: 'file_id confirm_upload',
+        example: "mobilerun-cloud agents:files:file-id confirm-upload \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/files/:fileId/confirm \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'download_file',
+    endpoint: '/agents/files/:fileId/download',
+    httpMethod: 'get',
+    summary: 'Redirect to a presigned GET URL for a file (FE owner only)',
+    description: 'Redirect to a presigned GET URL for a file (FE owner only)',
+    stainlessPath: '(resource) agents.files.file_id > (method) download_file',
+    qualified: 'client.agents.files.fileID.downloadFile',
+    markdown:
+      "## download_file\n\n`client.agents.files.fileID.downloadFile(): void`\n\n**get** `/agents/files/:fileId/download`\n\nRedirect to a presigned GET URL for a file (FE owner only)\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.agents.files.fileID.downloadFile()\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.files.fileID.downloadFile',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.agents.files.fileID.downloadFile();",
+      },
+      python: {
+        method: 'agents.files.file_id.download_file',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.agents.files.file_id.download_file()',
+      },
+      go: {
+        method: 'client.Agents.Files.FileID.DownloadFile',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Agents.Files.FileID.DownloadFile(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'file_id download_file',
+        example: "mobilerun-cloud agents:files:file-id download-file \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/files/:fileId/download \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update_metadata',
+    endpoint: '/agents/files/:fileId',
+    httpMethod: 'patch',
+    summary: 'Update file metadata (skills zone only)',
+    description:
+      'Partial update of `displayName` and/or `enabled`. Only files with `zone=skills` are mutable; other zones return 422 `unsupported_zone`.',
+    stainlessPath: '(resource) agents.files.file_id > (method) update_metadata',
+    qualified: 'client.agents.files.fileID.updateMetadata',
+    params: ['displayName?: string;', 'enabled?: boolean;'],
+    response:
+      "{ createdAt: string; createdBy: 'user' | 'agent' | 'workflow'; displayName: string; enabled: boolean; fileId: string; filename: string; mimeType: string; sizeBytes: number; zone: 'user' | 'agent' | 'workflow' | 'skills'; }",
+    markdown:
+      "## update_metadata\n\n`client.agents.files.fileID.updateMetadata(displayName?: string, enabled?: boolean): { createdAt: string; createdBy: 'user' | 'agent' | 'workflow'; displayName: string; enabled: boolean; fileId: string; filename: string; mimeType: string; sizeBytes: number; zone: 'user' | 'agent' | 'workflow' | 'skills'; }`\n\n**patch** `/agents/files/:fileId`\n\nPartial update of `displayName` and/or `enabled`. Only files with `zone=skills` are mutable; other zones return 422 `unsupported_zone`.\n\n### Parameters\n\n- `displayName?: string`\n\n- `enabled?: boolean`\n\n### Returns\n\n- `{ createdAt: string; createdBy: 'user' | 'agent' | 'workflow'; displayName: string; enabled: boolean; fileId: string; filename: string; mimeType: string; sizeBytes: number; zone: 'user' | 'agent' | 'workflow' | 'skills'; }`\n\n  - `createdAt: string`\n  - `createdBy: 'user' | 'agent' | 'workflow'`\n  - `displayName: string`\n  - `enabled: boolean`\n  - `fileId: string`\n  - `filename: string`\n  - `mimeType: string`\n  - `sizeBytes: number`\n  - `zone: 'user' | 'agent' | 'workflow' | 'skills'`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.files.fileID.updateMetadata();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.files.fileID.updateMetadata',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.files.fileID.updateMetadata();\n\nconsole.log(response.createdAt);",
+      },
+      python: {
+        method: 'agents.files.file_id.update_metadata',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.files.file_id.update_metadata()\nprint(response.created_at)',
+      },
+      go: {
+        method: 'client.Agents.Files.FileID.UpdateMetadata',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Files.FileID.UpdateMetadata(context.TODO(), mobileruncloud.AgentFileFileIDUpdateMetadataParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.CreatedAt)\n}\n',
+      },
+      cli: {
+        method: 'file_id update_metadata',
+        example: "mobilerun-cloud agents:files:file-id update-metadata \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/files/:fileId \\\n    -X PATCH \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'delete_file',
+    endpoint: '/agents/files/:fileId',
+    httpMethod: 'delete',
+    summary: 'Hard-delete a file',
+    description: 'Hard-delete a file',
+    stainlessPath: '(resource) agents.files.file_id > (method) delete_file',
+    qualified: 'client.agents.files.fileID.deleteFile',
+    response: '{ ok: true; }',
+    markdown:
+      "## delete_file\n\n`client.agents.files.fileID.deleteFile(): { ok: true; }`\n\n**delete** `/agents/files/:fileId`\n\nHard-delete a file\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.files.fileID.deleteFile();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.files.fileID.deleteFile',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.files.fileID.deleteFile();\n\nconsole.log(response.ok);",
+      },
+      python: {
+        method: 'agents.files.file_id.delete_file',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.files.file_id.delete_file()\nprint(response.ok)',
+      },
+      go: {
+        method: 'client.Agents.Files.FileID.DeleteFile',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Files.FileID.DeleteFile(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Ok)\n}\n',
+      },
+      cli: {
+        method: 'file_id delete_file',
+        example: "mobilerun-cloud agents:files:file-id delete-file \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/files/:fileId \\\n    -X DELETE \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'cancel_pending_upload',
+    endpoint: '/agents/files/:fileId/pending',
+    httpMethod: 'delete',
+    summary: 'Cancel a pending upload (transitions to expired, deletes the underlying object)',
+    description:
+      'Soft-cancels an in-flight upload before confirm. Only acts on `pending` rows — refuses to touch `ready` to avoid wiping confirmed files. Idempotent: `{ cancelled: false }` if the row exists but is no longer pending.',
+    stainlessPath: '(resource) agents.files.file_id > (method) cancel_pending_upload',
+    qualified: 'client.agents.files.fileID.cancelPendingUpload',
+    response: '{ cancelled: boolean; }',
+    markdown:
+      "## cancel_pending_upload\n\n`client.agents.files.fileID.cancelPendingUpload(): { cancelled: boolean; }`\n\n**delete** `/agents/files/:fileId/pending`\n\nSoft-cancels an in-flight upload before confirm. Only acts on `pending` rows — refuses to touch `ready` to avoid wiping confirmed files. Idempotent: `{ cancelled: false }` if the row exists but is no longer pending.\n\n### Returns\n\n- `{ cancelled: boolean; }`\n\n  - `cancelled: boolean`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.files.fileID.cancelPendingUpload();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.agents.files.fileID.cancelPendingUpload',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.files.fileID.cancelPendingUpload();\n\nconsole.log(response.cancelled);",
+      },
+      python: {
+        method: 'agents.files.file_id.cancel_pending_upload',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.files.file_id.cancel_pending_upload()\nprint(response.cancelled)',
+      },
+      go: {
+        method: 'client.Agents.Files.FileID.CancelPendingUpload',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Files.FileID.CancelPendingUpload(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Cancelled)\n}\n',
+      },
+      cli: {
+        method: 'file_id cancel_pending_upload',
+        example: "mobilerun-cloud agents:files:file-id cancel-pending-upload \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/agents/files/:fileId/pending \\\n    -X DELETE \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
       },
     },
   },
@@ -5336,6 +5878,48 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.mobilerun.ai/v1/flows/$FLOW_ID/clone \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'unblock',
+    endpoint: '/flows/{flowId}/unblock',
+    httpMethod: 'post',
+    summary:
+      "Clear a flow's blocked status after fixing the underlying issue. Idempotent — safe to call on already-healthy flows.",
+    description:
+      "Clear a flow's blocked status after fixing the underlying issue. Idempotent — safe to call on already-healthy flows.",
+    stainlessPath: '(resource) workflows.flows > (method) unblock',
+    qualified: 'client.workflows.flows.unblock',
+    params: ['flowId: string;'],
+    response:
+      "{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic'; lastTriggeredAt: string; name: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }",
+    markdown:
+      "## unblock\n\n`client.workflows.flows.unblock(flowId: string): { data: flow; }`\n\n**post** `/flows/{flowId}/unblock`\n\nClear a flow's blocked status after fixing the underlying issue. Idempotent — safe to call on already-healthy flows.\n\n### Parameters\n\n- `flowId: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic'; lastTriggeredAt: string; name: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }`\n\n  - `data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic'; lastTriggeredAt: string; name: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.flows.unblock('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.workflows.flows.unblock',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.workflows.flows.unblock('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.data);",
+      },
+      python: {
+        method: 'workflows.flows.unblock',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.workflows.flows.unblock(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.data)',
+      },
+      go: {
+        method: 'client.Workflows.Flows.Unblock',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Workflows.Flows.Unblock(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      cli: {
+        method: 'flows unblock',
+        example:
+          "mobilerun-cloud workflows:flows unblock \\\n  --api-key 'My API Key' \\\n  --flow-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/flows/$FLOW_ID/unblock \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
       },
     },
   },
