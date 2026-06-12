@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../../core/resource';
 import * as AbortAPI from './abort';
-import { Abort, AbortForceClearResponse, AbortPerformResponse } from './abort';
+import { Abort, AbortForceClearResponse, AbortPerformParams, AbortPerformResponse } from './abort';
 import * as QuestionAPI from './question';
 import {
   Question,
@@ -47,8 +47,11 @@ export class Chat extends APIResource {
   /**
    * Rehydrate the user's chat history. Does not wake a hibernated machine.
    */
-  rehydrateChat(options?: RequestOptions): APIPromise<ChatRehydrateChatResponse> {
-    return this._client.get('/agents/chat/messages', options);
+  rehydrateChat(
+    query: ChatRehydrateChatParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ChatRehydrateChatResponse> {
+    return this._client.get('/agents/chat/messages', { query, ...options });
   }
 }
 
@@ -99,6 +102,8 @@ export namespace ChatRehydrateChatResponse {
 
     role: 'user' | 'assistant' | 'system';
 
+    metadata?: Message.Metadata;
+
     source?: 'cloud' | 'telegram' | 'api' | 'workflow';
 
     synthetic?: boolean;
@@ -110,6 +115,14 @@ export namespace ChatRehydrateChatResponse {
 
       [k: string]: unknown;
     }
+
+    export interface Metadata {
+      agent?: string;
+
+      agentMessageId?: string;
+
+      agentSessionId?: string;
+    }
   }
 }
 
@@ -117,6 +130,10 @@ export interface ChatDeliverPermissionParams {
   permissionId: string;
 
   response: 'once' | 'always' | 'reject';
+}
+
+export interface ChatRehydrateChatParams {
+  sessionId?: string;
 }
 
 Chat.Abort = Abort;
@@ -129,12 +146,14 @@ export declare namespace Chat {
     type ChatListSlashCommandsResponse as ChatListSlashCommandsResponse,
     type ChatRehydrateChatResponse as ChatRehydrateChatResponse,
     type ChatDeliverPermissionParams as ChatDeliverPermissionParams,
+    type ChatRehydrateChatParams as ChatRehydrateChatParams,
   };
 
   export {
     Abort as Abort,
     type AbortForceClearResponse as AbortForceClearResponse,
     type AbortPerformResponse as AbortPerformResponse,
+    type AbortPerformParams as AbortPerformParams,
   };
 
   export {

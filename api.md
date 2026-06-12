@@ -28,7 +28,7 @@ Methods:
 - <code title="post /agents/chat/permission">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">deliverPermission</a>({ ...params }) -> ChatDeliverPermissionResponse</code>
 - <code title="get /agents/chat/state">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">getChatState</a>() -> ChatGetChatStateResponse</code>
 - <code title="get /agents/chat/slash-commands">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">listSlashCommands</a>() -> ChatListSlashCommandsResponse</code>
-- <code title="get /agents/chat/messages">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">rehydrateChat</a>() -> ChatRehydrateChatResponse</code>
+- <code title="get /agents/chat/messages">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">rehydrateChat</a>({ ...params }) -> ChatRehydrateChatResponse</code>
 
 ### Abort
 
@@ -40,7 +40,7 @@ Types:
 Methods:
 
 - <code title="post /agents/chat/abort/force">client.agents.chat.abort.<a href="./src/resources/agents/chat/abort.ts">forceClear</a>() -> AbortForceClearResponse</code>
-- <code title="post /agents/chat/abort">client.agents.chat.abort.<a href="./src/resources/agents/chat/abort.ts">perform</a>() -> AbortPerformResponse</code>
+- <code title="post /agents/chat/abort">client.agents.chat.abort.<a href="./src/resources/agents/chat/abort.ts">perform</a>({ ...params }) -> AbortPerformResponse</code>
 
 ### Question
 

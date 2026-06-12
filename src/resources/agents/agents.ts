@@ -8,6 +8,7 @@ import {
   ChatDeliverPermissionResponse,
   ChatGetChatStateResponse,
   ChatListSlashCommandsResponse,
+  ChatRehydrateChatParams,
   ChatRehydrateChatResponse,
 } from './chat/chat';
 import * as FilesAPI from './files/files';
@@ -35,6 +36,7 @@ export declare namespace Agents {
     type ChatListSlashCommandsResponse as ChatListSlashCommandsResponse,
     type ChatRehydrateChatResponse as ChatRehydrateChatResponse,
     type ChatDeliverPermissionParams as ChatDeliverPermissionParams,
+    type ChatRehydrateChatParams as ChatRehydrateChatParams,
   };
 
   export {

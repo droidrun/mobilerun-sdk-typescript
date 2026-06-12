@@ -14,10 +14,11 @@ export class Abort extends APIResource {
   }
 
   /**
-   * Abort the in-flight chat turn. Idempotent.
+   * Abort the in-flight chat turn owned by `sessionId`. Idempotent. A turn owned by
+   * a different session is left untouched (204).
    */
-  perform(options?: RequestOptions): APIPromise<AbortPerformResponse> {
-    return this._client.post('/agents/chat/abort', options);
+  perform(body: AbortPerformParams, options?: RequestOptions): APIPromise<AbortPerformResponse> {
+    return this._client.post('/agents/chat/abort', { body, ...options });
   }
 }
 
@@ -31,9 +32,14 @@ export interface AbortPerformResponse {
   ok: true;
 }
 
+export interface AbortPerformParams {
+  sessionId: string;
+}
+
 export declare namespace Abort {
   export {
     type AbortForceClearResponse as AbortForceClearResponse,
     type AbortPerformResponse as AbortPerformResponse,
+    type AbortPerformParams as AbortPerformParams,
   };
 }

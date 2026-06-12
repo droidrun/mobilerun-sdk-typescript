@@ -6,7 +6,7 @@ import { RequestOptions } from '../../../internal/request-options';
 
 export class Question extends APIResource {
   /**
-   * Forward the user's answers to kilo's `/question/{id}/reply` for an in-flight
+   * Deliver the user's answers to the agent's pending question for an in-flight
    * turn. Idempotent via the `idempotency-key` header.
    */
   deliverAnswer(
@@ -17,8 +17,8 @@ export class Question extends APIResource {
   }
 
   /**
-   * Forward a reject to kilo's `/question/{id}/reject`. Already-resolved questions
-   * return 200 (no-op) so multi-tab dismiss stays idempotent.
+   * Dismiss the agent's pending question. Already-resolved questions return 200
+   * (no-op) so multi-tab dismiss stays idempotent.
    */
   dismiss(body: QuestionDismissParams, options?: RequestOptions): APIPromise<QuestionDismissResponse> {
     return this._client.post('/agents/chat/question/reject', { body, ...options });

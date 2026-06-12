@@ -21,8 +21,10 @@ describe('resource abort', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('perform', async () => {
-    const responsePromise = client.agents.chat.abort.perform();
+  test.skip('perform: only required params', async () => {
+    const responsePromise = client.agents.chat.abort.perform({
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -30,5 +32,12 @@ describe('resource abort', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('perform: required and optional params', async () => {
+    const response = await client.agents.chat.abort.perform({
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
   });
 });
