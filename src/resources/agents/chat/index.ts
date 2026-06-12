@@ -1,6 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Abort, type AbortForceClearResponse, type AbortPerformResponse } from './abort';
+export {
+  Abort,
+  type AbortForceClearResponse,
+  type AbortPerformResponse,
+  type AbortPerformParams,
+} from './abort';
 export {
   Chat,
   type ChatDeliverPermissionResponse,
@@ -8,6 +13,7 @@ export {
   type ChatListSlashCommandsResponse,
   type ChatRehydrateChatResponse,
   type ChatDeliverPermissionParams,
+  type ChatRehydrateChatParams,
 } from './chat';
 export {
   Question,

@@ -54,14 +54,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'rehydrate_chat',
     endpoint: '/agents/chat/messages',
     httpMethod: 'get',
-    summary: "Rehydrate the user's single chat from the orchestrator display cache",
+    summary: 'Rehydrate a chat from the orchestrator display cache',
     description: "Rehydrate the user's chat history. Does not wake a hibernated machine.",
     stainlessPath: '(resource) agents.chat > (method) rehydrate_chat',
     qualified: 'client.agents.chat.rehydrateChat',
+    params: ['sessionId?: string;'],
     response:
-      "{ messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; source?: 'cloud' | 'telegram' | 'api' | 'workflow'; synthetic?: boolean; }[]; turnActive: boolean; }",
+      "{ messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; metadata?: { agent?: string; agentMessageId?: string; agentSessionId?: string; }; source?: 'cloud' | 'telegram' | 'api' | 'workflow'; synthetic?: boolean; }[]; turnActive: boolean; }",
     markdown:
-      "## rehydrate_chat\n\n`client.agents.chat.rehydrateChat(): { messages: object[]; turnActive: boolean; }`\n\n**get** `/agents/chat/messages`\n\nRehydrate the user's chat history. Does not wake a hibernated machine.\n\n### Returns\n\n- `{ messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; source?: 'cloud' | 'telegram' | 'api' | 'workflow'; synthetic?: boolean; }[]; turnActive: boolean; }`\n\n  - `messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; source?: 'cloud' | 'telegram' | 'api' | 'workflow'; synthetic?: boolean; }[]`\n  - `turnActive: boolean`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.rehydrateChat();\n\nconsole.log(response);\n```",
+      "## rehydrate_chat\n\n`client.agents.chat.rehydrateChat(sessionId?: string): { messages: object[]; turnActive: boolean; }`\n\n**get** `/agents/chat/messages`\n\nRehydrate the user's chat history. Does not wake a hibernated machine.\n\n### Parameters\n\n- `sessionId?: string`\n\n### Returns\n\n- `{ messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; metadata?: { agent?: string; agentMessageId?: string; agentSessionId?: string; }; source?: 'cloud' | 'telegram' | 'api' | 'workflow'; synthetic?: boolean; }[]; turnActive: boolean; }`\n\n  - `messages: { id: string; parts: { type: string; }[]; role: 'user' | 'assistant' | 'system'; metadata?: { agent?: string; agentMessageId?: string; agentSessionId?: string; }; source?: 'cloud' | 'telegram' | 'api' | 'workflow'; synthetic?: boolean; }[]`\n  - `turnActive: boolean`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.rehydrateChat();\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.agents.chat.rehydrateChat',
@@ -76,7 +77,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       go: {
         method: 'client.Agents.Chat.RehydrateChat',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.RehydrateChat(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Messages)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.RehydrateChat(context.TODO(), mobileruncloud.AgentChatRehydrateChatParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Messages)\n}\n',
       },
       cli: {
         method: 'chat rehydrate_chat',
@@ -206,36 +207,39 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'perform',
     endpoint: '/agents/chat/abort',
     httpMethod: 'post',
-    summary: 'Abort the currently in-flight chat turn for this user',
-    description: 'Abort the in-flight chat turn. Idempotent.',
+    summary: "Abort the named session's in-flight chat turn",
+    description:
+      'Abort the in-flight chat turn owned by `sessionId`. Idempotent. A turn owned by a different session is left untouched (204).',
     stainlessPath: '(resource) agents.chat.abort > (method) perform',
     qualified: 'client.agents.chat.abort.perform',
+    params: ['sessionId: string;'],
     response: '{ ok: true; }',
     markdown:
-      "## perform\n\n`client.agents.chat.abort.perform(): { ok: true; }`\n\n**post** `/agents/chat/abort`\n\nAbort the in-flight chat turn. Idempotent.\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.abort.perform();\n\nconsole.log(response);\n```",
+      "## perform\n\n`client.agents.chat.abort.perform(sessionId: string): { ok: true; }`\n\n**post** `/agents/chat/abort`\n\nAbort the in-flight chat turn owned by `sessionId`. Idempotent. A turn owned by a different session is left untouched (204).\n\n### Parameters\n\n- `sessionId: string`\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.abort.perform({ sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.agents.chat.abort.perform',
         example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.abort.perform();\n\nconsole.log(response.ok);",
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.agents.chat.abort.perform({\n  sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n});\n\nconsole.log(response.ok);",
       },
       python: {
         method: 'agents.chat.abort.perform',
         example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.abort.perform()\nprint(response.ok)',
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.agents.chat.abort.perform(\n    session_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.ok)',
       },
       go: {
         method: 'client.Agents.Chat.Abort.Perform',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.Abort.Perform(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Ok)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Agents.Chat.Abort.Perform(context.TODO(), mobileruncloud.AgentChatAbortPerformParams{\n\t\tSessionID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Ok)\n}\n',
       },
       cli: {
         method: 'abort perform',
-        example: "mobilerun-cloud agents:chat:abort perform \\\n  --api-key 'My API Key'",
+        example:
+          "mobilerun-cloud agents:chat:abort perform \\\n  --api-key 'My API Key' \\\n  --session-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
       },
       http: {
         example:
-          'curl https://api.mobilerun.ai/v1/agents/chat/abort \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+          'curl https://api.mobilerun.ai/v1/agents/chat/abort \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "sessionId": "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"\n        }\'',
       },
     },
   },
@@ -283,13 +287,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: "Deliver a question answer to the user's active chat session",
     description:
-      "Forward the user's answers to kilo's `/question/{id}/reply` for an in-flight turn. Idempotent via the `idempotency-key` header.",
+      "Deliver the user's answers to the agent's pending question for an in-flight turn. Idempotent via the `idempotency-key` header.",
     stainlessPath: '(resource) agents.chat.question > (method) deliver_answer',
     qualified: 'client.agents.chat.question.deliverAnswer',
     params: ['answers: { label: string; } | { custom: string; }[][];', 'questionId: string;'],
     response: '{ ok: true; }',
     markdown:
-      "## deliver_answer\n\n`client.agents.chat.question.deliverAnswer(answers: { label: string; } | { custom: string; }[][], questionId: string): { ok: true; }`\n\n**post** `/agents/chat/question`\n\nForward the user's answers to kilo's `/question/{id}/reply` for an in-flight turn. Idempotent via the `idempotency-key` header.\n\n### Parameters\n\n- `answers: { label: string; } | { custom: string; }[][]`\n\n- `questionId: string`\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.question.deliverAnswer({ answers: [[{ label: 'x' }]], questionId: 'x' });\n\nconsole.log(response);\n```",
+      "## deliver_answer\n\n`client.agents.chat.question.deliverAnswer(answers: { label: string; } | { custom: string; }[][], questionId: string): { ok: true; }`\n\n**post** `/agents/chat/question`\n\nDeliver the user's answers to the agent's pending question for an in-flight turn. Idempotent via the `idempotency-key` header.\n\n### Parameters\n\n- `answers: { label: string; } | { custom: string; }[][]`\n\n- `questionId: string`\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.question.deliverAnswer({ answers: [[{ label: 'x' }]], questionId: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.agents.chat.question.deliverAnswer',
@@ -323,13 +327,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Dismiss an outstanding question without answering',
     description:
-      "Forward a reject to kilo's `/question/{id}/reject`. Already-resolved questions return 200 (no-op) so multi-tab dismiss stays idempotent.",
+      "Dismiss the agent's pending question. Already-resolved questions return 200 (no-op) so multi-tab dismiss stays idempotent.",
     stainlessPath: '(resource) agents.chat.question > (method) dismiss',
     qualified: 'client.agents.chat.question.dismiss',
     params: ['questionId: string;'],
     response: '{ ok: true; }',
     markdown:
-      "## dismiss\n\n`client.agents.chat.question.dismiss(questionId: string): { ok: true; }`\n\n**post** `/agents/chat/question/reject`\n\nForward a reject to kilo's `/question/{id}/reject`. Already-resolved questions return 200 (no-op) so multi-tab dismiss stays idempotent.\n\n### Parameters\n\n- `questionId: string`\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.question.dismiss({ questionId: 'x' });\n\nconsole.log(response);\n```",
+      "## dismiss\n\n`client.agents.chat.question.dismiss(questionId: string): { ok: true; }`\n\n**post** `/agents/chat/question/reject`\n\nDismiss the agent's pending question. Already-resolved questions return 200 (no-op) so multi-tab dismiss stays idempotent.\n\n### Parameters\n\n- `questionId: string`\n\n### Returns\n\n- `{ ok: true; }`\n\n  - `ok: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.agents.chat.question.dismiss({ questionId: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.agents.chat.question.dismiss',
