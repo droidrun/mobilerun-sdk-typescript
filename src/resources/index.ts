@@ -104,4 +104,4 @@ export {
   type TaskRunStreamedParams,
   type TaskSendMessageParams,
 } from './tasks/tasks';
-export { Workflows, type Flow } from './workflows/workflows';
+export { Workflows } from './workflows/workflows';
