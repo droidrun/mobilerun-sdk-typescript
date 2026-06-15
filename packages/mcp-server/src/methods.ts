@@ -11,54 +11,6 @@ export type SdkMethod = {
 
 export const sdkMethods: SdkMethod[] = [
   {
-    clientCallName: 'client.agents.chat.deliverPermission',
-    fullyQualifiedName: 'agents.chat.deliverPermission',
-    httpMethod: 'post',
-    httpPath: '/agents/chat/permission',
-  },
-  {
-    clientCallName: 'client.agents.chat.getChatState',
-    fullyQualifiedName: 'agents.chat.getChatState',
-    httpMethod: 'get',
-    httpPath: '/agents/chat/state',
-  },
-  {
-    clientCallName: 'client.agents.chat.listSlashCommands',
-    fullyQualifiedName: 'agents.chat.listSlashCommands',
-    httpMethod: 'get',
-    httpPath: '/agents/chat/slash-commands',
-  },
-  {
-    clientCallName: 'client.agents.chat.rehydrateChat',
-    fullyQualifiedName: 'agents.chat.rehydrateChat',
-    httpMethod: 'get',
-    httpPath: '/agents/chat/messages',
-  },
-  {
-    clientCallName: 'client.agents.chat.abort.forceClear',
-    fullyQualifiedName: 'agents.chat.abort.forceClear',
-    httpMethod: 'post',
-    httpPath: '/agents/chat/abort/force',
-  },
-  {
-    clientCallName: 'client.agents.chat.abort.perform',
-    fullyQualifiedName: 'agents.chat.abort.perform',
-    httpMethod: 'post',
-    httpPath: '/agents/chat/abort',
-  },
-  {
-    clientCallName: 'client.agents.chat.question.deliverAnswer',
-    fullyQualifiedName: 'agents.chat.question.deliverAnswer',
-    httpMethod: 'post',
-    httpPath: '/agents/chat/question',
-  },
-  {
-    clientCallName: 'client.agents.chat.question.dismiss',
-    fullyQualifiedName: 'agents.chat.question.dismiss',
-    httpMethod: 'post',
-    httpPath: '/agents/chat/question/reject',
-  },
-  {
     clientCallName: 'client.agents.files.listFiles',
     fullyQualifiedName: 'agents.files.listFiles',
     httpMethod: 'get',

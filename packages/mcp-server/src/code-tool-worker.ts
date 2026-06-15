@@ -108,14 +108,6 @@ function getTSDiagnostics(code: string): string[] {
 
 const fuse = new Fuse(
   [
-    'client.agents.chat.deliverPermission',
-    'client.agents.chat.getChatState',
-    'client.agents.chat.listSlashCommands',
-    'client.agents.chat.rehydrateChat',
-    'client.agents.chat.abort.forceClear',
-    'client.agents.chat.abort.perform',
-    'client.agents.chat.question.deliverAnswer',
-    'client.agents.chat.question.dismiss',
     'client.agents.files.listFiles',
     'client.agents.files.mintUploadURL',
     'client.agents.files.fileID.cancelPendingUpload',
