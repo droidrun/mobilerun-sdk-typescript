@@ -120,7 +120,7 @@ import {
   Tasks,
   UsageResult,
 } from './resources/tasks/tasks';
-import { Workflows } from './resources/workflows/workflows';
+import { Flow, Workflows } from './resources/workflows/workflows';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -998,7 +998,7 @@ export declare namespace Mobilerun {
     type TaskSendMessageParams as TaskSendMessageParams,
   };
 
-  export { Workflows as Workflows };
+  export { Workflows as Workflows, type Flow as Flow };
 
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
