@@ -14,46 +14,6 @@ Types:
 
 # Agents
 
-## Chat
-
-Types:
-
-- <code><a href="./src/resources/agents/chat/chat.ts">ChatDeliverPermissionResponse</a></code>
-- <code><a href="./src/resources/agents/chat/chat.ts">ChatGetChatStateResponse</a></code>
-- <code><a href="./src/resources/agents/chat/chat.ts">ChatListSlashCommandsResponse</a></code>
-- <code><a href="./src/resources/agents/chat/chat.ts">ChatRehydrateChatResponse</a></code>
-
-Methods:
-
-- <code title="post /agents/chat/permission">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">deliverPermission</a>({ ...params }) -> ChatDeliverPermissionResponse</code>
-- <code title="get /agents/chat/state">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">getChatState</a>() -> ChatGetChatStateResponse</code>
-- <code title="get /agents/chat/slash-commands">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">listSlashCommands</a>() -> ChatListSlashCommandsResponse</code>
-- <code title="get /agents/chat/messages">client.agents.chat.<a href="./src/resources/agents/chat/chat.ts">rehydrateChat</a>({ ...params }) -> ChatRehydrateChatResponse</code>
-
-### Abort
-
-Types:
-
-- <code><a href="./src/resources/agents/chat/abort.ts">AbortForceClearResponse</a></code>
-- <code><a href="./src/resources/agents/chat/abort.ts">AbortPerformResponse</a></code>
-
-Methods:
-
-- <code title="post /agents/chat/abort/force">client.agents.chat.abort.<a href="./src/resources/agents/chat/abort.ts">forceClear</a>() -> AbortForceClearResponse</code>
-- <code title="post /agents/chat/abort">client.agents.chat.abort.<a href="./src/resources/agents/chat/abort.ts">perform</a>({ ...params }) -> AbortPerformResponse</code>
-
-### Question
-
-Types:
-
-- <code><a href="./src/resources/agents/chat/question.ts">QuestionDeliverAnswerResponse</a></code>
-- <code><a href="./src/resources/agents/chat/question.ts">QuestionDismissResponse</a></code>
-
-Methods:
-
-- <code title="post /agents/chat/question">client.agents.chat.question.<a href="./src/resources/agents/chat/question.ts">deliverAnswer</a>({ ...params }) -> QuestionDeliverAnswerResponse</code>
-- <code title="post /agents/chat/question/reject">client.agents.chat.question.<a href="./src/resources/agents/chat/question.ts">dismiss</a>({ ...params }) -> QuestionDismissResponse</code>
-
 ## Files
 
 Types:

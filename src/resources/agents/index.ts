@@ -2,15 +2,6 @@
 
 export { Agents } from './agents';
 export {
-  Chat,
-  type ChatDeliverPermissionResponse,
-  type ChatGetChatStateResponse,
-  type ChatListSlashCommandsResponse,
-  type ChatRehydrateChatResponse,
-  type ChatDeliverPermissionParams,
-  type ChatRehydrateChatParams,
-} from './chat/index';
-export {
   Files,
   type FileListFilesResponse,
   type FileMintUploadURLResponse,
