@@ -145,6 +145,8 @@ export interface Task {
 
   finishedAt?: string | null;
 
+  heartbeatAt?: string | null;
+
   maxSteps?: number;
 
   /**
