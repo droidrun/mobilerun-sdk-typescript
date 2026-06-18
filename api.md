@@ -12,12 +12,6 @@ Types:
 - <code><a href="./src/resources/shared.ts">PermissionSet</a></code>
 - <code><a href="./src/resources/shared.ts">Socks5</a></code>
 
-# Agents
-
-## Files
-
-### FileID
-
 # Apps
 
 Types:
@@ -628,3 +622,42 @@ Methods:
 - <code title="post /secrets">client.workflows.secrets.<a href="./src/resources/workflows/secrets.ts">create</a>({ ...params }) -> SecretCreateResponse</code>
 - <code title="get /secrets">client.workflows.secrets.<a href="./src/resources/workflows/secrets.ts">list</a>() -> SecretListResponse</code>
 - <code title="delete /secrets/{secretId}">client.workflows.secrets.<a href="./src/resources/workflows/secrets.ts">delete</a>(secretID) -> SecretDeleteResponse</code>
+
+# Webhooks
+
+Types:
+
+- <code><a href="./src/resources/webhooks/webhooks.ts">WebhookCreateResponse</a></code>
+- <code><a href="./src/resources/webhooks/webhooks.ts">WebhookRetrieveResponse</a></code>
+- <code><a href="./src/resources/webhooks/webhooks.ts">WebhookUpdateResponse</a></code>
+- <code><a href="./src/resources/webhooks/webhooks.ts">WebhookListResponse</a></code>
+- <code><a href="./src/resources/webhooks/webhooks.ts">WebhookEventTypesResponse</a></code>
+- <code><a href="./src/resources/webhooks/webhooks.ts">WebhookRotateSecretResponse</a></code>
+- <code><a href="./src/resources/webhooks/webhooks.ts">WebhookTestDeliveryResponse</a></code>
+
+Methods:
+
+- <code title="post /webhooks">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">create</a>({ ...params }) -> WebhookCreateResponse</code>
+- <code title="get /webhooks/{id}">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">retrieve</a>(id) -> WebhookRetrieveResponse</code>
+- <code title="patch /webhooks/{id}">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">update</a>(id, { ...params }) -> WebhookUpdateResponse</code>
+- <code title="get /webhooks">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">list</a>({ ...params }) -> WebhookListResponse</code>
+- <code title="delete /webhooks/{id}">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">delete</a>(id) -> void</code>
+- <code title="get /event-types">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">eventTypes</a>() -> WebhookEventTypesResponse</code>
+- <code title="post /webhooks/{id}/rotate-secret">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">rotateSecret</a>(id) -> WebhookRotateSecretResponse</code>
+- <code title="post /webhooks/{id}/test">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">testDelivery</a>(id) -> WebhookTestDeliveryResponse</code>
+
+## Deliveries
+
+Types:
+
+- <code><a href="./src/resources/webhooks/deliveries.ts">DeliveryListResponse</a></code>
+- <code><a href="./src/resources/webhooks/deliveries.ts">DeliveryListForWebhookResponse</a></code>
+- <code><a href="./src/resources/webhooks/deliveries.ts">DeliveryRetrieveAttemptsResponse</a></code>
+- <code><a href="./src/resources/webhooks/deliveries.ts">DeliveryStatsResponse</a></code>
+
+Methods:
+
+- <code title="get /webhooks/deliveries">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">list</a>({ ...params }) -> DeliveryListResponse</code>
+- <code title="get /webhooks/{id}/deliveries">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">listForWebhook</a>(id, { ...params }) -> DeliveryListForWebhookResponse</code>
+- <code title="get /webhooks/{id}/deliveries/{deliveryId}">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">retrieveAttempts</a>(deliveryID, { ...params }) -> DeliveryRetrieveAttemptsResponse</code>
+- <code title="get /webhooks/deliveries/stats">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">stats</a>({ ...params }) -> DeliveryStatsResponse</code>
