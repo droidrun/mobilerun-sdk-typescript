@@ -82,7 +82,6 @@ import {
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
-import { Agents } from './resources/agents/agents';
 import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
@@ -120,6 +119,19 @@ import {
   Tasks,
   UsageResult,
 } from './resources/tasks/tasks';
+import {
+  WebhookCreateParams,
+  WebhookCreateResponse,
+  WebhookEventTypesResponse,
+  WebhookListParams,
+  WebhookListResponse,
+  WebhookRetrieveResponse,
+  WebhookRotateSecretResponse,
+  WebhookTestDeliveryResponse,
+  WebhookUpdateParams,
+  WebhookUpdateResponse,
+  Webhooks,
+} from './resources/webhooks/webhooks';
 import { Flow, Workflows } from './resources/workflows/workflows';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -844,7 +856,6 @@ export class Mobilerun {
 
   static toFile = Uploads.toFile;
 
-  agents: API.Agents = new API.Agents(this);
   /**
    * App Management
    */
@@ -874,9 +885,9 @@ export class Mobilerun {
    */
   tasks: API.Tasks = new API.Tasks(this);
   workflows: API.Workflows = new API.Workflows(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
 }
 
-Mobilerun.Agents = Agents;
 Mobilerun.Apps = Apps;
 Mobilerun.Carriers = Carriers;
 Mobilerun.Credentials = Credentials;
@@ -888,11 +899,10 @@ Mobilerun.Proxies = Proxies;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
+Mobilerun.Webhooks = Webhooks;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
-
-  export { Agents as Agents };
 
   export {
     Apps as Apps,
@@ -1007,6 +1017,20 @@ export declare namespace Mobilerun {
   };
 
   export { Workflows as Workflows, type Flow as Flow };
+
+  export {
+    Webhooks as Webhooks,
+    type WebhookCreateResponse as WebhookCreateResponse,
+    type WebhookRetrieveResponse as WebhookRetrieveResponse,
+    type WebhookUpdateResponse as WebhookUpdateResponse,
+    type WebhookListResponse as WebhookListResponse,
+    type WebhookEventTypesResponse as WebhookEventTypesResponse,
+    type WebhookRotateSecretResponse as WebhookRotateSecretResponse,
+    type WebhookTestDeliveryResponse as WebhookTestDeliveryResponse,
+    type WebhookCreateParams as WebhookCreateParams,
+    type WebhookUpdateParams as WebhookUpdateParams,
+    type WebhookListParams as WebhookListParams,
+  };
 
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;

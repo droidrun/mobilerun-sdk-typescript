@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
-export { Agents } from './agents/agents';
 export {
   Apps,
   type AppRetrieveResponse,
@@ -104,4 +103,17 @@ export {
   type TaskRunStreamedParams,
   type TaskSendMessageParams,
 } from './tasks/tasks';
+export {
+  Webhooks,
+  type WebhookCreateResponse,
+  type WebhookRetrieveResponse,
+  type WebhookUpdateResponse,
+  type WebhookListResponse,
+  type WebhookEventTypesResponse,
+  type WebhookRotateSecretResponse,
+  type WebhookTestDeliveryResponse,
+  type WebhookCreateParams,
+  type WebhookUpdateParams,
+  type WebhookListParams,
+} from './webhooks/webhooks';
 export { Workflows, type Flow } from './workflows/workflows';

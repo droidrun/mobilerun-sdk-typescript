@@ -916,6 +916,78 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'delete',
     httpPath: '/secrets/{secretId}',
   },
+  {
+    clientCallName: 'client.webhooks.create',
+    fullyQualifiedName: 'webhooks.create',
+    httpMethod: 'post',
+    httpPath: '/webhooks',
+  },
+  {
+    clientCallName: 'client.webhooks.retrieve',
+    fullyQualifiedName: 'webhooks.retrieve',
+    httpMethod: 'get',
+    httpPath: '/webhooks/{id}',
+  },
+  {
+    clientCallName: 'client.webhooks.update',
+    fullyQualifiedName: 'webhooks.update',
+    httpMethod: 'patch',
+    httpPath: '/webhooks/{id}',
+  },
+  {
+    clientCallName: 'client.webhooks.list',
+    fullyQualifiedName: 'webhooks.list',
+    httpMethod: 'get',
+    httpPath: '/webhooks',
+  },
+  {
+    clientCallName: 'client.webhooks.delete',
+    fullyQualifiedName: 'webhooks.delete',
+    httpMethod: 'delete',
+    httpPath: '/webhooks/{id}',
+  },
+  {
+    clientCallName: 'client.webhooks.eventTypes',
+    fullyQualifiedName: 'webhooks.eventTypes',
+    httpMethod: 'get',
+    httpPath: '/event-types',
+  },
+  {
+    clientCallName: 'client.webhooks.rotateSecret',
+    fullyQualifiedName: 'webhooks.rotateSecret',
+    httpMethod: 'post',
+    httpPath: '/webhooks/{id}/rotate-secret',
+  },
+  {
+    clientCallName: 'client.webhooks.testDelivery',
+    fullyQualifiedName: 'webhooks.testDelivery',
+    httpMethod: 'post',
+    httpPath: '/webhooks/{id}/test',
+  },
+  {
+    clientCallName: 'client.webhooks.deliveries.list',
+    fullyQualifiedName: 'webhooks.deliveries.list',
+    httpMethod: 'get',
+    httpPath: '/webhooks/deliveries',
+  },
+  {
+    clientCallName: 'client.webhooks.deliveries.listForWebhook',
+    fullyQualifiedName: 'webhooks.deliveries.listForWebhook',
+    httpMethod: 'get',
+    httpPath: '/webhooks/{id}/deliveries',
+  },
+  {
+    clientCallName: 'client.webhooks.deliveries.retrieveAttempts',
+    fullyQualifiedName: 'webhooks.deliveries.retrieveAttempts',
+    httpMethod: 'get',
+    httpPath: '/webhooks/{id}/deliveries/{deliveryId}',
+  },
+  {
+    clientCallName: 'client.webhooks.deliveries.stats',
+    fullyQualifiedName: 'webhooks.deliveries.stats',
+    httpMethod: 'get',
+    httpPath: '/webhooks/deliveries/stats',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {

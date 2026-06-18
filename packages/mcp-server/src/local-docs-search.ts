@@ -6303,6 +6303,491 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'create',
+    endpoint: '/webhooks',
+    httpMethod: 'post',
+    summary: 'Register a webhook subscription',
+    description: 'Register a webhook subscription',
+    stainlessPath: '(resource) webhooks > (method) create',
+    qualified: 'client.webhooks.create',
+    params: ['url: string;', 'description?: string;', 'eventTypes?: string[];'],
+    response:
+      "{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }",
+    markdown:
+      "## create\n\n`client.webhooks.create(url: string, description?: string, eventTypes?: string[]): { data: object; }`\n\n**post** `/webhooks`\n\nRegister a webhook subscription\n\n### Parameters\n\n- `url: string`\n\n- `description?: string`\n\n- `eventTypes?: string[]`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhook = await client.webhooks.create({ url: 'https://example.com/webhooks/droidrun' });\n\nconsole.log(webhook);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.create',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst webhook = await client.webhooks.create({ url: 'https://example.com/webhooks/droidrun' });\n\nconsole.log(webhook.data);",
+      },
+      python: {
+        method: 'webhooks.create',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nwebhook = client.webhooks.create(\n    url="https://example.com/webhooks/droidrun",\n)\nprint(webhook.data)',
+      },
+      go: {
+        method: 'client.Webhooks.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\twebhook, err := client.Webhooks.New(context.TODO(), mobileruncloud.WebhookNewParams{\n\t\tURL: "https://example.com/webhooks/droidrun",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", webhook.Data)\n}\n',
+      },
+      cli: {
+        method: 'webhooks create',
+        example:
+          "mobilerun-cloud webhooks create \\\n  --api-key 'My API Key' \\\n  --url https://example.com/webhooks/droidrun",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "url": "https://example.com/webhooks/droidrun",\n          "eventTypes": [\n            "task.completed",\n            "task.failed"\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/webhooks',
+    httpMethod: 'get',
+    summary: 'List your webhook subscriptions',
+    description: 'List your webhook subscriptions',
+    stainlessPath: '(resource) webhooks > (method) list',
+    qualified: 'client.webhooks.list',
+    params: [
+      'page?: number;',
+      'pageSize?: number;',
+      "status?: 'active' | 'failing' | 'blocked' | 'disabled';",
+    ],
+    response:
+      "{ counts: { active: number; blocked: number; disabled: number; failing: number; total: number; }; items: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+    markdown:
+      "## list\n\n`client.webhooks.list(page?: number, pageSize?: number, status?: 'active' | 'failing' | 'blocked' | 'disabled'): { counts: object; items: object[]; pagination: pagination; }`\n\n**get** `/webhooks`\n\nList your webhook subscriptions\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `status?: 'active' | 'failing' | 'blocked' | 'disabled'`\n\n### Returns\n\n- `{ counts: { active: number; blocked: number; disabled: number; failing: number; total: number; }; items: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `counts: { active: number; blocked: number; disabled: number; failing: number; total: number; }`\n  - `items: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhooks = await client.webhooks.list();\n\nconsole.log(webhooks);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.list',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst webhooks = await client.webhooks.list();\n\nconsole.log(webhooks.counts);",
+      },
+      python: {
+        method: 'webhooks.list',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nwebhooks = client.webhooks.list()\nprint(webhooks.counts)',
+      },
+      go: {
+        method: 'client.Webhooks.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\twebhooks, err := client.Webhooks.List(context.TODO(), mobileruncloud.WebhookListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", webhooks.Counts)\n}\n',
+      },
+      cli: {
+        method: 'webhooks list',
+        example: "mobilerun-cloud webhooks list \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/webhooks/{id}',
+    httpMethod: 'get',
+    summary: 'Get a webhook subscription',
+    description: 'Get a webhook subscription',
+    stainlessPath: '(resource) webhooks > (method) retrieve',
+    qualified: 'client.webhooks.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }",
+    markdown:
+      "## retrieve\n\n`client.webhooks.retrieve(id: string): { data: object; }`\n\n**get** `/webhooks/{id}`\n\nGet a webhook subscription\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhook = await client.webhooks.retrieve('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(webhook);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.retrieve',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst webhook = await client.webhooks.retrieve('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(webhook.data);",
+      },
+      python: {
+        method: 'webhooks.retrieve',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nwebhook = client.webhooks.retrieve(\n    "550e8400-e29b-41d4-a716-446655440000",\n)\nprint(webhook.data)',
+      },
+      go: {
+        method: 'client.Webhooks.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\twebhook, err := client.Webhooks.Get(context.TODO(), "550e8400-e29b-41d4-a716-446655440000")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", webhook.Data)\n}\n',
+      },
+      cli: {
+        method: 'webhooks retrieve',
+        example:
+          "mobilerun-cloud webhooks retrieve \\\n  --api-key 'My API Key' \\\n  --id 550e8400-e29b-41d4-a716-446655440000",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks/$ID \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/webhooks/{id}',
+    httpMethod: 'patch',
+    summary: 'Update a webhook subscription',
+    description: 'Update a webhook subscription',
+    stainlessPath: '(resource) webhooks > (method) update',
+    qualified: 'client.webhooks.update',
+    params: [
+      'id: string;',
+      'description?: string;',
+      'eventTypes?: string[];',
+      "state?: 'ACTIVE' | 'DISABLED';",
+    ],
+    response:
+      "{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }",
+    markdown:
+      "## update\n\n`client.webhooks.update(id: string, description?: string, eventTypes?: string[], state?: 'ACTIVE' | 'DISABLED'): { data: object; }`\n\n**patch** `/webhooks/{id}`\n\nUpdate a webhook subscription\n\n### Parameters\n\n- `id: string`\n\n- `description?: string`\n\n- `eventTypes?: string[]`\n\n- `state?: 'ACTIVE' | 'DISABLED'`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhook = await client.webhooks.update('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(webhook);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.update',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst webhook = await client.webhooks.update('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(webhook.data);",
+      },
+      python: {
+        method: 'webhooks.update',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nwebhook = client.webhooks.update(\n    id="550e8400-e29b-41d4-a716-446655440000",\n)\nprint(webhook.data)',
+      },
+      go: {
+        method: 'client.Webhooks.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\twebhook, err := client.Webhooks.Update(\n\t\tcontext.TODO(),\n\t\t"550e8400-e29b-41d4-a716-446655440000",\n\t\tmobileruncloud.WebhookUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", webhook.Data)\n}\n',
+      },
+      cli: {
+        method: 'webhooks update',
+        example:
+          "mobilerun-cloud webhooks update \\\n  --api-key 'My API Key' \\\n  --id 550e8400-e29b-41d4-a716-446655440000",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/webhooks/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete a webhook subscription',
+    description: 'Delete a webhook subscription',
+    stainlessPath: '(resource) webhooks > (method) delete',
+    qualified: 'client.webhooks.delete',
+    params: ['id: string;'],
+    markdown:
+      "## delete\n\n`client.webhooks.delete(id: string): void`\n\n**delete** `/webhooks/{id}`\n\nDelete a webhook subscription\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.webhooks.delete('550e8400-e29b-41d4-a716-446655440000')\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.delete',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nawait client.webhooks.delete('550e8400-e29b-41d4-a716-446655440000');",
+      },
+      python: {
+        method: 'webhooks.delete',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nclient.webhooks.delete(\n    "550e8400-e29b-41d4-a716-446655440000",\n)',
+      },
+      go: {
+        method: 'client.Webhooks.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\terr := client.Webhooks.Delete(context.TODO(), "550e8400-e29b-41d4-a716-446655440000")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'webhooks delete',
+        example:
+          "mobilerun-cloud webhooks delete \\\n  --api-key 'My API Key' \\\n  --id 550e8400-e29b-41d4-a716-446655440000",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'rotate_secret',
+    endpoint: '/webhooks/{id}/rotate-secret',
+    httpMethod: 'post',
+    summary: 'Rotate the signing secret (returned once)',
+    description: 'Rotate the signing secret (returned once)',
+    stainlessPath: '(resource) webhooks > (method) rotate_secret',
+    qualified: 'client.webhooks.rotateSecret',
+    params: ['id: string;'],
+    response:
+      "{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }",
+    markdown:
+      "## rotate_secret\n\n`client.webhooks.rotateSecret(id: string): { data: object; }`\n\n**post** `/webhooks/{id}/rotate-secret`\n\nRotate the signing secret (returned once)\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.rotateSecret('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.rotateSecret',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.webhooks.rotateSecret('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response.data);",
+      },
+      python: {
+        method: 'webhooks.rotate_secret',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.webhooks.rotate_secret(\n    "550e8400-e29b-41d4-a716-446655440000",\n)\nprint(response.data)',
+      },
+      go: {
+        method: 'client.Webhooks.RotateSecret',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Webhooks.RotateSecret(context.TODO(), "550e8400-e29b-41d4-a716-446655440000")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      cli: {
+        method: 'webhooks rotate_secret',
+        example:
+          "mobilerun-cloud webhooks rotate-secret \\\n  --api-key 'My API Key' \\\n  --id 550e8400-e29b-41d4-a716-446655440000",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks/$ID/rotate-secret \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'test_delivery',
+    endpoint: '/webhooks/{id}/test',
+    httpMethod: 'post',
+    summary: 'Send a one-shot test delivery',
+    description: 'Send a one-shot test delivery',
+    stainlessPath: '(resource) webhooks > (method) test_delivery',
+    qualified: 'client.webhooks.testDelivery',
+    params: ['id: string;'],
+    response: '{ data: { error: string; statusCode: number; success: boolean; }; }',
+    markdown:
+      "## test_delivery\n\n`client.webhooks.testDelivery(id: string): { data: object; }`\n\n**post** `/webhooks/{id}/test`\n\nSend a one-shot test delivery\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { error: string; statusCode: number; success: boolean; }; }`\n\n  - `data: { error: string; statusCode: number; success: boolean; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.testDelivery('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.testDelivery',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.webhooks.testDelivery('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response.data);",
+      },
+      python: {
+        method: 'webhooks.test_delivery',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.webhooks.test_delivery(\n    "550e8400-e29b-41d4-a716-446655440000",\n)\nprint(response.data)',
+      },
+      go: {
+        method: 'client.Webhooks.TestDelivery',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Webhooks.TestDelivery(context.TODO(), "550e8400-e29b-41d4-a716-446655440000")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      cli: {
+        method: 'webhooks test_delivery',
+        example:
+          "mobilerun-cloud webhooks test-delivery \\\n  --api-key 'My API Key' \\\n  --id 550e8400-e29b-41d4-a716-446655440000",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks/$ID/test \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'event_types',
+    endpoint: '/event-types',
+    httpMethod: 'get',
+    summary: 'List subscribable event types per source',
+    description: 'List subscribable event types per source',
+    stainlessPath: '(resource) webhooks > (method) event_types',
+    qualified: 'client.webhooks.eventTypes',
+    response: '{ data: { schemaVersion: number; sources: { events: object[]; source: string; }[]; }; }',
+    markdown:
+      "## event_types\n\n`client.webhooks.eventTypes(): { data: object; }`\n\n**get** `/event-types`\n\nList subscribable event types per source\n\n### Returns\n\n- `{ data: { schemaVersion: number; sources: { events: object[]; source: string; }[]; }; }`\n\n  - `data: { schemaVersion: number; sources: { events: { description: string; type: string; }[]; source: string; }[]; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.eventTypes();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.eventTypes',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.webhooks.eventTypes();\n\nconsole.log(response.data);",
+      },
+      python: {
+        method: 'webhooks.event_types',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.webhooks.event_types()\nprint(response.data)',
+      },
+      go: {
+        method: 'client.Webhooks.EventTypes',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Webhooks.EventTypes(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      cli: {
+        method: 'webhooks event_types',
+        example: "mobilerun-cloud webhooks event-types \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/event-types \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/webhooks/deliveries',
+    httpMethod: 'get',
+    summary: 'List deliveries across all your webhooks',
+    description: 'List deliveries across all your webhooks',
+    stainlessPath: '(resource) webhooks.deliveries > (method) list',
+    qualified: 'client.webhooks.deliveries.list',
+    params: [
+      'page?: number;',
+      'pageSize?: number;',
+      'since?: string;',
+      "status?: 'pending' | 'success' | 'skipped' | 'dead';",
+    ],
+    response:
+      "{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; endpointUrl: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+    markdown:
+      "## list\n\n`client.webhooks.deliveries.list(page?: number, pageSize?: number, since?: string, status?: 'pending' | 'success' | 'skipped' | 'dead'): { items: object[]; pagination: pagination; }`\n\n**get** `/webhooks/deliveries`\n\nList deliveries across all your webhooks\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `since?: string`\n\n- `status?: 'pending' | 'success' | 'skipped' | 'dead'`\n\n### Returns\n\n- `{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; endpointUrl: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; endpointUrl: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst deliveries = await client.webhooks.deliveries.list();\n\nconsole.log(deliveries);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.deliveries.list',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst deliveries = await client.webhooks.deliveries.list();\n\nconsole.log(deliveries.items);",
+      },
+      python: {
+        method: 'webhooks.deliveries.list',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ndeliveries = client.webhooks.deliveries.list()\nprint(deliveries.items)',
+      },
+      go: {
+        method: 'client.Webhooks.Deliveries.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tdeliveries, err := client.Webhooks.Deliveries.List(context.TODO(), mobileruncloud.WebhookDeliveryListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", deliveries.Items)\n}\n',
+      },
+      cli: {
+        method: 'deliveries list',
+        example: "mobilerun-cloud webhooks:deliveries list \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks/deliveries \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'stats',
+    endpoint: '/webhooks/deliveries/stats',
+    httpMethod: 'get',
+    summary: 'Aggregate delivery statistics (excludes test sends)',
+    description: 'Aggregate delivery statistics (excludes test sends)',
+    stainlessPath: '(resource) webhooks.deliveries > (method) stats',
+    qualified: 'client.webhooks.deliveries.stats',
+    params: ['since?: string;'],
+    response:
+      '{ data: { byStatus: { dead: number; pending: number; skipped: number; success: number; }; successRate: number; total: number; }; }',
+    markdown:
+      "## stats\n\n`client.webhooks.deliveries.stats(since?: string): { data: object; }`\n\n**get** `/webhooks/deliveries/stats`\n\nAggregate delivery statistics (excludes test sends)\n\n### Parameters\n\n- `since?: string`\n\n### Returns\n\n- `{ data: { byStatus: { dead: number; pending: number; skipped: number; success: number; }; successRate: number; total: number; }; }`\n\n  - `data: { byStatus: { dead: number; pending: number; skipped: number; success: number; }; successRate: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.deliveries.stats();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.deliveries.stats',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.webhooks.deliveries.stats();\n\nconsole.log(response.data);",
+      },
+      python: {
+        method: 'webhooks.deliveries.stats',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.webhooks.deliveries.stats()\nprint(response.data)',
+      },
+      go: {
+        method: 'client.Webhooks.Deliveries.Stats',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Webhooks.Deliveries.Stats(context.TODO(), mobileruncloud.WebhookDeliveryStatsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      cli: {
+        method: 'deliveries stats',
+        example: "mobilerun-cloud webhooks:deliveries stats \\\n  --api-key 'My API Key'",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks/deliveries/stats \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list_for_webhook',
+    endpoint: '/webhooks/{id}/deliveries',
+    httpMethod: 'get',
+    summary: 'List deliveries for a webhook',
+    description: 'List deliveries for a webhook',
+    stainlessPath: '(resource) webhooks.deliveries > (method) list_for_webhook',
+    qualified: 'client.webhooks.deliveries.listForWebhook',
+    params: ['id: string;', 'page?: number;', 'pageSize?: number;'],
+    response:
+      "{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+    markdown:
+      "## list_for_webhook\n\n`client.webhooks.deliveries.listForWebhook(id: string, page?: number, pageSize?: number): { items: object[]; pagination: pagination; }`\n\n**get** `/webhooks/{id}/deliveries`\n\nList deliveries for a webhook\n\n### Parameters\n\n- `id: string`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.deliveries.listForWebhook('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.deliveries.listForWebhook',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.webhooks.deliveries.listForWebhook(\n  '550e8400-e29b-41d4-a716-446655440000',\n);\n\nconsole.log(response.items);",
+      },
+      python: {
+        method: 'webhooks.deliveries.list_for_webhook',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.webhooks.deliveries.list_for_webhook(\n    id="550e8400-e29b-41d4-a716-446655440000",\n)\nprint(response.items)',
+      },
+      go: {
+        method: 'client.Webhooks.Deliveries.ListForWebhook',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Webhooks.Deliveries.ListForWebhook(\n\t\tcontext.TODO(),\n\t\t"550e8400-e29b-41d4-a716-446655440000",\n\t\tmobileruncloud.WebhookDeliveryListForWebhookParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Items)\n}\n',
+      },
+      cli: {
+        method: 'deliveries list_for_webhook',
+        example:
+          "mobilerun-cloud webhooks:deliveries list-for-webhook \\\n  --api-key 'My API Key' \\\n  --id 550e8400-e29b-41d4-a716-446655440000",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks/$ID/deliveries \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve_attempts',
+    endpoint: '/webhooks/{id}/deliveries/{deliveryId}',
+    httpMethod: 'get',
+    summary: 'Get a delivery with its attempts',
+    description: 'Get a delivery with its attempts',
+    stainlessPath: '(resource) webhooks.deliveries > (method) retrieve_attempts',
+    qualified: 'client.webhooks.deliveries.retrieveAttempts',
+    params: ['id: string;', 'deliveryId: string;'],
+    response:
+      "{ data: { id: string; attempts: { attemptNo: number; durationMs: number; error: string; requestBody: string; requestHeaders: object; requestMethod: string; requestUrl: string; responseHeaders: object; responseSnippet: string; responseStatus: number; sentAt: string; signed: boolean; }[]; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }; }",
+    markdown:
+      "## retrieve_attempts\n\n`client.webhooks.deliveries.retrieveAttempts(id: string, deliveryId: string): { data: object; }`\n\n**get** `/webhooks/{id}/deliveries/{deliveryId}`\n\nGet a delivery with its attempts\n\n### Parameters\n\n- `id: string`\n\n- `deliveryId: string`\n\n### Returns\n\n- `{ data: { id: string; attempts: { attemptNo: number; durationMs: number; error: string; requestBody: string; requestHeaders: object; requestMethod: string; requestUrl: string; responseHeaders: object; responseSnippet: string; responseStatus: number; sentAt: string; signed: boolean; }[]; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }; }`\n\n  - `data: { id: string; attempts: { attemptNo: number; durationMs: number; error: string; requestBody: string; requestHeaders: object; requestMethod: string; requestUrl: string; responseHeaders: object; responseSnippet: string; responseStatus: number; sentAt: string; signed: boolean; }[]; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.deliveries.retrieveAttempts('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { id: '550e8400-e29b-41d4-a716-446655440000' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.webhooks.deliveries.retrieveAttempts',
+        example:
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.webhooks.deliveries.retrieveAttempts(\n  '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n  { id: '550e8400-e29b-41d4-a716-446655440000' },\n);\n\nconsole.log(response.data);",
+      },
+      python: {
+        method: 'webhooks.deliveries.retrieve_attempts',
+        example:
+          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.webhooks.deliveries.retrieve_attempts(\n    delivery_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n    id="550e8400-e29b-41d4-a716-446655440000",\n)\nprint(response.data)',
+      },
+      go: {
+        method: 'client.Webhooks.Deliveries.GetAttempts',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Webhooks.Deliveries.GetAttempts(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.WebhookDeliveryGetAttemptsParams{\n\t\t\tID: "550e8400-e29b-41d4-a716-446655440000",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      cli: {
+        method: 'deliveries retrieve_attempts',
+        example:
+          "mobilerun-cloud webhooks:deliveries retrieve-attempts \\\n  --api-key 'My API Key' \\\n  --id 550e8400-e29b-41d4-a716-446655440000 \\\n  --delivery-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+      },
+      http: {
+        example:
+          'curl https://api.mobilerun.ai/v1/webhooks/$ID/deliveries/$DELIVERY_ID \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
