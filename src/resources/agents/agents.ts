@@ -2,13 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as FilesAPI from './files/files';
-import {
-  FileListFilesParams,
-  FileListFilesResponse,
-  FileMintUploadURLParams,
-  FileMintUploadURLResponse,
-  Files,
-} from './files/files';
+import { Files } from './files/files';
 
 export class Agents extends APIResource {
   files: FilesAPI.Files = new FilesAPI.Files(this._client);
@@ -17,11 +11,5 @@ export class Agents extends APIResource {
 Agents.Files = Files;
 
 export declare namespace Agents {
-  export {
-    Files as Files,
-    type FileListFilesResponse as FileListFilesResponse,
-    type FileMintUploadURLResponse as FileMintUploadURLResponse,
-    type FileListFilesParams as FileListFilesParams,
-    type FileMintUploadURLParams as FileMintUploadURLParams,
-  };
+  export { Files as Files };
 }

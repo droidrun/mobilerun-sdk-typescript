@@ -11,48 +11,6 @@ export type SdkMethod = {
 
 export const sdkMethods: SdkMethod[] = [
   {
-    clientCallName: 'client.agents.files.listFiles',
-    fullyQualifiedName: 'agents.files.listFiles',
-    httpMethod: 'get',
-    httpPath: '/agents/files',
-  },
-  {
-    clientCallName: 'client.agents.files.mintUploadURL',
-    fullyQualifiedName: 'agents.files.mintUploadURL',
-    httpMethod: 'post',
-    httpPath: '/agents/files/upload-url',
-  },
-  {
-    clientCallName: 'client.agents.files.fileID.cancelPendingUpload',
-    fullyQualifiedName: 'agents.files.fileID.cancelPendingUpload',
-    httpMethod: 'delete',
-    httpPath: '/agents/files/:fileId/pending',
-  },
-  {
-    clientCallName: 'client.agents.files.fileID.confirmUpload',
-    fullyQualifiedName: 'agents.files.fileID.confirmUpload',
-    httpMethod: 'post',
-    httpPath: '/agents/files/:fileId/confirm',
-  },
-  {
-    clientCallName: 'client.agents.files.fileID.deleteFile',
-    fullyQualifiedName: 'agents.files.fileID.deleteFile',
-    httpMethod: 'delete',
-    httpPath: '/agents/files/:fileId',
-  },
-  {
-    clientCallName: 'client.agents.files.fileID.downloadFile',
-    fullyQualifiedName: 'agents.files.fileID.downloadFile',
-    httpMethod: 'get',
-    httpPath: '/agents/files/:fileId/download',
-  },
-  {
-    clientCallName: 'client.agents.files.fileID.updateMetadata',
-    fullyQualifiedName: 'agents.files.fileID.updateMetadata',
-    httpMethod: 'patch',
-    httpPath: '/agents/files/:fileId',
-  },
-  {
     clientCallName: 'client.apps.retrieve',
     fullyQualifiedName: 'apps.retrieve',
     httpMethod: 'get',

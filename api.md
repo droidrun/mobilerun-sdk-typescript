@@ -16,32 +16,7 @@ Types:
 
 ## Files
 
-Types:
-
-- <code><a href="./src/resources/agents/files/files.ts">FileListFilesResponse</a></code>
-- <code><a href="./src/resources/agents/files/files.ts">FileMintUploadURLResponse</a></code>
-
-Methods:
-
-- <code title="get /agents/files">client.agents.files.<a href="./src/resources/agents/files/files.ts">listFiles</a>({ ...params }) -> FileListFilesResponse</code>
-- <code title="post /agents/files/upload-url">client.agents.files.<a href="./src/resources/agents/files/files.ts">mintUploadURL</a>({ ...params }) -> FileMintUploadURLResponse</code>
-
 ### FileID
-
-Types:
-
-- <code><a href="./src/resources/agents/files/file-id.ts">FileIDCancelPendingUploadResponse</a></code>
-- <code><a href="./src/resources/agents/files/file-id.ts">FileIDConfirmUploadResponse</a></code>
-- <code><a href="./src/resources/agents/files/file-id.ts">FileIDDeleteFileResponse</a></code>
-- <code><a href="./src/resources/agents/files/file-id.ts">FileIDUpdateMetadataResponse</a></code>
-
-Methods:
-
-- <code title="delete /agents/files/:fileId/pending">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">cancelPendingUpload</a>() -> FileIDCancelPendingUploadResponse</code>
-- <code title="post /agents/files/:fileId/confirm">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">confirmUpload</a>() -> FileIDConfirmUploadResponse</code>
-- <code title="delete /agents/files/:fileId">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">deleteFile</a>() -> FileIDDeleteFileResponse</code>
-- <code title="get /agents/files/:fileId/download">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">downloadFile</a>() -> void</code>
-- <code title="patch /agents/files/:fileId">client.agents.files.fileID.<a href="./src/resources/agents/files/file-id.ts">updateMetadata</a>({ ...params }) -> FileIDUpdateMetadataResponse</code>
 
 # Apps
 
