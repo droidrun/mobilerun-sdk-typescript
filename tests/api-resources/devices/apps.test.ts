@@ -9,26 +9,6 @@ const client = new Mobilerun({
 
 describe('resource apps', () => {
   // Mock server tests are disabled
-  test.skip('update: only required params', async () => {
-    const responsePromise = client.devices.apps.update('packageName', { deviceId: 'deviceId' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: required and optional params', async () => {
-    const response = await client.devices.apps.update('packageName', {
-      deviceId: 'deviceId',
-      'X-Device-Display-ID': 0,
-    });
-  });
-
-  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.devices.apps.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
@@ -78,7 +58,7 @@ describe('resource apps', () => {
 
   // Mock server tests are disabled
   test.skip('install: only required params', async () => {
-    const responsePromise = client.devices.apps.install('deviceId', { packageName: 'packageName' });
+    const responsePromise = client.devices.apps.install('deviceId', { bundleId: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -91,7 +71,8 @@ describe('resource apps', () => {
   // Mock server tests are disabled
   test.skip('install: required and optional params', async () => {
     const response = await client.devices.apps.install('deviceId', {
-      packageName: 'packageName',
+      bundleId: 'x',
+      packageName: 'x',
       'X-Device-Display-ID': 0,
     });
   });
@@ -113,6 +94,26 @@ describe('resource apps', () => {
     const response = await client.devices.apps.start('packageName', {
       deviceId: 'deviceId',
       activity: 'activity',
+      'X-Device-Display-ID': 0,
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('stop: only required params', async () => {
+    const responsePromise = client.devices.apps.stop('packageName', { deviceId: 'deviceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('stop: required and optional params', async () => {
+    const response = await client.devices.apps.stop('packageName', {
+      deviceId: 'deviceId',
       'X-Device-Display-ID': 0,
     });
   });

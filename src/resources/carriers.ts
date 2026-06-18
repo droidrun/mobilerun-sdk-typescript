@@ -6,25 +6,32 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Mobile Carriers
+ */
 export class Carriers extends APIResource {
   /**
    * Create a new carrier
    */
-  create(body: CarrierCreateParams, options?: RequestOptions): APIPromise<Carrier> {
+  create(body: CarrierCreateParams, options?: RequestOptions): APIPromise<CarrierCreateResponse> {
     return this._client.post('/carriers', { body, ...options });
   }
 
   /**
    * Get carrier by ID
    */
-  retrieve(carrierID: number, options?: RequestOptions): APIPromise<Carrier> {
+  retrieve(carrierID: number, options?: RequestOptions): APIPromise<CarrierRetrieveResponse> {
     return this._client.get(path`/carriers/${carrierID}`, options);
   }
 
   /**
    * Update a carrier
    */
-  update(carrierID: number, body: CarrierUpdateParams, options?: RequestOptions): APIPromise<Carrier> {
+  update(
+    carrierID: number,
+    body: CarrierUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<CarrierUpdateResponse> {
     return this._client.patch(path`/carriers/${carrierID}`, { body, ...options });
   }
 
@@ -48,12 +55,98 @@ export class Carriers extends APIResource {
   /**
    * Get carrier by MCC and MNC
    */
-  lookup(query: CarrierLookupParams, options?: RequestOptions): APIPromise<Carrier> {
+  lookup(query: CarrierLookupParams, options?: RequestOptions): APIPromise<CarrierLookupResponse> {
     return this._client.get('/carriers/lookup', { query, ...options });
   }
 }
 
-export interface Carrier {
+export interface CarrierCreateResponse {
+  id: number;
+
+  company: string;
+
+  country: string;
+
+  country_code: string;
+
+  country_iso: string;
+
+  created_at: string;
+
+  detail_url: string;
+
+  gsm_bands: string;
+
+  lte_bands: string;
+
+  mcc: string;
+
+  mnc: string;
+
+  mobile_prefix: string;
+
+  nsn_size: string;
+
+  number_format: string;
+
+  operator: string;
+
+  protocols: string;
+
+  umts_bands: string;
+
+  website: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export interface CarrierRetrieveResponse {
+  id: number;
+
+  company: string;
+
+  country: string;
+
+  country_code: string;
+
+  country_iso: string;
+
+  created_at: string;
+
+  detail_url: string;
+
+  gsm_bands: string;
+
+  lte_bands: string;
+
+  mcc: string;
+
+  mnc: string;
+
+  mobile_prefix: string;
+
+  nsn_size: string;
+
+  number_format: string;
+
+  operator: string;
+
+  protocols: string;
+
+  umts_bands: string;
+
+  website: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export interface CarrierUpdateResponse {
   id: number;
 
   company: string;
@@ -97,7 +190,7 @@ export interface Carrier {
 }
 
 export interface CarrierListResponse {
-  items: Array<Carrier> | null;
+  items: Array<CarrierListResponse.Item> | null;
 
   pagination: Shared.Meta;
 
@@ -107,8 +200,96 @@ export interface CarrierListResponse {
   $schema?: string;
 }
 
+export namespace CarrierListResponse {
+  export interface Item {
+    id: number;
+
+    company: string;
+
+    country: string;
+
+    country_code: string;
+
+    country_iso: string;
+
+    created_at: string;
+
+    detail_url: string;
+
+    gsm_bands: string;
+
+    lte_bands: string;
+
+    mcc: string;
+
+    mnc: string;
+
+    mobile_prefix: string;
+
+    nsn_size: string;
+
+    number_format: string;
+
+    operator: string;
+
+    protocols: string;
+
+    umts_bands: string;
+
+    website: string;
+
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    $schema?: string;
+  }
+}
+
 export interface CarrierDeleteResponse {
   message: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export interface CarrierLookupResponse {
+  id: number;
+
+  company: string;
+
+  country: string;
+
+  country_code: string;
+
+  country_iso: string;
+
+  created_at: string;
+
+  detail_url: string;
+
+  gsm_bands: string;
+
+  lte_bands: string;
+
+  mcc: string;
+
+  mnc: string;
+
+  mobile_prefix: string;
+
+  nsn_size: string;
+
+  number_format: string;
+
+  operator: string;
+
+  protocols: string;
+
+  umts_bands: string;
+
+  website: string;
 
   /**
    * A URL to the JSON Schema for this object.
@@ -316,9 +497,12 @@ export interface CarrierLookupParams {
 
 export declare namespace Carriers {
   export {
-    type Carrier as Carrier,
+    type CarrierCreateResponse as CarrierCreateResponse,
+    type CarrierRetrieveResponse as CarrierRetrieveResponse,
+    type CarrierUpdateResponse as CarrierUpdateResponse,
     type CarrierListResponse as CarrierListResponse,
     type CarrierDeleteResponse as CarrierDeleteResponse,
+    type CarrierLookupResponse as CarrierLookupResponse,
     type CarrierCreateParams as CarrierCreateParams,
     type CarrierUpdateParams as CarrierUpdateParams,
     type CarrierListParams as CarrierListParams,

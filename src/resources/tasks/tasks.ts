@@ -117,6 +117,8 @@ export interface Task {
 
   id?: string;
 
+  accessibility?: boolean;
+
   agentId?: number;
 
   apps?: Array<string>;
@@ -131,6 +133,8 @@ export interface Task {
 
   credentials?: Array<PackageCredentials>;
 
+  creditsUsed?: number | null;
+
   dispatchedAt?: string | null;
 
   displayId?: number;
@@ -140,6 +144,8 @@ export interface Task {
   files?: Array<string>;
 
   finishedAt?: string | null;
+
+  heartbeatAt?: string | null;
 
   maxSteps?: number;
 
@@ -215,12 +221,100 @@ export interface TaskListResponse {
   /**
    * The paginated items
    */
-  items: Array<Task>;
+  items: Array<TaskListResponse.Item>;
 
   /**
    * Pagination metadata
    */
   pagination: Shared.PaginationMeta;
+}
+
+export namespace TaskListResponse {
+  /**
+   * Task representation for list endpoints — omits the large trajectory field.
+   */
+  export interface Item {
+    id: string;
+
+    deviceId: string;
+
+    displayId: number;
+
+    /**
+     * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+     */
+    llmModel: string;
+
+    status: TasksAPI.TaskStatus;
+
+    task: string;
+
+    tmpDevice: boolean;
+
+    userId: string;
+
+    accessibility?: boolean;
+
+    agentId?: number;
+
+    apps?: Array<string>;
+
+    cancelRequestedAt?: string | null;
+
+    claimedAt?: string | null;
+
+    continueOnFailure?: boolean;
+
+    createdAt?: string;
+
+    credentials?: Array<TasksAPI.PackageCredentials>;
+
+    creditsUsed?: number | null;
+
+    dispatchedAt?: string | null;
+
+    executionTimeout?: number;
+
+    files?: Array<string>;
+
+    finishedAt?: string | null;
+
+    maxSteps?: number;
+
+    /**
+     * Memory namespace for cross-task personalization
+     */
+    memoryNamespace?: string;
+
+    message?: string | null;
+
+    output?: { [key: string]: unknown } | null;
+
+    outputSchema?: { [key: string]: unknown } | null;
+
+    reasoning?: boolean;
+
+    stealth?: boolean;
+
+    steps?: number | null;
+
+    streamUrl?: string | null;
+
+    /**
+     * LLM model used by sub-agent roles: executor, app_opener, structured_output
+     */
+    subagentModel?: string;
+
+    succeeded?: boolean | null;
+
+    temperature?: number;
+
+    updatedAt?: string;
+
+    vision?: boolean;
+
+    vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+  }
 }
 
 export interface TaskGetStatusResponse {
@@ -463,7 +557,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryManagerPlanEvent {
     /**
-     * Coordination event from ManagerAgent to DroidAgent.
+     * Coordination event from ManagerAgent to MobileAgent.
      *
      * Used for workflow step routing only (NOT streamed to frontend). For internal
      * events with memory_update metadata, see ManagerPlanDetailsEvent.
@@ -475,7 +569,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryManagerPlanEvent {
     /**
-     * Coordination event from ManagerAgent to DroidAgent.
+     * Coordination event from ManagerAgent to MobileAgent.
      *
      * Used for workflow step routing only (NOT streamed to frontend). For internal
      * events with memory_update metadata, see ManagerPlanDetailsEvent.
@@ -932,6 +1026,8 @@ export interface TaskRunParams {
 
   task: string;
 
+  accessibility?: boolean;
+
   agentId?: number;
 
   apps?: Array<string>;
@@ -951,7 +1047,7 @@ export interface TaskRunParams {
 
   /**
    * The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.1-flash-lite-preview')
+   * 'google/gemini-3.1-flash-lite')
    */
   llmModel?: string;
 
@@ -988,6 +1084,8 @@ export interface TaskRunStreamedParams {
 
   task: string;
 
+  accessibility?: boolean;
+
   agentId?: number;
 
   apps?: Array<string>;
@@ -1007,7 +1105,7 @@ export interface TaskRunStreamedParams {
 
   /**
    * The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.1-flash-lite-preview')
+   * 'google/gemini-3.1-flash-lite')
    */
   llmModel?: string;
 

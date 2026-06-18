@@ -82,7 +82,7 @@ export interface ProxyStatusResponse {
   name: string | null;
 
   /**
-   * Active proxy protocol (socks5 or wireguard).
+   * Active proxy protocol (socks5).
    */
   protocol: string | null;
 
@@ -99,7 +99,7 @@ export interface ProxyConnectParams {
   host?: string;
 
   /**
-   * Body param: Proxy name (used for wireguard tunnel name)
+   * Body param: Proxy name
    */
   name?: string;
 
@@ -127,12 +127,6 @@ export interface ProxyConnectParams {
    * @deprecated Body param
    */
   user?: string;
-
-  /**
-   * Body param: WireGuard tunnel configuration file content (required for
-   * wireguard).
-   */
-  wireguard?: string;
 
   /**
    * Header param

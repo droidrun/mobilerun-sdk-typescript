@@ -1,18 +1,32 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
-export { Agents, type AgentListResponse } from './agents';
-export { Apps, type AppListResponse, type AppListParams } from './apps';
+export {
+  Apps,
+  type AppRetrieveResponse,
+  type AppListResponse,
+  type AppDeleteResponse,
+  type AppConfirmUploadResponse,
+  type AppCreateSignedUploadURLResponse,
+  type AppListVersionsResponse,
+  type AppMarkFailedResponse,
+  type AppListParams,
+  type AppCreateSignedUploadURLParams,
+} from './apps';
 export {
   Carriers,
-  type Carrier,
+  type CarrierCreateResponse,
+  type CarrierRetrieveResponse,
+  type CarrierUpdateResponse,
   type CarrierListResponse,
   type CarrierDeleteResponse,
+  type CarrierLookupResponse,
   type CarrierCreateParams,
   type CarrierUpdateParams,
   type CarrierListParams,
   type CarrierLookupParams,
 } from './carriers';
+export { Connect } from './connect/connect';
 export {
   Credentials,
   type CredentialListResponse,
@@ -23,8 +37,10 @@ export {
   type Device,
   type DeviceListResponse,
   type DeviceCountResponse,
+  type DeviceFingerprintResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceFingerprintParams,
   type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices/devices';
@@ -36,11 +52,13 @@ export {
   type HookGetSampleDataResponse,
   type HookPerformResponse,
   type HookSubscribeResponse,
+  type HookTestResponse,
   type HookUnsubscribeResponse,
   type HookUpdateParams,
   type HookListParams,
   type HookPerformParams,
   type HookSubscribeParams,
+  type HookTestParams,
 } from './hooks';
 export { Models, type ModelListResponse } from './models';
 export {
@@ -60,9 +78,11 @@ export {
   type ProxyUpdateResponse,
   type ProxyListResponse,
   type ProxyDeleteResponse,
+  type ProxyLookupResponse,
   type ProxyCreateParams,
   type ProxyUpdateParams,
   type ProxyListParams,
+  type ProxyLookupParams,
 } from './proxies';
 export {
   Tasks,
@@ -83,3 +103,17 @@ export {
   type TaskRunStreamedParams,
   type TaskSendMessageParams,
 } from './tasks/tasks';
+export {
+  Webhooks,
+  type WebhookCreateResponse,
+  type WebhookRetrieveResponse,
+  type WebhookUpdateResponse,
+  type WebhookListResponse,
+  type WebhookEventTypesResponse,
+  type WebhookRotateSecretResponse,
+  type WebhookTestDeliveryResponse,
+  type WebhookCreateParams,
+  type WebhookUpdateParams,
+  type WebhookListParams,
+} from './webhooks/webhooks';
+export { Workflows, type Flow } from './workflows/workflows';

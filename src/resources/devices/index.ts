@@ -12,19 +12,21 @@ export {
 export {
   Apps,
   type AppListResponse,
-  type AppUpdateParams,
   type AppListParams,
   type AppDeleteParams,
   type AppInstallParams,
   type AppStartParams,
+  type AppStopParams,
 } from './apps';
 export {
   Devices,
   type Device,
   type DeviceListResponse,
   type DeviceCountResponse,
+  type DeviceFingerprintResponse,
   type DeviceCreateParams,
   type DeviceListParams,
+  type DeviceFingerprintParams,
   type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices';
@@ -54,11 +56,12 @@ export {
   type KeyboardWriteParams,
 } from './keyboard';
 export {
-  Location,
-  type LocationGetResponse,
-  type LocationGetParams,
-  type LocationSetParams,
-} from './location';
+  Language,
+  type LanguageGetResponse,
+  type LanguageGetParams,
+  type LanguageSetParams,
+} from './language';
+export { Location, type LocationGetParams, type LocationSetParams } from './location';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
 export { Profile, type ProfileUpdateParams } from './profile';
 export {
@@ -70,18 +73,19 @@ export {
 } from './proxy';
 export {
   State,
+  type A11YNode,
   type Rect,
   type StateScreenshotResponse,
+  type StateTimeResponse,
   type StateUiResponse,
   type StateScreenshotParams,
+  type StateTimeParams,
   type StateUiParams,
 } from './state';
 export { Tasks, type TaskListResponse, type TaskListParams } from './tasks';
 export {
-  Time,
-  type TimeTimeResponse,
-  type TimeTimezoneResponse,
-  type TimeSetTimezoneParams,
-  type TimeTimeParams,
-  type TimeTimezoneParams,
-} from './time';
+  Timezone,
+  type TimezoneGetResponse,
+  type TimezoneGetParams,
+  type TimezoneSetParams,
+} from './timezone';

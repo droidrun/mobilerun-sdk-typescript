@@ -99,6 +99,12 @@ export interface KeyboardWriteParams {
   clear?: boolean;
 
   /**
+   * Body param: Per-character mistake rate for humantouch typing. -1 uses server
+   * default.
+   */
+  errorRate?: number;
+
+  /**
    * Body param
    */
   stealth?: boolean;

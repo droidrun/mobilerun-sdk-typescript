@@ -32,6 +32,28 @@ export class State extends APIResource {
   }
 
   /**
+   * Device time
+   */
+  time(
+    deviceID: string,
+    params: StateTimeParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/time`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * UI state
    */
   ui(
@@ -55,6 +77,54 @@ export class State extends APIResource {
   }
 }
 
+export interface A11YNode {
+  boundsInScreen: A11YNode.BoundsInScreen;
+
+  children: Array<A11YNode> | null;
+
+  className: string;
+
+  contentDescription: string;
+
+  isCheckable: boolean;
+
+  isChecked: boolean;
+
+  isClickable: boolean;
+
+  isEnabled: boolean;
+
+  isFocusable: boolean;
+
+  isFocused: boolean;
+
+  isLongClickable: boolean;
+
+  isPassword: boolean;
+
+  isScrollable: boolean;
+
+  isSelected: boolean;
+
+  packageName: string;
+
+  resourceId: string;
+
+  text: string;
+}
+
+export namespace A11YNode {
+  export interface BoundsInScreen {
+    bottom: number;
+
+    left: number;
+
+    right: number;
+
+    top: number;
+  }
+}
+
 export interface Rect {
   height: number;
 
@@ -63,10 +133,14 @@ export interface Rect {
 
 export type StateScreenshotResponse = string;
 
+export type StateTimeResponse = string;
+
 export interface StateUiResponse {
-  a11y_tree: unknown;
+  a11y_tree: A11YNode;
 
   device_context: StateUiResponse.DeviceContext;
+
+  ime_tree: A11YNode;
 
   phone_state: StateUiResponse.PhoneState;
 
@@ -83,8 +157,6 @@ export namespace StateUiResponse {
     filtering_params: DeviceContext.FilteringParams;
 
     screen_bounds: StateAPI.Rect;
-
-    screenSize: StateAPI.Rect;
   }
 
   export namespace DeviceContext {
@@ -144,6 +216,10 @@ export interface StateScreenshotParams {
   'X-Device-Display-ID'?: number;
 }
 
+export interface StateTimeParams {
+  'X-Device-Display-ID'?: number;
+}
+
 export interface StateUiParams {
   /**
    * Query param
@@ -158,10 +234,13 @@ export interface StateUiParams {
 
 export declare namespace State {
   export {
+    type A11YNode as A11YNode,
     type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
+    type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
+    type StateTimeParams as StateTimeParams,
     type StateUiParams as StateUiParams,
   };
 }

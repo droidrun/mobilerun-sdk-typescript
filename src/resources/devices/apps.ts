@@ -8,26 +8,6 @@ import { path } from '../../internal/utils/path';
 
 export class Apps extends APIResource {
   /**
-   * Stop app
-   */
-  update(packageName: string, params: AppUpdateParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.patch(path`/devices/${deviceId}/apps/${packageName}`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
-  }
-
-  /**
    * List apps
    */
   list(
@@ -109,6 +89,26 @@ export class Apps extends APIResource {
       ]),
     });
   }
+
+  /**
+   * Stop app
+   */
+  stop(packageName: string, params: AppStopParams, options?: RequestOptions): APIPromise<void> {
+    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    return this._client.patch(path`/devices/${deviceId}/apps/${packageName}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
 }
 
 export type AppListResponse = Array<AppListResponse.AppListResponseItem>;
@@ -125,18 +125,6 @@ export namespace AppListResponse {
 
     versionName: string;
   }
-}
-
-export interface AppUpdateParams {
-  /**
-   * Path param
-   */
-  deviceId: string;
-
-  /**
-   * Header param
-   */
-  'X-Device-Display-ID'?: number;
 }
 
 export interface AppListParams {
@@ -168,16 +156,42 @@ export interface AppDeleteParams {
   'X-Device-Display-ID'?: number;
 }
 
-export interface AppInstallParams {
-  /**
-   * Body param
-   */
-  packageName: string;
+export type AppInstallParams = AppInstallParams.Variant0 | AppInstallParams.Variant1;
 
-  /**
-   * Header param
-   */
-  'X-Device-Display-ID'?: number;
+export declare namespace AppInstallParams {
+  export interface Variant0 {
+    /**
+     * Body param: iOS bundle identifier (e.g. com.example.app)
+     */
+    bundleId: string;
+
+    /**
+     * Body param: Android package name (e.g. com.example.app)
+     */
+    packageName?: string;
+
+    /**
+     * Header param
+     */
+    'X-Device-Display-ID'?: number;
+  }
+
+  export interface Variant1 {
+    /**
+     * Body param: Android package name (e.g. com.example.app)
+     */
+    packageName: string;
+
+    /**
+     * Body param: iOS bundle identifier (e.g. com.example.app)
+     */
+    bundleId?: string;
+
+    /**
+     * Header param
+     */
+    'X-Device-Display-ID'?: number;
+  }
 }
 
 export interface AppStartParams {
@@ -197,13 +211,25 @@ export interface AppStartParams {
   'X-Device-Display-ID'?: number;
 }
 
+export interface AppStopParams {
+  /**
+   * Path param
+   */
+  deviceId: string;
+
+  /**
+   * Header param
+   */
+  'X-Device-Display-ID'?: number;
+}
+
 export declare namespace Apps {
   export {
     type AppListResponse as AppListResponse,
-    type AppUpdateParams as AppUpdateParams,
     type AppListParams as AppListParams,
     type AppDeleteParams as AppDeleteParams,
     type AppInstallParams as AppInstallParams,
     type AppStartParams as AppStartParams,
+    type AppStopParams as AppStopParams,
   };
 }

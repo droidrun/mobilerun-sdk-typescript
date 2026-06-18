@@ -7,10 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource agents', () => {
+describe('resource timezones', () => {
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.agents.list();
+    const responsePromise = client.workflows.timezones.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

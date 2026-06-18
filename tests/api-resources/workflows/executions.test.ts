@@ -7,10 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource time', () => {
+describe('resource executions', () => {
   // Mock server tests are disabled
-  test.skip('setTimezone: only required params', async () => {
-    const responsePromise = client.devices.time.setTimezone('deviceId', { timezone: 'timezone' });
+  test.skip('retrieve', async () => {
+    const responsePromise = client.workflows.executions.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,16 +21,8 @@ describe('resource time', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('setTimezone: required and optional params', async () => {
-    const response = await client.devices.time.setTimezone('deviceId', {
-      timezone: 'timezone',
-      'X-Device-Display-ID': 0,
-    });
-  });
-
-  // Mock server tests are disabled
-  test.skip('time', async () => {
-    const responsePromise = client.devices.time.time('deviceId');
+  test.skip('list', async () => {
+    const responsePromise = client.workflows.executions.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -41,20 +33,30 @@ describe('resource time', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('time: request options and params are passed correctly', async () => {
+  test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.devices.time.time(
-        'deviceId',
-        { 'X-Device-Display-ID': 0 },
+      client.workflows.executions.list(
+        {
+          flowId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          from: 'from',
+          orderBy: 'startedAt',
+          orderByDirection: 'asc',
+          page: 1,
+          pageSize: 1,
+          search: 'search',
+          status: 'pending',
+          to: 'to',
+          triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
-  test.skip('timezone', async () => {
-    const responsePromise = client.devices.time.timezone('deviceId');
+  test.skip('getMetrics', async () => {
+    const responsePromise = client.workflows.executions.getMetrics();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -65,12 +67,16 @@ describe('resource time', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('timezone: request options and params are passed correctly', async () => {
+  test.skip('getMetrics: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.devices.time.timezone(
-        'deviceId',
-        { 'X-Device-Display-ID': 0 },
+      client.workflows.executions.getMetrics(
+        {
+          flowId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          from: 'from',
+          to: 'to',
+          triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);

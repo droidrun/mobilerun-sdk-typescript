@@ -17,16 +17,29 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { AgentListResponse, Agents } from './resources/agents';
-import { AppListParams, AppListResponse, Apps } from './resources/apps';
 import {
-  Carrier,
+  AppConfirmUploadResponse,
+  AppCreateSignedUploadURLParams,
+  AppCreateSignedUploadURLResponse,
+  AppDeleteResponse,
+  AppListParams,
+  AppListResponse,
+  AppListVersionsResponse,
+  AppMarkFailedResponse,
+  AppRetrieveResponse,
+  Apps,
+} from './resources/apps';
+import {
   CarrierCreateParams,
+  CarrierCreateResponse,
   CarrierDeleteResponse,
   CarrierListParams,
   CarrierListResponse,
   CarrierLookupParams,
+  CarrierLookupResponse,
+  CarrierRetrieveResponse,
   CarrierUpdateParams,
+  CarrierUpdateResponse,
   Carriers,
 } from './resources/carriers';
 import {
@@ -38,6 +51,8 @@ import {
   HookRetrieveResponse,
   HookSubscribeParams,
   HookSubscribeResponse,
+  HookTestParams,
+  HookTestResponse,
   HookUnsubscribeResponse,
   HookUpdateParams,
   HookUpdateResponse,
@@ -61,10 +76,13 @@ import {
   ProxyDeleteResponse,
   ProxyListParams,
   ProxyListResponse,
+  ProxyLookupParams,
+  ProxyLookupResponse,
   ProxyRetrieveResponse,
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
+import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
   CredentialListResponse,
@@ -74,6 +92,8 @@ import {
   Device,
   DeviceCountResponse,
   DeviceCreateParams,
+  DeviceFingerprintParams,
+  DeviceFingerprintResponse,
   DeviceListParams,
   DeviceListResponse,
   DeviceSetNameParams,
@@ -99,6 +119,20 @@ import {
   Tasks,
   UsageResult,
 } from './resources/tasks/tasks';
+import {
+  WebhookCreateParams,
+  WebhookCreateResponse,
+  WebhookEventTypesResponse,
+  WebhookListParams,
+  WebhookListResponse,
+  WebhookRetrieveResponse,
+  WebhookRotateSecretResponse,
+  WebhookTestDeliveryResponse,
+  WebhookUpdateParams,
+  WebhookUpdateResponse,
+  Webhooks,
+} from './resources/webhooks/webhooks';
+import { Flow, Workflows } from './resources/workflows/workflows';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -242,6 +276,18 @@ export class Mobilerun {
     this.maxRetries = options.maxRetries ?? 2;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
+
+    const customHeadersEnv = readEnv('MOBILERUN_CUSTOM_HEADERS');
+    if (customHeadersEnv) {
+      const parsed: Record<string, string> = {};
+      for (const line of customHeadersEnv.split('\n')) {
+        const colon = line.indexOf(':');
+        if (colon >= 0) {
+          parsed[line.substring(0, colon).trim()] = line.substring(colon + 1).trim();
+        }
+      }
+      options.defaultHeaders = { ...parsed, ...options.defaultHeaders };
+    }
 
     this._options = options;
 
@@ -738,11 +784,19 @@ export class Mobilerun {
     return () => controller.abort();
   }
 
-  private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
+  private buildBody({ options }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
   } {
+    const { body, headers: rawHeaders } = options;
     if (!body) {
+      // A resource method always passes a `body` key when its operation defines a
+      // request body, even if the caller omitted an optional body param. Keep the
+      // content-type for those, and only elide it for operations with no body at
+      // all (e.g. GET/DELETE).
+      if (body == null && 'body' in options) {
+        return this.#encoder({ body, headers: buildHeaders([rawHeaders]) });
+      }
       return { bodyHeaders: undefined, body: undefined };
     }
     const headers = buildHeaders([rawHeaders]);
@@ -803,39 +857,144 @@ export class Mobilerun {
   static toFile = Uploads.toFile;
 
   /**
+   * App Management
+   */
+  apps: API.Apps = new API.Apps(this);
+  /**
+   * Mobile Carriers
+   */
+  carriers: API.Carriers = new API.Carriers(this);
+  /**
+   * Vault & Secrets
+   */
+  credentials: API.Credentials = new API.Credentials(this);
+  devices: API.Devices = new API.Devices(this);
+  hooks: API.Hooks = new API.Hooks(this);
+  /**
+   * LLM Models
+   */
+  models: API.Models = new API.Models(this);
+  profiles: API.Profiles = new API.Profiles(this);
+  /**
+   * Network Proxies
+   */
+  proxies: API.Proxies = new API.Proxies(this);
+  connect: API.Connect = new API.Connect(this);
+  /**
    * Tasks API
    */
   tasks: API.Tasks = new API.Tasks(this);
-  /**
-   * Agents API
-   */
-  agents: API.Agents = new API.Agents(this);
-  proxies: API.Proxies = new API.Proxies(this);
-  carriers: API.Carriers = new API.Carriers(this);
-  profiles: API.Profiles = new API.Profiles(this);
-  devices: API.Devices = new API.Devices(this);
-  apps: API.Apps = new API.Apps(this);
-  credentials: API.Credentials = new API.Credentials(this);
-  /**
-   * Webhooks API
-   */
-  hooks: API.Hooks = new API.Hooks(this);
-  models: API.Models = new API.Models(this);
+  workflows: API.Workflows = new API.Workflows(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
 }
 
-Mobilerun.Tasks = Tasks;
-Mobilerun.Agents = Agents;
-Mobilerun.Proxies = Proxies;
-Mobilerun.Carriers = Carriers;
-Mobilerun.Profiles = Profiles;
-Mobilerun.Devices = Devices;
 Mobilerun.Apps = Apps;
+Mobilerun.Carriers = Carriers;
 Mobilerun.Credentials = Credentials;
+Mobilerun.Devices = Devices;
 Mobilerun.Hooks = Hooks;
 Mobilerun.Models = Models;
+Mobilerun.Profiles = Profiles;
+Mobilerun.Proxies = Proxies;
+Mobilerun.Connect = Connect;
+Mobilerun.Tasks = Tasks;
+Mobilerun.Workflows = Workflows;
+Mobilerun.Webhooks = Webhooks;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
+
+  export {
+    Apps as Apps,
+    type AppRetrieveResponse as AppRetrieveResponse,
+    type AppListResponse as AppListResponse,
+    type AppDeleteResponse as AppDeleteResponse,
+    type AppConfirmUploadResponse as AppConfirmUploadResponse,
+    type AppCreateSignedUploadURLResponse as AppCreateSignedUploadURLResponse,
+    type AppListVersionsResponse as AppListVersionsResponse,
+    type AppMarkFailedResponse as AppMarkFailedResponse,
+    type AppListParams as AppListParams,
+    type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
+  };
+
+  export {
+    Carriers as Carriers,
+    type CarrierCreateResponse as CarrierCreateResponse,
+    type CarrierRetrieveResponse as CarrierRetrieveResponse,
+    type CarrierUpdateResponse as CarrierUpdateResponse,
+    type CarrierListResponse as CarrierListResponse,
+    type CarrierDeleteResponse as CarrierDeleteResponse,
+    type CarrierLookupResponse as CarrierLookupResponse,
+    type CarrierCreateParams as CarrierCreateParams,
+    type CarrierUpdateParams as CarrierUpdateParams,
+    type CarrierListParams as CarrierListParams,
+    type CarrierLookupParams as CarrierLookupParams,
+  };
+
+  export {
+    Credentials as Credentials,
+    type CredentialListResponse as CredentialListResponse,
+    type CredentialListParams as CredentialListParams,
+  };
+
+  export {
+    Devices as Devices,
+    type Device as Device,
+    type DeviceListResponse as DeviceListResponse,
+    type DeviceCountResponse as DeviceCountResponse,
+    type DeviceFingerprintResponse as DeviceFingerprintResponse,
+    type DeviceCreateParams as DeviceCreateParams,
+    type DeviceListParams as DeviceListParams,
+    type DeviceFingerprintParams as DeviceFingerprintParams,
+    type DeviceSetNameParams as DeviceSetNameParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
+  };
+
+  export {
+    Hooks as Hooks,
+    type HookRetrieveResponse as HookRetrieveResponse,
+    type HookUpdateResponse as HookUpdateResponse,
+    type HookListResponse as HookListResponse,
+    type HookGetSampleDataResponse as HookGetSampleDataResponse,
+    type HookPerformResponse as HookPerformResponse,
+    type HookSubscribeResponse as HookSubscribeResponse,
+    type HookTestResponse as HookTestResponse,
+    type HookUnsubscribeResponse as HookUnsubscribeResponse,
+    type HookUpdateParams as HookUpdateParams,
+    type HookListParams as HookListParams,
+    type HookPerformParams as HookPerformParams,
+    type HookSubscribeParams as HookSubscribeParams,
+    type HookTestParams as HookTestParams,
+  };
+
+  export { Models as Models, type ModelListResponse as ModelListResponse };
+
+  export {
+    Profiles as Profiles,
+    type Profile as Profile,
+    type ProfileListResponse as ProfileListResponse,
+    type ProfileDeleteResponse as ProfileDeleteResponse,
+    type ProfileCreateParams as ProfileCreateParams,
+    type ProfileUpdateParams as ProfileUpdateParams,
+    type ProfileListParams as ProfileListParams,
+  };
+
+  export {
+    Proxies as Proxies,
+    type ProxyConfig as ProxyConfig,
+    type ProxyCreateResponse as ProxyCreateResponse,
+    type ProxyRetrieveResponse as ProxyRetrieveResponse,
+    type ProxyUpdateResponse as ProxyUpdateResponse,
+    type ProxyListResponse as ProxyListResponse,
+    type ProxyDeleteResponse as ProxyDeleteResponse,
+    type ProxyLookupResponse as ProxyLookupResponse,
+    type ProxyCreateParams as ProxyCreateParams,
+    type ProxyUpdateParams as ProxyUpdateParams,
+    type ProxyListParams as ProxyListParams,
+    type ProxyLookupParams as ProxyLookupParams,
+  };
+
+  export { Connect as Connect };
 
   export {
     Tasks as Tasks,
@@ -857,83 +1016,29 @@ export declare namespace Mobilerun {
     type TaskSendMessageParams as TaskSendMessageParams,
   };
 
-  export { Agents as Agents, type AgentListResponse as AgentListResponse };
+  export { Workflows as Workflows, type Flow as Flow };
 
   export {
-    Proxies as Proxies,
-    type ProxyConfig as ProxyConfig,
-    type ProxyCreateResponse as ProxyCreateResponse,
-    type ProxyRetrieveResponse as ProxyRetrieveResponse,
-    type ProxyUpdateResponse as ProxyUpdateResponse,
-    type ProxyListResponse as ProxyListResponse,
-    type ProxyDeleteResponse as ProxyDeleteResponse,
-    type ProxyCreateParams as ProxyCreateParams,
-    type ProxyUpdateParams as ProxyUpdateParams,
-    type ProxyListParams as ProxyListParams,
+    Webhooks as Webhooks,
+    type WebhookCreateResponse as WebhookCreateResponse,
+    type WebhookRetrieveResponse as WebhookRetrieveResponse,
+    type WebhookUpdateResponse as WebhookUpdateResponse,
+    type WebhookListResponse as WebhookListResponse,
+    type WebhookEventTypesResponse as WebhookEventTypesResponse,
+    type WebhookRotateSecretResponse as WebhookRotateSecretResponse,
+    type WebhookTestDeliveryResponse as WebhookTestDeliveryResponse,
+    type WebhookCreateParams as WebhookCreateParams,
+    type WebhookUpdateParams as WebhookUpdateParams,
+    type WebhookListParams as WebhookListParams,
   };
-
-  export {
-    Carriers as Carriers,
-    type Carrier as Carrier,
-    type CarrierListResponse as CarrierListResponse,
-    type CarrierDeleteResponse as CarrierDeleteResponse,
-    type CarrierCreateParams as CarrierCreateParams,
-    type CarrierUpdateParams as CarrierUpdateParams,
-    type CarrierListParams as CarrierListParams,
-    type CarrierLookupParams as CarrierLookupParams,
-  };
-
-  export {
-    Profiles as Profiles,
-    type Profile as Profile,
-    type ProfileListResponse as ProfileListResponse,
-    type ProfileDeleteResponse as ProfileDeleteResponse,
-    type ProfileCreateParams as ProfileCreateParams,
-    type ProfileUpdateParams as ProfileUpdateParams,
-    type ProfileListParams as ProfileListParams,
-  };
-
-  export {
-    Devices as Devices,
-    type Device as Device,
-    type DeviceListResponse as DeviceListResponse,
-    type DeviceCountResponse as DeviceCountResponse,
-    type DeviceCreateParams as DeviceCreateParams,
-    type DeviceListParams as DeviceListParams,
-    type DeviceSetNameParams as DeviceSetNameParams,
-    type DeviceTerminateParams as DeviceTerminateParams,
-  };
-
-  export { Apps as Apps, type AppListResponse as AppListResponse, type AppListParams as AppListParams };
-
-  export {
-    Credentials as Credentials,
-    type CredentialListResponse as CredentialListResponse,
-    type CredentialListParams as CredentialListParams,
-  };
-
-  export {
-    Hooks as Hooks,
-    type HookRetrieveResponse as HookRetrieveResponse,
-    type HookUpdateResponse as HookUpdateResponse,
-    type HookListResponse as HookListResponse,
-    type HookGetSampleDataResponse as HookGetSampleDataResponse,
-    type HookPerformResponse as HookPerformResponse,
-    type HookSubscribeResponse as HookSubscribeResponse,
-    type HookUnsubscribeResponse as HookUnsubscribeResponse,
-    type HookUpdateParams as HookUpdateParams,
-    type HookListParams as HookListParams,
-    type HookPerformParams as HookPerformParams,
-    type HookSubscribeParams as HookSubscribeParams,
-  };
-
-  export { Models as Models, type ModelListResponse as ModelListResponse };
 
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
   export type DeviceSpec = API.DeviceSpec;
+  export type Location = API.Location;
   export type Meta = API.Meta;
   export type Pagination = API.Pagination;
   export type PaginationMeta = API.PaginationMeta;
   export type PermissionSet = API.PermissionSet;
+  export type Socks5 = API.Socks5;
 }
