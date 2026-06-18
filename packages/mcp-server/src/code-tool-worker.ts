@@ -108,13 +108,6 @@ function getTSDiagnostics(code: string): string[] {
 
 const fuse = new Fuse(
   [
-    'client.agents.files.listFiles',
-    'client.agents.files.mintUploadURL',
-    'client.agents.files.fileID.cancelPendingUpload',
-    'client.agents.files.fileID.confirmUpload',
-    'client.agents.files.fileID.deleteFile',
-    'client.agents.files.fileID.downloadFile',
-    'client.agents.files.fileID.updateMetadata',
     'client.apps.confirmUpload',
     'client.apps.createSignedUploadURL',
     'client.apps.delete',
