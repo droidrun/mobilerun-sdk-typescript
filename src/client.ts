@@ -132,7 +132,7 @@ import {
   WebhookUpdateResponse,
   Webhooks,
 } from './resources/webhooks/webhooks';
-import { Flow, Workflows } from './resources/workflows/workflows';
+import { Workflows } from './resources/workflows/workflows';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -1016,7 +1016,7 @@ export declare namespace Mobilerun {
     type TaskSendMessageParams as TaskSendMessageParams,
   };
 
-  export { Workflows as Workflows, type Flow as Flow };
+  export { Workflows as Workflows };
 
   export {
     Webhooks as Webhooks,

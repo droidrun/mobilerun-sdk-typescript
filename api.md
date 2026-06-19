@@ -450,178 +450,27 @@ Methods:
 
 # Workflows
 
-Types:
-
-- <code><a href="./src/resources/workflows/workflows.ts">Flow</a></code>
-
 ## Triggers
-
-Types:
-
-- <code><a href="./src/resources/workflows/triggers.ts">TriggerCreateResponse</a></code>
-- <code><a href="./src/resources/workflows/triggers.ts">TriggerRetrieveResponse</a></code>
-- <code><a href="./src/resources/workflows/triggers.ts">TriggerUpdateResponse</a></code>
-- <code><a href="./src/resources/workflows/triggers.ts">TriggerListResponse</a></code>
-- <code><a href="./src/resources/workflows/triggers.ts">TriggerDeleteResponse</a></code>
-- <code><a href="./src/resources/workflows/triggers.ts">TriggerFireResponse</a></code>
-
-Methods:
-
-- <code title="post /triggers">client.workflows.triggers.<a href="./src/resources/workflows/triggers.ts">create</a>({ ...params }) -> TriggerCreateResponse</code>
-- <code title="get /triggers/{triggerId}">client.workflows.triggers.<a href="./src/resources/workflows/triggers.ts">retrieve</a>(triggerID) -> TriggerRetrieveResponse</code>
-- <code title="patch /triggers/{triggerId}">client.workflows.triggers.<a href="./src/resources/workflows/triggers.ts">update</a>(triggerID, { ...params }) -> TriggerUpdateResponse</code>
-- <code title="get /triggers">client.workflows.triggers.<a href="./src/resources/workflows/triggers.ts">list</a>({ ...params }) -> TriggerListResponse</code>
-- <code title="delete /triggers/{triggerId}">client.workflows.triggers.<a href="./src/resources/workflows/triggers.ts">delete</a>(triggerID) -> TriggerDeleteResponse</code>
-- <code title="post /triggers/{triggerId}/fire">client.workflows.triggers.<a href="./src/resources/workflows/triggers.ts">fire</a>(triggerID, { ...params }) -> TriggerFireResponse</code>
 
 ## ActionCatalog
 
-Types:
-
-- <code><a href="./src/resources/workflows/action-catalog.ts">ActionCatalogEntry</a></code>
-- <code><a href="./src/resources/workflows/action-catalog.ts">ActionCatalogRetrieveResponse</a></code>
-- <code><a href="./src/resources/workflows/action-catalog.ts">ActionCatalogListResponse</a></code>
-
-Methods:
-
-- <code title="get /action-catalog/{catalogEntryId}">client.workflows.actionCatalog.<a href="./src/resources/workflows/action-catalog.ts">retrieve</a>(catalogEntryID) -> ActionCatalogRetrieveResponse</code>
-- <code title="get /action-catalog">client.workflows.actionCatalog.<a href="./src/resources/workflows/action-catalog.ts">list</a>({ ...params }) -> ActionCatalogListResponse</code>
-
 ## Actions
-
-Types:
-
-- <code><a href="./src/resources/workflows/actions/actions.ts">Action</a></code>
-- <code><a href="./src/resources/workflows/actions/actions.ts">ActionCreateResponse</a></code>
-- <code><a href="./src/resources/workflows/actions/actions.ts">ActionRetrieveResponse</a></code>
-- <code><a href="./src/resources/workflows/actions/actions.ts">ActionUpdateResponse</a></code>
-- <code><a href="./src/resources/workflows/actions/actions.ts">ActionListResponse</a></code>
-- <code><a href="./src/resources/workflows/actions/actions.ts">ActionDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /actions">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">create</a>({ ...params }) -> ActionCreateResponse</code>
-- <code title="get /actions/{actionId}">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">retrieve</a>(actionID) -> ActionRetrieveResponse</code>
-- <code title="patch /actions/{actionId}">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">update</a>(actionID, { ...params }) -> ActionUpdateResponse</code>
-- <code title="get /actions">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">list</a>({ ...params }) -> ActionListResponse</code>
-- <code title="delete /actions/{actionId}">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">delete</a>(actionID) -> ActionDeleteResponse</code>
 
 ### Services
 
-Types:
-
-- <code><a href="./src/resources/workflows/actions/services.ts">ServiceListResponse</a></code>
-- <code><a href="./src/resources/workflows/actions/services.ts">ServiceListMethodsResponse</a></code>
-
-Methods:
-
-- <code title="get /actions/services">client.workflows.actions.services.<a href="./src/resources/workflows/actions/services.ts">list</a>() -> ServiceListResponse</code>
-- <code title="get /actions/services/{service}/methods">client.workflows.actions.services.<a href="./src/resources/workflows/actions/services.ts">listMethods</a>(service) -> ServiceListMethodsResponse</code>
-
 ## Flows
-
-Types:
-
-- <code><a href="./src/resources/workflows/flows/flows.ts">FlowActionOverrides</a></code>
-- <code><a href="./src/resources/workflows/flows/flows.ts">FlowChildActionInput</a></code>
-- <code><a href="./src/resources/workflows/flows/flows.ts">FlowCreateResponse</a></code>
-- <code><a href="./src/resources/workflows/flows/flows.ts">FlowRetrieveResponse</a></code>
-- <code><a href="./src/resources/workflows/flows/flows.ts">FlowUpdateResponse</a></code>
-- <code><a href="./src/resources/workflows/flows/flows.ts">FlowListResponse</a></code>
-- <code><a href="./src/resources/workflows/flows/flows.ts">FlowDeleteResponse</a></code>
-- <code><a href="./src/resources/workflows/flows/flows.ts">FlowCloneResponse</a></code>
-- <code><a href="./src/resources/workflows/flows/flows.ts">FlowUnblockResponse</a></code>
-
-Methods:
-
-- <code title="post /flows">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">create</a>({ ...params }) -> FlowCreateResponse</code>
-- <code title="get /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">retrieve</a>(flowID) -> FlowRetrieveResponse</code>
-- <code title="patch /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">update</a>(flowID, { ...params }) -> FlowUpdateResponse</code>
-- <code title="get /flows">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">list</a>({ ...params }) -> FlowListResponse</code>
-- <code title="delete /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">delete</a>(flowID) -> FlowDeleteResponse</code>
-- <code title="post /flows/{flowId}/clone">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">clone</a>(flowID, { ...params }) -> FlowCloneResponse</code>
-- <code title="post /flows/{flowId}/unblock">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">unblock</a>(flowID) -> FlowUnblockResponse</code>
 
 ### Actions
 
-Types:
-
-- <code><a href="./src/resources/workflows/flows/actions.ts">FlowAction</a></code>
-- <code><a href="./src/resources/workflows/flows/actions.ts">ActionListResponse</a></code>
-- <code><a href="./src/resources/workflows/flows/actions.ts">ActionAddResponse</a></code>
-- <code><a href="./src/resources/workflows/flows/actions.ts">ActionRemoveResponse</a></code>
-- <code><a href="./src/resources/workflows/flows/actions.ts">ActionReplaceResponse</a></code>
-
-Methods:
-
-- <code title="get /flows/{flowId}/actions">client.workflows.flows.actions.<a href="./src/resources/workflows/flows/actions.ts">list</a>(flowID) -> ActionListResponse</code>
-- <code title="post /flows/{flowId}/actions">client.workflows.flows.actions.<a href="./src/resources/workflows/flows/actions.ts">add</a>(flowID, { ...params }) -> ActionAddResponse</code>
-- <code title="delete /flows/{flowId}/actions/{flowActionId}">client.workflows.flows.actions.<a href="./src/resources/workflows/flows/actions.ts">remove</a>(flowActionID, { ...params }) -> ActionRemoveResponse</code>
-- <code title="put /flows/{flowId}/actions">client.workflows.flows.actions.<a href="./src/resources/workflows/flows/actions.ts">replace</a>(flowID, { ...params }) -> ActionReplaceResponse</code>
-
 ## Events
-
-Types:
-
-- <code><a href="./src/resources/workflows/events/events.ts">EventDryRunResponse</a></code>
-- <code><a href="./src/resources/workflows/events/events.ts">EventIngestResponse</a></code>
-
-Methods:
-
-- <code title="post /events/dry-run">client.workflows.events.<a href="./src/resources/workflows/events/events.ts">dryRun</a>({ ...params }) -> EventDryRunResponse</code>
-- <code title="post /events/ingest">client.workflows.events.<a href="./src/resources/workflows/events/events.ts">ingest</a>({ ...params }) -> EventIngestResponse</code>
 
 ### Catalog
 
-Types:
-
-- <code><a href="./src/resources/workflows/events/catalog.ts">CatalogListResponse</a></code>
-- <code><a href="./src/resources/workflows/events/catalog.ts">CatalogRegisterResponse</a></code>
-
-Methods:
-
-- <code title="get /events/catalog">client.workflows.events.catalog.<a href="./src/resources/workflows/events/catalog.ts">list</a>({ ...params }) -> CatalogListResponse</code>
-- <code title="post /events/catalog/register">client.workflows.events.catalog.<a href="./src/resources/workflows/events/catalog.ts">register</a>({ ...params }) -> CatalogRegisterResponse</code>
-
 ## Executions
-
-Types:
-
-- <code><a href="./src/resources/workflows/executions.ts">FlowExecution</a></code>
-- <code><a href="./src/resources/workflows/executions.ts">ExecutionRetrieveResponse</a></code>
-- <code><a href="./src/resources/workflows/executions.ts">ExecutionListResponse</a></code>
-- <code><a href="./src/resources/workflows/executions.ts">ExecutionGetMetricsResponse</a></code>
-
-Methods:
-
-- <code title="get /executions/{executionId}">client.workflows.executions.<a href="./src/resources/workflows/executions.ts">retrieve</a>(executionID) -> ExecutionRetrieveResponse</code>
-- <code title="get /executions">client.workflows.executions.<a href="./src/resources/workflows/executions.ts">list</a>({ ...params }) -> ExecutionListResponse</code>
-- <code title="get /executions/metrics">client.workflows.executions.<a href="./src/resources/workflows/executions.ts">getMetrics</a>({ ...params }) -> ExecutionGetMetricsResponse</code>
 
 ## Timezones
 
-Types:
-
-- <code><a href="./src/resources/workflows/timezones.ts">TimezoneListResponse</a></code>
-
-Methods:
-
-- <code title="get /timezones">client.workflows.timezones.<a href="./src/resources/workflows/timezones.ts">list</a>() -> TimezoneListResponse</code>
-
 ## Secrets
-
-Types:
-
-- <code><a href="./src/resources/workflows/secrets.ts">UserSecret</a></code>
-- <code><a href="./src/resources/workflows/secrets.ts">SecretCreateResponse</a></code>
-- <code><a href="./src/resources/workflows/secrets.ts">SecretListResponse</a></code>
-- <code><a href="./src/resources/workflows/secrets.ts">SecretDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /secrets">client.workflows.secrets.<a href="./src/resources/workflows/secrets.ts">create</a>({ ...params }) -> SecretCreateResponse</code>
-- <code title="get /secrets">client.workflows.secrets.<a href="./src/resources/workflows/secrets.ts">list</a>() -> SecretListResponse</code>
-- <code title="delete /secrets/{secretId}">client.workflows.secrets.<a href="./src/resources/workflows/secrets.ts">delete</a>(secretID) -> SecretDeleteResponse</code>
 
 # Webhooks
 
