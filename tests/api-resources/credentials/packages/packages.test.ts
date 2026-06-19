@@ -10,7 +10,7 @@ const client = new Mobilerun({
 describe('resource packages', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.credentials.packages.create({ packageName: 'packageName' });
+    const responsePromise = client.credentials.packages.create({ packageName: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,12 +22,12 @@ describe('resource packages', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.credentials.packages.create({ packageName: 'packageName' });
+    const response = await client.credentials.packages.create({ packageName: 'x' });
   });
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.credentials.packages.list('packageName');
+    const responsePromise = client.credentials.packages.list('x');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
