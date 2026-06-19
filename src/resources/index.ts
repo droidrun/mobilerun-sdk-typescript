@@ -116,4 +116,4 @@ export {
   type WebhookUpdateParams,
   type WebhookListParams,
 } from './webhooks/webhooks';
-export { Workflows } from './workflows/workflows';
+export { Workflows, type Flow } from './workflows/workflows';
