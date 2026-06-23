@@ -63,8 +63,6 @@ export interface Action {
 
   description: string | null;
 
-  isAsync: boolean;
-
   method: string;
 
   name: string;

@@ -49,7 +49,11 @@ export namespace EventDryRunResponse {
 
       flow: WorkflowsAPI.Flow;
 
+      gates: MatchedFlow.Gates;
+
       trigger: MatchedFlow.Trigger;
+
+      wouldFire: boolean;
     }
 
     export namespace MatchedFlow {
@@ -62,9 +66,25 @@ export namespace EventDryRunResponse {
 
         service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
 
-        deviceId?: string;
+        /**
+         * Nested child actions (loop/branch bodies), each the same shape as a
+         * ResolvedAction.
+         */
+        children?: Array<unknown>;
 
         params?: { [key: string]: unknown };
+      }
+
+      export interface Gates {
+        blocked: boolean;
+
+        cooldownActive: boolean | null;
+
+        deviceAttached: boolean;
+
+        deviceIds: Array<string>;
+
+        enabled: boolean;
       }
 
       export interface Trigger {
@@ -140,15 +160,11 @@ export interface EventIngestResponse {
 export interface EventDryRunParams {
   eventType: string;
 
-  deviceId?: string;
-
   payload?: { [key: string]: unknown };
 }
 
 export interface EventIngestParams {
   eventType: string;
-
-  deviceId?: string;
 
   payload?: { [key: string]: unknown };
 }

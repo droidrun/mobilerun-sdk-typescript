@@ -32,8 +32,6 @@ export interface ActionCatalogEntry {
 
   description: string | null;
 
-  isAsync: boolean;
-
   method: string;
 
   name: string;

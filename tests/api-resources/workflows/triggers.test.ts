@@ -150,7 +150,6 @@ describe('resource triggers', () => {
   test.skip('fire: required and optional params', async () => {
     const response = await client.workflows.triggers.fire('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       payload: { foo: 'bar' },
-      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
   });
 });

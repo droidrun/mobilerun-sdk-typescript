@@ -10,7 +10,7 @@ const client = new Mobilerun({
 describe('resource credentials', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.credentials.packages.credentials.create('packageName', {
+    const responsePromise = client.credentials.packages.credentials.create('x', {
       credentialName: '26f1kl_-n-71',
       fields: [{ fieldType: 'email', value: 'x' }],
     });
@@ -25,7 +25,7 @@ describe('resource credentials', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.credentials.packages.credentials.create('packageName', {
+    const response = await client.credentials.packages.credentials.create('x', {
       credentialName: '26f1kl_-n-71',
       fields: [{ fieldType: 'email', value: 'x' }],
     });
@@ -33,8 +33,8 @@ describe('resource credentials', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: only required params', async () => {
-    const responsePromise = client.credentials.packages.credentials.retrieve('credentialName', {
-      packageName: 'packageName',
+    const responsePromise = client.credentials.packages.credentials.retrieve('26f1kl_-n-71', {
+      packageName: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -47,15 +47,15 @@ describe('resource credentials', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve: required and optional params', async () => {
-    const response = await client.credentials.packages.credentials.retrieve('credentialName', {
-      packageName: 'packageName',
+    const response = await client.credentials.packages.credentials.retrieve('26f1kl_-n-71', {
+      packageName: 'x',
     });
   });
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.credentials.packages.credentials.delete('credentialName', {
-      packageName: 'packageName',
+    const responsePromise = client.credentials.packages.credentials.delete('26f1kl_-n-71', {
+      packageName: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -68,8 +68,8 @@ describe('resource credentials', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.credentials.packages.credentials.delete('credentialName', {
-      packageName: 'packageName',
+    const response = await client.credentials.packages.credentials.delete('26f1kl_-n-71', {
+      packageName: 'x',
     });
   });
 });

@@ -19,15 +19,6 @@ import {
   Executions,
   FlowExecution,
 } from './executions';
-import * as SecretsAPI from './secrets';
-import {
-  SecretCreateParams,
-  SecretCreateResponse,
-  SecretDeleteResponse,
-  SecretListResponse,
-  Secrets,
-  UserSecret,
-} from './secrets';
 import * as TimezonesAPI from './timezones';
 import { TimezoneListResponse, Timezones } from './timezones';
 import * as TriggersAPI from './triggers';
@@ -91,7 +82,6 @@ export class Workflows extends APIResource {
   events: EventsAPI.Events = new EventsAPI.Events(this._client);
   executions: ExecutionsAPI.Executions = new ExecutionsAPI.Executions(this._client);
   timezones: TimezonesAPI.Timezones = new TimezonesAPI.Timezones(this._client);
-  secrets: SecretsAPI.Secrets = new SecretsAPI.Secrets(this._client);
 }
 
 export interface Flow {
@@ -109,15 +99,30 @@ export interface Flow {
 
   description: string | null;
 
+  deviceIds: Array<string>;
+
   enabled: boolean;
 
   lastFailureAt: string | null;
 
-  lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | null;
+  lastFailureCode:
+    | 'device_not_found'
+    | 'permission_denied'
+    | 'client_error'
+    | 'transient'
+    | 'logic'
+    | 'invalid_config'
+    | null;
 
   lastTriggeredAt: string | null;
 
   name: string;
+
+  notifyOnFailure: boolean;
+
+  notifyOnSuccess: boolean;
+
+  notifyWebhookId: string | null;
 
   status: 'healthy' | 'failing' | 'blocked';
 
@@ -135,7 +140,6 @@ Workflows.Flows = Flows;
 Workflows.Events = Events;
 Workflows.Executions = Executions;
 Workflows.Timezones = Timezones;
-Workflows.Secrets = Secrets;
 
 export declare namespace Workflows {
   export { type Flow as Flow };
@@ -211,13 +215,4 @@ export declare namespace Workflows {
   };
 
   export { Timezones as Timezones, type TimezoneListResponse as TimezoneListResponse };
-
-  export {
-    Secrets as Secrets,
-    type UserSecret as UserSecret,
-    type SecretCreateResponse as SecretCreateResponse,
-    type SecretListResponse as SecretListResponse,
-    type SecretDeleteResponse as SecretDeleteResponse,
-    type SecretCreateParams as SecretCreateParams,
-  };
 }

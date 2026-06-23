@@ -31,13 +31,9 @@ export interface ServiceListMethodsResponse {
 
 export namespace ServiceListMethodsResponse {
   export interface Data {
-    isAsync: boolean;
-
     method: string;
 
     params: Array<Data.Param>;
-
-    requiresTarget: boolean;
   }
 
   export namespace Data {

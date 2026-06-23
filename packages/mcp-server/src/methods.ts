@@ -899,24 +899,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/timezones',
   },
   {
-    clientCallName: 'client.workflows.secrets.create',
-    fullyQualifiedName: 'workflows.secrets.create',
-    httpMethod: 'post',
-    httpPath: '/secrets',
-  },
-  {
-    clientCallName: 'client.workflows.secrets.list',
-    fullyQualifiedName: 'workflows.secrets.list',
-    httpMethod: 'get',
-    httpPath: '/secrets',
-  },
-  {
-    clientCallName: 'client.workflows.secrets.delete',
-    fullyQualifiedName: 'workflows.secrets.delete',
-    httpMethod: 'delete',
-    httpPath: '/secrets/{secretId}',
-  },
-  {
     clientCallName: 'client.webhooks.create',
     fullyQualifiedName: 'webhooks.create',
     httpMethod: 'post',

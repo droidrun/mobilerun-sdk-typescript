@@ -54,8 +54,6 @@ export interface FlowAction {
 
   createdAt: string | null;
 
-  deviceId: string | null;
-
   flowId: string;
 
   nameOverride: string | null;
@@ -98,8 +96,6 @@ export interface ActionAddParams {
 
   continueOnError?: boolean;
 
-  deviceId?: string;
-
   nameOverride?: string;
 
   overrides?: FlowsAPI.FlowActionOverrides | null;
@@ -124,8 +120,6 @@ export namespace ActionReplaceParams {
     children?: Array<FlowsAPI.FlowChildActionInput>;
 
     continueOnError?: boolean;
-
-    deviceId?: string;
 
     nameOverride?: string;
 

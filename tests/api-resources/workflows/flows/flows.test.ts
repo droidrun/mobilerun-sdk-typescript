@@ -36,13 +36,11 @@ describe('resource flows', () => {
               actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
               position: 0,
               continueOnError: true,
-              deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
               nameOverride: 'x',
               overrides: { params: { foo: 'bar' } },
             },
           ],
           continueOnError: true,
-          deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
           nameOverride: 'x',
           overrides: { params: { foo: 'bar' } },
         },
@@ -52,7 +50,11 @@ describe('resource flows', () => {
       cooldownScope: 'flow',
       cooldownSeconds: 0,
       description: 'description',
+      deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       enabled: true,
+      notifyOnFailure: true,
+      notifyOnSuccess: true,
+      notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
   });
 
@@ -90,8 +92,12 @@ describe('resource flows', () => {
           cooldownScope: 'flow',
           cooldownSeconds: 0,
           description: 'description',
+          deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
           enabled: true,
           name: 'x',
+          notifyOnFailure: true,
+          notifyOnSuccess: true,
+          notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
           triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
         },
         { path: '/_stainless_unknown_path' },
@@ -161,7 +167,7 @@ describe('resource flows', () => {
     await expect(
       client.workflows.flows.clone(
         '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        { name: 'x' },
+        { deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], name: 'x' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);

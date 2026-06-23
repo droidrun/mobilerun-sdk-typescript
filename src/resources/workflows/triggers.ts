@@ -436,13 +436,6 @@ export interface TriggerFireParams {
    * otherwise only "must be a JSON object" is enforced.
    */
   payload: { [key: string]: unknown };
-
-  /**
-   * Optional device scope. When supplied, ownership is verified for the calling user
-   * and the value is passed through to each enqueued execution as the default device
-   * context.
-   */
-  deviceId?: string;
 }
 
 export declare namespace Triggers {

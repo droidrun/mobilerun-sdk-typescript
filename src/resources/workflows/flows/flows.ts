@@ -96,8 +96,6 @@ export interface FlowChildActionInput {
 
   continueOnError?: boolean;
 
-  deviceId?: string;
-
   nameOverride?: string;
 
   overrides?: FlowActionOverrides | null;
@@ -146,7 +144,15 @@ export interface FlowCreateParams {
 
   description?: string;
 
+  deviceIds?: Array<string>;
+
   enabled?: boolean;
+
+  notifyOnFailure?: boolean;
+
+  notifyOnSuccess?: boolean;
+
+  notifyWebhookId?: string | null;
 }
 
 export namespace FlowCreateParams {
@@ -158,8 +164,6 @@ export namespace FlowCreateParams {
     children?: Array<FlowsAPI.FlowChildActionInput>;
 
     continueOnError?: boolean;
-
-    deviceId?: string;
 
     nameOverride?: string;
 
@@ -174,9 +178,17 @@ export interface FlowUpdateParams {
 
   description?: string;
 
+  deviceIds?: Array<string>;
+
   enabled?: boolean;
 
   name?: string;
+
+  notifyOnFailure?: boolean;
+
+  notifyOnSuccess?: boolean;
+
+  notifyWebhookId?: string | null;
 
   triggerId?: string;
 }
@@ -200,6 +212,8 @@ export interface FlowListParams {
 }
 
 export interface FlowCloneParams {
+  deviceIds?: Array<string>;
+
   name?: string;
 }
 

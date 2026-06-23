@@ -72,9 +72,16 @@ export class Apps extends APIResource {
    * @example
    * ```ts
    * const response = await client.apps.createSignedUploadURL({
-   *   bundleId: 'x',
+   *   bundleId:
+   *     'NX0.JB-_-.m-u--_-p.Z1-u_2I.D--_T-_.dzZ-.Wx.L_a8--_.w_D_',
    *   displayName: 'x',
-   *   files: [{ contentType: 'x', fileName: 'x' }],
+   *   files: [
+   *     {
+   *       contentType:
+   *         'application/vnd.android.package-archive',
+   *       fileName: 'J!Q0Ok0bzJb7.apk/i',
+   *     },
+   *   ],
    *   sizeBytes: 0,
    *   versionCode: 0,
    *   versionName: 'x',
@@ -844,9 +851,11 @@ export interface AppCreateSignedUploadURLParams {
 
 export namespace AppCreateSignedUploadURLParams {
   export interface File {
-    contentType: string;
+    contentType: 'application/vnd.android.package-archive' | 'application/octet-stream' | 'application/zip';
 
     fileName: string;
+
+    sha256?: string;
   }
 }
 

@@ -608,21 +608,6 @@ Methods:
 
 - <code title="get /timezones">client.workflows.timezones.<a href="./src/resources/workflows/timezones.ts">list</a>() -> TimezoneListResponse</code>
 
-## Secrets
-
-Types:
-
-- <code><a href="./src/resources/workflows/secrets.ts">UserSecret</a></code>
-- <code><a href="./src/resources/workflows/secrets.ts">SecretCreateResponse</a></code>
-- <code><a href="./src/resources/workflows/secrets.ts">SecretListResponse</a></code>
-- <code><a href="./src/resources/workflows/secrets.ts">SecretDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /secrets">client.workflows.secrets.<a href="./src/resources/workflows/secrets.ts">create</a>({ ...params }) -> SecretCreateResponse</code>
-- <code title="get /secrets">client.workflows.secrets.<a href="./src/resources/workflows/secrets.ts">list</a>() -> SecretListResponse</code>
-- <code title="delete /secrets/{secretId}">client.workflows.secrets.<a href="./src/resources/workflows/secrets.ts">delete</a>(secretID) -> SecretDeleteResponse</code>
-
 # Webhooks
 
 Types:

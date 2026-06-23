@@ -48,9 +48,11 @@ export interface FlowExecution {
 
   flowName: string | null;
 
+  kind: 'live' | 'dry_run';
+
   startedAt: string | null;
 
-  status: 'pending' | 'running' | 'success' | 'failed' | null;
+  status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid' | null;
 
   triggerId: string;
 
@@ -86,11 +88,17 @@ export namespace ExecutionGetMetricsResponse {
 
   export namespace Data {
     export interface ByStatus {
+      cancelled: number;
+
       failed: number;
+
+      invalid: number;
 
       pending: number;
 
       running: number;
+
+      skipped: number;
 
       success: number;
     }
@@ -112,7 +120,7 @@ export interface ExecutionListParams {
 
   search?: string;
 
-  status?: 'pending' | 'running' | 'success' | 'failed';
+  status?: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid';
 
   to?: string | null;
 
