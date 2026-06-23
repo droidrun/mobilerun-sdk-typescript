@@ -608,8 +608,6 @@ Methods:
 
 - <code title="get /timezones">client.workflows.timezones.<a href="./src/resources/workflows/timezones.ts">list</a>() -> TimezoneListResponse</code>
 
-## Secrets
-
 # Webhooks
 
 Types:
