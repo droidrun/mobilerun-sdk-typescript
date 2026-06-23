@@ -19,8 +19,6 @@ import {
   Executions,
   FlowExecution,
 } from './executions';
-import * as SecretsAPI from './secrets';
-import { Secrets } from './secrets';
 import * as TimezonesAPI from './timezones';
 import { TimezoneListResponse, Timezones } from './timezones';
 import * as TriggersAPI from './triggers';
@@ -84,7 +82,6 @@ export class Workflows extends APIResource {
   events: EventsAPI.Events = new EventsAPI.Events(this._client);
   executions: ExecutionsAPI.Executions = new ExecutionsAPI.Executions(this._client);
   timezones: TimezonesAPI.Timezones = new TimezonesAPI.Timezones(this._client);
-  secrets: SecretsAPI.Secrets = new SecretsAPI.Secrets(this._client);
 }
 
 export interface Flow {
@@ -143,7 +140,6 @@ Workflows.Flows = Flows;
 Workflows.Events = Events;
 Workflows.Executions = Executions;
 Workflows.Timezones = Timezones;
-Workflows.Secrets = Secrets;
 
 export declare namespace Workflows {
   export { type Flow as Flow };
@@ -219,6 +215,4 @@ export declare namespace Workflows {
   };
 
   export { Timezones as Timezones, type TimezoneListResponse as TimezoneListResponse };
-
-  export { Secrets as Secrets };
 }

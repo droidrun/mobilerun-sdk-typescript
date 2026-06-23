@@ -51,7 +51,6 @@ export {
   type FlowListParams,
   type FlowCloneParams,
 } from './flows/index';
-export { Secrets } from './secrets';
 export { Timezones, type TimezoneListResponse } from './timezones';
 export {
   Triggers,
