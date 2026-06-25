@@ -277,28 +277,6 @@ Methods:
 
 # Hooks
 
-Types:
-
-- <code><a href="./src/resources/hooks.ts">HookRetrieveResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookUpdateResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookListResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookGetSampleDataResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookPerformResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookSubscribeResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookTestResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookUnsubscribeResponse</a></code>
-
-Methods:
-
-- <code title="get /hooks/{hook_id}">client.hooks.<a href="./src/resources/hooks.ts">retrieve</a>(hookID) -> HookRetrieveResponse</code>
-- <code title="post /hooks/{hook_id}/edit">client.hooks.<a href="./src/resources/hooks.ts">update</a>(hookID, { ...params }) -> HookUpdateResponse</code>
-- <code title="get /hooks">client.hooks.<a href="./src/resources/hooks.ts">list</a>({ ...params }) -> HookListResponse</code>
-- <code title="get /hooks/sample">client.hooks.<a href="./src/resources/hooks.ts">getSampleData</a>() -> HookGetSampleDataResponse</code>
-- <code title="post /hooks/perform">client.hooks.<a href="./src/resources/hooks.ts">perform</a>({ ...params }) -> HookPerformResponse</code>
-- <code title="post /hooks/subscribe">client.hooks.<a href="./src/resources/hooks.ts">subscribe</a>({ ...params }) -> HookSubscribeResponse</code>
-- <code title="post /hooks/{hook_id}/test">client.hooks.<a href="./src/resources/hooks.ts">test</a>(hookID, { ...params }) -> HookTestResponse</code>
-- <code title="post /hooks/{hook_id}/unsubscribe">client.hooks.<a href="./src/resources/hooks.ts">unsubscribe</a>(hookID) -> HookUnsubscribeResponse</code>
-
 # Models
 
 Types:
@@ -572,16 +550,6 @@ Methods:
 - <code title="post /events/ingest">client.workflows.events.<a href="./src/resources/workflows/events/events.ts">ingest</a>({ ...params }) -> EventIngestResponse</code>
 
 ### Catalog
-
-Types:
-
-- <code><a href="./src/resources/workflows/events/catalog.ts">CatalogListResponse</a></code>
-- <code><a href="./src/resources/workflows/events/catalog.ts">CatalogRegisterResponse</a></code>
-
-Methods:
-
-- <code title="get /events/catalog">client.workflows.events.catalog.<a href="./src/resources/workflows/events/catalog.ts">list</a>({ ...params }) -> CatalogListResponse</code>
-- <code title="post /events/catalog/register">client.workflows.events.catalog.<a href="./src/resources/workflows/events/catalog.ts">register</a>({ ...params }) -> CatalogRegisterResponse</code>
 
 ## Executions
 

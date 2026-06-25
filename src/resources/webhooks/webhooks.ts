@@ -304,7 +304,7 @@ export interface WebhookEventTypesResponse {
 
 export namespace WebhookEventTypesResponse {
   export interface Data {
-    schemaVersion: number;
+    schemaVersion: 1;
 
     sources: Array<Data.Source>;
   }

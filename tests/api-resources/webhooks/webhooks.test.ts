@@ -25,7 +25,7 @@ describe('resource webhooks', () => {
     const response = await client.webhooks.create({
       url: 'https://example.com/webhooks/droidrun',
       description: 'description',
-      eventTypes: ['task.completed', 'task.failed'],
+      eventTypes: ['task.run.completed', 'task.run.failed'],
     });
   });
 

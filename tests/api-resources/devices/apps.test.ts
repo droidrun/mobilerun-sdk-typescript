@@ -114,6 +114,7 @@ describe('resource apps', () => {
   test.skip('stop: required and optional params', async () => {
     const response = await client.devices.apps.stop('packageName', {
       deviceId: 'deviceId',
+      clearData: true,
       'X-Device-Display-ID': 0,
     });
   });

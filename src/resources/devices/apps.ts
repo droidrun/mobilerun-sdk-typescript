@@ -218,6 +218,12 @@ export interface AppStopParams {
   deviceId: string;
 
   /**
+   * Body param: If true, clears all app data (pm clear) in addition to stopping the
+   * app.
+   */
+  clearData?: boolean;
+
+  /**
    * Header param
    */
   'X-Device-Display-ID'?: number;

@@ -1767,9 +1767,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Stop app',
     stainlessPath: '(resource) devices.apps > (method) stop',
     qualified: 'client.devices.apps.stop',
-    params: ['deviceId: string;', 'packageName: string;', 'X-Device-Display-ID?: number;'],
+    params: [
+      'deviceId: string;',
+      'packageName: string;',
+      'clearData?: boolean;',
+      'X-Device-Display-ID?: number;',
+    ],
     markdown:
-      "## stop\n\n`client.devices.apps.stop(deviceId: string, packageName: string, X-Device-Display-ID?: number): void`\n\n**patch** `/devices/{deviceId}/apps/{packageName}`\n\nStop app\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.stop('packageName', { deviceId: 'deviceId' })\n```",
+      "## stop\n\n`client.devices.apps.stop(deviceId: string, packageName: string, clearData?: boolean, X-Device-Display-ID?: number): void`\n\n**patch** `/devices/{deviceId}/apps/{packageName}`\n\nStop app\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `clearData?: boolean`\n  If true, clears all app data (pm clear) in addition to stopping the app.\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.stop('packageName', { deviceId: 'deviceId' })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.apps.stop',
@@ -2832,325 +2837,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/language \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'get_sample_data',
-    endpoint: '/hooks/sample',
-    httpMethod: 'get',
-    summary: 'Get Sample Data',
-    description: 'Get sample hook data for Zapier Perform List (testing/field mapping).',
-    stainlessPath: '(resource) hooks > (method) get_sample_data',
-    qualified: 'client.hooks.getSampleData',
-    response:
-      '{ id: string; createdAt: string; events: string[]; state: string; url: string; updatedAt?: string; }[]',
-    markdown:
-      "## get_sample_data\n\n`client.hooks.getSampleData(): { id: string; createdAt: string; events: string[]; state: string; url: string; updatedAt?: string; }[]`\n\n**get** `/hooks/sample`\n\nGet sample hook data for Zapier Perform List (testing/field mapping).\n\n### Returns\n\n- `{ id: string; createdAt: string; events: string[]; state: string; url: string; updatedAt?: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.getSampleData();\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.getSampleData',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.getSampleData();\n\nconsole.log(response);",
-      },
-      python: {
-        method: 'hooks.get_sample_data',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.get_sample_data()\nprint(response)',
-      },
-      go: {
-        method: 'client.Hooks.GetSampleData',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.GetSampleData(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
-      },
-      cli: {
-        method: 'hooks get_sample_data',
-        example: "mobilerun-cloud hooks get-sample-data \\\n  --api-key 'My API Key'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/sample \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'list',
-    endpoint: '/hooks',
-    httpMethod: 'get',
-    summary: 'List Hooks',
-    description: 'List hooks belonging to the requesting user (paginated).',
-    stainlessPath: '(resource) hooks > (method) list',
-    qualified: 'client.hooks.list',
-    params: [
-      'orderBy?: string;',
-      "orderByDirection?: 'asc' | 'desc';",
-      'page?: number;',
-      'pageSize?: number;',
-    ],
-    response:
-      "{ items: { service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
-    markdown:
-      "## list\n\n`client.hooks.list(orderBy?: string, orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number): { items: object[]; pagination: pagination_meta; }`\n\n**get** `/hooks`\n\nList hooks belonging to the requesting user (paginated).\n\n### Parameters\n\n- `orderBy?: string`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst hooks = await client.hooks.list();\n\nconsole.log(hooks);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.list',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst hooks = await client.hooks.list();\n\nconsole.log(hooks.items);",
-      },
-      python: {
-        method: 'hooks.list',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhooks = client.hooks.list()\nprint(hooks.items)',
-      },
-      go: {
-        method: 'client.Hooks.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\thooks, err := client.Hooks.List(context.TODO(), mobileruncloud.HookListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", hooks.Items)\n}\n',
-      },
-      cli: {
-        method: 'hooks list',
-        example: "mobilerun-cloud hooks list \\\n  --api-key 'My API Key'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'perform',
-    endpoint: '/hooks/perform',
-    httpMethod: 'post',
-    summary: 'Perform Hook',
-    description: 'Zapier Perform endpoint - processes webhook payloads.',
-    stainlessPath: '(resource) hooks > (method) perform',
-    qualified: 'client.hooks.perform',
-    params: ['body: object;'],
-    response: 'object[]',
-    markdown:
-      "## perform\n\n`client.hooks.perform(body: object): object[]`\n\n**post** `/hooks/perform`\n\nZapier Perform endpoint - processes webhook payloads.\n\n### Parameters\n\n- `body: object`\n\n### Returns\n\n- `object[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.perform({ body: { foo: 'bar' } });\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.perform',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.perform({ body: { foo: 'bar' } });\n\nconsole.log(response);",
-      },
-      python: {
-        method: 'hooks.perform',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.perform(\n    body={\n        "foo": "bar"\n    },\n)\nprint(response)',
-      },
-      go: {
-        method: 'client.Hooks.Perform',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.Perform(context.TODO(), mobileruncloud.HookPerformParams{\n\t\tBody: map[string]any{\n\t\t\t"foo": "bar",\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
-      },
-      cli: {
-        method: 'hooks perform',
-        example: "mobilerun-cloud hooks perform \\\n  --api-key 'My API Key' \\\n  --body '{foo: bar}'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/perform \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "foo": "bar"\n        }\'',
-      },
-    },
-  },
-  {
-    name: 'retrieve',
-    endpoint: '/hooks/{hook_id}',
-    httpMethod: 'get',
-    summary: 'Get Hook',
-    description: 'Get a hook subscription by id.',
-    stainlessPath: '(resource) hooks > (method) retrieve',
-    qualified: 'client.hooks.retrieve',
-    params: ['hook_id: string;'],
-    response:
-      "{ service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }",
-    markdown:
-      "## retrieve\n\n`client.hooks.retrieve(hook_id: string): { service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: task_status[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }`\n\n**get** `/hooks/{hook_id}`\n\nGet a hook subscription by id.\n\n### Parameters\n\n- `hook_id: string`\n\n### Returns\n\n- `{ service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }`\n\n  - `service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'`\n  - `url: string`\n  - `userId: string`\n  - `id?: string`\n  - `createdAt?: string`\n  - `events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]`\n  - `state?: 'active' | 'disabled' | 'deleted'`\n  - `updatedAt?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst hook = await client.hooks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(hook);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.retrieve',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst hook = await client.hooks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(hook.id);",
-      },
-      python: {
-        method: 'hooks.retrieve',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhook = client.hooks.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(hook.id)',
-      },
-      go: {
-        method: 'client.Hooks.Get',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\thook, err := client.Hooks.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", hook.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks retrieve',
-        example:
-          "mobilerun-cloud hooks retrieve \\\n  --api-key 'My API Key' \\\n  --hook-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/$HOOK_ID \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'subscribe',
-    endpoint: '/hooks/subscribe',
-    httpMethod: 'post',
-    summary: 'Subscribe',
-    description: 'Subscribe the current user to a webhook URL. Returns subscription id.',
-    stainlessPath: '(resource) hooks > (method) subscribe',
-    qualified: 'client.hooks.subscribe',
-    params: ['targetUrl: string;', 'events?: string[];', 'service?: string;'],
-    response: '{ id: string; subscribed: boolean; url: string; events?: string[]; service?: string; }',
-    markdown:
-      "## subscribe\n\n`client.hooks.subscribe(targetUrl: string, events?: string[], service?: string): { id: string; subscribed: boolean; url: string; events?: string[]; service?: string; }`\n\n**post** `/hooks/subscribe`\n\nSubscribe the current user to a webhook URL. Returns subscription id.\n\n### Parameters\n\n- `targetUrl: string`\n  The webhook URL to send notifications to\n\n- `events?: string[]`\n  List of task events to subscribe to (created, running, completed, failed, cancelled, paused)\n\n- `service?: string`\n  Service that receives the webhook\n\n### Returns\n\n- `{ id: string; subscribed: boolean; url: string; events?: string[]; service?: string; }`\n  Response model after successful subscription.\n\n  - `id: string`\n  - `subscribed: boolean`\n  - `url: string`\n  - `events?: string[]`\n  - `service?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.subscribe({ targetUrl: 'https://example.com' });\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.subscribe',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.subscribe({ targetUrl: 'https://example.com' });\n\nconsole.log(response.id);",
-      },
-      python: {
-        method: 'hooks.subscribe',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.subscribe(\n    target_url="https://example.com",\n)\nprint(response.id)',
-      },
-      go: {
-        method: 'client.Hooks.Subscribe',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.Subscribe(context.TODO(), mobileruncloud.HookSubscribeParams{\n\t\tTargetURL: "https://example.com",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks subscribe',
-        example:
-          "mobilerun-cloud hooks subscribe \\\n  --api-key 'My API Key' \\\n  --target-url https://example.com",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/subscribe \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "targetUrl": "https://example.com"\n        }\'',
-      },
-    },
-  },
-  {
-    name: 'unsubscribe',
-    endpoint: '/hooks/{hook_id}/unsubscribe',
-    httpMethod: 'post',
-    summary: 'Unsubscribe',
-    description:
-      'Unsubscribe a previously created subscription by id.\n\nPermanently deletes the subscription if it belongs to the user.',
-    stainlessPath: '(resource) hooks > (method) unsubscribe',
-    qualified: 'client.hooks.unsubscribe',
-    params: ['hook_id: string;'],
-    response: '{ id: string; unsubscribed: boolean; }',
-    markdown:
-      "## unsubscribe\n\n`client.hooks.unsubscribe(hook_id: string): { id: string; unsubscribed: boolean; }`\n\n**post** `/hooks/{hook_id}/unsubscribe`\n\nUnsubscribe a previously created subscription by id.\n\nPermanently deletes the subscription if it belongs to the user.\n\n### Parameters\n\n- `hook_id: string`\n\n### Returns\n\n- `{ id: string; unsubscribed: boolean; }`\n  Response model after successful unsubscription.\n\n  - `id: string`\n  - `unsubscribed: boolean`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.unsubscribe('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.unsubscribe',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.unsubscribe('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.id);",
-      },
-      python: {
-        method: 'hooks.unsubscribe',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.unsubscribe(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.id)',
-      },
-      go: {
-        method: 'client.Hooks.Unsubscribe',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.Unsubscribe(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks unsubscribe',
-        example:
-          "mobilerun-cloud hooks unsubscribe \\\n  --api-key 'My API Key' \\\n  --hook-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/$HOOK_ID/unsubscribe \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'update',
-    endpoint: '/hooks/{hook_id}/edit',
-    httpMethod: 'post',
-    summary: 'Edit Hook',
-    description:
-      'Edit a hook subscription (events or state).\n\nAllows updating the events filter and/or the state of a hook.',
-    stainlessPath: '(resource) hooks > (method) update',
-    qualified: 'client.hooks.update',
-    params: ['hook_id: string;', 'events?: string[];', 'state?: string;'],
-    response: '{ id: string; state: string; updated: boolean; url: string; events?: string[]; }',
-    markdown:
-      "## update\n\n`client.hooks.update(hook_id: string, events?: string[], state?: string): { id: string; state: string; updated: boolean; url: string; events?: string[]; }`\n\n**post** `/hooks/{hook_id}/edit`\n\nEdit a hook subscription (events or state).\n\nAllows updating the events filter and/or the state of a hook.\n\n### Parameters\n\n- `hook_id: string`\n\n- `events?: string[]`\n  Updated list of events to subscribe to\n\n- `state?: string`\n  Updated hook state (active, disabled, deleted)\n\n### Returns\n\n- `{ id: string; state: string; updated: boolean; url: string; events?: string[]; }`\n  Response model after successfully editing a hook.\n\n  - `id: string`\n  - `state: string`\n  - `updated: boolean`\n  - `url: string`\n  - `events?: string[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst hook = await client.hooks.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(hook);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.update',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst hook = await client.hooks.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(hook.id);",
-      },
-      python: {
-        method: 'hooks.update',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhook = client.hooks.update(\n    hook_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(hook.id)',
-      },
-      go: {
-        method: 'client.Hooks.Update',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\thook, err := client.Hooks.Update(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.HookUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", hook.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks update',
-        example:
-          "mobilerun-cloud hooks update \\\n  --api-key 'My API Key' \\\n  --hook-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      http: {
-        example:
-          "curl https://api.mobilerun.ai/v1/hooks/$HOOK_ID/edit \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $MOBILERUN_CLOUD_API_KEY\" \\\n    -d '{}'",
-      },
-    },
-  },
-  {
-    name: 'test',
-    endpoint: '/hooks/{hook_id}/test',
-    httpMethod: 'post',
-    summary: 'Test Hook',
-    description:
-      "Send a test event to a webhook endpoint.\n\nDelivers a sample payload to the hook's URL with a single attempt\n(no retries) for fast feedback.",
-    stainlessPath: '(resource) hooks > (method) test',
-    qualified: 'client.hooks.test',
-    params: ['hook_id: string;', 'event?: string;'],
-    response: '{ id: string; success: boolean; error?: string; statusCode?: number; }',
-    markdown:
-      "## test\n\n`client.hooks.test(hook_id: string, event?: string): { id: string; success: boolean; error?: string; statusCode?: number; }`\n\n**post** `/hooks/{hook_id}/test`\n\nSend a test event to a webhook endpoint.\n\nDelivers a sample payload to the hook's URL with a single attempt\n(no retries) for fast feedback.\n\n### Parameters\n\n- `hook_id: string`\n\n- `event?: string`\n  Event type to simulate (default: completed)\n\n### Returns\n\n- `{ id: string; success: boolean; error?: string; statusCode?: number; }`\n  Response after attempting test delivery.\n\n  - `id: string`\n  - `success: boolean`\n  - `error?: string`\n  - `statusCode?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.test('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.test',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.test('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.id);",
-      },
-      python: {
-        method: 'hooks.test',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.test(\n    hook_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.id)',
-      },
-      go: {
-        method: 'client.Hooks.Test',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.Test(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.HookTestParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks test',
-        example:
-          "mobilerun-cloud hooks test \\\n  --api-key 'My API Key' \\\n  --hook-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      http: {
-        example:
-          "curl https://api.mobilerun.ai/v1/hooks/$HOOK_ID/test \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $MOBILERUN_CLOUD_API_KEY\" \\\n    -d '{}'",
       },
     },
   },
@@ -5878,11 +5564,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'Simulate an event against all configured flows. Returns which flows would match and what actions would run, without storing the event or enqueuing jobs.',
     stainlessPath: '(resource) workflows.events > (method) dry_run',
     qualified: 'client.workflows.events.dryRun',
-    params: ['eventType: string;', 'payload?: object;'],
+    params: ['eventType: string;', 'deviceId?: string;', 'payload?: object;'],
     response:
       '{ data: { matchedFlows: { actions: object[]; flow: flow; gates: object; trigger: object; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: object[]; }; }; }',
     markdown:
-      "## dry_run\n\n`client.workflows.events.dryRun(eventType: string, payload?: object): { data: object; }`\n\n**post** `/events/dry-run`\n\nSimulate an event against all configured flows. Returns which flows would match and what actions would run, without storing the event or enqueuing jobs.\n\n### Parameters\n\n- `eventType: string`\n\n- `payload?: object`\n\n### Returns\n\n- `{ data: { matchedFlows: { actions: object[]; flow: flow; gates: object; trigger: object; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: object[]; }; }; }`\n\n  - `data: { matchedFlows: { actions: { continueOnError: boolean; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; children?: object[]; params?: object; }[]; flow: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; gates: { blocked: boolean; cooldownActive: boolean; deviceAttached: boolean; deviceIds: string[]; enabled: boolean; }; trigger: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: { field: string; message: string; }[]; }; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.dryRun({ eventType: 'x' });\n\nconsole.log(response);\n```",
+      "## dry_run\n\n`client.workflows.events.dryRun(eventType: string, deviceId?: string, payload?: object): { data: object; }`\n\n**post** `/events/dry-run`\n\nSimulate an event against all configured flows. Returns which flows would match and what actions would run, without storing the event or enqueuing jobs.\n\n### Parameters\n\n- `eventType: string`\n\n- `deviceId?: string`\n\n- `payload?: object`\n\n### Returns\n\n- `{ data: { matchedFlows: { actions: object[]; flow: flow; gates: object; trigger: object; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: object[]; }; }; }`\n\n  - `data: { matchedFlows: { actions: { continueOnError: boolean; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; children?: object[]; params?: object; }[]; flow: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; gates: { blocked: boolean; cooldownActive: boolean; deviceAttached: boolean; deviceIds: string[]; enabled: boolean; }; trigger: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: { field: string; message: string; }[]; }; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.dryRun({ eventType: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.events.dryRun',
@@ -5917,10 +5603,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Ingest an event for trigger evaluation. Returns immediately with 202 Accepted.',
     stainlessPath: '(resource) workflows.events > (method) ingest',
     qualified: 'client.workflows.events.ingest',
-    params: ['eventType: string;', 'payload?: object;'],
+    params: ['eventType: string;', 'deviceId?: string;', 'payload?: object;'],
     response: '{ eventId: string; }',
     markdown:
-      "## ingest\n\n`client.workflows.events.ingest(eventType: string, payload?: object): { eventId: string; }`\n\n**post** `/events/ingest`\n\nIngest an event for trigger evaluation. Returns immediately with 202 Accepted.\n\n### Parameters\n\n- `eventType: string`\n\n- `payload?: object`\n\n### Returns\n\n- `{ eventId: string; }`\n\n  - `eventId: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.ingest({ eventType: 'x' });\n\nconsole.log(response);\n```",
+      "## ingest\n\n`client.workflows.events.ingest(eventType: string, deviceId?: string, payload?: object): { eventId: string; }`\n\n**post** `/events/ingest`\n\nIngest an event for trigger evaluation. Returns immediately with 202 Accepted.\n\n### Parameters\n\n- `eventType: string`\n\n- `deviceId?: string`\n\n- `payload?: object`\n\n### Returns\n\n- `{ eventId: string; }`\n\n  - `eventId: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.ingest({ eventType: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.events.ingest',
@@ -5944,86 +5630,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.mobilerun.ai/v1/events/ingest \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "eventType": "x"\n        }\'',
-      },
-    },
-  },
-  {
-    name: 'register',
-    endpoint: '/events/catalog/register',
-    httpMethod: 'post',
-    summary: 'Register event types in the catalog',
-    description: 'Register event types in the catalog',
-    stainlessPath: '(resource) workflows.events.catalog > (method) register',
-    qualified: 'client.workflows.events.catalog.register',
-    params: [
-      "events: { eventType: string; label: string; description?: string; payloadSchema?: object; source?: 'device' | 'system' | 'webhook'; }[];",
-    ],
-    response: '{ message: string; }',
-    markdown:
-      "## register\n\n`client.workflows.events.catalog.register(events: { eventType: string; label: string; description?: string; payloadSchema?: object; source?: 'device' | 'system' | 'webhook'; }[]): { message: string; }`\n\n**post** `/events/catalog/register`\n\nRegister event types in the catalog\n\n### Parameters\n\n- `events: { eventType: string; label: string; description?: string; payloadSchema?: object; source?: 'device' | 'system' | 'webhook'; }[]`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.catalog.register({ events: [{ eventType: 'x', label: 'x' }] });\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.workflows.events.catalog.register',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.workflows.events.catalog.register({\n  events: [{ eventType: 'x', label: 'x' }],\n});\n\nconsole.log(response.message);",
-      },
-      python: {
-        method: 'workflows.events.catalog.register',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.workflows.events.catalog.register(\n    events=[{\n        "event_type": "x",\n        "label": "x",\n    }],\n)\nprint(response.message)',
-      },
-      go: {
-        method: 'client.Workflows.Events.Catalog.Register',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Workflows.Events.Catalog.Register(context.TODO(), mobileruncloud.WorkflowEventCatalogRegisterParams{\n\t\tEvents: []mobileruncloud.WorkflowEventCatalogRegisterParamsEvent{{\n\t\t\tEventType: "x",\n\t\t\tLabel:     "x",\n\t\t}},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Message)\n}\n',
-      },
-      cli: {
-        method: 'catalog register',
-        example:
-          "mobilerun-cloud workflows:events:catalog register \\\n  --api-key 'My API Key' \\\n  --event '{eventType: x, label: x}'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/events/catalog/register \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "events": [\n            {\n              "eventType": "x",\n              "label": "x"\n            }\n          ]\n        }\'',
-      },
-    },
-  },
-  {
-    name: 'list',
-    endpoint: '/events/catalog',
-    httpMethod: 'get',
-    summary: 'List event catalog',
-    description: 'List event catalog',
-    stainlessPath: '(resource) workflows.events.catalog > (method) list',
-    qualified: 'client.workflows.events.catalog.list',
-    params: ['page?: number;', 'pageSize?: number;', "source?: 'device' | 'system' | 'webhook';"],
-    response:
-      '{ items: { createdAt: string; description: string; eventType: string; label: string; source: string; updatedAt: string; payloadSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }',
-    markdown:
-      "## list\n\n`client.workflows.events.catalog.list(page?: number, pageSize?: number, source?: 'device' | 'system' | 'webhook'): { items: object[]; pagination: pagination; }`\n\n**get** `/events/catalog`\n\nList event catalog\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `source?: 'device' | 'system' | 'webhook'`\n\n### Returns\n\n- `{ items: { createdAt: string; description: string; eventType: string; label: string; source: string; updatedAt: string; payloadSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { createdAt: string; description: string; eventType: string; label: string; source: string; updatedAt: string; payloadSchema?: object; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst catalogs = await client.workflows.events.catalog.list();\n\nconsole.log(catalogs);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.workflows.events.catalog.list',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst catalogs = await client.workflows.events.catalog.list();\n\nconsole.log(catalogs.items);",
-      },
-      python: {
-        method: 'workflows.events.catalog.list',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncatalogs = client.workflows.events.catalog.list()\nprint(catalogs.items)',
-      },
-      go: {
-        method: 'client.Workflows.Events.Catalog.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcatalogs, err := client.Workflows.Events.Catalog.List(context.TODO(), mobileruncloud.WorkflowEventCatalogListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", catalogs.Items)\n}\n',
-      },
-      cli: {
-        method: 'catalog list',
-        example: "mobilerun-cloud workflows:events:catalog list \\\n  --api-key 'My API Key'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/events/catalog \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
       },
     },
   },
@@ -6229,7 +5835,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.mobilerun.ai/v1/webhooks \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "url": "https://example.com/webhooks/droidrun",\n          "eventTypes": [\n            "task.completed",\n            "task.failed"\n          ]\n        }\'',
+          'curl https://api.mobilerun.ai/v1/webhooks \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "url": "https://example.com/webhooks/droidrun",\n          "eventTypes": [\n            "task.run.completed",\n            "task.run.failed"\n          ]\n        }\'',
       },
     },
   },
@@ -6486,9 +6092,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'List subscribable event types per source',
     stainlessPath: '(resource) webhooks > (method) event_types',
     qualified: 'client.webhooks.eventTypes',
-    response: '{ data: { schemaVersion: number; sources: { events: object[]; source: string; }[]; }; }',
+    response: '{ data: { schemaVersion: 1; sources: { events: object[]; source: string; }[]; }; }',
     markdown:
-      "## event_types\n\n`client.webhooks.eventTypes(): { data: object; }`\n\n**get** `/event-types`\n\nList subscribable event types per source\n\n### Returns\n\n- `{ data: { schemaVersion: number; sources: { events: object[]; source: string; }[]; }; }`\n\n  - `data: { schemaVersion: number; sources: { events: { description: string; type: string; }[]; source: string; }[]; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.eventTypes();\n\nconsole.log(response);\n```",
+      "## event_types\n\n`client.webhooks.eventTypes(): { data: object; }`\n\n**get** `/event-types`\n\nList subscribable event types per source\n\n### Returns\n\n- `{ data: { schemaVersion: 1; sources: { events: object[]; source: string; }[]; }; }`\n\n  - `data: { schemaVersion: 1; sources: { events: { description: string; type: string; }[]; source: string; }[]; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.eventTypes();\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.eventTypes',
