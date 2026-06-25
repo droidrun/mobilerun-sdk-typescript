@@ -24,6 +24,7 @@ describe('resource events', () => {
   test.skip('dryRun: required and optional params', async () => {
     const response = await client.workflows.events.dryRun({
       eventType: 'x',
+      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       payload: { foo: 'bar' },
     });
   });
@@ -44,6 +45,7 @@ describe('resource events', () => {
   test.skip('ingest: required and optional params', async () => {
     const response = await client.workflows.events.ingest({
       eventType: 'x',
+      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       payload: { foo: 'bar' },
     });
   });

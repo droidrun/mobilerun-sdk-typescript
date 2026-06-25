@@ -3,13 +3,7 @@
 import { APIResource } from '../../../core/resource';
 import * as WorkflowsAPI from '../workflows';
 import * as CatalogAPI from './catalog';
-import {
-  Catalog,
-  CatalogListParams,
-  CatalogListResponse,
-  CatalogRegisterParams,
-  CatalogRegisterResponse,
-} from './catalog';
+import { Catalog } from './catalog';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 
@@ -160,11 +154,15 @@ export interface EventIngestResponse {
 export interface EventDryRunParams {
   eventType: string;
 
+  deviceId?: string;
+
   payload?: { [key: string]: unknown };
 }
 
 export interface EventIngestParams {
   eventType: string;
+
+  deviceId?: string;
 
   payload?: { [key: string]: unknown };
 }
@@ -179,11 +177,5 @@ export declare namespace Events {
     type EventIngestParams as EventIngestParams,
   };
 
-  export {
-    Catalog as Catalog,
-    type CatalogListResponse as CatalogListResponse,
-    type CatalogRegisterResponse as CatalogRegisterResponse,
-    type CatalogListParams as CatalogListParams,
-    type CatalogRegisterParams as CatalogRegisterParams,
-  };
+  export { Catalog as Catalog };
 }
