@@ -846,6 +846,9 @@ export class Mobilerun {
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
   hooks: API.Hooks = new API.Hooks(this);
+  /**
+   * LLM Models
+   */
   models: API.Models = new API.Models(this);
   profiles: API.Profiles = new API.Profiles(this);
   proxies: API.Proxies = new API.Proxies(this);

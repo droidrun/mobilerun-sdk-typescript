@@ -8,14 +8,17 @@ import { path } from '../../internal/utils/path';
 
 export class ActionCatalog extends APIResource {
   /**
-   * Get a catalog entry
+   * Fetch a single action catalog entry by its ID, including its service, method,
+   * and parameter schema. Returns 404 if no entry matches.
    */
   retrieve(catalogEntryID: string, options?: RequestOptions): APIPromise<ActionCatalogRetrieveResponse> {
     return this._client.get(path`/action-catalog/${catalogEntryID}`, options);
   }
 
   /**
-   * List action catalog entries
+   * Return a paginated list of catalog entries — the service/method templates that
+   * actions are created from, each carrying its parameter schema. Supports filtering
+   * by `service`.
    */
   list(
     query: ActionCatalogListParams | null | undefined = {},

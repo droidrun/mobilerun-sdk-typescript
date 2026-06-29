@@ -24,21 +24,28 @@ export class Flows extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
-   * Create a flow
+   * Create a flow that binds a trigger (`triggerId`) to an ordered list of actions,
+   * with at least one action required. Optional settings include target `deviceIds`,
+   * a cooldown (`cooldownSeconds`/`cooldownScope`), and webhook notifications on
+   * success or failure.
    */
   create(body: FlowCreateParams, options?: RequestOptions): APIPromise<FlowCreateResponse> {
     return this._client.post('/flows', { body, ...options });
   }
 
   /**
-   * Get a flow
+   * Fetch a single flow by its ID, including its trigger binding, configuration, and
+   * current status. Returns 404 if no flow matches.
    */
   retrieve(flowID: string, options?: RequestOptions): APIPromise<FlowRetrieveResponse> {
     return this._client.get(path`/flows/${flowID}`, options);
   }
 
   /**
-   * Update a flow
+   * Partially update a flow's settings — name, trigger binding, enabled state,
+   * target devices, cooldown, or notifications; all fields are optional. Actions are
+   * managed through the flow-actions endpoints, not here. Returns 404 if the flow
+   * does not exist.
    */
   update(
     flowID: string,
@@ -49,7 +56,9 @@ export class Flows extends APIResource {
   }
 
   /**
-   * List flows
+   * Return a paginated list of flows. Supports filtering by `triggerId`, `enabled`,
+   * and one or more health `status` values (healthy, failing, blocked), plus
+   * free-text `search` and ordering.
    */
   list(
     query: FlowListParams | null | undefined = {},
@@ -59,14 +68,16 @@ export class Flows extends APIResource {
   }
 
   /**
-   * Delete a flow
+   * Delete a flow by its ID. Returns 404 if no flow matches.
    */
   delete(flowID: string, options?: RequestOptions): APIPromise<FlowDeleteResponse> {
     return this._client.delete(path`/flows/${flowID}`, options);
   }
 
   /**
-   * Clone a flow
+   * Create a copy of an existing flow, including its actions and settings. The
+   * optional body can override the new flow's `name` and target `deviceIds`. Returns
+   * 404 if the source flow does not exist.
    */
   clone(
     flowID: string,
