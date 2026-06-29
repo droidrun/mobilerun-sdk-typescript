@@ -95,7 +95,7 @@ export interface ProxyRetrieveResponse {
    */
   status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
 
-  type: 'residential';
+  type: 'dedicated_residential' | 'residential' | 'mobile';
 
   username: string;
 
@@ -145,7 +145,7 @@ export namespace ProxyListResponse {
      */
     status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
 
-    type: 'residential';
+    type: 'dedicated_residential' | 'residential' | 'mobile';
 
     username: string;
   }
@@ -214,7 +214,7 @@ export interface ProxyBuyResponse {
    */
   status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
 
-  type: 'residential';
+  type: 'dedicated_residential' | 'residential' | 'mobile';
 
   username: string;
 
@@ -450,7 +450,7 @@ export interface ProxyBuyParams {
    */
   country: string;
 
-  type?: 'residential';
+  type?: 'dedicated_residential' | 'residential' | 'mobile';
 }
 
 export interface ProxyListConnectionsParams {

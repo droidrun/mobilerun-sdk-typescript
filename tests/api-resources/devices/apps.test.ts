@@ -7,22 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource proxies', () => {
-  // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.connect.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
+describe('resource apps', () => {
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.connect.proxies.list();
+    const responsePromise = client.devices.apps.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -36,11 +24,12 @@ describe('resource proxies', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.connect.proxies.list(
+      client.devices.apps.list(
+        'deviceId',
         {
-          country: 'country',
-          page: 1,
-          pageSize: 1,
+          includeProtectedApps: true,
+          includeSystemApps: true,
+          'X-Device-Display-ID': 0,
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -48,8 +37,8 @@ describe('resource proxies', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('buy: only required params', async () => {
-    const responsePromise = client.connect.proxies.buy({ country: 'country' });
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.devices.apps.delete('packageName', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -60,13 +49,16 @@ describe('resource proxies', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('buy: required and optional params', async () => {
-    const response = await client.connect.proxies.buy({ country: 'country', type: 'dedicated_residential' });
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.devices.apps.delete('packageName', {
+      deviceId: 'deviceId',
+      'X-Device-Display-ID': 0,
+    });
   });
 
   // Mock server tests are disabled
-  test.skip('cancel', async () => {
-    const responsePromise = client.connect.proxies.cancel('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+  test.skip('install: only required params', async () => {
+    const responsePromise = client.devices.apps.install('deviceId', { bundleId: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -77,8 +69,17 @@ describe('resource proxies', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listConnections', async () => {
-    const responsePromise = client.connect.proxies.listConnections('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+  test.skip('install: required and optional params', async () => {
+    const response = await client.devices.apps.install('deviceId', {
+      bundleId: 'x',
+      packageName: 'x',
+      'X-Device-Display-ID': 0,
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('start: only required params', async () => {
+    const responsePromise = client.devices.apps.start('packageName', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -89,46 +90,17 @@ describe('resource proxies', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('listConnections: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.connect.proxies.listConnections(
-        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        {
-          closeReason: 'closeReason',
-          country: 'country',
-          dstHost: 'dstHost',
-          dstPort: 0,
-          endedAfter: '2019-12-27T18:11:19.117Z',
-          endedBefore: '2019-12-27T18:11:19.117Z',
-          maxBytesIn: 0,
-          maxBytesOut: 0,
-          maxDurationMs: 0,
-          maxTotalBytes: 0,
-          minBytesIn: 0,
-          minBytesOut: 0,
-          minDurationMs: 0,
-          minTotalBytes: 0,
-          order: 'asc',
-          orderBy: 'startedAt',
-          page: 1,
-          pageSize: 1,
-          protocol: 'tcp',
-          provider: 'provider',
-          sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-          startedAfter: '2019-12-27T18:11:19.117Z',
-          startedBefore: '2019-12-27T18:11:19.117Z',
-          status: 'active',
-          userId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+  test.skip('start: required and optional params', async () => {
+    const response = await client.devices.apps.start('packageName', {
+      deviceId: 'deviceId',
+      activity: 'activity',
+      'X-Device-Display-ID': 0,
+    });
   });
 
   // Mock server tests are disabled
-  test.skip('ping', async () => {
-    const responsePromise = client.connect.proxies.ping('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+  test.skip('stop: only required params', async () => {
+    const responsePromise = client.devices.apps.stop('packageName', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -136,5 +108,14 @@ describe('resource proxies', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('stop: required and optional params', async () => {
+    const response = await client.devices.apps.stop('packageName', {
+      deviceId: 'deviceId',
+      clearData: true,
+      'X-Device-Display-ID': 0,
+    });
   });
 });

@@ -7,10 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource countries', () => {
+describe('resource tasks', () => {
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.connect.countries.list();
+    const responsePromise = client.devices.tasks.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,11 +24,13 @@ describe('resource countries', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.connect.countries.list(
+      client.devices.tasks.list(
+        'deviceId',
         {
-          page: 1,
-          pageSize: 1,
-          type: 'dedicated_residential',
+          orderBy: 'id',
+          orderByDirection: 'asc',
+          page: 0,
+          pageSize: 0,
         },
         { path: '/_stainless_unknown_path' },
       ),
