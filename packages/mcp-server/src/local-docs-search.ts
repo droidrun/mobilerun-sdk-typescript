@@ -621,15 +621,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/credentials',
     httpMethod: 'get',
-    summary: 'List all credentials for the authenticated user',
-    description: 'List all credentials for the authenticated user',
+    summary: 'List credentials',
+    description:
+      'Returns a paginated list of all credentials belonging to the authenticated user across every package. Accepts standard pagination query parameters and responds with the credential items plus pagination metadata.',
     stainlessPath: '(resource) credentials > (method) list',
     qualified: 'client.credentials.list',
     params: ['page?: number;', 'pageSize?: number;'],
     response:
       '{ items: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }',
     markdown:
-      "## list\n\n`client.credentials.list(page?: number, pageSize?: number): { items: credential[]; pagination: pagination; }`\n\n**get** `/credentials`\n\nList all credentials for the authenticated user\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credentials = await client.credentials.list();\n\nconsole.log(credentials);\n```",
+      "## list\n\n`client.credentials.list(page?: number, pageSize?: number): { items: credential[]; pagination: pagination; }`\n\n**get** `/credentials`\n\nReturns a paginated list of all credentials belonging to the authenticated user across every package. Accepts standard pagination query parameters and responds with the credential items plus pagination metadata.\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credentials = await client.credentials.list();\n\nconsole.log(credentials);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.list',
@@ -661,13 +662,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages',
     httpMethod: 'post',
     summary: 'Initialize a new package/app',
-    description: 'Initialize a new package/app',
+    description:
+      'Creates a new package (identified by `packageName`) under which credentials can be grouped. Returns a conflict if a package with the same name already exists for the user.',
     stainlessPath: '(resource) credentials.packages > (method) create',
     qualified: 'client.credentials.packages.create',
     params: ['packageName: string;'],
     response: '{ data: { packageName: string; }; message: string; success: true; }',
     markdown:
-      "## create\n\n`client.credentials.packages.create(packageName: string): { data: object; message: string; success: true; }`\n\n**post** `/credentials/packages`\n\nInitialize a new package/app\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { packageName: string; }; message: string; success: true; }`\n\n  - `data: { packageName: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst _package = await client.credentials.packages.create({ packageName: 'x' });\n\nconsole.log(_package);\n```",
+      "## create\n\n`client.credentials.packages.create(packageName: string): { data: object; message: string; success: true; }`\n\n**post** `/credentials/packages`\n\nCreates a new package (identified by `packageName`) under which credentials can be grouped. Returns a conflict if a package with the same name already exists for the user.\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { packageName: string; }; message: string; success: true; }`\n\n  - `data: { packageName: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst _package = await client.credentials.packages.create({ packageName: 'x' });\n\nconsole.log(_package);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.create',
@@ -700,14 +702,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages/{packageName}',
     httpMethod: 'get',
     summary: 'List credentials for a specific package',
-    description: 'List credentials for a specific package',
+    description:
+      'Returns all credentials stored under the given `packageName`. Each credential includes its name, secret path, and the list of fields it holds.',
     stainlessPath: '(resource) credentials.packages > (method) list',
     qualified: 'client.credentials.packages.list',
     params: ['packageName: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; }',
     markdown:
-      "## list\n\n`client.credentials.packages.list(packageName: string): { data: credential[]; }`\n\n**get** `/credentials/packages/{packageName}`\n\nList credentials for a specific package\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst packages = await client.credentials.packages.list('x');\n\nconsole.log(packages);\n```",
+      "## list\n\n`client.credentials.packages.list(packageName: string): { data: credential[]; }`\n\n**get** `/credentials/packages/{packageName}`\n\nReturns all credentials stored under the given `packageName`. Each credential includes its name, secret path, and the list of fields it holds.\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst packages = await client.credentials.packages.list('x');\n\nconsole.log(packages);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.list',
@@ -739,8 +742,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'create',
     endpoint: '/credentials/packages/{packageName}',
     httpMethod: 'post',
-    summary: 'Create a credential with fields for a package',
-    description: 'Create a credential with fields for a package',
+    summary: 'Create a credential',
+    description:
+      'Creates a credential under the given package with a `credentialName` and at least one field. Each field has a `fieldType` (email, username, password, api_token, phone_number, two_factor_secret, or backup_codes) and a value.',
     stainlessPath: '(resource) credentials.packages.credentials > (method) create',
     qualified: 'client.credentials.packages.credentials.create',
     params: [
@@ -751,7 +755,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## create\n\n`client.credentials.packages.credentials.create(packageName: string, credentialName: string, fields: { fieldType: string; value: string; }[]): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}`\n\nCreate a credential with fields for a package\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fields: { fieldType: string; value: string; }[]`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.create('x', { credentialName: '26f1kl_-n-71', fields: [{ fieldType: 'email', value: 'x' }] });\n\nconsole.log(credential);\n```",
+      "## create\n\n`client.credentials.packages.credentials.create(packageName: string, credentialName: string, fields: { fieldType: string; value: string; }[]): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}`\n\nCreates a credential under the given package with a `credentialName` and at least one field. Each field has a `fieldType` (email, username, password, api_token, phone_number, two_factor_secret, or backup_codes) and a value.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fields: { fieldType: string; value: string; }[]`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.create('x', { credentialName: '26f1kl_-n-71', fields: [{ fieldType: 'email', value: 'x' }] });\n\nconsole.log(credential);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.create',
@@ -784,14 +788,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}',
     httpMethod: 'delete',
     summary: 'Delete a credential and all its fields',
-    description: 'Delete a credential and all its fields',
+    description:
+      'Permanently deletes the credential identified by `packageName` and `credentialName`, removing all of its fields. Returns the deleted credential.',
     stainlessPath: '(resource) credentials.packages.credentials > (method) delete',
     qualified: 'client.credentials.packages.credentials.delete',
     params: ['packageName: string;', 'credentialName: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## delete\n\n`client.credentials.packages.credentials.delete(packageName: string, credentialName: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nDelete a credential and all its fields\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.delete('26f1kl_-n-71', { packageName: 'x' });\n\nconsole.log(credential);\n```",
+      "## delete\n\n`client.credentials.packages.credentials.delete(packageName: string, credentialName: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nPermanently deletes the credential identified by `packageName` and `credentialName`, removing all of its fields. Returns the deleted credential.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.delete('26f1kl_-n-71', { packageName: 'x' });\n\nconsole.log(credential);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.delete',
@@ -823,15 +828,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'retrieve',
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}',
     httpMethod: 'get',
-    summary: 'Get a specific credential with its fields',
-    description: 'Get a specific credential with its fields',
+    summary: 'Get a credential',
+    description:
+      'Fetches a single credential by `packageName` and `credentialName`, including all of its stored fields. Returns not found if no matching credential exists.',
     stainlessPath: '(resource) credentials.packages.credentials > (method) retrieve',
     qualified: 'client.credentials.packages.credentials.retrieve',
     params: ['packageName: string;', 'credentialName: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; }',
     markdown:
-      "## retrieve\n\n`client.credentials.packages.credentials.retrieve(packageName: string, credentialName: string): { data: credential; }`\n\n**get** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nGet a specific credential with its fields\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.retrieve('26f1kl_-n-71', { packageName: 'x' });\n\nconsole.log(credential);\n```",
+      "## retrieve\n\n`client.credentials.packages.credentials.retrieve(packageName: string, credentialName: string): { data: credential; }`\n\n**get** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nFetches a single credential by `packageName` and `credentialName`, including all of its stored fields. Returns not found if no matching credential exists.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.retrieve('26f1kl_-n-71', { packageName: 'x' });\n\nconsole.log(credential);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.retrieve',
@@ -863,15 +869,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'create',
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}/fields',
     httpMethod: 'post',
-    summary: 'Add a new field to an existing credential',
-    description: 'Add a new field to an existing credential',
+    summary: 'Add a credential field',
+    description:
+      'Adds a single field to an existing credential. The body specifies a `fieldType` (one of the supported field types) and its value. Returns a conflict if a field of that type already exists on the credential.',
     stainlessPath: '(resource) credentials.packages.credentials.fields > (method) create',
     qualified: 'client.credentials.packages.credentials.fields.create',
     params: ['packageName: string;', 'credentialName: string;', 'fieldType: string;', 'value: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## create\n\n`client.credentials.packages.credentials.fields.create(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}/credentials/{credentialName}/fields`\n\nAdd a new field to an existing credential\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.create('26f1kl_-n-71', {\n  packageName: 'x',\n  fieldType: 'email',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
+      "## create\n\n`client.credentials.packages.credentials.fields.create(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}/credentials/{credentialName}/fields`\n\nAdds a single field to an existing credential. The body specifies a `fieldType` (one of the supported field types) and its value. Returns a conflict if a field of that type already exists on the credential.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.create('26f1kl_-n-71', {\n  packageName: 'x',\n  fieldType: 'email',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.fields.create',
@@ -904,14 +911,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}',
     httpMethod: 'delete',
     summary: 'Delete a field from a credential',
-    description: 'Delete a field from a credential',
+    description:
+      'Removes a single field of the given `fieldType` from the specified credential while leaving the credential itself intact. Returns the updated credential.',
     stainlessPath: '(resource) credentials.packages.credentials.fields > (method) delete',
     qualified: 'client.credentials.packages.credentials.fields.delete',
     params: ['packageName: string;', 'credentialName: string;', 'fieldType: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## delete\n\n`client.credentials.packages.credentials.fields.delete(packageName: string, credentialName: string, fieldType: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nDelete a field from a credential\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.delete('email', { packageName: 'x', credentialName: '26f1kl_-n-71' });\n\nconsole.log(field);\n```",
+      "## delete\n\n`client.credentials.packages.credentials.fields.delete(packageName: string, credentialName: string, fieldType: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nRemoves a single field of the given `fieldType` from the specified credential while leaving the credential itself intact. Returns the updated credential.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.delete('email', { packageName: 'x', credentialName: '26f1kl_-n-71' });\n\nconsole.log(field);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.fields.delete',
@@ -944,14 +952,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}',
     httpMethod: 'patch',
     summary: 'Update the value of a credential field',
-    description: 'Update the value of a credential field',
+    description:
+      'Updates the value of an existing field on a credential, identified by `packageName`, `credentialName`, and `fieldType` in the path. The body carries the new value and returns the updated credential.',
     stainlessPath: '(resource) credentials.packages.credentials.fields > (method) update',
     qualified: 'client.credentials.packages.credentials.fields.update',
     params: ['packageName: string;', 'credentialName: string;', 'fieldType: string;', 'value: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## update\n\n`client.credentials.packages.credentials.fields.update(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**patch** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nUpdate the value of a credential field\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.update('email', {\n  packageName: 'x',\n  credentialName: '26f1kl_-n-71',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
+      "## update\n\n`client.credentials.packages.credentials.fields.update(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**patch** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nUpdates the value of an existing field on a credential, identified by `packageName`, `credentialName`, and `fieldType` in the path. The body carries the new value and returns the updated credential.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.update('email', {\n  packageName: 'x',\n  credentialName: '26f1kl_-n-71',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.fields.update',
@@ -3092,8 +3101,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'create',
     endpoint: '/proxies',
     httpMethod: 'post',
-    summary: 'Create a new proxy config',
-    description: 'Create a new proxy config',
+    summary: 'Create a proxy config',
+    description:
+      'Creates a proxy config. The body is a discriminated union on `protocol`: `socks5` requires name, host, port, user, and password, while `wireguard` requires name and a config string. Returns the created config with its generated `proxyId`.',
     stainlessPath: '(resource) proxies > (method) create',
     qualified: 'client.proxies.create',
     params: [
@@ -3133,14 +3143,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/proxies/{proxyId}',
     httpMethod: 'delete',
     summary: 'Delete a proxy config',
-    description: 'Delete a proxy config',
+    description:
+      'Permanently deletes the proxy config identified by `proxyId` and returns the deleted config. Returns not found if no matching config exists.',
     stainlessPath: '(resource) proxies > (method) delete',
     qualified: 'client.proxies.delete',
     params: ['proxyId: string;'],
     response:
       "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }",
     markdown:
-      "## delete\n\n`client.proxies.delete(proxyId: string): { data: proxy_config; message: string; success: true; }`\n\n**delete** `/proxies/{proxyId}`\n\nDelete a proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
+      "## delete\n\n`client.proxies.delete(proxyId: string): { data: proxy_config; message: string; success: true; }`\n\n**delete** `/proxies/{proxyId}`\n\nPermanently deletes the proxy config identified by `proxyId` and returns the deleted config. Returns not found if no matching config exists.\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
     perLanguage: {
       typescript: {
         method: 'client.proxies.delete',
@@ -3172,15 +3183,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/proxies',
     httpMethod: 'get',
-    summary: 'List all proxy configs for the authenticated user',
-    description: 'List all proxy configs for the authenticated user',
+    summary: 'List proxy configs',
+    description:
+      'Returns all proxy configs for the authenticated user. An optional `protocol` query parameter (`socks5` or `wireguard`) filters the results by proxy type.',
     stainlessPath: '(resource) proxies > (method) list',
     qualified: 'client.proxies.list',
     params: ["protocol?: 'socks5' | 'wireguard';"],
     response:
       "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }",
     markdown:
-      "## list\n\n`client.proxies.list(protocol?: 'socks5' | 'wireguard'): { data: proxy_config[]; }`\n\n**get** `/proxies`\n\nList all proxy configs for the authenticated user\n\n### Parameters\n\n- `protocol?: 'socks5' | 'wireguard'`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.proxies.list();\n\nconsole.log(proxies);\n```",
+      "## list\n\n`client.proxies.list(protocol?: 'socks5' | 'wireguard'): { data: proxy_config[]; }`\n\n**get** `/proxies`\n\nReturns all proxy configs for the authenticated user. An optional `protocol` query parameter (`socks5` or `wireguard`) filters the results by proxy type.\n\n### Parameters\n\n- `protocol?: 'socks5' | 'wireguard'`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.proxies.list();\n\nconsole.log(proxies);\n```",
     perLanguage: {
       typescript: {
         method: 'client.proxies.list',
@@ -3211,15 +3223,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'retrieve',
     endpoint: '/proxies/{proxyId}',
     httpMethod: 'get',
-    summary: 'Get a specific proxy config',
-    description: 'Get a specific proxy config',
+    summary: 'Get a proxy config',
+    description:
+      "Fetches a single proxy config by its `proxyId`. The response shape depends on the proxy's `protocol` (socks5 or wireguard). Returns not found if no matching config exists.",
     stainlessPath: '(resource) proxies > (method) retrieve',
     qualified: 'client.proxies.retrieve',
     params: ['proxyId: string;'],
     response:
       "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }",
     markdown:
-      "## retrieve\n\n`client.proxies.retrieve(proxyId: string): { data: proxy_config; }`\n\n**get** `/proxies/{proxyId}`\n\nGet a specific proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
+      "## retrieve\n\n`client.proxies.retrieve(proxyId: string): { data: proxy_config; }`\n\n**get** `/proxies/{proxyId}`\n\nFetches a single proxy config by its `proxyId`. The response shape depends on the proxy's `protocol` (socks5 or wireguard). Returns not found if no matching config exists.\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
     perLanguage: {
       typescript: {
         method: 'client.proxies.retrieve',
@@ -3252,7 +3265,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/proxies/{proxyId}',
     httpMethod: 'put',
     summary: 'Update a proxy config',
-    description: 'Update a proxy config',
+    description:
+      'Replaces the proxy config identified by `proxyId` with the provided body. As with creation, the body is a `protocol`-discriminated union of socks5 or wireguard fields. Returns the updated config.',
     stainlessPath: '(resource) proxies > (method) update',
     qualified: 'client.proxies.update',
     params: [

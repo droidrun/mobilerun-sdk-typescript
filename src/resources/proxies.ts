@@ -10,21 +10,28 @@ import { path } from '../internal/utils/path';
  */
 export class Proxies extends APIResource {
   /**
-   * Create a new proxy config
+   * Creates a proxy config. The body is a discriminated union on `protocol`:
+   * `socks5` requires name, host, port, user, and password, while `wireguard`
+   * requires name and a config string. Returns the created config with its generated
+   * `proxyId`.
    */
   create(body: ProxyCreateParams, options?: RequestOptions): APIPromise<ProxyCreateResponse> {
     return this._client.post('/proxies', { body, ...options });
   }
 
   /**
-   * Get a specific proxy config
+   * Fetches a single proxy config by its `proxyId`. The response shape depends on
+   * the proxy's `protocol` (socks5 or wireguard). Returns not found if no matching
+   * config exists.
    */
   retrieve(proxyID: string, options?: RequestOptions): APIPromise<ProxyRetrieveResponse> {
     return this._client.get(path`/proxies/${proxyID}`, options);
   }
 
   /**
-   * Update a proxy config
+   * Replaces the proxy config identified by `proxyId` with the provided body. As
+   * with creation, the body is a `protocol`-discriminated union of socks5 or
+   * wireguard fields. Returns the updated config.
    */
   update(
     proxyID: string,
@@ -35,7 +42,8 @@ export class Proxies extends APIResource {
   }
 
   /**
-   * List all proxy configs for the authenticated user
+   * Returns all proxy configs for the authenticated user. An optional `protocol`
+   * query parameter (`socks5` or `wireguard`) filters the results by proxy type.
    */
   list(
     query: ProxyListParams | null | undefined = {},
@@ -45,7 +53,8 @@ export class Proxies extends APIResource {
   }
 
   /**
-   * Delete a proxy config
+   * Permanently deletes the proxy config identified by `proxyId` and returns the
+   * deleted config. Returns not found if no matching config exists.
    */
   delete(proxyID: string, options?: RequestOptions): APIPromise<ProxyDeleteResponse> {
     return this._client.delete(path`/proxies/${proxyID}`, options);

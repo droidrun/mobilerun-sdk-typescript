@@ -22,7 +22,9 @@ export class Credentials extends APIResource {
   fields: FieldsAPI.Fields = new FieldsAPI.Fields(this._client);
 
   /**
-   * Create a credential with fields for a package
+   * Creates a credential under the given package with a `credentialName` and at
+   * least one field. Each field has a `fieldType` (email, username, password,
+   * api_token, phone_number, two_factor_secret, or backup_codes) and a value.
    */
   create(
     packageName: string,
@@ -33,7 +35,8 @@ export class Credentials extends APIResource {
   }
 
   /**
-   * Get a specific credential with its fields
+   * Fetches a single credential by `packageName` and `credentialName`, including all
+   * of its stored fields. Returns not found if no matching credential exists.
    */
   retrieve(
     credentialName: string,
@@ -48,7 +51,8 @@ export class Credentials extends APIResource {
   }
 
   /**
-   * Delete a credential and all its fields
+   * Permanently deletes the credential identified by `packageName` and
+   * `credentialName`, removing all of its fields. Returns the deleted credential.
    */
   delete(
     credentialName: string,
