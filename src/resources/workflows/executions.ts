@@ -8,14 +8,17 @@ import { path } from '../../internal/utils/path';
 
 export class Executions extends APIResource {
   /**
-   * Get execution details
+   * Fetch a single flow execution by its ID, including its status, kind, result or
+   * error, and start/finish timestamps. Returns 404 if no execution matches.
    */
   retrieve(executionID: string, options?: RequestOptions): APIPromise<ExecutionRetrieveResponse> {
     return this._client.get(path`/executions/${executionID}`, options);
   }
 
   /**
-   * List flow executions
+   * Return a paginated history of flow executions. Supports filtering by `flowId`,
+   * `triggerId`, `status`, and a `from`/`to` time range, plus free-text `search` and
+   * ordering by startedAt, finishedAt, or status.
    */
   list(
     query: ExecutionListParams | null | undefined = {},
@@ -25,7 +28,9 @@ export class Executions extends APIResource {
   }
 
   /**
-   * Get execution metrics
+   * Return aggregate execution metrics — total count, counts by status, average
+   * duration, and the last execution time. Can be scoped by `flowId`, `triggerId`,
+   * and a `from`/`to` time range.
    */
   getMetrics(
     query: ExecutionGetMetricsParams | null | undefined = {},

@@ -96,7 +96,7 @@ export namespace EventDryRunResponse {
 
         name: string;
 
-        scheduleRule: Trigger.ScheduleRule | null;
+        scheduleRule: unknown;
 
         timezone: string | null;
 
@@ -107,27 +107,6 @@ export namespace EventDryRunResponse {
         conditions?: unknown;
 
         nextFireTime?: string | null;
-      }
-
-      export namespace Trigger {
-        export interface ScheduleRule {
-          type: 'once' | 'cron' | 'recurring';
-
-          /**
-           * ISO 8601 datetime (for type=once)
-           */
-          dateTime?: string;
-
-          /**
-           * Cron expression (for type=cron)
-           */
-          expression?: string;
-
-          /**
-           * RRULE string (for type=recurring)
-           */
-          rrule?: string;
-        }
       }
     }
 
