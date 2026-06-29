@@ -29,10 +29,30 @@ import {
   AppRetrieveResponse,
   Apps,
 } from './resources/apps';
-import { Carriers } from './resources/carriers';
+import {
+  CarrierCreateParams,
+  CarrierCreateResponse,
+  CarrierDeleteResponse,
+  CarrierListParams,
+  CarrierListResponse,
+  CarrierLookupParams,
+  CarrierLookupResponse,
+  CarrierRetrieveResponse,
+  CarrierUpdateParams,
+  CarrierUpdateResponse,
+  Carriers,
+} from './resources/carriers';
 import { Hooks } from './resources/hooks';
 import { ModelListResponse, Models } from './resources/models';
-import { Profiles } from './resources/profiles';
+import {
+  Profile,
+  ProfileCreateParams,
+  ProfileDeleteResponse,
+  ProfileListParams,
+  ProfileListResponse,
+  ProfileUpdateParams,
+  Profiles,
+} from './resources/profiles';
 import {
   Proxies,
   ProxyConfig,
@@ -41,6 +61,8 @@ import {
   ProxyDeleteResponse,
   ProxyListParams,
   ProxyListResponse,
+  ProxyLookupParams,
+  ProxyLookupResponse,
   ProxyRetrieveResponse,
   ProxyUpdateParams,
   ProxyUpdateResponse,
@@ -51,7 +73,18 @@ import {
   CredentialListResponse,
   Credentials,
 } from './resources/credentials/credentials';
-import { Devices } from './resources/devices/devices';
+import {
+  Device,
+  DeviceCountResponse,
+  DeviceCreateParams,
+  DeviceFingerprintParams,
+  DeviceFingerprintResponse,
+  DeviceListParams,
+  DeviceListResponse,
+  DeviceSetNameParams,
+  DeviceTerminateParams,
+  Devices,
+} from './resources/devices/devices';
 import {
   PackageCredentials,
   Task,
@@ -857,7 +890,19 @@ export declare namespace Mobilerun {
     type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
   };
 
-  export { Carriers as Carriers };
+  export {
+    Carriers as Carriers,
+    type CarrierCreateResponse as CarrierCreateResponse,
+    type CarrierRetrieveResponse as CarrierRetrieveResponse,
+    type CarrierUpdateResponse as CarrierUpdateResponse,
+    type CarrierListResponse as CarrierListResponse,
+    type CarrierDeleteResponse as CarrierDeleteResponse,
+    type CarrierLookupResponse as CarrierLookupResponse,
+    type CarrierCreateParams as CarrierCreateParams,
+    type CarrierUpdateParams as CarrierUpdateParams,
+    type CarrierListParams as CarrierListParams,
+    type CarrierLookupParams as CarrierLookupParams,
+  };
 
   export {
     Credentials as Credentials,
@@ -865,13 +910,32 @@ export declare namespace Mobilerun {
     type CredentialListParams as CredentialListParams,
   };
 
-  export { Devices as Devices };
+  export {
+    Devices as Devices,
+    type Device as Device,
+    type DeviceListResponse as DeviceListResponse,
+    type DeviceCountResponse as DeviceCountResponse,
+    type DeviceFingerprintResponse as DeviceFingerprintResponse,
+    type DeviceCreateParams as DeviceCreateParams,
+    type DeviceListParams as DeviceListParams,
+    type DeviceFingerprintParams as DeviceFingerprintParams,
+    type DeviceSetNameParams as DeviceSetNameParams,
+    type DeviceTerminateParams as DeviceTerminateParams,
+  };
 
   export { Hooks as Hooks };
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
-  export { Profiles as Profiles };
+  export {
+    Profiles as Profiles,
+    type Profile as Profile,
+    type ProfileListResponse as ProfileListResponse,
+    type ProfileDeleteResponse as ProfileDeleteResponse,
+    type ProfileCreateParams as ProfileCreateParams,
+    type ProfileUpdateParams as ProfileUpdateParams,
+    type ProfileListParams as ProfileListParams,
+  };
 
   export {
     Proxies as Proxies,
@@ -881,9 +945,11 @@ export declare namespace Mobilerun {
     type ProxyUpdateResponse as ProxyUpdateResponse,
     type ProxyListResponse as ProxyListResponse,
     type ProxyDeleteResponse as ProxyDeleteResponse,
+    type ProxyLookupResponse as ProxyLookupResponse,
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
+    type ProxyLookupParams as ProxyLookupParams,
   };
 
   export { Connect as Connect };
@@ -924,6 +990,13 @@ export declare namespace Mobilerun {
     type WebhookListParams as WebhookListParams,
   };
 
+  export type DeviceCarrier = API.DeviceCarrier;
+  export type DeviceIdentifiers = API.DeviceIdentifiers;
+  export type DeviceSpec = API.DeviceSpec;
+  export type Location = API.Location;
+  export type Meta = API.Meta;
   export type Pagination = API.Pagination;
   export type PaginationMeta = API.PaginationMeta;
+  export type PermissionSet = API.PermissionSet;
+  export type Socks5 = API.Socks5;
 }
