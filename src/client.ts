@@ -841,28 +841,13 @@ export class Mobilerun {
 
   static toFile = Uploads.toFile;
 
-  /**
-   * App Management
-   */
   apps: API.Apps = new API.Apps(this);
-  /**
-   * Mobile Carriers
-   */
   carriers: API.Carriers = new API.Carriers(this);
-  /**
-   * Vault & Secrets
-   */
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
   hooks: API.Hooks = new API.Hooks(this);
-  /**
-   * LLM Models
-   */
   models: API.Models = new API.Models(this);
   profiles: API.Profiles = new API.Profiles(this);
-  /**
-   * Network Proxies
-   */
   proxies: API.Proxies = new API.Proxies(this);
   connect: API.Connect = new API.Connect(this);
   /**
