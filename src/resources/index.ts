@@ -13,48 +13,17 @@ export {
   type AppListParams,
   type AppCreateSignedUploadURLParams,
 } from './apps';
-export {
-  Carriers,
-  type CarrierCreateResponse,
-  type CarrierRetrieveResponse,
-  type CarrierUpdateResponse,
-  type CarrierListResponse,
-  type CarrierDeleteResponse,
-  type CarrierLookupResponse,
-  type CarrierCreateParams,
-  type CarrierUpdateParams,
-  type CarrierListParams,
-  type CarrierLookupParams,
-} from './carriers';
+export { Carriers } from './carriers';
 export { Connect } from './connect/connect';
 export {
   Credentials,
   type CredentialListResponse,
   type CredentialListParams,
 } from './credentials/credentials';
-export {
-  Devices,
-  type Device,
-  type DeviceListResponse,
-  type DeviceCountResponse,
-  type DeviceFingerprintResponse,
-  type DeviceCreateParams,
-  type DeviceListParams,
-  type DeviceFingerprintParams,
-  type DeviceSetNameParams,
-  type DeviceTerminateParams,
-} from './devices/devices';
+export { Devices } from './devices/devices';
 export { Hooks } from './hooks';
 export { Models, type ModelListResponse } from './models';
-export {
-  Profiles,
-  type Profile,
-  type ProfileListResponse,
-  type ProfileDeleteResponse,
-  type ProfileCreateParams,
-  type ProfileUpdateParams,
-  type ProfileListParams,
-} from './profiles';
+export { Profiles } from './profiles';
 export {
   Proxies,
   type ProxyConfig,
@@ -63,11 +32,9 @@ export {
   type ProxyUpdateResponse,
   type ProxyListResponse,
   type ProxyDeleteResponse,
-  type ProxyLookupResponse,
   type ProxyCreateParams,
   type ProxyUpdateParams,
   type ProxyListParams,
-  type ProxyLookupParams,
 } from './proxies';
 export {
   Tasks,
