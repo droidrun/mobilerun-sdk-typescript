@@ -5,9 +5,6 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
-/**
- * Network Proxies
- */
 export class Proxies extends APIResource {
   /**
    * Creates a proxy config. The body is a discriminated union on `protocol`:

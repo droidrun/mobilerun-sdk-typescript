@@ -4,9 +4,6 @@ import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
-/**
- * LLM Models
- */
 export class Models extends APIResource {
   /**
    * Get all LLM models

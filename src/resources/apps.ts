@@ -6,9 +6,6 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
-/**
- * App Management
- */
 export class Apps extends APIResource {
   /**
    * Retrieves an app by its ID
