@@ -7,14 +7,17 @@ import { path } from '../../../internal/utils/path';
 
 export class Services extends APIResource {
   /**
-   * List available services
+   * Return the names of the services that actions can be built against. Use these
+   * values to look up each service's allowed methods.
    */
   list(options?: RequestOptions): APIPromise<ServiceListResponse> {
     return this._client.get('/actions/services', options);
   }
 
   /**
-   * List allowed methods for a service
+   * Return the methods allowed for the given service, each with its parameter
+   * definitions (name, type, whether required, description, and optional
+   * default/example). Returns 404 if the service is unknown.
    */
   listMethods(service: string, options?: RequestOptions): APIPromise<ServiceListMethodsResponse> {
     return this._client.get(path`/actions/services/${service}/methods`, options);

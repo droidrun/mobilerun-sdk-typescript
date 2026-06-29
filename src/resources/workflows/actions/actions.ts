@@ -12,21 +12,25 @@ export class Actions extends APIResource {
   services: ServicesAPI.Services = new ServicesAPI.Services(this._client);
 
   /**
-   * Create an action
+   * Create a reusable action from a catalog entry (`catalogEntryId`), with an
+   * optional `params` object supplying the values for that entry's service method.
+   * Returns 400 if the params are invalid for the chosen catalog entry.
    */
   create(body: ActionCreateParams, options?: RequestOptions): APIPromise<ActionCreateResponse> {
     return this._client.post('/actions', { body, ...options });
   }
 
   /**
-   * Get an action
+   * Fetch a single action by its ID, including its configured service, method, and
+   * params. Returns 404 if no action matches.
    */
   retrieve(actionID: string, options?: RequestOptions): APIPromise<ActionRetrieveResponse> {
     return this._client.get(path`/actions/${actionID}`, options);
   }
 
   /**
-   * Update an action
+   * Partially update an action's name, description, or params; all fields are
+   * optional. Returns 404 if the action does not exist.
    */
   update(
     actionID: string,
@@ -37,7 +41,8 @@ export class Actions extends APIResource {
   }
 
   /**
-   * List actions
+   * Return a paginated list of actions. Supports filtering by `service`, free-text
+   * `search`, and ordering by name, createdAt, or updatedAt.
    */
   list(
     query: ActionListParams | null | undefined = {},
@@ -47,7 +52,7 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Delete an action
+   * Delete an action by its ID. Returns 404 if no action matches.
    */
   delete(actionID: string, options?: RequestOptions): APIPromise<ActionDeleteResponse> {
     return this._client.delete(path`/actions/${actionID}`, options);
