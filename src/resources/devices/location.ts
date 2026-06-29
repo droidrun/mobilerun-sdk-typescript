@@ -1,5 +1,79 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as Shared from '../shared';
+import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
+import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
 
-export class Location extends APIResource {}
+export class Location extends APIResource {
+  /**
+   * Returns the device's current simulated GPS location as latitude and longitude.
+   * Devices without geo support return an unsupported-feature error.
+   */
+  get(
+    deviceID: string,
+    params: LocationGetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Shared.Location> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.get(path`/devices/${deviceID}/location`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
+   * Sets the device's simulated GPS location to the latitude and longitude in the
+   * request body. Devices without geo support return an unsupported-feature error.
+   */
+  set(deviceID: string, params: LocationSetParams, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
+    return this._client.post(path`/devices/${deviceID}/location`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+}
+
+export interface LocationGetParams {
+  'X-Device-Display-ID'?: number;
+}
+
+export interface LocationSetParams {
+  /**
+   * Body param
+   */
+  latitude: number;
+
+  /**
+   * Body param
+   */
+  longitude: number;
+
+  /**
+   * Header param
+   */
+  'X-Device-Display-ID'?: number;
+}
+
+export declare namespace Location {
+  export { type LocationGetParams as LocationGetParams, type LocationSetParams as LocationSetParams };
+}

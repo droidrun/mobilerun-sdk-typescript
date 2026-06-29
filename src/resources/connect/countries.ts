@@ -40,7 +40,7 @@ export namespace CountryListResponse {
     /**
      * Proxy types available to provision in this country.
      */
-    proxyTypes: Array<'residential'>;
+    proxyTypes: Array<'dedicated_residential' | 'residential' | 'mobile'>;
   }
 
   /**
@@ -93,7 +93,7 @@ export interface CountryListParams {
   /**
    * Filter to countries offering this proxy type.
    */
-  type?: 'residential';
+  type?: 'dedicated_residential' | 'residential' | 'mobile';
 }
 
 export declare namespace Countries {
