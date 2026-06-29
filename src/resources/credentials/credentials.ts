@@ -20,7 +20,9 @@ export class Credentials extends APIResource {
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
 
   /**
-   * List all credentials for the authenticated user
+   * Returns a paginated list of all credentials belonging to the authenticated user
+   * across every package. Accepts standard pagination query parameters and responds
+   * with the credential items plus pagination metadata.
    */
   list(
     query: CredentialListParams | null | undefined = {},
