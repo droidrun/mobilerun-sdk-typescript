@@ -11,7 +11,9 @@ import { path } from '../../../../internal/utils/path';
  */
 export class Fields extends APIResource {
   /**
-   * Add a new field to an existing credential
+   * Adds a single field to an existing credential. The body specifies a `fieldType`
+   * (one of the supported field types) and its value. Returns a conflict if a field
+   * of that type already exists on the credential.
    */
   create(
     credentialName: string,
@@ -26,7 +28,9 @@ export class Fields extends APIResource {
   }
 
   /**
-   * Update the value of a credential field
+   * Updates the value of an existing field on a credential, identified by
+   * `packageName`, `credentialName`, and `fieldType` in the path. The body carries
+   * the new value and returns the updated credential.
    */
   update(
     fieldType:
@@ -48,7 +52,8 @@ export class Fields extends APIResource {
   }
 
   /**
-   * Delete a field from a credential
+   * Removes a single field of the given `fieldType` from the specified credential
+   * while leaving the credential itself intact. Returns the updated credential.
    */
   delete(
     fieldType:

@@ -23,14 +23,17 @@ export class Packages extends APIResource {
   credentials: CredentialsAPI.Credentials = new CredentialsAPI.Credentials(this._client);
 
   /**
-   * Initialize a new package/app
+   * Creates a new package (identified by `packageName`) under which credentials can
+   * be grouped. Returns a conflict if a package with the same name already exists
+   * for the user.
    */
   create(body: PackageCreateParams, options?: RequestOptions): APIPromise<PackageCreateResponse> {
     return this._client.post('/credentials/packages', { body, ...options });
   }
 
   /**
-   * List credentials for a specific package
+   * Returns all credentials stored under the given `packageName`. Each credential
+   * includes its name, secret path, and the list of fields it holds.
    */
   list(packageName: string, options?: RequestOptions): APIPromise<PackageListResponse> {
     return this._client.get(path`/credentials/packages/${packageName}`, options);
