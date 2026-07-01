@@ -1,5 +1,21 @@
 # Changelog
 
+## 5.2.0 (2026-07-01)
+
+Full Changelog: [v5.1.0...v5.2.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.1.0...v5.2.0)
+
+### Features
+
+* **api:** api update ([0f7f001](https://github.com/droidrun/mobilerun-sdk-typescript/commit/0f7f001b2fb5e584400de91ce2e0838a5c972bdc))
+* **api:** api update ([42d2eaa](https://github.com/droidrun/mobilerun-sdk-typescript/commit/42d2eaa0fe372d021b732cc31880e37305d4b446))
+* **api:** api update ([8523264](https://github.com/droidrun/mobilerun-sdk-typescript/commit/8523264e558e1bfc4dfbb9a8f409579df71f4ff8))
+* **api:** api update ([8311efd](https://github.com/droidrun/mobilerun-sdk-typescript/commit/8311efd2f0b6ea6bacaaeeda2492c7a5fe507ca4))
+* **api:** api update ([25cc849](https://github.com/droidrun/mobilerun-sdk-typescript/commit/25cc84920ff0315f20c2ffffdb6c045dcc7a7871))
+* **api:** api update ([e51b564](https://github.com/droidrun/mobilerun-sdk-typescript/commit/e51b564ce35c07b11fe84ef671ca13cc448f9811))
+* **api:** api update ([5354959](https://github.com/droidrun/mobilerun-sdk-typescript/commit/5354959b4a0713daa33db21c4af24238035e48ea))
+* **api:** api update ([fa5796e](https://github.com/droidrun/mobilerun-sdk-typescript/commit/fa5796e56e9beb2585ea942c104e0a52f8c89d41))
+* **api:** api update ([73ac378](https://github.com/droidrun/mobilerun-sdk-typescript/commit/73ac3785e02dad99179d9e9ae5cff37dcc5ed521))
+
 ## 5.1.0 (2026-06-23)
 
 Full Changelog: [v5.0.0...v5.1.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.0.0...v5.1.0)
