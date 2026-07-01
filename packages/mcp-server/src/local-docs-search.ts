@@ -3381,7 +3381,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/connect/countries',
     httpMethod: 'get',
-    summary: 'List available proxy countries',
+    summary: 'List available countries',
     description: 'Lookup of countries that can be selected when creating a proxy.',
     stainlessPath: '(resource) connect.countries > (method) list',
     qualified: 'client.connect.countries.list',
@@ -3424,7 +3424,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/connect/proxies',
     httpMethod: 'get',
-    summary: "List the caller's proxies",
+    summary: 'List proxies',
     description:
       'Returns proxies owned by the user identified by the X-User-ID header. Credentials are omitted from the list.',
     stainlessPath: '(resource) connect.proxies > (method) list',
@@ -3502,15 +3502,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'retrieve',
     endpoint: '/connect/proxies/{id}',
     httpMethod: 'get',
-    summary: 'Get a proxy by ID, including its password',
-    description: 'Get a proxy by ID, including its password',
+    summary: 'Get proxy by ID',
+    description: "Returns the proxy identified by the path ID. The response includes the proxy's password.",
     stainlessPath: '(resource) connect.proxies > (method) retrieve',
     qualified: 'client.connect.proxies.retrieve',
     params: ['id: string;'],
     response:
       "{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }",
     markdown:
-      "## retrieve\n\n`client.connect.proxies.retrieve(id: string): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n\n**get** `/connect/proxies/{id}`\n\nGet a proxy by ID, including its password\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'dedicated_residential' | 'residential' | 'mobile'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.connect.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
+      "## retrieve\n\n`client.connect.proxies.retrieve(id: string): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n\n**get** `/connect/proxies/{id}`\n\nReturns the proxy identified by the path ID. The response includes the proxy's password.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'dedicated_residential' | 'residential' | 'mobile'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.connect.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.proxies.retrieve',
@@ -3541,12 +3541,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/connect/proxies/{id}',
     httpMethod: 'delete',
     summary: 'Delete a proxy',
-    description: 'Delete a proxy',
+    description:
+      'Deletes the proxy identified by the path ID and releases its provisioning. Returns 404 if no such proxy exists for the caller.',
     stainlessPath: '(resource) connect.proxies > (method) cancel',
     qualified: 'client.connect.proxies.cancel',
     params: ['id: string;'],
     markdown:
-      "## cancel\n\n`client.connect.proxies.cancel(id: string): void`\n\n**delete** `/connect/proxies/{id}`\n\nDelete a proxy\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.proxies.cancel('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
+      "## cancel\n\n`client.connect.proxies.cancel(id: string): void`\n\n**delete** `/connect/proxies/{id}`\n\nDeletes the proxy identified by the path ID and releases its provisioning. Returns 404 if no such proxy exists for the caller.\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.proxies.cancel('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.proxies.cancel',
@@ -3576,7 +3577,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'ping',
     endpoint: '/connect/proxies/{id}/ping',
     httpMethod: 'get',
-    summary: 'Latency reading for a proxy',
+    summary: 'Latency check',
     description:
       'Returns the most recent cached network-latency measurement for the proxy, sampled periodically by connecting through the proxy to a fixed target. `latency` is null when no measurement is available yet (e.g. the proxy is not active, or it has not been sampled since coming online).',
     stainlessPath: '(resource) connect.proxies > (method) ping',
@@ -3615,7 +3616,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list_connections',
     endpoint: '/connect/proxies/{id}/connections',
     httpMethod: 'get',
-    summary: 'List connections routed through a proxy',
+    summary: 'List Proxy Connections',
     description:
       "Returns the connection history recorded for this proxy, one item per connection (aggregated across the connection's lifetime). Supports filtering on every property plus ordering and pagination. Returns 503 when the connection-insights backend is disabled or unreachable.",
     stainlessPath: '(resource) connect.proxies > (method) list_connections',
@@ -3682,7 +3683,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/connect/users',
     httpMethod: 'get',
-    summary: "List the caller's SOCKS5 users",
+    summary: 'List SOCKS5 users',
     description: 'Returns SOCKS5 users owned by the caller. Passwords are omitted from the list.',
     stainlessPath: '(resource) connect.users > (method) list',
     qualified: 'client.connect.users.list',
@@ -3759,14 +3760,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'retrieve',
     endpoint: '/connect/users/{id}',
     httpMethod: 'get',
-    summary: 'Get a SOCKS5 user by ID, including its password',
-    description: 'Get a SOCKS5 user by ID, including its password',
+    summary: 'Get a SOCKS5 user by ID',
+    description:
+      "Returns the SOCKS5 user identified by the path ID. The response includes the user's password.",
     stainlessPath: '(resource) connect.users > (method) retrieve',
     qualified: 'client.connect.users.retrieve',
     params: ['id: string;'],
     response: '{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }',
     markdown:
-      "## retrieve\n\n`client.connect.users.retrieve(id: string): { id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n\n**get** `/connect/users/{id}`\n\nGet a SOCKS5 user by ID, including its password\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n  A SOCKS5 user including its password. Returned only on create and single-user reads.\n\n  - `id: string`\n  - `createdAt: string`\n  - `password: string`\n  - `username: string`\n  - `proxyId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(user);\n```",
+      "## retrieve\n\n`client.connect.users.retrieve(id: string): { id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n\n**get** `/connect/users/{id}`\n\nReturns the SOCKS5 user identified by the path ID. The response includes the user's password.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n  A SOCKS5 user including its password. Returned only on create and single-user reads.\n\n  - `id: string`\n  - `createdAt: string`\n  - `password: string`\n  - `username: string`\n  - `proxyId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(user);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.users.retrieve',
@@ -3835,12 +3837,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/connect/users/{id}',
     httpMethod: 'delete',
     summary: 'Delete a SOCKS5 user',
-    description: 'Delete a SOCKS5 user',
+    description:
+      'Deletes the SOCKS5 user identified by the path ID, revoking its credentials and any proxy binding. Returns 404 if no such user exists for the caller.',
     stainlessPath: '(resource) connect.users > (method) delete',
     qualified: 'client.connect.users.delete',
     params: ['id: string;'],
     markdown:
-      "## delete\n\n`client.connect.users.delete(id: string): void`\n\n**delete** `/connect/users/{id}`\n\nDelete a SOCKS5 user\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.users.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
+      "## delete\n\n`client.connect.users.delete(id: string): void`\n\n**delete** `/connect/users/{id}`\n\nDeletes the SOCKS5 user identified by the path ID, revoking its credentials and any proxy binding. Returns 404 if no such user exists for the caller.\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.users.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.users.delete',
@@ -3870,7 +3873,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list_connections',
     endpoint: '/connect/users/{id}/connections',
     httpMethod: 'get',
-    summary: 'List connections made by a SOCKS5 user',
+    summary: 'List connections by SOCKS5 user',
     description:
       "Returns the connection history recorded for this user, one item per connection (aggregated across the connection's lifetime). Supports filtering on every property plus ordering and pagination. Returns 503 when the connection-insights backend is disabled or unreachable.",
     stainlessPath: '(resource) connect.users > (method) list_connections',
