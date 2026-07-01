@@ -8,7 +8,8 @@ import { path } from '../../internal/utils/path';
 
 export class Proxies extends APIResource {
   /**
-   * Get a proxy by ID, including its password
+   * Returns the proxy identified by the path ID. The response includes the proxy's
+   * password.
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<ProxyRetrieveResponse> {
     return this._client.get(path`/connect/proxies/${id}`, options);
@@ -33,7 +34,8 @@ export class Proxies extends APIResource {
   }
 
   /**
-   * Delete a proxy
+   * Deletes the proxy identified by the path ID and releases its provisioning.
+   * Returns 404 if no such proxy exists for the caller.
    */
   cancel(id: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/connect/proxies/${id}`, {

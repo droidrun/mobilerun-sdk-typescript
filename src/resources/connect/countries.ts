@@ -4,6 +4,9 @@ import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Mobilerun Connect country coverage information
+ */
 export class Countries extends APIResource {
   /**
    * Lookup of countries that can be selected when creating a proxy.
