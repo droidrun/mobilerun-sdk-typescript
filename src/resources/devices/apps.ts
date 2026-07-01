@@ -8,7 +8,9 @@ import { path } from '../../internal/utils/path';
 
 export class Apps extends APIResource {
   /**
-   * List apps
+   * Returns detailed information about apps installed on the device, including
+   * package name and label. System and protected apps are excluded unless the
+   * corresponding query parameters are set.
    */
   list(
     deviceID: string,
@@ -31,7 +33,8 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Delete app
+   * Uninstalls the app identified by the path package name from the device.
+   * Protected packages cannot be deleted.
    */
   delete(packageName: string, params: AppDeleteParams, options?: RequestOptions): APIPromise<void> {
     const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -51,7 +54,8 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Install app
+   * Installs an app on the device. The request body must supply exactly one of an
+   * Android packageName or an iOS bundleId; protected packages are rejected.
    */
   install(deviceID: string, params: AppInstallParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -71,7 +75,9 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Start app
+   * Launches the app identified by the path package name, optionally starting a
+   * specific activity given in the request body. Protected packages cannot be
+   * started.
    */
   start(packageName: string, params: AppStartParams, options?: RequestOptions): APIPromise<void> {
     const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -91,7 +97,9 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Stop app
+   * Force-stops the app identified by the path package name. When clearData is set
+   * in the request body, the app's data is also cleared. Protected packages cannot
+   * be stopped.
    */
   stop(packageName: string, params: AppStopParams, options?: RequestOptions): APIPromise<void> {
     const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -216,6 +224,12 @@ export interface AppStopParams {
    * Path param
    */
   deviceId: string;
+
+  /**
+   * Body param: If true, clears all app data (pm clear) in addition to stopping the
+   * app.
+   */
+  clearData?: boolean;
 
   /**
    * Header param

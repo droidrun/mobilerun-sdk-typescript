@@ -8,21 +8,26 @@ import { path } from '../../../internal/utils/path';
 
 export class Actions extends APIResource {
   /**
-   * List actions for a flow
+   * Return the ordered list of actions attached to a flow, including any nested
+   * child actions. Returns 404 if the flow does not exist.
    */
   list(flowID: string, options?: RequestOptions): APIPromise<ActionListResponse> {
     return this._client.get(path`/flows/${flowID}/actions`, options);
   }
 
   /**
-   * Add an action to a flow
+   * Append a single action to a flow at the given `position`, optionally nesting it
+   * under a `parentFlowActionId` or supplying its own `children`. Supports a
+   * `nameOverride`, param `overrides`, and `continueOnError`. Returns 404 if the
+   * flow does not exist.
    */
   add(flowID: string, body: ActionAddParams, options?: RequestOptions): APIPromise<ActionAddResponse> {
     return this._client.post(path`/flows/${flowID}/actions`, { body, ...options });
   }
 
   /**
-   * Remove an action from a flow
+   * Remove a single action from a flow by its `flowActionId`. Returns 404 if the
+   * flow or flow action does not exist.
    */
   remove(
     flowActionID: string,
@@ -34,7 +39,10 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Replace all actions for a flow
+   * Replace a flow's entire action list with the supplied set (at least one
+   * required). Each action references an `actionId` and a unique `position`, and may
+   * include nested `children`, a `nameOverride`, param `overrides`, and a
+   * `continueOnError` flag. Returns 404 if the flow does not exist.
    */
   replace(
     flowID: string,

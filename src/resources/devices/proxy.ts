@@ -8,7 +8,9 @@ import { path } from '../../internal/utils/path';
 
 export class Proxy extends APIResource {
   /**
-   * Connect proxy
+   * Routes the device's traffic through a SOCKS5 proxy supplied in the request body,
+   * replacing any existing connection. A smartIp option can be used to select an IP
+   * automatically; the legacy flat host/port/user/password fields remain supported.
    */
   connect(deviceID: string, params: ProxyConnectParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -28,7 +30,8 @@ export class Proxy extends APIResource {
   }
 
   /**
-   * Disconnect proxy
+   * Disconnects the device's active proxy connection and clears its stored proxy
+   * state. Returns successfully if no proxy is connected.
    */
   disconnect(
     deviceID: string,
@@ -51,7 +54,8 @@ export class Proxy extends APIResource {
   }
 
   /**
-   * Get proxy connection state
+   * Returns the device's current proxy connection state, including whether a proxy
+   * is connected and its protocol and name.
    */
   status(
     deviceID: string,

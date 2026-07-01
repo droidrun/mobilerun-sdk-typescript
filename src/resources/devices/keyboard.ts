@@ -8,7 +8,7 @@ import { path } from '../../internal/utils/path';
 
 export class Keyboard extends APIResource {
   /**
-   * Clear input
+   * Clears the contents of the currently focused text input field.
    */
   clear(
     deviceID: string,
@@ -31,7 +31,7 @@ export class Keyboard extends APIResource {
   }
 
   /**
-   * Input key
+   * Sends a single Android key event to the device, identified by its key code.
    */
   key(deviceID: string, params: KeyboardKeyParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -51,7 +51,9 @@ export class Keyboard extends APIResource {
   }
 
   /**
-   * Input text
+   * Types the given text into the focused input field. Supports optionally clearing
+   * the field first and a stealth mode that emulates human typing speed and error
+   * rate on supported devices.
    */
   write(deviceID: string, params: KeyboardWriteParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;

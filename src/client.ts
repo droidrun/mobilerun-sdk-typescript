@@ -42,22 +42,7 @@ import {
   CarrierUpdateResponse,
   Carriers,
 } from './resources/carriers';
-import {
-  HookGetSampleDataResponse,
-  HookListParams,
-  HookListResponse,
-  HookPerformParams,
-  HookPerformResponse,
-  HookRetrieveResponse,
-  HookSubscribeParams,
-  HookSubscribeResponse,
-  HookTestParams,
-  HookTestResponse,
-  HookUnsubscribeResponse,
-  HookUpdateParams,
-  HookUpdateResponse,
-  Hooks,
-} from './resources/hooks';
+import { Hooks } from './resources/hooks';
 import { ModelListResponse, Models } from './resources/models';
 import {
   Profile,
@@ -856,17 +841,8 @@ export class Mobilerun {
 
   static toFile = Uploads.toFile;
 
-  /**
-   * App Management
-   */
   apps: API.Apps = new API.Apps(this);
-  /**
-   * Mobile Carriers
-   */
   carriers: API.Carriers = new API.Carriers(this);
-  /**
-   * Vault & Secrets
-   */
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
   hooks: API.Hooks = new API.Hooks(this);
@@ -875,9 +851,6 @@ export class Mobilerun {
    */
   models: API.Models = new API.Models(this);
   profiles: API.Profiles = new API.Profiles(this);
-  /**
-   * Network Proxies
-   */
   proxies: API.Proxies = new API.Proxies(this);
   connect: API.Connect = new API.Connect(this);
   /**
@@ -950,22 +923,7 @@ export declare namespace Mobilerun {
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 
-  export {
-    Hooks as Hooks,
-    type HookRetrieveResponse as HookRetrieveResponse,
-    type HookUpdateResponse as HookUpdateResponse,
-    type HookListResponse as HookListResponse,
-    type HookGetSampleDataResponse as HookGetSampleDataResponse,
-    type HookPerformResponse as HookPerformResponse,
-    type HookSubscribeResponse as HookSubscribeResponse,
-    type HookTestResponse as HookTestResponse,
-    type HookUnsubscribeResponse as HookUnsubscribeResponse,
-    type HookUpdateParams as HookUpdateParams,
-    type HookListParams as HookListParams,
-    type HookPerformParams as HookPerformParams,
-    type HookSubscribeParams as HookSubscribeParams,
-    type HookTestParams as HookTestParams,
-  };
+  export { Hooks as Hooks };
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
 

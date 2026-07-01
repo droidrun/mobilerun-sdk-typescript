@@ -621,15 +621,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/credentials',
     httpMethod: 'get',
-    summary: 'List all credentials for the authenticated user',
-    description: 'List all credentials for the authenticated user',
+    summary: 'List credentials',
+    description:
+      'Returns a paginated list of all credentials belonging to the authenticated user across every package. Accepts standard pagination query parameters and responds with the credential items plus pagination metadata.',
     stainlessPath: '(resource) credentials > (method) list',
     qualified: 'client.credentials.list',
     params: ['page?: number;', 'pageSize?: number;'],
     response:
       '{ items: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }',
     markdown:
-      "## list\n\n`client.credentials.list(page?: number, pageSize?: number): { items: credential[]; pagination: pagination; }`\n\n**get** `/credentials`\n\nList all credentials for the authenticated user\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credentials = await client.credentials.list();\n\nconsole.log(credentials);\n```",
+      "## list\n\n`client.credentials.list(page?: number, pageSize?: number): { items: credential[]; pagination: pagination; }`\n\n**get** `/credentials`\n\nReturns a paginated list of all credentials belonging to the authenticated user across every package. Accepts standard pagination query parameters and responds with the credential items plus pagination metadata.\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credentials = await client.credentials.list();\n\nconsole.log(credentials);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.list',
@@ -661,13 +662,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages',
     httpMethod: 'post',
     summary: 'Initialize a new package/app',
-    description: 'Initialize a new package/app',
+    description:
+      'Creates a new package (identified by `packageName`) under which credentials can be grouped. Returns a conflict if a package with the same name already exists for the user.',
     stainlessPath: '(resource) credentials.packages > (method) create',
     qualified: 'client.credentials.packages.create',
     params: ['packageName: string;'],
     response: '{ data: { packageName: string; }; message: string; success: true; }',
     markdown:
-      "## create\n\n`client.credentials.packages.create(packageName: string): { data: object; message: string; success: true; }`\n\n**post** `/credentials/packages`\n\nInitialize a new package/app\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { packageName: string; }; message: string; success: true; }`\n\n  - `data: { packageName: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst _package = await client.credentials.packages.create({ packageName: 'x' });\n\nconsole.log(_package);\n```",
+      "## create\n\n`client.credentials.packages.create(packageName: string): { data: object; message: string; success: true; }`\n\n**post** `/credentials/packages`\n\nCreates a new package (identified by `packageName`) under which credentials can be grouped. Returns a conflict if a package with the same name already exists for the user.\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { packageName: string; }; message: string; success: true; }`\n\n  - `data: { packageName: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst _package = await client.credentials.packages.create({ packageName: 'x' });\n\nconsole.log(_package);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.create',
@@ -700,14 +702,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages/{packageName}',
     httpMethod: 'get',
     summary: 'List credentials for a specific package',
-    description: 'List credentials for a specific package',
+    description:
+      'Returns all credentials stored under the given `packageName`. Each credential includes its name, secret path, and the list of fields it holds.',
     stainlessPath: '(resource) credentials.packages > (method) list',
     qualified: 'client.credentials.packages.list',
     params: ['packageName: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; }',
     markdown:
-      "## list\n\n`client.credentials.packages.list(packageName: string): { data: credential[]; }`\n\n**get** `/credentials/packages/{packageName}`\n\nList credentials for a specific package\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst packages = await client.credentials.packages.list('x');\n\nconsole.log(packages);\n```",
+      "## list\n\n`client.credentials.packages.list(packageName: string): { data: credential[]; }`\n\n**get** `/credentials/packages/{packageName}`\n\nReturns all credentials stored under the given `packageName`. Each credential includes its name, secret path, and the list of fields it holds.\n\n### Parameters\n\n- `packageName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }[]; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst packages = await client.credentials.packages.list('x');\n\nconsole.log(packages);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.list',
@@ -739,8 +742,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'create',
     endpoint: '/credentials/packages/{packageName}',
     httpMethod: 'post',
-    summary: 'Create a credential with fields for a package',
-    description: 'Create a credential with fields for a package',
+    summary: 'Create a credential',
+    description:
+      'Creates a credential under the given package with a `credentialName` and at least one field. Each field has a `fieldType` (email, username, password, api_token, phone_number, two_factor_secret, or backup_codes) and a value.',
     stainlessPath: '(resource) credentials.packages.credentials > (method) create',
     qualified: 'client.credentials.packages.credentials.create',
     params: [
@@ -751,7 +755,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## create\n\n`client.credentials.packages.credentials.create(packageName: string, credentialName: string, fields: { fieldType: string; value: string; }[]): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}`\n\nCreate a credential with fields for a package\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fields: { fieldType: string; value: string; }[]`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.create('x', { credentialName: '26f1kl_-n-71', fields: [{ fieldType: 'email', value: 'x' }] });\n\nconsole.log(credential);\n```",
+      "## create\n\n`client.credentials.packages.credentials.create(packageName: string, credentialName: string, fields: { fieldType: string; value: string; }[]): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}`\n\nCreates a credential under the given package with a `credentialName` and at least one field. Each field has a `fieldType` (email, username, password, api_token, phone_number, two_factor_secret, or backup_codes) and a value.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fields: { fieldType: string; value: string; }[]`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.create('x', { credentialName: '26f1kl_-n-71', fields: [{ fieldType: 'email', value: 'x' }] });\n\nconsole.log(credential);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.create',
@@ -784,14 +788,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}',
     httpMethod: 'delete',
     summary: 'Delete a credential and all its fields',
-    description: 'Delete a credential and all its fields',
+    description:
+      'Permanently deletes the credential identified by `packageName` and `credentialName`, removing all of its fields. Returns the deleted credential.',
     stainlessPath: '(resource) credentials.packages.credentials > (method) delete',
     qualified: 'client.credentials.packages.credentials.delete',
     params: ['packageName: string;', 'credentialName: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## delete\n\n`client.credentials.packages.credentials.delete(packageName: string, credentialName: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nDelete a credential and all its fields\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.delete('26f1kl_-n-71', { packageName: 'x' });\n\nconsole.log(credential);\n```",
+      "## delete\n\n`client.credentials.packages.credentials.delete(packageName: string, credentialName: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nPermanently deletes the credential identified by `packageName` and `credentialName`, removing all of its fields. Returns the deleted credential.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.delete('26f1kl_-n-71', { packageName: 'x' });\n\nconsole.log(credential);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.delete',
@@ -823,15 +828,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'retrieve',
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}',
     httpMethod: 'get',
-    summary: 'Get a specific credential with its fields',
-    description: 'Get a specific credential with its fields',
+    summary: 'Get a credential',
+    description:
+      'Fetches a single credential by `packageName` and `credentialName`, including all of its stored fields. Returns not found if no matching credential exists.',
     stainlessPath: '(resource) credentials.packages.credentials > (method) retrieve',
     qualified: 'client.credentials.packages.credentials.retrieve',
     params: ['packageName: string;', 'credentialName: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; }',
     markdown:
-      "## retrieve\n\n`client.credentials.packages.credentials.retrieve(packageName: string, credentialName: string): { data: credential; }`\n\n**get** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nGet a specific credential with its fields\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.retrieve('26f1kl_-n-71', { packageName: 'x' });\n\nconsole.log(credential);\n```",
+      "## retrieve\n\n`client.credentials.packages.credentials.retrieve(packageName: string, credentialName: string): { data: credential; }`\n\n**get** `/credentials/packages/{packageName}/credentials/{credentialName}`\n\nFetches a single credential by `packageName` and `credentialName`, including all of its stored fields. Returns not found if no matching credential exists.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst credential = await client.credentials.packages.credentials.retrieve('26f1kl_-n-71', { packageName: 'x' });\n\nconsole.log(credential);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.retrieve',
@@ -863,15 +869,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'create',
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}/fields',
     httpMethod: 'post',
-    summary: 'Add a new field to an existing credential',
-    description: 'Add a new field to an existing credential',
+    summary: 'Add a credential field',
+    description:
+      'Adds a single field to an existing credential. The body specifies a `fieldType` (one of the supported field types) and its value. Returns a conflict if a field of that type already exists on the credential.',
     stainlessPath: '(resource) credentials.packages.credentials.fields > (method) create',
     qualified: 'client.credentials.packages.credentials.fields.create',
     params: ['packageName: string;', 'credentialName: string;', 'fieldType: string;', 'value: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## create\n\n`client.credentials.packages.credentials.fields.create(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}/credentials/{credentialName}/fields`\n\nAdd a new field to an existing credential\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.create('26f1kl_-n-71', {\n  packageName: 'x',\n  fieldType: 'email',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
+      "## create\n\n`client.credentials.packages.credentials.fields.create(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**post** `/credentials/packages/{packageName}/credentials/{credentialName}/fields`\n\nAdds a single field to an existing credential. The body specifies a `fieldType` (one of the supported field types) and its value. Returns a conflict if a field of that type already exists on the credential.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.create('26f1kl_-n-71', {\n  packageName: 'x',\n  fieldType: 'email',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.fields.create',
@@ -904,14 +911,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}',
     httpMethod: 'delete',
     summary: 'Delete a field from a credential',
-    description: 'Delete a field from a credential',
+    description:
+      'Removes a single field of the given `fieldType` from the specified credential while leaving the credential itself intact. Returns the updated credential.',
     stainlessPath: '(resource) credentials.packages.credentials.fields > (method) delete',
     qualified: 'client.credentials.packages.credentials.fields.delete',
     params: ['packageName: string;', 'credentialName: string;', 'fieldType: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## delete\n\n`client.credentials.packages.credentials.fields.delete(packageName: string, credentialName: string, fieldType: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nDelete a field from a credential\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.delete('email', { packageName: 'x', credentialName: '26f1kl_-n-71' });\n\nconsole.log(field);\n```",
+      "## delete\n\n`client.credentials.packages.credentials.fields.delete(packageName: string, credentialName: string, fieldType: string): { data: credential; message: string; success: true; }`\n\n**delete** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nRemoves a single field of the given `fieldType` from the specified credential while leaving the credential itself intact. Returns the updated credential.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.delete('email', { packageName: 'x', credentialName: '26f1kl_-n-71' });\n\nconsole.log(field);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.fields.delete',
@@ -944,14 +952,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}',
     httpMethod: 'patch',
     summary: 'Update the value of a credential field',
-    description: 'Update the value of a credential field',
+    description:
+      'Updates the value of an existing field on a credential, identified by `packageName`, `credentialName`, and `fieldType` in the path. The body carries the new value and returns the updated credential.',
     stainlessPath: '(resource) credentials.packages.credentials.fields > (method) update',
     qualified: 'client.credentials.packages.credentials.fields.update',
     params: ['packageName: string;', 'credentialName: string;', 'fieldType: string;', 'value: string;'],
     response:
       '{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }',
     markdown:
-      "## update\n\n`client.credentials.packages.credentials.fields.update(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**patch** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nUpdate the value of a credential field\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.update('email', {\n  packageName: 'x',\n  credentialName: '26f1kl_-n-71',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
+      "## update\n\n`client.credentials.packages.credentials.fields.update(packageName: string, credentialName: string, fieldType: string, value: string): { data: credential; message: string; success: true; }`\n\n**patch** `/credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}`\n\nUpdates the value of an existing field on a credential, identified by `packageName`, `credentialName`, and `fieldType` in the path. The body carries the new value and returns the updated credential.\n\n### Parameters\n\n- `packageName: string`\n\n- `credentialName: string`\n\n- `fieldType: string`\n\n- `value: string`\n\n### Returns\n\n- `{ data: { credentialName: string; fields: object[]; packageName: string; secretPath: string; userId: string; }; message: string; success: true; }`\n\n  - `data: { credentialName: string; fields: { fieldType: string; value: string; }[]; packageName: string; secretPath: string; userId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst field = await client.credentials.packages.credentials.fields.update('email', {\n  packageName: 'x',\n  credentialName: '26f1kl_-n-71',\n  value: 'x',\n});\n\nconsole.log(field);\n```",
     perLanguage: {
       typescript: {
         method: 'client.credentials.packages.credentials.fields.update',
@@ -984,12 +993,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/count',
     httpMethod: 'get',
     summary: 'Count claimed devices',
-    description: 'Count claimed devices',
+    description: 'Returns the number of claimed devices for the user, broken down by device type.',
     stainlessPath: '(resource) devices > (method) count',
     qualified: 'client.devices.count',
     response: 'object',
     markdown:
-      "## count\n\n`client.devices.count(): object`\n\n**get** `/devices/count`\n\nCount claimed devices\n\n### Returns\n\n- `object`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.count();\n\nconsole.log(response);\n```",
+      "## count\n\n`client.devices.count(): object`\n\n**get** `/devices/count`\n\nReturns the number of claimed devices for the user, broken down by device type.\n\n### Returns\n\n- `object`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.count();\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.count',
@@ -1021,12 +1030,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices',
     httpMethod: 'post',
     summary: 'Provision a new device',
-    description: 'Provision a new device',
+    description:
+      'Requests a new device for the authenticated user from the device spec in the request body. Optional query parameters select the device type, target country, billing mode, and a profile to use as the base spec; the response returns the device and its stream token.',
     stainlessPath: '(resource) devices > (method) create',
     qualified: 'client.devices.create',
     params: [
+      "billing?: 'auto' | 'subscription' | 'minute';",
       'country?: string;',
-      "deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device';",
+      'deviceType?: string;',
       'profileId?: string;',
       'androidVersion?: number;',
       'apps?: string[];',
@@ -1041,9 +1052,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'timezone?: string;',
     ],
     response:
-      '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }',
+      '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }',
     markdown:
-      "## create\n\n`client.devices.create(country?: string, deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device', profileId?: string, androidVersion?: number, apps?: string[], carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }, country?: string, files?: string[], identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }, locale?: string, location?: { latitude: number; longitude: number; $schema?: string; }, name?: string, proxy?: { name?: string; smartIp?: boolean; socks5?: object; }, timezone?: string): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n**post** `/devices`\n\nProvision a new device\n\n### Parameters\n\n- `country?: string`\n  ISO 3166-1 alpha-2 country code. If omitted the system picks the country with the most availability.\n\n- `deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device'`\n\n- `profileId?: string`\n  Profile ID to use as device spec\n\n- `androidVersion?: number`\n\n- `apps?: string[]`\n\n- `carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `GsmOperatorAlpha: string`\n  - `GsmOperatorNumeric: number`\n  - `GsmSimOperatorAlpha: string`\n  - `GsmSimOperatorIsoCountry: string`\n  - `GsmSimOperatorNumeric: number`\n  - `PersistSysTimezone: string`\n\n- `country?: string`\n\n- `files?: string[]`\n\n- `identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `BootloaderSerialNumber: string`\n  - `IdentifierAndroidID: string`\n  - `IdentifierAppSetID: string`\n  - `IdentifierBluetoothMAC: string`\n  - `IdentifierGAID: string`\n  - `IdentifierGSFID: string`\n  - `IdentifierICCID: string`\n  - `IdentifierIMEI: string`\n  - `IdentifierIMSI: string`\n  - `IdentifierMediaDRMID: string`\n  - `IdentifierMEID: string`\n  - `IdentifierPhoneNumber: string`\n  - `IdentifierSerial: string`\n  - `IdentifierWifiMAC: string`\n  - `SerialNumber: string`\n\n- `locale?: string`\n\n- `location?: { latitude: number; longitude: number; $schema?: string; }`\n  - `latitude: number`\n  - `longitude: number`\n  - `$schema?: string`\n    A URL to the JSON Schema for this object.\n\n- `name?: string`\n\n- `proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; }`\n  - `name?: string`\n  - `smartIp?: boolean`\n  - `socks5?: { host: string; password: string; port: number; user: string; }`\n\n- `timezone?: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `providerId?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.create();\n\nconsole.log(device);\n```",
+      "## create\n\n`client.devices.create(billing?: 'auto' | 'subscription' | 'minute', country?: string, deviceType?: string, profileId?: string, androidVersion?: number, apps?: string[], carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }, country?: string, files?: string[], identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }, locale?: string, location?: { latitude: number; longitude: number; $schema?: string; }, name?: string, proxy?: { name?: string; smartIp?: boolean; socks5?: object; }, timezone?: string): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n**post** `/devices`\n\nRequests a new device for the authenticated user from the device spec in the request body. Optional query parameters select the device type, target country, billing mode, and a profile to use as the base spec; the response returns the device and its stream token.\n\n### Parameters\n\n- `billing?: 'auto' | 'subscription' | 'minute'`\n  Billing mode. 'auto' uses a subscription slot when available and otherwise bills per minute; 'subscription' requires an available subscription slot; 'minute' bills per minute. Only cloud phone and cloud emulator devices support per-minute billing.\n\n- `country?: string`\n  ISO 3166-1 alpha-2 country code. If omitted the system picks the country with the most availability.\n\n- `deviceType?: string`\n\n- `profileId?: string`\n  Profile ID to use as device spec\n\n- `androidVersion?: number`\n\n- `apps?: string[]`\n\n- `carrier?: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `GsmOperatorAlpha: string`\n  - `GsmOperatorNumeric: number`\n  - `GsmSimOperatorAlpha: string`\n  - `GsmSimOperatorIsoCountry: string`\n  - `GsmSimOperatorNumeric: number`\n  - `PersistSysTimezone: string`\n\n- `country?: string`\n\n- `files?: string[]`\n\n- `identifiers?: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `BootloaderSerialNumber: string`\n  - `IdentifierAndroidID: string`\n  - `IdentifierAppSetID: string`\n  - `IdentifierBluetoothMAC: string`\n  - `IdentifierGAID: string`\n  - `IdentifierGSFID: string`\n  - `IdentifierICCID: string`\n  - `IdentifierIMEI: string`\n  - `IdentifierIMSI: string`\n  - `IdentifierMediaDRMID: string`\n  - `IdentifierMEID: string`\n  - `IdentifierPhoneNumber: string`\n  - `IdentifierSerial: string`\n  - `IdentifierWifiMAC: string`\n  - `SerialNumber: string`\n\n- `locale?: string`\n\n- `location?: { latitude: number; longitude: number; $schema?: string; }`\n  - `latitude: number`\n  - `longitude: number`\n  - `$schema?: string`\n    A URL to the JSON Schema for this object.\n\n- `name?: string`\n\n- `proxy?: { name?: string; smartIp?: boolean; socks5?: { host: string; password: string; port: number; user: string; }; }`\n  - `name?: string`\n  - `smartIp?: boolean`\n  - `socks5?: { host: string; password: string; port: number; user: string; }`\n\n- `timezone?: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `billingStrategy?: string`\n  - `providerId?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.create();\n\nconsole.log(device);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.create',
@@ -1075,7 +1086,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices',
     httpMethod: 'get',
     summary: 'List devices',
-    description: 'List devices',
+    description: "Returns a paginated list of the user's devices along with pagination metadata.",
     stainlessPath: '(resource) devices > (method) list',
     qualified: 'client.devices.list',
     params: [
@@ -1090,9 +1101,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       "type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device';",
     ],
     response:
-      '{ items: { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }',
+      '{ items: { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }',
     markdown:
-      "## list\n\n`client.devices.list(country?: string, name?: string, orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, providerId?: string, state?: string[], type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device'): { items: device[]; pagination: meta; $schema?: string; }`\n\n**get** `/devices`\n\nList devices\n\n### Parameters\n\n- `country?: string`\n\n- `name?: string`\n\n- `orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `providerId?: string`\n\n- `state?: string[]`\n\n- `type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device'`\n\n### Returns\n\n- `{ items: { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }`\n\n  - `items: { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst devices = await client.devices.list();\n\nconsole.log(devices);\n```",
+      "## list\n\n`client.devices.list(country?: string, name?: string, orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, providerId?: string, state?: string[], type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device'): { items: device[]; pagination: meta; $schema?: string; }`\n\n**get** `/devices`\n\nReturns a paginated list of the user's devices along with pagination metadata.\n\n### Parameters\n\n- `country?: string`\n\n- `name?: string`\n\n- `orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `providerId?: string`\n\n- `state?: string[]`\n\n- `type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device'`\n\n### Returns\n\n- `{ items: { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }`\n\n  - `items: { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst devices = await client.devices.list();\n\nconsole.log(devices);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.list',
@@ -1124,14 +1135,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}',
     httpMethod: 'get',
     summary: 'Get device info',
-    description: 'Get device info',
+    description:
+      'Returns the current state and metadata for a single device, including its lifecycle state, type, stream URL, billing strategy, and timestamps. A stream token is included while the device is active.',
     stainlessPath: '(resource) devices > (method) retrieve',
     qualified: 'client.devices.retrieve',
     params: ['deviceId: string;'],
     response:
-      '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }',
+      '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }',
     markdown:
-      "## retrieve\n\n`client.devices.retrieve(deviceId: string): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n**get** `/devices/{deviceId}`\n\nGet device info\n\n### Parameters\n\n- `deviceId: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `providerId?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.retrieve('deviceId');\n\nconsole.log(device);\n```",
+      "## retrieve\n\n`client.devices.retrieve(deviceId: string): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n**get** `/devices/{deviceId}`\n\nReturns the current state and metadata for a single device, including its lifecycle state, type, stream URL, billing strategy, and timestamps. A stream token is included while the device is active.\n\n### Parameters\n\n- `deviceId: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `billingStrategy?: string`\n  - `providerId?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.retrieve('deviceId');\n\nconsole.log(device);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.retrieve',
@@ -1163,14 +1175,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/name',
     httpMethod: 'put',
     summary: 'Update device name',
-    description: 'Update device name',
+    description:
+      'Sets the display name for a device from the name in the request body and returns the updated device.',
     stainlessPath: '(resource) devices > (method) set_name',
     qualified: 'client.devices.setName',
     params: ['deviceId: string;', 'name: string;'],
     response:
-      '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }',
+      '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }',
     markdown:
-      "## set_name\n\n`client.devices.setName(deviceId: string, name: string): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n**put** `/devices/{deviceId}/name`\n\nUpdate device name\n\n### Parameters\n\n- `deviceId: string`\n\n- `name: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `providerId?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.setName('deviceId', { name: 'x' });\n\nconsole.log(device);\n```",
+      "## set_name\n\n`client.devices.setName(deviceId: string, name: string): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n**put** `/devices/{deviceId}/name`\n\nSets the display name for a device from the name in the request body and returns the updated device.\n\n### Parameters\n\n- `deviceId: string`\n\n- `name: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `billingStrategy?: string`\n  - `providerId?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.setName('deviceId', { name: 'x' });\n\nconsole.log(device);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.setName',
@@ -1203,12 +1216,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}',
     httpMethod: 'delete',
     summary: 'Terminate a device',
-    description: 'Terminate a device',
+    description:
+      'Terminates the device and releases its resources. Termination can be scheduled for a future time or chained from a previous device via the request body, in which case a service key is required.',
     stainlessPath: '(resource) devices > (method) terminate',
     qualified: 'client.devices.terminate',
     params: ['deviceId: string;', 'previousDeviceId?: string;', 'terminateAt?: string;'],
     markdown:
-      "## terminate\n\n`client.devices.terminate(deviceId: string, previousDeviceId?: string, terminateAt?: string): void`\n\n**delete** `/devices/{deviceId}`\n\nTerminate a device\n\n### Parameters\n\n- `deviceId: string`\n\n- `previousDeviceId?: string`\n\n- `terminateAt?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.terminate('deviceId')\n```",
+      "## terminate\n\n`client.devices.terminate(deviceId: string, previousDeviceId?: string, terminateAt?: string): void`\n\n**delete** `/devices/{deviceId}`\n\nTerminates the device and releases its resources. Termination can be scheduled for a future time or chained from a previous device via the request body, in which case a service key is required.\n\n### Parameters\n\n- `deviceId: string`\n\n- `previousDeviceId?: string`\n\n- `terminateAt?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.terminate('deviceId')\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.terminate',
@@ -1240,12 +1254,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/reboot',
     httpMethod: 'post',
     summary: 'Reboot a device',
-    description: 'Reboot a device',
+    description:
+      'Triggers a reboot of the device. The device transitions through its reboot lifecycle and becomes ready again once the restart completes.',
     stainlessPath: '(resource) devices > (method) reboot',
     qualified: 'client.devices.reboot',
     params: ['deviceId: string;'],
     markdown:
-      "## reboot\n\n`client.devices.reboot(deviceId: string): void`\n\n**post** `/devices/{deviceId}/reboot`\n\nReboot a device\n\n### Parameters\n\n- `deviceId: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.reboot('deviceId')\n```",
+      "## reboot\n\n`client.devices.reboot(deviceId: string): void`\n\n**post** `/devices/{deviceId}/reboot`\n\nTriggers a reboot of the device. The device transitions through its reboot lifecycle and becomes ready again once the restart completes.\n\n### Parameters\n\n- `deviceId: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.reboot('deviceId')\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.reboot',
@@ -1277,12 +1292,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/reset',
     httpMethod: 'post',
     summary: 'Reset a device to a fresh state',
-    description: 'Reset a device to a fresh state',
+    description:
+      'Resets the device back to a clean state, clearing installed apps and user data accumulated during the session. The device transitions through its reset lifecycle before becoming ready again.',
     stainlessPath: '(resource) devices > (method) reset',
     qualified: 'client.devices.reset',
     params: ['deviceId: string;'],
     markdown:
-      "## reset\n\n`client.devices.reset(deviceId: string): void`\n\n**post** `/devices/{deviceId}/reset`\n\nReset a device to a fresh state\n\n### Parameters\n\n- `deviceId: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.reset('deviceId')\n```",
+      "## reset\n\n`client.devices.reset(deviceId: string): void`\n\n**post** `/devices/{deviceId}/reset`\n\nResets the device back to a clean state, clearing installed apps and user data accumulated during the session. The device transitions through its reset lifecycle before becoming ready again.\n\n### Parameters\n\n- `deviceId: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.reset('deviceId')\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.reset',
@@ -1314,14 +1330,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/wait',
     httpMethod: 'get',
     summary: 'Wait for device to be ready',
-    description: 'Wait for device to be ready',
+    description:
+      'Blocks until the device reaches the ready state, then returns the same payload as Get device info. The call returns early with an error if the wait is cancelled or times out.',
     stainlessPath: '(resource) devices > (method) wait_ready',
     qualified: 'client.devices.waitReady',
     params: ['deviceId: string;'],
     response:
-      '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }',
+      '{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }',
     markdown:
-      "## wait_ready\n\n`client.devices.waitReady(deviceId: string): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n**get** `/devices/{deviceId}/wait`\n\nWait for device to be ready\n\n### Parameters\n\n- `deviceId: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `providerId?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.waitReady('deviceId');\n\nconsole.log(device);\n```",
+      "## wait_ready\n\n`client.devices.waitReady(deviceId: string): { id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n**get** `/devices/{deviceId}/wait`\n\nBlocks until the device reaches the ready state, then returns the same payload as Get device info. The call returns early with an error if the wait is cancelled or times out.\n\n### Parameters\n\n- `deviceId: string`\n\n### Returns\n\n- `{ id: string; activeTaskId: string; assignedAt: string; createdAt: string; name: string; state: string; stateMessage: string; streamUrl: string; taskCount: number; terminatesAt: string; type: string; updatedAt: string; $schema?: string; billingStrategy?: string; providerId?: string; streamToken?: string; userId?: string; }`\n\n  - `id: string`\n  - `activeTaskId: string`\n  - `assignedAt: string`\n  - `createdAt: string`\n  - `name: string`\n  - `state: string`\n  - `stateMessage: string`\n  - `streamUrl: string`\n  - `taskCount: number`\n  - `terminatesAt: string`\n  - `type: string`\n  - `updatedAt: string`\n  - `$schema?: string`\n  - `billingStrategy?: string`\n  - `providerId?: string`\n  - `streamToken?: string`\n  - `userId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst device = await client.devices.waitReady('deviceId');\n\nconsole.log(device);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.waitReady',
@@ -1353,14 +1370,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/fingerprint',
     httpMethod: 'get',
     summary: 'Device fingerprint snapshot',
-    description: 'Device fingerprint snapshot',
+    description:
+      "Returns a live snapshot of the device's spoofed identity, including model, display, identifiers, and carrier. Devices without fingerprint support return an unsupported-feature error.",
     stainlessPath: '(resource) devices > (method) fingerprint',
     qualified: 'client.devices.fingerprint',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     response:
       '{ carrier: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; display: { densityDpi?: number; height?: number; width?: number; }; identifiers: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; model: { aospVersion?: string; brand?: string; device?: string; hardware?: string; imageRepository?: string; manufacturer?: string; model?: string; }; $schema?: string; }',
     markdown:
-      "## fingerprint\n\n`client.devices.fingerprint(deviceId: string, X-Device-Display-ID?: number): { carrier: device_carrier; display: object; identifiers: device_identifiers; model: object; $schema?: string; }`\n\n**get** `/devices/{deviceId}/fingerprint`\n\nDevice fingerprint snapshot\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ carrier: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; display: { densityDpi?: number; height?: number; width?: number; }; identifiers: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; model: { aospVersion?: string; brand?: string; device?: string; hardware?: string; imageRepository?: string; manufacturer?: string; model?: string; }; $schema?: string; }`\n\n  - `carrier: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `display: { densityDpi?: number; height?: number; width?: number; }`\n  - `identifiers: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `model: { aospVersion?: string; brand?: string; device?: string; hardware?: string; imageRepository?: string; manufacturer?: string; model?: string; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.fingerprint('deviceId');\n\nconsole.log(response);\n```",
+      "## fingerprint\n\n`client.devices.fingerprint(deviceId: string, X-Device-Display-ID?: number): { carrier: device_carrier; display: object; identifiers: device_identifiers; model: object; $schema?: string; }`\n\n**get** `/devices/{deviceId}/fingerprint`\n\nReturns a live snapshot of the device's spoofed identity, including model, display, identifiers, and carrier. Devices without fingerprint support return an unsupported-feature error.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ carrier: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }; display: { densityDpi?: number; height?: number; width?: number; }; identifiers: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }; model: { aospVersion?: string; brand?: string; device?: string; hardware?: string; imageRepository?: string; manufacturer?: string; model?: string; }; $schema?: string; }`\n\n  - `carrier: { GsmOperatorAlpha: string; GsmOperatorNumeric: number; GsmSimOperatorAlpha: string; GsmSimOperatorIsoCountry: string; GsmSimOperatorNumeric: number; PersistSysTimezone: string; }`\n  - `display: { densityDpi?: number; height?: number; width?: number; }`\n  - `identifiers: { BootloaderSerialNumber: string; IdentifierAndroidID: string; IdentifierAppSetID: string; IdentifierBluetoothMAC: string; IdentifierGAID: string; IdentifierGSFID: string; IdentifierICCID: string; IdentifierIMEI: string; IdentifierIMSI: string; IdentifierMediaDRMID: string; IdentifierMEID: string; IdentifierPhoneNumber: string; IdentifierSerial: string; IdentifierWifiMAC: string; SerialNumber: string; }`\n  - `model: { aospVersion?: string; brand?: string; device?: string; hardware?: string; imageRepository?: string; manufacturer?: string; model?: string; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.fingerprint('deviceId');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.fingerprint',
@@ -1393,12 +1411,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/global',
     httpMethod: 'post',
     summary: 'Perform a global action',
-    description: 'Perform a global action',
+    description:
+      'Performs a global system action on the device, such as navigating back or going to the home screen, identified by an action code.',
     stainlessPath: '(resource) devices.actions > (method) global',
     qualified: 'client.devices.actions.global',
     params: ['deviceId: string;', 'action: number;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## global\n\n`client.devices.actions.global(deviceId: string, action: number, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/global`\n\nPerform a global action\n\n### Parameters\n\n- `deviceId: string`\n\n- `action: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.actions.global('deviceId', { action: 0 })\n```",
+      "## global\n\n`client.devices.actions.global(deviceId: string, action: number, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/global`\n\nPerforms a global system action on the device, such as navigating back or going to the home screen, identified by an action code.\n\n### Parameters\n\n- `deviceId: string`\n\n- `action: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.actions.global('deviceId', { action: 0 })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.actions.global',
@@ -1431,13 +1450,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/overlay',
     httpMethod: 'get',
     summary: 'Check if overlay is visible',
-    description: 'Check if overlay is visible',
+    description: 'Returns whether the accessibility overlay is currently visible on the device.',
     stainlessPath: '(resource) devices.actions > (method) overlay_visible',
     qualified: 'client.devices.actions.overlayVisible',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     response: '{ visible: boolean; $schema?: string; }',
     markdown:
-      "## overlay_visible\n\n`client.devices.actions.overlayVisible(deviceId: string, X-Device-Display-ID?: number): { visible: boolean; $schema?: string; }`\n\n**get** `/devices/{deviceId}/overlay`\n\nCheck if overlay is visible\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ visible: boolean; $schema?: string; }`\n\n  - `visible: boolean`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.actions.overlayVisible('deviceId');\n\nconsole.log(response);\n```",
+      "## overlay_visible\n\n`client.devices.actions.overlayVisible(deviceId: string, X-Device-Display-ID?: number): { visible: boolean; $schema?: string; }`\n\n**get** `/devices/{deviceId}/overlay`\n\nReturns whether the accessibility overlay is currently visible on the device.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ visible: boolean; $schema?: string; }`\n\n  - `visible: boolean`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.actions.overlayVisible('deviceId');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.actions.overlayVisible',
@@ -1470,12 +1489,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/overlay',
     httpMethod: 'post',
     summary: 'Set overlay visibility',
-    description: 'Set overlay visibility',
+    description:
+      'Shows or hides the accessibility overlay on the device based on the visibility flag in the request body.',
     stainlessPath: '(resource) devices.actions > (method) set_overlay_visible',
     qualified: 'client.devices.actions.setOverlayVisible',
     params: ['deviceId: string;', 'visible: boolean;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## set_overlay_visible\n\n`client.devices.actions.setOverlayVisible(deviceId: string, visible: boolean, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/overlay`\n\nSet overlay visibility\n\n### Parameters\n\n- `deviceId: string`\n\n- `visible: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.actions.setOverlayVisible('deviceId', { visible: true })\n```",
+      "## set_overlay_visible\n\n`client.devices.actions.setOverlayVisible(deviceId: string, visible: boolean, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/overlay`\n\nShows or hides the accessibility overlay on the device based on the visibility flag in the request body.\n\n### Parameters\n\n- `deviceId: string`\n\n- `visible: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.actions.setOverlayVisible('deviceId', { visible: true })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.actions.setOverlayVisible',
@@ -1508,7 +1528,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/swipe',
     httpMethod: 'post',
     summary: 'Swipe',
-    description: 'Swipe',
+    description:
+      'Swipes from a start coordinate to an end coordinate over the given duration in milliseconds. An optional stealth flag applies human-like jitter and curved paths on devices that support it.',
     stainlessPath: '(resource) devices.actions > (method) swipe',
     qualified: 'client.devices.actions.swipe',
     params: [
@@ -1522,7 +1543,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'X-Device-Display-ID?: number;',
     ],
     markdown:
-      "## swipe\n\n`client.devices.actions.swipe(deviceId: string, duration: number, endX: number, endY: number, startX: number, startY: number, stealth?: boolean, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/swipe`\n\nSwipe\n\n### Parameters\n\n- `deviceId: string`\n\n- `duration: number`\n  Swipe duration in milliseconds\n\n- `endX: number`\n\n- `endY: number`\n\n- `startX: number`\n\n- `startY: number`\n\n- `stealth?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.actions.swipe('deviceId', {\n  duration: 10,\n  endX: 0,\n  endY: 0,\n  startX: 0,\n  startY: 0,\n})\n```",
+      "## swipe\n\n`client.devices.actions.swipe(deviceId: string, duration: number, endX: number, endY: number, startX: number, startY: number, stealth?: boolean, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/swipe`\n\nSwipes from a start coordinate to an end coordinate over the given duration in milliseconds. An optional stealth flag applies human-like jitter and curved paths on devices that support it.\n\n### Parameters\n\n- `deviceId: string`\n\n- `duration: number`\n  Swipe duration in milliseconds\n\n- `endX: number`\n\n- `endY: number`\n\n- `startX: number`\n\n- `startY: number`\n\n- `stealth?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.actions.swipe('deviceId', {\n  duration: 10,\n  endX: 0,\n  endY: 0,\n  startX: 0,\n  startY: 0,\n})\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.actions.swipe',
@@ -1555,7 +1576,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/tap',
     httpMethod: 'post',
     summary: 'Tap by coordinates',
-    description: 'Tap by coordinates',
+    description:
+      'Taps the device screen at the given x/y coordinates. An optional stealth flag routes the tap through human-like input on devices that support it.',
     stainlessPath: '(resource) devices.actions > (method) tap',
     qualified: 'client.devices.actions.tap',
     params: [
@@ -1566,7 +1588,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'X-Device-Display-ID?: number;',
     ],
     markdown:
-      "## tap\n\n`client.devices.actions.tap(deviceId: string, x: number, y: number, stealth?: boolean, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/tap`\n\nTap by coordinates\n\n### Parameters\n\n- `deviceId: string`\n\n- `x: number`\n\n- `y: number`\n\n- `stealth?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.actions.tap('deviceId', { x: 0, y: 0 })\n```",
+      "## tap\n\n`client.devices.actions.tap(deviceId: string, x: number, y: number, stealth?: boolean, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/tap`\n\nTaps the device screen at the given x/y coordinates. An optional stealth flag routes the tap through human-like input on devices that support it.\n\n### Parameters\n\n- `deviceId: string`\n\n- `x: number`\n\n- `y: number`\n\n- `stealth?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.actions.tap('deviceId', { x: 0, y: 0 })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.actions.tap',
@@ -1599,12 +1621,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/apps/{packageName}',
     httpMethod: 'delete',
     summary: 'Delete app',
-    description: 'Delete app',
+    description:
+      'Uninstalls the app identified by the path package name from the device. Protected packages cannot be deleted.',
     stainlessPath: '(resource) devices.apps > (method) delete',
     qualified: 'client.devices.apps.delete',
     params: ['deviceId: string;', 'packageName: string;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## delete\n\n`client.devices.apps.delete(deviceId: string, packageName: string, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/apps/{packageName}`\n\nDelete app\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.delete('packageName', { deviceId: 'deviceId' })\n```",
+      "## delete\n\n`client.devices.apps.delete(deviceId: string, packageName: string, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/apps/{packageName}`\n\nUninstalls the app identified by the path package name from the device. Protected packages cannot be deleted.\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.delete('packageName', { deviceId: 'deviceId' })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.apps.delete',
@@ -1637,7 +1660,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/apps',
     httpMethod: 'post',
     summary: 'Install app',
-    description: 'Install app',
+    description:
+      'Installs an app on the device. The request body must supply exactly one of an Android packageName or an iOS bundleId; protected packages are rejected.',
     stainlessPath: '(resource) devices.apps > (method) install',
     qualified: 'client.devices.apps.install',
     params: [
@@ -1677,7 +1701,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/apps',
     httpMethod: 'get',
     summary: 'List apps',
-    description: 'List apps',
+    description:
+      'Returns detailed information about apps installed on the device, including package name and label. System and protected apps are excluded unless the corresponding query parameters are set.',
     stainlessPath: '(resource) devices.apps > (method) list',
     qualified: 'client.devices.apps.list',
     params: [
@@ -1689,7 +1714,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ isSystemApp: boolean; label: string; packageName: string; versionCode: number; versionName: string; }[]',
     markdown:
-      "## list\n\n`client.devices.apps.list(deviceId: string, includeProtectedApps?: boolean, includeSystemApps?: boolean, X-Device-Display-ID?: number): { isSystemApp: boolean; label: string; packageName: string; versionCode: number; versionName: string; }[]`\n\n**get** `/devices/{deviceId}/apps`\n\nList apps\n\n### Parameters\n\n- `deviceId: string`\n\n- `includeProtectedApps?: boolean`\n\n- `includeSystemApps?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ isSystemApp: boolean; label: string; packageName: string; versionCode: number; versionName: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst apps = await client.devices.apps.list('deviceId');\n\nconsole.log(apps);\n```",
+      "## list\n\n`client.devices.apps.list(deviceId: string, includeProtectedApps?: boolean, includeSystemApps?: boolean, X-Device-Display-ID?: number): { isSystemApp: boolean; label: string; packageName: string; versionCode: number; versionName: string; }[]`\n\n**get** `/devices/{deviceId}/apps`\n\nReturns detailed information about apps installed on the device, including package name and label. System and protected apps are excluded unless the corresponding query parameters are set.\n\n### Parameters\n\n- `deviceId: string`\n\n- `includeProtectedApps?: boolean`\n\n- `includeSystemApps?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ isSystemApp: boolean; label: string; packageName: string; versionCode: number; versionName: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst apps = await client.devices.apps.list('deviceId');\n\nconsole.log(apps);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.apps.list',
@@ -1721,7 +1746,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/apps/{packageName}',
     httpMethod: 'put',
     summary: 'Start app',
-    description: 'Start app',
+    description:
+      'Launches the app identified by the path package name, optionally starting a specific activity given in the request body. Protected packages cannot be started.',
     stainlessPath: '(resource) devices.apps > (method) start',
     qualified: 'client.devices.apps.start',
     params: [
@@ -1731,7 +1757,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'X-Device-Display-ID?: number;',
     ],
     markdown:
-      "## start\n\n`client.devices.apps.start(deviceId: string, packageName: string, activity?: string, X-Device-Display-ID?: number): void`\n\n**put** `/devices/{deviceId}/apps/{packageName}`\n\nStart app\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `activity?: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.start('packageName', { deviceId: 'deviceId' })\n```",
+      "## start\n\n`client.devices.apps.start(deviceId: string, packageName: string, activity?: string, X-Device-Display-ID?: number): void`\n\n**put** `/devices/{deviceId}/apps/{packageName}`\n\nLaunches the app identified by the path package name, optionally starting a specific activity given in the request body. Protected packages cannot be started.\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `activity?: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.start('packageName', { deviceId: 'deviceId' })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.apps.start',
@@ -1764,12 +1790,18 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/apps/{packageName}',
     httpMethod: 'patch',
     summary: 'Stop app',
-    description: 'Stop app',
+    description:
+      "Force-stops the app identified by the path package name. When clearData is set in the request body, the app's data is also cleared. Protected packages cannot be stopped.",
     stainlessPath: '(resource) devices.apps > (method) stop',
     qualified: 'client.devices.apps.stop',
-    params: ['deviceId: string;', 'packageName: string;', 'X-Device-Display-ID?: number;'],
+    params: [
+      'deviceId: string;',
+      'packageName: string;',
+      'clearData?: boolean;',
+      'X-Device-Display-ID?: number;',
+    ],
     markdown:
-      "## stop\n\n`client.devices.apps.stop(deviceId: string, packageName: string, X-Device-Display-ID?: number): void`\n\n**patch** `/devices/{deviceId}/apps/{packageName}`\n\nStop app\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.stop('packageName', { deviceId: 'deviceId' })\n```",
+      "## stop\n\n`client.devices.apps.stop(deviceId: string, packageName: string, clearData?: boolean, X-Device-Display-ID?: number): void`\n\n**patch** `/devices/{deviceId}/apps/{packageName}`\n\nForce-stops the app identified by the path package name. When clearData is set in the request body, the app's data is also cleared. Protected packages cannot be stopped.\n\n### Parameters\n\n- `deviceId: string`\n\n- `packageName: string`\n\n- `clearData?: boolean`\n  If true, clears all app data (pm clear) in addition to stopping the app.\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.apps.stop('packageName', { deviceId: 'deviceId' })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.apps.stop',
@@ -1801,8 +1833,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'activate',
     endpoint: '/devices/{deviceId}/esim',
     httpMethod: 'post',
-    summary: 'Configure eSIM (download profile and/or enable subscription)',
-    description: 'Configure eSIM (download profile and/or enable subscription)',
+    summary: 'Configure eSIM',
+    description: 'Download profile and/or enable subscription.',
     stainlessPath: '(resource) devices.esim > (method) activate',
     qualified: 'client.devices.esim.activate',
     params: [
@@ -1816,7 +1848,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }',
     markdown:
-      "## activate\n\n`client.devices.esim.activate(deviceId: string, enable: boolean, smDpAddr: string, confirmationCode?: string, matchingId?: string, X-Device-Display-ID?: number): { carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }`\n\n**post** `/devices/{deviceId}/esim`\n\nConfigure eSIM (download profile and/or enable subscription)\n\n### Parameters\n\n- `deviceId: string`\n\n- `enable: boolean`\n\n- `smDpAddr: string`\n\n- `confirmationCode?: string`\n  Optional carrier-issued confirmation code (the 4th LPA segment). Required only for plans whose SM-DP+ challenges the device for one. Requires matchingId — the LPA spec only interprets segment 4 when segment 3 is present.\n\n- `matchingId?: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }`\n\n  - `carrier: string`\n  - `displayName: string`\n  - `iccid: string`\n  - `isEmbedded: boolean`\n  - `slot: number`\n  - `subId: number`\n  - `type: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.esim.activate('deviceId', { enable: true, smDpAddr: 'smDpAddr' });\n\nconsole.log(response);\n```",
+      "## activate\n\n`client.devices.esim.activate(deviceId: string, enable: boolean, smDpAddr: string, confirmationCode?: string, matchingId?: string, X-Device-Display-ID?: number): { carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }`\n\n**post** `/devices/{deviceId}/esim`\n\nDownload profile and/or enable subscription.\n\n### Parameters\n\n- `deviceId: string`\n\n- `enable: boolean`\n\n- `smDpAddr: string`\n\n- `confirmationCode?: string`\n  Optional carrier-issued confirmation code (the 4th LPA segment). Required only for plans whose SM-DP+ challenges the device for one. Requires matchingId — the LPA spec only interprets segment 4 when segment 3 is present.\n\n- `matchingId?: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }`\n\n  - `carrier: string`\n  - `displayName: string`\n  - `iccid: string`\n  - `isEmbedded: boolean`\n  - `slot: number`\n  - `subId: number`\n  - `type: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.esim.activate('deviceId', { enable: true, smDpAddr: 'smDpAddr' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.esim.activate',
@@ -1849,12 +1881,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/esim',
     httpMethod: 'put',
     summary: 'Enable an eSIM subscription',
-    description: 'Enable an eSIM subscription',
+    description:
+      'Enables the eSIM subscription identified by the subId in the request body so it becomes the active subscription.',
     stainlessPath: '(resource) devices.esim > (method) enable',
     qualified: 'client.devices.esim.enable',
     params: ['deviceId: string;', 'subId: number;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## enable\n\n`client.devices.esim.enable(deviceId: string, subId: number, X-Device-Display-ID?: number): void`\n\n**put** `/devices/{deviceId}/esim`\n\nEnable an eSIM subscription\n\n### Parameters\n\n- `deviceId: string`\n\n- `subId: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.esim.enable('deviceId', { subId: 0 })\n```",
+      "## enable\n\n`client.devices.esim.enable(deviceId: string, subId: number, X-Device-Display-ID?: number): void`\n\n**put** `/devices/{deviceId}/esim`\n\nEnables the eSIM subscription identified by the subId in the request body so it becomes the active subscription.\n\n### Parameters\n\n- `deviceId: string`\n\n- `subId: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.esim.enable('deviceId', { subId: 0 })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.esim.enable',
@@ -1887,14 +1920,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/esim',
     httpMethod: 'get',
     summary: 'List eSIM subscriptions',
-    description: 'List eSIM subscriptions',
+    description: 'Returns the eSIM subscriptions currently provisioned on the device.',
     stainlessPath: '(resource) devices.esim > (method) list',
     qualified: 'client.devices.esim.list',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     response:
       '{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }[]',
     markdown:
-      "## list\n\n`client.devices.esim.list(deviceId: string, X-Device-Display-ID?: number): { carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }[]`\n\n**get** `/devices/{deviceId}/esim`\n\nList eSIM subscriptions\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst esims = await client.devices.esim.list('deviceId');\n\nconsole.log(esims);\n```",
+      "## list\n\n`client.devices.esim.list(deviceId: string, X-Device-Display-ID?: number): { carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }[]`\n\n**get** `/devices/{deviceId}/esim`\n\nReturns the eSIM subscriptions currently provisioned on the device.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ carrier: string; displayName: string; iccid: string; isEmbedded: boolean; slot: number; subId: number; type: string; $schema?: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst esims = await client.devices.esim.list('deviceId');\n\nconsole.log(esims);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.esim.list',
@@ -1926,12 +1959,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/esim',
     httpMethod: 'delete',
     summary: 'Delete eSIM subscription',
-    description: 'Delete eSIM subscription',
+    description: 'Deletes the eSIM subscription identified by the subId query parameter from the device.',
     stainlessPath: '(resource) devices.esim > (method) remove',
     qualified: 'client.devices.esim.remove',
     params: ['deviceId: string;', 'subId: number;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## remove\n\n`client.devices.esim.remove(deviceId: string, subId: number, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/esim`\n\nDelete eSIM subscription\n\n### Parameters\n\n- `deviceId: string`\n\n- `subId: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.esim.remove('deviceId', { subId: 0 })\n```",
+      "## remove\n\n`client.devices.esim.remove(deviceId: string, subId: number, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/esim`\n\nDeletes the eSIM subscription identified by the subId query parameter from the device.\n\n### Parameters\n\n- `deviceId: string`\n\n- `subId: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.esim.remove('deviceId', { subId: 0 })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.esim.remove',
@@ -1964,12 +1997,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/files',
     httpMethod: 'delete',
     summary: 'Delete file',
-    description: 'Delete file',
+    description: 'Deletes the file at the path given in the path query parameter from the device.',
     stainlessPath: '(resource) devices.files > (method) delete',
     qualified: 'client.devices.files.delete',
     params: ['deviceId: string;', 'path: string;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## delete\n\n`client.devices.files.delete(deviceId: string, path: string, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/files`\n\nDelete file\n\n### Parameters\n\n- `deviceId: string`\n\n- `path: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.files.delete('deviceId', { path: 'path' })\n```",
+      "## delete\n\n`client.devices.files.delete(deviceId: string, path: string, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/files`\n\nDeletes the file at the path given in the path query parameter from the device.\n\n### Parameters\n\n- `deviceId: string`\n\n- `path: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.files.delete('deviceId', { path: 'path' })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.files.delete',
@@ -2002,13 +2035,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/files/download',
     httpMethod: 'get',
     summary: 'Download file',
-    description: 'Download file',
+    description:
+      'Pulls the file at the given path query parameter from the device and returns its raw bytes as an octet-stream.',
     stainlessPath: '(resource) devices.files > (method) download',
     qualified: 'client.devices.files.download',
     params: ['deviceId: string;', 'path: string;', 'X-Device-Display-ID?: number;'],
     response: 'string',
     markdown:
-      "## download\n\n`client.devices.files.download(deviceId: string, path: string, X-Device-Display-ID?: number): string`\n\n**get** `/devices/{deviceId}/files/download`\n\nDownload file\n\n### Parameters\n\n- `deviceId: string`\n\n- `path: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.files.download('deviceId', { path: 'path' });\n\nconsole.log(response);\n```",
+      "## download\n\n`client.devices.files.download(deviceId: string, path: string, X-Device-Display-ID?: number): string`\n\n**get** `/devices/{deviceId}/files/download`\n\nPulls the file at the given path query parameter from the device and returns its raw bytes as an octet-stream.\n\n### Parameters\n\n- `deviceId: string`\n\n- `path: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.files.download('deviceId', { path: 'path' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.files.download',
@@ -2041,14 +2075,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/files',
     httpMethod: 'get',
     summary: 'List files',
-    description: 'List files',
+    description:
+      "Lists the files at the directory path given in the path query parameter, returning each entry's metadata along with the path and total count.",
     stainlessPath: '(resource) devices.files > (method) list',
     qualified: 'client.devices.files.list',
     params: ['deviceId: string;', 'path: string;', 'X-Device-Display-ID?: number;'],
     response:
       '{ files: { extendedAttributes: boolean; group: string; hardLinks: number; modifiedAt: string; name: string; owner: string; permissions: object; size: number; type: string; symlinkTarget?: string; }[]; path: string; total: number; $schema?: string; }',
     markdown:
-      "## list\n\n`client.devices.files.list(deviceId: string, path: string, X-Device-Display-ID?: number): { files: file_info[]; path: string; total: number; $schema?: string; }`\n\n**get** `/devices/{deviceId}/files`\n\nList files\n\n### Parameters\n\n- `deviceId: string`\n\n- `path: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ files: { extendedAttributes: boolean; group: string; hardLinks: number; modifiedAt: string; name: string; owner: string; permissions: object; size: number; type: string; symlinkTarget?: string; }[]; path: string; total: number; $schema?: string; }`\n\n  - `files: { extendedAttributes: boolean; group: string; hardLinks: number; modifiedAt: string; name: string; owner: string; permissions: { group: object; others: object; owner: object; special: { setGid: boolean; setUid: boolean; sticky: boolean; }; }; size: number; type: string; symlinkTarget?: string; }[]`\n  - `path: string`\n  - `total: number`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst files = await client.devices.files.list('deviceId', { path: 'path' });\n\nconsole.log(files);\n```",
+      "## list\n\n`client.devices.files.list(deviceId: string, path: string, X-Device-Display-ID?: number): { files: file_info[]; path: string; total: number; $schema?: string; }`\n\n**get** `/devices/{deviceId}/files`\n\nLists the files at the directory path given in the path query parameter, returning each entry's metadata along with the path and total count.\n\n### Parameters\n\n- `deviceId: string`\n\n- `path: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ files: { extendedAttributes: boolean; group: string; hardLinks: number; modifiedAt: string; name: string; owner: string; permissions: object; size: number; type: string; symlinkTarget?: string; }[]; path: string; total: number; $schema?: string; }`\n\n  - `files: { extendedAttributes: boolean; group: string; hardLinks: number; modifiedAt: string; name: string; owner: string; permissions: { group: object; others: object; owner: object; special: { setGid: boolean; setUid: boolean; sticky: boolean; }; }; size: number; type: string; symlinkTarget?: string; }[]`\n  - `path: string`\n  - `total: number`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst files = await client.devices.files.list('deviceId', { path: 'path' });\n\nconsole.log(files);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.files.list',
@@ -2081,12 +2116,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/files',
     httpMethod: 'post',
     summary: 'Upload file',
-    description: 'Upload file',
+    description:
+      "Uploads a file to the device via multipart form data, writing it into the directory given by the path query parameter using the uploaded file's name.",
     stainlessPath: '(resource) devices.files > (method) upload',
     qualified: 'client.devices.files.upload',
     params: ['deviceId: string;', 'path: string;', 'file: string;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## upload\n\n`client.devices.files.upload(deviceId: string, path: string, file: string, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/files`\n\nUpload file\n\n### Parameters\n\n- `deviceId: string`\n\n- `path: string`\n\n- `file: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.files.upload('deviceId', { path: 'path', file: fs.createReadStream('path/to/file') })\n```",
+      "## upload\n\n`client.devices.files.upload(deviceId: string, path: string, file: string, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/files`\n\nUploads a file to the device via multipart form data, writing it into the directory given by the path query parameter using the uploaded file's name.\n\n### Parameters\n\n- `deviceId: string`\n\n- `path: string`\n\n- `file: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.files.upload('deviceId', { path: 'path', file: fs.createReadStream('path/to/file') })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.files.upload',
@@ -2119,12 +2155,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/keyboard',
     httpMethod: 'delete',
     summary: 'Clear input',
-    description: 'Clear input',
+    description: 'Clears the contents of the currently focused text input field.',
     stainlessPath: '(resource) devices.keyboard > (method) clear',
     qualified: 'client.devices.keyboard.clear',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## clear\n\n`client.devices.keyboard.clear(deviceId: string, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/keyboard`\n\nClear input\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.keyboard.clear('deviceId')\n```",
+      "## clear\n\n`client.devices.keyboard.clear(deviceId: string, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/keyboard`\n\nClears the contents of the currently focused text input field.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.keyboard.clear('deviceId')\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.keyboard.clear',
@@ -2157,12 +2193,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/keyboard',
     httpMethod: 'put',
     summary: 'Input key',
-    description: 'Input key',
+    description: 'Sends a single Android key event to the device, identified by its key code.',
     stainlessPath: '(resource) devices.keyboard > (method) key',
     qualified: 'client.devices.keyboard.key',
     params: ['deviceId: string;', 'key: number;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## key\n\n`client.devices.keyboard.key(deviceId: string, key: number, X-Device-Display-ID?: number): void`\n\n**put** `/devices/{deviceId}/keyboard`\n\nInput key\n\n### Parameters\n\n- `deviceId: string`\n\n- `key: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.keyboard.key('deviceId', { key: 0 })\n```",
+      "## key\n\n`client.devices.keyboard.key(deviceId: string, key: number, X-Device-Display-ID?: number): void`\n\n**put** `/devices/{deviceId}/keyboard`\n\nSends a single Android key event to the device, identified by its key code.\n\n### Parameters\n\n- `deviceId: string`\n\n- `key: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.keyboard.key('deviceId', { key: 0 })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.keyboard.key',
@@ -2195,7 +2231,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/keyboard',
     httpMethod: 'post',
     summary: 'Input text',
-    description: 'Input text',
+    description:
+      'Types the given text into the focused input field. Supports optionally clearing the field first and a stealth mode that emulates human typing speed and error rate on supported devices.',
     stainlessPath: '(resource) devices.keyboard > (method) write',
     qualified: 'client.devices.keyboard.write',
     params: [
@@ -2208,7 +2245,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'X-Device-Display-ID?: number;',
     ],
     markdown:
-      "## write\n\n`client.devices.keyboard.write(deviceId: string, text: string, clear?: boolean, errorRate?: number, stealth?: boolean, wpm?: number, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/keyboard`\n\nInput text\n\n### Parameters\n\n- `deviceId: string`\n\n- `text: string`\n\n- `clear?: boolean`\n\n- `errorRate?: number`\n  Per-character mistake rate for humantouch typing. -1 uses server default.\n\n- `stealth?: boolean`\n\n- `wpm?: number`\n  Words per minute for stealth typing. 0 uses portal default.\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.keyboard.write('deviceId', { text: 'text' })\n```",
+      "## write\n\n`client.devices.keyboard.write(deviceId: string, text: string, clear?: boolean, errorRate?: number, stealth?: boolean, wpm?: number, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/keyboard`\n\nTypes the given text into the focused input field. Supports optionally clearing the field first and a stealth mode that emulates human typing speed and error rate on supported devices.\n\n### Parameters\n\n- `deviceId: string`\n\n- `text: string`\n\n- `clear?: boolean`\n\n- `errorRate?: number`\n  Per-character mistake rate for humantouch typing. -1 uses server default.\n\n- `stealth?: boolean`\n\n- `wpm?: number`\n  Words per minute for stealth typing. 0 uses portal default.\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.keyboard.write('deviceId', { text: 'text' })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.keyboard.write',
@@ -2241,13 +2278,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/location',
     httpMethod: 'get',
     summary: 'Get device location',
-    description: 'Get device location',
+    description:
+      "Returns the device's current simulated GPS location as latitude and longitude. Devices without geo support return an unsupported-feature error.",
     stainlessPath: '(resource) devices.location > (method) get',
     qualified: 'client.devices.location.get',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     response: '{ latitude: number; longitude: number; $schema?: string; }',
     markdown:
-      "## get\n\n`client.devices.location.get(deviceId: string, X-Device-Display-ID?: number): { latitude: number; longitude: number; $schema?: string; }`\n\n**get** `/devices/{deviceId}/location`\n\nGet device location\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ latitude: number; longitude: number; $schema?: string; }`\n\n  - `latitude: number`\n  - `longitude: number`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst location = await client.devices.location.get('deviceId');\n\nconsole.log(location);\n```",
+      "## get\n\n`client.devices.location.get(deviceId: string, X-Device-Display-ID?: number): { latitude: number; longitude: number; $schema?: string; }`\n\n**get** `/devices/{deviceId}/location`\n\nReturns the device's current simulated GPS location as latitude and longitude. Devices without geo support return an unsupported-feature error.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ latitude: number; longitude: number; $schema?: string; }`\n\n  - `latitude: number`\n  - `longitude: number`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst location = await client.devices.location.get('deviceId');\n\nconsole.log(location);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.location.get',
@@ -2280,12 +2318,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/location',
     httpMethod: 'post',
     summary: 'Set device location',
-    description: 'Set device location',
+    description:
+      "Sets the device's simulated GPS location to the latitude and longitude in the request body. Devices without geo support return an unsupported-feature error.",
     stainlessPath: '(resource) devices.location > (method) set',
     qualified: 'client.devices.location.set',
     params: ['deviceId: string;', 'latitude: number;', 'longitude: number;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## set\n\n`client.devices.location.set(deviceId: string, latitude: number, longitude: number, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/location`\n\nSet device location\n\n### Parameters\n\n- `deviceId: string`\n\n- `latitude: number`\n\n- `longitude: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.location.set('deviceId', { latitude: 0, longitude: 0 })\n```",
+      "## set\n\n`client.devices.location.set(deviceId: string, latitude: number, longitude: number, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/location`\n\nSets the device's simulated GPS location to the latitude and longitude in the request body. Devices without geo support return an unsupported-feature error.\n\n### Parameters\n\n- `deviceId: string`\n\n- `latitude: number`\n\n- `longitude: number`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.location.set('deviceId', { latitude: 0, longitude: 0 })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.location.set',
@@ -2318,7 +2357,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/packages',
     httpMethod: 'get',
     summary: 'List packages',
-    description: 'List packages',
+    description:
+      'Returns the package names of apps installed on the device. System and protected packages are excluded unless the corresponding query parameters are set.',
     stainlessPath: '(resource) devices.packages > (method) list',
     qualified: 'client.devices.packages.list',
     params: [
@@ -2329,7 +2369,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     ],
     response: 'string[]',
     markdown:
-      "## list\n\n`client.devices.packages.list(deviceId: string, includeProtectedPackages?: boolean, includeSystemPackages?: boolean, X-Device-Display-ID?: number): string[]`\n\n**get** `/devices/{deviceId}/packages`\n\nList packages\n\n### Parameters\n\n- `deviceId: string`\n\n- `includeProtectedPackages?: boolean`\n\n- `includeSystemPackages?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst packages = await client.devices.packages.list('deviceId');\n\nconsole.log(packages);\n```",
+      "## list\n\n`client.devices.packages.list(deviceId: string, includeProtectedPackages?: boolean, includeSystemPackages?: boolean, X-Device-Display-ID?: number): string[]`\n\n**get** `/devices/{deviceId}/packages`\n\nReturns the package names of apps installed on the device. System and protected packages are excluded unless the corresponding query parameters are set.\n\n### Parameters\n\n- `deviceId: string`\n\n- `includeProtectedPackages?: boolean`\n\n- `includeSystemPackages?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst packages = await client.devices.packages.list('deviceId');\n\nconsole.log(packages);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.packages.list',
@@ -2400,7 +2440,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/proxy',
     httpMethod: 'post',
     summary: 'Connect proxy',
-    description: 'Connect proxy',
+    description:
+      "Routes the device's traffic through a SOCKS5 proxy supplied in the request body, replacing any existing connection. A smartIp option can be used to select an IP automatically; the legacy flat host/port/user/password fields remain supported.",
     stainlessPath: '(resource) devices.proxy > (method) connect',
     qualified: 'client.devices.proxy.connect',
     params: [
@@ -2415,7 +2456,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'X-Device-Display-ID?: number;',
     ],
     markdown:
-      "## connect\n\n`client.devices.proxy.connect(deviceId: string, host?: string, name?: string, password?: string, port?: number, smartIp?: boolean, socks5?: { host: string; port: number; password?: string; user?: string; }, user?: string, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/proxy`\n\nConnect proxy\n\n### Parameters\n\n- `deviceId: string`\n\n- `host?: string`\n\n- `name?: string`\n  Proxy name\n\n- `password?: string`\n\n- `port?: number`\n\n- `smartIp?: boolean`\n\n- `socks5?: { host: string; port: number; password?: string; user?: string; }`\n  SOCKS5 proxy configuration (required for socks5).\n  - `host: string`\n  - `port: number`\n  - `password?: string`\n  - `user?: string`\n\n- `user?: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.proxy.connect('deviceId')\n```",
+      "## connect\n\n`client.devices.proxy.connect(deviceId: string, host?: string, name?: string, password?: string, port?: number, smartIp?: boolean, socks5?: { host: string; port: number; password?: string; user?: string; }, user?: string, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/proxy`\n\nRoutes the device's traffic through a SOCKS5 proxy supplied in the request body, replacing any existing connection. A smartIp option can be used to select an IP automatically; the legacy flat host/port/user/password fields remain supported.\n\n### Parameters\n\n- `deviceId: string`\n\n- `host?: string`\n\n- `name?: string`\n  Proxy name\n\n- `password?: string`\n\n- `port?: number`\n\n- `smartIp?: boolean`\n\n- `socks5?: { host: string; port: number; password?: string; user?: string; }`\n  SOCKS5 proxy configuration (required for socks5).\n  - `host: string`\n  - `port: number`\n  - `password?: string`\n  - `user?: string`\n\n- `user?: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.proxy.connect('deviceId')\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.proxy.connect',
@@ -2448,12 +2489,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/proxy',
     httpMethod: 'delete',
     summary: 'Disconnect proxy',
-    description: 'Disconnect proxy',
+    description:
+      "Disconnects the device's active proxy connection and clears its stored proxy state. Returns successfully if no proxy is connected.",
     stainlessPath: '(resource) devices.proxy > (method) disconnect',
     qualified: 'client.devices.proxy.disconnect',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## disconnect\n\n`client.devices.proxy.disconnect(deviceId: string, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/proxy`\n\nDisconnect proxy\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.proxy.disconnect('deviceId')\n```",
+      "## disconnect\n\n`client.devices.proxy.disconnect(deviceId: string, X-Device-Display-ID?: number): void`\n\n**delete** `/devices/{deviceId}/proxy`\n\nDisconnects the device's active proxy connection and clears its stored proxy state. Returns successfully if no proxy is connected.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.proxy.disconnect('deviceId')\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.proxy.disconnect',
@@ -2486,13 +2528,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/proxy',
     httpMethod: 'get',
     summary: 'Get proxy connection state',
-    description: 'Get proxy connection state',
+    description:
+      "Returns the device's current proxy connection state, including whether a proxy is connected and its protocol and name.",
     stainlessPath: '(resource) devices.proxy > (method) status',
     qualified: 'client.devices.proxy.status',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     response: '{ connected: boolean; name: string; protocol: string; $schema?: string; }',
     markdown:
-      "## status\n\n`client.devices.proxy.status(deviceId: string, X-Device-Display-ID?: number): { connected: boolean; name: string; protocol: string; $schema?: string; }`\n\n**get** `/devices/{deviceId}/proxy`\n\nGet proxy connection state\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ connected: boolean; name: string; protocol: string; $schema?: string; }`\n\n  - `connected: boolean`\n  - `name: string`\n  - `protocol: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.proxy.status('deviceId');\n\nconsole.log(response);\n```",
+      "## status\n\n`client.devices.proxy.status(deviceId: string, X-Device-Display-ID?: number): { connected: boolean; name: string; protocol: string; $schema?: string; }`\n\n**get** `/devices/{deviceId}/proxy`\n\nReturns the device's current proxy connection state, including whether a proxy is connected and its protocol and name.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ connected: boolean; name: string; protocol: string; $schema?: string; }`\n\n  - `connected: boolean`\n  - `name: string`\n  - `protocol: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.proxy.status('deviceId');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.proxy.status',
@@ -2525,13 +2568,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/screenshot',
     httpMethod: 'get',
     summary: 'Take screenshot',
-    description: 'Take screenshot',
+    description:
+      'Captures the device screen and returns it as a PNG image. An optional hideOverlay query parameter excludes the accessibility overlay from the capture.',
     stainlessPath: '(resource) devices.state > (method) screenshot',
     qualified: 'client.devices.state.screenshot',
     params: ['deviceId: string;', 'hideOverlay?: boolean;', 'X-Device-Display-ID?: number;'],
     response: 'string',
     markdown:
-      "## screenshot\n\n`client.devices.state.screenshot(deviceId: string, hideOverlay?: boolean, X-Device-Display-ID?: number): string`\n\n**get** `/devices/{deviceId}/screenshot`\n\nTake screenshot\n\n### Parameters\n\n- `deviceId: string`\n\n- `hideOverlay?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.state.screenshot('deviceId');\n\nconsole.log(response);\n```",
+      "## screenshot\n\n`client.devices.state.screenshot(deviceId: string, hideOverlay?: boolean, X-Device-Display-ID?: number): string`\n\n**get** `/devices/{deviceId}/screenshot`\n\nCaptures the device screen and returns it as a PNG image. An optional hideOverlay query parameter excludes the accessibility overlay from the capture.\n\n### Parameters\n\n- `deviceId: string`\n\n- `hideOverlay?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.state.screenshot('deviceId');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.state.screenshot',
@@ -2564,14 +2608,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/ui-state',
     httpMethod: 'get',
     summary: 'UI state',
-    description: 'UI state',
+    description:
+      'Returns the current accessibility UI state of the device as a structured tree of on-screen elements. An optional filter query reduces the result to interactive elements.',
     stainlessPath: '(resource) devices.state > (method) ui',
     qualified: 'client.devices.state.ui',
     params: ['deviceId: string;', 'filter?: boolean;', 'X-Device-Display-ID?: number;'],
     response:
       '{ a11y_tree: object; device_context: { display_metrics: object; filtering_params: object; screen_bounds: rect; }; ime_tree: object; phone_state: { isEditable: boolean; keyboardVisible: boolean; activityName?: string; currentApp?: string; focusedElement?: object; packageName?: string; }; $schema?: string; }',
     markdown:
-      "## ui\n\n`client.devices.state.ui(deviceId: string, filter?: boolean, X-Device-Display-ID?: number): { a11y_tree: a11_y_node; device_context: object; ime_tree: a11_y_node; phone_state: object; $schema?: string; }`\n\n**get** `/devices/{deviceId}/ui-state`\n\nUI state\n\n### Parameters\n\n- `deviceId: string`\n\n- `filter?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ a11y_tree: { boundsInScreen: object; children: a11_y_node[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }; device_context: { display_metrics: { density: number; densityDpi: number; heightPixels: number; scaledDensity: number; widthPixels: number; }; filtering_params: { min_element_size: number; overlay_offset: number; }; screen_bounds: object; }; ime_tree: { boundsInScreen: object; children: a11_y_node[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }; phone_state: { isEditable: boolean; keyboardVisible: boolean; activityName?: string; currentApp?: string; focusedElement?: { className?: string; resourceId?: string; text?: string; }; packageName?: string; }; $schema?: string; }`\n\n  - `a11y_tree: { boundsInScreen: { bottom: number; left: number; right: number; top: number; }; children: { boundsInScreen: object; children: a11_y_node[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }`\n  - `device_context: { display_metrics: { density: number; densityDpi: number; heightPixels: number; scaledDensity: number; widthPixels: number; }; filtering_params: { min_element_size: number; overlay_offset: number; }; screen_bounds: { height: number; width: number; }; }`\n  - `ime_tree: { boundsInScreen: { bottom: number; left: number; right: number; top: number; }; children: { boundsInScreen: object; children: a11_y_node[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }`\n  - `phone_state: { isEditable: boolean; keyboardVisible: boolean; activityName?: string; currentApp?: string; focusedElement?: { className?: string; resourceId?: string; text?: string; }; packageName?: string; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.state.ui('deviceId');\n\nconsole.log(response);\n```",
+      "## ui\n\n`client.devices.state.ui(deviceId: string, filter?: boolean, X-Device-Display-ID?: number): { a11y_tree: a11_y_node; device_context: object; ime_tree: a11_y_node; phone_state: object; $schema?: string; }`\n\n**get** `/devices/{deviceId}/ui-state`\n\nReturns the current accessibility UI state of the device as a structured tree of on-screen elements. An optional filter query reduces the result to interactive elements.\n\n### Parameters\n\n- `deviceId: string`\n\n- `filter?: boolean`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ a11y_tree: { boundsInScreen: object; children: a11_y_node[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }; device_context: { display_metrics: { density: number; densityDpi: number; heightPixels: number; scaledDensity: number; widthPixels: number; }; filtering_params: { min_element_size: number; overlay_offset: number; }; screen_bounds: object; }; ime_tree: { boundsInScreen: object; children: a11_y_node[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }; phone_state: { isEditable: boolean; keyboardVisible: boolean; activityName?: string; currentApp?: string; focusedElement?: { className?: string; resourceId?: string; text?: string; }; packageName?: string; }; $schema?: string; }`\n\n  - `a11y_tree: { boundsInScreen: { bottom: number; left: number; right: number; top: number; }; children: { boundsInScreen: object; children: a11_y_node[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }`\n  - `device_context: { display_metrics: { density: number; densityDpi: number; heightPixels: number; scaledDensity: number; widthPixels: number; }; filtering_params: { min_element_size: number; overlay_offset: number; }; screen_bounds: { height: number; width: number; }; }`\n  - `ime_tree: { boundsInScreen: { bottom: number; left: number; right: number; top: number; }; children: { boundsInScreen: object; children: a11_y_node[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }[]; className: string; contentDescription: string; isCheckable: boolean; isChecked: boolean; isClickable: boolean; isEnabled: boolean; isFocusable: boolean; isFocused: boolean; isLongClickable: boolean; isPassword: boolean; isScrollable: boolean; isSelected: boolean; packageName: string; resourceId: string; text: string; }`\n  - `phone_state: { isEditable: boolean; keyboardVisible: boolean; activityName?: string; currentApp?: string; focusedElement?: { className?: string; resourceId?: string; text?: string; }; packageName?: string; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.state.ui('deviceId');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.state.ui',
@@ -2603,13 +2648,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/time',
     httpMethod: 'get',
     summary: 'Device time',
-    description: 'Device time',
+    description: "Returns the device's current wall-clock time as an RFC 3339 timestamp.",
     stainlessPath: '(resource) devices.state > (method) time',
     qualified: 'client.devices.state.time',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     response: 'string',
     markdown:
-      "## time\n\n`client.devices.state.time(deviceId: string, X-Device-Display-ID?: number): string`\n\n**get** `/devices/{deviceId}/time`\n\nDevice time\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.state.time('deviceId');\n\nconsole.log(response);\n```",
+      "## time\n\n`client.devices.state.time(deviceId: string, X-Device-Display-ID?: number): string`\n\n**get** `/devices/{deviceId}/time`\n\nReturns the device's current wall-clock time as an RFC 3339 timestamp.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.devices.state.time('deviceId');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.state.time',
@@ -2641,7 +2686,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/tasks',
     httpMethod: 'get',
     summary: 'List tasks for a device',
-    description: 'List tasks for a device',
+    description:
+      'Returns a paginated list of tasks that have run on the device, along with pagination metadata.',
     stainlessPath: '(resource) devices.tasks > (method) list',
     qualified: 'client.devices.tasks.list',
     params: [
@@ -2654,7 +2700,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ items: { createdAt: string; taskId: string; updatedAt: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }',
     markdown:
-      "## list\n\n`client.devices.tasks.list(deviceId: string, orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number): { items: object[]; pagination: meta; $schema?: string; }`\n\n**get** `/devices/{deviceId}/tasks`\n\nList tasks for a device\n\n### Parameters\n\n- `deviceId: string`\n\n- `orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { createdAt: string; taskId: string; updatedAt: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }`\n\n  - `items: { createdAt: string; taskId: string; updatedAt: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst tasks = await client.devices.tasks.list('deviceId');\n\nconsole.log(tasks);\n```",
+      "## list\n\n`client.devices.tasks.list(deviceId: string, orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number): { items: object[]; pagination: meta; $schema?: string; }`\n\n**get** `/devices/{deviceId}/tasks`\n\nReturns a paginated list of tasks that have run on the device, along with pagination metadata.\n\n### Parameters\n\n- `deviceId: string`\n\n- `orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { createdAt: string; taskId: string; updatedAt: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; $schema?: string; }`\n\n  - `items: { createdAt: string; taskId: string; updatedAt: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst tasks = await client.devices.tasks.list('deviceId');\n\nconsole.log(tasks);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.tasks.list',
@@ -2686,12 +2732,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/timezone',
     httpMethod: 'post',
     summary: 'Set device timezone',
-    description: 'Set device timezone',
+    description:
+      'Sets the device timezone to the identifier in the request body. Devices that do not support timezone control return an unsupported-feature error.',
     stainlessPath: '(resource) devices.timezone > (method) set',
     qualified: 'client.devices.timezone.set',
     params: ['deviceId: string;', 'timezone: string;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## set\n\n`client.devices.timezone.set(deviceId: string, timezone: string, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/timezone`\n\nSet device timezone\n\n### Parameters\n\n- `deviceId: string`\n\n- `timezone: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.timezone.set('deviceId', { timezone: 'timezone' })\n```",
+      "## set\n\n`client.devices.timezone.set(deviceId: string, timezone: string, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/timezone`\n\nSets the device timezone to the identifier in the request body. Devices that do not support timezone control return an unsupported-feature error.\n\n### Parameters\n\n- `deviceId: string`\n\n- `timezone: string`\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.timezone.set('deviceId', { timezone: 'timezone' })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.timezone.set',
@@ -2724,13 +2771,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/timezone',
     httpMethod: 'get',
     summary: 'Get device timezone',
-    description: 'Get device timezone',
+    description:
+      "Returns the device's current timezone identifier. Devices that do not support timezone control return an unsupported-feature error.",
     stainlessPath: '(resource) devices.timezone > (method) get',
     qualified: 'client.devices.timezone.get',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     response: '{ timezone: string; $schema?: string; }',
     markdown:
-      "## get\n\n`client.devices.timezone.get(deviceId: string, X-Device-Display-ID?: number): { timezone: string; $schema?: string; }`\n\n**get** `/devices/{deviceId}/timezone`\n\nGet device timezone\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ timezone: string; $schema?: string; }`\n\n  - `timezone: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst timezone = await client.devices.timezone.get('deviceId');\n\nconsole.log(timezone);\n```",
+      "## get\n\n`client.devices.timezone.get(deviceId: string, X-Device-Display-ID?: number): { timezone: string; $schema?: string; }`\n\n**get** `/devices/{deviceId}/timezone`\n\nReturns the device's current timezone identifier. Devices that do not support timezone control return an unsupported-feature error.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ timezone: string; $schema?: string; }`\n\n  - `timezone: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst timezone = await client.devices.timezone.get('deviceId');\n\nconsole.log(timezone);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.timezone.get',
@@ -2763,12 +2811,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/language',
     httpMethod: 'post',
     summary: 'Set device language/locale',
-    description: 'Set device language/locale',
+    description:
+      'Sets the device language/locale to the BCP-47 locale in the request body. An optional restart flag applies the change immediately by restarting the zygote instead of waiting for the next reboot.',
     stainlessPath: '(resource) devices.language > (method) set',
     qualified: 'client.devices.language.set',
     params: ['deviceId: string;', 'locale: string;', 'restart?: boolean;', 'X-Device-Display-ID?: number;'],
     markdown:
-      "## set\n\n`client.devices.language.set(deviceId: string, locale: string, restart?: boolean, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/language`\n\nSet device language/locale\n\n### Parameters\n\n- `deviceId: string`\n\n- `locale: string`\n  BCP-47 locale: a 2–3 letter language tag, optionally followed by a 4-letter script and/or a 2-letter region (e.g. en-US, de-DE, ja-JP, zh-Hans-CN).\n\n- `restart?: boolean`\n  Restart zygote so the locale change takes full effect immediately. Without it, the locale is written but won't fully apply until the next reboot.\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.language.set('deviceId', { locale: 'sqf-Kkif-BB' })\n```",
+      "## set\n\n`client.devices.language.set(deviceId: string, locale: string, restart?: boolean, X-Device-Display-ID?: number): void`\n\n**post** `/devices/{deviceId}/language`\n\nSets the device language/locale to the BCP-47 locale in the request body. An optional restart flag applies the change immediately by restarting the zygote instead of waiting for the next reboot.\n\n### Parameters\n\n- `deviceId: string`\n\n- `locale: string`\n  BCP-47 locale: a 2–3 letter language tag, optionally followed by a 4-letter script and/or a 2-letter region (e.g. en-US, de-DE, ja-JP, zh-Hans-CN).\n\n- `restart?: boolean`\n  Restart zygote so the locale change takes full effect immediately. Without it, the locale is written but won't fully apply until the next reboot.\n\n- `X-Device-Display-ID?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.devices.language.set('deviceId', { locale: 'sqf-Kkif-BB' })\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.language.set',
@@ -2801,13 +2850,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/devices/{deviceId}/language',
     httpMethod: 'get',
     summary: 'Get device language/locale',
-    description: 'Get device language/locale',
+    description: "Returns the device's current language/locale as a BCP-47 locale string.",
     stainlessPath: '(resource) devices.language > (method) get',
     qualified: 'client.devices.language.get',
     params: ['deviceId: string;', 'X-Device-Display-ID?: number;'],
     response: '{ locale: string; $schema?: string; }',
     markdown:
-      "## get\n\n`client.devices.language.get(deviceId: string, X-Device-Display-ID?: number): { locale: string; $schema?: string; }`\n\n**get** `/devices/{deviceId}/language`\n\nGet device language/locale\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ locale: string; $schema?: string; }`\n\n  - `locale: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst language = await client.devices.language.get('deviceId');\n\nconsole.log(language);\n```",
+      "## get\n\n`client.devices.language.get(deviceId: string, X-Device-Display-ID?: number): { locale: string; $schema?: string; }`\n\n**get** `/devices/{deviceId}/language`\n\nReturns the device's current language/locale as a BCP-47 locale string.\n\n### Parameters\n\n- `deviceId: string`\n\n- `X-Device-Display-ID?: number`\n\n### Returns\n\n- `{ locale: string; $schema?: string; }`\n\n  - `locale: string`\n  - `$schema?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst language = await client.devices.language.get('deviceId');\n\nconsole.log(language);\n```",
     perLanguage: {
       typescript: {
         method: 'client.devices.language.get',
@@ -2832,325 +2881,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.mobilerun.ai/v1/devices/$DEVICE_ID/language \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'get_sample_data',
-    endpoint: '/hooks/sample',
-    httpMethod: 'get',
-    summary: 'Get Sample Data',
-    description: 'Get sample hook data for Zapier Perform List (testing/field mapping).',
-    stainlessPath: '(resource) hooks > (method) get_sample_data',
-    qualified: 'client.hooks.getSampleData',
-    response:
-      '{ id: string; createdAt: string; events: string[]; state: string; url: string; updatedAt?: string; }[]',
-    markdown:
-      "## get_sample_data\n\n`client.hooks.getSampleData(): { id: string; createdAt: string; events: string[]; state: string; url: string; updatedAt?: string; }[]`\n\n**get** `/hooks/sample`\n\nGet sample hook data for Zapier Perform List (testing/field mapping).\n\n### Returns\n\n- `{ id: string; createdAt: string; events: string[]; state: string; url: string; updatedAt?: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.getSampleData();\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.getSampleData',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.getSampleData();\n\nconsole.log(response);",
-      },
-      python: {
-        method: 'hooks.get_sample_data',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.get_sample_data()\nprint(response)',
-      },
-      go: {
-        method: 'client.Hooks.GetSampleData',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.GetSampleData(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
-      },
-      cli: {
-        method: 'hooks get_sample_data',
-        example: "mobilerun-cloud hooks get-sample-data \\\n  --api-key 'My API Key'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/sample \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'list',
-    endpoint: '/hooks',
-    httpMethod: 'get',
-    summary: 'List Hooks',
-    description: 'List hooks belonging to the requesting user (paginated).',
-    stainlessPath: '(resource) hooks > (method) list',
-    qualified: 'client.hooks.list',
-    params: [
-      'orderBy?: string;',
-      "orderByDirection?: 'asc' | 'desc';",
-      'page?: number;',
-      'pageSize?: number;',
-    ],
-    response:
-      "{ items: { service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
-    markdown:
-      "## list\n\n`client.hooks.list(orderBy?: string, orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number): { items: object[]; pagination: pagination_meta; }`\n\n**get** `/hooks`\n\nList hooks belonging to the requesting user (paginated).\n\n### Parameters\n\n- `orderBy?: string`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst hooks = await client.hooks.list();\n\nconsole.log(hooks);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.list',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst hooks = await client.hooks.list();\n\nconsole.log(hooks.items);",
-      },
-      python: {
-        method: 'hooks.list',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhooks = client.hooks.list()\nprint(hooks.items)',
-      },
-      go: {
-        method: 'client.Hooks.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\thooks, err := client.Hooks.List(context.TODO(), mobileruncloud.HookListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", hooks.Items)\n}\n',
-      },
-      cli: {
-        method: 'hooks list',
-        example: "mobilerun-cloud hooks list \\\n  --api-key 'My API Key'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'perform',
-    endpoint: '/hooks/perform',
-    httpMethod: 'post',
-    summary: 'Perform Hook',
-    description: 'Zapier Perform endpoint - processes webhook payloads.',
-    stainlessPath: '(resource) hooks > (method) perform',
-    qualified: 'client.hooks.perform',
-    params: ['body: object;'],
-    response: 'object[]',
-    markdown:
-      "## perform\n\n`client.hooks.perform(body: object): object[]`\n\n**post** `/hooks/perform`\n\nZapier Perform endpoint - processes webhook payloads.\n\n### Parameters\n\n- `body: object`\n\n### Returns\n\n- `object[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.perform({ body: { foo: 'bar' } });\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.perform',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.perform({ body: { foo: 'bar' } });\n\nconsole.log(response);",
-      },
-      python: {
-        method: 'hooks.perform',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.perform(\n    body={\n        "foo": "bar"\n    },\n)\nprint(response)',
-      },
-      go: {
-        method: 'client.Hooks.Perform',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.Perform(context.TODO(), mobileruncloud.HookPerformParams{\n\t\tBody: map[string]any{\n\t\t\t"foo": "bar",\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
-      },
-      cli: {
-        method: 'hooks perform',
-        example: "mobilerun-cloud hooks perform \\\n  --api-key 'My API Key' \\\n  --body '{foo: bar}'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/perform \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "foo": "bar"\n        }\'',
-      },
-    },
-  },
-  {
-    name: 'retrieve',
-    endpoint: '/hooks/{hook_id}',
-    httpMethod: 'get',
-    summary: 'Get Hook',
-    description: 'Get a hook subscription by id.',
-    stainlessPath: '(resource) hooks > (method) retrieve',
-    qualified: 'client.hooks.retrieve',
-    params: ['hook_id: string;'],
-    response:
-      "{ service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }",
-    markdown:
-      "## retrieve\n\n`client.hooks.retrieve(hook_id: string): { service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: task_status[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }`\n\n**get** `/hooks/{hook_id}`\n\nGet a hook subscription by id.\n\n### Parameters\n\n- `hook_id: string`\n\n### Returns\n\n- `{ service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'; url: string; userId: string; id?: string; createdAt?: string; events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]; state?: 'active' | 'disabled' | 'deleted'; updatedAt?: string; }`\n\n  - `service: 'zapier' | 'n8n' | 'make' | 'internal' | 'other'`\n  - `url: string`\n  - `userId: string`\n  - `id?: string`\n  - `createdAt?: string`\n  - `events?: 'queued' | 'created' | 'running' | 'cancelling' | 'paused' | 'completed' | 'failed' | 'cancelled'[]`\n  - `state?: 'active' | 'disabled' | 'deleted'`\n  - `updatedAt?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst hook = await client.hooks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(hook);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.retrieve',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst hook = await client.hooks.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(hook.id);",
-      },
-      python: {
-        method: 'hooks.retrieve',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhook = client.hooks.retrieve(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(hook.id)',
-      },
-      go: {
-        method: 'client.Hooks.Get',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\thook, err := client.Hooks.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", hook.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks retrieve',
-        example:
-          "mobilerun-cloud hooks retrieve \\\n  --api-key 'My API Key' \\\n  --hook-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/$HOOK_ID \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'subscribe',
-    endpoint: '/hooks/subscribe',
-    httpMethod: 'post',
-    summary: 'Subscribe',
-    description: 'Subscribe the current user to a webhook URL. Returns subscription id.',
-    stainlessPath: '(resource) hooks > (method) subscribe',
-    qualified: 'client.hooks.subscribe',
-    params: ['targetUrl: string;', 'events?: string[];', 'service?: string;'],
-    response: '{ id: string; subscribed: boolean; url: string; events?: string[]; service?: string; }',
-    markdown:
-      "## subscribe\n\n`client.hooks.subscribe(targetUrl: string, events?: string[], service?: string): { id: string; subscribed: boolean; url: string; events?: string[]; service?: string; }`\n\n**post** `/hooks/subscribe`\n\nSubscribe the current user to a webhook URL. Returns subscription id.\n\n### Parameters\n\n- `targetUrl: string`\n  The webhook URL to send notifications to\n\n- `events?: string[]`\n  List of task events to subscribe to (created, running, completed, failed, cancelled, paused)\n\n- `service?: string`\n  Service that receives the webhook\n\n### Returns\n\n- `{ id: string; subscribed: boolean; url: string; events?: string[]; service?: string; }`\n  Response model after successful subscription.\n\n  - `id: string`\n  - `subscribed: boolean`\n  - `url: string`\n  - `events?: string[]`\n  - `service?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.subscribe({ targetUrl: 'https://example.com' });\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.subscribe',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.subscribe({ targetUrl: 'https://example.com' });\n\nconsole.log(response.id);",
-      },
-      python: {
-        method: 'hooks.subscribe',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.subscribe(\n    target_url="https://example.com",\n)\nprint(response.id)',
-      },
-      go: {
-        method: 'client.Hooks.Subscribe',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.Subscribe(context.TODO(), mobileruncloud.HookSubscribeParams{\n\t\tTargetURL: "https://example.com",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks subscribe',
-        example:
-          "mobilerun-cloud hooks subscribe \\\n  --api-key 'My API Key' \\\n  --target-url https://example.com",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/subscribe \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "targetUrl": "https://example.com"\n        }\'',
-      },
-    },
-  },
-  {
-    name: 'unsubscribe',
-    endpoint: '/hooks/{hook_id}/unsubscribe',
-    httpMethod: 'post',
-    summary: 'Unsubscribe',
-    description:
-      'Unsubscribe a previously created subscription by id.\n\nPermanently deletes the subscription if it belongs to the user.',
-    stainlessPath: '(resource) hooks > (method) unsubscribe',
-    qualified: 'client.hooks.unsubscribe',
-    params: ['hook_id: string;'],
-    response: '{ id: string; unsubscribed: boolean; }',
-    markdown:
-      "## unsubscribe\n\n`client.hooks.unsubscribe(hook_id: string): { id: string; unsubscribed: boolean; }`\n\n**post** `/hooks/{hook_id}/unsubscribe`\n\nUnsubscribe a previously created subscription by id.\n\nPermanently deletes the subscription if it belongs to the user.\n\n### Parameters\n\n- `hook_id: string`\n\n### Returns\n\n- `{ id: string; unsubscribed: boolean; }`\n  Response model after successful unsubscription.\n\n  - `id: string`\n  - `unsubscribed: boolean`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.unsubscribe('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.unsubscribe',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.unsubscribe('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.id);",
-      },
-      python: {
-        method: 'hooks.unsubscribe',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.unsubscribe(\n    "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.id)',
-      },
-      go: {
-        method: 'client.Hooks.Unsubscribe',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.Unsubscribe(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks unsubscribe',
-        example:
-          "mobilerun-cloud hooks unsubscribe \\\n  --api-key 'My API Key' \\\n  --hook-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/hooks/$HOOK_ID/unsubscribe \\\n    -X POST \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
-    name: 'update',
-    endpoint: '/hooks/{hook_id}/edit',
-    httpMethod: 'post',
-    summary: 'Edit Hook',
-    description:
-      'Edit a hook subscription (events or state).\n\nAllows updating the events filter and/or the state of a hook.',
-    stainlessPath: '(resource) hooks > (method) update',
-    qualified: 'client.hooks.update',
-    params: ['hook_id: string;', 'events?: string[];', 'state?: string;'],
-    response: '{ id: string; state: string; updated: boolean; url: string; events?: string[]; }',
-    markdown:
-      "## update\n\n`client.hooks.update(hook_id: string, events?: string[], state?: string): { id: string; state: string; updated: boolean; url: string; events?: string[]; }`\n\n**post** `/hooks/{hook_id}/edit`\n\nEdit a hook subscription (events or state).\n\nAllows updating the events filter and/or the state of a hook.\n\n### Parameters\n\n- `hook_id: string`\n\n- `events?: string[]`\n  Updated list of events to subscribe to\n\n- `state?: string`\n  Updated hook state (active, disabled, deleted)\n\n### Returns\n\n- `{ id: string; state: string; updated: boolean; url: string; events?: string[]; }`\n  Response model after successfully editing a hook.\n\n  - `id: string`\n  - `state: string`\n  - `updated: boolean`\n  - `url: string`\n  - `events?: string[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst hook = await client.hooks.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(hook);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.update',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst hook = await client.hooks.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(hook.id);",
-      },
-      python: {
-        method: 'hooks.update',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nhook = client.hooks.update(\n    hook_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(hook.id)',
-      },
-      go: {
-        method: 'client.Hooks.Update',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\thook, err := client.Hooks.Update(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.HookUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", hook.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks update',
-        example:
-          "mobilerun-cloud hooks update \\\n  --api-key 'My API Key' \\\n  --hook-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      http: {
-        example:
-          "curl https://api.mobilerun.ai/v1/hooks/$HOOK_ID/edit \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $MOBILERUN_CLOUD_API_KEY\" \\\n    -d '{}'",
-      },
-    },
-  },
-  {
-    name: 'test',
-    endpoint: '/hooks/{hook_id}/test',
-    httpMethod: 'post',
-    summary: 'Test Hook',
-    description:
-      "Send a test event to a webhook endpoint.\n\nDelivers a sample payload to the hook's URL with a single attempt\n(no retries) for fast feedback.",
-    stainlessPath: '(resource) hooks > (method) test',
-    qualified: 'client.hooks.test',
-    params: ['hook_id: string;', 'event?: string;'],
-    response: '{ id: string; success: boolean; error?: string; statusCode?: number; }',
-    markdown:
-      "## test\n\n`client.hooks.test(hook_id: string, event?: string): { id: string; success: boolean; error?: string; statusCode?: number; }`\n\n**post** `/hooks/{hook_id}/test`\n\nSend a test event to a webhook endpoint.\n\nDelivers a sample payload to the hook's URL with a single attempt\n(no retries) for fast feedback.\n\n### Parameters\n\n- `hook_id: string`\n\n- `event?: string`\n  Event type to simulate (default: completed)\n\n### Returns\n\n- `{ id: string; success: boolean; error?: string; statusCode?: number; }`\n  Response after attempting test delivery.\n\n  - `id: string`\n  - `success: boolean`\n  - `error?: string`\n  - `statusCode?: number`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.hooks.test('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.hooks.test',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.hooks.test('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response.id);",
-      },
-      python: {
-        method: 'hooks.test',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.hooks.test(\n    hook_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n)\nprint(response.id)',
-      },
-      go: {
-        method: 'client.Hooks.Test',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Hooks.Test(\n\t\tcontext.TODO(),\n\t\t"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",\n\t\tmobileruncloud.HookTestParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
-      },
-      cli: {
-        method: 'hooks test',
-        example:
-          "mobilerun-cloud hooks test \\\n  --api-key 'My API Key' \\\n  --hook-id 182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-      },
-      http: {
-        example:
-          "curl https://api.mobilerun.ai/v1/hooks/$HOOK_ID/test \\\n    -H 'Content-Type: application/json' \\\n    -H \"Authorization: Bearer $MOBILERUN_CLOUD_API_KEY\" \\\n    -d '{}'",
       },
     },
   },
@@ -3406,8 +3136,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'create',
     endpoint: '/proxies',
     httpMethod: 'post',
-    summary: 'Create a new proxy config',
-    description: 'Create a new proxy config',
+    summary: 'Create a proxy config',
+    description:
+      'Creates a proxy config. The body is a discriminated union on `protocol`: `socks5` requires name, host, port, user, and password, while `wireguard` requires name and a config string. Returns the created config with its generated `proxyId`.',
     stainlessPath: '(resource) proxies > (method) create',
     qualified: 'client.proxies.create',
     params: [
@@ -3447,14 +3178,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/proxies/{proxyId}',
     httpMethod: 'delete',
     summary: 'Delete a proxy config',
-    description: 'Delete a proxy config',
+    description:
+      'Permanently deletes the proxy config identified by `proxyId` and returns the deleted config. Returns not found if no matching config exists.',
     stainlessPath: '(resource) proxies > (method) delete',
     qualified: 'client.proxies.delete',
     params: ['proxyId: string;'],
     response:
       "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }",
     markdown:
-      "## delete\n\n`client.proxies.delete(proxyId: string): { data: proxy_config; message: string; success: true; }`\n\n**delete** `/proxies/{proxyId}`\n\nDelete a proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
+      "## delete\n\n`client.proxies.delete(proxyId: string): { data: proxy_config; message: string; success: true; }`\n\n**delete** `/proxies/{proxyId}`\n\nPermanently deletes the proxy config identified by `proxyId` and returns the deleted config. Returns not found if no matching config exists.\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; message: string; success: true; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n  - `message: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
     perLanguage: {
       typescript: {
         method: 'client.proxies.delete',
@@ -3486,15 +3218,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/proxies',
     httpMethod: 'get',
-    summary: 'List all proxy configs for the authenticated user',
-    description: 'List all proxy configs for the authenticated user',
+    summary: 'List proxy configs',
+    description:
+      'Returns all proxy configs for the authenticated user. An optional `protocol` query parameter (`socks5` or `wireguard`) filters the results by proxy type.',
     stainlessPath: '(resource) proxies > (method) list',
     qualified: 'client.proxies.list',
     params: ["protocol?: 'socks5' | 'wireguard';"],
     response:
       "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }",
     markdown:
-      "## list\n\n`client.proxies.list(protocol?: 'socks5' | 'wireguard'): { data: proxy_config[]; }`\n\n**get** `/proxies`\n\nList all proxy configs for the authenticated user\n\n### Parameters\n\n- `protocol?: 'socks5' | 'wireguard'`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.proxies.list();\n\nconsole.log(proxies);\n```",
+      "## list\n\n`client.proxies.list(protocol?: 'socks5' | 'wireguard'): { data: proxy_config[]; }`\n\n**get** `/proxies`\n\nReturns all proxy configs for the authenticated user. An optional `protocol` query parameter (`socks5` or `wireguard`) filters the results by proxy type.\n\n### Parameters\n\n- `protocol?: 'socks5' | 'wireguard'`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.proxies.list();\n\nconsole.log(proxies);\n```",
     perLanguage: {
       typescript: {
         method: 'client.proxies.list',
@@ -3525,15 +3258,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'retrieve',
     endpoint: '/proxies/{proxyId}',
     httpMethod: 'get',
-    summary: 'Get a specific proxy config',
-    description: 'Get a specific proxy config',
+    summary: 'Get a proxy config',
+    description:
+      "Fetches a single proxy config by its `proxyId`. The response shape depends on the proxy's `protocol` (socks5 or wireguard). Returns not found if no matching config exists.",
     stainlessPath: '(resource) proxies > (method) retrieve',
     qualified: 'client.proxies.retrieve',
     params: ['proxyId: string;'],
     response:
       "{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }",
     markdown:
-      "## retrieve\n\n`client.proxies.retrieve(proxyId: string): { data: proxy_config; }`\n\n**get** `/proxies/{proxyId}`\n\nGet a specific proxy config\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
+      "## retrieve\n\n`client.proxies.retrieve(proxyId: string): { data: proxy_config; }`\n\n**get** `/proxies/{proxyId}`\n\nFetches a single proxy config by its `proxyId`. The response shape depends on the proxy's `protocol` (socks5 or wireguard). Returns not found if no matching config exists.\n\n### Parameters\n\n- `proxyId: string`\n\n### Returns\n\n- `{ data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }; }`\n\n  - `data: { host: string; name: string; password: string; port: number; protocol: 'socks5'; proxyId: string; user: string; } | { config: string; name: string; protocol: 'wireguard'; proxyId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
     perLanguage: {
       typescript: {
         method: 'client.proxies.retrieve',
@@ -3566,7 +3300,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/proxies/{proxyId}',
     httpMethod: 'put',
     summary: 'Update a proxy config',
-    description: 'Update a proxy config',
+    description:
+      'Replaces the proxy config identified by `proxyId` with the provided body. As with creation, the body is a `protocol`-discriminated union of socks5 or wireguard fields. Returns the updated config.',
     stainlessPath: '(resource) proxies > (method) update',
     qualified: 'client.proxies.update',
     params: [
@@ -3646,15 +3381,19 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/connect/countries',
     httpMethod: 'get',
-    summary: 'List available proxy countries',
+    summary: 'List available countries',
     description: 'Lookup of countries that can be selected when creating a proxy.',
     stainlessPath: '(resource) connect.countries > (method) list',
     qualified: 'client.connect.countries.list',
-    params: ['page?: number;', 'pageSize?: number;', "type?: 'residential';"],
+    params: [
+      'page?: number;',
+      'pageSize?: number;',
+      "type?: 'dedicated_residential' | 'residential' | 'mobile';",
+    ],
     response:
-      "{ items: { code: string; name: string; proxyTypes: 'residential'[]; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+      "{ items: { code: string; name: string; proxyTypes: 'dedicated_residential' | 'residential' | 'mobile'[]; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.connect.countries.list(page?: number, pageSize?: number, type?: 'residential'): { items: object[]; pagination: object; }`\n\n**get** `/connect/countries`\n\nLookup of countries that can be selected when creating a proxy.\n\n### Parameters\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n- `type?: 'residential'`\n  Filter to countries offering this proxy type.\n\n### Returns\n\n- `{ items: { code: string; name: string; proxyTypes: 'residential'[]; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of countries.\n\n  - `items: { code: string; name: string; proxyTypes: 'residential'[]; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst countries = await client.connect.countries.list();\n\nconsole.log(countries);\n```",
+      "## list\n\n`client.connect.countries.list(page?: number, pageSize?: number, type?: 'dedicated_residential' | 'residential' | 'mobile'): { items: object[]; pagination: object; }`\n\n**get** `/connect/countries`\n\nLookup of countries that can be selected when creating a proxy.\n\n### Parameters\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n- `type?: 'dedicated_residential' | 'residential' | 'mobile'`\n  Filter to countries offering this proxy type.\n\n### Returns\n\n- `{ items: { code: string; name: string; proxyTypes: 'dedicated_residential' | 'residential' | 'mobile'[]; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of countries.\n\n  - `items: { code: string; name: string; proxyTypes: 'dedicated_residential' | 'residential' | 'mobile'[]; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst countries = await client.connect.countries.list();\n\nconsole.log(countries);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.countries.list',
@@ -3685,16 +3424,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/connect/proxies',
     httpMethod: 'get',
-    summary: "List the caller's proxies",
+    summary: 'List proxies',
     description:
       'Returns proxies owned by the user identified by the X-User-ID header. Credentials are omitted from the list.',
     stainlessPath: '(resource) connect.proxies > (method) list',
     qualified: 'client.connect.proxies.list',
     params: ['country?: string;', 'page?: number;', 'pageSize?: number;'],
     response:
-      "{ items: { id: string; country: string; createdAt: string; host: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+      "{ items: { id: string; country: string; createdAt: string; host: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.connect.proxies.list(country?: string, page?: number, pageSize?: number): { items: object[]; pagination: object; }`\n\n**get** `/connect/proxies`\n\nReturns proxies owned by the user identified by the X-User-ID header. Credentials are omitted from the list.\n\n### Parameters\n\n- `country?: string`\n  Filter to proxies in this country (ISO 3166-1 alpha-2, lowercase).\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n### Returns\n\n- `{ items: { id: string; country: string; createdAt: string; host: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of proxies.\n\n  - `items: { id: string; country: string; createdAt: string; host: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.connect.proxies.list();\n\nconsole.log(proxies);\n```",
+      "## list\n\n`client.connect.proxies.list(country?: string, page?: number, pageSize?: number): { items: object[]; pagination: object; }`\n\n**get** `/connect/proxies`\n\nReturns proxies owned by the user identified by the X-User-ID header. Credentials are omitted from the list.\n\n### Parameters\n\n- `country?: string`\n  Filter to proxies in this country (ISO 3166-1 alpha-2, lowercase).\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n### Returns\n\n- `{ items: { id: string; country: string; createdAt: string; host: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of proxies.\n\n  - `items: { id: string; country: string; createdAt: string; host: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxies = await client.connect.proxies.list();\n\nconsole.log(proxies);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.proxies.list',
@@ -3728,11 +3467,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Provisions a proxy for the caller in the selected country.',
     stainlessPath: '(resource) connect.proxies > (method) buy',
     qualified: 'client.connect.proxies.buy',
-    params: ['country: string;', "type?: 'residential';"],
+    params: ['country: string;', "type?: 'dedicated_residential' | 'residential' | 'mobile';"],
     response:
-      "{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }",
+      "{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }",
     markdown:
-      "## buy\n\n`client.connect.proxies.buy(country: string, type?: 'residential'): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }`\n\n**post** `/connect/proxies`\n\nProvisions a proxy for the caller in the selected country.\n\n### Parameters\n\n- `country: string`\n  ISO 3166-1 alpha-2 country code to provision the proxy in.\n\n- `type?: 'residential'`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'residential'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.buy({ country: 'country' });\n\nconsole.log(response);\n```",
+      "## buy\n\n`client.connect.proxies.buy(country: string, type?: 'dedicated_residential' | 'residential' | 'mobile'): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n\n**post** `/connect/proxies`\n\nProvisions a proxy for the caller in the selected country.\n\n### Parameters\n\n- `country: string`\n  ISO 3166-1 alpha-2 country code to provision the proxy in.\n\n- `type?: 'dedicated_residential' | 'residential' | 'mobile'`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'dedicated_residential' | 'residential' | 'mobile'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.buy({ country: 'country' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.proxies.buy',
@@ -3763,15 +3502,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'retrieve',
     endpoint: '/connect/proxies/{id}',
     httpMethod: 'get',
-    summary: 'Get a proxy by ID, including its password',
-    description: 'Get a proxy by ID, including its password',
+    summary: 'Get proxy by ID',
+    description: "Returns the proxy identified by the path ID. The response includes the proxy's password.",
     stainlessPath: '(resource) connect.proxies > (method) retrieve',
     qualified: 'client.connect.proxies.retrieve',
     params: ['id: string;'],
     response:
-      "{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }",
+      "{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }",
     markdown:
-      "## retrieve\n\n`client.connect.proxies.retrieve(id: string): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }`\n\n**get** `/connect/proxies/{id}`\n\nGet a proxy by ID, including its password\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'residential'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'residential'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.connect.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
+      "## retrieve\n\n`client.connect.proxies.retrieve(id: string): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n\n**get** `/connect/proxies/{id}`\n\nReturns the proxy identified by the path ID. The response includes the proxy's password.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'dedicated_residential' | 'residential' | 'mobile'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst proxy = await client.connect.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(proxy);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.proxies.retrieve',
@@ -3802,12 +3541,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/connect/proxies/{id}',
     httpMethod: 'delete',
     summary: 'Delete a proxy',
-    description: 'Delete a proxy',
+    description:
+      'Deletes the proxy identified by the path ID and releases its provisioning. Returns 404 if no such proxy exists for the caller.',
     stainlessPath: '(resource) connect.proxies > (method) cancel',
     qualified: 'client.connect.proxies.cancel',
     params: ['id: string;'],
     markdown:
-      "## cancel\n\n`client.connect.proxies.cancel(id: string): void`\n\n**delete** `/connect/proxies/{id}`\n\nDelete a proxy\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.proxies.cancel('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
+      "## cancel\n\n`client.connect.proxies.cancel(id: string): void`\n\n**delete** `/connect/proxies/{id}`\n\nDeletes the proxy identified by the path ID and releases its provisioning. Returns 404 if no such proxy exists for the caller.\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.proxies.cancel('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.proxies.cancel',
@@ -3837,7 +3577,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'ping',
     endpoint: '/connect/proxies/{id}/ping',
     httpMethod: 'get',
-    summary: 'Latency reading for a proxy',
+    summary: 'Latency check',
     description:
       'Returns the most recent cached network-latency measurement for the proxy, sampled periodically by connecting through the proxy to a fixed target. `latency` is null when no measurement is available yet (e.g. the proxy is not active, or it has not been sampled since coming online).',
     stainlessPath: '(resource) connect.proxies > (method) ping',
@@ -3876,7 +3616,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list_connections',
     endpoint: '/connect/proxies/{id}/connections',
     httpMethod: 'get',
-    summary: 'List connections routed through a proxy',
+    summary: 'List Proxy Connections',
     description:
       "Returns the connection history recorded for this proxy, one item per connection (aggregated across the connection's lifetime). Supports filtering on every property plus ordering and pagination. Returns 503 when the connection-insights backend is disabled or unreachable.",
     stainlessPath: '(resource) connect.proxies > (method) list_connections',
@@ -3943,7 +3683,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/connect/users',
     httpMethod: 'get',
-    summary: "List the caller's SOCKS5 users",
+    summary: 'List SOCKS5 users',
     description: 'Returns SOCKS5 users owned by the caller. Passwords are omitted from the list.',
     stainlessPath: '(resource) connect.users > (method) list',
     qualified: 'client.connect.users.list',
@@ -4020,14 +3760,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'retrieve',
     endpoint: '/connect/users/{id}',
     httpMethod: 'get',
-    summary: 'Get a SOCKS5 user by ID, including its password',
-    description: 'Get a SOCKS5 user by ID, including its password',
+    summary: 'Get a SOCKS5 user by ID',
+    description:
+      "Returns the SOCKS5 user identified by the path ID. The response includes the user's password.",
     stainlessPath: '(resource) connect.users > (method) retrieve',
     qualified: 'client.connect.users.retrieve',
     params: ['id: string;'],
     response: '{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }',
     markdown:
-      "## retrieve\n\n`client.connect.users.retrieve(id: string): { id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n\n**get** `/connect/users/{id}`\n\nGet a SOCKS5 user by ID, including its password\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n  A SOCKS5 user including its password. Returned only on create and single-user reads.\n\n  - `id: string`\n  - `createdAt: string`\n  - `password: string`\n  - `username: string`\n  - `proxyId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(user);\n```",
+      "## retrieve\n\n`client.connect.users.retrieve(id: string): { id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n\n**get** `/connect/users/{id}`\n\nReturns the SOCKS5 user identified by the path ID. The response includes the user's password.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; createdAt: string; password: string; username: string; proxyId?: string; }`\n  A SOCKS5 user including its password. Returned only on create and single-user reads.\n\n  - `id: string`\n  - `createdAt: string`\n  - `password: string`\n  - `username: string`\n  - `proxyId?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst user = await client.connect.users.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(user);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.users.retrieve',
@@ -4096,12 +3837,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/connect/users/{id}',
     httpMethod: 'delete',
     summary: 'Delete a SOCKS5 user',
-    description: 'Delete a SOCKS5 user',
+    description:
+      'Deletes the SOCKS5 user identified by the path ID, revoking its credentials and any proxy binding. Returns 404 if no such user exists for the caller.',
     stainlessPath: '(resource) connect.users > (method) delete',
     qualified: 'client.connect.users.delete',
     params: ['id: string;'],
     markdown:
-      "## delete\n\n`client.connect.users.delete(id: string): void`\n\n**delete** `/connect/users/{id}`\n\nDelete a SOCKS5 user\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.users.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
+      "## delete\n\n`client.connect.users.delete(id: string): void`\n\n**delete** `/connect/users/{id}`\n\nDeletes the SOCKS5 user identified by the path ID, revoking its credentials and any proxy binding. Returns 404 if no such user exists for the caller.\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.connect.users.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e')\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.users.delete',
@@ -4131,7 +3873,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list_connections',
     endpoint: '/connect/users/{id}/connections',
     httpMethod: 'get',
-    summary: 'List connections made by a SOCKS5 user',
+    summary: 'List connections by SOCKS5 user',
     description:
       "Returns the connection history recorded for this user, one item per connection (aggregated across the connection's lifetime). Supports filtering on every property plus ordering and pagination. Returns 503 when the connection-insights backend is disabled or unreachable.",
     stainlessPath: '(resource) connect.users > (method) list_connections',
@@ -4760,7 +4502,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/triggers',
     httpMethod: 'post',
     summary: 'Create a trigger',
-    description: 'Create a trigger',
+    description:
+      'Create a trigger with an activation type of `event`, `schedule`, or `custom`. Each type requires its own fields (e.g. `eventType` and optional `conditions` for events, `scheduleRule` and `timezone` for schedules, `customPayloadSchema` for custom triggers); mismatched fields are rejected.',
     stainlessPath: '(resource) workflows.triggers > (method) create',
     qualified: 'client.workflows.triggers.create',
     params: [
@@ -4776,7 +4519,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }",
     markdown:
-      "## create\n\n`client.workflows.triggers.create(activation: 'event' | 'schedule' | 'custom', name: string, conditions?: { all?: object[]; any?: object[]; }, customPayloadSchema?: object, description?: string, eventType?: string, scheduleRule?: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }, timezone?: string): { data: object; }`\n\n**post** `/triggers`\n\nCreate a trigger\n\n### Parameters\n\n- `activation: 'event' | 'schedule' | 'custom'`\n\n- `name: string`\n\n- `conditions?: { all?: object[]; any?: object[]; }`\n  - `all?: object[]`\n  - `any?: object[]`\n\n- `customPayloadSchema?: object`\n  Optional JSON Schema for validating payloads sent to this custom trigger\n\n- `description?: string`\n\n- `eventType?: string`\n\n- `scheduleRule?: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }`\n  - `type: 'once' | 'cron' | 'recurring'`\n  - `dateTime?: string`\n    ISO 8601 datetime (for type=once)\n  - `expression?: string`\n    Cron expression (for type=cron)\n  - `rrule?: string`\n    RRULE string (for type=recurring)\n\n- `timezone?: string`\n\n### Returns\n\n- `{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }`\n\n  - `data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst trigger = await client.workflows.triggers.create({ activation: 'event', name: 'x' });\n\nconsole.log(trigger);\n```",
+      "## create\n\n`client.workflows.triggers.create(activation: 'event' | 'schedule' | 'custom', name: string, conditions?: { all?: object[]; any?: object[]; }, customPayloadSchema?: object, description?: string, eventType?: string, scheduleRule?: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }, timezone?: string): { data: object; }`\n\n**post** `/triggers`\n\nCreate a trigger with an activation type of `event`, `schedule`, or `custom`. Each type requires its own fields (e.g. `eventType` and optional `conditions` for events, `scheduleRule` and `timezone` for schedules, `customPayloadSchema` for custom triggers); mismatched fields are rejected.\n\n### Parameters\n\n- `activation: 'event' | 'schedule' | 'custom'`\n\n- `name: string`\n\n- `conditions?: { all?: object[]; any?: object[]; }`\n  - `all?: object[]`\n  - `any?: object[]`\n\n- `customPayloadSchema?: object`\n  Optional JSON Schema for validating payloads sent to this custom trigger\n\n- `description?: string`\n\n- `eventType?: string`\n\n- `scheduleRule?: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }`\n  - `type: 'once' | 'cron' | 'recurring'`\n  - `dateTime?: string`\n    ISO 8601 datetime (for type=once)\n  - `expression?: string`\n    Cron expression (for type=cron)\n  - `rrule?: string`\n    RRULE string (for type=recurring)\n\n- `timezone?: string`\n\n### Returns\n\n- `{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }`\n\n  - `data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst trigger = await client.workflows.triggers.create({ activation: 'event', name: 'x' });\n\nconsole.log(trigger);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.triggers.create',
@@ -4809,7 +4552,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/triggers',
     httpMethod: 'get',
     summary: 'List triggers',
-    description: 'List triggers',
+    description:
+      'Return a paginated list of triggers. Supports filtering by `activation` and `eventType`, free-text `search`, and ordering by name, createdAt, or updatedAt.',
     stainlessPath: '(resource) workflows.triggers > (method) list',
     qualified: 'client.workflows.triggers.list',
     params: [
@@ -4822,9 +4566,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'search?: string;',
     ],
     response:
-      "{ items: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
+      "{ items: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.workflows.triggers.list(activation?: 'event' | 'schedule' | 'custom', eventType?: string, orderBy?: 'name' | 'createdAt' | 'updatedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, search?: string): { items: object[]; pagination: pagination; }`\n\n**get** `/triggers`\n\nList triggers\n\n### Parameters\n\n- `activation?: 'event' | 'schedule' | 'custom'`\n\n- `eventType?: string`\n\n- `orderBy?: 'name' | 'createdAt' | 'updatedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `search?: string`\n\n### Returns\n\n- `{ items: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst triggers = await client.workflows.triggers.list();\n\nconsole.log(triggers);\n```",
+      "## list\n\n`client.workflows.triggers.list(activation?: 'event' | 'schedule' | 'custom', eventType?: string, orderBy?: 'name' | 'createdAt' | 'updatedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, search?: string): { items: object[]; pagination: pagination; }`\n\n**get** `/triggers`\n\nReturn a paginated list of triggers. Supports filtering by `activation` and `eventType`, free-text `search`, and ordering by name, createdAt, or updatedAt.\n\n### Parameters\n\n- `activation?: 'event' | 'schedule' | 'custom'`\n\n- `eventType?: string`\n\n- `orderBy?: 'name' | 'createdAt' | 'updatedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `search?: string`\n\n### Returns\n\n- `{ items: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst triggers = await client.workflows.triggers.list();\n\nconsole.log(triggers);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.triggers.list',
@@ -4856,14 +4600,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/triggers/{triggerId}',
     httpMethod: 'get',
     summary: 'Get a trigger',
-    description: 'Get a trigger',
+    description:
+      'Fetch a single trigger by its ID, including its activation type and type-specific configuration. Returns 404 if no trigger matches.',
     stainlessPath: '(resource) workflows.triggers > (method) retrieve',
     qualified: 'client.workflows.triggers.retrieve',
     params: ['triggerId: string;'],
     response:
-      "{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }",
+      "{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }",
     markdown:
-      "## retrieve\n\n`client.workflows.triggers.retrieve(triggerId: string): { data: object; }`\n\n**get** `/triggers/{triggerId}`\n\nGet a trigger\n\n### Parameters\n\n- `triggerId: string`\n\n### Returns\n\n- `{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }`\n\n  - `data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst trigger = await client.workflows.triggers.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(trigger);\n```",
+      "## retrieve\n\n`client.workflows.triggers.retrieve(triggerId: string): { data: object; }`\n\n**get** `/triggers/{triggerId}`\n\nFetch a single trigger by its ID, including its activation type and type-specific configuration. Returns 404 if no trigger matches.\n\n### Parameters\n\n- `triggerId: string`\n\n### Returns\n\n- `{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }`\n\n  - `data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst trigger = await client.workflows.triggers.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(trigger);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.triggers.retrieve',
@@ -4896,7 +4641,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/triggers/{triggerId}',
     httpMethod: 'patch',
     summary: 'Update a trigger',
-    description: 'Update a trigger',
+    description:
+      'Partially update a trigger; all fields are optional. When `activation` is changed, the type-specific field rules are re-validated. Returns 404 if the trigger does not exist.',
     stainlessPath: '(resource) workflows.triggers > (method) update',
     qualified: 'client.workflows.triggers.update',
     params: [
@@ -4911,9 +4657,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'timezone?: string;',
     ],
     response:
-      "{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }",
+      "{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }",
     markdown:
-      "## update\n\n`client.workflows.triggers.update(triggerId: string, activation?: 'event' | 'schedule' | 'custom', conditions?: { all?: object[]; any?: object[]; }, customPayloadSchema?: object, description?: string, eventType?: string, name?: string, scheduleRule?: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }, timezone?: string): { data: object; }`\n\n**patch** `/triggers/{triggerId}`\n\nUpdate a trigger\n\n### Parameters\n\n- `triggerId: string`\n\n- `activation?: 'event' | 'schedule' | 'custom'`\n\n- `conditions?: { all?: object[]; any?: object[]; }`\n  - `all?: object[]`\n  - `any?: object[]`\n\n- `customPayloadSchema?: object`\n  Optional JSON Schema for validating payloads sent to this custom trigger\n\n- `description?: string`\n\n- `eventType?: string`\n\n- `name?: string`\n\n- `scheduleRule?: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }`\n  - `type: 'once' | 'cron' | 'recurring'`\n  - `dateTime?: string`\n    ISO 8601 datetime (for type=once)\n  - `expression?: string`\n    Cron expression (for type=cron)\n  - `rrule?: string`\n    RRULE string (for type=recurring)\n\n- `timezone?: string`\n\n### Returns\n\n- `{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }`\n\n  - `data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst trigger = await client.workflows.triggers.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(trigger);\n```",
+      "## update\n\n`client.workflows.triggers.update(triggerId: string, activation?: 'event' | 'schedule' | 'custom', conditions?: { all?: object[]; any?: object[]; }, customPayloadSchema?: object, description?: string, eventType?: string, name?: string, scheduleRule?: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }, timezone?: string): { data: object; }`\n\n**patch** `/triggers/{triggerId}`\n\nPartially update a trigger; all fields are optional. When `activation` is changed, the type-specific field rules are re-validated. Returns 404 if the trigger does not exist.\n\n### Parameters\n\n- `triggerId: string`\n\n- `activation?: 'event' | 'schedule' | 'custom'`\n\n- `conditions?: { all?: object[]; any?: object[]; }`\n  - `all?: object[]`\n  - `any?: object[]`\n\n- `customPayloadSchema?: object`\n\n- `description?: string`\n\n- `eventType?: string`\n\n- `name?: string`\n\n- `scheduleRule?: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }`\n  - `type: 'once' | 'cron' | 'recurring'`\n  - `dateTime?: string`\n    ISO 8601 datetime (for type=once)\n  - `expression?: string`\n    Cron expression (for type=cron)\n  - `rrule?: string`\n    RRULE string (for type=recurring)\n\n- `timezone?: string`\n\n### Returns\n\n- `{ data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; }`\n\n  - `data: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst trigger = await client.workflows.triggers.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(trigger);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.triggers.update',
@@ -4946,13 +4692,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/triggers/{triggerId}',
     httpMethod: 'delete',
     summary: 'Delete a trigger',
-    description: 'Delete a trigger',
+    description: 'Delete a trigger by its ID. Returns 404 if no trigger matches.',
     stainlessPath: '(resource) workflows.triggers > (method) delete',
     qualified: 'client.workflows.triggers.delete',
     params: ['triggerId: string;'],
     response: '{ message: string; }',
     markdown:
-      "## delete\n\n`client.workflows.triggers.delete(triggerId: string): { message: string; }`\n\n**delete** `/triggers/{triggerId}`\n\nDelete a trigger\n\n### Parameters\n\n- `triggerId: string`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst trigger = await client.workflows.triggers.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(trigger);\n```",
+      "## delete\n\n`client.workflows.triggers.delete(triggerId: string): { message: string; }`\n\n**delete** `/triggers/{triggerId}`\n\nDelete a trigger by its ID. Returns 404 if no trigger matches.\n\n### Parameters\n\n- `triggerId: string`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst trigger = await client.workflows.triggers.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(trigger);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.triggers.delete',
@@ -5025,7 +4771,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/action-catalog',
     httpMethod: 'get',
     summary: 'List action catalog entries',
-    description: 'List action catalog entries',
+    description:
+      'Return a paginated list of catalog entries — the service/method templates that actions are created from, each carrying its parameter schema. Supports filtering by `service`.',
     stainlessPath: '(resource) workflows.action_catalog > (method) list',
     qualified: 'client.workflows.actionCatalog.list',
     params: [
@@ -5036,7 +4783,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ items: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.workflows.actionCatalog.list(page?: number, pageSize?: number, service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'): { items: action_catalog_entry[]; pagination: pagination; }`\n\n**get** `/action-catalog`\n\nList action catalog entries\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'`\n\n### Returns\n\n- `{ items: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst actionCatalogs = await client.workflows.actionCatalog.list();\n\nconsole.log(actionCatalogs);\n```",
+      "## list\n\n`client.workflows.actionCatalog.list(page?: number, pageSize?: number, service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'): { items: action_catalog_entry[]; pagination: pagination; }`\n\n**get** `/action-catalog`\n\nReturn a paginated list of catalog entries — the service/method templates that actions are created from, each carrying its parameter schema. Supports filtering by `service`.\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'`\n\n### Returns\n\n- `{ items: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst actionCatalogs = await client.workflows.actionCatalog.list();\n\nconsole.log(actionCatalogs);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.actionCatalog.list',
@@ -5068,14 +4815,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/action-catalog/{catalogEntryId}',
     httpMethod: 'get',
     summary: 'Get a catalog entry',
-    description: 'Get a catalog entry',
+    description:
+      'Fetch a single action catalog entry by its ID, including its service, method, and parameter schema. Returns 404 if no entry matches.',
     stainlessPath: '(resource) workflows.action_catalog > (method) retrieve',
     qualified: 'client.workflows.actionCatalog.retrieve',
     params: ['catalogEntryId: string;'],
     response:
       "{ data: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }; }",
     markdown:
-      "## retrieve\n\n`client.workflows.actionCatalog.retrieve(catalogEntryId: string): { data: action_catalog_entry; }`\n\n**get** `/action-catalog/{catalogEntryId}`\n\nGet a catalog entry\n\n### Parameters\n\n- `catalogEntryId: string`\n\n### Returns\n\n- `{ data: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }; }`\n\n  - `data: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst actionCatalog = await client.workflows.actionCatalog.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(actionCatalog);\n```",
+      "## retrieve\n\n`client.workflows.actionCatalog.retrieve(catalogEntryId: string): { data: action_catalog_entry; }`\n\n**get** `/action-catalog/{catalogEntryId}`\n\nFetch a single action catalog entry by its ID, including its service, method, and parameter schema. Returns 404 if no entry matches.\n\n### Parameters\n\n- `catalogEntryId: string`\n\n### Returns\n\n- `{ data: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }; }`\n\n  - `data: { id: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; paramsSchema?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst actionCatalog = await client.workflows.actionCatalog.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(actionCatalog);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.actionCatalog.retrieve',
@@ -5108,14 +4856,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/actions',
     httpMethod: 'post',
     summary: 'Create an action',
-    description: 'Create an action',
+    description:
+      "Create a reusable action from a catalog entry (`catalogEntryId`), with an optional `params` object supplying the values for that entry's service method. Returns 400 if the params are invalid for the chosen catalog entry.",
     stainlessPath: '(resource) workflows.actions > (method) create',
     qualified: 'client.workflows.actions.create',
     params: ['catalogEntryId: string;', 'name: string;', 'description?: string;', 'params?: object;'],
     response:
       "{ data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }; }",
     markdown:
-      "## create\n\n`client.workflows.actions.create(catalogEntryId: string, name: string, description?: string, params?: object): { data: action; }`\n\n**post** `/actions`\n\nCreate an action\n\n### Parameters\n\n- `catalogEntryId: string`\n\n- `name: string`\n\n- `description?: string`\n\n- `params?: object`\n\n### Returns\n\n- `{ data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }; }`\n\n  - `data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.actions.create({ catalogEntryId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', name: 'x' });\n\nconsole.log(action);\n```",
+      "## create\n\n`client.workflows.actions.create(catalogEntryId: string, name: string, description?: string, params?: object): { data: action; }`\n\n**post** `/actions`\n\nCreate a reusable action from a catalog entry (`catalogEntryId`), with an optional `params` object supplying the values for that entry's service method. Returns 400 if the params are invalid for the chosen catalog entry.\n\n### Parameters\n\n- `catalogEntryId: string`\n\n- `name: string`\n\n- `description?: string`\n\n- `params?: object`\n\n### Returns\n\n- `{ data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }; }`\n\n  - `data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.actions.create({ catalogEntryId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', name: 'x' });\n\nconsole.log(action);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.actions.create',
@@ -5148,7 +4897,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/actions',
     httpMethod: 'get',
     summary: 'List actions',
-    description: 'List actions',
+    description:
+      'Return a paginated list of actions. Supports filtering by `service`, free-text `search`, and ordering by name, createdAt, or updatedAt.',
     stainlessPath: '(resource) workflows.actions > (method) list',
     qualified: 'client.workflows.actions.list',
     params: [
@@ -5162,7 +4912,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ items: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.workflows.actions.list(orderBy?: 'name' | 'createdAt' | 'updatedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, search?: string, service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'): { items: action[]; pagination: pagination; }`\n\n**get** `/actions`\n\nList actions\n\n### Parameters\n\n- `orderBy?: 'name' | 'createdAt' | 'updatedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `search?: string`\n\n- `service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'`\n\n### Returns\n\n- `{ items: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst actions = await client.workflows.actions.list();\n\nconsole.log(actions);\n```",
+      "## list\n\n`client.workflows.actions.list(orderBy?: 'name' | 'createdAt' | 'updatedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, search?: string, service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'): { items: action[]; pagination: pagination; }`\n\n**get** `/actions`\n\nReturn a paginated list of actions. Supports filtering by `service`, free-text `search`, and ordering by name, createdAt, or updatedAt.\n\n### Parameters\n\n- `orderBy?: 'name' | 'createdAt' | 'updatedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `search?: string`\n\n- `service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'`\n\n### Returns\n\n- `{ items: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst actions = await client.workflows.actions.list();\n\nconsole.log(actions);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.actions.list',
@@ -5194,14 +4944,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/actions/{actionId}',
     httpMethod: 'get',
     summary: 'Get an action',
-    description: 'Get an action',
+    description:
+      'Fetch a single action by its ID, including its configured service, method, and params. Returns 404 if no action matches.',
     stainlessPath: '(resource) workflows.actions > (method) retrieve',
     qualified: 'client.workflows.actions.retrieve',
     params: ['actionId: string;'],
     response:
       "{ data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }; }",
     markdown:
-      "## retrieve\n\n`client.workflows.actions.retrieve(actionId: string): { data: action; }`\n\n**get** `/actions/{actionId}`\n\nGet an action\n\n### Parameters\n\n- `actionId: string`\n\n### Returns\n\n- `{ data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }; }`\n\n  - `data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.actions.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(action);\n```",
+      "## retrieve\n\n`client.workflows.actions.retrieve(actionId: string): { data: action; }`\n\n**get** `/actions/{actionId}`\n\nFetch a single action by its ID, including its configured service, method, and params. Returns 404 if no action matches.\n\n### Parameters\n\n- `actionId: string`\n\n### Returns\n\n- `{ data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }; }`\n\n  - `data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.actions.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(action);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.actions.retrieve',
@@ -5234,14 +4985,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/actions/{actionId}',
     httpMethod: 'patch',
     summary: 'Update an action',
-    description: 'Update an action',
+    description:
+      "Partially update an action's name, description, or params; all fields are optional. Returns 404 if the action does not exist.",
     stainlessPath: '(resource) workflows.actions > (method) update',
     qualified: 'client.workflows.actions.update',
     params: ['actionId: string;', 'description?: string;', 'name?: string;', 'params?: object;'],
     response:
       "{ data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }; }",
     markdown:
-      "## update\n\n`client.workflows.actions.update(actionId: string, description?: string, name?: string, params?: object): { data: action; }`\n\n**patch** `/actions/{actionId}`\n\nUpdate an action\n\n### Parameters\n\n- `actionId: string`\n\n- `description?: string`\n\n- `name?: string`\n\n- `params?: object`\n\n### Returns\n\n- `{ data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }; }`\n\n  - `data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.actions.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(action);\n```",
+      "## update\n\n`client.workflows.actions.update(actionId: string, description?: string, name?: string, params?: object): { data: action; }`\n\n**patch** `/actions/{actionId}`\n\nPartially update an action's name, description, or params; all fields are optional. Returns 404 if the action does not exist.\n\n### Parameters\n\n- `actionId: string`\n\n- `description?: string`\n\n- `name?: string`\n\n- `params?: object`\n\n### Returns\n\n- `{ data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }; }`\n\n  - `data: { id: string; catalogEntryId: string; createdAt: string; description: string; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; updatedAt: string; userId: string; params?: object; paramsSchema?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.actions.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(action);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.actions.update',
@@ -5274,13 +5026,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/actions/{actionId}',
     httpMethod: 'delete',
     summary: 'Delete an action',
-    description: 'Delete an action',
+    description: 'Delete an action by its ID. Returns 404 if no action matches.',
     stainlessPath: '(resource) workflows.actions > (method) delete',
     qualified: 'client.workflows.actions.delete',
     params: ['actionId: string;'],
     response: '{ message: string; }',
     markdown:
-      "## delete\n\n`client.workflows.actions.delete(actionId: string): { message: string; }`\n\n**delete** `/actions/{actionId}`\n\nDelete an action\n\n### Parameters\n\n- `actionId: string`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.actions.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(action);\n```",
+      "## delete\n\n`client.workflows.actions.delete(actionId: string): { message: string; }`\n\n**delete** `/actions/{actionId}`\n\nDelete an action by its ID. Returns 404 if no action matches.\n\n### Parameters\n\n- `actionId: string`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.actions.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(action);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.actions.delete',
@@ -5313,12 +5065,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/actions/services',
     httpMethod: 'get',
     summary: 'List available services',
-    description: 'List available services',
+    description:
+      "Return the names of the services that actions can be built against. Use these values to look up each service's allowed methods.",
     stainlessPath: '(resource) workflows.actions.services > (method) list',
     qualified: 'client.workflows.actions.services.list',
     response: '{ data: string[]; }',
     markdown:
-      "## list\n\n`client.workflows.actions.services.list(): { data: string[]; }`\n\n**get** `/actions/services`\n\nList available services\n\n### Returns\n\n- `{ data: string[]; }`\n\n  - `data: string[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst services = await client.workflows.actions.services.list();\n\nconsole.log(services);\n```",
+      "## list\n\n`client.workflows.actions.services.list(): { data: string[]; }`\n\n**get** `/actions/services`\n\nReturn the names of the services that actions can be built against. Use these values to look up each service's allowed methods.\n\n### Returns\n\n- `{ data: string[]; }`\n\n  - `data: string[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst services = await client.workflows.actions.services.list();\n\nconsole.log(services);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.actions.services.list',
@@ -5350,14 +5103,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/actions/services/{service}/methods',
     httpMethod: 'get',
     summary: 'List allowed methods for a service',
-    description: 'List allowed methods for a service',
+    description:
+      'Return the methods allowed for the given service, each with its parameter definitions (name, type, whether required, description, and optional default/example). Returns 404 if the service is unknown.',
     stainlessPath: '(resource) workflows.actions.services > (method) list_methods',
     qualified: 'client.workflows.actions.services.listMethods',
     params: ['service: string;'],
     response:
       "{ data: { method: string; params: { description: string; name: string; required: boolean; type: 'string' | 'number' | 'boolean' | 'object' | 'array'; default?: object; example?: object; }[]; }[]; }",
     markdown:
-      "## list_methods\n\n`client.workflows.actions.services.listMethods(service: string): { data: object[]; }`\n\n**get** `/actions/services/{service}/methods`\n\nList allowed methods for a service\n\n### Parameters\n\n- `service: string`\n\n### Returns\n\n- `{ data: { method: string; params: { description: string; name: string; required: boolean; type: 'string' | 'number' | 'boolean' | 'object' | 'array'; default?: object; example?: object; }[]; }[]; }`\n\n  - `data: { method: string; params: { description: string; name: string; required: boolean; type: 'string' | 'number' | 'boolean' | 'object' | 'array'; default?: object; example?: object; }[]; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.actions.services.listMethods('x');\n\nconsole.log(response);\n```",
+      "## list_methods\n\n`client.workflows.actions.services.listMethods(service: string): { data: object[]; }`\n\n**get** `/actions/services/{service}/methods`\n\nReturn the methods allowed for the given service, each with its parameter definitions (name, type, whether required, description, and optional default/example). Returns 404 if the service is unknown.\n\n### Parameters\n\n- `service: string`\n\n### Returns\n\n- `{ data: { method: string; params: { description: string; name: string; required: boolean; type: 'string' | 'number' | 'boolean' | 'object' | 'array'; default?: object; example?: object; }[]; }[]; }`\n\n  - `data: { method: string; params: { description: string; name: string; required: boolean; type: 'string' | 'number' | 'boolean' | 'object' | 'array'; default?: object; example?: object; }[]; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.actions.services.listMethods('x');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.actions.services.listMethods',
@@ -5390,7 +5144,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows',
     httpMethod: 'post',
     summary: 'Create a flow',
-    description: 'Create a flow',
+    description:
+      'Create a flow that binds a trigger (`triggerId`) to an ordered list of actions, with at least one action required. Optional settings include target `deviceIds`, a cooldown (`cooldownSeconds`/`cooldownScope`), and webhook notifications on success or failure.',
     stainlessPath: '(resource) workflows.flows > (method) create',
     qualified: 'client.workflows.flows.create',
     params: [
@@ -5409,7 +5164,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }",
     markdown:
-      "## create\n\n`client.workflows.flows.create(actions: { actionId: string; position: number; children?: object[]; continueOnError?: boolean; nameOverride?: string; overrides?: object; }[], name: string, triggerId: string, cooldownScope?: 'flow' | 'device', cooldownSeconds?: number, description?: string, deviceIds?: string[], enabled?: boolean, notifyOnFailure?: boolean, notifyOnSuccess?: boolean, notifyWebhookId?: string): { data: flow; }`\n\n**post** `/flows`\n\nCreate a flow\n\n### Parameters\n\n- `actions: { actionId: string; position: number; children?: { actionId: string; position: number; continueOnError?: boolean; nameOverride?: string; overrides?: object; }[]; continueOnError?: boolean; nameOverride?: string; overrides?: { params?: object; }; }[]`\n\n- `name: string`\n\n- `triggerId: string`\n\n- `cooldownScope?: 'flow' | 'device'`\n\n- `cooldownSeconds?: number`\n\n- `description?: string`\n\n- `deviceIds?: string[]`\n\n- `enabled?: boolean`\n\n- `notifyOnFailure?: boolean`\n\n- `notifyOnSuccess?: boolean`\n\n- `notifyWebhookId?: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }`\n\n  - `data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flow = await client.workflows.flows.create({\n  actions: [{ actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 }],\n  name: 'x',\n  triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n});\n\nconsole.log(flow);\n```",
+      "## create\n\n`client.workflows.flows.create(actions: { actionId: string; position: number; children?: object[]; continueOnError?: boolean; nameOverride?: string; overrides?: object; }[], name: string, triggerId: string, cooldownScope?: 'flow' | 'device', cooldownSeconds?: number, description?: string, deviceIds?: string[], enabled?: boolean, notifyOnFailure?: boolean, notifyOnSuccess?: boolean, notifyWebhookId?: string): { data: flow; }`\n\n**post** `/flows`\n\nCreate a flow that binds a trigger (`triggerId`) to an ordered list of actions, with at least one action required. Optional settings include target `deviceIds`, a cooldown (`cooldownSeconds`/`cooldownScope`), and webhook notifications on success or failure.\n\n### Parameters\n\n- `actions: { actionId: string; position: number; children?: { actionId: string; position: number; continueOnError?: boolean; nameOverride?: string; overrides?: object; }[]; continueOnError?: boolean; nameOverride?: string; overrides?: { params?: object; }; }[]`\n\n- `name: string`\n\n- `triggerId: string`\n\n- `cooldownScope?: 'flow' | 'device'`\n\n- `cooldownSeconds?: number`\n\n- `description?: string`\n\n- `deviceIds?: string[]`\n\n- `enabled?: boolean`\n\n- `notifyOnFailure?: boolean`\n\n- `notifyOnSuccess?: boolean`\n\n- `notifyWebhookId?: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }`\n\n  - `data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flow = await client.workflows.flows.create({\n  actions: [{ actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 }],\n  name: 'x',\n  triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n});\n\nconsole.log(flow);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.create',
@@ -5442,7 +5197,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows',
     httpMethod: 'get',
     summary: 'List flows',
-    description: 'List flows',
+    description:
+      'Return a paginated list of flows. Supports filtering by `triggerId`, `enabled`, and one or more health `status` values (healthy, failing, blocked), plus free-text `search` and ordering.',
     stainlessPath: '(resource) workflows.flows > (method) list',
     qualified: 'client.workflows.flows.list',
     params: [
@@ -5458,7 +5214,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ items: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.workflows.flows.list(enabled?: boolean, orderBy?: 'name' | 'createdAt' | 'updatedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, search?: string, status?: 'healthy' | 'failing' | 'blocked'[], triggerId?: string): { items: flow[]; pagination: pagination; }`\n\n**get** `/flows`\n\nList flows\n\n### Parameters\n\n- `enabled?: boolean`\n\n- `orderBy?: 'name' | 'createdAt' | 'updatedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `search?: string`\n\n- `status?: 'healthy' | 'failing' | 'blocked'[]`\n\n- `triggerId?: string`\n\n### Returns\n\n- `{ items: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flows = await client.workflows.flows.list();\n\nconsole.log(flows);\n```",
+      "## list\n\n`client.workflows.flows.list(enabled?: boolean, orderBy?: 'name' | 'createdAt' | 'updatedAt', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, search?: string, status?: 'healthy' | 'failing' | 'blocked'[], triggerId?: string): { items: flow[]; pagination: pagination; }`\n\n**get** `/flows`\n\nReturn a paginated list of flows. Supports filtering by `triggerId`, `enabled`, and one or more health `status` values (healthy, failing, blocked), plus free-text `search` and ordering.\n\n### Parameters\n\n- `enabled?: boolean`\n\n- `orderBy?: 'name' | 'createdAt' | 'updatedAt'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `search?: string`\n\n- `status?: 'healthy' | 'failing' | 'blocked'[]`\n\n- `triggerId?: string`\n\n### Returns\n\n- `{ items: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flows = await client.workflows.flows.list();\n\nconsole.log(flows);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.list',
@@ -5490,14 +5246,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows/{flowId}',
     httpMethod: 'get',
     summary: 'Get a flow',
-    description: 'Get a flow',
+    description:
+      'Fetch a single flow by its ID, including its trigger binding, configuration, and current status. Returns 404 if no flow matches.',
     stainlessPath: '(resource) workflows.flows > (method) retrieve',
     qualified: 'client.workflows.flows.retrieve',
     params: ['flowId: string;'],
     response:
       "{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }",
     markdown:
-      "## retrieve\n\n`client.workflows.flows.retrieve(flowId: string): { data: flow; }`\n\n**get** `/flows/{flowId}`\n\nGet a flow\n\n### Parameters\n\n- `flowId: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }`\n\n  - `data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flow = await client.workflows.flows.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(flow);\n```",
+      "## retrieve\n\n`client.workflows.flows.retrieve(flowId: string): { data: flow; }`\n\n**get** `/flows/{flowId}`\n\nFetch a single flow by its ID, including its trigger binding, configuration, and current status. Returns 404 if no flow matches.\n\n### Parameters\n\n- `flowId: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }`\n\n  - `data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flow = await client.workflows.flows.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(flow);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.retrieve',
@@ -5530,7 +5287,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows/{flowId}',
     httpMethod: 'patch',
     summary: 'Update a flow',
-    description: 'Update a flow',
+    description:
+      "Partially update a flow's settings — name, trigger binding, enabled state, target devices, cooldown, or notifications; all fields are optional. Actions are managed through the flow-actions endpoints, not here. Returns 404 if the flow does not exist.",
     stainlessPath: '(resource) workflows.flows > (method) update',
     qualified: 'client.workflows.flows.update',
     params: [
@@ -5549,7 +5307,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }",
     markdown:
-      "## update\n\n`client.workflows.flows.update(flowId: string, cooldownScope?: 'flow' | 'device', cooldownSeconds?: number, description?: string, deviceIds?: string[], enabled?: boolean, name?: string, notifyOnFailure?: boolean, notifyOnSuccess?: boolean, notifyWebhookId?: string, triggerId?: string): { data: flow; }`\n\n**patch** `/flows/{flowId}`\n\nUpdate a flow\n\n### Parameters\n\n- `flowId: string`\n\n- `cooldownScope?: 'flow' | 'device'`\n\n- `cooldownSeconds?: number`\n\n- `description?: string`\n\n- `deviceIds?: string[]`\n\n- `enabled?: boolean`\n\n- `name?: string`\n\n- `notifyOnFailure?: boolean`\n\n- `notifyOnSuccess?: boolean`\n\n- `notifyWebhookId?: string`\n\n- `triggerId?: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }`\n\n  - `data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flow = await client.workflows.flows.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(flow);\n```",
+      "## update\n\n`client.workflows.flows.update(flowId: string, cooldownScope?: 'flow' | 'device', cooldownSeconds?: number, description?: string, deviceIds?: string[], enabled?: boolean, name?: string, notifyOnFailure?: boolean, notifyOnSuccess?: boolean, notifyWebhookId?: string, triggerId?: string): { data: flow; }`\n\n**patch** `/flows/{flowId}`\n\nPartially update a flow's settings — name, trigger binding, enabled state, target devices, cooldown, or notifications; all fields are optional. Actions are managed through the flow-actions endpoints, not here. Returns 404 if the flow does not exist.\n\n### Parameters\n\n- `flowId: string`\n\n- `cooldownScope?: 'flow' | 'device'`\n\n- `cooldownSeconds?: number`\n\n- `description?: string`\n\n- `deviceIds?: string[]`\n\n- `enabled?: boolean`\n\n- `name?: string`\n\n- `notifyOnFailure?: boolean`\n\n- `notifyOnSuccess?: boolean`\n\n- `notifyWebhookId?: string`\n\n- `triggerId?: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }`\n\n  - `data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flow = await client.workflows.flows.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(flow);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.update',
@@ -5582,13 +5340,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows/{flowId}',
     httpMethod: 'delete',
     summary: 'Delete a flow',
-    description: 'Delete a flow',
+    description: 'Delete a flow by its ID. Returns 404 if no flow matches.',
     stainlessPath: '(resource) workflows.flows > (method) delete',
     qualified: 'client.workflows.flows.delete',
     params: ['flowId: string;'],
     response: '{ message: string; }',
     markdown:
-      "## delete\n\n`client.workflows.flows.delete(flowId: string): { message: string; }`\n\n**delete** `/flows/{flowId}`\n\nDelete a flow\n\n### Parameters\n\n- `flowId: string`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flow = await client.workflows.flows.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(flow);\n```",
+      "## delete\n\n`client.workflows.flows.delete(flowId: string): { message: string; }`\n\n**delete** `/flows/{flowId}`\n\nDelete a flow by its ID. Returns 404 if no flow matches.\n\n### Parameters\n\n- `flowId: string`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst flow = await client.workflows.flows.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(flow);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.delete',
@@ -5621,14 +5379,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows/{flowId}/clone',
     httpMethod: 'post',
     summary: 'Clone a flow',
-    description: 'Clone a flow',
+    description:
+      "Create a copy of an existing flow, including its actions and settings. The optional body can override the new flow's `name` and target `deviceIds`. Returns 404 if the source flow does not exist.",
     stainlessPath: '(resource) workflows.flows > (method) clone',
     qualified: 'client.workflows.flows.clone',
     params: ['flowId: string;', 'deviceIds?: string[];', 'name?: string;'],
     response:
       "{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }",
     markdown:
-      "## clone\n\n`client.workflows.flows.clone(flowId: string, deviceIds?: string[], name?: string): { data: flow; }`\n\n**post** `/flows/{flowId}/clone`\n\nClone a flow\n\n### Parameters\n\n- `flowId: string`\n\n- `deviceIds?: string[]`\n\n- `name?: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }`\n\n  - `data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.flows.clone('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
+      "## clone\n\n`client.workflows.flows.clone(flowId: string, deviceIds?: string[], name?: string): { data: flow; }`\n\n**post** `/flows/{flowId}/clone`\n\nCreate a copy of an existing flow, including its actions and settings. The optional body can override the new flow's `name` and target `deviceIds`. Returns 404 if the source flow does not exist.\n\n### Parameters\n\n- `flowId: string`\n\n- `deviceIds?: string[]`\n\n- `name?: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; }`\n\n  - `data: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.flows.clone('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.clone',
@@ -5660,8 +5419,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'unblock',
     endpoint: '/flows/{flowId}/unblock',
     httpMethod: 'post',
-    summary:
-      "Clear a flow's blocked status after fixing the underlying issue. Idempotent — safe to call on already-healthy flows.",
+    summary: 'Unblock a flow',
     description:
       "Clear a flow's blocked status after fixing the underlying issue. Idempotent — safe to call on already-healthy flows.",
     stainlessPath: '(resource) workflows.flows > (method) unblock',
@@ -5703,14 +5461,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows/{flowId}/actions',
     httpMethod: 'get',
     summary: 'List actions for a flow',
-    description: 'List actions for a flow',
+    description:
+      'Return the ordered list of actions attached to a flow, including any nested child actions. Returns 404 if the flow does not exist.',
     stainlessPath: '(resource) workflows.flows.actions > (method) list',
     qualified: 'client.workflows.flows.actions.list',
     params: ['flowId: string;'],
     response:
       '{ data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: object; parentFlowActionId: string; position: number; }[]; }',
     markdown:
-      "## list\n\n`client.workflows.flows.actions.list(flowId: string): { data: flow_action[]; }`\n\n**get** `/flows/{flowId}/actions`\n\nList actions for a flow\n\n### Parameters\n\n- `flowId: string`\n\n### Returns\n\n- `{ data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: object; parentFlowActionId: string; position: number; }[]; }`\n\n  - `data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: { params?: object; }; parentFlowActionId: string; position: number; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst actions = await client.workflows.flows.actions.list('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(actions);\n```",
+      "## list\n\n`client.workflows.flows.actions.list(flowId: string): { data: flow_action[]; }`\n\n**get** `/flows/{flowId}/actions`\n\nReturn the ordered list of actions attached to a flow, including any nested child actions. Returns 404 if the flow does not exist.\n\n### Parameters\n\n- `flowId: string`\n\n### Returns\n\n- `{ data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: object; parentFlowActionId: string; position: number; }[]; }`\n\n  - `data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: { params?: object; }; parentFlowActionId: string; position: number; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst actions = await client.workflows.flows.actions.list('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(actions);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.actions.list',
@@ -5743,7 +5502,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows/{flowId}/actions',
     httpMethod: 'put',
     summary: 'Replace all actions for a flow',
-    description: 'Replace all actions for a flow',
+    description:
+      "Replace a flow's entire action list with the supplied set (at least one required). Each action references an `actionId` and a unique `position`, and may include nested `children`, a `nameOverride`, param `overrides`, and a `continueOnError` flag. Returns 404 if the flow does not exist.",
     stainlessPath: '(resource) workflows.flows.actions > (method) replace',
     qualified: 'client.workflows.flows.actions.replace',
     params: [
@@ -5753,7 +5513,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: object; parentFlowActionId: string; position: number; }[]; }',
     markdown:
-      "## replace\n\n`client.workflows.flows.actions.replace(flowId: string, actions: { actionId: string; position: number; children?: object[]; continueOnError?: boolean; nameOverride?: string; overrides?: object; }[]): { data: flow_action[]; }`\n\n**put** `/flows/{flowId}/actions`\n\nReplace all actions for a flow\n\n### Parameters\n\n- `flowId: string`\n\n- `actions: { actionId: string; position: number; children?: { actionId: string; position: number; continueOnError?: boolean; nameOverride?: string; overrides?: object; }[]; continueOnError?: boolean; nameOverride?: string; overrides?: { params?: object; }; }[]`\n\n### Returns\n\n- `{ data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: object; parentFlowActionId: string; position: number; }[]; }`\n\n  - `data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: { params?: object; }; parentFlowActionId: string; position: number; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.flows.actions.replace('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { actions: [{ actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 }] });\n\nconsole.log(response);\n```",
+      "## replace\n\n`client.workflows.flows.actions.replace(flowId: string, actions: { actionId: string; position: number; children?: object[]; continueOnError?: boolean; nameOverride?: string; overrides?: object; }[]): { data: flow_action[]; }`\n\n**put** `/flows/{flowId}/actions`\n\nReplace a flow's entire action list with the supplied set (at least one required). Each action references an `actionId` and a unique `position`, and may include nested `children`, a `nameOverride`, param `overrides`, and a `continueOnError` flag. Returns 404 if the flow does not exist.\n\n### Parameters\n\n- `flowId: string`\n\n- `actions: { actionId: string; position: number; children?: { actionId: string; position: number; continueOnError?: boolean; nameOverride?: string; overrides?: object; }[]; continueOnError?: boolean; nameOverride?: string; overrides?: { params?: object; }; }[]`\n\n### Returns\n\n- `{ data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: object; parentFlowActionId: string; position: number; }[]; }`\n\n  - `data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: { params?: object; }; parentFlowActionId: string; position: number; }[]`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.flows.actions.replace('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { actions: [{ actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 }] });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.actions.replace',
@@ -5786,7 +5546,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows/{flowId}/actions',
     httpMethod: 'post',
     summary: 'Add an action to a flow',
-    description: 'Add an action to a flow',
+    description:
+      'Append a single action to a flow at the given `position`, optionally nesting it under a `parentFlowActionId` or supplying its own `children`. Supports a `nameOverride`, param `overrides`, and `continueOnError`. Returns 404 if the flow does not exist.',
     stainlessPath: '(resource) workflows.flows.actions > (method) add',
     qualified: 'client.workflows.flows.actions.add',
     params: [
@@ -5802,7 +5563,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: object; parentFlowActionId: string; position: number; }; }',
     markdown:
-      "## add\n\n`client.workflows.flows.actions.add(flowId: string, actionId: string, position: number, children?: { actionId: string; position: number; continueOnError?: boolean; nameOverride?: string; overrides?: flow_action_overrides; }[], continueOnError?: boolean, nameOverride?: string, overrides?: { params?: object; }, parentFlowActionId?: string): { data: flow_action; }`\n\n**post** `/flows/{flowId}/actions`\n\nAdd an action to a flow\n\n### Parameters\n\n- `flowId: string`\n\n- `actionId: string`\n\n- `position: number`\n\n- `children?: { actionId: string; position: number; continueOnError?: boolean; nameOverride?: string; overrides?: { params?: object; }; }[]`\n\n- `continueOnError?: boolean`\n\n- `nameOverride?: string`\n\n- `overrides?: { params?: object; }`\n  - `params?: object`\n\n- `parentFlowActionId?: string`\n\n### Returns\n\n- `{ data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: object; parentFlowActionId: string; position: number; }; }`\n\n  - `data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: { params?: object; }; parentFlowActionId: string; position: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.flows.actions.add('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 });\n\nconsole.log(response);\n```",
+      "## add\n\n`client.workflows.flows.actions.add(flowId: string, actionId: string, position: number, children?: { actionId: string; position: number; continueOnError?: boolean; nameOverride?: string; overrides?: flow_action_overrides; }[], continueOnError?: boolean, nameOverride?: string, overrides?: { params?: object; }, parentFlowActionId?: string): { data: flow_action; }`\n\n**post** `/flows/{flowId}/actions`\n\nAppend a single action to a flow at the given `position`, optionally nesting it under a `parentFlowActionId` or supplying its own `children`. Supports a `nameOverride`, param `overrides`, and `continueOnError`. Returns 404 if the flow does not exist.\n\n### Parameters\n\n- `flowId: string`\n\n- `actionId: string`\n\n- `position: number`\n\n- `children?: { actionId: string; position: number; continueOnError?: boolean; nameOverride?: string; overrides?: { params?: object; }; }[]`\n\n- `continueOnError?: boolean`\n\n- `nameOverride?: string`\n\n- `overrides?: { params?: object; }`\n  - `params?: object`\n\n- `parentFlowActionId?: string`\n\n### Returns\n\n- `{ data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: object; parentFlowActionId: string; position: number; }; }`\n\n  - `data: { id: string; actionId: string; continueOnError: boolean; createdAt: string; flowId: string; nameOverride: string; overrides: { params?: object; }; parentFlowActionId: string; position: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.flows.actions.add('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.actions.add',
@@ -5835,13 +5596,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/flows/{flowId}/actions/{flowActionId}',
     httpMethod: 'delete',
     summary: 'Remove an action from a flow',
-    description: 'Remove an action from a flow',
+    description:
+      'Remove a single action from a flow by its `flowActionId`. Returns 404 if the flow or flow action does not exist.',
     stainlessPath: '(resource) workflows.flows.actions > (method) remove',
     qualified: 'client.workflows.flows.actions.remove',
     params: ['flowId: string;', 'flowActionId: string;'],
     response: '{ message: string; }',
     markdown:
-      "## remove\n\n`client.workflows.flows.actions.remove(flowId: string, flowActionId: string): { message: string; }`\n\n**delete** `/flows/{flowId}/actions/{flowActionId}`\n\nRemove an action from a flow\n\n### Parameters\n\n- `flowId: string`\n\n- `flowActionId: string`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.flows.actions.remove('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { flowId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' });\n\nconsole.log(action);\n```",
+      "## remove\n\n`client.workflows.flows.actions.remove(flowId: string, flowActionId: string): { message: string; }`\n\n**delete** `/flows/{flowId}/actions/{flowActionId}`\n\nRemove a single action from a flow by its `flowActionId`. Returns 404 if the flow or flow action does not exist.\n\n### Parameters\n\n- `flowId: string`\n\n- `flowActionId: string`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst action = await client.workflows.flows.actions.remove('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { flowId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e' });\n\nconsole.log(action);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.flows.actions.remove',
@@ -5878,11 +5640,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'Simulate an event against all configured flows. Returns which flows would match and what actions would run, without storing the event or enqueuing jobs.',
     stainlessPath: '(resource) workflows.events > (method) dry_run',
     qualified: 'client.workflows.events.dryRun',
-    params: ['eventType: string;', 'payload?: object;'],
+    params: ['eventType: string;', 'deviceId?: string;', 'payload?: object;'],
     response:
       '{ data: { matchedFlows: { actions: object[]; flow: flow; gates: object; trigger: object; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: object[]; }; }; }',
     markdown:
-      "## dry_run\n\n`client.workflows.events.dryRun(eventType: string, payload?: object): { data: object; }`\n\n**post** `/events/dry-run`\n\nSimulate an event against all configured flows. Returns which flows would match and what actions would run, without storing the event or enqueuing jobs.\n\n### Parameters\n\n- `eventType: string`\n\n- `payload?: object`\n\n### Returns\n\n- `{ data: { matchedFlows: { actions: object[]; flow: flow; gates: object; trigger: object; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: object[]; }; }; }`\n\n  - `data: { matchedFlows: { actions: { continueOnError: boolean; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; children?: object[]; params?: object; }[]; flow: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; gates: { blocked: boolean; cooldownActive: boolean; deviceAttached: boolean; deviceIds: string[]; enabled: boolean; }; trigger: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: { type: 'once' | 'cron' | 'recurring'; dateTime?: string; expression?: string; rrule?: string; }; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: { field: string; message: string; }[]; }; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.dryRun({ eventType: 'x' });\n\nconsole.log(response);\n```",
+      "## dry_run\n\n`client.workflows.events.dryRun(eventType: string, deviceId?: string, payload?: object): { data: object; }`\n\n**post** `/events/dry-run`\n\nSimulate an event against all configured flows. Returns which flows would match and what actions would run, without storing the event or enqueuing jobs.\n\n### Parameters\n\n- `eventType: string`\n\n- `deviceId?: string`\n\n- `payload?: object`\n\n### Returns\n\n- `{ data: { matchedFlows: { actions: object[]; flow: flow; gates: object; trigger: object; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: object[]; }; }; }`\n\n  - `data: { matchedFlows: { actions: { continueOnError: boolean; method: string; name: string; service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks'; children?: object[]; params?: object; }[]; flow: { id: string; blockedAt: string; consecutiveFailures: number; cooldownScope: 'flow' | 'device'; cooldownSeconds: number; createdAt: string; description: string; deviceIds: string[]; enabled: boolean; lastFailureAt: string; lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config'; lastTriggeredAt: string; name: string; notifyOnFailure: boolean; notifyOnSuccess: boolean; notifyWebhookId: string; status: 'healthy' | 'failing' | 'blocked'; triggerId: string; updatedAt: string; userId: string; }; gates: { blocked: boolean; cooldownActive: boolean; deviceAttached: boolean; deviceIds: string[]; enabled: boolean; }; trigger: { id: string; activation: 'event' | 'schedule' | 'custom'; createdAt: string; customPayloadSchema: object; description: string; eventType: string; name: string; scheduleRule: object; timezone: string; updatedAt: string; userId: string; conditions?: object; nextFireTime?: string; }; wouldFire: boolean; }[]; validation: { valid: boolean; errors?: { field: string; message: string; }[]; }; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.dryRun({ eventType: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.events.dryRun',
@@ -5917,10 +5679,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     description: 'Ingest an event for trigger evaluation. Returns immediately with 202 Accepted.',
     stainlessPath: '(resource) workflows.events > (method) ingest',
     qualified: 'client.workflows.events.ingest',
-    params: ['eventType: string;', 'payload?: object;'],
+    params: ['eventType: string;', 'deviceId?: string;', 'payload?: object;'],
     response: '{ eventId: string; }',
     markdown:
-      "## ingest\n\n`client.workflows.events.ingest(eventType: string, payload?: object): { eventId: string; }`\n\n**post** `/events/ingest`\n\nIngest an event for trigger evaluation. Returns immediately with 202 Accepted.\n\n### Parameters\n\n- `eventType: string`\n\n- `payload?: object`\n\n### Returns\n\n- `{ eventId: string; }`\n\n  - `eventId: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.ingest({ eventType: 'x' });\n\nconsole.log(response);\n```",
+      "## ingest\n\n`client.workflows.events.ingest(eventType: string, deviceId?: string, payload?: object): { eventId: string; }`\n\n**post** `/events/ingest`\n\nIngest an event for trigger evaluation. Returns immediately with 202 Accepted.\n\n### Parameters\n\n- `eventType: string`\n\n- `deviceId?: string`\n\n- `payload?: object`\n\n### Returns\n\n- `{ eventId: string; }`\n\n  - `eventId: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.ingest({ eventType: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.events.ingest',
@@ -5948,91 +5710,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
-    name: 'register',
-    endpoint: '/events/catalog/register',
-    httpMethod: 'post',
-    summary: 'Register event types in the catalog',
-    description: 'Register event types in the catalog',
-    stainlessPath: '(resource) workflows.events.catalog > (method) register',
-    qualified: 'client.workflows.events.catalog.register',
-    params: [
-      "events: { eventType: string; label: string; description?: string; payloadSchema?: object; source?: 'device' | 'system' | 'webhook'; }[];",
-    ],
-    response: '{ message: string; }',
-    markdown:
-      "## register\n\n`client.workflows.events.catalog.register(events: { eventType: string; label: string; description?: string; payloadSchema?: object; source?: 'device' | 'system' | 'webhook'; }[]): { message: string; }`\n\n**post** `/events/catalog/register`\n\nRegister event types in the catalog\n\n### Parameters\n\n- `events: { eventType: string; label: string; description?: string; payloadSchema?: object; source?: 'device' | 'system' | 'webhook'; }[]`\n\n### Returns\n\n- `{ message: string; }`\n\n  - `message: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.events.catalog.register({ events: [{ eventType: 'x', label: 'x' }] });\n\nconsole.log(response);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.workflows.events.catalog.register',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.workflows.events.catalog.register({\n  events: [{ eventType: 'x', label: 'x' }],\n});\n\nconsole.log(response.message);",
-      },
-      python: {
-        method: 'workflows.events.catalog.register',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.workflows.events.catalog.register(\n    events=[{\n        "event_type": "x",\n        "label": "x",\n    }],\n)\nprint(response.message)',
-      },
-      go: {
-        method: 'client.Workflows.Events.Catalog.Register',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Workflows.Events.Catalog.Register(context.TODO(), mobileruncloud.WorkflowEventCatalogRegisterParams{\n\t\tEvents: []mobileruncloud.WorkflowEventCatalogRegisterParamsEvent{{\n\t\t\tEventType: "x",\n\t\t\tLabel:     "x",\n\t\t}},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Message)\n}\n',
-      },
-      cli: {
-        method: 'catalog register',
-        example:
-          "mobilerun-cloud workflows:events:catalog register \\\n  --api-key 'My API Key' \\\n  --event '{eventType: x, label: x}'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/events/catalog/register \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "events": [\n            {\n              "eventType": "x",\n              "label": "x"\n            }\n          ]\n        }\'',
-      },
-    },
-  },
-  {
-    name: 'list',
-    endpoint: '/events/catalog',
-    httpMethod: 'get',
-    summary: 'List event catalog',
-    description: 'List event catalog',
-    stainlessPath: '(resource) workflows.events.catalog > (method) list',
-    qualified: 'client.workflows.events.catalog.list',
-    params: ['page?: number;', 'pageSize?: number;', "source?: 'device' | 'system' | 'webhook';"],
-    response:
-      '{ items: { createdAt: string; description: string; eventType: string; label: string; source: string; updatedAt: string; payloadSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }',
-    markdown:
-      "## list\n\n`client.workflows.events.catalog.list(page?: number, pageSize?: number, source?: 'device' | 'system' | 'webhook'): { items: object[]; pagination: pagination; }`\n\n**get** `/events/catalog`\n\nList event catalog\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `source?: 'device' | 'system' | 'webhook'`\n\n### Returns\n\n- `{ items: { createdAt: string; description: string; eventType: string; label: string; source: string; updatedAt: string; payloadSchema?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { createdAt: string; description: string; eventType: string; label: string; source: string; updatedAt: string; payloadSchema?: object; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst catalogs = await client.workflows.events.catalog.list();\n\nconsole.log(catalogs);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.workflows.events.catalog.list',
-        example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun({\n  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted\n});\n\nconst catalogs = await client.workflows.events.catalog.list();\n\nconsole.log(catalogs.items);",
-      },
-      python: {
-        method: 'workflows.events.catalog.list',
-        example:
-          'import os\nfrom mobilerun_sdk import Mobilerun\n\nclient = Mobilerun(\n    api_key=os.environ.get("MOBILERUN_CLOUD_API_KEY"),  # This is the default and can be omitted\n)\ncatalogs = client.workflows.events.catalog.list()\nprint(catalogs.items)',
-      },
-      go: {
-        method: 'client.Workflows.Events.Catalog.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n\t"github.com/stainless-sdks/droidrun-cloud-go/option"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcatalogs, err := client.Workflows.Events.Catalog.List(context.TODO(), mobileruncloud.WorkflowEventCatalogListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", catalogs.Items)\n}\n',
-      },
-      cli: {
-        method: 'catalog list',
-        example: "mobilerun-cloud workflows:events:catalog list \\\n  --api-key 'My API Key'",
-      },
-      http: {
-        example:
-          'curl https://api.mobilerun.ai/v1/events/catalog \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY"',
-      },
-    },
-  },
-  {
     name: 'list',
     endpoint: '/executions',
     httpMethod: 'get',
     summary: 'List flow executions',
-    description: 'List flow executions',
+    description:
+      'Return a paginated history of flow executions. Supports filtering by `flowId`, `triggerId`, `status`, and a `from`/`to` time range, plus free-text `search` and ordering by startedAt, finishedAt, or status.',
     stainlessPath: '(resource) workflows.executions > (method) list',
     qualified: 'client.workflows.executions.list',
     params: [
@@ -6050,7 +5733,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ items: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.workflows.executions.list(flowId?: string, from?: string, orderBy?: 'startedAt' | 'finishedAt' | 'status', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, search?: string, status?: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid', to?: string, triggerId?: string): { items: flow_execution[]; pagination: pagination; }`\n\n**get** `/executions`\n\nList flow executions\n\n### Parameters\n\n- `flowId?: string`\n\n- `from?: string`\n\n- `orderBy?: 'startedAt' | 'finishedAt' | 'status'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `search?: string`\n\n- `status?: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'`\n\n- `to?: string`\n\n- `triggerId?: string`\n\n### Returns\n\n- `{ items: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst executions = await client.workflows.executions.list();\n\nconsole.log(executions);\n```",
+      "## list\n\n`client.workflows.executions.list(flowId?: string, from?: string, orderBy?: 'startedAt' | 'finishedAt' | 'status', orderByDirection?: 'asc' | 'desc', page?: number, pageSize?: number, search?: string, status?: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid', to?: string, triggerId?: string): { items: flow_execution[]; pagination: pagination; }`\n\n**get** `/executions`\n\nReturn a paginated history of flow executions. Supports filtering by `flowId`, `triggerId`, `status`, and a `from`/`to` time range, plus free-text `search` and ordering by startedAt, finishedAt, or status.\n\n### Parameters\n\n- `flowId?: string`\n\n- `from?: string`\n\n- `orderBy?: 'startedAt' | 'finishedAt' | 'status'`\n\n- `orderByDirection?: 'asc' | 'desc'`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `search?: string`\n\n- `status?: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'`\n\n- `to?: string`\n\n- `triggerId?: string`\n\n### Returns\n\n- `{ items: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst executions = await client.workflows.executions.list();\n\nconsole.log(executions);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.executions.list',
@@ -6082,14 +5765,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/executions/metrics',
     httpMethod: 'get',
     summary: 'Get execution metrics',
-    description: 'Get execution metrics',
+    description:
+      'Return aggregate execution metrics — total count, counts by status, average duration, and the last execution time. Can be scoped by `flowId`, `triggerId`, and a `from`/`to` time range.',
     stainlessPath: '(resource) workflows.executions > (method) get_metrics',
     qualified: 'client.workflows.executions.getMetrics',
     params: ['flowId?: string;', 'from?: string;', 'to?: string;', 'triggerId?: string;'],
     response:
       '{ data: { avgDurationMs: number; byStatus: { cancelled: number; failed: number; invalid: number; pending: number; running: number; skipped: number; success: number; }; lastExecutionAt: string; total: number; }; }',
     markdown:
-      "## get_metrics\n\n`client.workflows.executions.getMetrics(flowId?: string, from?: string, to?: string, triggerId?: string): { data: object; }`\n\n**get** `/executions/metrics`\n\nGet execution metrics\n\n### Parameters\n\n- `flowId?: string`\n\n- `from?: string`\n\n- `to?: string`\n\n- `triggerId?: string`\n\n### Returns\n\n- `{ data: { avgDurationMs: number; byStatus: { cancelled: number; failed: number; invalid: number; pending: number; running: number; skipped: number; success: number; }; lastExecutionAt: string; total: number; }; }`\n\n  - `data: { avgDurationMs: number; byStatus: { cancelled: number; failed: number; invalid: number; pending: number; running: number; skipped: number; success: number; }; lastExecutionAt: string; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.executions.getMetrics();\n\nconsole.log(response);\n```",
+      "## get_metrics\n\n`client.workflows.executions.getMetrics(flowId?: string, from?: string, to?: string, triggerId?: string): { data: object; }`\n\n**get** `/executions/metrics`\n\nReturn aggregate execution metrics — total count, counts by status, average duration, and the last execution time. Can be scoped by `flowId`, `triggerId`, and a `from`/`to` time range.\n\n### Parameters\n\n- `flowId?: string`\n\n- `from?: string`\n\n- `to?: string`\n\n- `triggerId?: string`\n\n### Returns\n\n- `{ data: { avgDurationMs: number; byStatus: { cancelled: number; failed: number; invalid: number; pending: number; running: number; skipped: number; success: number; }; lastExecutionAt: string; total: number; }; }`\n\n  - `data: { avgDurationMs: number; byStatus: { cancelled: number; failed: number; invalid: number; pending: number; running: number; skipped: number; success: number; }; lastExecutionAt: string; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.workflows.executions.getMetrics();\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.executions.getMetrics',
@@ -6121,14 +5805,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/executions/{executionId}',
     httpMethod: 'get',
     summary: 'Get execution details',
-    description: 'Get execution details',
+    description:
+      'Fetch a single flow execution by its ID, including its status, kind, result or error, and start/finish timestamps. Returns 404 if no execution matches.',
     stainlessPath: '(resource) workflows.executions > (method) retrieve',
     qualified: 'client.workflows.executions.retrieve',
     params: ['executionId: string;'],
     response:
       "{ data: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }; }",
     markdown:
-      "## retrieve\n\n`client.workflows.executions.retrieve(executionId: string): { data: flow_execution; }`\n\n**get** `/executions/{executionId}`\n\nGet execution details\n\n### Parameters\n\n- `executionId: string`\n\n### Returns\n\n- `{ data: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }; }`\n\n  - `data: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst execution = await client.workflows.executions.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(execution);\n```",
+      "## retrieve\n\n`client.workflows.executions.retrieve(executionId: string): { data: flow_execution; }`\n\n**get** `/executions/{executionId}`\n\nFetch a single flow execution by its ID, including its status, kind, result or error, and start/finish timestamps. Returns 404 if no execution matches.\n\n### Parameters\n\n- `executionId: string`\n\n### Returns\n\n- `{ data: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }; }`\n\n  - `data: { id: string; error: string; eventId: string; finishedAt: string; flowId: string; flowName: string; kind: 'live' | 'dry_run'; startedAt: string; status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid'; triggerId: string; triggerName: string; result?: object; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst execution = await client.workflows.executions.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\nconsole.log(execution);\n```",
     perLanguage: {
       typescript: {
         method: 'client.workflows.executions.retrieve',
@@ -6198,14 +5883,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/webhooks',
     httpMethod: 'post',
     summary: 'Register a webhook subscription',
-    description: 'Register a webhook subscription',
+    description:
+      'Creates a webhook subscription with a delivery URL and an optional list of event types to subscribe to (defaults to all when omitted). The response includes the generated signing secret, which is returned only once at creation time and cannot be retrieved later.',
     stainlessPath: '(resource) webhooks > (method) create',
     qualified: 'client.webhooks.create',
     params: ['url: string;', 'description?: string;', 'eventTypes?: string[];'],
     response:
       "{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }",
     markdown:
-      "## create\n\n`client.webhooks.create(url: string, description?: string, eventTypes?: string[]): { data: object; }`\n\n**post** `/webhooks`\n\nRegister a webhook subscription\n\n### Parameters\n\n- `url: string`\n\n- `description?: string`\n\n- `eventTypes?: string[]`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhook = await client.webhooks.create({ url: 'https://example.com/webhooks/droidrun' });\n\nconsole.log(webhook);\n```",
+      "## create\n\n`client.webhooks.create(url: string, description?: string, eventTypes?: string[]): { data: object; }`\n\n**post** `/webhooks`\n\nCreates a webhook subscription with a delivery URL and an optional list of event types to subscribe to (defaults to all when omitted). The response includes the generated signing secret, which is returned only once at creation time and cannot be retrieved later.\n\n### Parameters\n\n- `url: string`\n\n- `description?: string`\n\n- `eventTypes?: string[]`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhook = await client.webhooks.create({ url: 'https://example.com/webhooks/droidrun' });\n\nconsole.log(webhook);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.create',
@@ -6229,7 +5915,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.mobilerun.ai/v1/webhooks \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "url": "https://example.com/webhooks/droidrun",\n          "eventTypes": [\n            "task.completed",\n            "task.failed"\n          ]\n        }\'',
+          'curl https://api.mobilerun.ai/v1/webhooks \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $MOBILERUN_CLOUD_API_KEY" \\\n    -d \'{\n          "url": "https://example.com/webhooks/droidrun",\n          "eventTypes": [\n            "task.run.completed",\n            "task.run.failed"\n          ]\n        }\'',
       },
     },
   },
@@ -6238,7 +5924,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/webhooks',
     httpMethod: 'get',
     summary: 'List your webhook subscriptions',
-    description: 'List your webhook subscriptions',
+    description:
+      'Returns a paginated list of your webhook subscriptions, optionally filtered by status (active, failing, blocked, or disabled). The response also includes per-status counts across all of your subscriptions.',
     stainlessPath: '(resource) webhooks > (method) list',
     qualified: 'client.webhooks.list',
     params: [
@@ -6249,7 +5936,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ counts: { active: number; blocked: number; disabled: number; failing: number; total: number; }; items: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.webhooks.list(page?: number, pageSize?: number, status?: 'active' | 'failing' | 'blocked' | 'disabled'): { counts: object; items: object[]; pagination: pagination; }`\n\n**get** `/webhooks`\n\nList your webhook subscriptions\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `status?: 'active' | 'failing' | 'blocked' | 'disabled'`\n\n### Returns\n\n- `{ counts: { active: number; blocked: number; disabled: number; failing: number; total: number; }; items: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `counts: { active: number; blocked: number; disabled: number; failing: number; total: number; }`\n  - `items: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhooks = await client.webhooks.list();\n\nconsole.log(webhooks);\n```",
+      "## list\n\n`client.webhooks.list(page?: number, pageSize?: number, status?: 'active' | 'failing' | 'blocked' | 'disabled'): { counts: object; items: object[]; pagination: pagination; }`\n\n**get** `/webhooks`\n\nReturns a paginated list of your webhook subscriptions, optionally filtered by status (active, failing, blocked, or disabled). The response also includes per-status counts across all of your subscriptions.\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `status?: 'active' | 'failing' | 'blocked' | 'disabled'`\n\n### Returns\n\n- `{ counts: { active: number; blocked: number; disabled: number; failing: number; total: number; }; items: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `counts: { active: number; blocked: number; disabled: number; failing: number; total: number; }`\n  - `items: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhooks = await client.webhooks.list();\n\nconsole.log(webhooks);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.list',
@@ -6281,14 +5968,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/webhooks/{id}',
     httpMethod: 'get',
     summary: 'Get a webhook subscription',
-    description: 'Get a webhook subscription',
+    description:
+      'Returns a single webhook subscription by id, including its URL, subscribed event types, state, and system-observed delivery health. The signing secret is never included.',
     stainlessPath: '(resource) webhooks > (method) retrieve',
     qualified: 'client.webhooks.retrieve',
     params: ['id: string;'],
     response:
       "{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }",
     markdown:
-      "## retrieve\n\n`client.webhooks.retrieve(id: string): { data: object; }`\n\n**get** `/webhooks/{id}`\n\nGet a webhook subscription\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhook = await client.webhooks.retrieve('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(webhook);\n```",
+      "## retrieve\n\n`client.webhooks.retrieve(id: string): { data: object; }`\n\n**get** `/webhooks/{id}`\n\nReturns a single webhook subscription by id, including its URL, subscribed event types, state, and system-observed delivery health. The signing secret is never included.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhook = await client.webhooks.retrieve('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(webhook);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.retrieve',
@@ -6321,7 +6009,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/webhooks/{id}',
     httpMethod: 'patch',
     summary: 'Update a webhook subscription',
-    description: 'Update a webhook subscription',
+    description:
+      'Updates a webhook subscription. Any combination of the subscribed event types, state (ACTIVE or DISABLED), and description may be changed, and at least one field must be supplied. Setting state to ACTIVE re-enables a subscription that was auto-blocked after sustained delivery failures.',
     stainlessPath: '(resource) webhooks > (method) update',
     qualified: 'client.webhooks.update',
     params: [
@@ -6333,7 +6022,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }",
     markdown:
-      "## update\n\n`client.webhooks.update(id: string, description?: string, eventTypes?: string[], state?: 'ACTIVE' | 'DISABLED'): { data: object; }`\n\n**patch** `/webhooks/{id}`\n\nUpdate a webhook subscription\n\n### Parameters\n\n- `id: string`\n\n- `description?: string`\n\n- `eventTypes?: string[]`\n\n- `state?: 'ACTIVE' | 'DISABLED'`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhook = await client.webhooks.update('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(webhook);\n```",
+      "## update\n\n`client.webhooks.update(id: string, description?: string, eventTypes?: string[], state?: 'ACTIVE' | 'DISABLED'): { data: object; }`\n\n**patch** `/webhooks/{id}`\n\nUpdates a webhook subscription. Any combination of the subscribed event types, state (ACTIVE or DISABLED), and description may be changed, and at least one field must be supplied. Setting state to ACTIVE re-enables a subscription that was auto-blocked after sustained delivery failures.\n\n### Parameters\n\n- `id: string`\n\n- `description?: string`\n\n- `eventTypes?: string[]`\n\n- `state?: 'ACTIVE' | 'DISABLED'`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst webhook = await client.webhooks.update('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(webhook);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.update',
@@ -6366,12 +6055,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/webhooks/{id}',
     httpMethod: 'delete',
     summary: 'Delete a webhook subscription',
-    description: 'Delete a webhook subscription',
+    description:
+      'Deletes a webhook subscription so it stops receiving deliveries. Returns 204 No Content on success.',
     stainlessPath: '(resource) webhooks > (method) delete',
     qualified: 'client.webhooks.delete',
     params: ['id: string;'],
     markdown:
-      "## delete\n\n`client.webhooks.delete(id: string): void`\n\n**delete** `/webhooks/{id}`\n\nDelete a webhook subscription\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.webhooks.delete('550e8400-e29b-41d4-a716-446655440000')\n```",
+      "## delete\n\n`client.webhooks.delete(id: string): void`\n\n**delete** `/webhooks/{id}`\n\nDeletes a webhook subscription so it stops receiving deliveries. Returns 204 No Content on success.\n\n### Parameters\n\n- `id: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nawait client.webhooks.delete('550e8400-e29b-41d4-a716-446655440000')\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.delete',
@@ -6403,15 +6093,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'rotate_secret',
     endpoint: '/webhooks/{id}/rotate-secret',
     httpMethod: 'post',
-    summary: 'Rotate the signing secret (returned once)',
-    description: 'Rotate the signing secret (returned once)',
+    summary: 'Rotate signing secret',
+    description:
+      'Generates a new signing secret for the webhook subscription and returns it once in the response. The previous secret is replaced immediately, so any signature verification on your endpoint must be updated to use the new value.',
     stainlessPath: '(resource) webhooks > (method) rotate_secret',
     qualified: 'client.webhooks.rotateSecret',
     params: ['id: string;'],
     response:
       "{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }",
     markdown:
-      "## rotate_secret\n\n`client.webhooks.rotateSecret(id: string): { data: object; }`\n\n**post** `/webhooks/{id}/rotate-secret`\n\nRotate the signing secret (returned once)\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.rotateSecret('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response);\n```",
+      "## rotate_secret\n\n`client.webhooks.rotateSecret(id: string): { data: object; }`\n\n**post** `/webhooks/{id}/rotate-secret`\n\nGenerates a new signing secret for the webhook subscription and returns it once in the response. The previous secret is replaced immediately, so any signature verification on your endpoint must be updated to use the new value.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }; }`\n\n  - `data: { id: string; blockedAt: string; blockedReason: string; createdAt: string; description: string; eventTypes: string[]; health: 'healthy' | 'failing' | 'blocked'; secret: string; signingEnabled: boolean; state: 'ACTIVE' | 'DISABLED' | 'DELETED'; updatedAt: string; url: string; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.rotateSecret('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.rotateSecret',
@@ -6444,13 +6135,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/webhooks/{id}/test',
     httpMethod: 'post',
     summary: 'Send a one-shot test delivery',
-    description: 'Send a one-shot test delivery',
+    description:
+      'Sends a single test payload to the webhook subscription URL to verify connectivity. The response reports whether the attempt succeeded along with the returned HTTP status code or error, if any.',
     stainlessPath: '(resource) webhooks > (method) test_delivery',
     qualified: 'client.webhooks.testDelivery',
     params: ['id: string;'],
     response: '{ data: { error: string; statusCode: number; success: boolean; }; }',
     markdown:
-      "## test_delivery\n\n`client.webhooks.testDelivery(id: string): { data: object; }`\n\n**post** `/webhooks/{id}/test`\n\nSend a one-shot test delivery\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { error: string; statusCode: number; success: boolean; }; }`\n\n  - `data: { error: string; statusCode: number; success: boolean; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.testDelivery('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response);\n```",
+      "## test_delivery\n\n`client.webhooks.testDelivery(id: string): { data: object; }`\n\n**post** `/webhooks/{id}/test`\n\nSends a single test payload to the webhook subscription URL to verify connectivity. The response reports whether the attempt succeeded along with the returned HTTP status code or error, if any.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ data: { error: string; statusCode: number; success: boolean; }; }`\n\n  - `data: { error: string; statusCode: number; success: boolean; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.testDelivery('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.testDelivery',
@@ -6483,12 +6175,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/event-types',
     httpMethod: 'get',
     summary: 'List subscribable event types per source',
-    description: 'List subscribable event types per source',
+    description:
+      'Returns the catalog of event types that webhook subscriptions can subscribe to, grouped by source. Use the returned type identifiers as the `eventTypes` values when creating or updating a webhook.',
     stainlessPath: '(resource) webhooks > (method) event_types',
     qualified: 'client.webhooks.eventTypes',
-    response: '{ data: { schemaVersion: number; sources: { events: object[]; source: string; }[]; }; }',
+    response: '{ data: { schemaVersion: 1; sources: { events: object[]; source: string; }[]; }; }',
     markdown:
-      "## event_types\n\n`client.webhooks.eventTypes(): { data: object; }`\n\n**get** `/event-types`\n\nList subscribable event types per source\n\n### Returns\n\n- `{ data: { schemaVersion: number; sources: { events: object[]; source: string; }[]; }; }`\n\n  - `data: { schemaVersion: number; sources: { events: { description: string; type: string; }[]; source: string; }[]; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.eventTypes();\n\nconsole.log(response);\n```",
+      "## event_types\n\n`client.webhooks.eventTypes(): { data: object; }`\n\n**get** `/event-types`\n\nReturns the catalog of event types that webhook subscriptions can subscribe to, grouped by source. Use the returned type identifiers as the `eventTypes` values when creating or updating a webhook.\n\n### Returns\n\n- `{ data: { schemaVersion: 1; sources: { events: object[]; source: string; }[]; }; }`\n\n  - `data: { schemaVersion: 1; sources: { events: { description: string; type: string; }[]; source: string; }[]; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.eventTypes();\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.eventTypes',
@@ -6520,7 +6213,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/webhooks/deliveries',
     httpMethod: 'get',
     summary: 'List deliveries across all your webhooks',
-    description: 'List deliveries across all your webhooks',
+    description:
+      'Returns a paginated feed of webhook deliveries across all of your subscriptions, with the originating endpoint URL included on each record. Results can be filtered by delivery status (pending, success, skipped, or dead) and by a `since` timestamp.',
     stainlessPath: '(resource) webhooks.deliveries > (method) list',
     qualified: 'client.webhooks.deliveries.list',
     params: [
@@ -6532,7 +6226,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; endpointUrl: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.webhooks.deliveries.list(page?: number, pageSize?: number, since?: string, status?: 'pending' | 'success' | 'skipped' | 'dead'): { items: object[]; pagination: pagination; }`\n\n**get** `/webhooks/deliveries`\n\nList deliveries across all your webhooks\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `since?: string`\n\n- `status?: 'pending' | 'success' | 'skipped' | 'dead'`\n\n### Returns\n\n- `{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; endpointUrl: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; endpointUrl: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst deliveries = await client.webhooks.deliveries.list();\n\nconsole.log(deliveries);\n```",
+      "## list\n\n`client.webhooks.deliveries.list(page?: number, pageSize?: number, since?: string, status?: 'pending' | 'success' | 'skipped' | 'dead'): { items: object[]; pagination: pagination; }`\n\n**get** `/webhooks/deliveries`\n\nReturns a paginated feed of webhook deliveries across all of your subscriptions, with the originating endpoint URL included on each record. Results can be filtered by delivery status (pending, success, skipped, or dead) and by a `since` timestamp.\n\n### Parameters\n\n- `page?: number`\n\n- `pageSize?: number`\n\n- `since?: string`\n\n- `status?: 'pending' | 'success' | 'skipped' | 'dead'`\n\n### Returns\n\n- `{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; endpointUrl: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; endpointUrl: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst deliveries = await client.webhooks.deliveries.list();\n\nconsole.log(deliveries);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.deliveries.list',
@@ -6563,15 +6257,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'stats',
     endpoint: '/webhooks/deliveries/stats',
     httpMethod: 'get',
-    summary: 'Aggregate delivery statistics (excludes test sends)',
-    description: 'Aggregate delivery statistics (excludes test sends)',
+    summary: 'Get delivery statistics',
+    description:
+      'Returns aggregate delivery statistics across all of your webhooks, including the total count, a breakdown by status (pending, success, skipped, dead), and the overall success rate. An optional `since` timestamp narrows the reporting window.',
     stainlessPath: '(resource) webhooks.deliveries > (method) stats',
     qualified: 'client.webhooks.deliveries.stats',
     params: ['since?: string;'],
     response:
       '{ data: { byStatus: { dead: number; pending: number; skipped: number; success: number; }; successRate: number; total: number; }; }',
     markdown:
-      "## stats\n\n`client.webhooks.deliveries.stats(since?: string): { data: object; }`\n\n**get** `/webhooks/deliveries/stats`\n\nAggregate delivery statistics (excludes test sends)\n\n### Parameters\n\n- `since?: string`\n\n### Returns\n\n- `{ data: { byStatus: { dead: number; pending: number; skipped: number; success: number; }; successRate: number; total: number; }; }`\n\n  - `data: { byStatus: { dead: number; pending: number; skipped: number; success: number; }; successRate: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.deliveries.stats();\n\nconsole.log(response);\n```",
+      "## stats\n\n`client.webhooks.deliveries.stats(since?: string): { data: object; }`\n\n**get** `/webhooks/deliveries/stats`\n\nReturns aggregate delivery statistics across all of your webhooks, including the total count, a breakdown by status (pending, success, skipped, dead), and the overall success rate. An optional `since` timestamp narrows the reporting window.\n\n### Parameters\n\n- `since?: string`\n\n### Returns\n\n- `{ data: { byStatus: { dead: number; pending: number; skipped: number; success: number; }; successRate: number; total: number; }; }`\n\n  - `data: { byStatus: { dead: number; pending: number; skipped: number; success: number; }; successRate: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.deliveries.stats();\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.deliveries.stats',
@@ -6603,14 +6298,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/webhooks/{id}/deliveries',
     httpMethod: 'get',
     summary: 'List deliveries for a webhook',
-    description: 'List deliveries for a webhook',
+    description:
+      'Returns a paginated list of deliveries for a single webhook subscription, identified by its id. Each record reports the event, delivery status, attempt count, and the last response code or error.',
     stainlessPath: '(resource) webhooks.deliveries > (method) list_for_webhook',
     qualified: 'client.webhooks.deliveries.listForWebhook',
     params: ['id: string;', 'page?: number;', 'pageSize?: number;'],
     response:
       "{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list_for_webhook\n\n`client.webhooks.deliveries.listForWebhook(id: string, page?: number, pageSize?: number): { items: object[]; pagination: pagination; }`\n\n**get** `/webhooks/{id}/deliveries`\n\nList deliveries for a webhook\n\n### Parameters\n\n- `id: string`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.deliveries.listForWebhook('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response);\n```",
+      "## list_for_webhook\n\n`client.webhooks.deliveries.listForWebhook(id: string, page?: number, pageSize?: number): { items: object[]; pagination: pagination; }`\n\n**get** `/webhooks/{id}/deliveries`\n\nReturns a paginated list of deliveries for a single webhook subscription, identified by its id. Each record reports the event, delivery status, attempt count, and the last response code or error.\n\n### Parameters\n\n- `id: string`\n\n- `page?: number`\n\n- `pageSize?: number`\n\n### Returns\n\n- `{ items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n\n  - `items: { id: string; attempts: number; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.deliveries.listForWebhook('550e8400-e29b-41d4-a716-446655440000');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.deliveries.listForWebhook',
@@ -6643,14 +6339,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/webhooks/{id}/deliveries/{deliveryId}',
     httpMethod: 'get',
     summary: 'Get a delivery with its attempts',
-    description: 'Get a delivery with its attempts',
+    description:
+      'Returns a single delivery for a webhook subscription along with the full list of captured attempt records. Each attempt includes the request URL, method, headers and body, whether it was signed, and the response status, headers, and snippet.',
     stainlessPath: '(resource) webhooks.deliveries > (method) retrieve_attempts',
     qualified: 'client.webhooks.deliveries.retrieveAttempts',
     params: ['id: string;', 'deliveryId: string;'],
     response:
       "{ data: { id: string; attempts: { attemptNo: number; durationMs: number; error: string; requestBody: string; requestHeaders: object; requestMethod: string; requestUrl: string; responseHeaders: object; responseSnippet: string; responseStatus: number; sentAt: string; signed: boolean; }[]; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }; }",
     markdown:
-      "## retrieve_attempts\n\n`client.webhooks.deliveries.retrieveAttempts(id: string, deliveryId: string): { data: object; }`\n\n**get** `/webhooks/{id}/deliveries/{deliveryId}`\n\nGet a delivery with its attempts\n\n### Parameters\n\n- `id: string`\n\n- `deliveryId: string`\n\n### Returns\n\n- `{ data: { id: string; attempts: { attemptNo: number; durationMs: number; error: string; requestBody: string; requestHeaders: object; requestMethod: string; requestUrl: string; responseHeaders: object; responseSnippet: string; responseStatus: number; sentAt: string; signed: boolean; }[]; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }; }`\n\n  - `data: { id: string; attempts: { attemptNo: number; durationMs: number; error: string; requestBody: string; requestHeaders: object; requestMethod: string; requestUrl: string; responseHeaders: object; responseSnippet: string; responseStatus: number; sentAt: string; signed: boolean; }[]; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.deliveries.retrieveAttempts('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { id: '550e8400-e29b-41d4-a716-446655440000' });\n\nconsole.log(response);\n```",
+      "## retrieve_attempts\n\n`client.webhooks.deliveries.retrieveAttempts(id: string, deliveryId: string): { data: object; }`\n\n**get** `/webhooks/{id}/deliveries/{deliveryId}`\n\nReturns a single delivery for a webhook subscription along with the full list of captured attempt records. Each attempt includes the request URL, method, headers and body, whether it was signed, and the response status, headers, and snippet.\n\n### Parameters\n\n- `id: string`\n\n- `deliveryId: string`\n\n### Returns\n\n- `{ data: { id: string; attempts: { attemptNo: number; durationMs: number; error: string; requestBody: string; requestHeaders: object; requestMethod: string; requestUrl: string; responseHeaders: object; responseSnippet: string; responseStatus: number; sentAt: string; signed: boolean; }[]; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }; }`\n\n  - `data: { id: string; attempts: { attemptNo: number; durationMs: number; error: string; requestBody: string; requestHeaders: object; requestMethod: string; requestUrl: string; responseHeaders: object; responseSnippet: string; responseStatus: number; sentAt: string; signed: boolean; }[]; completedAt: string; createdAt: string; durationMs: number; endpointId: string; eventId: string; eventType: string; isTest: boolean; lastError: string; lastStatusCode: number; occurredAt: string; source: string; status: 'pending' | 'success' | 'skipped' | 'dead'; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.webhooks.deliveries.retrieveAttempts('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { id: '550e8400-e29b-41d4-a716-446655440000' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.webhooks.deliveries.retrieveAttempts',

@@ -8,7 +8,7 @@ import { path } from '../../internal/utils/path';
 
 export class Esim extends APIResource {
   /**
-   * List eSIM subscriptions
+   * Returns the eSIM subscriptions currently provisioned on the device.
    */
   list(
     deviceID: string,
@@ -30,7 +30,7 @@ export class Esim extends APIResource {
   }
 
   /**
-   * Configure eSIM (download profile and/or enable subscription)
+   * Download profile and/or enable subscription.
    */
   activate(
     deviceID: string,
@@ -53,7 +53,8 @@ export class Esim extends APIResource {
   }
 
   /**
-   * Enable an eSIM subscription
+   * Enables the eSIM subscription identified by the subId in the request body so it
+   * becomes the active subscription.
    */
   enable(deviceID: string, params: EsimEnableParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -73,7 +74,8 @@ export class Esim extends APIResource {
   }
 
   /**
-   * Delete eSIM subscription
+   * Deletes the eSIM subscription identified by the subId query parameter from the
+   * device.
    */
   remove(deviceID: string, params: EsimRemoveParams, options?: RequestOptions): APIPromise<void> {
     const { subId, 'X-Device-Display-ID': xDeviceDisplayID } = params;

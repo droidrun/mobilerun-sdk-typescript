@@ -6,12 +6,10 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
-/**
- * Device Management
- */
 export class Tasks extends APIResource {
   /**
-   * List tasks for a device
+   * Returns a paginated list of tasks that have run on the device, along with
+   * pagination metadata.
    */
   list(
     deviceID: string,

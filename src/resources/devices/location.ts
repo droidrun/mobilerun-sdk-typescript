@@ -9,7 +9,8 @@ import { path } from '../../internal/utils/path';
 
 export class Location extends APIResource {
   /**
-   * Get device location
+   * Returns the device's current simulated GPS location as latitude and longitude.
+   * Devices without geo support return an unsupported-feature error.
    */
   get(
     deviceID: string,
@@ -31,7 +32,8 @@ export class Location extends APIResource {
   }
 
   /**
-   * Set device location
+   * Sets the device's simulated GPS location to the latitude and longitude in the
+   * request body. Devices without geo support return an unsupported-feature error.
    */
   set(deviceID: string, params: LocationSetParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;

@@ -4,6 +4,9 @@ import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Mobilerun Connect country coverage information
+ */
 export class Countries extends APIResource {
   /**
    * Lookup of countries that can be selected when creating a proxy.
@@ -40,7 +43,7 @@ export namespace CountryListResponse {
     /**
      * Proxy types available to provision in this country.
      */
-    proxyTypes: Array<'residential'>;
+    proxyTypes: Array<'dedicated_residential' | 'residential' | 'mobile'>;
   }
 
   /**
@@ -93,7 +96,7 @@ export interface CountryListParams {
   /**
    * Filter to countries offering this proxy type.
    */
-  type?: 'residential';
+  type?: 'dedicated_residential' | 'residential' | 'mobile';
 }
 
 export declare namespace Countries {

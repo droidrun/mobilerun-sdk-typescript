@@ -9,7 +9,8 @@ import { path } from '../../internal/utils/path';
 
 export class State extends APIResource {
   /**
-   * Take screenshot
+   * Captures the device screen and returns it as a PNG image. An optional
+   * hideOverlay query parameter excludes the accessibility overlay from the capture.
    */
   screenshot(
     deviceID: string,
@@ -32,7 +33,7 @@ export class State extends APIResource {
   }
 
   /**
-   * Device time
+   * Returns the device's current wall-clock time as an RFC 3339 timestamp.
    */
   time(
     deviceID: string,
@@ -54,7 +55,9 @@ export class State extends APIResource {
   }
 
   /**
-   * UI state
+   * Returns the current accessibility UI state of the device as a structured tree of
+   * on-screen elements. An optional filter query reduces the result to interactive
+   * elements.
    */
   ui(
     deviceID: string,

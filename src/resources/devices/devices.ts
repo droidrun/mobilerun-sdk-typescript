@@ -98,26 +98,31 @@ export class Devices extends APIResource {
   language: LanguageAPI.Language = new LanguageAPI.Language(this._client);
 
   /**
-   * Provision a new device
+   * Requests a new device for the authenticated user from the device spec in the
+   * request body. Optional query parameters select the device type, target country,
+   * billing mode, and a profile to use as the base spec; the response returns the
+   * device and its stream token.
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
-    const { query_country, deviceType, profileId, ...body } = params;
+    const { billing, query_country, deviceType, profileId, ...body } = params;
     return this._client.post('/devices', {
-      query: { country: query_country, deviceType, profileId },
+      query: { billing, country: query_country, deviceType, profileId },
       body,
       ...options,
     });
   }
 
   /**
-   * Get device info
+   * Returns the current state and metadata for a single device, including its
+   * lifecycle state, type, stream URL, billing strategy, and timestamps. A stream
+   * token is included while the device is active.
    */
   retrieve(deviceID: string, options?: RequestOptions): APIPromise<Device> {
     return this._client.get(path`/devices/${deviceID}`, options);
   }
 
   /**
-   * List devices
+   * Returns a paginated list of the user's devices along with pagination metadata.
    */
   list(
     query: DeviceListParams | null | undefined = {},
@@ -127,14 +132,16 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Count claimed devices
+   * Returns the number of claimed devices for the user, broken down by device type.
    */
   count(options?: RequestOptions): APIPromise<DeviceCountResponse> {
     return this._client.get('/devices/count', options);
   }
 
   /**
-   * Device fingerprint snapshot
+   * Returns a live snapshot of the device's spoofed identity, including model,
+   * display, identifiers, and carrier. Devices without fingerprint support return an
+   * unsupported-feature error.
    */
   fingerprint(
     deviceID: string,
@@ -156,7 +163,8 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Reboot a device
+   * Triggers a reboot of the device. The device transitions through its reboot
+   * lifecycle and becomes ready again once the restart completes.
    */
   reboot(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/reboot`, {
@@ -166,7 +174,9 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Reset a device to a fresh state
+   * Resets the device back to a clean state, clearing installed apps and user data
+   * accumulated during the session. The device transitions through its reset
+   * lifecycle before becoming ready again.
    */
   reset(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/reset`, {
@@ -176,14 +186,17 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Update device name
+   * Sets the display name for a device from the name in the request body and returns
+   * the updated device.
    */
   setName(deviceID: string, body: DeviceSetNameParams, options?: RequestOptions): APIPromise<Device> {
     return this._client.put(path`/devices/${deviceID}/name`, { body, ...options });
   }
 
   /**
-   * Terminate a device
+   * Terminates the device and releases its resources. Termination can be scheduled
+   * for a future time or chained from a previous device via the request body, in
+   * which case a service key is required.
    */
   terminate(deviceID: string, body: DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/devices/${deviceID}`, {
@@ -194,7 +207,9 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Wait for device to be ready
+   * Blocks until the device reaches the ready state, then returns the same payload
+   * as Get device info. The call returns early with an error if the wait is
+   * cancelled or times out.
    */
   waitReady(deviceID: string, options?: RequestOptions): APIPromise<Device> {
     return this._client.get(path`/devices/${deviceID}/wait`, options);
@@ -230,6 +245,8 @@ export interface Device {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
+
+  billingStrategy?: string;
 
   providerId?: string;
 
@@ -294,6 +311,14 @@ export namespace DeviceFingerprintResponse {
 
 export interface DeviceCreateParams {
   /**
+   * Query param: Billing mode. 'auto' uses a subscription slot when available and
+   * otherwise bills per minute; 'subscription' requires an available subscription
+   * slot; 'minute' bills per minute. Only cloud phone and cloud emulator devices
+   * support per-minute billing.
+   */
+  billing?: 'auto' | 'subscription' | 'minute';
+
+  /**
    * Query param: ISO 3166-1 alpha-2 country code. If omitted the system picks the
    * country with the most availability.
    */
@@ -302,7 +327,11 @@ export interface DeviceCreateParams {
   /**
    * Query param
    */
-  deviceType?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device';
+  deviceType?:
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device'
+    | 'dedicated_ios_device'
+    | 'dedicated_emulated_device';
 
   /**
    * Query param: Profile ID to use as device spec

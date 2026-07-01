@@ -8,7 +8,10 @@ import { path } from '../../internal/utils/path';
 
 export class Deliveries extends APIResource {
   /**
-   * List deliveries across all your webhooks
+   * Returns a paginated feed of webhook deliveries across all of your subscriptions,
+   * with the originating endpoint URL included on each record. Results can be
+   * filtered by delivery status (pending, success, skipped, or dead) and by a
+   * `since` timestamp.
    *
    * @example
    * ```ts
@@ -23,7 +26,9 @@ export class Deliveries extends APIResource {
   }
 
   /**
-   * List deliveries for a webhook
+   * Returns a paginated list of deliveries for a single webhook subscription,
+   * identified by its id. Each record reports the event, delivery status, attempt
+   * count, and the last response code or error.
    *
    * @example
    * ```ts
@@ -42,7 +47,9 @@ export class Deliveries extends APIResource {
   }
 
   /**
-   * Get a delivery with its attempts
+   * Returns a single delivery for a webhook subscription along with the full list of
+   * captured attempt records. Each attempt includes the request URL, method, headers
+   * and body, whether it was signed, and the response status, headers, and snippet.
    *
    * @example
    * ```ts
@@ -63,7 +70,10 @@ export class Deliveries extends APIResource {
   }
 
   /**
-   * Aggregate delivery statistics (excludes test sends)
+   * Returns aggregate delivery statistics across all of your webhooks, including the
+   * total count, a breakdown by status (pending, success, skipped, dead), and the
+   * overall success rate. An optional `since` timestamp narrows the reporting
+   * window.
    *
    * @example
    * ```ts
