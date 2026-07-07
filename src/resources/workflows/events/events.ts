@@ -88,6 +88,8 @@ export namespace EventDryRunResponse {
 
         createdAt: string | null;
 
+        createdBy: string | null;
+
         customPayloadSchema: { [key: string]: unknown } | null;
 
         description: string | null;
@@ -96,12 +98,17 @@ export namespace EventDryRunResponse {
 
         name: string;
 
+        ownerId: string;
+
         scheduleRule: unknown;
 
         timezone: string | null;
 
         updatedAt: string | null;
 
+        /**
+         * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+         */
         userId: string;
 
         conditions?: unknown;

@@ -248,10 +248,17 @@ export interface Device {
 
   billingStrategy?: string;
 
+  createdBy?: string;
+
+  ownerId?: string;
+
   providerId?: string;
 
   streamToken?: string;
 
+  /**
+   * @deprecated Deprecated: use ownerId/createdBy.
+   */
   userId?: string;
 }
 

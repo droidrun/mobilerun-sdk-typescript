@@ -96,6 +96,8 @@ export namespace TriggerCreateResponse {
 
     createdAt: string | null;
 
+    createdBy: string | null;
+
     customPayloadSchema: { [key: string]: unknown } | null;
 
     description: string | null;
@@ -104,12 +106,17 @@ export namespace TriggerCreateResponse {
 
     name: string;
 
+    ownerId: string;
+
     scheduleRule: Data.ScheduleRule;
 
     timezone: string | null;
 
     updatedAt: string | null;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     conditions?: unknown;
@@ -151,6 +158,8 @@ export namespace TriggerRetrieveResponse {
 
     createdAt: string | null;
 
+    createdBy: string | null;
+
     customPayloadSchema: { [key: string]: unknown } | null;
 
     description: string | null;
@@ -159,12 +168,17 @@ export namespace TriggerRetrieveResponse {
 
     name: string;
 
+    ownerId: string;
+
     scheduleRule: unknown;
 
     timezone: string | null;
 
     updatedAt: string | null;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     conditions?: unknown;
@@ -185,6 +199,8 @@ export namespace TriggerUpdateResponse {
 
     createdAt: string | null;
 
+    createdBy: string | null;
+
     customPayloadSchema: { [key: string]: unknown } | null;
 
     description: string | null;
@@ -193,12 +209,17 @@ export namespace TriggerUpdateResponse {
 
     name: string;
 
+    ownerId: string;
+
     scheduleRule: unknown;
 
     timezone: string | null;
 
     updatedAt: string | null;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     conditions?: unknown;
@@ -221,6 +242,8 @@ export namespace TriggerListResponse {
 
     createdAt: string | null;
 
+    createdBy: string | null;
+
     customPayloadSchema: { [key: string]: unknown } | null;
 
     description: string | null;
@@ -229,12 +252,17 @@ export namespace TriggerListResponse {
 
     name: string;
 
+    ownerId: string;
+
     scheduleRule: unknown;
 
     timezone: string | null;
 
     updatedAt: string | null;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     conditions?: unknown;
