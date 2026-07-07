@@ -48,7 +48,9 @@ export { Hooks } from './hooks';
 export { Models, type ModelListResponse } from './models';
 export {
   Profiles,
-  type Profile,
+  type ProfileCreateResponse,
+  type ProfileRetrieveResponse,
+  type ProfileUpdateResponse,
   type ProfileListResponse,
   type ProfileDeleteResponse,
   type ProfileCreateParams,

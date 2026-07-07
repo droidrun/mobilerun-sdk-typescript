@@ -79,7 +79,6 @@ export class Apps extends APIResource {
    *       fileName: 'J!Q0Ok0bzJb7.apk/i',
    *     },
    *   ],
-   *   sizeBytes: 0,
    *   versionCode: 0,
    *   versionName: 'x',
    * });
@@ -451,6 +450,10 @@ export namespace AppListResponse {
 
       createdAt: string | null;
 
+      createdBy: string | null;
+
+      ownerId: string | null;
+
       queuedAt: string | null;
 
       sizeBytes: number | null;
@@ -463,6 +466,9 @@ export namespace AppListResponse {
 
       updatedAt: string | null;
 
+      /**
+       * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+       */
       userId: string | null;
 
       versionCode: number;
@@ -775,6 +781,10 @@ export namespace AppListVersionsResponse {
 
     createdAt: string | null;
 
+    createdBy: string | null;
+
+    ownerId: string | null;
+
     queuedAt: string | null;
 
     sizeBytes: number | null;
@@ -787,6 +797,9 @@ export namespace AppListVersionsResponse {
 
     updatedAt: string | null;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string | null;
 
     versionCode: number;
@@ -823,8 +836,6 @@ export interface AppCreateSignedUploadURLParams {
   displayName: string;
 
   files: Array<AppCreateSignedUploadURLParams.File>;
-
-  sizeBytes: number;
 
   versionCode: number;
 

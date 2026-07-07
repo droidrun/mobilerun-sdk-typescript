@@ -97,6 +97,8 @@ export interface Flow {
 
   createdAt: string | null;
 
+  createdBy: string | null;
+
   description: string | null;
 
   deviceIds: Array<string>;
@@ -124,12 +126,17 @@ export interface Flow {
 
   notifyWebhookId: string | null;
 
+  ownerId: string;
+
   status: 'healthy' | 'failing' | 'blocked';
 
   triggerId: string;
 
   updatedAt: string | null;
 
+  /**
+   * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+   */
   userId: string;
 }
 

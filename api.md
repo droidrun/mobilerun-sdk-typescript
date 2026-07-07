@@ -291,15 +291,17 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/profiles.ts">Profile</a></code>
+- <code><a href="./src/resources/profiles.ts">ProfileCreateResponse</a></code>
+- <code><a href="./src/resources/profiles.ts">ProfileRetrieveResponse</a></code>
+- <code><a href="./src/resources/profiles.ts">ProfileUpdateResponse</a></code>
 - <code><a href="./src/resources/profiles.ts">ProfileListResponse</a></code>
 - <code><a href="./src/resources/profiles.ts">ProfileDeleteResponse</a></code>
 
 Methods:
 
-- <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> Profile</code>
-- <code title="get /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">retrieve</a>(profileID) -> Profile</code>
-- <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> Profile</code>
+- <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> ProfileCreateResponse</code>
+- <code title="get /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">retrieve</a>(profileID) -> ProfileRetrieveResponse</code>
+- <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> ProfileUpdateResponse</code>
 - <code title="get /profiles">client.profiles.<a href="./src/resources/profiles.ts">list</a>({ ...params }) -> ProfileListResponse</code>
 - <code title="delete /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">delete</a>(profileID) -> ProfileDeleteResponse</code>
 

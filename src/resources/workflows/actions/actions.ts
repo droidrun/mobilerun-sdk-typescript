@@ -66,16 +66,23 @@ export interface Action {
 
   createdAt: string | null;
 
+  createdBy: string | null;
+
   description: string | null;
 
   method: string;
 
   name: string;
 
+  ownerId: string;
+
   service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
 
   updatedAt: string | null;
 
+  /**
+   * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+   */
   userId: string;
 
   params?: unknown;
