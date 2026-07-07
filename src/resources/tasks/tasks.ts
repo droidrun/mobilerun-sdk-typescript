@@ -104,90 +104,11 @@ export interface PackageCredentials {
 }
 
 export interface Task {
-  deviceId: string;
+  createdAt: string;
 
-  /**
-   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
-   */
-  llmModel: string;
+  taskId: string;
 
-  task: string;
-
-  userId: string;
-
-  id?: string;
-
-  accessibility?: boolean;
-
-  agentId?: number;
-
-  apps?: Array<string>;
-
-  cancelRequestedAt?: string | null;
-
-  claimedAt?: string | null;
-
-  continueOnFailure?: boolean;
-
-  createdAt?: string;
-
-  credentials?: Array<PackageCredentials>;
-
-  creditsUsed?: number | null;
-
-  dispatchedAt?: string | null;
-
-  displayId?: number;
-
-  executionTimeout?: number;
-
-  files?: Array<string>;
-
-  finishedAt?: string | null;
-
-  heartbeatAt?: string | null;
-
-  maxSteps?: number;
-
-  /**
-   * Memory namespace for cross-task personalization
-   */
-  memoryNamespace?: string;
-
-  message?: string | null;
-
-  output?: { [key: string]: unknown } | null;
-
-  outputSchema?: { [key: string]: unknown } | null;
-
-  reasoning?: boolean;
-
-  status?: TaskStatus;
-
-  stealth?: boolean;
-
-  steps?: number | null;
-
-  streamUrl?: string | null;
-
-  /**
-   * LLM model used by sub-agent roles: executor, app_opener, structured_output
-   */
-  subagentModel?: string;
-
-  succeeded?: boolean | null;
-
-  temperature?: number;
-
-  tmpDevice?: boolean;
-
-  trajectory?: Array<{ [key: string]: unknown }>;
-
-  updatedAt?: string;
-
-  vision?: boolean;
-
-  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+  updatedAt: string;
 }
 
 export type TaskStatus =
@@ -214,7 +135,102 @@ export interface TaskRetrieveResponse {
   /**
    * The task
    */
-  task: Task;
+  task: TaskRetrieveResponse.Task;
+}
+
+export namespace TaskRetrieveResponse {
+  /**
+   * The task
+   */
+  export interface Task {
+    id: string;
+
+    deviceId: string;
+
+    displayId: number;
+
+    /**
+     * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+     */
+    llmModel: string;
+
+    ownerId: string;
+
+    status: TasksAPI.TaskStatus;
+
+    task: string;
+
+    tmpDevice: boolean;
+
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
+    userId: string;
+
+    accessibility?: boolean;
+
+    agentId?: number;
+
+    apps?: Array<string>;
+
+    cancelRequestedAt?: string | null;
+
+    claimedAt?: string | null;
+
+    continueOnFailure?: boolean;
+
+    createdAt?: string;
+
+    createdBy?: string | null;
+
+    credentials?: Array<TasksAPI.PackageCredentials>;
+
+    creditsUsed?: number | null;
+
+    dispatchedAt?: string | null;
+
+    executionTimeout?: number;
+
+    files?: Array<string>;
+
+    finishedAt?: string | null;
+
+    maxSteps?: number;
+
+    /**
+     * Memory namespace for cross-task personalization
+     */
+    memoryNamespace?: string;
+
+    message?: string | null;
+
+    output?: { [key: string]: unknown } | null;
+
+    outputSchema?: { [key: string]: unknown } | null;
+
+    reasoning?: boolean;
+
+    stealth?: boolean;
+
+    steps?: number | null;
+
+    streamUrl?: string | null;
+
+    /**
+     * LLM model used by sub-agent roles: executor, app_opener, structured_output
+     */
+    subagentModel?: string;
+
+    succeeded?: boolean | null;
+
+    temperature?: number;
+
+    updatedAt?: string;
+
+    vision?: boolean;
+
+    vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+  }
 }
 
 export interface TaskListResponse {
@@ -245,12 +261,17 @@ export namespace TaskListResponse {
      */
     llmModel: string;
 
+    ownerId: string;
+
     status: TasksAPI.TaskStatus;
 
     task: string;
 
     tmpDevice: boolean;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     accessibility?: boolean;
@@ -266,6 +287,8 @@ export namespace TaskListResponse {
     continueOnFailure?: boolean;
 
     createdAt?: string;
+
+    createdBy?: string | null;
 
     credentials?: Array<TasksAPI.PackageCredentials>;
 

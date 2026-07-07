@@ -45,12 +45,14 @@ import {
 import { Hooks } from './resources/hooks';
 import { ModelListResponse, Models } from './resources/models';
 import {
-  Profile,
   ProfileCreateParams,
+  ProfileCreateResponse,
   ProfileDeleteResponse,
   ProfileListParams,
   ProfileListResponse,
+  ProfileRetrieveResponse,
   ProfileUpdateParams,
+  ProfileUpdateResponse,
   Profiles,
 } from './resources/profiles';
 import {
@@ -929,7 +931,9 @@ export declare namespace Mobilerun {
 
   export {
     Profiles as Profiles,
-    type Profile as Profile,
+    type ProfileCreateResponse as ProfileCreateResponse,
+    type ProfileRetrieveResponse as ProfileRetrieveResponse,
+    type ProfileUpdateResponse as ProfileUpdateResponse,
     type ProfileListResponse as ProfileListResponse,
     type ProfileDeleteResponse as ProfileDeleteResponse,
     type ProfileCreateParams as ProfileCreateParams,

@@ -65,15 +65,23 @@ export class Credentials extends APIResource {
 }
 
 export interface Credential {
+  createdBy: string | null;
+
   credentialName: string;
 
   fields: Array<Credential.Field>;
+
+  ownerId: string;
 
   packageName: string;
 
   secretPath: string;
 
-  userId: string;
+  /**
+   * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+   * for credentials created before rollout.
+   */
+  userId: string | null;
 }
 
 export namespace Credential {

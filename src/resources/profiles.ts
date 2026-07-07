@@ -10,21 +10,25 @@ export class Profiles extends APIResource {
   /**
    * Create a new device profile
    */
-  create(body: ProfileCreateParams, options?: RequestOptions): APIPromise<Profile> {
+  create(body: ProfileCreateParams, options?: RequestOptions): APIPromise<ProfileCreateResponse> {
     return this._client.post('/profiles', { body, ...options });
   }
 
   /**
    * Get device profile by ID
    */
-  retrieve(profileID: string, options?: RequestOptions): APIPromise<Profile> {
+  retrieve(profileID: string, options?: RequestOptions): APIPromise<ProfileRetrieveResponse> {
     return this._client.get(path`/profiles/${profileID}`, options);
   }
 
   /**
    * Update a device profile
    */
-  update(profileID: string, body: ProfileUpdateParams, options?: RequestOptions): APIPromise<Profile> {
+  update(
+    profileID: string,
+    body: ProfileUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<ProfileUpdateResponse> {
     return this._client.put(path`/profiles/${profileID}`, { body, ...options });
   }
 
@@ -46,27 +50,86 @@ export class Profiles extends APIResource {
   }
 }
 
-export interface Profile {
+export interface ProfileCreateResponse {
   id: string;
 
   createdAt: string;
 
   name: string;
 
+  ownerId: string;
+
   spec: Shared.DeviceSpec;
 
   updatedAt: string;
 
+  /**
+   * @deprecated Deprecated: use ownerId/createdBy.
+   */
   userId: string;
 
   /**
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
+
+  createdBy?: string;
+}
+
+export interface ProfileRetrieveResponse {
+  id: string;
+
+  createdAt: string;
+
+  name: string;
+
+  ownerId: string;
+
+  spec: Shared.DeviceSpec;
+
+  updatedAt: string;
+
+  /**
+   * @deprecated Deprecated: use ownerId/createdBy.
+   */
+  userId: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  createdBy?: string;
+}
+
+export interface ProfileUpdateResponse {
+  id: string;
+
+  createdAt: string;
+
+  name: string;
+
+  ownerId: string;
+
+  spec: Shared.DeviceSpec;
+
+  updatedAt: string;
+
+  /**
+   * @deprecated Deprecated: use ownerId/createdBy.
+   */
+  userId: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  createdBy?: string;
 }
 
 export interface ProfileListResponse {
-  items: Array<Profile> | null;
+  items: Array<ProfileListResponse.Item> | null;
 
   pagination: Shared.Meta;
 
@@ -74,6 +137,34 @@ export interface ProfileListResponse {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
+}
+
+export namespace ProfileListResponse {
+  export interface Item {
+    id: string;
+
+    createdAt: string;
+
+    name: string;
+
+    ownerId: string;
+
+    spec: Shared.DeviceSpec;
+
+    updatedAt: string;
+
+    /**
+     * @deprecated Deprecated: use ownerId/createdBy.
+     */
+    userId: string;
+
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    $schema?: string;
+
+    createdBy?: string;
+  }
 }
 
 export interface ProfileDeleteResponse {
@@ -123,7 +214,9 @@ export interface ProfileListParams {
 
 export declare namespace Profiles {
   export {
-    type Profile as Profile,
+    type ProfileCreateResponse as ProfileCreateResponse,
+    type ProfileRetrieveResponse as ProfileRetrieveResponse,
+    type ProfileUpdateResponse as ProfileUpdateResponse,
     type ProfileListResponse as ProfileListResponse,
     type ProfileDeleteResponse as ProfileDeleteResponse,
     type ProfileCreateParams as ProfileCreateParams,

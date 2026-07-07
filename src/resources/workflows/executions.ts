@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ExecutionsAPI from './executions';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -67,7 +68,28 @@ export interface FlowExecution {
 }
 
 export interface ExecutionRetrieveResponse {
-  data: FlowExecution;
+  data: ExecutionRetrieveResponse.Data;
+}
+
+export namespace ExecutionRetrieveResponse {
+  export interface Data extends ExecutionsAPI.FlowExecution {
+    /**
+     * Files produced by files.upload steps; derived server-side at read time.
+     */
+    files: Array<Data.File>;
+  }
+
+  export namespace Data {
+    export interface File {
+      fileId: string;
+
+      filename: string;
+
+      mimeType: string;
+
+      sizeBytes: number;
+    }
+  }
 }
 
 export interface ExecutionListResponse {
