@@ -16,8 +16,8 @@ export class Proxies extends APIResource {
   }
 
   /**
-   * Returns proxies owned by the user identified by the X-User-ID header.
-   * Credentials are omitted from the list.
+   * Returns proxies owned by the calling tenant (the X-Owner-Id header, falling back
+   * to X-User-ID). Credentials are omitted from the list.
    */
   list(
     query: ProxyListParams | null | undefined = {},
