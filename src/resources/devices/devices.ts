@@ -338,7 +338,8 @@ export interface DeviceCreateParams {
     | 'dedicated_physical_device'
     | 'dedicated_premium_device'
     | 'dedicated_ios_device'
-    | 'dedicated_emulated_device';
+    | 'dedicated_emulated_device'
+    | 'ios_simulator';
 
   /**
    * Query param: Profile ID to use as device spec
@@ -438,7 +439,12 @@ export interface DeviceListParams {
     | 'unknown'
   > | null;
 
-  type?: 'dedicated_physical_device' | 'dedicated_premium_device' | 'dedicated_ios_device';
+  type?:
+    | 'dedicated_physical_device'
+    | 'dedicated_premium_device'
+    | 'dedicated_ios_device'
+    | 'dedicated_emulated_device'
+    | 'ios_simulator';
 }
 
 export interface DeviceFingerprintParams {
