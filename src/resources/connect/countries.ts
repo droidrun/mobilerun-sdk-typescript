@@ -9,7 +9,9 @@ import { RequestOptions } from '../../internal/request-options';
  */
 export class Countries extends APIResource {
   /**
-   * Lookup of countries that can be selected when creating a proxy.
+   * Lookup of countries that can be selected when creating a proxy. Each country
+   * lists the proxy types available there; without a ?type filter, every covered
+   * country is returned.
    */
   list(
     query: CountryListParams | null | undefined = {},
