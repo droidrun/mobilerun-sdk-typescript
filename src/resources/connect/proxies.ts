@@ -27,7 +27,7 @@ export class Proxies extends APIResource {
   }
 
   /**
-   * Provisions a proxy for the caller in the selected country.
+   * Provisions a proxy of the requested type for the caller in the selected country.
    */
   buy(body: ProxyBuyParams, options?: RequestOptions): APIPromise<ProxyBuyResponse> {
     return this._client.post('/connect/proxies', { body, ...options });
@@ -452,7 +452,7 @@ export interface ProxyBuyParams {
    */
   country: string;
 
-  type?: 'dedicated_residential' | 'residential' | 'mobile';
+  type: 'dedicated_residential' | 'residential' | 'mobile';
 }
 
 export interface ProxyListConnectionsParams {

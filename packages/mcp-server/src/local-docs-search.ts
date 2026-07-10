@@ -3381,7 +3381,8 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/connect/countries',
     httpMethod: 'get',
     summary: 'List available countries',
-    description: 'Lookup of countries that can be selected when creating a proxy.',
+    description:
+      'Lookup of countries that can be selected when creating a proxy. Each country lists the proxy types available there; without a ?type filter, every covered country is returned.',
     stainlessPath: '(resource) connect.countries > (method) list',
     qualified: 'client.connect.countries.list',
     params: [
@@ -3392,7 +3393,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ items: { code: string; name: string; proxyTypes: 'dedicated_residential' | 'residential' | 'mobile'[]; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }",
     markdown:
-      "## list\n\n`client.connect.countries.list(page?: number, pageSize?: number, type?: 'dedicated_residential' | 'residential' | 'mobile'): { items: object[]; pagination: object; }`\n\n**get** `/connect/countries`\n\nLookup of countries that can be selected when creating a proxy.\n\n### Parameters\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n- `type?: 'dedicated_residential' | 'residential' | 'mobile'`\n  Filter to countries offering this proxy type.\n\n### Returns\n\n- `{ items: { code: string; name: string; proxyTypes: 'dedicated_residential' | 'residential' | 'mobile'[]; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of countries.\n\n  - `items: { code: string; name: string; proxyTypes: 'dedicated_residential' | 'residential' | 'mobile'[]; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst countries = await client.connect.countries.list();\n\nconsole.log(countries);\n```",
+      "## list\n\n`client.connect.countries.list(page?: number, pageSize?: number, type?: 'dedicated_residential' | 'residential' | 'mobile'): { items: object[]; pagination: object; }`\n\n**get** `/connect/countries`\n\nLookup of countries that can be selected when creating a proxy. Each country lists the proxy types available there; without a ?type filter, every covered country is returned.\n\n### Parameters\n\n- `page?: number`\n  Page number (1-based).\n\n- `pageSize?: number`\n  Number of items per page.\n\n- `type?: 'dedicated_residential' | 'residential' | 'mobile'`\n  Filter to countries offering this proxy type.\n\n### Returns\n\n- `{ items: { code: string; name: string; proxyTypes: 'dedicated_residential' | 'residential' | 'mobile'[]; }[]; pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }; }`\n  A page of countries.\n\n  - `items: { code: string; name: string; proxyTypes: 'dedicated_residential' | 'residential' | 'mobile'[]; }[]`\n  - `pagination: { hasNext: boolean; hasPrev: boolean; page: number; pages: number; pageSize: number; total: number; }`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst countries = await client.connect.countries.list();\n\nconsole.log(countries);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.countries.list',
@@ -3463,37 +3464,38 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/connect/proxies',
     httpMethod: 'post',
     summary: 'Create a proxy',
-    description: 'Provisions a proxy for the caller in the selected country.',
+    description: 'Provisions a proxy of the requested type for the caller in the selected country.',
     stainlessPath: '(resource) connect.proxies > (method) buy',
     qualified: 'client.connect.proxies.buy',
-    params: ['country: string;', "type?: 'dedicated_residential' | 'residential' | 'mobile';"],
+    params: ['country: string;', "type: 'dedicated_residential' | 'residential' | 'mobile';"],
     response:
       "{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }",
     markdown:
-      "## buy\n\n`client.connect.proxies.buy(country: string, type?: 'dedicated_residential' | 'residential' | 'mobile'): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n\n**post** `/connect/proxies`\n\nProvisions a proxy for the caller in the selected country.\n\n### Parameters\n\n- `country: string`\n  ISO 3166-1 alpha-2 country code to provision the proxy in.\n\n- `type?: 'dedicated_residential' | 'residential' | 'mobile'`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'dedicated_residential' | 'residential' | 'mobile'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.buy({ country: 'country' });\n\nconsole.log(response);\n```",
+      "## buy\n\n`client.connect.proxies.buy(country: string, type: 'dedicated_residential' | 'residential' | 'mobile'): { id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n\n**post** `/connect/proxies`\n\nProvisions a proxy of the requested type for the caller in the selected country.\n\n### Parameters\n\n- `country: string`\n  ISO 3166-1 alpha-2 country code to provision the proxy in.\n\n- `type: 'dedicated_residential' | 'residential' | 'mobile'`\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; host: string; password: string; port: number; status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'; type: 'dedicated_residential' | 'residential' | 'mobile'; username: string; paymentUrl?: string; }`\n  A proxy including its password. Returned only on create and single-proxy reads.\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `host: string`\n  - `password: string`\n  - `port: number`\n  - `status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error'`\n  - `type: 'dedicated_residential' | 'residential' | 'mobile'`\n  - `username: string`\n  - `paymentUrl?: string`\n\n### Example\n\n```typescript\nimport Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.buy({ country: 'country', type: 'dedicated_residential' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.connect.proxies.buy',
         example:
-          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.buy({ country: 'country' });\n\nconsole.log(response.id);",
+          "import Mobilerun from '@mobilerun/sdk';\n\nconst client = new Mobilerun();\n\nconst response = await client.connect.proxies.buy({\n  country: 'country',\n  type: 'dedicated_residential',\n});\n\nconsole.log(response.id);",
       },
       python: {
         method: 'connect.proxies.buy',
         example:
-          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nresponse = client.connect.proxies.buy(\n    country="country",\n)\nprint(response.id)',
+          'from mobilerun_sdk import Mobilerun\n\nclient = Mobilerun()\nresponse = client.connect.proxies.buy(\n    country="country",\n    type="dedicated_residential",\n)\nprint(response.id)',
       },
       go: {
         method: 'client.Connect.Proxies.Buy',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tresponse, err := client.Connect.Proxies.Buy(context.TODO(), mobileruncloud.ConnectProxyBuyParams{\n\t\tCountry: "country",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/droidrun-cloud-go"\n)\n\nfunc main() {\n\tclient := mobileruncloud.NewClient()\n\tresponse, err := client.Connect.Proxies.Buy(context.TODO(), mobileruncloud.ConnectProxyBuyParams{\n\t\tCountry: "country",\n\t\tType:    mobileruncloud.ConnectProxyBuyParamsTypeDedicatedResidential,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
       },
       cli: {
         method: 'proxies buy',
-        example: 'mobilerun-cloud connect:proxies buy \\\n  --country country',
+        example:
+          'mobilerun-cloud connect:proxies buy \\\n  --country country \\\n  --type dedicated_residential',
       },
       http: {
         example:
-          'curl https://api.mobilerun.ai/v1/connect/proxies \\\n    -H \'Content-Type: application/json\' \\\n    -d \'{\n          "country": "country"\n        }\'',
+          'curl https://api.mobilerun.ai/v1/connect/proxies \\\n    -H \'Content-Type: application/json\' \\\n    -d \'{\n          "country": "country",\n          "type": "dedicated_residential"\n        }\'',
       },
     },
   },
