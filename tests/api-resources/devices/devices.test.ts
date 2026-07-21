@@ -58,7 +58,7 @@ describe('resource devices', () => {
           pageSize: 0,
           providerId: 'providerId',
           state: ['creating'],
-          type: 'dedicated_physical_device',
+          type: 'dedicated_premium_device',
         },
         { path: '/_stainless_unknown_path' },
       ),

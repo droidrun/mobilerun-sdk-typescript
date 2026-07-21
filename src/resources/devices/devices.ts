@@ -335,7 +335,6 @@ export interface DeviceCreateParams {
    * Query param
    */
   deviceType?:
-    | 'dedicated_physical_device'
     | 'dedicated_premium_device'
     | 'dedicated_ios_device'
     | 'dedicated_emulated_device'
@@ -439,12 +438,7 @@ export interface DeviceListParams {
     | 'unknown'
   > | null;
 
-  type?:
-    | 'dedicated_physical_device'
-    | 'dedicated_premium_device'
-    | 'dedicated_ios_device'
-    | 'dedicated_emulated_device'
-    | 'ios_simulator';
+  type?: 'dedicated_premium_device' | 'dedicated_ios_device' | 'dedicated_emulated_device' | 'ios_simulator';
 }
 
 export interface DeviceFingerprintParams {
