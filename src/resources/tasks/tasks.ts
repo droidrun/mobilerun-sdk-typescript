@@ -1069,8 +1069,7 @@ export interface TaskRunParams {
   files?: Array<string>;
 
   /**
-   * The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.1-flash-lite')
+   * The LLM model identifier to use for the task (e.g. 'google/gemini-3.5-flash')
    */
   llmModel?: string;
 
@@ -1127,8 +1126,7 @@ export interface TaskRunStreamedParams {
   files?: Array<string>;
 
   /**
-   * The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.1-flash-lite')
+   * The LLM model identifier to use for the task (e.g. 'google/gemini-3.5-flash')
    */
   llmModel?: string;
 
