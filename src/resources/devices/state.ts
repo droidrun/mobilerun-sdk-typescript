@@ -114,6 +114,8 @@ export interface A11YNode {
   resourceId: string;
 
   text: string;
+
+  isVisibleToUser?: boolean;
 }
 
 export namespace A11YNode {

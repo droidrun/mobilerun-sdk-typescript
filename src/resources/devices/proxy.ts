@@ -98,6 +98,13 @@ export interface ProxyStatusResponse {
 
 export interface ProxyConnectParams {
   /**
+   * Body param: Mobilerun Connect proxy — pass exactly one of id (use an existing
+   * proxy's credentials) or country (provision or reuse a rotating residential proxy
+   * for the device).
+   */
+  connect?: ProxyConnectParams.Connect;
+
+  /**
    * @deprecated Body param
    */
   host?: string;
@@ -139,6 +146,24 @@ export interface ProxyConnectParams {
 }
 
 export namespace ProxyConnectParams {
+  /**
+   * Mobilerun Connect proxy — pass exactly one of id (use an existing proxy's
+   * credentials) or country (provision or reuse a rotating residential proxy for the
+   * device).
+   */
+  export interface Connect {
+    /**
+     * Existing Mobilerun Connect proxy id; its credentials are fetched server-side.
+     */
+    id?: string;
+
+    /**
+     * ISO 3166-1 alpha-2 country code; provisions (or reuses) a rotating residential
+     * Mobilerun Connect proxy for the device.
+     */
+    country?: string;
+  }
+
   /**
    * SOCKS5 proxy configuration (required for socks5).
    */

@@ -79,11 +79,28 @@ export interface DeviceSpec {
 
 export namespace DeviceSpec {
   export interface Proxy {
+    connect?: Proxy.Connect;
+
     name?: string;
 
     smartIp?: boolean;
 
     socks5?: Shared.Socks5;
+  }
+
+  export namespace Proxy {
+    export interface Connect {
+      /**
+       * Existing Mobilerun Connect proxy id; its credentials are fetched server-side.
+       */
+      id?: string;
+
+      /**
+       * ISO 3166-1 alpha-2 country code; provisions (or reuses) a rotating residential
+       * Mobilerun Connect proxy for the device.
+       */
+      country?: string;
+    }
   }
 }
 
