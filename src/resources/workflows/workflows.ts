@@ -130,6 +130,14 @@ export interface Flow {
 
   status: 'healthy' | 'failing' | 'blocked';
 
+  /**
+   * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+   * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
+   * a whole-token null stays JSON null). Existing flows stay 1; new flows default
+   * to 2.
+   */
+  templateResolutionVersion: number;
+
   triggerId: string;
 
   updatedAt: string | null;
