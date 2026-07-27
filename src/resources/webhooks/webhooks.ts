@@ -337,7 +337,19 @@ export namespace WebhookEventTypesResponse {
       export interface Event {
         description: string;
 
+        surfaces: Event.Surfaces;
+
         type: string;
+      }
+
+      export namespace Event {
+        export interface Surfaces {
+          feed: boolean;
+
+          toast: boolean;
+
+          webhook: boolean;
+        }
       }
     }
   }
