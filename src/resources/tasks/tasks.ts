@@ -116,7 +116,6 @@ export type TaskStatus =
   | 'created'
   | 'running'
   | 'cancelling'
-  | 'paused'
   | 'completed'
   | 'failed'
   | 'cancelled';
