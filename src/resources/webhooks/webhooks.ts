@@ -78,8 +78,9 @@ export class Webhooks extends APIResource {
 
   /**
    * Returns a paginated list of your webhook subscriptions, optionally filtered by
-   * status (active, failing, blocked, or disabled). The response also includes
-   * per-status counts across all of your subscriptions.
+   * status (active, failing, blocked, or disabled) and/or by `search` (a
+   * case-insensitive substring match against the URL or description). The response
+   * also includes per-status counts across all of your subscriptions.
    *
    * @example
    * ```ts
@@ -428,6 +429,11 @@ export interface WebhookListParams {
   page?: number;
 
   pageSize?: number;
+
+  /**
+   * Case-insensitive substring match against the URL or description.
+   */
+  search?: string;
 
   status?: 'active' | 'failing' | 'blocked' | 'disabled';
 }
