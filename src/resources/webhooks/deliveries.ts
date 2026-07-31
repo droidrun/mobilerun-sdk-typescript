@@ -10,8 +10,8 @@ export class Deliveries extends APIResource {
   /**
    * Returns a paginated feed of webhook deliveries across all of your subscriptions,
    * with the originating endpoint URL included on each record. Results can be
-   * filtered by delivery status (pending, success, skipped, or dead) and by a
-   * `since` timestamp.
+   * filtered by delivery status (pending, success, skipped, or dead), by a `since`
+   * timestamp, and by `eventId` (exact match against the originating event id).
    *
    * @example
    * ```ts
@@ -28,7 +28,8 @@ export class Deliveries extends APIResource {
   /**
    * Returns a paginated list of deliveries for a single webhook subscription,
    * identified by its id. Each record reports the event, delivery status, attempt
-   * count, and the last response code or error.
+   * count, and the last response code or error. Results can be filtered by `eventId`
+   * (exact match against the originating event id).
    *
    * @example
    * ```ts
@@ -257,6 +258,11 @@ export namespace DeliveryStatsResponse {
 }
 
 export interface DeliveryListParams {
+  /**
+   * Exact text match against the originating event id.
+   */
+  eventId?: string;
+
   page?: number;
 
   pageSize?: number;
@@ -267,6 +273,11 @@ export interface DeliveryListParams {
 }
 
 export interface DeliveryListForWebhookParams {
+  /**
+   * Exact text match against the originating event id.
+   */
+  eventId?: string;
+
   page?: number;
 
   pageSize?: number;

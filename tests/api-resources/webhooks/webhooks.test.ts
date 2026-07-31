@@ -89,6 +89,7 @@ describe('resource webhooks', () => {
         {
           page: 1,
           pageSize: 1,
+          search: 'x',
           status: 'active',
         },
         { path: '/_stainless_unknown_path' },

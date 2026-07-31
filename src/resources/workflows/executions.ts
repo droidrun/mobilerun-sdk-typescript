@@ -64,6 +64,11 @@ export interface FlowExecution {
 
   triggerName: string | null;
 
+  /**
+   * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
+   * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
+   * step that opted into a verdict — null otherwise.
+   */
   result?: unknown;
 }
 
@@ -74,7 +79,9 @@ export interface ExecutionRetrieveResponse {
 export namespace ExecutionRetrieveResponse {
   export interface Data extends ExecutionsAPI.FlowExecution {
     /**
-     * Files produced by files.upload steps; derived server-side at read time.
+     * Files produced by files.upload steps, plus files an agent.run step reported on
+     * its terminal response (agent-created output or a workflow upload minted during
+     * the turn); derived server-side at read time.
      */
     files: Array<Data.File>;
   }

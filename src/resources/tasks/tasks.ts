@@ -346,6 +346,11 @@ export interface TaskGetStatusResponse {
   status: TaskStatus;
 
   /**
+   * Execution metadata for abnormal terminal outcomes
+   */
+  execution?: TaskGetStatusResponse.Execution | null;
+
+  /**
    * The last agent response (FastAgentResponseEvent or ManagerPlanEvent)
    */
   lastResponse?: { [key: string]: unknown } | null;
@@ -369,6 +374,31 @@ export interface TaskGetStatusResponse {
    * Whether the task succeeded
    */
   succeeded?: boolean | null;
+}
+
+export namespace TaskGetStatusResponse {
+  /**
+   * Execution metadata for abnormal terminal outcomes
+   */
+  export interface Execution {
+    checkpoint: Execution.Checkpoint;
+
+    terminationReason: 'execution_timeout' | 'worker_lost' | 'cancelled' | 'agent_failed';
+
+    retrySafety?: 'unknown';
+  }
+
+  export namespace Execution {
+    export interface Checkpoint {
+      currentSubgoal?: string | null;
+
+      plan?: string | null;
+
+      progressSummary?: string | null;
+
+      steps?: number;
+    }
+  }
 }
 
 export interface TaskGetTrajectoryResponse {
