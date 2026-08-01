@@ -103,6 +103,14 @@ export interface PackageCredentials {
   packageName: string;
 }
 
+export interface Task {
+  createdAt: string;
+
+  taskId: string;
+
+  updatedAt: string;
+}
+
 export type TaskStatus =
   | 'queued'
   | 'created'
@@ -1189,6 +1197,7 @@ Tasks.UiStates = UiStates;
 export declare namespace Tasks {
   export {
     type PackageCredentials as PackageCredentials,
+    type Task as Task,
     type TaskStatus as TaskStatus,
     type UsageResult as UsageResult,
     type TaskRetrieveResponse as TaskRetrieveResponse,
