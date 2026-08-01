@@ -7,16 +7,14 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource proxies', () => {
+describe('resource carriers', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.proxies.create({
-      host: 'x',
-      name: 'xxx',
-      password: 'x',
-      port: 1,
-      protocol: 'socks5',
-      user: 'x',
+    const responsePromise = client.carriers.create({
+      country: 'x',
+      mcc: 'x',
+      mnc: 'x',
+      operator: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -29,19 +27,29 @@ describe('resource proxies', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.proxies.create({
-      host: 'x',
-      name: 'xxx',
-      password: 'x',
-      port: 1,
-      protocol: 'socks5',
-      user: 'x',
+    const response = await client.carriers.create({
+      country: 'x',
+      mcc: 'x',
+      mnc: 'x',
+      operator: 'x',
+      company: 'company',
+      country_code: 'country_code',
+      country_iso: 'xx',
+      detail_url: 'detail_url',
+      gsm_bands: 'gsm_bands',
+      lte_bands: 'lte_bands',
+      mobile_prefix: 'mobile_prefix',
+      nsn_size: 'nsn_size',
+      number_format: 'number_format',
+      protocols: 'protocols',
+      umts_bands: 'umts_bands',
+      website: 'website',
     });
   });
 
   // Mock server tests are disabled
   test.skip('retrieve', async () => {
-    const responsePromise = client.proxies.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const responsePromise = client.carriers.retrieve(1);
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -52,15 +60,8 @@ describe('resource proxies', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update: only required params', async () => {
-    const responsePromise = client.proxies.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      host: 'x',
-      name: 'xxx',
-      password: 'x',
-      port: 1,
-      protocol: 'socks5',
-      user: 'x',
-    });
+  test.skip('update', async () => {
+    const responsePromise = client.carriers.update(1, {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -68,23 +69,11 @@ describe('resource proxies', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('update: required and optional params', async () => {
-    const response = await client.proxies.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      host: 'x',
-      name: 'xxx',
-      password: 'x',
-      port: 1,
-      protocol: 'socks5',
-      user: 'x',
-    });
   });
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.proxies.list();
+    const responsePromise = client.carriers.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -98,13 +87,23 @@ describe('resource proxies', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.proxies.list({ protocol: 'socks5' }, { path: '/_stainless_unknown_path' }),
+      client.carriers.list(
+        {
+          country: 'country',
+          countryISO: 'xx',
+          orderBy: 'id',
+          orderDir: 'asc',
+          page: 1,
+          pageSize: 1,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
   test.skip('delete', async () => {
-    const responsePromise = client.proxies.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const responsePromise = client.carriers.delete(1);
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -116,7 +115,7 @@ describe('resource proxies', () => {
 
   // Mock server tests are disabled
   test.skip('lookup: only required params', async () => {
-    const responsePromise = client.proxies.lookup({ socks5: { host: 'host', port: 1 } });
+    const responsePromise = client.carriers.lookup({ mcc: 'x', mnc: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -128,13 +127,6 @@ describe('resource proxies', () => {
 
   // Mock server tests are disabled
   test.skip('lookup: required and optional params', async () => {
-    const response = await client.proxies.lookup({
-      socks5: {
-        host: 'host',
-        port: 1,
-        password: 'password',
-        user: 'user',
-      },
-    });
+    const response = await client.carriers.lookup({ mcc: 'x', mnc: 'x' });
   });
 });
