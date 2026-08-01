@@ -9,7 +9,6 @@ export {
 export {
   Tasks,
   type PackageCredentials,
-  type Task,
   type TaskStatus,
   type UsageResult,
   type TaskRetrieveResponse,
