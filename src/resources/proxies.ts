@@ -56,13 +56,6 @@ export class Proxies extends APIResource {
   delete(proxyID: string, options?: RequestOptions): APIPromise<ProxyDeleteResponse> {
     return this._client.delete(path`/proxies/${proxyID}`, options);
   }
-
-  /**
-   * Lookup proxy location
-   */
-  lookup(body: ProxyLookupParams, options?: RequestOptions): APIPromise<ProxyLookupResponse> {
-    return this._client.post('/proxies/lookup', { body, ...options });
-  }
 }
 
 export type ProxyConfig = ProxyConfig.Socks5ProxyConfig | ProxyConfig.WireguardProxyConfig;
@@ -127,85 +120,6 @@ export interface ProxyDeleteResponse {
   success: true;
 }
 
-export interface ProxyLookupResponse {
-  /**
-   * IP address of the proxy.
-   */
-  ip: string;
-
-  /**
-   * Whether the IP is a mobile connection.
-   */
-  isMobile: boolean;
-
-  /**
-   * Latitude of the proxy.
-   */
-  latitude: number;
-
-  /**
-   * Longitude of the proxy.
-   */
-  longitude: number;
-
-  /**
-   * A URL to the JSON Schema for this object.
-   */
-  $schema?: string;
-
-  /**
-   * Mobile carrier information.
-   */
-  carrier?: ProxyLookupResponse.Carrier;
-
-  /**
-   * City of the proxy.
-   */
-  city?: string;
-
-  /**
-   * Country of the proxy.
-   */
-  country?: string;
-
-  /**
-   * ISO country code.
-   */
-  countryCode?: string;
-
-  /**
-   * Region of the proxy.
-   */
-  region?: string;
-
-  /**
-   * Timezone of the proxy.
-   */
-  timezone?: string;
-}
-
-export namespace ProxyLookupResponse {
-  /**
-   * Mobile carrier information.
-   */
-  export interface Carrier {
-    /**
-     * Mobile Country Code.
-     */
-    mcc?: string;
-
-    /**
-     * Mobile Network Code.
-     */
-    mnc?: string;
-
-    /**
-     * Carrier name.
-     */
-    name?: string;
-  }
-}
-
 export type ProxyCreateParams = ProxyCreateParams.CreateSocks5Proxy | ProxyCreateParams.CreateWireguardProxy;
 
 export declare namespace ProxyCreateParams {
@@ -262,28 +176,6 @@ export interface ProxyListParams {
   protocol?: 'socks5' | 'wireguard';
 }
 
-export interface ProxyLookupParams {
-  /**
-   * SOCKS5 proxy configuration.
-   */
-  socks5: ProxyLookupParams.Socks5;
-}
-
-export namespace ProxyLookupParams {
-  /**
-   * SOCKS5 proxy configuration.
-   */
-  export interface Socks5 {
-    host: string;
-
-    port: number;
-
-    password?: string;
-
-    user?: string;
-  }
-}
-
 export declare namespace Proxies {
   export {
     type ProxyConfig as ProxyConfig,
@@ -292,10 +184,8 @@ export declare namespace Proxies {
     type ProxyUpdateResponse as ProxyUpdateResponse,
     type ProxyListResponse as ProxyListResponse,
     type ProxyDeleteResponse as ProxyDeleteResponse,
-    type ProxyLookupResponse as ProxyLookupResponse,
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
-    type ProxyLookupParams as ProxyLookupParams,
   };
 }
