@@ -139,9 +139,25 @@ export namespace TriggerCreateResponse {
       expression?: string;
 
       /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      jitter?: ScheduleRule.Jitter;
+
+      /**
        * RRULE string (for type=recurring)
        */
       rrule?: string;
+    }
+
+    export namespace ScheduleRule {
+      /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      export interface Jitter {
+        afterMinutes?: number;
+
+        beforeMinutes?: number;
+      }
     }
   }
 }
@@ -331,9 +347,25 @@ export namespace TriggerCreateParams {
     expression?: string;
 
     /**
+     * Optional per-occurrence random window around the nominal schedule time
+     */
+    jitter?: ScheduleRule.Jitter;
+
+    /**
      * RRULE string (for type=recurring)
      */
     rrule?: string;
+  }
+
+  export namespace ScheduleRule {
+    /**
+     * Optional per-occurrence random window around the nominal schedule time
+     */
+    export interface Jitter {
+      afterMinutes?: number;
+
+      beforeMinutes?: number;
+    }
   }
 }
 
@@ -376,9 +408,25 @@ export namespace TriggerUpdateParams {
     expression?: string;
 
     /**
+     * Optional per-occurrence random window around the nominal schedule time
+     */
+    jitter?: ScheduleRule.Jitter;
+
+    /**
      * RRULE string (for type=recurring)
      */
     rrule?: string;
+  }
+
+  export namespace ScheduleRule {
+    /**
+     * Optional per-occurrence random window around the nominal schedule time
+     */
+    export interface Jitter {
+      afterMinutes?: number;
+
+      beforeMinutes?: number;
+    }
   }
 }
 
