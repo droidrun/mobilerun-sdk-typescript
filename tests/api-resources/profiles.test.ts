@@ -174,6 +174,7 @@ describe('resource profiles', () => {
     await expect(
       client.profiles.list(
         {
+          mine: true,
           name: 'name',
           orderBy: 'name',
           orderByDirection: 'asc',

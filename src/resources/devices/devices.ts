@@ -431,6 +431,17 @@ export namespace DeviceCreateParams {
 export interface DeviceListParams {
   country?: string;
 
+  /**
+   * Filter to devices created by this user id. Mutually exclusive with mine.
+   */
+  createdBy?: string;
+
+  /**
+   * When true, only return devices created by the calling user (resolved from
+   * X-User-ID, never a client-supplied id).
+   */
+  mine?: boolean;
+
   name?: string;
 
   orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt';
