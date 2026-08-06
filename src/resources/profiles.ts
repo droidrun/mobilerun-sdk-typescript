@@ -201,6 +201,12 @@ export interface ProfileUpdateParams {
 }
 
 export interface ProfileListParams {
+  /**
+   * When true, only return profiles created by the calling user (resolved from
+   * X-User-ID, never a client-supplied id).
+   */
+  mine?: boolean;
+
   name?: string;
 
   orderBy?: 'name' | 'created_at' | 'updated_at';

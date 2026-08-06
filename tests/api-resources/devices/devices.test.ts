@@ -51,6 +51,8 @@ describe('resource devices', () => {
       client.devices.list(
         {
           country: 'country',
+          createdBy: 'createdBy',
+          mine: true,
           name: 'name',
           orderBy: 'id',
           orderByDirection: 'asc',
