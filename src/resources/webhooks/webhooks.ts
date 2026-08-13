@@ -173,6 +173,11 @@ export namespace WebhookCreateResponse {
 
     createdAt: string;
 
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
+
     description: string | null;
 
     eventTypes: Array<string>;
@@ -212,6 +217,11 @@ export namespace WebhookRetrieveResponse {
 
     createdAt: string;
 
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
+
     description: string | null;
 
     eventTypes: Array<string>;
@@ -245,6 +255,11 @@ export namespace WebhookUpdateResponse {
     blockedReason: string | null;
 
     createdAt: string;
+
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
 
     description: string | null;
 
@@ -295,6 +310,11 @@ export namespace WebhookListResponse {
     blockedReason: string | null;
 
     createdAt: string;
+
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
 
     description: string | null;
 
@@ -370,6 +390,11 @@ export namespace WebhookRotateSecretResponse {
 
     createdAt: string;
 
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
+
     description: string | null;
 
     eventTypes: Array<string>;
@@ -426,6 +451,16 @@ export interface WebhookUpdateParams {
 }
 
 export interface WebhookListParams {
+  /**
+   * Only include webhooks created by this actor id. Mutually exclusive with `mine`.
+   */
+  createdBy?: string;
+
+  /**
+   * When true, only include webhooks created by you (not just owned by your org).
+   */
+  mine?: 'true' | 'false';
+
   page?: number;
 
   pageSize?: number;

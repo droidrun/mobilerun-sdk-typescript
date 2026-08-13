@@ -115,7 +115,7 @@ describe('resource triggers', () => {
           orderByDirection: 'asc',
           page: 1,
           pageSize: 1,
-          search: 'search',
+          search: 'x',
         },
         { path: '/_stainless_unknown_path' },
       ),

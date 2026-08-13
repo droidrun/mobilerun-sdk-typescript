@@ -60,7 +60,7 @@ describe('resource devices', () => {
           pageSize: 0,
           providerId: 'providerId',
           state: ['creating'],
-          type: 'dedicated_premium_device',
+          type: 'android_cloud_phone',
         },
         { path: '/_stainless_unknown_path' },
       ),

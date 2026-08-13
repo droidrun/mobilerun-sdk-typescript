@@ -95,7 +95,7 @@ describe('resource actions', () => {
           orderByDirection: 'asc',
           page: 1,
           pageSize: 1,
-          search: 'search',
+          search: 'x',
           service: 'tasks_api',
         },
         { path: '/_stainless_unknown_path' },

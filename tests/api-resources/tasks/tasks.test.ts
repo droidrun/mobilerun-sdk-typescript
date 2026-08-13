@@ -38,6 +38,8 @@ describe('resource tasks', () => {
     await expect(
       client.tasks.list(
         {
+          createdBy: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          mine: true,
           orderBy: 'id',
           orderByDirection: 'asc',
           page: 1,
@@ -121,6 +123,7 @@ describe('resource tasks', () => {
       temperature: 0,
       vision: true,
       vpnCountry: 'US',
+      'Idempotency-Key': 'x',
     });
   });
 

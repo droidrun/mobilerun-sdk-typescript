@@ -105,6 +105,8 @@ export interface Flow {
 
   enabled: boolean;
 
+  healthMonitoringEnabled: boolean;
+
   lastFailureAt: string | null;
 
   lastFailureCode:
@@ -127,6 +129,10 @@ export interface Flow {
   notifyWebhookId: string | null;
 
   ownerId: string;
+
+  selfHealingEnabled: boolean;
+
+  selfHealingMaxAttempts: number;
 
   status: 'healthy' | 'failing' | 'blocked';
 

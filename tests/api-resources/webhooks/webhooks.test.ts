@@ -87,6 +87,8 @@ describe('resource webhooks', () => {
     await expect(
       client.webhooks.list(
         {
+          createdBy: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          mine: 'true',
           page: 1,
           pageSize: 1,
           search: 'x',
