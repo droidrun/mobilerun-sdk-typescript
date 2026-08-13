@@ -57,8 +57,9 @@ export class Flows extends APIResource {
 
   /**
    * Return a paginated list of flows. Supports filtering by `triggerId`, `enabled`,
-   * and one or more health `status` values (healthy, failing, blocked), plus
-   * free-text `search` and ordering.
+   * one or more health `status` values (healthy, failing, blocked), `mine` (flows
+   * created by the calling actor), `createdBy` (flows created by a given actor id —
+   * mutually exclusive with `mine`), plus free-text `search` and ordering.
    */
   list(
     query: FlowListParams | null | undefined = {},
@@ -159,11 +160,17 @@ export interface FlowCreateParams {
 
   enabled?: boolean;
 
+  healthMonitoringEnabled?: boolean;
+
   notifyOnFailure?: boolean;
 
   notifyOnSuccess?: boolean;
 
   notifyWebhookId?: string | null;
+
+  selfHealingEnabled?: boolean;
+
+  selfHealingMaxAttempts?: number;
 }
 
 export namespace FlowCreateParams {
@@ -193,6 +200,8 @@ export interface FlowUpdateParams {
 
   enabled?: boolean;
 
+  healthMonitoringEnabled?: boolean;
+
   name?: string;
 
   notifyOnFailure?: boolean;
@@ -201,11 +210,25 @@ export interface FlowUpdateParams {
 
   notifyWebhookId?: string | null;
 
+  selfHealingEnabled?: boolean;
+
+  selfHealingMaxAttempts?: number;
+
   triggerId?: string;
 }
 
 export interface FlowListParams {
-  enabled?: boolean | null;
+  createdBy?: string;
+
+  /**
+   * Only include flows with this enabled state.
+   */
+  enabled?: 'true' | 'false';
+
+  /**
+   * Only include flows created by you.
+   */
+  mine?: 'true' | 'false';
 
   orderBy?: 'name' | 'createdAt' | 'updatedAt';
 

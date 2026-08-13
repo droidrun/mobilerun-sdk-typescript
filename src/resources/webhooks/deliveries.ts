@@ -105,6 +105,12 @@ export namespace DeliveryListResponse {
 
     createdAt: string;
 
+    /**
+     * Id of the parent endpoint's creator. Null when the endpoint row is gone or its
+     * creator was never recorded.
+     */
+    createdBy: string | null;
+
     durationMs: number | null;
 
     endpointId: string;
@@ -145,6 +151,12 @@ export namespace DeliveryListForWebhookResponse {
 
     createdAt: string;
 
+    /**
+     * Id of the parent endpoint's creator. Null when the endpoint row is gone or its
+     * creator was never recorded.
+     */
+    createdBy: string | null;
+
     durationMs: number | null;
 
     endpointId: string;
@@ -180,6 +192,12 @@ export namespace DeliveryRetrieveAttemptsResponse {
     completedAt: string | null;
 
     createdAt: string;
+
+    /**
+     * Id of the parent endpoint's creator. Null when the endpoint row is gone or its
+     * creator was never recorded.
+     */
+    createdBy: string | null;
 
     durationMs: number | null;
 

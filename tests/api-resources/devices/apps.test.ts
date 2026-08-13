@@ -72,6 +72,7 @@ describe('resource apps', () => {
   test.skip('install: required and optional params', async () => {
     const response = await client.devices.apps.install('deviceId', {
       bundleId: 'x',
+      background: true,
       packageName: 'x',
       'X-Device-Display-ID': 0,
     });

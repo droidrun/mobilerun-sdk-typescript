@@ -64,8 +64,16 @@ export class Tasks extends APIResource {
    * Create and dispatch a new agent task. Returns the task ID and device stream
    * details.
    */
-  run(body: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
-    return this._client.post('/tasks', { body, ...options });
+  run(params: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
+    return this._client.post('/tasks', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -1054,6 +1062,16 @@ export interface TaskStopResponse {
 }
 
 export interface TaskListParams {
+  /**
+   * Only tasks created by this user id.
+   */
+  createdBy?: string | null;
+
+  /**
+   * Only tasks created by the calling user.
+   */
+  mine?: boolean;
+
   orderBy?: 'id' | 'createdAt' | 'finishedAt' | 'status' | null;
 
   orderByDirection?: 'asc' | 'desc';
@@ -1072,59 +1090,111 @@ export interface TaskListParams {
 
 export interface TaskRunParams {
   /**
-   * The ID of the device to run the task on.
+   * Body param: The ID of the device to run the task on.
    */
   deviceId: string;
 
+  /**
+   * Body param
+   */
   task: string;
 
+  /**
+   * Body param
+   */
   accessibility?: boolean;
 
+  /**
+   * Body param
+   */
   agentId?: number;
 
+  /**
+   * Body param
+   */
   apps?: Array<string>;
 
+  /**
+   * Body param
+   */
   continueOnFailure?: boolean;
 
+  /**
+   * Body param
+   */
   credentials?: Array<PackageCredentials>;
 
   /**
-   * The display ID of the device to run the task on.
+   * Body param: The display ID of the device to run the task on.
    */
   displayId?: number;
 
+  /**
+   * Body param
+   */
   executionTimeout?: number;
 
+  /**
+   * Body param
+   */
   files?: Array<string>;
 
   /**
-   * The LLM model identifier to use for the task (e.g. 'google/gemini-3.5-flash')
+   * Body param: The LLM model identifier to use for the task (e.g.
+   * 'google/gemini-3.5-flash')
    */
   llmModel?: string;
 
+  /**
+   * Body param
+   */
   maxSteps?: number;
 
   /**
-   * Memory namespace for cross-task personalization
+   * Body param: Memory namespace for cross-task personalization
    */
   memoryNamespace?: string;
 
+  /**
+   * Body param
+   */
   outputSchema?: { [key: string]: unknown } | null;
 
+  /**
+   * Body param
+   */
   reasoning?: boolean;
 
+  /**
+   * Body param
+   */
   stealth?: boolean;
 
   /**
-   * LLM model used by sub-agent roles: executor, app_opener, structured_output
+   * Body param: LLM model used by sub-agent roles: executor, app_opener,
+   * structured_output
    */
   subagentModel?: string;
 
+  /**
+   * Body param
+   */
   temperature?: number;
 
+  /**
+   * Body param
+   */
   vision?: boolean;
 
+  /**
+   * Body param
+   */
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+
+  /**
+   * Header param
+   */
+  'Idempotency-Key'?: string;
 }
 
 export interface TaskRunStreamedParams {

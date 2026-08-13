@@ -99,9 +99,10 @@ export class Devices extends APIResource {
 
   /**
    * Requests a new device for the authenticated user from the device spec in the
-   * request body. Optional query parameters select the device type, target country,
-   * billing mode, and a profile to use as the base spec; the response returns the
-   * device and its stream token.
+   * request body. Optional query parameters select the canonical device type, target
+   * country, billing mode, and a profile to use as the base spec; deprecated
+   * device-type aliases remain accepted only during the documented compatibility
+   * grace period. The response returns the device and its stream token.
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
     const { billing, query_country, deviceType, profileId, ...body } = params;
@@ -332,13 +333,18 @@ export interface DeviceCreateParams {
   query_country?: string;
 
   /**
-   * Query param
+   * Query param: Deprecated device type aliases are accepted during a compatibility
+   * grace period: dedicated_premium_device maps to android_cloud_phone,
+   * dedicated_physical_device maps to android_physical_phone, dedicated_ios_device
+   * maps to ios_stealth_phone, and dedicated_emulated_device maps to
+   * android_emulator.
    */
   deviceType?:
+    | 'android_cloud_phone'
     | 'dedicated_premium_device'
+    | 'dedicated_physical_device'
     | 'dedicated_ios_device'
-    | 'dedicated_emulated_device'
-    | 'ios_simulator';
+    | 'dedicated_emulated_device';
 
   /**
    * Query param: Profile ID to use as device spec
@@ -463,10 +469,22 @@ export interface DeviceListParams {
     | 'resetting'
     | 'terminated'
     | 'maintenance'
+    | 'stopped'
     | 'unknown'
   > | null;
 
-  type?: 'dedicated_premium_device' | 'dedicated_ios_device' | 'dedicated_emulated_device' | 'ios_simulator';
+  /**
+   * Deprecated device type aliases are accepted during a compatibility grace period:
+   * dedicated_premium_device maps to android_cloud_phone, dedicated_physical_device
+   * maps to android_physical_phone, dedicated_ios_device maps to ios_stealth_phone,
+   * and dedicated_emulated_device maps to android_emulator.
+   */
+  type?:
+    | 'android_cloud_phone'
+    | 'dedicated_premium_device'
+    | 'dedicated_physical_device'
+    | 'dedicated_ios_device'
+    | 'dedicated_emulated_device';
 }
 
 export interface DeviceFingerprintParams {

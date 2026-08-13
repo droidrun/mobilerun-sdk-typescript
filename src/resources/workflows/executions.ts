@@ -67,7 +67,10 @@ export interface FlowExecution {
   /**
    * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
    * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
-   * step that opted into a verdict — null otherwise.
+   * step that opted into a verdict — null otherwise. Table-backed steps (current
+   * executions) also carry a `status` string (e.g. success/failed/stopped, see
+   * deriveStepStatus); it is optional and absent on legacy blob-only executions, so
+   * clients must not assume its presence.
    */
   result?: unknown;
 }
@@ -78,6 +81,8 @@ export interface ExecutionRetrieveResponse {
 
 export namespace ExecutionRetrieveResponse {
   export interface Data extends ExecutionsAPI.FlowExecution {
+    createdBy: string | null;
+
     /**
      * Files produced by files.upload steps, plus files an agent.run step reported on
      * its terminal response (agent-created output or a workflow upload minted during
@@ -100,9 +105,15 @@ export namespace ExecutionRetrieveResponse {
 }
 
 export interface ExecutionListResponse {
-  items: Array<FlowExecution>;
+  items: Array<ExecutionListResponse.Item>;
 
   pagination: Shared.Pagination;
+}
+
+export namespace ExecutionListResponse {
+  export interface Item extends ExecutionsAPI.FlowExecution {
+    createdBy: string | null;
+  }
 }
 
 export interface ExecutionGetMetricsResponse {
