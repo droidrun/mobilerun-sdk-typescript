@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as ProfilesAPI from './profiles';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
@@ -24,21 +25,14 @@ export class Profiles extends APIResource {
   /**
    * Update a device profile
    */
-  update(
-    profileID: string,
-    body: ProfileUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<ProfileUpdateResponse> {
+  update(profileID: string, body: ProfileUpdateParams, options?: RequestOptions): APIPromise<ProfileUpdateResponse> {
     return this._client.put(path`/profiles/${profileID}`, { body, ...options });
   }
 
   /**
    * List device profiles
    */
-  list(
-    query: ProfileListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ProfileListResponse> {
+  list(query: ProfileListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ProfileListResponse> {
     return this._client.get('/profiles', { query, ...options });
   }
 
@@ -227,6 +221,6 @@ export declare namespace Profiles {
     type ProfileDeleteResponse as ProfileDeleteResponse,
     type ProfileCreateParams as ProfileCreateParams,
     type ProfileUpdateParams as ProfileUpdateParams,
-    type ProfileListParams as ProfileListParams,
+    type ProfileListParams as ProfileListParams
   };
 }

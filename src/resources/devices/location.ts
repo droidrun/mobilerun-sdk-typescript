@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as LocationAPI from './location';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
@@ -12,23 +13,18 @@ export class Location extends APIResource {
    * Returns the device's current simulated GPS location as latitude and longitude.
    * Devices without geo support return an unsupported-feature error.
    */
-  get(
-    deviceID: string,
-    params: LocationGetParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Shared.Location> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/location`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  get(deviceID: string, params: LocationGetParams | null | undefined = {}, options?: RequestOptions): APIPromise<Shared.Location> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/location`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+  }
+
+  /**
+   * Clears any simulated GPS location and restores the device's default location
+   * behavior. Devices without geo support return an unsupported-feature error.
+   */
+  reset(deviceID: string, params: LocationResetParams | null | undefined = {}, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.delete(path`/devices/${deviceID}/location`, { ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -36,24 +32,16 @@ export class Location extends APIResource {
    * request body. Devices without geo support return an unsupported-feature error.
    */
   set(deviceID: string, params: LocationSetParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/location`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/location`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
 export interface LocationGetParams {
+  'X-Device-Display-ID'?: number;
+}
+
+export interface LocationResetParams {
   'X-Device-Display-ID'?: number;
 }
 
@@ -75,5 +63,9 @@ export interface LocationSetParams {
 }
 
 export declare namespace Location {
-  export { type LocationGetParams as LocationGetParams, type LocationSetParams as LocationSetParams };
+  export {
+    type LocationGetParams as LocationGetParams,
+    type LocationResetParams as LocationResetParams,
+    type LocationSetParams as LocationSetParams
+  };
 }

@@ -1,5 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import * as Core from '../core';
 import * as Shared from './shared';
 
 export interface DeviceCarrier {
@@ -85,7 +86,7 @@ export namespace DeviceSpec {
 
     smartIp?: boolean;
 
-    socks5?: Shared.Socks5;
+    socks5?: Proxy.Socks5;
   }
 
   export namespace Proxy {
@@ -100,6 +101,16 @@ export namespace DeviceSpec {
        * Mobilerun Connect proxy for the device.
        */
       country?: string;
+    }
+
+    export interface Socks5 {
+      host: string;
+
+      password: string;
+
+      port: number;
+
+      user: string;
     }
   }
 }
@@ -186,12 +197,18 @@ export interface PermissionSet {
   write: boolean;
 }
 
-export interface Socks5 {
+export interface Socks5ProxyConfig {
   host: string;
+
+  name: string;
 
   password: string;
 
   port: number;
+
+  protocol: 'socks5';
+
+  proxyId: string;
 
   user: string;
 }

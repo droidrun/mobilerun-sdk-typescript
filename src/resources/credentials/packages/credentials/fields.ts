@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
-import * as CredentialsAPI from './credentials';
+import * as FieldsAPI from './fields';
 import { APIPromise } from '../../../../core/api-promise';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
@@ -12,16 +12,9 @@ export class Fields extends APIResource {
    * (one of the supported field types) and its value. Returns a conflict if a field
    * of that type already exists on the credential.
    */
-  create(
-    credentialName: string,
-    params: FieldCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<FieldCreateResponse> {
-    const { packageName, ...body } = params;
-    return this._client.post(
-      path`/credentials/packages/${packageName}/credentials/${credentialName}/fields`,
-      { body, ...options },
-    );
+  create(credentialName: string, params: FieldCreateParams, options?: RequestOptions): APIPromise<FieldCreateResponse> {
+    const { packageName, ...body } = params
+    return this._client.post(path`/credentials/packages/${packageName}/credentials/${credentialName}/fields`, { body, ...options });
   }
 
   /**
@@ -29,71 +22,133 @@ export class Fields extends APIResource {
    * `packageName`, `credentialName`, and `fieldType` in the path. The body carries
    * the new value and returns the updated credential.
    */
-  update(
-    fieldType:
-      | 'email'
-      | 'username'
-      | 'password'
-      | 'api_token'
-      | 'phone_number'
-      | 'two_factor_secret'
-      | 'backup_codes',
-    params: FieldUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<FieldUpdateResponse> {
-    const { packageName, credentialName, ...body } = params;
-    return this._client.patch(
-      path`/credentials/packages/${packageName}/credentials/${credentialName}/fields/${fieldType}`,
-      { body, ...options },
-    );
+  update(fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes', params: FieldUpdateParams, options?: RequestOptions): APIPromise<FieldUpdateResponse> {
+    const { packageName, credentialName, ...body } = params
+    return this._client.patch(path`/credentials/packages/${packageName}/credentials/${credentialName}/fields/${fieldType}`, { body, ...options });
   }
 
   /**
    * Removes a single field of the given `fieldType` from the specified credential
    * while leaving the credential itself intact. Returns the updated credential.
    */
-  delete(
-    fieldType:
-      | 'email'
-      | 'username'
-      | 'password'
-      | 'api_token'
-      | 'phone_number'
-      | 'two_factor_secret'
-      | 'backup_codes',
-    params: FieldDeleteParams,
-    options?: RequestOptions,
-  ): APIPromise<FieldDeleteResponse> {
-    const { packageName, credentialName } = params;
-    return this._client.delete(
-      path`/credentials/packages/${packageName}/credentials/${credentialName}/fields/${fieldType}`,
-      options,
-    );
+  delete(fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes', params: FieldDeleteParams, options?: RequestOptions): APIPromise<FieldDeleteResponse> {
+    const { packageName, credentialName } = params
+    return this._client.delete(path`/credentials/packages/${packageName}/credentials/${credentialName}/fields/${fieldType}`, options);
   }
 }
 
 export interface FieldCreateResponse {
-  data: CredentialsAPI.Credential;
+  data: FieldCreateResponse.Data;
 
   message: string;
 
   success: true;
+}
+
+export namespace FieldCreateResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
+
+      value: string;
+    }
+  }
 }
 
 export interface FieldUpdateResponse {
-  data: CredentialsAPI.Credential;
+  data: FieldUpdateResponse.Data;
 
   message: string;
 
   success: true;
 }
 
+export namespace FieldUpdateResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
+
+      value: string;
+    }
+  }
+}
+
 export interface FieldDeleteResponse {
-  data: CredentialsAPI.Credential;
+  data: FieldDeleteResponse.Data;
 
   message: string;
 
   success: true;
+}
+
+export namespace FieldDeleteResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
+
+      value: string;
+    }
+  }
 }
 
 export interface FieldCreateParams {
@@ -105,14 +160,7 @@ export interface FieldCreateParams {
   /**
    * Body param
    */
-  fieldType:
-    | 'email'
-    | 'username'
-    | 'password'
-    | 'api_token'
-    | 'phone_number'
-    | 'two_factor_secret'
-    | 'backup_codes';
+  fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
 
   /**
    * Body param
@@ -150,6 +198,6 @@ export declare namespace Fields {
     type FieldDeleteResponse as FieldDeleteResponse,
     type FieldCreateParams as FieldCreateParams,
     type FieldUpdateParams as FieldUpdateParams,
-    type FieldDeleteParams as FieldDeleteParams,
+    type FieldDeleteParams as FieldDeleteParams
   };
 }

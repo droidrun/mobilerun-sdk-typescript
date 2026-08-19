@@ -4,9 +4,9 @@ import { APIResource } from '../../core/resource';
 import * as TasksAPI from './tasks';
 import * as Shared from '../shared';
 import * as ScreenshotsAPI from './screenshots';
-import { MediaResponse, ScreenshotListResponse, ScreenshotRetrieveParams, Screenshots } from './screenshots';
+import { ScreenshotListResponse, ScreenshotRetrieveParams, ScreenshotRetrieveResponse, Screenshots } from './screenshots';
 import * as UiStatesAPI from './ui-states';
-import { UiStateListResponse, UiStateRetrieveParams, UiStates } from './ui-states';
+import { UiStateListResponse, UiStateRetrieveParams, UiStateRetrieveResponse, UiStates } from './ui-states';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -29,10 +29,7 @@ export class Tasks extends APIResource {
   /**
    * List tasks with optional filtering, sorting, and pagination.
    */
-  list(
-    query: TaskListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TaskListResponse> {
+  list(query: TaskListParams | null | undefined = {}, options?: RequestOptions): APIPromise<TaskListResponse> {
     return this._client.get('/tasks', { query, ...options });
   }
 
@@ -40,10 +37,7 @@ export class Tasks extends APIResource {
    * Attach to a running task and receive its events as an SSE stream.
    */
   attach(taskID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.get(path`/tasks/${taskID}/attach`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.get(path`/tasks/${taskID}/attach`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -65,15 +59,8 @@ export class Tasks extends APIResource {
    * details.
    */
   run(params: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post('/tasks', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params
+    return this._client.post('/tasks', { body, ...options, headers: buildHeaders([{...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -88,11 +75,7 @@ export class Tasks extends APIResource {
    * Send a message to a running agent task. The message ID is delivered via SSE
    * (UserMessageEvent with action=queued).
    */
-  sendMessage(
-    taskID: string,
-    body: TaskSendMessageParams,
-    options?: RequestOptions,
-  ): APIPromise<TaskSendMessageResponse> {
+  sendMessage(taskID: string, body: TaskSendMessageParams, options?: RequestOptions): APIPromise<TaskSendMessageResponse> {
     return this._client.post(path`/tasks/${taskID}/message`, { body, ...options });
   }
 
@@ -103,39 +86,6 @@ export class Tasks extends APIResource {
   stop(taskID: string, options?: RequestOptions): APIPromise<TaskStopResponse> {
     return this._client.post(path`/tasks/${taskID}/cancel`, options);
   }
-}
-
-export interface PackageCredentials {
-  credentialNames: Array<string>;
-
-  packageName: string;
-}
-
-export interface Task {
-  createdAt: string;
-
-  taskId: string;
-
-  updatedAt: string;
-}
-
-export type TaskStatus =
-  | 'queued'
-  | 'created'
-  | 'running'
-  | 'cancelling'
-  | 'completed'
-  | 'failed'
-  | 'cancelled';
-
-export interface UsageResult {
-  request_tokens: number;
-
-  requests: number;
-
-  response_tokens: number;
-
-  total_tokens: number;
 }
 
 export interface TaskRetrieveResponse {
@@ -163,7 +113,7 @@ export namespace TaskRetrieveResponse {
 
     ownerId: string;
 
-    status: TasksAPI.TaskStatus;
+    status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
     task: string;
 
@@ -190,7 +140,7 @@ export namespace TaskRetrieveResponse {
 
     createdBy?: string | null;
 
-    credentials?: Array<TasksAPI.PackageCredentials>;
+    credentials?: Array<Task.Credential>;
 
     creditsUsed?: number | null;
 
@@ -237,6 +187,14 @@ export namespace TaskRetrieveResponse {
     vision?: boolean;
 
     vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+  }
+
+  export namespace Task {
+    export interface Credential {
+      credentialNames: Array<string>;
+
+      packageName: string;
+    }
   }
 }
 
@@ -270,7 +228,7 @@ export namespace TaskListResponse {
 
     ownerId: string;
 
-    status: TasksAPI.TaskStatus;
+    status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
     task: string;
 
@@ -297,7 +255,7 @@ export namespace TaskListResponse {
 
     createdBy?: string | null;
 
-    credentials?: Array<TasksAPI.PackageCredentials>;
+    credentials?: Array<Item.Credential>;
 
     creditsUsed?: number | null;
 
@@ -345,13 +303,21 @@ export namespace TaskListResponse {
 
     vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
   }
+
+  export namespace Item {
+    export interface Credential {
+      credentialNames: Array<string>;
+
+      packageName: string;
+    }
+  }
 }
 
 export interface TaskGetStatusResponse {
   /**
    * The status of the task
    */
-  status: TaskStatus;
+  status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
   /**
    * Execution metadata for abnormal terminal outcomes
@@ -413,39 +379,7 @@ export interface TaskGetTrajectoryResponse {
   /**
    * The trajectory of the task
    */
-  trajectory: Array<
-    | TaskGetTrajectoryResponse.TrajectoryQueuedEvent
-    | TaskGetTrajectoryResponse.TrajectoryCreatedEvent
-    | TaskGetTrajectoryResponse.TrajectoryExceptionEvent
-    | TaskGetTrajectoryResponse.TrajectoryCancelEvent
-    | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent
-    | TaskGetTrajectoryResponse.TrajectoryStartEvent
-    | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent
-    | TaskGetTrajectoryResponse.TrajectoryStopEvent
-    | TaskGetTrajectoryResponse.TrajectoryResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerPlanEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentToolCallEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentOutputEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentEndEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentExecuteEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryToolExecutionEvent
-    | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerContextEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerPlanDetailsEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorContextEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryUserMessageEvent
-    | TaskGetTrajectoryResponse.TrajectoryUnknownEvent
-  >;
+  trajectory: Array<TaskGetTrajectoryResponse.TrajectoryQueuedEvent | TaskGetTrajectoryResponse.TrajectoryCreatedEvent | TaskGetTrajectoryResponse.TrajectoryExceptionEvent | TaskGetTrajectoryResponse.TrajectoryCancelEvent | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent | TaskGetTrajectoryResponse.TrajectoryStartEvent | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent | TaskGetTrajectoryResponse.TrajectoryStopEvent | TaskGetTrajectoryResponse.TrajectoryResultEvent | TaskGetTrajectoryResponse.TrajectoryManagerInputEvent | TaskGetTrajectoryResponse.TrajectoryManagerPlanEvent | TaskGetTrajectoryResponse.TrajectoryExecutorInputEvent | TaskGetTrajectoryResponse.TrajectoryExecutorResultEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentInputEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentResponseEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentToolCallEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentOutputEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentEndEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentExecuteEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentResultEvent | TaskGetTrajectoryResponse.TrajectoryToolExecutionEvent | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent | TaskGetTrajectoryResponse.TrajectoryManagerContextEvent | TaskGetTrajectoryResponse.TrajectoryManagerResponseEvent | TaskGetTrajectoryResponse.TrajectoryManagerPlanDetailsEvent | TaskGetTrajectoryResponse.TrajectoryExecutorContextEvent | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent | TaskGetTrajectoryResponse.TrajectoryUserMessageEvent | TaskGetTrajectoryResponse.TrajectoryUnknownEvent>;
 }
 
 export namespace TaskGetTrajectoryResponse {
@@ -716,7 +650,19 @@ export namespace TaskGetTrajectoryResponse {
 
       code?: string | null;
 
-      usage?: TasksAPI.UsageResult | null;
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
     }
   }
 
@@ -869,7 +815,19 @@ export namespace TaskGetTrajectoryResponse {
     export interface Data {
       response: string;
 
-      usage?: TasksAPI.UsageResult | null;
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
     }
   }
 
@@ -939,7 +897,19 @@ export namespace TaskGetTrajectoryResponse {
     export interface Data {
       response: string;
 
-      usage?: TasksAPI.UsageResult | null;
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
     }
   }
 
@@ -1037,7 +1007,7 @@ export interface TaskRunResponse {
   /**
    * The status of the task (queued or created)
    */
-  status: TaskStatus;
+  status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
   /**
    * The URL of the stream (null when queued)
@@ -1045,7 +1015,7 @@ export interface TaskRunResponse {
   streamUrl?: string | null;
 }
 
-export type TaskRunStreamedResponse = unknown;
+export type TaskRunStreamedResponse = unknown
 
 export interface TaskSendMessageResponse {
   /**
@@ -1085,7 +1055,7 @@ export interface TaskListParams {
    */
   query?: string | null;
 
-  status?: TaskStatus | null;
+  status?: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled' | null;
 }
 
 export interface TaskRunParams {
@@ -1122,7 +1092,7 @@ export interface TaskRunParams {
   /**
    * Body param
    */
-  credentials?: Array<PackageCredentials>;
+  credentials?: Array<TaskRunParams.Credential>;
 
   /**
    * Body param: The display ID of the device to run the task on.
@@ -1197,6 +1167,14 @@ export interface TaskRunParams {
   'Idempotency-Key'?: string;
 }
 
+export namespace TaskRunParams {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
+}
+
 export interface TaskRunStreamedParams {
   /**
    * The ID of the device to run the task on.
@@ -1213,7 +1191,7 @@ export interface TaskRunStreamedParams {
 
   continueOnFailure?: boolean;
 
-  credentials?: Array<PackageCredentials>;
+  credentials?: Array<TaskRunStreamedParams.Credential>;
 
   /**
    * The display ID of the device to run the task on.
@@ -1254,6 +1232,14 @@ export interface TaskRunStreamedParams {
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
 }
 
+export namespace TaskRunStreamedParams {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
+}
+
 export interface TaskSendMessageParams {
   /**
    * Message to send to the running agent
@@ -1266,10 +1252,6 @@ Tasks.UiStates = UiStates;
 
 export declare namespace Tasks {
   export {
-    type PackageCredentials as PackageCredentials,
-    type Task as Task,
-    type TaskStatus as TaskStatus,
-    type UsageResult as UsageResult,
     type TaskRetrieveResponse as TaskRetrieveResponse,
     type TaskListResponse as TaskListResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,
@@ -1281,19 +1263,20 @@ export declare namespace Tasks {
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
-    type TaskSendMessageParams as TaskSendMessageParams,
+    type TaskSendMessageParams as TaskSendMessageParams
   };
 
   export {
     Screenshots as Screenshots,
-    type MediaResponse as MediaResponse,
+    type ScreenshotRetrieveResponse as ScreenshotRetrieveResponse,
     type ScreenshotListResponse as ScreenshotListResponse,
-    type ScreenshotRetrieveParams as ScreenshotRetrieveParams,
+    type ScreenshotRetrieveParams as ScreenshotRetrieveParams
   };
 
   export {
     UiStates as UiStates,
+    type UiStateRetrieveResponse as UiStateRetrieveResponse,
     type UiStateListResponse as UiStateListResponse,
-    type UiStateRetrieveParams as UiStateRetrieveParams,
+    type UiStateRetrieveParams as UiStateRetrieveParams
   };
 }
