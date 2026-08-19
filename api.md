@@ -260,6 +260,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/devices/state.ts">A11YNode</a></code>
 - <code><a href="./src/resources/devices/state.ts">StateScreenshotResponse</a></code>
 - <code><a href="./src/resources/devices/state.ts">StateTimeResponse</a></code>
 - <code><a href="./src/resources/devices/state.ts">StateUiResponse</a></code>

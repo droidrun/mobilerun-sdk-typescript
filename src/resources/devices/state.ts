@@ -36,16 +36,66 @@ export class State extends APIResource {
   }
 }
 
+export interface A11YNode {
+  boundsInScreen: A11YNode.BoundsInScreen;
+
+  children: Array<A11YNode> | null;
+
+  className: string;
+
+  contentDescription: string;
+
+  isCheckable: boolean;
+
+  isChecked: boolean;
+
+  isClickable: boolean;
+
+  isEnabled: boolean;
+
+  isFocusable: boolean;
+
+  isFocused: boolean;
+
+  isLongClickable: boolean;
+
+  isPassword: boolean;
+
+  isScrollable: boolean;
+
+  isSelected: boolean;
+
+  packageName: string;
+
+  resourceId: string;
+
+  text: string;
+
+  isVisibleToUser?: boolean;
+}
+
+export namespace A11YNode {
+  export interface BoundsInScreen {
+    bottom: number;
+
+    left: number;
+
+    right: number;
+
+    top: number;
+  }
+}
+
 export type StateScreenshotResponse = string
 
 export type StateTimeResponse = string
 
 export interface StateUiResponse {
-  a11y_tree: StateUiResponse.A11yTree;
+  a11y_tree: A11YNode;
 
   device_context: StateUiResponse.DeviceContext;
 
-  ime_tree: StateUiResponse.ImeTree;
+  ime_tree: A11YNode;
 
   phone_state: StateUiResponse.PhoneState;
 
@@ -56,56 +106,6 @@ export interface StateUiResponse {
 }
 
 export namespace StateUiResponse {
-  export interface A11yTree {
-    boundsInScreen: A11yTree.BoundsInScreen;
-
-    children: Array<unknown> | null;
-
-    className: string;
-
-    contentDescription: string;
-
-    isCheckable: boolean;
-
-    isChecked: boolean;
-
-    isClickable: boolean;
-
-    isEnabled: boolean;
-
-    isFocusable: boolean;
-
-    isFocused: boolean;
-
-    isLongClickable: boolean;
-
-    isPassword: boolean;
-
-    isScrollable: boolean;
-
-    isSelected: boolean;
-
-    packageName: string;
-
-    resourceId: string;
-
-    text: string;
-
-    isVisibleToUser?: boolean;
-  }
-
-  export namespace A11yTree {
-    export interface BoundsInScreen {
-      bottom: number;
-
-      left: number;
-
-      right: number;
-
-      top: number;
-    }
-  }
-
   export interface DeviceContext {
     display_metrics: DeviceContext.DisplayMetrics;
 
@@ -137,56 +137,6 @@ export namespace StateUiResponse {
       height: number;
 
       width: number;
-    }
-  }
-
-  export interface ImeTree {
-    boundsInScreen: ImeTree.BoundsInScreen;
-
-    children: Array<unknown> | null;
-
-    className: string;
-
-    contentDescription: string;
-
-    isCheckable: boolean;
-
-    isChecked: boolean;
-
-    isClickable: boolean;
-
-    isEnabled: boolean;
-
-    isFocusable: boolean;
-
-    isFocused: boolean;
-
-    isLongClickable: boolean;
-
-    isPassword: boolean;
-
-    isScrollable: boolean;
-
-    isSelected: boolean;
-
-    packageName: string;
-
-    resourceId: string;
-
-    text: string;
-
-    isVisibleToUser?: boolean;
-  }
-
-  export namespace ImeTree {
-    export interface BoundsInScreen {
-      bottom: number;
-
-      left: number;
-
-      right: number;
-
-      top: number;
     }
   }
 
@@ -245,6 +195,7 @@ export interface StateUiParams {
 
 export declare namespace State {
   export {
+    type A11YNode as A11YNode,
     type StateScreenshotResponse as StateScreenshotResponse,
     type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,

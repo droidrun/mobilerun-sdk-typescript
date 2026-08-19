@@ -16,6 +16,6 @@ export { Packages, type PackageListResponse, type PackageListParams } from './pa
 export { Profile, type ProfileUpdateParams } from './profile';;
 export { Proxy, type ProxyStatusResponse, type ProxyConnectParams, type ProxyDisconnectParams, type ProxyStatusParams } from './proxy';;
 export { Recordings, type RecordingListResponse, type RecordingStartResponse, type RecordingStatusResponse, type RecordingStopResponse, type RecordingListParams, type RecordingDeleteParams, type RecordingStartParams, type RecordingStatusParams, type RecordingStopParams, type RecordingTrajectoryParams, type RecordingVideoParams } from './recordings';;
-export { State, type StateScreenshotResponse, type StateTimeResponse, type StateUiResponse, type StateScreenshotParams, type StateTimeParams, type StateUiParams } from './state';;
+export { State, type A11YNode, type StateScreenshotResponse, type StateTimeResponse, type StateUiResponse, type StateScreenshotParams, type StateTimeParams, type StateUiParams } from './state';;
 export { Tasks, type TaskListResponse, type TaskListParams } from './tasks';;
 export { Timezone, type TimezoneGetResponse, type TimezoneGetParams, type TimezoneSetParams } from './timezone';;

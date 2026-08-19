@@ -32,7 +32,7 @@ import { Proxy as ProxyAPIProxy, ProxyConnectParams, ProxyDisconnectParams, Prox
 import * as RecordingsAPI from './recordings';
 import { RecordingDeleteParams, RecordingListParams, RecordingListResponse, RecordingStartParams, RecordingStartResponse, RecordingStatusParams, RecordingStatusResponse, RecordingStopParams, RecordingStopResponse, RecordingTrajectoryParams, RecordingVideoParams, Recordings } from './recordings';
 import * as StateAPI from './state';
-import { State, StateScreenshotParams, StateScreenshotResponse, StateTimeParams, StateTimeResponse, StateUiParams, StateUiResponse } from './state';
+import { A11YNode, State, StateScreenshotParams, StateScreenshotResponse, StateTimeParams, StateTimeResponse, StateUiParams, StateUiResponse } from './state';
 import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimezoneAPI from './timezone';
@@ -817,6 +817,7 @@ export declare namespace Devices {
 
   export {
     State as State,
+    type A11YNode as A11YNode,
     type StateScreenshotResponse as StateScreenshotResponse,
     type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
