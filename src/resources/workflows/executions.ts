@@ -21,11 +21,16 @@ export class Executions extends APIResource {
    * `triggerId`, `status`, and a `from`/`to` time range, plus free-text `search` and
    * ordering by startedAt, finishedAt, or status.
    */
-  list(
-    query: ExecutionListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ExecutionListResponse> {
+  list(query: ExecutionListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ExecutionListResponse> {
     return this._client.get('/executions', { query, ...options });
+  }
+
+  /**
+   * Signals the worker to stop the execution between steps and marks it cancelled.
+   * Idempotent-ish: already-terminal executions return 409.
+   */
+  abort(executionID: string, options?: RequestOptions): APIPromise<ExecutionAbortResponse> {
+    return this._client.post(path`/executions/${executionID}/abort`, options);
   }
 
   /**
@@ -33,46 +38,9 @@ export class Executions extends APIResource {
    * duration, and the last execution time. Can be scoped by `flowId`, `triggerId`,
    * and a `from`/`to` time range.
    */
-  getMetrics(
-    query: ExecutionGetMetricsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ExecutionGetMetricsResponse> {
+  getMetrics(query: ExecutionGetMetricsParams | null | undefined = {}, options?: RequestOptions): APIPromise<ExecutionGetMetricsResponse> {
     return this._client.get('/executions/metrics', { query, ...options });
   }
-}
-
-export interface FlowExecution {
-  id: string;
-
-  error: string | null;
-
-  eventId: string | null;
-
-  finishedAt: string | null;
-
-  flowId: string;
-
-  flowName: string | null;
-
-  kind: 'live' | 'dry_run';
-
-  startedAt: string | null;
-
-  status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid' | null;
-
-  triggerId: string;
-
-  triggerName: string | null;
-
-  /**
-   * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
-   * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
-   * step that opted into a verdict — null otherwise. Table-backed steps (current
-   * executions) also carry a `status` string (e.g. success/failed/stopped, see
-   * deriveStepStatus); it is optional and absent on legacy blob-only executions, so
-   * clients must not assume its presence.
-   */
-  result?: unknown;
 }
 
 export interface ExecutionRetrieveResponse {
@@ -80,8 +48,14 @@ export interface ExecutionRetrieveResponse {
 }
 
 export namespace ExecutionRetrieveResponse {
-  export interface Data extends ExecutionsAPI.FlowExecution {
+  export interface Data {
+    id: string;
+
     createdBy: string | null;
+
+    error: string | null;
+
+    eventId: string | null;
 
     /**
      * Files produced by files.upload steps, plus files an agent.run step reported on
@@ -89,6 +63,32 @@ export namespace ExecutionRetrieveResponse {
      * the turn); derived server-side at read time.
      */
     files: Array<Data.File>;
+
+    finishedAt: string | null;
+
+    flowId: string;
+
+    flowName: string | null;
+
+    kind: 'live' | 'dry_run';
+
+    startedAt: string | null;
+
+    status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid' | null;
+
+    triggerId: string;
+
+    triggerName: string | null;
+
+    /**
+     * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
+     * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
+     * step that opted into a verdict — null otherwise. Table-backed steps (current
+     * executions) also carry a `status` string (e.g. success/failed/stopped, see
+     * deriveStepStatus); it is optional and absent on legacy blob-only executions, so
+     * clients must not assume its presence.
+     */
+    result?: unknown;
   }
 
   export namespace Data {
@@ -111,8 +111,80 @@ export interface ExecutionListResponse {
 }
 
 export namespace ExecutionListResponse {
-  export interface Item extends ExecutionsAPI.FlowExecution {
+  export interface Item {
+    id: string;
+
     createdBy: string | null;
+
+    error: string | null;
+
+    eventId: string | null;
+
+    finishedAt: string | null;
+
+    flowId: string;
+
+    flowName: string | null;
+
+    kind: 'live' | 'dry_run';
+
+    startedAt: string | null;
+
+    status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid' | null;
+
+    triggerId: string;
+
+    triggerName: string | null;
+
+    /**
+     * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
+     * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
+     * step that opted into a verdict — null otherwise. Table-backed steps (current
+     * executions) also carry a `status` string (e.g. success/failed/stopped, see
+     * deriveStepStatus); it is optional and absent on legacy blob-only executions, so
+     * clients must not assume its presence.
+     */
+    result?: unknown;
+  }
+}
+
+export interface ExecutionAbortResponse {
+  data: ExecutionAbortResponse.Data;
+}
+
+export namespace ExecutionAbortResponse {
+  export interface Data {
+    id: string;
+
+    error: string | null;
+
+    eventId: string | null;
+
+    finishedAt: string | null;
+
+    flowId: string;
+
+    flowName: string | null;
+
+    kind: 'live' | 'dry_run';
+
+    startedAt: string | null;
+
+    status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid' | null;
+
+    triggerId: string;
+
+    triggerName: string | null;
+
+    /**
+     * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
+     * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
+     * step that opted into a verdict — null otherwise. Table-backed steps (current
+     * executions) also carry a `status` string (e.g. success/failed/stopped, see
+     * deriveStepStatus); it is optional and absent on legacy blob-only executions, so
+     * clients must not assume its presence.
+     */
+    result?: unknown;
   }
 }
 
@@ -184,11 +256,11 @@ export interface ExecutionGetMetricsParams {
 
 export declare namespace Executions {
   export {
-    type FlowExecution as FlowExecution,
     type ExecutionRetrieveResponse as ExecutionRetrieveResponse,
     type ExecutionListResponse as ExecutionListResponse,
+    type ExecutionAbortResponse as ExecutionAbortResponse,
     type ExecutionGetMetricsResponse as ExecutionGetMetricsResponse,
     type ExecutionListParams as ExecutionListParams,
-    type ExecutionGetMetricsParams as ExecutionGetMetricsParams,
+    type ExecutionGetMetricsParams as ExecutionGetMetricsParams
   };
 }

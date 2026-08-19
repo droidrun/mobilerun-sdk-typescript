@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AppsAPI from './apps';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -12,24 +13,9 @@ export class Apps extends APIResource {
    * package name and label. System and protected apps are excluded unless the
    * corresponding query parameters are set.
    */
-  list(
-    deviceID: string,
-    params: AppListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<AppListResponse | null> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/apps`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  list(deviceID: string, params: AppListParams | null | undefined = {}, options?: RequestOptions): APIPromise<AppListResponse | null> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/apps`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -37,20 +23,17 @@ export class Apps extends APIResource {
    * Protected packages cannot be deleted.
    */
   delete(packageName: string, params: AppDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.delete(path`/devices/${deviceId}/apps/${packageName}`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.delete(path`/devices/${deviceId}/apps/${packageName}`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+  }
+
+  /**
+   * Grants an Android runtime permission to the package named in the path. The
+   * permission is given by its short name (e.g. POST_NOTIFICATIONS).
+   */
+  grantPermission(permission: 'POST_NOTIFICATIONS', params: AppGrantPermissionParams, options?: RequestOptions): APIPromise<void> {
+    const { deviceId, packageName, 'X-Device-Display-ID': xDeviceDisplayID } = params
+    return this._client.put(path`/devices/${deviceId}/apps/${packageName}/permissions/${permission}`, { ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -66,20 +49,29 @@ export class Apps extends APIResource {
    * retry once that attempt reaches a terminal state.
    */
   install(deviceID: string, params: AppInstallParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/apps`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/apps`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+  }
+
+  /**
+   * Reports the backend's view of background app-install attempts on this device —
+   * status reflects the install ATTEMPT, not device ground truth; list-apps remains
+   * authoritative for what is actually installed. Records are in-memory and lost on
+   * service restart; terminal records are kept ~15 minutes. Not gated on device
+   * readiness, so it also answers while the device is offline or crashed.
+   */
+  listInstalls(deviceID: string, params: AppListInstallsParams | null | undefined = {}, options?: RequestOptions): APIPromise<AppListInstallsResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/apps/installs`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
+  }
+
+  /**
+   * Revokes an Android runtime permission from the package named in the path. The
+   * permission is given by its short name (e.g. POST_NOTIFICATIONS).
+   */
+  revokePermission(permission: 'POST_NOTIFICATIONS', params: AppRevokePermissionParams, options?: RequestOptions): APIPromise<void> {
+    const { deviceId, packageName, 'X-Device-Display-ID': xDeviceDisplayID } = params
+    return this._client.delete(path`/devices/${deviceId}/apps/${packageName}/permissions/${permission}`, { ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -88,20 +80,8 @@ export class Apps extends APIResource {
    * started.
    */
   start(packageName: string, params: AppStartParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.put(path`/devices/${deviceId}/apps/${packageName}`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.put(path`/devices/${deviceId}/apps/${packageName}`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -110,24 +90,12 @@ export class Apps extends APIResource {
    * be stopped.
    */
   stop(packageName: string, params: AppStopParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.patch(path`/devices/${deviceId}/apps/${packageName}`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { deviceId, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.patch(path`/devices/${deviceId}/apps/${packageName}`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
-export type AppListResponse = Array<AppListResponse.AppListResponseItem>;
+export type AppListResponse = Array<AppListResponse.AppListResponseItem>
 
 export namespace AppListResponse {
   export interface AppListResponseItem {
@@ -140,6 +108,45 @@ export namespace AppListResponse {
     versionCode: number;
 
     versionName: string;
+  }
+}
+
+export interface AppListInstallsResponse {
+  installs: Array<AppListInstallsResponse.Install> | null;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export namespace AppListInstallsResponse {
+  export interface Install {
+    /**
+     * Android package name or iOS bundle id
+     */
+    appId: string;
+
+    /**
+     * android or ios
+     */
+    platform: string;
+
+    startedAt: string;
+
+    /**
+     * On iOS MDM devices, succeeded means the install command was accepted by the
+     * device's MDM channel, not that the install finished on-device.
+     */
+    status: 'running' | 'succeeded' | 'failed';
+
+    updatedAt: string;
+
+    /**
+     * Closed set: download_failed, adb_install_failed, panic, timeout, failed. Only
+     * present when status is failed.
+     */
+    errorClass?: string;
   }
 }
 
@@ -172,7 +179,24 @@ export interface AppDeleteParams {
   'X-Device-Display-ID'?: number;
 }
 
-export type AppInstallParams = AppInstallParams.Variant0 | AppInstallParams.Variant1;
+export interface AppGrantPermissionParams {
+  /**
+   * Path param
+   */
+  deviceId: string;
+
+  /**
+   * Path param
+   */
+  packageName: string;
+
+  /**
+   * Header param
+   */
+  'X-Device-Display-ID'?: number;
+}
+
+export type AppInstallParams = AppInstallParams.Variant0 | AppInstallParams.Variant1
 
 export declare namespace AppInstallParams {
   export interface Variant0 {
@@ -224,6 +248,27 @@ export declare namespace AppInstallParams {
   }
 }
 
+export interface AppListInstallsParams {
+  'X-Device-Display-ID'?: number;
+}
+
+export interface AppRevokePermissionParams {
+  /**
+   * Path param
+   */
+  deviceId: string;
+
+  /**
+   * Path param
+   */
+  packageName: string;
+
+  /**
+   * Header param
+   */
+  'X-Device-Display-ID'?: number;
+}
+
 export interface AppStartParams {
   /**
    * Path param
@@ -262,10 +307,14 @@ export interface AppStopParams {
 export declare namespace Apps {
   export {
     type AppListResponse as AppListResponse,
+    type AppListInstallsResponse as AppListInstallsResponse,
     type AppListParams as AppListParams,
     type AppDeleteParams as AppDeleteParams,
+    type AppGrantPermissionParams as AppGrantPermissionParams,
     type AppInstallParams as AppInstallParams,
+    type AppListInstallsParams as AppListInstallsParams,
+    type AppRevokePermissionParams as AppRevokePermissionParams,
     type AppStartParams as AppStartParams,
-    type AppStopParams as AppStopParams,
+    type AppStopParams as AppStopParams
   };
 }

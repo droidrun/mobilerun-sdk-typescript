@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as TriggersAPI from './triggers';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -30,11 +31,7 @@ export class Triggers extends APIResource {
    * changed, the type-specific field rules are re-validated. Returns 404 if the
    * trigger does not exist.
    */
-  update(
-    triggerID: string,
-    body: TriggerUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TriggerUpdateResponse> {
+  update(triggerID: string, body: TriggerUpdateParams | null | undefined = {}, options?: RequestOptions): APIPromise<TriggerUpdateResponse> {
     return this._client.patch(path`/triggers/${triggerID}`, { body, ...options });
   }
 
@@ -42,10 +39,7 @@ export class Triggers extends APIResource {
    * Return a paginated list of triggers. Supports filtering by `activation` and
    * `eventType`, free-text `search`, and ordering by name, createdAt, or updatedAt.
    */
-  list(
-    query: TriggerListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TriggerListResponse> {
+  list(query: TriggerListParams | null | undefined = {}, options?: RequestOptions): APIPromise<TriggerListResponse> {
     return this._client.get('/triggers', { query, ...options });
   }
 
@@ -75,11 +69,7 @@ export class Triggers extends APIResource {
    * Only triggers with `activation = "custom"` can be fired through this endpoint;
    * event and schedule triggers return 409.
    */
-  fire(
-    triggerID: string,
-    body: TriggerFireParams,
-    options?: RequestOptions,
-  ): APIPromise<TriggerFireResponse> {
+  fire(triggerID: string, body: TriggerFireParams, options?: RequestOptions): APIPromise<TriggerFireResponse> {
     return this._client.post(path`/triggers/${triggerID}/fire`, { body, ...options });
   }
 }
@@ -372,9 +362,12 @@ export namespace TriggerCreateParams {
 export interface TriggerUpdateParams {
   activation?: 'event' | 'schedule' | 'custom';
 
-  conditions?: TriggerUpdateParams.Conditions;
+  conditions?: TriggerUpdateParams.Conditions | null;
 
-  customPayloadSchema?: { [key: string]: unknown };
+  /**
+   * Optional JSON Schema for validating payloads sent to this custom trigger
+   */
+  customPayloadSchema?: { [key: string]: unknown } | null;
 
   description?: string;
 
@@ -382,7 +375,7 @@ export interface TriggerUpdateParams {
 
   name?: string;
 
-  scheduleRule?: TriggerUpdateParams.ScheduleRule;
+  scheduleRule?: TriggerUpdateParams.ScheduleRule | null;
 
   timezone?: string | null;
 }
@@ -466,6 +459,6 @@ export declare namespace Triggers {
     type TriggerCreateParams as TriggerCreateParams,
     type TriggerUpdateParams as TriggerUpdateParams,
     type TriggerListParams as TriggerListParams,
-    type TriggerFireParams as TriggerFireParams,
+    type TriggerFireParams as TriggerFireParams
   };
 }

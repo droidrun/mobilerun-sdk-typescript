@@ -1,6 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as ProxiesAPI from './proxies';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -30,11 +32,7 @@ export class Proxies extends APIResource {
    * with creation, the body is a `protocol`-discriminated union of socks5 or
    * wireguard fields. Returns the updated config.
    */
-  update(
-    proxyID: string,
-    body: ProxyUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<ProxyUpdateResponse> {
+  update(proxyID: string, body: ProxyUpdateParams, options?: RequestOptions): APIPromise<ProxyUpdateResponse> {
     return this._client.put(path`/proxies/${proxyID}`, { body, ...options });
   }
 
@@ -42,10 +40,7 @@ export class Proxies extends APIResource {
    * Returns all proxy configs for the authenticated user. An optional `protocol`
    * query parameter (`socks5` or `wireguard`) filters the results by proxy type.
    */
-  list(
-    query: ProxyListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ProxyListResponse> {
+  list(query: ProxyListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ProxyListResponse> {
     return this._client.get('/proxies', { query, ...options });
   }
 
@@ -65,25 +60,15 @@ export class Proxies extends APIResource {
   }
 }
 
-export type ProxyConfig = ProxyConfig.Socks5ProxyConfig | ProxyConfig.WireguardProxyConfig;
+export interface ProxyCreateResponse {
+  data: Shared.Socks5ProxyConfig | ProxyCreateResponse.WireguardProxyConfig;
 
-export namespace ProxyConfig {
-  export interface Socks5ProxyConfig {
-    host: string;
+  message: string;
 
-    name: string;
+  success: true;
+}
 
-    password: string;
-
-    port: number;
-
-    protocol: 'socks5';
-
-    proxyId: string;
-
-    user: string;
-  }
-
+export namespace ProxyCreateResponse {
   export interface WireguardProxyConfig {
     config: string;
 
@@ -95,36 +80,76 @@ export namespace ProxyConfig {
   }
 }
 
-export interface ProxyCreateResponse {
-  data: ProxyConfig;
-
-  message: string;
-
-  success: true;
+export interface ProxyRetrieveResponse {
+  data: Shared.Socks5ProxyConfig | ProxyRetrieveResponse.WireguardProxyConfig;
 }
 
-export interface ProxyRetrieveResponse {
-  data: ProxyConfig;
+export namespace ProxyRetrieveResponse {
+  export interface WireguardProxyConfig {
+    config: string;
+
+    name: string;
+
+    protocol: 'wireguard';
+
+    proxyId: string;
+  }
 }
 
 export interface ProxyUpdateResponse {
-  data: ProxyConfig;
+  data: Shared.Socks5ProxyConfig | ProxyUpdateResponse.WireguardProxyConfig;
 
   message: string;
 
   success: true;
+}
+
+export namespace ProxyUpdateResponse {
+  export interface WireguardProxyConfig {
+    config: string;
+
+    name: string;
+
+    protocol: 'wireguard';
+
+    proxyId: string;
+  }
 }
 
 export interface ProxyListResponse {
-  data: Array<ProxyConfig>;
+  data: Array<Shared.Socks5ProxyConfig | ProxyListResponse.WireguardProxyConfig>;
+}
+
+export namespace ProxyListResponse {
+  export interface WireguardProxyConfig {
+    config: string;
+
+    name: string;
+
+    protocol: 'wireguard';
+
+    proxyId: string;
+  }
 }
 
 export interface ProxyDeleteResponse {
-  data: ProxyConfig;
+  data: Shared.Socks5ProxyConfig | ProxyDeleteResponse.WireguardProxyConfig;
 
   message: string;
 
   success: true;
+}
+
+export namespace ProxyDeleteResponse {
+  export interface WireguardProxyConfig {
+    config: string;
+
+    name: string;
+
+    protocol: 'wireguard';
+
+    proxyId: string;
+  }
 }
 
 export interface ProxyLookupResponse {
@@ -206,7 +231,7 @@ export namespace ProxyLookupResponse {
   }
 }
 
-export type ProxyCreateParams = ProxyCreateParams.CreateSocks5Proxy | ProxyCreateParams.CreateWireguardProxy;
+export type ProxyCreateParams = ProxyCreateParams.CreateSocks5Proxy | ProxyCreateParams.CreateWireguardProxy
 
 export declare namespace ProxyCreateParams {
   export interface CreateSocks5Proxy {
@@ -232,7 +257,7 @@ export declare namespace ProxyCreateParams {
   }
 }
 
-export type ProxyUpdateParams = ProxyUpdateParams.UpdateSocks5Proxy | ProxyUpdateParams.UpdateWireguardProxy;
+export type ProxyUpdateParams = ProxyUpdateParams.UpdateSocks5Proxy | ProxyUpdateParams.UpdateWireguardProxy
 
 export declare namespace ProxyUpdateParams {
   export interface UpdateSocks5Proxy {
@@ -286,7 +311,6 @@ export namespace ProxyLookupParams {
 
 export declare namespace Proxies {
   export {
-    type ProxyConfig as ProxyConfig,
     type ProxyCreateResponse as ProxyCreateResponse,
     type ProxyRetrieveResponse as ProxyRetrieveResponse,
     type ProxyUpdateResponse as ProxyUpdateResponse,
@@ -296,6 +320,6 @@ export declare namespace Proxies {
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
-    type ProxyLookupParams as ProxyLookupParams,
+    type ProxyLookupParams as ProxyLookupParams
   };
 }

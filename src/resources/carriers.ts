@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as CarriersAPI from './carriers';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
@@ -24,21 +25,14 @@ export class Carriers extends APIResource {
   /**
    * Update a carrier
    */
-  update(
-    carrierID: number,
-    body: CarrierUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<CarrierUpdateResponse> {
+  update(carrierID: number, body: CarrierUpdateParams, options?: RequestOptions): APIPromise<CarrierUpdateResponse> {
     return this._client.patch(path`/carriers/${carrierID}`, { body, ...options });
   }
 
   /**
    * List carriers with pagination
    */
-  list(
-    query: CarrierListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CarrierListResponse> {
+  list(query: CarrierListParams | null | undefined = {}, options?: RequestOptions): APIPromise<CarrierListResponse> {
     return this._client.get('/carriers', { query, ...options });
   }
 
@@ -503,6 +497,6 @@ export declare namespace Carriers {
     type CarrierCreateParams as CarrierCreateParams,
     type CarrierUpdateParams as CarrierUpdateParams,
     type CarrierListParams as CarrierListParams,
-    type CarrierLookupParams as CarrierLookupParams,
+    type CarrierLookupParams as CarrierLookupParams
   };
 }
