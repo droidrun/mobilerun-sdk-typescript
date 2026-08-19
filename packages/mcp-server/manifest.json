@@ -5,14 +5,13 @@
   "description": "The official MCP Server for the Mobilerun API",
   "author": {
     "name": "Mobilerun",
-    "email": "support@droidrun.ai"
+    "email": "lucius@droidrun.ai"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/droidrun/mobilerun-sdk-typescript.git"
   },
   "homepage": "https://github.com/droidrun/mobilerun-sdk-typescript/tree/main/packages/mcp-server#readme",
-  "documentation": "https://docs.mobilerun.ai",
   "server": {
     "type": "node",
     "entry_point": "index.js",
@@ -28,8 +27,8 @@
   },
   "user_config": {
     "MOBILERUN_CLOUD_API_KEY": {
-      "title": "apiKey",
-      "description": "",
+      "title": "api_key",
+      "description": "A bearer API key to authenticate requests.",
       "required": false,
       "type": "string"
     }

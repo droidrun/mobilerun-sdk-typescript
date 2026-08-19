@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ProxiesAPI from './proxies';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -19,10 +20,7 @@ export class Proxies extends APIResource {
    * Returns proxies owned by the calling tenant (the X-Owner-Id header, falling back
    * to X-User-ID). Credentials are omitted from the list.
    */
-  list(
-    query: ProxyListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ProxyListResponse> {
+  list(query: ProxyListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ProxyListResponse> {
     return this._client.get('/connect/proxies', { query, ...options });
   }
 
@@ -38,10 +36,7 @@ export class Proxies extends APIResource {
    * Returns 404 if no such proxy exists for the caller.
    */
   cancel(id: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/connect/proxies/${id}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.delete(path`/connect/proxies/${id}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -50,11 +45,7 @@ export class Proxies extends APIResource {
    * property plus ordering and pagination. Returns 503 when the connection-insights
    * backend is disabled or unreachable.
    */
-  listConnections(
-    id: string,
-    query: ProxyListConnectionsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ProxyListConnectionsResponse> {
+  listConnections(id: string, query: ProxyListConnectionsParams | null | undefined = {}, options?: RequestOptions): APIPromise<ProxyListConnectionsResponse> {
     return this._client.get(path`/connect/proxies/${id}/connections`, { query, ...options });
   }
 
@@ -593,6 +584,6 @@ export declare namespace Proxies {
     type ProxyPingResponse as ProxyPingResponse,
     type ProxyListParams as ProxyListParams,
     type ProxyBuyParams as ProxyBuyParams,
-    type ProxyListConnectionsParams as ProxyListConnectionsParams,
+    type ProxyListConnectionsParams as ProxyListConnectionsParams
   };
 }

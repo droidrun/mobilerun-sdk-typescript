@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as FlowsAPI from './flows';
+import * as ActionsAPI from './actions';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -29,12 +29,8 @@ export class Actions extends APIResource {
    * Remove a single action from a flow by its `flowActionId`. Returns 404 if the
    * flow or flow action does not exist.
    */
-  remove(
-    flowActionID: string,
-    params: ActionRemoveParams,
-    options?: RequestOptions,
-  ): APIPromise<ActionRemoveResponse> {
-    const { flowId } = params;
+  remove(flowActionID: string, params: ActionRemoveParams, options?: RequestOptions): APIPromise<ActionRemoveResponse> {
+    const { flowId } = params
     return this._client.delete(path`/flows/${flowId}/actions/${flowActionID}`, options);
   }
 
@@ -44,47 +40,73 @@ export class Actions extends APIResource {
    * include nested `children`, a `nameOverride`, param `overrides`, and a
    * `continueOnError` flag. Returns 404 if the flow does not exist.
    */
-  replace(
-    flowID: string,
-    body: ActionReplaceParams,
-    options?: RequestOptions,
-  ): APIPromise<ActionReplaceResponse> {
+  replace(flowID: string, body: ActionReplaceParams, options?: RequestOptions): APIPromise<ActionReplaceResponse> {
     return this._client.put(path`/flows/${flowID}/actions`, { body, ...options });
   }
 }
 
-export interface FlowAction {
-  id: string;
-
-  actionId: string;
-
-  continueOnError: boolean;
-
-  createdAt: string | null;
-
-  flowId: string;
-
-  nameOverride: string | null;
-
-  overrides: FlowAction.Overrides | null;
-
-  parentFlowActionId: string | null;
-
-  position: number;
+export interface ActionListResponse {
+  data: Array<ActionListResponse.Data>;
 }
 
-export namespace FlowAction {
-  export interface Overrides {
-    params?: { [key: string]: unknown };
+export namespace ActionListResponse {
+  export interface Data {
+    id: string;
+
+    actionId: string;
+
+    continueOnError: boolean;
+
+    createdAt: string | null;
+
+    flowId: string;
+
+    nameOverride: string | null;
+
+    overrides: Data.Overrides | null;
+
+    parentFlowActionId: string | null;
+
+    position: number;
+  }
+
+  export namespace Data {
+    export interface Overrides {
+      params?: { [key: string]: unknown };
+    }
   }
 }
 
-export interface ActionListResponse {
-  data: Array<FlowAction>;
+export interface ActionAddResponse {
+  data: ActionAddResponse.Data;
 }
 
-export interface ActionAddResponse {
-  data: FlowAction;
+export namespace ActionAddResponse {
+  export interface Data {
+    id: string;
+
+    actionId: string;
+
+    continueOnError: boolean;
+
+    createdAt: string | null;
+
+    flowId: string;
+
+    nameOverride: string | null;
+
+    overrides: Data.Overrides | null;
+
+    parentFlowActionId: string | null;
+
+    position: number;
+  }
+
+  export namespace Data {
+    export interface Overrides {
+      params?: { [key: string]: unknown };
+    }
+  }
 }
 
 export interface ActionRemoveResponse {
@@ -92,7 +114,35 @@ export interface ActionRemoveResponse {
 }
 
 export interface ActionReplaceResponse {
-  data: Array<FlowAction>;
+  data: Array<ActionReplaceResponse.Data>;
+}
+
+export namespace ActionReplaceResponse {
+  export interface Data {
+    id: string;
+
+    actionId: string;
+
+    continueOnError: boolean;
+
+    createdAt: string | null;
+
+    flowId: string;
+
+    nameOverride: string | null;
+
+    overrides: Data.Overrides | null;
+
+    parentFlowActionId: string | null;
+
+    position: number;
+  }
+
+  export namespace Data {
+    export interface Overrides {
+      params?: { [key: string]: unknown };
+    }
+  }
 }
 
 export interface ActionAddParams {
@@ -100,15 +150,39 @@ export interface ActionAddParams {
 
   position: number;
 
-  children?: Array<FlowsAPI.FlowChildActionInput>;
+  children?: Array<ActionAddParams.Child>;
 
   continueOnError?: boolean;
 
   nameOverride?: string;
 
-  overrides?: FlowsAPI.FlowActionOverrides | null;
+  overrides?: ActionAddParams.Overrides | null;
 
   parentFlowActionId?: string | null;
+}
+
+export namespace ActionAddParams {
+  export interface Child {
+    actionId: string;
+
+    position: number;
+
+    continueOnError?: boolean;
+
+    nameOverride?: string;
+
+    overrides?: Child.Overrides | null;
+  }
+
+  export namespace Child {
+    export interface Overrides {
+      params?: { [key: string]: unknown };
+    }
+  }
+
+  export interface Overrides {
+    params?: { [key: string]: unknown };
+  }
 }
 
 export interface ActionRemoveParams {
@@ -125,25 +199,48 @@ export namespace ActionReplaceParams {
 
     position: number;
 
-    children?: Array<FlowsAPI.FlowChildActionInput>;
+    children?: Array<Action.Child>;
 
     continueOnError?: boolean;
 
     nameOverride?: string;
 
-    overrides?: FlowsAPI.FlowActionOverrides | null;
+    overrides?: Action.Overrides | null;
+  }
+
+  export namespace Action {
+    export interface Child {
+      actionId: string;
+
+      position: number;
+
+      continueOnError?: boolean;
+
+      nameOverride?: string;
+
+      overrides?: Child.Overrides | null;
+    }
+
+    export namespace Child {
+      export interface Overrides {
+        params?: { [key: string]: unknown };
+      }
+    }
+
+    export interface Overrides {
+      params?: { [key: string]: unknown };
+    }
   }
 }
 
 export declare namespace Actions {
   export {
-    type FlowAction as FlowAction,
     type ActionListResponse as ActionListResponse,
     type ActionAddResponse as ActionAddResponse,
     type ActionRemoveResponse as ActionRemoveResponse,
     type ActionReplaceResponse as ActionReplaceResponse,
     type ActionAddParams as ActionAddParams,
     type ActionRemoveParams as ActionRemoveParams,
-    type ActionReplaceParams as ActionReplaceParams,
+    type ActionReplaceParams as ActionReplaceParams
   };
 }

@@ -2,7 +2,7 @@
   "name": "@mobilerun/sdk-mcp",
   "version": "5.1.0",
   "description": "The official MCP Server for the Mobilerun API",
-  "author": "Mobilerun <support@droidrun.ai>",
+  "author": "Mobilerun <lucius@droidrun.ai>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
@@ -24,6 +24,7 @@
     "prepack": "echo 'to pack, run pnpm build && (cd dist; pnpm pack)' && exit 1",
     "prepublishOnly": "echo 'to publish, run pnpm build && (cd dist; pnpm publish)' && exit 1",
     "format": "prettier --write --cache --cache-strategy metadata . !dist",
+    
     "tsn": "ts-node -r tsconfig-paths/register",
     "lint": "eslint .",
     "fix": "eslint --fix ."
