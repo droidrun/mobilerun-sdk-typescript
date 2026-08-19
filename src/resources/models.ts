@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as ModelsAPI from './models';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
@@ -38,5 +39,7 @@ export namespace ModelListResponse {
 }
 
 export declare namespace Models {
-  export { type ModelListResponse as ModelListResponse };
+  export {
+    type ModelListResponse as ModelListResponse
+  };
 }

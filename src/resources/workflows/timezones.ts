@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as TimezonesAPI from './timezones';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -18,5 +19,7 @@ export interface TimezoneListResponse {
 }
 
 export declare namespace Timezones {
-  export { type TimezoneListResponse as TimezoneListResponse };
+  export {
+    type TimezoneListResponse as TimezoneListResponse
+  };
 }

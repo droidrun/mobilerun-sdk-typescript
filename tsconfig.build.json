@@ -6,7 +6,7 @@
     "rootDir": "./dist/src",
     "paths": {
       "@mobilerun/sdk/*": ["./dist/src/*"],
-      "@mobilerun/sdk": ["./dist/src/index.ts"]
+      "@mobilerun/sdk": ["./dist/src/index.ts"],
     },
     "noEmit": false,
     "declaration": true,

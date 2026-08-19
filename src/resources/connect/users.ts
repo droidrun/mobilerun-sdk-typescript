@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as UsersAPI from './users';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -36,10 +37,7 @@ export class Users extends APIResource {
   /**
    * Returns SOCKS5 users owned by the caller. Passwords are omitted from the list.
    */
-  list(
-    query: UserListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<UserListResponse> {
+  list(query: UserListParams | null | undefined = {}, options?: RequestOptions): APIPromise<UserListResponse> {
     return this._client.get('/connect/users', { query, ...options });
   }
 
@@ -48,10 +46,7 @@ export class Users extends APIResource {
    * any proxy binding. Returns 404 if no such user exists for the caller.
    */
   delete(id: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/connect/users/${id}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.delete(path`/connect/users/${id}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -60,11 +55,7 @@ export class Users extends APIResource {
    * property plus ordering and pagination. Returns 503 when the connection-insights
    * backend is disabled or unreachable.
    */
-  listConnections(
-    id: string,
-    query: UserListConnectionsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<UserListConnectionsResponse> {
+  listConnections(id: string, query: UserListConnectionsParams | null | undefined = {}, options?: RequestOptions): APIPromise<UserListConnectionsResponse> {
     return this._client.get(path`/connect/users/${id}/connections`, { query, ...options });
   }
 }
@@ -512,6 +503,6 @@ export declare namespace Users {
     type UserCreateParams as UserCreateParams,
     type UserUpdateParams as UserUpdateParams,
     type UserListParams as UserListParams,
-    type UserListConnectionsParams as UserListConnectionsParams,
+    type UserListConnectionsParams as UserListConnectionsParams
   };
 }

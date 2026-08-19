@@ -1,11 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Mobilerun from '@mobilerun/sdk';
+import Mobilerun, { toFile } from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource triggers', () => {
   // Mock server tests are disabled
@@ -23,21 +20,21 @@ describe('resource triggers', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.workflows.triggers.create({
-      activation: 'event',
-      name: 'x',
-      conditions: { all: [{}], any: [{}] },
-      customPayloadSchema: { foo: 'bar' },
-      description: 'description',
-      eventType: 'eventType',
-      scheduleRule: {
-        type: 'once',
-        dateTime: 'dateTime',
-        expression: 'expression',
-        jitter: { afterMinutes: 0, beforeMinutes: 0 },
-        rrule: 'rrule',
-      },
-      timezone: 'timezone',
-    });
+    activation: 'event',
+    name: 'x',
+    conditions: { all: [{}], any: [{}] },
+    customPayloadSchema: { foo: 'bar' },
+    description: 'description',
+    eventType: 'eventType',
+    scheduleRule: {
+    type: 'once',
+    dateTime: 'dateTime',
+    expression: 'expression',
+    jitter: { afterMinutes: 0, beforeMinutes: 0 },
+    rrule: 'rrule',
+  },
+    timezone: 'timezone',
+  });
   });
 
   // Mock server tests are disabled
@@ -67,28 +64,24 @@ describe('resource triggers', () => {
   // Mock server tests are disabled
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.workflows.triggers.update(
-        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        {
-          activation: 'event',
-          conditions: { all: [{}], any: [{}] },
-          customPayloadSchema: { foo: 'bar' },
-          description: 'description',
-          eventType: 'eventType',
-          name: 'x',
-          scheduleRule: {
-            type: 'once',
-            dateTime: 'dateTime',
-            expression: 'expression',
-            jitter: { afterMinutes: 0, beforeMinutes: 0 },
-            rrule: 'rrule',
-          },
-          timezone: 'timezone',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.workflows.triggers.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+    activation: 'event',
+    conditions: { all: [{}], any: [{}] },
+    customPayloadSchema: { foo: 'bar' },
+    description: 'description',
+    eventType: 'eventType',
+    name: 'x',
+    scheduleRule: {
+    type: 'once',
+    dateTime: 'dateTime',
+    expression: 'expression',
+    jitter: { afterMinutes: 0, beforeMinutes: 0 },
+    rrule: 'rrule',
+  },
+    timezone: 'timezone',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -106,20 +99,17 @@ describe('resource triggers', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.workflows.triggers.list(
-        {
-          activation: 'event',
-          eventType: 'eventType',
-          orderBy: 'name',
-          orderByDirection: 'asc',
-          page: 1,
-          pageSize: 1,
-          search: 'x',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.workflows.triggers.list({
+    activation: 'event',
+    eventType: 'eventType',
+    orderBy: 'name',
+    orderByDirection: 'asc',
+    page: 1,
+    pageSize: 1,
+    search: 'x',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -136,9 +126,7 @@ describe('resource triggers', () => {
 
   // Mock server tests are disabled
   test.skip('fire: only required params', async () => {
-    const responsePromise = client.workflows.triggers.fire('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      payload: { foo: 'bar' },
-    });
+    const responsePromise = client.workflows.triggers.fire('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { payload: { foo: 'bar' } });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -150,8 +138,6 @@ describe('resource triggers', () => {
 
   // Mock server tests are disabled
   test.skip('fire: required and optional params', async () => {
-    const response = await client.workflows.triggers.fire('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      payload: { foo: 'bar' },
-    });
+    const response = await client.workflows.triggers.fire('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { payload: { foo: 'bar' } });
   });
 });

@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as ScreenshotsAPI from './screenshots';
+import * as UiStatesAPI from './ui-states';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -13,12 +13,8 @@ export class UiStates extends APIResource {
   /**
    * Get a specific UI state by index.
    */
-  retrieve(
-    index: number,
-    params: UiStateRetrieveParams,
-    options?: RequestOptions,
-  ): APIPromise<ScreenshotsAPI.MediaResponse> {
-    const { task_id } = params;
+  retrieve(index: number, params: UiStateRetrieveParams, options?: RequestOptions): APIPromise<UiStateRetrieveResponse> {
+    const { task_id } = params
     return this._client.get(path`/tasks/${task_id}/ui_states/${index}`, options);
   }
 
@@ -28,6 +24,13 @@ export class UiStates extends APIResource {
   list(taskID: string, options?: RequestOptions): APIPromise<UiStateListResponse> {
     return this._client.get(path`/tasks/${taskID}/ui_states`, options);
   }
+}
+
+export interface UiStateRetrieveResponse {
+  /**
+   * The URL of the media
+   */
+  url: string;
 }
 
 export interface UiStateListResponse {
@@ -43,7 +46,8 @@ export interface UiStateRetrieveParams {
 
 export declare namespace UiStates {
   export {
+    type UiStateRetrieveResponse as UiStateRetrieveResponse,
     type UiStateListResponse as UiStateListResponse,
-    type UiStateRetrieveParams as UiStateRetrieveParams,
+    type UiStateRetrieveParams as UiStateRetrieveParams
   };
 }

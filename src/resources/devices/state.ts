@@ -12,46 +12,17 @@ export class State extends APIResource {
    * Captures the device screen and returns it as a PNG image. An optional
    * hideOverlay query parameter excludes the accessibility overlay from the capture.
    */
-  screenshot(
-    deviceID: string,
-    params: StateScreenshotParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/screenshot`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  screenshot(deviceID: string, params: StateScreenshotParams | null | undefined = {}, options?: RequestOptions): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/screenshot`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Returns the device's current wall-clock time as an RFC 3339 timestamp.
    */
-  time(
-    deviceID: string,
-    params: StateTimeParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/time`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  time(deviceID: string, params: StateTimeParams | null | undefined = {}, options?: RequestOptions): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/time`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -59,93 +30,22 @@ export class State extends APIResource {
    * on-screen elements. An optional filter query reduces the result to interactive
    * elements.
    */
-  ui(
-    deviceID: string,
-    params: StateUiParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<StateUiResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/ui-state`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  ui(deviceID: string, params: StateUiParams | null | undefined = {}, options?: RequestOptions): APIPromise<StateUiResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/ui-state`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
-export interface A11YNode {
-  boundsInScreen: A11YNode.BoundsInScreen;
+export type StateScreenshotResponse = string
 
-  children: Array<A11YNode> | null;
-
-  className: string;
-
-  contentDescription: string;
-
-  isCheckable: boolean;
-
-  isChecked: boolean;
-
-  isClickable: boolean;
-
-  isEnabled: boolean;
-
-  isFocusable: boolean;
-
-  isFocused: boolean;
-
-  isLongClickable: boolean;
-
-  isPassword: boolean;
-
-  isScrollable: boolean;
-
-  isSelected: boolean;
-
-  packageName: string;
-
-  resourceId: string;
-
-  text: string;
-
-  isVisibleToUser?: boolean;
-}
-
-export namespace A11YNode {
-  export interface BoundsInScreen {
-    bottom: number;
-
-    left: number;
-
-    right: number;
-
-    top: number;
-  }
-}
-
-export interface Rect {
-  height: number;
-
-  width: number;
-}
-
-export type StateScreenshotResponse = string;
-
-export type StateTimeResponse = string;
+export type StateTimeResponse = string
 
 export interface StateUiResponse {
-  a11y_tree: A11YNode;
+  a11y_tree: StateUiResponse.A11yTree;
 
   device_context: StateUiResponse.DeviceContext;
 
-  ime_tree: A11YNode;
+  ime_tree: StateUiResponse.ImeTree;
 
   phone_state: StateUiResponse.PhoneState;
 
@@ -156,12 +56,62 @@ export interface StateUiResponse {
 }
 
 export namespace StateUiResponse {
+  export interface A11yTree {
+    boundsInScreen: A11yTree.BoundsInScreen;
+
+    children: Array<unknown> | null;
+
+    className: string;
+
+    contentDescription: string;
+
+    isCheckable: boolean;
+
+    isChecked: boolean;
+
+    isClickable: boolean;
+
+    isEnabled: boolean;
+
+    isFocusable: boolean;
+
+    isFocused: boolean;
+
+    isLongClickable: boolean;
+
+    isPassword: boolean;
+
+    isScrollable: boolean;
+
+    isSelected: boolean;
+
+    packageName: string;
+
+    resourceId: string;
+
+    text: string;
+
+    isVisibleToUser?: boolean;
+  }
+
+  export namespace A11yTree {
+    export interface BoundsInScreen {
+      bottom: number;
+
+      left: number;
+
+      right: number;
+
+      top: number;
+    }
+  }
+
   export interface DeviceContext {
     display_metrics: DeviceContext.DisplayMetrics;
 
     filtering_params: DeviceContext.FilteringParams;
 
-    screen_bounds: StateAPI.Rect;
+    screen_bounds: DeviceContext.ScreenBounds;
   }
 
   export namespace DeviceContext {
@@ -181,6 +131,62 @@ export namespace StateUiResponse {
       min_element_size: number;
 
       overlay_offset: number;
+    }
+
+    export interface ScreenBounds {
+      height: number;
+
+      width: number;
+    }
+  }
+
+  export interface ImeTree {
+    boundsInScreen: ImeTree.BoundsInScreen;
+
+    children: Array<unknown> | null;
+
+    className: string;
+
+    contentDescription: string;
+
+    isCheckable: boolean;
+
+    isChecked: boolean;
+
+    isClickable: boolean;
+
+    isEnabled: boolean;
+
+    isFocusable: boolean;
+
+    isFocused: boolean;
+
+    isLongClickable: boolean;
+
+    isPassword: boolean;
+
+    isScrollable: boolean;
+
+    isSelected: boolean;
+
+    packageName: string;
+
+    resourceId: string;
+
+    text: string;
+
+    isVisibleToUser?: boolean;
+  }
+
+  export namespace ImeTree {
+    export interface BoundsInScreen {
+      bottom: number;
+
+      left: number;
+
+      right: number;
+
+      top: number;
     }
   }
 
@@ -239,13 +245,11 @@ export interface StateUiParams {
 
 export declare namespace State {
   export {
-    type A11YNode as A11YNode,
-    type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
     type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
     type StateTimeParams as StateTimeParams,
-    type StateUiParams as StateUiParams,
+    type StateUiParams as StateUiParams
   };
 }
