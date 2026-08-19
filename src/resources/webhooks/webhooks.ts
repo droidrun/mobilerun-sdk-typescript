@@ -1,19 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as WebhooksAPI from './webhooks';
 import * as Shared from '../shared';
 import * as DeliveriesAPI from './deliveries';
-import {
-  Deliveries,
-  DeliveryListForWebhookParams,
-  DeliveryListForWebhookResponse,
-  DeliveryListParams,
-  DeliveryListResponse,
-  DeliveryRetrieveAttemptsParams,
-  DeliveryRetrieveAttemptsResponse,
-  DeliveryStatsParams,
-  DeliveryStatsResponse,
-} from './deliveries';
+import { Deliveries, DeliveryListForWebhookParams, DeliveryListForWebhookResponse, DeliveryListParams, DeliveryListResponse, DeliveryRetrieveAttemptsParams, DeliveryRetrieveAttemptsResponse, DeliveryStatsParams, DeliveryStatsResponse } from './deliveries';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -68,11 +59,7 @@ export class Webhooks extends APIResource {
    * );
    * ```
    */
-  update(
-    id: string,
-    body: WebhookUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<WebhookUpdateResponse> {
+  update(id: string, body: WebhookUpdateParams | null | undefined = {}, options?: RequestOptions): APIPromise<WebhookUpdateResponse> {
     return this._client.patch(path`/webhooks/${id}`, { body, ...options });
   }
 
@@ -87,10 +74,7 @@ export class Webhooks extends APIResource {
    * const webhooks = await client.webhooks.list();
    * ```
    */
-  list(
-    query: WebhookListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<WebhookListResponse> {
+  list(query: WebhookListParams | null | undefined = {}, options?: RequestOptions): APIPromise<WebhookListResponse> {
     return this._client.get('/webhooks', { query, ...options });
   }
 
@@ -106,10 +90,7 @@ export class Webhooks extends APIResource {
    * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/webhooks/${id}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.delete(path`/webhooks/${id}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -486,7 +467,7 @@ export declare namespace Webhooks {
     type WebhookTestDeliveryResponse as WebhookTestDeliveryResponse,
     type WebhookCreateParams as WebhookCreateParams,
     type WebhookUpdateParams as WebhookUpdateParams,
-    type WebhookListParams as WebhookListParams,
+    type WebhookListParams as WebhookListParams
   };
 
   export {
@@ -498,6 +479,6 @@ export declare namespace Webhooks {
     type DeliveryListParams as DeliveryListParams,
     type DeliveryListForWebhookParams as DeliveryListForWebhookParams,
     type DeliveryRetrieveAttemptsParams as DeliveryRetrieveAttemptsParams,
-    type DeliveryStatsParams as DeliveryStatsParams,
+    type DeliveryStatsParams as DeliveryStatsParams
   };
 }

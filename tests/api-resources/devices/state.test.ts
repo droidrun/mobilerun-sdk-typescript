@@ -1,11 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Mobilerun from '@mobilerun/sdk';
+import Mobilerun, { toFile } from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource state', () => {
   // Mock server tests are disabled
@@ -23,13 +20,9 @@ describe('resource state', () => {
   // Mock server tests are disabled
   test.skip('screenshot: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.devices.state.screenshot(
-        'deviceId',
-        { hideOverlay: true, 'X-Device-Display-ID': 0 },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.devices.state.screenshot('deviceId', { hideOverlay: true, 'X-Device-Display-ID': 0 }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -47,13 +40,9 @@ describe('resource state', () => {
   // Mock server tests are disabled
   test.skip('time: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.devices.state.time(
-        'deviceId',
-        { 'X-Device-Display-ID': 0 },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.devices.state.time('deviceId', { 'X-Device-Display-ID': 0 }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -71,12 +60,8 @@ describe('resource state', () => {
   // Mock server tests are disabled
   test.skip('ui: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.devices.state.ui(
-        'deviceId',
-        { filter: true, 'X-Device-Display-ID': 0 },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.devices.state.ui('deviceId', { filter: true, 'X-Device-Display-ID': 0 }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 });

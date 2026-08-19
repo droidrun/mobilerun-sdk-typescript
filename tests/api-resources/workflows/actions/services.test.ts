@@ -1,11 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Mobilerun from '@mobilerun/sdk';
+import Mobilerun, { toFile } from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource services', () => {
   // Mock server tests are disabled

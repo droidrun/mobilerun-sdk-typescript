@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as KeyboardAPI from './keyboard';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -10,44 +11,17 @@ export class Keyboard extends APIResource {
   /**
    * Clears the contents of the currently focused text input field.
    */
-  clear(
-    deviceID: string,
-    params: KeyboardClearParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.delete(path`/devices/${deviceID}/keyboard`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  clear(deviceID: string, params: KeyboardClearParams | null | undefined = {}, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.delete(path`/devices/${deviceID}/keyboard`, { ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Sends a single Android key event to the device, identified by its key code.
    */
   key(deviceID: string, params: KeyboardKeyParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.put(path`/devices/${deviceID}/keyboard`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.put(path`/devices/${deviceID}/keyboard`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -56,20 +30,8 @@ export class Keyboard extends APIResource {
    * rate on supported devices.
    */
   write(deviceID: string, params: KeyboardWriteParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/keyboard`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/keyboard`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
@@ -126,6 +88,6 @@ export declare namespace Keyboard {
   export {
     type KeyboardClearParams as KeyboardClearParams,
     type KeyboardKeyParams as KeyboardKeyParams,
-    type KeyboardWriteParams as KeyboardWriteParams,
+    type KeyboardWriteParams as KeyboardWriteParams
   };
 }

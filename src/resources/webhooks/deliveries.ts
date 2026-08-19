@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as DeliveriesAPI from './deliveries';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -18,10 +19,7 @@ export class Deliveries extends APIResource {
    * const deliveries = await client.webhooks.deliveries.list();
    * ```
    */
-  list(
-    query: DeliveryListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DeliveryListResponse> {
+  list(query: DeliveryListParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeliveryListResponse> {
     return this._client.get('/webhooks/deliveries', { query, ...options });
   }
 
@@ -39,11 +37,7 @@ export class Deliveries extends APIResource {
    *   );
    * ```
    */
-  listForWebhook(
-    id: string,
-    query: DeliveryListForWebhookParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DeliveryListForWebhookResponse> {
+  listForWebhook(id: string, query: DeliveryListForWebhookParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeliveryListForWebhookResponse> {
     return this._client.get(path`/webhooks/${id}/deliveries`, { query, ...options });
   }
 
@@ -61,12 +55,8 @@ export class Deliveries extends APIResource {
    *   );
    * ```
    */
-  retrieveAttempts(
-    deliveryID: string,
-    params: DeliveryRetrieveAttemptsParams,
-    options?: RequestOptions,
-  ): APIPromise<DeliveryRetrieveAttemptsResponse> {
-    const { id } = params;
+  retrieveAttempts(deliveryID: string, params: DeliveryRetrieveAttemptsParams, options?: RequestOptions): APIPromise<DeliveryRetrieveAttemptsResponse> {
+    const { id } = params
     return this._client.get(path`/webhooks/${id}/deliveries/${deliveryID}`, options);
   }
 
@@ -81,10 +71,7 @@ export class Deliveries extends APIResource {
    * const response = await client.webhooks.deliveries.stats();
    * ```
    */
-  stats(
-    query: DeliveryStatsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DeliveryStatsResponse> {
+  stats(query: DeliveryStatsParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeliveryStatsResponse> {
     return this._client.get('/webhooks/deliveries/stats', { query, ...options });
   }
 }
@@ -318,6 +305,6 @@ export declare namespace Deliveries {
     type DeliveryListParams as DeliveryListParams,
     type DeliveryListForWebhookParams as DeliveryListForWebhookParams,
     type DeliveryRetrieveAttemptsParams as DeliveryRetrieveAttemptsParams,
-    type DeliveryStatsParams as DeliveryStatsParams,
+    type DeliveryStatsParams as DeliveryStatsParams
   };
 }

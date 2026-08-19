@@ -1,20 +1,17 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Mobilerun from '@mobilerun/sdk';
+import Mobilerun, { toFile } from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource flows', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.workflows.flows.create({
-      actions: [{ actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 }],
-      name: 'x',
-      triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-    });
+    actions: [{ actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 }],
+    name: 'x',
+    triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+  });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -27,38 +24,34 @@ describe('resource flows', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.workflows.flows.create({
-      actions: [
-        {
-          actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-          position: 0,
-          children: [
-            {
-              actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-              position: 0,
-              continueOnError: true,
-              nameOverride: 'x',
-              overrides: { params: { foo: 'bar' } },
-            },
-          ],
-          continueOnError: true,
-          nameOverride: 'x',
-          overrides: { params: { foo: 'bar' } },
-        },
-      ],
-      name: 'x',
-      triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-      cooldownScope: 'flow',
-      cooldownSeconds: 0,
-      description: 'description',
-      deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
-      enabled: true,
-      healthMonitoringEnabled: true,
-      notifyOnFailure: true,
-      notifyOnSuccess: true,
-      notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-      selfHealingEnabled: true,
-      selfHealingMaxAttempts: 1,
-    });
+    actions: [{
+    actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    position: 0,
+    children: [{
+    actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    position: 0,
+    continueOnError: true,
+    nameOverride: 'x',
+    overrides: { params: { foo: 'bar' } },
+  }],
+    continueOnError: true,
+    nameOverride: 'x',
+    overrides: { params: { foo: 'bar' } },
+  }],
+    name: 'x',
+    triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    cooldownScope: 'flow',
+    cooldownSeconds: 0,
+    description: 'description',
+    deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+    enabled: true,
+    healthMonitoringEnabled: true,
+    notifyOnFailure: true,
+    notifyOnSuccess: true,
+    notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    selfHealingEnabled: true,
+    selfHealingMaxAttempts: 1,
+  });
   });
 
   // Mock server tests are disabled
@@ -88,27 +81,23 @@ describe('resource flows', () => {
   // Mock server tests are disabled
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.workflows.flows.update(
-        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        {
-          cooldownScope: 'flow',
-          cooldownSeconds: 0,
-          description: 'description',
-          deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
-          enabled: true,
-          healthMonitoringEnabled: true,
-          name: 'x',
-          notifyOnFailure: true,
-          notifyOnSuccess: true,
-          notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-          selfHealingEnabled: true,
-          selfHealingMaxAttempts: 1,
-          triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.workflows.flows.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+    cooldownScope: 'flow',
+    cooldownSeconds: 0,
+    description: 'description',
+    deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+    enabled: true,
+    healthMonitoringEnabled: true,
+    name: 'x',
+    notifyOnFailure: true,
+    notifyOnSuccess: true,
+    notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    selfHealingEnabled: true,
+    selfHealingMaxAttempts: 1,
+    triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -126,23 +115,20 @@ describe('resource flows', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.workflows.flows.list(
-        {
-          createdBy: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-          enabled: 'true',
-          mine: 'true',
-          orderBy: 'name',
-          orderByDirection: 'asc',
-          page: 1,
-          pageSize: 1,
-          search: 'x',
-          status: ['healthy'],
-          triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.workflows.flows.list({
+    createdBy: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    enabled: 'true',
+    mine: 'true',
+    orderBy: 'name',
+    orderByDirection: 'asc',
+    page: 1,
+    pageSize: 1,
+    search: 'x',
+    status: ['healthy'],
+    triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -172,13 +158,41 @@ describe('resource flows', () => {
   // Mock server tests are disabled
   test.skip('clone: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.workflows.flows.clone(
-        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        { deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], name: 'x' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.workflows.flows.clone('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], name: 'x' }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('dryRun', async () => {
+    const responsePromise = client.workflows.flows.dryRun('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('dryRun: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(client.workflows.flows.dryRun('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { payload: { foo: 'bar' } }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listRepairs', async () => {
+    const responsePromise = client.workflows.flows.listRepairs('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // Mock server tests are disabled

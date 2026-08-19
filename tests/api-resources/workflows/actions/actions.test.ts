@@ -1,19 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Mobilerun from '@mobilerun/sdk';
+import Mobilerun, { toFile } from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource actions', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.workflows.actions.create({
-      catalogEntryId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-      name: 'x',
-    });
+    const responsePromise = client.workflows.actions.create({ catalogEntryId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', name: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -26,11 +20,11 @@ describe('resource actions', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.workflows.actions.create({
-      catalogEntryId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-      name: 'x',
-      description: 'description',
-      params: { foo: 'bar' },
-    });
+    catalogEntryId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    name: 'x',
+    description: 'description',
+    params: { foo: 'bar' },
+  });
   });
 
   // Mock server tests are disabled
@@ -60,17 +54,13 @@ describe('resource actions', () => {
   // Mock server tests are disabled
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.workflows.actions.update(
-        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        {
-          description: 'description',
-          name: 'x',
-          params: { foo: 'bar' },
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.workflows.actions.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+    description: 'description',
+    name: 'x',
+    params: { foo: 'bar' },
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -88,19 +78,16 @@ describe('resource actions', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.workflows.actions.list(
-        {
-          orderBy: 'name',
-          orderByDirection: 'asc',
-          page: 1,
-          pageSize: 1,
-          search: 'x',
-          service: 'tasks_api',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.workflows.actions.list({
+    orderBy: 'name',
+    orderByDirection: 'asc',
+    page: 1,
+    pageSize: 1,
+    search: 'x',
+    service: 'tasks_api',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled

@@ -20,7 +20,7 @@ or products provided by Mobilerun, please follow the respective company's securi
 
 ### Mobilerun Terms and Policies
 
-Please contact support@droidrun.ai for any questions or concerns regarding the security of our services.
+Please contact lucius@droidrun.ai for any questions or concerns regarding the security of our services.
 
 ---
 
