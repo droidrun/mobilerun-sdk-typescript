@@ -57,6 +57,30 @@ describe('resource apps', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('grantPermission: only required params', async () => {
+    const responsePromise = client.devices.apps.grantPermission('POST_NOTIFICATIONS', {
+      deviceId: 'deviceId',
+      packageName: 'packageName',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('grantPermission: required and optional params', async () => {
+    const response = await client.devices.apps.grantPermission('POST_NOTIFICATIONS', {
+      deviceId: 'deviceId',
+      packageName: 'packageName',
+      'X-Device-Display-ID': 0,
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('install: only required params', async () => {
     const responsePromise = client.devices.apps.install('deviceId', { bundleId: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -74,6 +98,54 @@ describe('resource apps', () => {
       bundleId: 'x',
       background: true,
       packageName: 'x',
+      'X-Device-Display-ID': 0,
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('listInstalls', async () => {
+    const responsePromise = client.devices.apps.listInstalls('deviceId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listInstalls: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.apps.listInstalls(
+        'deviceId',
+        { 'X-Device-Display-ID': 0 },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('revokePermission: only required params', async () => {
+    const responsePromise = client.devices.apps.revokePermission('POST_NOTIFICATIONS', {
+      deviceId: 'deviceId',
+      packageName: 'packageName',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('revokePermission: required and optional params', async () => {
+    const response = await client.devices.apps.revokePermission('POST_NOTIFICATIONS', {
+      deviceId: 'deviceId',
+      packageName: 'packageName',
       'X-Device-Display-ID': 0,
     });
   });

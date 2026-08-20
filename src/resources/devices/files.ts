@@ -99,52 +99,8 @@ export class Files extends APIResource {
   }
 }
 
-export interface FileInfo {
-  extendedAttributes: boolean;
-
-  group: string;
-
-  hardLinks: number;
-
-  modifiedAt: string;
-
-  name: string;
-
-  owner: string;
-
-  permissions: FileInfo.Permissions;
-
-  size: number;
-
-  type: string;
-
-  symlinkTarget?: string;
-}
-
-export namespace FileInfo {
-  export interface Permissions {
-    group: Shared.PermissionSet;
-
-    others: Shared.PermissionSet;
-
-    owner: Shared.PermissionSet;
-
-    special: Permissions.Special;
-  }
-
-  export namespace Permissions {
-    export interface Special {
-      setGid: boolean;
-
-      setUid: boolean;
-
-      sticky: boolean;
-    }
-  }
-}
-
 export interface FileListResponse {
-  files: Array<FileInfo> | null;
+  files: Array<FileListResponse.File> | null;
 
   path: string;
 
@@ -154,6 +110,52 @@ export interface FileListResponse {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
+}
+
+export namespace FileListResponse {
+  export interface File {
+    extendedAttributes: boolean;
+
+    group: string;
+
+    hardLinks: number;
+
+    modifiedAt: string;
+
+    name: string;
+
+    owner: string;
+
+    permissions: File.Permissions;
+
+    size: number;
+
+    type: string;
+
+    symlinkTarget?: string;
+  }
+
+  export namespace File {
+    export interface Permissions {
+      group: Shared.PermissionSet;
+
+      others: Shared.PermissionSet;
+
+      owner: Shared.PermissionSet;
+
+      special: Permissions.Special;
+    }
+
+    export namespace Permissions {
+      export interface Special {
+        setGid: boolean;
+
+        setUid: boolean;
+
+        sticky: boolean;
+      }
+    }
+  }
 }
 
 export type FileDownloadResponse = string;
@@ -213,7 +215,6 @@ export interface FileUploadParams {
 
 export declare namespace Files {
   export {
-    type FileInfo as FileInfo,
     type FileListResponse as FileListResponse,
     type FileDownloadResponse as FileDownloadResponse,
     type FileListParams as FileListParams,

@@ -128,6 +128,30 @@ describe('resource devices', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('resume', async () => {
+    const responsePromise = client.devices.resume('deviceId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieveCapabilities', async () => {
+    const responsePromise = client.devices.retrieveCapabilities('deviceId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('setName: only required params', async () => {
     const responsePromise = client.devices.setName('deviceId', { name: 'x' });
     const rawResponse = await responsePromise.asResponse();
@@ -142,6 +166,18 @@ describe('resource devices', () => {
   // Mock server tests are disabled
   test.skip('setName: required and optional params', async () => {
     const response = await client.devices.setName('deviceId', { name: 'x' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('stop', async () => {
+    const responsePromise = client.devices.stop('deviceId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // Mock server tests are disabled

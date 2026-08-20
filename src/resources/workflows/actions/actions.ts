@@ -59,53 +59,154 @@ export class Actions extends APIResource {
   }
 }
 
-export interface Action {
-  id: string;
-
-  catalogEntryId: string;
-
-  createdAt: string | null;
-
-  createdBy: string | null;
-
-  description: string | null;
-
-  method: string;
-
-  name: string;
-
-  ownerId: string;
-
-  service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
-
-  updatedAt: string | null;
-
-  /**
-   * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
-   */
-  userId: string;
-
-  params?: unknown;
-
-  paramsSchema?: unknown;
+export interface ActionCreateResponse {
+  data: ActionCreateResponse.Data;
 }
 
-export interface ActionCreateResponse {
-  data: Action;
+export namespace ActionCreateResponse {
+  export interface Data {
+    id: string;
+
+    catalogEntryId: string;
+
+    createdAt: string | null;
+
+    createdBy: string | null;
+
+    description: string | null;
+
+    method: string;
+
+    name: string;
+
+    ownerId: string;
+
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+
+    updatedAt: string | null;
+
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
+    userId: string;
+
+    params?: unknown;
+
+    paramsSchema?: unknown;
+  }
 }
 
 export interface ActionRetrieveResponse {
-  data: Action;
+  data: ActionRetrieveResponse.Data;
+}
+
+export namespace ActionRetrieveResponse {
+  export interface Data {
+    id: string;
+
+    catalogEntryId: string;
+
+    createdAt: string | null;
+
+    createdBy: string | null;
+
+    description: string | null;
+
+    method: string;
+
+    name: string;
+
+    ownerId: string;
+
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+
+    updatedAt: string | null;
+
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
+    userId: string;
+
+    params?: unknown;
+
+    paramsSchema?: unknown;
+  }
 }
 
 export interface ActionUpdateResponse {
-  data: Action;
+  data: ActionUpdateResponse.Data;
+}
+
+export namespace ActionUpdateResponse {
+  export interface Data {
+    id: string;
+
+    catalogEntryId: string;
+
+    createdAt: string | null;
+
+    createdBy: string | null;
+
+    description: string | null;
+
+    method: string;
+
+    name: string;
+
+    ownerId: string;
+
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+
+    updatedAt: string | null;
+
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
+    userId: string;
+
+    params?: unknown;
+
+    paramsSchema?: unknown;
+  }
 }
 
 export interface ActionListResponse {
-  items: Array<Action>;
+  items: Array<ActionListResponse.Item>;
 
   pagination: Shared.Pagination;
+}
+
+export namespace ActionListResponse {
+  export interface Item {
+    id: string;
+
+    catalogEntryId: string;
+
+    createdAt: string | null;
+
+    createdBy: string | null;
+
+    description: string | null;
+
+    method: string;
+
+    name: string;
+
+    ownerId: string;
+
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+
+    updatedAt: string | null;
+
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
+    userId: string;
+
+    params?: unknown;
+
+    paramsSchema?: unknown;
+  }
 }
 
 export interface ActionDeleteResponse {
@@ -148,7 +249,6 @@ Actions.Services = Services;
 
 export declare namespace Actions {
   export {
-    type Action as Action,
     type ActionCreateResponse as ActionCreateResponse,
     type ActionRetrieveResponse as ActionRetrieveResponse,
     type ActionUpdateResponse as ActionUpdateResponse,

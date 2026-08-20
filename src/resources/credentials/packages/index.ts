@@ -2,7 +2,6 @@
 
 export {
   Credentials,
-  type Credential,
   type CredentialCreateResponse,
   type CredentialRetrieveResponse,
   type CredentialDeleteResponse,
@@ -14,5 +13,6 @@ export {
   Packages,
   type PackageCreateResponse,
   type PackageListResponse,
+  type PackageListAllResponse,
   type PackageCreateParams,
 } from './packages';

@@ -2,7 +2,6 @@
 
 export {
   Actions,
-  type Action,
   type ActionCreateResponse,
   type ActionRetrieveResponse,
   type ActionUpdateResponse,
