@@ -1,6 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
+export { Agents, type AgentListResponse } from './agents';
+export {
+  AppEvents,
+  type AppEventRetrieveResponse,
+  type AppEventListResponse,
+  type AppEventListParams,
+} from './app-events/app-events';
 export {
   Apps,
   type AppRetrieveResponse,
@@ -10,6 +17,7 @@ export {
   type AppCreateSignedUploadURLResponse,
   type AppListVersionsResponse,
   type AppMarkFailedResponse,
+  type AppStorageUsageResponse,
   type AppListParams,
   type AppCreateSignedUploadURLParams,
 } from './apps';
@@ -34,18 +42,58 @@ export {
 } from './credentials/credentials';
 export {
   Devices,
-  type Device,
+  type DeviceCreateResponse,
+  type DeviceRetrieveResponse,
   type DeviceListResponse,
   type DeviceCountResponse,
   type DeviceFingerprintResponse,
+  type DeviceRetrieveCapabilitiesResponse,
+  type DeviceSetNameResponse,
+  type DeviceWaitReadyResponse,
   type DeviceCreateParams,
   type DeviceListParams,
   type DeviceFingerprintParams,
   type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices/devices';
-export { Hooks } from './hooks';
+export {
+  Esims,
+  type EsimCreateResponse,
+  type EsimRetrieveResponse,
+  type EsimUpdateResponse,
+  type EsimListResponse,
+  type EsimCapacityResponse,
+  type EsimConfirmPaymentResponse,
+  type EsimImportResponse,
+  type EsimInstallResponse,
+  type EsimInstallStatusResponse,
+  type EsimSelectorResponse,
+  type EsimCreateParams,
+  type EsimUpdateParams,
+  type EsimListParams,
+  type EsimImportParams,
+  type EsimInstallParams,
+} from './esims/esims';
+export { Messages, type MessageListResponse, type MessageListParams } from './messages/messages';
 export { Models, type ModelListResponse } from './models';
+export {
+  Notifications,
+  type NotificationCatalogResponse,
+  type NotificationGetPreferencesResponse,
+  type NotificationUpdatePreferencesResponse,
+  type NotificationUpdatePreferencesParams,
+} from './notifications';
+export {
+  Numbers,
+  type NumberCreateResponse,
+  type NumberRetrieveResponse,
+  type NumberListResponse,
+  type NumberDeleteResponse,
+  type NumberCountriesResponse,
+  type NumberPurposesResponse,
+  type NumberCreateParams,
+  type NumberListParams,
+} from './numbers/numbers';
 export {
   Profiles,
   type ProfileCreateResponse,
@@ -59,7 +107,6 @@ export {
 } from './profiles';
 export {
   Proxies,
-  type ProxyConfig,
   type ProxyCreateResponse,
   type ProxyRetrieveResponse,
   type ProxyUpdateResponse,
@@ -71,12 +118,9 @@ export {
   type ProxyListParams,
   type ProxyLookupParams,
 } from './proxies';
+export { Store, type StoreCategoriesResponse } from './store/store';
 export {
   Tasks,
-  type PackageCredentials,
-  type Task,
-  type TaskStatus,
-  type UsageResult,
   type TaskRetrieveResponse,
   type TaskListResponse,
   type TaskGetStatusResponse,
@@ -103,4 +147,4 @@ export {
   type WebhookUpdateParams,
   type WebhookListParams,
 } from './webhooks/webhooks';
-export { Workflows, type Flow } from './workflows/workflows';
+export { Workflows } from './workflows/workflows';

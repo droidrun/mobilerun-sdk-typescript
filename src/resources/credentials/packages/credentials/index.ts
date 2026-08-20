@@ -2,7 +2,6 @@
 
 export {
   Credentials,
-  type Credential,
   type CredentialCreateResponse,
   type CredentialRetrieveResponse,
   type CredentialDeleteResponse,

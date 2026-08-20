@@ -2,7 +2,6 @@
 
 export {
   Actions,
-  type FlowAction,
   type ActionListResponse,
   type ActionAddResponse,
   type ActionRemoveResponse,
@@ -13,17 +12,18 @@ export {
 } from './actions';
 export {
   Flows,
-  type FlowActionOverrides,
-  type FlowChildActionInput,
   type FlowCreateResponse,
   type FlowRetrieveResponse,
   type FlowUpdateResponse,
   type FlowListResponse,
   type FlowDeleteResponse,
   type FlowCloneResponse,
+  type FlowDryRunResponse,
+  type FlowListRepairsResponse,
   type FlowUnblockResponse,
   type FlowCreateParams,
   type FlowUpdateParams,
   type FlowListParams,
   type FlowCloneParams,
+  type FlowDryRunParams,
 } from './flows';
