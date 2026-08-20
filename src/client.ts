@@ -17,6 +17,7 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { AgentListResponse, Agents } from './resources/agents';
 import {
   AppConfirmUploadResponse,
   AppCreateSignedUploadURLParams,
@@ -27,6 +28,7 @@ import {
   AppListVersionsResponse,
   AppMarkFailedResponse,
   AppRetrieveResponse,
+  AppStorageUsageResponse,
   Apps,
 } from './resources/apps';
 import {
@@ -42,8 +44,14 @@ import {
   CarrierUpdateResponse,
   Carriers,
 } from './resources/carriers';
-import { Hooks } from './resources/hooks';
 import { ModelListResponse, Models } from './resources/models';
+import {
+  NotificationCatalogResponse,
+  NotificationGetPreferencesResponse,
+  NotificationUpdatePreferencesParams,
+  NotificationUpdatePreferencesResponse,
+  Notifications,
+} from './resources/notifications';
 import {
   ProfileCreateParams,
   ProfileCreateResponse,
@@ -57,7 +65,6 @@ import {
 } from './resources/profiles';
 import {
   Proxies,
-  ProxyConfig,
   ProxyCreateParams,
   ProxyCreateResponse,
   ProxyDeleteResponse,
@@ -69,6 +76,12 @@ import {
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
+import {
+  AppEventListParams,
+  AppEventListResponse,
+  AppEventRetrieveResponse,
+  AppEvents,
+} from './resources/app-events/app-events';
 import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
@@ -76,20 +89,53 @@ import {
   Credentials,
 } from './resources/credentials/credentials';
 import {
-  Device,
   DeviceCountResponse,
   DeviceCreateParams,
+  DeviceCreateResponse,
   DeviceFingerprintParams,
   DeviceFingerprintResponse,
   DeviceListParams,
   DeviceListResponse,
+  DeviceRetrieveCapabilitiesResponse,
+  DeviceRetrieveResponse,
   DeviceSetNameParams,
+  DeviceSetNameResponse,
   DeviceTerminateParams,
+  DeviceWaitReadyResponse,
   Devices,
 } from './resources/devices/devices';
 import {
-  PackageCredentials,
-  Task,
+  EsimCapacityResponse,
+  EsimConfirmPaymentResponse,
+  EsimCreateParams,
+  EsimCreateResponse,
+  EsimImportParams,
+  EsimImportResponse,
+  EsimInstallParams,
+  EsimInstallResponse,
+  EsimInstallStatusResponse,
+  EsimListParams,
+  EsimListResponse,
+  EsimRetrieveResponse,
+  EsimSelectorResponse,
+  EsimUpdateParams,
+  EsimUpdateResponse,
+  Esims,
+} from './resources/esims/esims';
+import { MessageListParams, MessageListResponse, Messages } from './resources/messages/messages';
+import {
+  NumberCountriesResponse,
+  NumberCreateParams,
+  NumberCreateResponse,
+  NumberDeleteResponse,
+  NumberListParams,
+  NumberListResponse,
+  NumberPurposesResponse,
+  NumberRetrieveResponse,
+  Numbers,
+} from './resources/numbers/numbers';
+import { Store, StoreCategoriesResponse } from './resources/store/store';
+import {
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
   TaskListParams,
@@ -101,10 +147,8 @@ import {
   TaskRunStreamedResponse,
   TaskSendMessageParams,
   TaskSendMessageResponse,
-  TaskStatus,
   TaskStopResponse,
   Tasks,
-  UsageResult,
 } from './resources/tasks/tasks';
 import {
   WebhookCreateParams,
@@ -119,7 +163,7 @@ import {
   WebhookUpdateResponse,
   Webhooks,
 } from './resources/webhooks/webhooks';
-import { Flow, Workflows } from './resources/workflows/workflows';
+import { Workflows } from './resources/workflows/workflows';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -135,7 +179,7 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['MOBILERUN_CLOUD_API_KEY'].
+   * A bearer API key to authenticate requests.
    */
   apiKey?: string | null | undefined;
 
@@ -847,7 +891,6 @@ export class Mobilerun {
   carriers: API.Carriers = new API.Carriers(this);
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
-  hooks: API.Hooks = new API.Hooks(this);
   /**
    * LLM Models
    */
@@ -861,13 +904,19 @@ export class Mobilerun {
   tasks: API.Tasks = new API.Tasks(this);
   workflows: API.Workflows = new API.Workflows(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
+  agents: API.Agents = new API.Agents(this);
+  appEvents: API.AppEvents = new API.AppEvents(this);
+  notifications: API.Notifications = new API.Notifications(this);
+  esims: API.Esims = new API.Esims(this);
+  messages: API.Messages = new API.Messages(this);
+  numbers: API.Numbers = new API.Numbers(this);
+  store: API.Store = new API.Store(this);
 }
 
 Mobilerun.Apps = Apps;
 Mobilerun.Carriers = Carriers;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
-Mobilerun.Hooks = Hooks;
 Mobilerun.Models = Models;
 Mobilerun.Profiles = Profiles;
 Mobilerun.Proxies = Proxies;
@@ -875,6 +924,13 @@ Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
 Mobilerun.Webhooks = Webhooks;
+Mobilerun.Agents = Agents;
+Mobilerun.AppEvents = AppEvents;
+Mobilerun.Notifications = Notifications;
+Mobilerun.Esims = Esims;
+Mobilerun.Messages = Messages;
+Mobilerun.Numbers = Numbers;
+Mobilerun.Store = Store;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
@@ -888,6 +944,7 @@ export declare namespace Mobilerun {
     type AppCreateSignedUploadURLResponse as AppCreateSignedUploadURLResponse,
     type AppListVersionsResponse as AppListVersionsResponse,
     type AppMarkFailedResponse as AppMarkFailedResponse,
+    type AppStorageUsageResponse as AppStorageUsageResponse,
     type AppListParams as AppListParams,
     type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
   };
@@ -914,18 +971,20 @@ export declare namespace Mobilerun {
 
   export {
     Devices as Devices,
-    type Device as Device,
+    type DeviceCreateResponse as DeviceCreateResponse,
+    type DeviceRetrieveResponse as DeviceRetrieveResponse,
     type DeviceListResponse as DeviceListResponse,
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceFingerprintResponse as DeviceFingerprintResponse,
+    type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
+    type DeviceSetNameResponse as DeviceSetNameResponse,
+    type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
     type DeviceFingerprintParams as DeviceFingerprintParams,
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
-
-  export { Hooks as Hooks };
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
@@ -943,7 +1002,6 @@ export declare namespace Mobilerun {
 
   export {
     Proxies as Proxies,
-    type ProxyConfig as ProxyConfig,
     type ProxyCreateResponse as ProxyCreateResponse,
     type ProxyRetrieveResponse as ProxyRetrieveResponse,
     type ProxyUpdateResponse as ProxyUpdateResponse,
@@ -960,10 +1018,6 @@ export declare namespace Mobilerun {
 
   export {
     Tasks as Tasks,
-    type PackageCredentials as PackageCredentials,
-    type Task as Task,
-    type TaskStatus as TaskStatus,
-    type UsageResult as UsageResult,
     type TaskRetrieveResponse as TaskRetrieveResponse,
     type TaskListResponse as TaskListResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,
@@ -978,7 +1032,7 @@ export declare namespace Mobilerun {
     type TaskSendMessageParams as TaskSendMessageParams,
   };
 
-  export { Workflows as Workflows, type Flow as Flow };
+  export { Workflows as Workflows };
 
   export {
     Webhooks as Webhooks,
@@ -994,6 +1048,62 @@ export declare namespace Mobilerun {
     type WebhookListParams as WebhookListParams,
   };
 
+  export { Agents as Agents, type AgentListResponse as AgentListResponse };
+
+  export {
+    AppEvents as AppEvents,
+    type AppEventRetrieveResponse as AppEventRetrieveResponse,
+    type AppEventListResponse as AppEventListResponse,
+    type AppEventListParams as AppEventListParams,
+  };
+
+  export {
+    Notifications as Notifications,
+    type NotificationCatalogResponse as NotificationCatalogResponse,
+    type NotificationGetPreferencesResponse as NotificationGetPreferencesResponse,
+    type NotificationUpdatePreferencesResponse as NotificationUpdatePreferencesResponse,
+    type NotificationUpdatePreferencesParams as NotificationUpdatePreferencesParams,
+  };
+
+  export {
+    Esims as Esims,
+    type EsimCreateResponse as EsimCreateResponse,
+    type EsimRetrieveResponse as EsimRetrieveResponse,
+    type EsimUpdateResponse as EsimUpdateResponse,
+    type EsimListResponse as EsimListResponse,
+    type EsimCapacityResponse as EsimCapacityResponse,
+    type EsimConfirmPaymentResponse as EsimConfirmPaymentResponse,
+    type EsimImportResponse as EsimImportResponse,
+    type EsimInstallResponse as EsimInstallResponse,
+    type EsimInstallStatusResponse as EsimInstallStatusResponse,
+    type EsimSelectorResponse as EsimSelectorResponse,
+    type EsimCreateParams as EsimCreateParams,
+    type EsimUpdateParams as EsimUpdateParams,
+    type EsimListParams as EsimListParams,
+    type EsimImportParams as EsimImportParams,
+    type EsimInstallParams as EsimInstallParams,
+  };
+
+  export {
+    Messages as Messages,
+    type MessageListResponse as MessageListResponse,
+    type MessageListParams as MessageListParams,
+  };
+
+  export {
+    Numbers as Numbers,
+    type NumberCreateResponse as NumberCreateResponse,
+    type NumberRetrieveResponse as NumberRetrieveResponse,
+    type NumberListResponse as NumberListResponse,
+    type NumberDeleteResponse as NumberDeleteResponse,
+    type NumberCountriesResponse as NumberCountriesResponse,
+    type NumberPurposesResponse as NumberPurposesResponse,
+    type NumberCreateParams as NumberCreateParams,
+    type NumberListParams as NumberListParams,
+  };
+
+  export { Store as Store, type StoreCategoriesResponse as StoreCategoriesResponse };
+
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
   export type DeviceSpec = API.DeviceSpec;
@@ -1002,5 +1112,5 @@ export declare namespace Mobilerun {
   export type Pagination = API.Pagination;
   export type PaginationMeta = API.PaginationMeta;
   export type PermissionSet = API.PermissionSet;
-  export type Socks5 = API.Socks5;
+  export type Socks5ProxyConfig = API.Socks5ProxyConfig;
 }

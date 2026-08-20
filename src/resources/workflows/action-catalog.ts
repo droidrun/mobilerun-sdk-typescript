@@ -28,32 +28,54 @@ export class ActionCatalog extends APIResource {
   }
 }
 
-export interface ActionCatalogEntry {
-  id: string;
-
-  createdAt: string | null;
-
-  description: string | null;
-
-  method: string;
-
-  name: string;
-
-  service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
-
-  updatedAt: string | null;
-
-  paramsSchema?: unknown;
+export interface ActionCatalogRetrieveResponse {
+  data: ActionCatalogRetrieveResponse.Data;
 }
 
-export interface ActionCatalogRetrieveResponse {
-  data: ActionCatalogEntry;
+export namespace ActionCatalogRetrieveResponse {
+  export interface Data {
+    id: string;
+
+    createdAt: string | null;
+
+    description: string | null;
+
+    method: string;
+
+    name: string;
+
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+
+    updatedAt: string | null;
+
+    paramsSchema?: unknown;
+  }
 }
 
 export interface ActionCatalogListResponse {
-  items: Array<ActionCatalogEntry>;
+  items: Array<ActionCatalogListResponse.Item>;
 
   pagination: Shared.Pagination;
+}
+
+export namespace ActionCatalogListResponse {
+  export interface Item {
+    id: string;
+
+    createdAt: string | null;
+
+    description: string | null;
+
+    method: string;
+
+    name: string;
+
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+
+    updatedAt: string | null;
+
+    paramsSchema?: unknown;
+  }
 }
 
 export interface ActionCatalogListParams {
@@ -66,7 +88,6 @@ export interface ActionCatalogListParams {
 
 export declare namespace ActionCatalog {
   export {
-    type ActionCatalogEntry as ActionCatalogEntry,
     type ActionCatalogRetrieveResponse as ActionCatalogRetrieveResponse,
     type ActionCatalogListResponse as ActionCatalogListResponse,
     type ActionCatalogListParams as ActionCatalogListParams,

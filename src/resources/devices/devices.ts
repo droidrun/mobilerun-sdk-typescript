@@ -15,29 +15,26 @@ import {
 import * as AppsAPI from './apps';
 import {
   AppDeleteParams,
+  AppGrantPermissionParams,
   AppInstallParams,
+  AppListInstallsParams,
+  AppListInstallsResponse,
   AppListParams,
   AppListResponse,
+  AppRevokePermissionParams,
   AppStartParams,
   AppStopParams,
   Apps,
 } from './apps';
-import * as EsimAPI from './esim';
-import {
-  Esim,
-  EsimActivateParams,
-  EsimActivateResponse,
-  EsimEnableParams,
-  EsimListParams,
-  EsimListResponse,
-  EsimRemoveParams,
-} from './esim';
+import * as BrowserAPI from './browser';
+import { Browser, BrowserExecuteScriptParams, BrowserExecuteScriptResponse } from './browser';
+import * as DeepLinkAPI from './deep-link';
+import { DeepLink, DeepLinkExecuteDeepLinkParams } from './deep-link';
 import * as FilesAPI from './files';
 import {
   FileDeleteParams,
   FileDownloadParams,
   FileDownloadResponse,
-  FileInfo,
   FileListParams,
   FileListResponse,
   FileUploadParams,
@@ -45,10 +42,22 @@ import {
 } from './files';
 import * as KeyboardAPI from './keyboard';
 import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
+import * as KioskAPI from './kiosk';
+import { Kiosk, KioskDisableParams, KioskEnableParams } from './kiosk';
 import * as LanguageAPI from './language';
 import { Language, LanguageGetParams, LanguageGetResponse, LanguageSetParams } from './language';
 import * as LocationAPI from './location';
-import { Location, LocationGetParams, LocationSetParams } from './location';
+import { Location, LocationGetParams, LocationResetParams, LocationSetParams } from './location';
+import * as MediaSessionsAPI from './media-sessions';
+import {
+  MediaSessionActivateParams,
+  MediaSessionActivateResponse,
+  MediaSessionCreateParams,
+  MediaSessionCreateResponse,
+  MediaSessionDeleteParams,
+  MediaSessionRetrieveCurrentResponse,
+  MediaSessions,
+} from './media-sessions';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
@@ -61,10 +70,24 @@ import {
   ProxyStatusParams,
   ProxyStatusResponse,
 } from './proxy';
+import * as RecordingsAPI from './recordings';
+import {
+  RecordingDeleteParams,
+  RecordingListParams,
+  RecordingListResponse,
+  RecordingStartParams,
+  RecordingStartResponse,
+  RecordingStatusParams,
+  RecordingStatusResponse,
+  RecordingStopParams,
+  RecordingStopResponse,
+  RecordingTrajectoryParams,
+  RecordingVideoParams,
+  Recordings,
+} from './recordings';
 import * as StateAPI from './state';
 import {
   A11YNode,
-  Rect,
   State,
   StateScreenshotParams,
   StateScreenshotResponse,
@@ -77,6 +100,19 @@ import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimezoneAPI from './timezone';
 import { Timezone, TimezoneGetParams, TimezoneGetResponse, TimezoneSetParams } from './timezone';
+import * as EsimAPI from './esim/esim';
+import {
+  Esim,
+  EsimActivateParams,
+  EsimActivateResponse,
+  EsimEnableParams,
+  EsimListParams,
+  EsimListResponse,
+  EsimRemoveParams,
+  EsimSetRoamingParams,
+  EsimStatusParams,
+  EsimStatusResponse,
+} from './esim/esim';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -96,6 +132,11 @@ export class Devices extends APIResource {
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
   timezone: TimezoneAPI.Timezone = new TimezoneAPI.Timezone(this._client);
   language: LanguageAPI.Language = new LanguageAPI.Language(this._client);
+  deepLink: DeepLinkAPI.DeepLink = new DeepLinkAPI.DeepLink(this._client);
+  browser: BrowserAPI.Browser = new BrowserAPI.Browser(this._client);
+  kiosk: KioskAPI.Kiosk = new KioskAPI.Kiosk(this._client);
+  mediaSessions: MediaSessionsAPI.MediaSessions = new MediaSessionsAPI.MediaSessions(this._client);
+  recordings: RecordingsAPI.Recordings = new RecordingsAPI.Recordings(this._client);
 
   /**
    * Requests a new device for the authenticated user from the device spec in the
@@ -104,7 +145,7 @@ export class Devices extends APIResource {
    * device-type aliases remain accepted only during the documented compatibility
    * grace period. The response returns the device and its stream token.
    */
-  create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<Device> {
+  create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<DeviceCreateResponse> {
     const { billing, query_country, deviceType, profileId, ...body } = params;
     return this._client.post('/devices', {
       query: { billing, country: query_country, deviceType, profileId },
@@ -118,7 +159,7 @@ export class Devices extends APIResource {
    * lifecycle state, type, stream URL, billing strategy, and timestamps. A stream
    * token is included while the device is active.
    */
-  retrieve(deviceID: string, options?: RequestOptions): APIPromise<Device> {
+  retrieve(deviceID: string, options?: RequestOptions): APIPromise<DeviceRetrieveResponse> {
     return this._client.get(path`/devices/${deviceID}`, options);
   }
 
@@ -187,11 +228,54 @@ export class Devices extends APIResource {
   }
 
   /**
+   * Wakes a parked device: capacity is preflighted (the device's data may be
+   * replicated to another node if its home is full), the device starts running
+   * again, and per-minute billing resumes. On a device that is not parked this is a
+   * no-op ready transition.
+   */
+  resume(deviceID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.post(path`/devices/${deviceID}/resume`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+
+  /**
+   * Returns the set of capabilities supported by this device. For a legacy device
+   * this reflects the live instance's actual tools rather than its static type; for
+   * a core-managed device it is resolved from provider/pool configuration without
+   * guaranteeing a live instance. Used to determine which tools and features are
+   * available for the device.
+   */
+  retrieveCapabilities(
+    deviceID: string,
+    options?: RequestOptions,
+  ): APIPromise<DeviceRetrieveCapabilitiesResponse> {
+    return this._client.get(path`/devices/${deviceID}/capabilities`, options);
+  }
+
+  /**
    * Sets the display name for a device from the name in the request body and returns
    * the updated device.
    */
-  setName(deviceID: string, body: DeviceSetNameParams, options?: RequestOptions): APIPromise<Device> {
+  setName(
+    deviceID: string,
+    body: DeviceSetNameParams,
+    options?: RequestOptions,
+  ): APIPromise<DeviceSetNameResponse> {
     return this._client.put(path`/devices/${deviceID}/name`, { body, ...options });
+  }
+
+  /**
+   * Parks the device: its data, apps and identity are kept, but nothing runs and
+   * nothing is billed until it is resumed. Only devices whose capabilities report
+   * stop=true support this; others return 404.
+   */
+  stop(deviceID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.post(path`/devices/${deviceID}/stop`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -212,12 +296,58 @@ export class Devices extends APIResource {
    * as Get device info. The call returns early with an error if the wait is
    * cancelled or times out.
    */
-  waitReady(deviceID: string, options?: RequestOptions): APIPromise<Device> {
+  waitReady(deviceID: string, options?: RequestOptions): APIPromise<DeviceWaitReadyResponse> {
     return this._client.get(path`/devices/${deviceID}/wait`, options);
   }
 }
 
-export interface Device {
+export interface DeviceCreateResponse {
+  id: string;
+
+  activeTaskId: string;
+
+  assignedAt: string | null;
+
+  createdAt: string;
+
+  name: string;
+
+  state: string;
+
+  stateMessage: string;
+
+  streamUrl: string;
+
+  taskCount: number;
+
+  terminatesAt: string | null;
+
+  type: string;
+
+  updatedAt: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  billingStrategy?: string;
+
+  createdBy?: string;
+
+  ownerId?: string;
+
+  providerId?: string;
+
+  streamToken?: string;
+
+  /**
+   * @deprecated Deprecated: use ownerId/createdBy.
+   */
+  userId?: string;
+}
+
+export interface DeviceRetrieveResponse {
   id: string;
 
   activeTaskId: string;
@@ -264,7 +394,7 @@ export interface Device {
 }
 
 export interface DeviceListResponse {
-  items: Array<Device> | null;
+  items: Array<DeviceListResponse.Item> | null;
 
   pagination: Shared.Meta;
 
@@ -272,6 +402,54 @@ export interface DeviceListResponse {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
+}
+
+export namespace DeviceListResponse {
+  export interface Item {
+    id: string;
+
+    activeTaskId: string;
+
+    assignedAt: string | null;
+
+    createdAt: string;
+
+    name: string;
+
+    state: string;
+
+    stateMessage: string;
+
+    streamUrl: string;
+
+    taskCount: number;
+
+    terminatesAt: string | null;
+
+    type: string;
+
+    updatedAt: string;
+
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    $schema?: string;
+
+    billingStrategy?: string;
+
+    createdBy?: string;
+
+    ownerId?: string;
+
+    providerId?: string;
+
+    streamToken?: string;
+
+    /**
+     * @deprecated Deprecated: use ownerId/createdBy.
+     */
+    userId?: string;
+  }
 }
 
 export type DeviceCountResponse = { [key: string]: number };
@@ -315,6 +493,155 @@ export namespace DeviceFingerprintResponse {
 
     model?: string;
   }
+}
+
+export interface DeviceRetrieveCapabilitiesResponse {
+  capabilities: DeviceRetrieveCapabilitiesResponse.Capabilities;
+
+  deviceType: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export namespace DeviceRetrieveCapabilitiesResponse {
+  export interface Capabilities {
+    accessibility: boolean;
+
+    agent: boolean;
+
+    apps: boolean;
+
+    browser: boolean;
+
+    cameraInjection: boolean;
+
+    esim: boolean;
+
+    files: boolean;
+
+    fingerprint: boolean;
+
+    frida: boolean;
+
+    geo: boolean;
+
+    humanTouch: boolean;
+
+    language: boolean;
+
+    logcat: boolean;
+
+    microphoneInjection: boolean;
+
+    proxy: boolean;
+
+    reset: boolean;
+
+    shell: boolean;
+
+    spoofing: boolean;
+
+    stop: boolean;
+
+    stream: boolean;
+
+    time: boolean;
+  }
+}
+
+export interface DeviceSetNameResponse {
+  id: string;
+
+  activeTaskId: string;
+
+  assignedAt: string | null;
+
+  createdAt: string;
+
+  name: string;
+
+  state: string;
+
+  stateMessage: string;
+
+  streamUrl: string;
+
+  taskCount: number;
+
+  terminatesAt: string | null;
+
+  type: string;
+
+  updatedAt: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  billingStrategy?: string;
+
+  createdBy?: string;
+
+  ownerId?: string;
+
+  providerId?: string;
+
+  streamToken?: string;
+
+  /**
+   * @deprecated Deprecated: use ownerId/createdBy.
+   */
+  userId?: string;
+}
+
+export interface DeviceWaitReadyResponse {
+  id: string;
+
+  activeTaskId: string;
+
+  assignedAt: string | null;
+
+  createdAt: string;
+
+  name: string;
+
+  state: string;
+
+  stateMessage: string;
+
+  streamUrl: string;
+
+  taskCount: number;
+
+  terminatesAt: string | null;
+
+  type: string;
+
+  updatedAt: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  billingStrategy?: string;
+
+  createdBy?: string;
+
+  ownerId?: string;
+
+  providerId?: string;
+
+  streamToken?: string;
+
+  /**
+   * @deprecated Deprecated: use ownerId/createdBy.
+   */
+  userId?: string;
 }
 
 export interface DeviceCreateParams {
@@ -415,7 +742,7 @@ export namespace DeviceCreateParams {
 
     smartIp?: boolean;
 
-    socks5?: Shared.Socks5;
+    socks5?: Proxy.Socks5;
   }
 
   export namespace Proxy {
@@ -430,6 +757,16 @@ export namespace DeviceCreateParams {
        * Mobilerun Connect proxy for the device.
        */
       country?: string;
+    }
+
+    export interface Socks5 {
+      host: string;
+
+      password: string;
+
+      port: number;
+
+      user: string;
     }
   }
 }
@@ -514,13 +851,22 @@ Devices.State = State;
 Devices.Tasks = Tasks;
 Devices.Timezone = Timezone;
 Devices.Language = Language;
+Devices.DeepLink = DeepLink;
+Devices.Browser = Browser;
+Devices.Kiosk = Kiosk;
+Devices.MediaSessions = MediaSessions;
+Devices.Recordings = Recordings;
 
 export declare namespace Devices {
   export {
-    type Device as Device,
+    type DeviceCreateResponse as DeviceCreateResponse,
+    type DeviceRetrieveResponse as DeviceRetrieveResponse,
     type DeviceListResponse as DeviceListResponse,
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceFingerprintResponse as DeviceFingerprintResponse,
+    type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
+    type DeviceSetNameResponse as DeviceSetNameResponse,
+    type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
     type DeviceFingerprintParams as DeviceFingerprintParams,
@@ -541,9 +887,13 @@ export declare namespace Devices {
   export {
     Apps as Apps,
     type AppListResponse as AppListResponse,
+    type AppListInstallsResponse as AppListInstallsResponse,
     type AppListParams as AppListParams,
     type AppDeleteParams as AppDeleteParams,
+    type AppGrantPermissionParams as AppGrantPermissionParams,
     type AppInstallParams as AppInstallParams,
+    type AppListInstallsParams as AppListInstallsParams,
+    type AppRevokePermissionParams as AppRevokePermissionParams,
     type AppStartParams as AppStartParams,
     type AppStopParams as AppStopParams,
   };
@@ -552,15 +902,17 @@ export declare namespace Devices {
     Esim as Esim,
     type EsimListResponse as EsimListResponse,
     type EsimActivateResponse as EsimActivateResponse,
+    type EsimStatusResponse as EsimStatusResponse,
     type EsimListParams as EsimListParams,
     type EsimActivateParams as EsimActivateParams,
     type EsimEnableParams as EsimEnableParams,
     type EsimRemoveParams as EsimRemoveParams,
+    type EsimSetRoamingParams as EsimSetRoamingParams,
+    type EsimStatusParams as EsimStatusParams,
   };
 
   export {
     Files as Files,
-    type FileInfo as FileInfo,
     type FileListResponse as FileListResponse,
     type FileDownloadResponse as FileDownloadResponse,
     type FileListParams as FileListParams,
@@ -579,6 +931,7 @@ export declare namespace Devices {
   export {
     Location as Location,
     type LocationGetParams as LocationGetParams,
+    type LocationResetParams as LocationResetParams,
     type LocationSetParams as LocationSetParams,
   };
 
@@ -601,7 +954,6 @@ export declare namespace Devices {
   export {
     State as State,
     type A11YNode as A11YNode,
-    type Rect as Rect,
     type StateScreenshotResponse as StateScreenshotResponse,
     type StateTimeResponse as StateTimeResponse,
     type StateUiResponse as StateUiResponse,
@@ -624,5 +976,44 @@ export declare namespace Devices {
     type LanguageGetResponse as LanguageGetResponse,
     type LanguageGetParams as LanguageGetParams,
     type LanguageSetParams as LanguageSetParams,
+  };
+
+  export { DeepLink as DeepLink, type DeepLinkExecuteDeepLinkParams as DeepLinkExecuteDeepLinkParams };
+
+  export {
+    Browser as Browser,
+    type BrowserExecuteScriptResponse as BrowserExecuteScriptResponse,
+    type BrowserExecuteScriptParams as BrowserExecuteScriptParams,
+  };
+
+  export {
+    Kiosk as Kiosk,
+    type KioskDisableParams as KioskDisableParams,
+    type KioskEnableParams as KioskEnableParams,
+  };
+
+  export {
+    MediaSessions as MediaSessions,
+    type MediaSessionCreateResponse as MediaSessionCreateResponse,
+    type MediaSessionActivateResponse as MediaSessionActivateResponse,
+    type MediaSessionRetrieveCurrentResponse as MediaSessionRetrieveCurrentResponse,
+    type MediaSessionCreateParams as MediaSessionCreateParams,
+    type MediaSessionDeleteParams as MediaSessionDeleteParams,
+    type MediaSessionActivateParams as MediaSessionActivateParams,
+  };
+
+  export {
+    Recordings as Recordings,
+    type RecordingListResponse as RecordingListResponse,
+    type RecordingStartResponse as RecordingStartResponse,
+    type RecordingStatusResponse as RecordingStatusResponse,
+    type RecordingStopResponse as RecordingStopResponse,
+    type RecordingListParams as RecordingListParams,
+    type RecordingDeleteParams as RecordingDeleteParams,
+    type RecordingStartParams as RecordingStartParams,
+    type RecordingStatusParams as RecordingStatusParams,
+    type RecordingStopParams as RecordingStopParams,
+    type RecordingTrajectoryParams as RecordingTrajectoryParams,
+    type RecordingVideoParams as RecordingVideoParams,
   };
 }

@@ -119,6 +119,19 @@ export class Apps extends APIResource {
   markFailed(id: string, options?: RequestOptions): APIPromise<AppMarkFailedResponse> {
     return this._client.post(path`/apps/${id}/mark-failed`, options);
   }
+
+  /**
+   * Returns the user’s total storage quota, bytes used, and remaining bytes — the
+   * reliable maximum size for the next upload.
+   *
+   * @example
+   * ```ts
+   * const response = await client.apps.storageUsage();
+   * ```
+   */
+  storageUsage(options?: RequestOptions): APIPromise<AppStorageUsageResponse> {
+    return this._client.get('/apps/storage-usage', options);
+  }
 }
 
 export interface AppRetrieveResponse {
@@ -814,6 +827,31 @@ export interface AppMarkFailedResponse {
   success: true;
 }
 
+export interface AppStorageUsageResponse {
+  data: AppStorageUsageResponse.Data;
+}
+
+export namespace AppStorageUsageResponse {
+  export interface Data {
+    /**
+     * Remaining bytes — the reliable maximum size for the next upload. Advisory
+     * snapshot: the quota is enforced under a lock at confirm, so concurrent uploads
+     * may reduce actual headroom.
+     */
+    availableBytes: number;
+
+    /**
+     * Total storage allowance for the user, in bytes
+     */
+    quotaBytes: number;
+
+    /**
+     * Bytes currently consumed across all of the user’s app versions
+     */
+    usedBytes: number;
+  }
+}
+
 export interface AppListParams {
   order?: 'asc' | 'desc';
 
@@ -876,6 +914,7 @@ export declare namespace Apps {
     type AppCreateSignedUploadURLResponse as AppCreateSignedUploadURLResponse,
     type AppListVersionsResponse as AppListVersionsResponse,
     type AppMarkFailedResponse as AppMarkFailedResponse,
+    type AppStorageUsageResponse as AppStorageUsageResponse,
     type AppListParams as AppListParams,
     type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
   };

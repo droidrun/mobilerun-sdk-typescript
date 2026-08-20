@@ -12,18 +12,28 @@ export {
 export {
   Apps,
   type AppListResponse,
+  type AppListInstallsResponse,
   type AppListParams,
   type AppDeleteParams,
+  type AppGrantPermissionParams,
   type AppInstallParams,
+  type AppListInstallsParams,
+  type AppRevokePermissionParams,
   type AppStartParams,
   type AppStopParams,
 } from './apps';
+export { Browser, type BrowserExecuteScriptResponse, type BrowserExecuteScriptParams } from './browser';
+export { DeepLink, type DeepLinkExecuteDeepLinkParams } from './deep-link';
 export {
   Devices,
-  type Device,
+  type DeviceCreateResponse,
+  type DeviceRetrieveResponse,
   type DeviceListResponse,
   type DeviceCountResponse,
   type DeviceFingerprintResponse,
+  type DeviceRetrieveCapabilitiesResponse,
+  type DeviceSetNameResponse,
+  type DeviceWaitReadyResponse,
   type DeviceCreateParams,
   type DeviceListParams,
   type DeviceFingerprintParams,
@@ -34,14 +44,16 @@ export {
   Esim,
   type EsimListResponse,
   type EsimActivateResponse,
+  type EsimStatusResponse,
   type EsimListParams,
   type EsimActivateParams,
   type EsimEnableParams,
   type EsimRemoveParams,
-} from './esim';
+  type EsimSetRoamingParams,
+  type EsimStatusParams,
+} from './esim/index';
 export {
   Files,
-  type FileInfo,
   type FileListResponse,
   type FileDownloadResponse,
   type FileListParams,
@@ -55,13 +67,28 @@ export {
   type KeyboardKeyParams,
   type KeyboardWriteParams,
 } from './keyboard';
+export { Kiosk, type KioskDisableParams, type KioskEnableParams } from './kiosk';
 export {
   Language,
   type LanguageGetResponse,
   type LanguageGetParams,
   type LanguageSetParams,
 } from './language';
-export { Location, type LocationGetParams, type LocationSetParams } from './location';
+export {
+  Location,
+  type LocationGetParams,
+  type LocationResetParams,
+  type LocationSetParams,
+} from './location';
+export {
+  MediaSessions,
+  type MediaSessionCreateResponse,
+  type MediaSessionActivateResponse,
+  type MediaSessionRetrieveCurrentResponse,
+  type MediaSessionCreateParams,
+  type MediaSessionDeleteParams,
+  type MediaSessionActivateParams,
+} from './media-sessions';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
 export { Profile, type ProfileUpdateParams } from './profile';
 export {
@@ -72,9 +99,22 @@ export {
   type ProxyStatusParams,
 } from './proxy';
 export {
+  Recordings,
+  type RecordingListResponse,
+  type RecordingStartResponse,
+  type RecordingStatusResponse,
+  type RecordingStopResponse,
+  type RecordingListParams,
+  type RecordingDeleteParams,
+  type RecordingStartParams,
+  type RecordingStatusParams,
+  type RecordingStopParams,
+  type RecordingTrajectoryParams,
+  type RecordingVideoParams,
+} from './recordings';
+export {
   State,
   type A11YNode,
-  type Rect,
   type StateScreenshotResponse,
   type StateTimeResponse,
   type StateUiResponse,
