@@ -4,7 +4,7 @@
 
 This library provides convenient access to the Mobilerun REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [docs.mobilerun.ai](https://docs.mobilerun.ai). The full API of this library can be found in [api.md](api.md).
+The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -20,8 +20,11 @@ Use the Mobilerun MCP Server to enable AI assistants to interact with this API, 
 ## Installation
 
 ```sh
-npm install @mobilerun/sdk
+npm install git+ssh://git@github.com:droidrun/mobilerun-sdk-typescript.git
 ```
+
+> [!NOTE]
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install @mobilerun/sdk`
 
 ## Usage
 
@@ -35,9 +38,9 @@ const client = new Mobilerun({
   apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
 });
 
-const tasks = await client.tasks.list();
+const devices = await client.devices.list();
 
-console.log(tasks.items);
+console.log(devices.items);
 ```
 
 ### Request & Response types
@@ -52,7 +55,7 @@ const client = new Mobilerun({
   apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
 });
 
-const tasks: Mobilerun.TaskListResponse = await client.tasks.list();
+const devices: Mobilerun.DeviceListResponse = await client.devices.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -109,7 +112,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const tasks = await client.tasks.list().catch(async (err) => {
+const devices = await client.devices.list().catch(async (err) => {
   if (err instanceof Mobilerun.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -149,7 +152,7 @@ const client = new Mobilerun({
 });
 
 // Or, configure per-request:
-await client.tasks.list({
+await client.devices.list({
   maxRetries: 5,
 });
 ```
@@ -166,7 +169,7 @@ const client = new Mobilerun({
 });
 
 // Override per-request:
-await client.tasks.list({
+await client.devices.list({
   timeout: 5 * 1000,
 });
 ```
@@ -189,13 +192,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Mobilerun();
 
-const response = await client.tasks.list().asResponse();
+const response = await client.devices.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: tasks, response: raw } = await client.tasks.list().withResponse();
+const { data: devices, response: raw } = await client.devices.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(tasks.items);
+console.log(devices.items);
 ```
 
 ### Logging
@@ -275,7 +278,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.tasks.list({
+client.devices.list({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

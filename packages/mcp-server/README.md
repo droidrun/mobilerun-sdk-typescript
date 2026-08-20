@@ -4,16 +4,31 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
-### Direct invocation
+### Building
 
-You can run the MCP Server directly via `npx`:
+Because it's not published yet, clone the repo and build it:
 
 ```sh
-export MOBILERUN_CLOUD_API_KEY="My API Key"
-npx -y @mobilerun/sdk-mcp@latest
+git clone git@github.com:droidrun/mobilerun-sdk-typescript.git
+cd mobilerun-sdk-typescript
+./scripts/bootstrap
+./scripts/build
 ```
 
+### Running
+
+```sh
+# set env vars as needed
+export MOBILERUN_CLOUD_API_KEY="My API Key"
+node ./packages/mcp-server/dist/index.js
+```
+
+> [!NOTE]
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npx -y @mobilerun/sdk-mcp`
+
 ### Via MCP Client
+
+[Build the project](#building) as mentioned above.
 
 There is a partial list of existing clients at [modelcontextprotocol.io](https://modelcontextprotocol.io/clients). If you already
 have a client, consult their documentation to install the MCP server.
@@ -24,37 +39,14 @@ For clients with a configuration JSON, it might look something like this:
 {
   "mcpServers": {
     "mobilerun_sdk_api": {
-      "command": "npx",
-      "args": ["-y", "@mobilerun/sdk-mcp"],
+      "command": "node",
+      "args": ["/path/to/local/mobilerun-sdk-typescript/packages/mcp-server"],
       "env": {
         "MOBILERUN_CLOUD_API_KEY": "My API Key"
       }
     }
   }
 }
-```
-
-### Cursor
-
-If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
-in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
-
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40mobilerun%2Fsdk-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBtb2JpbGVydW4vc2RrLW1jcCJdLCJlbnYiOnsiTU9CSUxFUlVOX0NMT1VEX0FQSV9LRVkiOiJNeSBBUEkgS2V5In19)
-
-### VS Code
-
-If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
-in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
-
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40mobilerun%2Fsdk-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40mobilerun%2Fsdk-mcp%22%5D%2C%22env%22%3A%7B%22MOBILERUN_CLOUD_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)
-
-### Claude Code
-
-If you use Claude Code, you can install the MCP server by running the command below in your terminal. You will need to set your
-environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
-
-```
-claude mcp add mobilerun_sdk_mcp_api --env MOBILERUN_CLOUD_API_KEY="My API Key" -- npx -y @mobilerun/sdk-mcp
 ```
 
 ## Code Mode
