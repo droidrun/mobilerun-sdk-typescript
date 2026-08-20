@@ -1,5 +1,22 @@
 # Changelog
 
+## [5.2.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.2.0...v5.2.1) (2026-08-20)
+
+
+### Features
+
+* **bootstrap:** repo-driven STLC pipeline ([9cd8358](https://github.com/droidrun/mobilerun-sdk-typescript/commit/9cd835887ccd94f62985636d01fa62150b65299d))
+
+
+### Bug Fixes
+
+* **ci:** serialize release-please, ff main, drop prerelease ([6b488e9](https://github.com/droidrun/mobilerun-sdk-typescript/commit/6b488e9287ff60f6336d16016f6607351c5aca54))
+
+
+### Chores
+
+* release 5.2.1 ([72b2ca1](https://github.com/droidrun/mobilerun-sdk-typescript/commit/72b2ca1f6dc058e9120faadaff7c32538e9c4ec2))
+
 ## 5.2.0 (2026-08-13)
 
 Full Changelog: [v5.1.0...v5.2.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.1.0...v5.2.0)
