@@ -1,0 +1,50 @@
+name: release-please
+on:
+  push:
+    branches:
+      - next
+
+concurrency:
+  group: release-please-next
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          target-branch: next
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      # release-please tags/releases the existing `next` commit in place; it
+      # does not itself update `main`. Once a release actually landed, fast
+      # forward `main` to that commit so `main` always reflects the latest
+      # released state. This never force-pushes: `git push <ref>:main`
+      # without `-f` is rejected by git/GitHub if it isn't a fast-forward,
+      # so a divergent `main` fails loudly instead of being overwritten.
+      - name: Fast-forward main to the released next commit
+        if: steps.release.outputs.releases_created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          git fetch origin next main
+          if ! git merge-base --is-ancestor origin/main origin/next; then
+            echo "::error::origin/main is not an ancestor of origin/next — refusing to fast-forward" >&2
+            exit 1
+          fi
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" origin/next:main
