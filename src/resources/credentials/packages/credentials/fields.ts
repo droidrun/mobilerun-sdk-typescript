@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
-import * as CredentialsAPI from './credentials';
 import { APIPromise } from '../../../../core/api-promise';
 import { RequestOptions } from '../../../../internal/request-options';
 import { path } from '../../../../internal/utils/path';
@@ -73,27 +72,138 @@ export class Fields extends APIResource {
 }
 
 export interface FieldCreateResponse {
-  data: CredentialsAPI.Credential;
+  data: FieldCreateResponse.Data;
 
   message: string;
 
   success: true;
+}
+
+export namespace FieldCreateResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType:
+        | 'email'
+        | 'username'
+        | 'password'
+        | 'api_token'
+        | 'phone_number'
+        | 'two_factor_secret'
+        | 'backup_codes';
+
+      value: string;
+    }
+  }
 }
 
 export interface FieldUpdateResponse {
-  data: CredentialsAPI.Credential;
+  data: FieldUpdateResponse.Data;
 
   message: string;
 
   success: true;
 }
 
+export namespace FieldUpdateResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType:
+        | 'email'
+        | 'username'
+        | 'password'
+        | 'api_token'
+        | 'phone_number'
+        | 'two_factor_secret'
+        | 'backup_codes';
+
+      value: string;
+    }
+  }
+}
+
 export interface FieldDeleteResponse {
-  data: CredentialsAPI.Credential;
+  data: FieldDeleteResponse.Data;
 
   message: string;
 
   success: true;
+}
+
+export namespace FieldDeleteResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType:
+        | 'email'
+        | 'username'
+        | 'password'
+        | 'api_token'
+        | 'phone_number'
+        | 'two_factor_secret'
+        | 'backup_codes';
+
+      value: string;
+    }
+  }
 }
 
 export interface FieldCreateParams {

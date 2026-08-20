@@ -55,6 +55,18 @@ describe('resource executions', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('abort', async () => {
+    const responsePromise = client.workflows.executions.abort('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('getMetrics', async () => {
     const responsePromise = client.workflows.executions.getMetrics();
     const rawResponse = await responsePromise.asResponse();

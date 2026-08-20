@@ -32,6 +32,30 @@ export class Location extends APIResource {
   }
 
   /**
+   * Clears any simulated GPS location and restores the device's default location
+   * behavior. Devices without geo support return an unsupported-feature error.
+   */
+  reset(
+    deviceID: string,
+    params: LocationResetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
+    return this._client.delete(path`/devices/${deviceID}/location`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          Accept: '*/*',
+          ...(xDeviceDisplayID?.toString() != null ?
+            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
+          : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Sets the device's simulated GPS location to the latitude and longitude in the
    * request body. Devices without geo support return an unsupported-feature error.
    */
@@ -57,6 +81,10 @@ export interface LocationGetParams {
   'X-Device-Display-ID'?: number;
 }
 
+export interface LocationResetParams {
+  'X-Device-Display-ID'?: number;
+}
+
 export interface LocationSetParams {
   /**
    * Body param
@@ -75,5 +103,9 @@ export interface LocationSetParams {
 }
 
 export declare namespace Location {
-  export { type LocationGetParams as LocationGetParams, type LocationSetParams as LocationSetParams };
+  export {
+    type LocationGetParams as LocationGetParams,
+    type LocationResetParams as LocationResetParams,
+    type LocationSetParams as LocationSetParams,
+  };
 }

@@ -1,12 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as TasksAPI from './tasks';
 import * as Shared from '../shared';
 import * as ScreenshotsAPI from './screenshots';
-import { MediaResponse, ScreenshotListResponse, ScreenshotRetrieveParams, Screenshots } from './screenshots';
+import {
+  ScreenshotListResponse,
+  ScreenshotRetrieveParams,
+  ScreenshotRetrieveResponse,
+  Screenshots,
+} from './screenshots';
 import * as UiStatesAPI from './ui-states';
-import { UiStateListResponse, UiStateRetrieveParams, UiStates } from './ui-states';
+import { UiStateListResponse, UiStateRetrieveParams, UiStateRetrieveResponse, UiStates } from './ui-states';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -105,39 +109,6 @@ export class Tasks extends APIResource {
   }
 }
 
-export interface PackageCredentials {
-  credentialNames: Array<string>;
-
-  packageName: string;
-}
-
-export interface Task {
-  createdAt: string;
-
-  taskId: string;
-
-  updatedAt: string;
-}
-
-export type TaskStatus =
-  | 'queued'
-  | 'created'
-  | 'running'
-  | 'cancelling'
-  | 'completed'
-  | 'failed'
-  | 'cancelled';
-
-export interface UsageResult {
-  request_tokens: number;
-
-  requests: number;
-
-  response_tokens: number;
-
-  total_tokens: number;
-}
-
 export interface TaskRetrieveResponse {
   /**
    * The task
@@ -163,7 +134,7 @@ export namespace TaskRetrieveResponse {
 
     ownerId: string;
 
-    status: TasksAPI.TaskStatus;
+    status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
     task: string;
 
@@ -190,7 +161,7 @@ export namespace TaskRetrieveResponse {
 
     createdBy?: string | null;
 
-    credentials?: Array<TasksAPI.PackageCredentials>;
+    credentials?: Array<Task.Credential>;
 
     creditsUsed?: number | null;
 
@@ -237,6 +208,14 @@ export namespace TaskRetrieveResponse {
     vision?: boolean;
 
     vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+  }
+
+  export namespace Task {
+    export interface Credential {
+      credentialNames: Array<string>;
+
+      packageName: string;
+    }
   }
 }
 
@@ -270,7 +249,7 @@ export namespace TaskListResponse {
 
     ownerId: string;
 
-    status: TasksAPI.TaskStatus;
+    status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
     task: string;
 
@@ -297,7 +276,7 @@ export namespace TaskListResponse {
 
     createdBy?: string | null;
 
-    credentials?: Array<TasksAPI.PackageCredentials>;
+    credentials?: Array<Item.Credential>;
 
     creditsUsed?: number | null;
 
@@ -345,13 +324,21 @@ export namespace TaskListResponse {
 
     vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
   }
+
+  export namespace Item {
+    export interface Credential {
+      credentialNames: Array<string>;
+
+      packageName: string;
+    }
+  }
 }
 
 export interface TaskGetStatusResponse {
   /**
    * The status of the task
    */
-  status: TaskStatus;
+  status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
   /**
    * Execution metadata for abnormal terminal outcomes
@@ -716,7 +703,19 @@ export namespace TaskGetTrajectoryResponse {
 
       code?: string | null;
 
-      usage?: TasksAPI.UsageResult | null;
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
     }
   }
 
@@ -869,7 +868,19 @@ export namespace TaskGetTrajectoryResponse {
     export interface Data {
       response: string;
 
-      usage?: TasksAPI.UsageResult | null;
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
     }
   }
 
@@ -939,7 +950,19 @@ export namespace TaskGetTrajectoryResponse {
     export interface Data {
       response: string;
 
-      usage?: TasksAPI.UsageResult | null;
+      usage?: Data.Usage | null;
+    }
+
+    export namespace Data {
+      export interface Usage {
+        request_tokens: number;
+
+        requests: number;
+
+        response_tokens: number;
+
+        total_tokens: number;
+      }
     }
   }
 
@@ -1037,7 +1060,7 @@ export interface TaskRunResponse {
   /**
    * The status of the task (queued or created)
    */
-  status: TaskStatus;
+  status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
   /**
    * The URL of the stream (null when queued)
@@ -1085,7 +1108,7 @@ export interface TaskListParams {
    */
   query?: string | null;
 
-  status?: TaskStatus | null;
+  status?: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled' | null;
 }
 
 export interface TaskRunParams {
@@ -1122,7 +1145,7 @@ export interface TaskRunParams {
   /**
    * Body param
    */
-  credentials?: Array<PackageCredentials>;
+  credentials?: Array<TaskRunParams.Credential>;
 
   /**
    * Body param: The display ID of the device to run the task on.
@@ -1197,6 +1220,14 @@ export interface TaskRunParams {
   'Idempotency-Key'?: string;
 }
 
+export namespace TaskRunParams {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
+}
+
 export interface TaskRunStreamedParams {
   /**
    * The ID of the device to run the task on.
@@ -1213,7 +1244,7 @@ export interface TaskRunStreamedParams {
 
   continueOnFailure?: boolean;
 
-  credentials?: Array<PackageCredentials>;
+  credentials?: Array<TaskRunStreamedParams.Credential>;
 
   /**
    * The display ID of the device to run the task on.
@@ -1254,6 +1285,14 @@ export interface TaskRunStreamedParams {
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
 }
 
+export namespace TaskRunStreamedParams {
+  export interface Credential {
+    credentialNames: Array<string>;
+
+    packageName: string;
+  }
+}
+
 export interface TaskSendMessageParams {
   /**
    * Message to send to the running agent
@@ -1266,10 +1305,6 @@ Tasks.UiStates = UiStates;
 
 export declare namespace Tasks {
   export {
-    type PackageCredentials as PackageCredentials,
-    type Task as Task,
-    type TaskStatus as TaskStatus,
-    type UsageResult as UsageResult,
     type TaskRetrieveResponse as TaskRetrieveResponse,
     type TaskListResponse as TaskListResponse,
     type TaskGetStatusResponse as TaskGetStatusResponse,
@@ -1286,13 +1321,14 @@ export declare namespace Tasks {
 
   export {
     Screenshots as Screenshots,
-    type MediaResponse as MediaResponse,
+    type ScreenshotRetrieveResponse as ScreenshotRetrieveResponse,
     type ScreenshotListResponse as ScreenshotListResponse,
     type ScreenshotRetrieveParams as ScreenshotRetrieveParams,
   };
 
   export {
     UiStates as UiStates,
+    type UiStateRetrieveResponse as UiStateRetrieveResponse,
     type UiStateListResponse as UiStateListResponse,
     type UiStateRetrieveParams as UiStateRetrieveParams,
   };
