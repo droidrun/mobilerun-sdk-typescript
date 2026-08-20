@@ -25,7 +25,7 @@ describe('resource webhooks', () => {
     const response = await client.webhooks.create({
       url: 'https://example.com/webhooks/droidrun',
       description: 'description',
-      eventTypes: ['task.completed', 'task.failed'],
+      eventTypes: ['task.run.completed', 'task.run.failed'],
     });
   });
 
@@ -87,8 +87,11 @@ describe('resource webhooks', () => {
     await expect(
       client.webhooks.list(
         {
+          createdBy: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          mine: 'true',
           page: 1,
           pageSize: 1,
+          search: 'x',
           status: 'active',
         },
         { path: '/_stainless_unknown_path' },

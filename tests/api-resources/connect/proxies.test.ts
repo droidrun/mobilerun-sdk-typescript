@@ -49,7 +49,7 @@ describe('resource proxies', () => {
 
   // Mock server tests are disabled
   test.skip('buy: only required params', async () => {
-    const responsePromise = client.connect.proxies.buy({ country: 'country' });
+    const responsePromise = client.connect.proxies.buy({ country: 'country', type: 'dedicated_residential' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -61,7 +61,7 @@ describe('resource proxies', () => {
 
   // Mock server tests are disabled
   test.skip('buy: required and optional params', async () => {
-    const response = await client.connect.proxies.buy({ country: 'country', type: 'residential' });
+    const response = await client.connect.proxies.buy({ country: 'country', type: 'dedicated_residential' });
   });
 
   // Mock server tests are disabled

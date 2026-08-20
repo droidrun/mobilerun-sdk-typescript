@@ -419,54 +419,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/{deviceId}/language',
   },
   {
-    clientCallName: 'client.hooks.retrieve',
-    fullyQualifiedName: 'hooks.retrieve',
-    httpMethod: 'get',
-    httpPath: '/hooks/{hook_id}',
-  },
-  {
-    clientCallName: 'client.hooks.update',
-    fullyQualifiedName: 'hooks.update',
-    httpMethod: 'post',
-    httpPath: '/hooks/{hook_id}/edit',
-  },
-  {
-    clientCallName: 'client.hooks.list',
-    fullyQualifiedName: 'hooks.list',
-    httpMethod: 'get',
-    httpPath: '/hooks',
-  },
-  {
-    clientCallName: 'client.hooks.getSampleData',
-    fullyQualifiedName: 'hooks.getSampleData',
-    httpMethod: 'get',
-    httpPath: '/hooks/sample',
-  },
-  {
-    clientCallName: 'client.hooks.perform',
-    fullyQualifiedName: 'hooks.perform',
-    httpMethod: 'post',
-    httpPath: '/hooks/perform',
-  },
-  {
-    clientCallName: 'client.hooks.subscribe',
-    fullyQualifiedName: 'hooks.subscribe',
-    httpMethod: 'post',
-    httpPath: '/hooks/subscribe',
-  },
-  {
-    clientCallName: 'client.hooks.test',
-    fullyQualifiedName: 'hooks.test',
-    httpMethod: 'post',
-    httpPath: '/hooks/{hook_id}/test',
-  },
-  {
-    clientCallName: 'client.hooks.unsubscribe',
-    fullyQualifiedName: 'hooks.unsubscribe',
-    httpMethod: 'post',
-    httpPath: '/hooks/{hook_id}/unsubscribe',
-  },
-  {
     clientCallName: 'client.models.list',
     fullyQualifiedName: 'models.list',
     httpMethod: 'get',
@@ -861,18 +813,6 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'workflows.events.ingest',
     httpMethod: 'post',
     httpPath: '/events/ingest',
-  },
-  {
-    clientCallName: 'client.workflows.events.catalog.list',
-    fullyQualifiedName: 'workflows.events.catalog.list',
-    httpMethod: 'get',
-    httpPath: '/events/catalog',
-  },
-  {
-    clientCallName: 'client.workflows.events.catalog.register',
-    fullyQualifiedName: 'workflows.events.catalog.register',
-    httpMethod: 'post',
-    httpPath: '/events/catalog/register',
   },
   {
     clientCallName: 'client.workflows.executions.retrieve',

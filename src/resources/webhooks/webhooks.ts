@@ -23,7 +23,10 @@ export class Webhooks extends APIResource {
   deliveries: DeliveriesAPI.Deliveries = new DeliveriesAPI.Deliveries(this._client);
 
   /**
-   * Register a webhook subscription
+   * Creates a webhook subscription with a delivery URL and an optional list of event
+   * types to subscribe to (defaults to all when omitted). The response includes the
+   * generated signing secret, which is returned only once at creation time and
+   * cannot be retrieved later.
    *
    * @example
    * ```ts
@@ -37,7 +40,9 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Get a webhook subscription
+   * Returns a single webhook subscription by id, including its URL, subscribed event
+   * types, state, and system-observed delivery health. The signing secret is never
+   * included.
    *
    * @example
    * ```ts
@@ -51,7 +56,10 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Update a webhook subscription
+   * Updates a webhook subscription. Any combination of the subscribed event types,
+   * state (ACTIVE or DISABLED), and description may be changed, and at least one
+   * field must be supplied. Setting state to ACTIVE re-enables a subscription that
+   * was auto-blocked after sustained delivery failures.
    *
    * @example
    * ```ts
@@ -69,7 +77,10 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * List your webhook subscriptions
+   * Returns a paginated list of your webhook subscriptions, optionally filtered by
+   * status (active, failing, blocked, or disabled) and/or by `search` (a
+   * case-insensitive substring match against the URL or description). The response
+   * also includes per-status counts across all of your subscriptions.
    *
    * @example
    * ```ts
@@ -84,7 +95,8 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Delete a webhook subscription
+   * Deletes a webhook subscription so it stops receiving deliveries. Returns 204 No
+   * Content on success.
    *
    * @example
    * ```ts
@@ -101,7 +113,9 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * List subscribable event types per source
+   * Returns the catalog of event types that webhook subscriptions can subscribe to,
+   * grouped by source. Use the returned type identifiers as the `eventTypes` values
+   * when creating or updating a webhook.
    *
    * @example
    * ```ts
@@ -113,7 +127,9 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Rotate the signing secret (returned once)
+   * Generates a new signing secret for the webhook subscription and returns it once
+   * in the response. The previous secret is replaced immediately, so any signature
+   * verification on your endpoint must be updated to use the new value.
    *
    * @example
    * ```ts
@@ -127,7 +143,9 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Send a one-shot test delivery
+   * Sends a single test payload to the webhook subscription URL to verify
+   * connectivity. The response reports whether the attempt succeeded along with the
+   * returned HTTP status code or error, if any.
    *
    * @example
    * ```ts
@@ -154,6 +172,11 @@ export namespace WebhookCreateResponse {
     blockedReason: string | null;
 
     createdAt: string;
+
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
 
     description: string | null;
 
@@ -194,6 +217,11 @@ export namespace WebhookRetrieveResponse {
 
     createdAt: string;
 
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
+
     description: string | null;
 
     eventTypes: Array<string>;
@@ -227,6 +255,11 @@ export namespace WebhookUpdateResponse {
     blockedReason: string | null;
 
     createdAt: string;
+
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
 
     description: string | null;
 
@@ -278,6 +311,11 @@ export namespace WebhookListResponse {
 
     createdAt: string;
 
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
+
     description: string | null;
 
     eventTypes: Array<string>;
@@ -304,7 +342,7 @@ export interface WebhookEventTypesResponse {
 
 export namespace WebhookEventTypesResponse {
   export interface Data {
-    schemaVersion: number;
+    schemaVersion: 1;
 
     sources: Array<Data.Source>;
   }
@@ -320,7 +358,19 @@ export namespace WebhookEventTypesResponse {
       export interface Event {
         description: string;
 
+        surfaces: Event.Surfaces;
+
         type: string;
+      }
+
+      export namespace Event {
+        export interface Surfaces {
+          feed: boolean;
+
+          toast: boolean;
+
+          webhook: boolean;
+        }
       }
     }
   }
@@ -339,6 +389,11 @@ export namespace WebhookRotateSecretResponse {
     blockedReason: string | null;
 
     createdAt: string;
+
+    /**
+     * Id of the actor who created this endpoint. Null when no creator was recorded.
+     */
+    createdBy: string | null;
 
     description: string | null;
 
@@ -396,9 +451,24 @@ export interface WebhookUpdateParams {
 }
 
 export interface WebhookListParams {
+  /**
+   * Only include webhooks created by this actor id. Mutually exclusive with `mine`.
+   */
+  createdBy?: string;
+
+  /**
+   * When true, only include webhooks created by you (not just owned by your org).
+   */
+  mine?: 'true' | 'false';
+
   page?: number;
 
   pageSize?: number;
+
+  /**
+   * Case-insensitive substring match against the URL or description.
+   */
+  search?: string;
 
   status?: 'active' | 'failing' | 'blocked' | 'disabled';
 }

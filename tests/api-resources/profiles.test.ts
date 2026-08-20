@@ -61,6 +61,7 @@ describe('resource profiles', () => {
         location: { latitude: 0, longitude: 0 },
         name: 'name',
         proxy: {
+          connect: { id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', country: 'SE' },
           name: 'name',
           smartIp: true,
           socks5: {
@@ -140,6 +141,7 @@ describe('resource profiles', () => {
         location: { latitude: 0, longitude: 0 },
         name: 'name',
         proxy: {
+          connect: { id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', country: 'SE' },
           name: 'name',
           smartIp: true,
           socks5: {
@@ -172,6 +174,7 @@ describe('resource profiles', () => {
     await expect(
       client.profiles.list(
         {
+          mine: true,
           name: 'name',
           orderBy: 'name',
           orderByDirection: 'asc',

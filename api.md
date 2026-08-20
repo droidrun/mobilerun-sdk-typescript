@@ -277,28 +277,6 @@ Methods:
 
 # Hooks
 
-Types:
-
-- <code><a href="./src/resources/hooks.ts">HookRetrieveResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookUpdateResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookListResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookGetSampleDataResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookPerformResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookSubscribeResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookTestResponse</a></code>
-- <code><a href="./src/resources/hooks.ts">HookUnsubscribeResponse</a></code>
-
-Methods:
-
-- <code title="get /hooks/{hook_id}">client.hooks.<a href="./src/resources/hooks.ts">retrieve</a>(hookID) -> HookRetrieveResponse</code>
-- <code title="post /hooks/{hook_id}/edit">client.hooks.<a href="./src/resources/hooks.ts">update</a>(hookID, { ...params }) -> HookUpdateResponse</code>
-- <code title="get /hooks">client.hooks.<a href="./src/resources/hooks.ts">list</a>({ ...params }) -> HookListResponse</code>
-- <code title="get /hooks/sample">client.hooks.<a href="./src/resources/hooks.ts">getSampleData</a>() -> HookGetSampleDataResponse</code>
-- <code title="post /hooks/perform">client.hooks.<a href="./src/resources/hooks.ts">perform</a>({ ...params }) -> HookPerformResponse</code>
-- <code title="post /hooks/subscribe">client.hooks.<a href="./src/resources/hooks.ts">subscribe</a>({ ...params }) -> HookSubscribeResponse</code>
-- <code title="post /hooks/{hook_id}/test">client.hooks.<a href="./src/resources/hooks.ts">test</a>(hookID, { ...params }) -> HookTestResponse</code>
-- <code title="post /hooks/{hook_id}/unsubscribe">client.hooks.<a href="./src/resources/hooks.ts">unsubscribe</a>(hookID) -> HookUnsubscribeResponse</code>
-
 # Models
 
 Types:
@@ -313,15 +291,17 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/profiles.ts">Profile</a></code>
+- <code><a href="./src/resources/profiles.ts">ProfileCreateResponse</a></code>
+- <code><a href="./src/resources/profiles.ts">ProfileRetrieveResponse</a></code>
+- <code><a href="./src/resources/profiles.ts">ProfileUpdateResponse</a></code>
 - <code><a href="./src/resources/profiles.ts">ProfileListResponse</a></code>
 - <code><a href="./src/resources/profiles.ts">ProfileDeleteResponse</a></code>
 
 Methods:
 
-- <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> Profile</code>
-- <code title="get /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">retrieve</a>(profileID) -> Profile</code>
-- <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> Profile</code>
+- <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> ProfileCreateResponse</code>
+- <code title="get /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">retrieve</a>(profileID) -> ProfileRetrieveResponse</code>
+- <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> ProfileUpdateResponse</code>
 - <code title="get /profiles">client.profiles.<a href="./src/resources/profiles.ts">list</a>({ ...params }) -> ProfileListResponse</code>
 - <code title="delete /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">delete</a>(profileID) -> ProfileDeleteResponse</code>
 
@@ -572,16 +552,6 @@ Methods:
 - <code title="post /events/ingest">client.workflows.events.<a href="./src/resources/workflows/events/events.ts">ingest</a>({ ...params }) -> EventIngestResponse</code>
 
 ### Catalog
-
-Types:
-
-- <code><a href="./src/resources/workflows/events/catalog.ts">CatalogListResponse</a></code>
-- <code><a href="./src/resources/workflows/events/catalog.ts">CatalogRegisterResponse</a></code>
-
-Methods:
-
-- <code title="get /events/catalog">client.workflows.events.catalog.<a href="./src/resources/workflows/events/catalog.ts">list</a>({ ...params }) -> CatalogListResponse</code>
-- <code title="post /events/catalog/register">client.workflows.events.catalog.<a href="./src/resources/workflows/events/catalog.ts">register</a>({ ...params }) -> CatalogRegisterResponse</code>
 
 ## Executions
 

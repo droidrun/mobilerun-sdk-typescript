@@ -2,16 +2,15 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
+import * as ResourcesTasksAPI from '../tasks/tasks';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
-/**
- * Device Management
- */
 export class Tasks extends APIResource {
   /**
-   * List tasks for a device
+   * Returns a paginated list of tasks that have run on the device, along with
+   * pagination metadata.
    */
   list(
     deviceID: string,
@@ -23,7 +22,7 @@ export class Tasks extends APIResource {
 }
 
 export interface TaskListResponse {
-  items: Array<TaskListResponse.Item> | null;
+  items: Array<ResourcesTasksAPI.Task> | null;
 
   pagination: Shared.Meta;
 
@@ -31,16 +30,6 @@ export interface TaskListResponse {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
-}
-
-export namespace TaskListResponse {
-  export interface Item {
-    createdAt: string;
-
-    taskId: string;
-
-    updatedAt: string;
-  }
 }
 
 export interface TaskListParams {

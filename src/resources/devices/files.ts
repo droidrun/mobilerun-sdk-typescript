@@ -11,7 +11,8 @@ import { path } from '../../internal/utils/path';
 
 export class Files extends APIResource {
   /**
-   * List files
+   * Lists the files at the directory path given in the path query parameter,
+   * returning each entry's metadata along with the path and total count.
    */
   list(deviceID: string, params: FileListParams, options?: RequestOptions): APIPromise<FileListResponse> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params;
@@ -30,7 +31,7 @@ export class Files extends APIResource {
   }
 
   /**
-   * Delete file
+   * Deletes the file at the path given in the path query parameter from the device.
    */
   delete(deviceID: string, params: FileDeleteParams, options?: RequestOptions): APIPromise<void> {
     const { path: path_, 'X-Device-Display-ID': xDeviceDisplayID } = params;
@@ -50,7 +51,8 @@ export class Files extends APIResource {
   }
 
   /**
-   * Download file
+   * Pulls the file at the given path query parameter from the device and returns its
+   * raw bytes as an octet-stream.
    */
   download(deviceID: string, params: FileDownloadParams, options?: RequestOptions): APIPromise<string> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params;
@@ -69,7 +71,8 @@ export class Files extends APIResource {
   }
 
   /**
-   * Upload file
+   * Uploads a file to the device via multipart form data, writing it into the
+   * directory given by the path query parameter using the uploaded file's name.
    */
   upload(deviceID: string, params: FileUploadParams, options?: RequestOptions): APIPromise<void> {
     const { path: path_, 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;

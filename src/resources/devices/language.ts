@@ -8,7 +8,7 @@ import { path } from '../../internal/utils/path';
 
 export class Language extends APIResource {
   /**
-   * Get device language/locale
+   * Returns the device's current language/locale as a BCP-47 locale string.
    */
   get(
     deviceID: string,
@@ -30,7 +30,9 @@ export class Language extends APIResource {
   }
 
   /**
-   * Set device language/locale
+   * Sets the device language/locale to the BCP-47 locale in the request body. An
+   * optional restart flag applies the change immediately by restarting the zygote
+   * instead of waiting for the next reboot.
    */
   set(deviceID: string, params: LanguageSetParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;

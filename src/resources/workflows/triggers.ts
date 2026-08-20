@@ -8,21 +8,27 @@ import { path } from '../../internal/utils/path';
 
 export class Triggers extends APIResource {
   /**
-   * Create a trigger
+   * Create a trigger with an activation type of `event`, `schedule`, or `custom`.
+   * Each type requires its own fields (e.g. `eventType` and optional `conditions`
+   * for events, `scheduleRule` and `timezone` for schedules, `customPayloadSchema`
+   * for custom triggers); mismatched fields are rejected.
    */
   create(body: TriggerCreateParams, options?: RequestOptions): APIPromise<TriggerCreateResponse> {
     return this._client.post('/triggers', { body, ...options });
   }
 
   /**
-   * Get a trigger
+   * Fetch a single trigger by its ID, including its activation type and
+   * type-specific configuration. Returns 404 if no trigger matches.
    */
   retrieve(triggerID: string, options?: RequestOptions): APIPromise<TriggerRetrieveResponse> {
     return this._client.get(path`/triggers/${triggerID}`, options);
   }
 
   /**
-   * Update a trigger
+   * Partially update a trigger; all fields are optional. When `activation` is
+   * changed, the type-specific field rules are re-validated. Returns 404 if the
+   * trigger does not exist.
    */
   update(
     triggerID: string,
@@ -33,7 +39,8 @@ export class Triggers extends APIResource {
   }
 
   /**
-   * List triggers
+   * Return a paginated list of triggers. Supports filtering by `activation` and
+   * `eventType`, free-text `search`, and ordering by name, createdAt, or updatedAt.
    */
   list(
     query: TriggerListParams | null | undefined = {},
@@ -43,7 +50,7 @@ export class Triggers extends APIResource {
   }
 
   /**
-   * Delete a trigger
+   * Delete a trigger by its ID. Returns 404 if no trigger matches.
    */
   delete(triggerID: string, options?: RequestOptions): APIPromise<TriggerDeleteResponse> {
     return this._client.delete(path`/triggers/${triggerID}`, options);
@@ -89,6 +96,8 @@ export namespace TriggerCreateResponse {
 
     createdAt: string | null;
 
+    createdBy: string | null;
+
     customPayloadSchema: { [key: string]: unknown } | null;
 
     description: string | null;
@@ -97,12 +106,17 @@ export namespace TriggerCreateResponse {
 
     name: string;
 
+    ownerId: string;
+
     scheduleRule: Data.ScheduleRule;
 
     timezone: string | null;
 
     updatedAt: string | null;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     conditions?: unknown;
@@ -125,9 +139,25 @@ export namespace TriggerCreateResponse {
       expression?: string;
 
       /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      jitter?: ScheduleRule.Jitter;
+
+      /**
        * RRULE string (for type=recurring)
        */
       rrule?: string;
+    }
+
+    export namespace ScheduleRule {
+      /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      export interface Jitter {
+        afterMinutes?: number;
+
+        beforeMinutes?: number;
+      }
     }
   }
 }
@@ -144,6 +174,8 @@ export namespace TriggerRetrieveResponse {
 
     createdAt: string | null;
 
+    createdBy: string | null;
+
     customPayloadSchema: { [key: string]: unknown } | null;
 
     description: string | null;
@@ -152,38 +184,22 @@ export namespace TriggerRetrieveResponse {
 
     name: string;
 
-    scheduleRule: Data.ScheduleRule | null;
+    ownerId: string;
+
+    scheduleRule: unknown;
 
     timezone: string | null;
 
     updatedAt: string | null;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     conditions?: unknown;
 
     nextFireTime?: string | null;
-  }
-
-  export namespace Data {
-    export interface ScheduleRule {
-      type: 'once' | 'cron' | 'recurring';
-
-      /**
-       * ISO 8601 datetime (for type=once)
-       */
-      dateTime?: string;
-
-      /**
-       * Cron expression (for type=cron)
-       */
-      expression?: string;
-
-      /**
-       * RRULE string (for type=recurring)
-       */
-      rrule?: string;
-    }
   }
 }
 
@@ -199,6 +215,8 @@ export namespace TriggerUpdateResponse {
 
     createdAt: string | null;
 
+    createdBy: string | null;
+
     customPayloadSchema: { [key: string]: unknown } | null;
 
     description: string | null;
@@ -207,38 +225,22 @@ export namespace TriggerUpdateResponse {
 
     name: string;
 
-    scheduleRule: Data.ScheduleRule | null;
+    ownerId: string;
+
+    scheduleRule: unknown;
 
     timezone: string | null;
 
     updatedAt: string | null;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     conditions?: unknown;
 
     nextFireTime?: string | null;
-  }
-
-  export namespace Data {
-    export interface ScheduleRule {
-      type: 'once' | 'cron' | 'recurring';
-
-      /**
-       * ISO 8601 datetime (for type=once)
-       */
-      dateTime?: string;
-
-      /**
-       * Cron expression (for type=cron)
-       */
-      expression?: string;
-
-      /**
-       * RRULE string (for type=recurring)
-       */
-      rrule?: string;
-    }
   }
 }
 
@@ -256,6 +258,8 @@ export namespace TriggerListResponse {
 
     createdAt: string | null;
 
+    createdBy: string | null;
+
     customPayloadSchema: { [key: string]: unknown } | null;
 
     description: string | null;
@@ -264,38 +268,22 @@ export namespace TriggerListResponse {
 
     name: string;
 
-    scheduleRule: Item.ScheduleRule | null;
+    ownerId: string;
+
+    scheduleRule: unknown;
 
     timezone: string | null;
 
     updatedAt: string | null;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     conditions?: unknown;
 
     nextFireTime?: string | null;
-  }
-
-  export namespace Item {
-    export interface ScheduleRule {
-      type: 'once' | 'cron' | 'recurring';
-
-      /**
-       * ISO 8601 datetime (for type=once)
-       */
-      dateTime?: string;
-
-      /**
-       * Cron expression (for type=cron)
-       */
-      expression?: string;
-
-      /**
-       * RRULE string (for type=recurring)
-       */
-      rrule?: string;
-    }
   }
 }
 
@@ -359,9 +347,25 @@ export namespace TriggerCreateParams {
     expression?: string;
 
     /**
+     * Optional per-occurrence random window around the nominal schedule time
+     */
+    jitter?: ScheduleRule.Jitter;
+
+    /**
      * RRULE string (for type=recurring)
      */
     rrule?: string;
+  }
+
+  export namespace ScheduleRule {
+    /**
+     * Optional per-occurrence random window around the nominal schedule time
+     */
+    export interface Jitter {
+      afterMinutes?: number;
+
+      beforeMinutes?: number;
+    }
   }
 }
 
@@ -370,10 +374,7 @@ export interface TriggerUpdateParams {
 
   conditions?: TriggerUpdateParams.Conditions;
 
-  /**
-   * Optional JSON Schema for validating payloads sent to this custom trigger
-   */
-  customPayloadSchema?: { [key: string]: unknown } | null;
+  customPayloadSchema?: { [key: string]: unknown };
 
   description?: string;
 
@@ -407,9 +408,25 @@ export namespace TriggerUpdateParams {
     expression?: string;
 
     /**
+     * Optional per-occurrence random window around the nominal schedule time
+     */
+    jitter?: ScheduleRule.Jitter;
+
+    /**
      * RRULE string (for type=recurring)
      */
     rrule?: string;
+  }
+
+  export namespace ScheduleRule {
+    /**
+     * Optional per-occurrence random window around the nominal schedule time
+     */
+    export interface Jitter {
+      afterMinutes?: number;
+
+      beforeMinutes?: number;
+    }
   }
 }
 

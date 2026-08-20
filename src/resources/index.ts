@@ -44,26 +44,13 @@ export {
   type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices/devices';
-export {
-  Hooks,
-  type HookRetrieveResponse,
-  type HookUpdateResponse,
-  type HookListResponse,
-  type HookGetSampleDataResponse,
-  type HookPerformResponse,
-  type HookSubscribeResponse,
-  type HookTestResponse,
-  type HookUnsubscribeResponse,
-  type HookUpdateParams,
-  type HookListParams,
-  type HookPerformParams,
-  type HookSubscribeParams,
-  type HookTestParams,
-} from './hooks';
+export { Hooks } from './hooks';
 export { Models, type ModelListResponse } from './models';
 export {
   Profiles,
-  type Profile,
+  type ProfileCreateResponse,
+  type ProfileRetrieveResponse,
+  type ProfileUpdateResponse,
   type ProfileListResponse,
   type ProfileDeleteResponse,
   type ProfileCreateParams,

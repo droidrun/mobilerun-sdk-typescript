@@ -8,7 +8,8 @@ import { path } from '../../internal/utils/path';
 
 export class Packages extends APIResource {
   /**
-   * List packages
+   * Returns the package names of apps installed on the device. System and protected
+   * packages are excluded unless the corresponding query parameters are set.
    */
   list(
     deviceID: string,

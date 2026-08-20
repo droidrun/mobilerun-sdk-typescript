@@ -8,7 +8,8 @@ import { path } from '../../internal/utils/path';
 
 export class Timezone extends APIResource {
   /**
-   * Get device timezone
+   * Returns the device's current timezone identifier. Devices that do not support
+   * timezone control return an unsupported-feature error.
    */
   get(
     deviceID: string,
@@ -30,7 +31,8 @@ export class Timezone extends APIResource {
   }
 
   /**
-   * Set device timezone
+   * Sets the device timezone to the identifier in the request body. Devices that do
+   * not support timezone control return an unsupported-feature error.
    */
   set(deviceID: string, params: TimezoneSetParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;

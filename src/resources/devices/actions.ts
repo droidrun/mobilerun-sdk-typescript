@@ -8,7 +8,8 @@ import { path } from '../../internal/utils/path';
 
 export class Actions extends APIResource {
   /**
-   * Perform a global action
+   * Performs a global system action on the device, such as navigating back or going
+   * to the home screen, identified by an action code.
    */
   global(deviceID: string, params: ActionGlobalParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -28,7 +29,7 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Check if overlay is visible
+   * Returns whether the accessibility overlay is currently visible on the device.
    */
   overlayVisible(
     deviceID: string,
@@ -50,7 +51,8 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Set overlay visibility
+   * Shows or hides the accessibility overlay on the device based on the visibility
+   * flag in the request body.
    */
   setOverlayVisible(
     deviceID: string,
@@ -74,7 +76,9 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Swipe
+   * Swipes from a start coordinate to an end coordinate over the given duration in
+   * milliseconds. An optional stealth flag applies human-like jitter and curved
+   * paths on devices that support it.
    */
   swipe(deviceID: string, params: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -94,7 +98,8 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Tap by coordinates
+   * Taps the device screen at the given x/y coordinates. An optional stealth flag
+   * routes the tap through human-like input on devices that support it.
    */
   tap(deviceID: string, params: ActionTapParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;

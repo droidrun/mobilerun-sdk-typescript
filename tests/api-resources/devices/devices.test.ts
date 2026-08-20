@@ -51,6 +51,8 @@ describe('resource devices', () => {
       client.devices.list(
         {
           country: 'country',
+          createdBy: 'createdBy',
+          mine: true,
           name: 'name',
           orderBy: 'id',
           orderByDirection: 'asc',
@@ -58,7 +60,7 @@ describe('resource devices', () => {
           pageSize: 0,
           providerId: 'providerId',
           state: ['creating'],
-          type: 'dedicated_physical_device',
+          type: 'android_cloud_phone',
         },
         { path: '/_stainless_unknown_path' },
       ),

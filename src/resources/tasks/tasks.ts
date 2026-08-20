@@ -64,8 +64,16 @@ export class Tasks extends APIResource {
    * Create and dispatch a new agent task. Returns the task ID and device stream
    * details.
    */
-  run(body: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
-    return this._client.post('/tasks', { body, ...options });
+  run(params: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
+    return this._client.post('/tasks', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -104,90 +112,11 @@ export interface PackageCredentials {
 }
 
 export interface Task {
-  deviceId: string;
+  createdAt: string;
 
-  /**
-   * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
-   */
-  llmModel: string;
+  taskId: string;
 
-  task: string;
-
-  userId: string;
-
-  id?: string;
-
-  accessibility?: boolean;
-
-  agentId?: number;
-
-  apps?: Array<string>;
-
-  cancelRequestedAt?: string | null;
-
-  claimedAt?: string | null;
-
-  continueOnFailure?: boolean;
-
-  createdAt?: string;
-
-  credentials?: Array<PackageCredentials>;
-
-  creditsUsed?: number | null;
-
-  dispatchedAt?: string | null;
-
-  displayId?: number;
-
-  executionTimeout?: number;
-
-  files?: Array<string>;
-
-  finishedAt?: string | null;
-
-  heartbeatAt?: string | null;
-
-  maxSteps?: number;
-
-  /**
-   * Memory namespace for cross-task personalization
-   */
-  memoryNamespace?: string;
-
-  message?: string | null;
-
-  output?: { [key: string]: unknown } | null;
-
-  outputSchema?: { [key: string]: unknown } | null;
-
-  reasoning?: boolean;
-
-  status?: TaskStatus;
-
-  stealth?: boolean;
-
-  steps?: number | null;
-
-  streamUrl?: string | null;
-
-  /**
-   * LLM model used by sub-agent roles: executor, app_opener, structured_output
-   */
-  subagentModel?: string;
-
-  succeeded?: boolean | null;
-
-  temperature?: number;
-
-  tmpDevice?: boolean;
-
-  trajectory?: Array<{ [key: string]: unknown }>;
-
-  updatedAt?: string;
-
-  vision?: boolean;
-
-  vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+  updatedAt: string;
 }
 
 export type TaskStatus =
@@ -195,7 +124,6 @@ export type TaskStatus =
   | 'created'
   | 'running'
   | 'cancelling'
-  | 'paused'
   | 'completed'
   | 'failed'
   | 'cancelled';
@@ -214,7 +142,102 @@ export interface TaskRetrieveResponse {
   /**
    * The task
    */
-  task: Task;
+  task: TaskRetrieveResponse.Task;
+}
+
+export namespace TaskRetrieveResponse {
+  /**
+   * The task
+   */
+  export interface Task {
+    id: string;
+
+    deviceId: string;
+
+    displayId: number;
+
+    /**
+     * The LLM model identifier to use for the task (e.g. 'gemini/gemini-2.5-flash')
+     */
+    llmModel: string;
+
+    ownerId: string;
+
+    status: TasksAPI.TaskStatus;
+
+    task: string;
+
+    tmpDevice: boolean;
+
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
+    userId: string;
+
+    accessibility?: boolean;
+
+    agentId?: number;
+
+    apps?: Array<string>;
+
+    cancelRequestedAt?: string | null;
+
+    claimedAt?: string | null;
+
+    continueOnFailure?: boolean;
+
+    createdAt?: string;
+
+    createdBy?: string | null;
+
+    credentials?: Array<TasksAPI.PackageCredentials>;
+
+    creditsUsed?: number | null;
+
+    dispatchedAt?: string | null;
+
+    executionTimeout?: number;
+
+    files?: Array<string>;
+
+    finishedAt?: string | null;
+
+    maxSteps?: number;
+
+    /**
+     * Memory namespace for cross-task personalization
+     */
+    memoryNamespace?: string;
+
+    message?: string | null;
+
+    output?: { [key: string]: unknown } | null;
+
+    outputSchema?: { [key: string]: unknown } | null;
+
+    reasoning?: boolean;
+
+    stealth?: boolean;
+
+    steps?: number | null;
+
+    streamUrl?: string | null;
+
+    /**
+     * LLM model used by sub-agent roles: executor, app_opener, structured_output
+     */
+    subagentModel?: string;
+
+    succeeded?: boolean | null;
+
+    temperature?: number;
+
+    updatedAt?: string;
+
+    vision?: boolean;
+
+    vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+  }
 }
 
 export interface TaskListResponse {
@@ -245,12 +268,17 @@ export namespace TaskListResponse {
      */
     llmModel: string;
 
+    ownerId: string;
+
     status: TasksAPI.TaskStatus;
 
     task: string;
 
     tmpDevice: boolean;
 
+    /**
+     * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+     */
     userId: string;
 
     accessibility?: boolean;
@@ -266,6 +294,8 @@ export namespace TaskListResponse {
     continueOnFailure?: boolean;
 
     createdAt?: string;
+
+    createdBy?: string | null;
 
     credentials?: Array<TasksAPI.PackageCredentials>;
 
@@ -324,6 +354,11 @@ export interface TaskGetStatusResponse {
   status: TaskStatus;
 
   /**
+   * Execution metadata for abnormal terminal outcomes
+   */
+  execution?: TaskGetStatusResponse.Execution | null;
+
+  /**
    * The last agent response (FastAgentResponseEvent or ManagerPlanEvent)
    */
   lastResponse?: { [key: string]: unknown } | null;
@@ -347,6 +382,31 @@ export interface TaskGetStatusResponse {
    * Whether the task succeeded
    */
   succeeded?: boolean | null;
+}
+
+export namespace TaskGetStatusResponse {
+  /**
+   * Execution metadata for abnormal terminal outcomes
+   */
+  export interface Execution {
+    checkpoint: Execution.Checkpoint;
+
+    terminationReason: 'execution_timeout' | 'worker_lost' | 'cancelled' | 'agent_failed';
+
+    retrySafety?: 'unknown';
+  }
+
+  export namespace Execution {
+    export interface Checkpoint {
+      currentSubgoal?: string | null;
+
+      plan?: string | null;
+
+      progressSummary?: string | null;
+
+      steps?: number;
+    }
+  }
 }
 
 export interface TaskGetTrajectoryResponse {
@@ -1002,6 +1062,16 @@ export interface TaskStopResponse {
 }
 
 export interface TaskListParams {
+  /**
+   * Only tasks created by this user id.
+   */
+  createdBy?: string | null;
+
+  /**
+   * Only tasks created by the calling user.
+   */
+  mine?: boolean;
+
   orderBy?: 'id' | 'createdAt' | 'finishedAt' | 'status' | null;
 
   orderByDirection?: 'asc' | 'desc';
@@ -1020,60 +1090,111 @@ export interface TaskListParams {
 
 export interface TaskRunParams {
   /**
-   * The ID of the device to run the task on.
+   * Body param: The ID of the device to run the task on.
    */
   deviceId: string;
 
+  /**
+   * Body param
+   */
   task: string;
 
+  /**
+   * Body param
+   */
   accessibility?: boolean;
 
+  /**
+   * Body param
+   */
   agentId?: number;
 
+  /**
+   * Body param
+   */
   apps?: Array<string>;
 
+  /**
+   * Body param
+   */
   continueOnFailure?: boolean;
 
+  /**
+   * Body param
+   */
   credentials?: Array<PackageCredentials>;
 
   /**
-   * The display ID of the device to run the task on.
+   * Body param: The display ID of the device to run the task on.
    */
   displayId?: number;
 
+  /**
+   * Body param
+   */
   executionTimeout?: number;
 
+  /**
+   * Body param
+   */
   files?: Array<string>;
 
   /**
-   * The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.1-flash-lite')
+   * Body param: The LLM model identifier to use for the task (e.g.
+   * 'google/gemini-3.5-flash')
    */
   llmModel?: string;
 
+  /**
+   * Body param
+   */
   maxSteps?: number;
 
   /**
-   * Memory namespace for cross-task personalization
+   * Body param: Memory namespace for cross-task personalization
    */
   memoryNamespace?: string;
 
+  /**
+   * Body param
+   */
   outputSchema?: { [key: string]: unknown } | null;
 
+  /**
+   * Body param
+   */
   reasoning?: boolean;
 
+  /**
+   * Body param
+   */
   stealth?: boolean;
 
   /**
-   * LLM model used by sub-agent roles: executor, app_opener, structured_output
+   * Body param: LLM model used by sub-agent roles: executor, app_opener,
+   * structured_output
    */
   subagentModel?: string;
 
+  /**
+   * Body param
+   */
   temperature?: number;
 
+  /**
+   * Body param
+   */
   vision?: boolean;
 
+  /**
+   * Body param
+   */
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
+
+  /**
+   * Header param
+   */
+  'Idempotency-Key'?: string;
 }
 
 export interface TaskRunStreamedParams {
@@ -1104,8 +1225,7 @@ export interface TaskRunStreamedParams {
   files?: Array<string>;
 
   /**
-   * The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.1-flash-lite')
+   * The LLM model identifier to use for the task (e.g. 'google/gemini-3.5-flash')
    */
   llmModel?: string;
 

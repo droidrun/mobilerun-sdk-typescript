@@ -97,11 +97,15 @@ export interface Flow {
 
   createdAt: string | null;
 
+  createdBy: string | null;
+
   description: string | null;
 
   deviceIds: Array<string>;
 
   enabled: boolean;
+
+  healthMonitoringEnabled: boolean;
 
   lastFailureAt: string | null;
 
@@ -124,12 +128,29 @@ export interface Flow {
 
   notifyWebhookId: string | null;
 
+  ownerId: string;
+
+  selfHealingEnabled: boolean;
+
+  selfHealingMaxAttempts: number;
+
   status: 'healthy' | 'failing' | 'blocked';
+
+  /**
+   * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+   * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
+   * a whole-token null stays JSON null). Existing flows stay 1; new flows default
+   * to 2.
+   */
+  templateResolutionVersion: number;
 
   triggerId: string;
 
   updatedAt: string | null;
 
+  /**
+   * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+   */
   userId: string;
 }
 

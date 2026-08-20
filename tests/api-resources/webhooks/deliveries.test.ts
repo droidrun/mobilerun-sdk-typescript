@@ -26,6 +26,7 @@ describe('resource deliveries', () => {
     await expect(
       client.webhooks.deliveries.list(
         {
+          eventId: 'x',
           page: 1,
           pageSize: 1,
           since: '2019-12-27T18:11:19.117Z',
@@ -54,7 +55,11 @@ describe('resource deliveries', () => {
     await expect(
       client.webhooks.deliveries.listForWebhook(
         '550e8400-e29b-41d4-a716-446655440000',
-        { page: 1, pageSize: 1 },
+        {
+          eventId: 'x',
+          page: 1,
+          pageSize: 1,
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);

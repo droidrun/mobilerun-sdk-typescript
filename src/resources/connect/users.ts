@@ -6,6 +6,9 @@ import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Manage your Mobilerun Connect Socks Users
+ */
 export class Users extends APIResource {
   /**
    * Creates a SOCKS5 credential, optionally bound to a proxy for dedicated routing.
@@ -16,7 +19,8 @@ export class Users extends APIResource {
   }
 
   /**
-   * Get a SOCKS5 user by ID, including its password
+   * Returns the SOCKS5 user identified by the path ID. The response includes the
+   * user's password.
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<UserRetrieveResponse> {
     return this._client.get(path`/connect/users/${id}`, options);
@@ -40,7 +44,8 @@ export class Users extends APIResource {
   }
 
   /**
-   * Delete a SOCKS5 user
+   * Deletes the SOCKS5 user identified by the path ID, revoking its credentials and
+   * any proxy binding. Returns 404 if no such user exists for the caller.
    */
   delete(id: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/connect/users/${id}`, {

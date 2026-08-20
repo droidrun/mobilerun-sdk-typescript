@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ExecutionsAPI from './executions';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -8,14 +9,17 @@ import { path } from '../../internal/utils/path';
 
 export class Executions extends APIResource {
   /**
-   * Get execution details
+   * Fetch a single flow execution by its ID, including its status, kind, result or
+   * error, and start/finish timestamps. Returns 404 if no execution matches.
    */
   retrieve(executionID: string, options?: RequestOptions): APIPromise<ExecutionRetrieveResponse> {
     return this._client.get(path`/executions/${executionID}`, options);
   }
 
   /**
-   * List flow executions
+   * Return a paginated history of flow executions. Supports filtering by `flowId`,
+   * `triggerId`, `status`, and a `from`/`to` time range, plus free-text `search` and
+   * ordering by startedAt, finishedAt, or status.
    */
   list(
     query: ExecutionListParams | null | undefined = {},
@@ -25,7 +29,9 @@ export class Executions extends APIResource {
   }
 
   /**
-   * Get execution metrics
+   * Return aggregate execution metrics — total count, counts by status, average
+   * duration, and the last execution time. Can be scoped by `flowId`, `triggerId`,
+   * and a `from`/`to` time range.
    */
   getMetrics(
     query: ExecutionGetMetricsParams | null | undefined = {},
@@ -58,17 +64,56 @@ export interface FlowExecution {
 
   triggerName: string | null;
 
+  /**
+   * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
+   * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
+   * step that opted into a verdict — null otherwise. Table-backed steps (current
+   * executions) also carry a `status` string (e.g. success/failed/stopped, see
+   * deriveStepStatus); it is optional and absent on legacy blob-only executions, so
+   * clients must not assume its presence.
+   */
   result?: unknown;
 }
 
 export interface ExecutionRetrieveResponse {
-  data: FlowExecution;
+  data: ExecutionRetrieveResponse.Data;
+}
+
+export namespace ExecutionRetrieveResponse {
+  export interface Data extends ExecutionsAPI.FlowExecution {
+    createdBy: string | null;
+
+    /**
+     * Files produced by files.upload steps, plus files an agent.run step reported on
+     * its terminal response (agent-created output or a workflow upload minted during
+     * the turn); derived server-side at read time.
+     */
+    files: Array<Data.File>;
+  }
+
+  export namespace Data {
+    export interface File {
+      fileId: string;
+
+      filename: string;
+
+      mimeType: string;
+
+      sizeBytes: number;
+    }
+  }
 }
 
 export interface ExecutionListResponse {
-  items: Array<FlowExecution>;
+  items: Array<ExecutionListResponse.Item>;
 
   pagination: Shared.Pagination;
+}
+
+export namespace ExecutionListResponse {
+  export interface Item extends ExecutionsAPI.FlowExecution {
+    createdBy: string | null;
+  }
 }
 
 export interface ExecutionGetMetricsResponse {

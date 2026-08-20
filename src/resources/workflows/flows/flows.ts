@@ -24,21 +24,28 @@ export class Flows extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
-   * Create a flow
+   * Create a flow that binds a trigger (`triggerId`) to an ordered list of actions,
+   * with at least one action required. Optional settings include target `deviceIds`,
+   * a cooldown (`cooldownSeconds`/`cooldownScope`), and webhook notifications on
+   * success or failure.
    */
   create(body: FlowCreateParams, options?: RequestOptions): APIPromise<FlowCreateResponse> {
     return this._client.post('/flows', { body, ...options });
   }
 
   /**
-   * Get a flow
+   * Fetch a single flow by its ID, including its trigger binding, configuration, and
+   * current status. Returns 404 if no flow matches.
    */
   retrieve(flowID: string, options?: RequestOptions): APIPromise<FlowRetrieveResponse> {
     return this._client.get(path`/flows/${flowID}`, options);
   }
 
   /**
-   * Update a flow
+   * Partially update a flow's settings — name, trigger binding, enabled state,
+   * target devices, cooldown, or notifications; all fields are optional. Actions are
+   * managed through the flow-actions endpoints, not here. Returns 404 if the flow
+   * does not exist.
    */
   update(
     flowID: string,
@@ -49,7 +56,10 @@ export class Flows extends APIResource {
   }
 
   /**
-   * List flows
+   * Return a paginated list of flows. Supports filtering by `triggerId`, `enabled`,
+   * one or more health `status` values (healthy, failing, blocked), `mine` (flows
+   * created by the calling actor), `createdBy` (flows created by a given actor id —
+   * mutually exclusive with `mine`), plus free-text `search` and ordering.
    */
   list(
     query: FlowListParams | null | undefined = {},
@@ -59,14 +69,16 @@ export class Flows extends APIResource {
   }
 
   /**
-   * Delete a flow
+   * Delete a flow by its ID. Returns 404 if no flow matches.
    */
   delete(flowID: string, options?: RequestOptions): APIPromise<FlowDeleteResponse> {
     return this._client.delete(path`/flows/${flowID}`, options);
   }
 
   /**
-   * Clone a flow
+   * Create a copy of an existing flow, including its actions and settings. The
+   * optional body can override the new flow's `name` and target `deviceIds`. Returns
+   * 404 if the source flow does not exist.
    */
   clone(
     flowID: string,
@@ -148,11 +160,17 @@ export interface FlowCreateParams {
 
   enabled?: boolean;
 
+  healthMonitoringEnabled?: boolean;
+
   notifyOnFailure?: boolean;
 
   notifyOnSuccess?: boolean;
 
   notifyWebhookId?: string | null;
+
+  selfHealingEnabled?: boolean;
+
+  selfHealingMaxAttempts?: number;
 }
 
 export namespace FlowCreateParams {
@@ -182,6 +200,8 @@ export interface FlowUpdateParams {
 
   enabled?: boolean;
 
+  healthMonitoringEnabled?: boolean;
+
   name?: string;
 
   notifyOnFailure?: boolean;
@@ -190,11 +210,25 @@ export interface FlowUpdateParams {
 
   notifyWebhookId?: string | null;
 
+  selfHealingEnabled?: boolean;
+
+  selfHealingMaxAttempts?: number;
+
   triggerId?: string;
 }
 
 export interface FlowListParams {
-  enabled?: boolean | null;
+  createdBy?: string;
+
+  /**
+   * Only include flows with this enabled state.
+   */
+  enabled?: 'true' | 'false';
+
+  /**
+   * Only include flows created by you.
+   */
+  mine?: 'true' | 'false';
 
   orderBy?: 'name' | 'createdAt' | 'updatedAt';
 

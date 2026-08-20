@@ -52,9 +52,12 @@ describe('resource flows', () => {
       description: 'description',
       deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       enabled: true,
+      healthMonitoringEnabled: true,
       notifyOnFailure: true,
       notifyOnSuccess: true,
       notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      selfHealingEnabled: true,
+      selfHealingMaxAttempts: 1,
     });
   });
 
@@ -94,10 +97,13 @@ describe('resource flows', () => {
           description: 'description',
           deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
           enabled: true,
+          healthMonitoringEnabled: true,
           name: 'x',
           notifyOnFailure: true,
           notifyOnSuccess: true,
           notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          selfHealingEnabled: true,
+          selfHealingMaxAttempts: 1,
           triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
         },
         { path: '/_stainless_unknown_path' },
@@ -123,12 +129,14 @@ describe('resource flows', () => {
     await expect(
       client.workflows.flows.list(
         {
-          enabled: true,
+          createdBy: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          enabled: 'true',
+          mine: 'true',
           orderBy: 'name',
           orderByDirection: 'asc',
           page: 1,
           pageSize: 1,
-          search: 'search',
+          search: 'x',
           status: ['healthy'],
           triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
         },

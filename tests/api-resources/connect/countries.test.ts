@@ -28,7 +28,7 @@ describe('resource countries', () => {
         {
           page: 1,
           pageSize: 1,
-          type: 'residential',
+          type: 'dedicated_residential',
         },
         { path: '/_stainless_unknown_path' },
       ),

@@ -3,13 +3,7 @@
 import { APIResource } from '../../../core/resource';
 import * as WorkflowsAPI from '../workflows';
 import * as CatalogAPI from './catalog';
-import {
-  Catalog,
-  CatalogListParams,
-  CatalogListResponse,
-  CatalogRegisterParams,
-  CatalogRegisterResponse,
-} from './catalog';
+import { Catalog } from './catalog';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 
@@ -94,6 +88,8 @@ export namespace EventDryRunResponse {
 
         createdAt: string | null;
 
+        createdBy: string | null;
+
         customPayloadSchema: { [key: string]: unknown } | null;
 
         description: string | null;
@@ -102,38 +98,22 @@ export namespace EventDryRunResponse {
 
         name: string;
 
-        scheduleRule: Trigger.ScheduleRule | null;
+        ownerId: string;
+
+        scheduleRule: unknown;
 
         timezone: string | null;
 
         updatedAt: string | null;
 
+        /**
+         * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+         */
         userId: string;
 
         conditions?: unknown;
 
         nextFireTime?: string | null;
-      }
-
-      export namespace Trigger {
-        export interface ScheduleRule {
-          type: 'once' | 'cron' | 'recurring';
-
-          /**
-           * ISO 8601 datetime (for type=once)
-           */
-          dateTime?: string;
-
-          /**
-           * Cron expression (for type=cron)
-           */
-          expression?: string;
-
-          /**
-           * RRULE string (for type=recurring)
-           */
-          rrule?: string;
-        }
       }
     }
 
@@ -160,11 +140,15 @@ export interface EventIngestResponse {
 export interface EventDryRunParams {
   eventType: string;
 
+  deviceId?: string;
+
   payload?: { [key: string]: unknown };
 }
 
 export interface EventIngestParams {
   eventType: string;
+
+  deviceId?: string;
 
   payload?: { [key: string]: unknown };
 }
@@ -179,11 +163,5 @@ export declare namespace Events {
     type EventIngestParams as EventIngestParams,
   };
 
-  export {
-    Catalog as Catalog,
-    type CatalogListResponse as CatalogListResponse,
-    type CatalogRegisterResponse as CatalogRegisterResponse,
-    type CatalogListParams as CatalogListParams,
-    type CatalogRegisterParams as CatalogRegisterParams,
-  };
+  export { Catalog as Catalog };
 }

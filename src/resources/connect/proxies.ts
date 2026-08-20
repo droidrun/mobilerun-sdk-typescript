@@ -8,15 +8,16 @@ import { path } from '../../internal/utils/path';
 
 export class Proxies extends APIResource {
   /**
-   * Get a proxy by ID, including its password
+   * Returns the proxy identified by the path ID. The response includes the proxy's
+   * password.
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<ProxyRetrieveResponse> {
     return this._client.get(path`/connect/proxies/${id}`, options);
   }
 
   /**
-   * Returns proxies owned by the user identified by the X-User-ID header.
-   * Credentials are omitted from the list.
+   * Returns proxies owned by the calling tenant (the X-Owner-Id header, falling back
+   * to X-User-ID). Credentials are omitted from the list.
    */
   list(
     query: ProxyListParams | null | undefined = {},
@@ -26,14 +27,15 @@ export class Proxies extends APIResource {
   }
 
   /**
-   * Provisions a proxy for the caller in the selected country.
+   * Provisions a proxy of the requested type for the caller in the selected country.
    */
   buy(body: ProxyBuyParams, options?: RequestOptions): APIPromise<ProxyBuyResponse> {
     return this._client.post('/connect/proxies', { body, ...options });
   }
 
   /**
-   * Delete a proxy
+   * Deletes the proxy identified by the path ID and releases its provisioning.
+   * Returns 404 if no such proxy exists for the caller.
    */
   cancel(id: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/connect/proxies/${id}`, {
@@ -95,7 +97,7 @@ export interface ProxyRetrieveResponse {
    */
   status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
 
-  type: 'residential';
+  type: 'dedicated_residential' | 'residential' | 'mobile';
 
   username: string;
 
@@ -145,7 +147,7 @@ export namespace ProxyListResponse {
      */
     status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
 
-    type: 'residential';
+    type: 'dedicated_residential' | 'residential' | 'mobile';
 
     username: string;
   }
@@ -214,7 +216,7 @@ export interface ProxyBuyResponse {
    */
   status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
 
-  type: 'residential';
+  type: 'dedicated_residential' | 'residential' | 'mobile';
 
   username: string;
 
@@ -450,7 +452,7 @@ export interface ProxyBuyParams {
    */
   country: string;
 
-  type?: 'residential';
+  type: 'dedicated_residential' | 'residential' | 'mobile';
 }
 
 export interface ProxyListConnectionsParams {

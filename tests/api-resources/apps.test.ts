@@ -81,7 +81,6 @@ describe('resource apps', () => {
       bundleId: 'NX0.JB-_-.m-u--_-p.Z1-u_2I.D--_T-_.dzZ-.Wx.L_a8--_.w_D_',
       displayName: 'x',
       files: [{ contentType: 'application/vnd.android.package-archive', fileName: 'J!Q0Ok0bzJb7.apk/i' }],
-      sizeBytes: 0,
       versionCode: 0,
       versionName: 'x',
     });
@@ -106,7 +105,6 @@ describe('resource apps', () => {
           sha256: '210b9798eb53baa4e69d31c1071cf03d212b8ad0ca30cf321e0ea82e120aac26/i',
         },
       ],
-      sizeBytes: 0,
       versionCode: 0,
       versionName: 'x',
       country: 'US',

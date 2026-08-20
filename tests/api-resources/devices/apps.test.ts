@@ -72,6 +72,7 @@ describe('resource apps', () => {
   test.skip('install: required and optional params', async () => {
     const response = await client.devices.apps.install('deviceId', {
       bundleId: 'x',
+      background: true,
       packageName: 'x',
       'X-Device-Display-ID': 0,
     });
@@ -114,6 +115,7 @@ describe('resource apps', () => {
   test.skip('stop: required and optional params', async () => {
     const response = await client.devices.apps.stop('packageName', {
       deviceId: 'deviceId',
+      clearData: true,
       'X-Device-Display-ID': 0,
     });
   });
