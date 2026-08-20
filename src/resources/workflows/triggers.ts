@@ -372,9 +372,12 @@ export namespace TriggerCreateParams {
 export interface TriggerUpdateParams {
   activation?: 'event' | 'schedule' | 'custom';
 
-  conditions?: TriggerUpdateParams.Conditions;
+  conditions?: TriggerUpdateParams.Conditions | null;
 
-  customPayloadSchema?: { [key: string]: unknown };
+  /**
+   * Optional JSON Schema for validating payloads sent to this custom trigger
+   */
+  customPayloadSchema?: { [key: string]: unknown } | null;
 
   description?: string;
 
@@ -382,7 +385,7 @@ export interface TriggerUpdateParams {
 
   name?: string;
 
-  scheduleRule?: TriggerUpdateParams.ScheduleRule;
+  scheduleRule?: TriggerUpdateParams.ScheduleRule | null;
 
   timezone?: string | null;
 }

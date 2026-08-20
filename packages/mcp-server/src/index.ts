@@ -1,26 +1,5 @@
 #!/usr/bin/env node
 
-// Load environment variables from .env file
-try {
-  // Try to load dotenv if available (optional dependency)
-  const dotenv = require('dotenv');
-  const path = require('path');
-  // Look for .env file in current directory, parent directory (mcp), or project root
-  const envPaths = [
-    path.resolve(process.cwd(), '.env'),
-    path.resolve(process.cwd(), '..', '.env'),
-    path.resolve(__dirname, '..', '..', '..', '..', 'mcp', '.env'),
-  ];
-  for (const envPath of envPaths) {
-    const result = dotenv.config({ path: envPath });
-    if (!result.error) {
-      break;
-    }
-  }
-} catch (e) {
-  // dotenv is optional, continue without it if not available
-}
-
 import { selectTools } from './server';
 import { McpOptions, parseCLIOptions } from './options';
 import { launchStdioServer } from './stdio';
