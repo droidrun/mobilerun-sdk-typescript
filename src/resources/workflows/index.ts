@@ -2,14 +2,12 @@
 
 export {
   ActionCatalog,
-  type ActionCatalogEntry,
   type ActionCatalogRetrieveResponse,
   type ActionCatalogListResponse,
   type ActionCatalogListParams,
 } from './action-catalog';
 export {
   Actions,
-  type Action,
   type ActionCreateResponse,
   type ActionRetrieveResponse,
   type ActionUpdateResponse,
@@ -25,31 +23,32 @@ export {
   type EventIngestResponse,
   type EventDryRunParams,
   type EventIngestParams,
-} from './events/index';
+} from './events';
 export {
   Executions,
-  type FlowExecution,
   type ExecutionRetrieveResponse,
   type ExecutionListResponse,
+  type ExecutionAbortResponse,
   type ExecutionGetMetricsResponse,
   type ExecutionListParams,
   type ExecutionGetMetricsParams,
 } from './executions';
 export {
   Flows,
-  type FlowActionOverrides,
-  type FlowChildActionInput,
   type FlowCreateResponse,
   type FlowRetrieveResponse,
   type FlowUpdateResponse,
   type FlowListResponse,
   type FlowDeleteResponse,
   type FlowCloneResponse,
+  type FlowDryRunResponse,
+  type FlowListRepairsResponse,
   type FlowUnblockResponse,
   type FlowCreateParams,
   type FlowUpdateParams,
   type FlowListParams,
   type FlowCloneParams,
+  type FlowDryRunParams,
 } from './flows/index';
 export { Timezones, type TimezoneListResponse } from './timezones';
 export {
@@ -65,4 +64,4 @@ export {
   type TriggerListParams,
   type TriggerFireParams,
 } from './triggers';
-export { Workflows, type Flow } from './workflows';
+export { Workflows } from './workflows';

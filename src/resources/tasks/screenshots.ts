@@ -16,7 +16,7 @@ export class Screenshots extends APIResource {
     index: number,
     params: ScreenshotRetrieveParams,
     options?: RequestOptions,
-  ): APIPromise<MediaResponse> {
+  ): APIPromise<ScreenshotRetrieveResponse> {
     const { task_id } = params;
     return this._client.get(path`/tasks/${task_id}/screenshots/${index}`, options);
   }
@@ -29,7 +29,7 @@ export class Screenshots extends APIResource {
   }
 }
 
-export interface MediaResponse {
+export interface ScreenshotRetrieveResponse {
   /**
    * The URL of the media
    */
@@ -49,7 +49,7 @@ export interface ScreenshotRetrieveParams {
 
 export declare namespace Screenshots {
   export {
-    type MediaResponse as MediaResponse,
+    type ScreenshotRetrieveResponse as ScreenshotRetrieveResponse,
     type ScreenshotListResponse as ScreenshotListResponse,
     type ScreenshotRetrieveParams as ScreenshotRetrieveParams,
   };

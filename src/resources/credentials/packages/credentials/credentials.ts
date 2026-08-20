@@ -64,59 +64,135 @@ export class Credentials extends APIResource {
   }
 }
 
-export interface Credential {
-  createdBy: string | null;
+export interface CredentialCreateResponse {
+  data: CredentialCreateResponse.Data;
 
-  credentialName: string;
+  message: string;
 
-  fields: Array<Credential.Field>;
-
-  ownerId: string;
-
-  packageName: string;
-
-  secretPath: string;
-
-  /**
-   * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
-   * for credentials created before rollout.
-   */
-  userId: string | null;
+  success: true;
 }
 
-export namespace Credential {
-  export interface Field {
-    fieldType:
-      | 'email'
-      | 'username'
-      | 'password'
-      | 'api_token'
-      | 'phone_number'
-      | 'two_factor_secret'
-      | 'backup_codes';
+export namespace CredentialCreateResponse {
+  export interface Data {
+    createdBy: string | null;
 
-    value: string;
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType:
+        | 'email'
+        | 'username'
+        | 'password'
+        | 'api_token'
+        | 'phone_number'
+        | 'two_factor_secret'
+        | 'backup_codes';
+
+      value: string;
+    }
   }
 }
 
-export interface CredentialCreateResponse {
-  data: Credential;
-
-  message: string;
-
-  success: true;
+export interface CredentialRetrieveResponse {
+  data: CredentialRetrieveResponse.Data;
 }
 
-export interface CredentialRetrieveResponse {
-  data: Credential;
+export namespace CredentialRetrieveResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType:
+        | 'email'
+        | 'username'
+        | 'password'
+        | 'api_token'
+        | 'phone_number'
+        | 'two_factor_secret'
+        | 'backup_codes';
+
+      value: string;
+    }
+  }
 }
 
 export interface CredentialDeleteResponse {
-  data: Credential;
+  data: CredentialDeleteResponse.Data;
 
   message: string;
 
   success: true;
+}
+
+export namespace CredentialDeleteResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType:
+        | 'email'
+        | 'username'
+        | 'password'
+        | 'api_token'
+        | 'phone_number'
+        | 'two_factor_secret'
+        | 'backup_codes';
+
+      value: string;
+    }
+  }
 }
 
 export interface CredentialCreateParams {
@@ -152,7 +228,6 @@ Credentials.Fields = Fields;
 
 export declare namespace Credentials {
   export {
-    type Credential as Credential,
     type CredentialCreateResponse as CredentialCreateResponse,
     type CredentialRetrieveResponse as CredentialRetrieveResponse,
     type CredentialDeleteResponse as CredentialDeleteResponse,

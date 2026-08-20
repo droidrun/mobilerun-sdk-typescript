@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
-import * as ResourcesTasksAPI from '../tasks/tasks';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -22,7 +21,7 @@ export class Tasks extends APIResource {
 }
 
 export interface TaskListResponse {
-  items: Array<ResourcesTasksAPI.Task> | null;
+  items: Array<TaskListResponse.Item> | null;
 
   pagination: Shared.Meta;
 
@@ -30,6 +29,16 @@ export interface TaskListResponse {
    * A URL to the JSON Schema for this object.
    */
   $schema?: string;
+}
+
+export namespace TaskListResponse {
+  export interface Item {
+    createdAt: string;
+
+    taskId: string;
+
+    updatedAt: string;
+  }
 }
 
 export interface TaskListParams {

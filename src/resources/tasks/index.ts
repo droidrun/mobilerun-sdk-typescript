@@ -2,16 +2,12 @@
 
 export {
   Screenshots,
-  type MediaResponse,
+  type ScreenshotRetrieveResponse,
   type ScreenshotListResponse,
   type ScreenshotRetrieveParams,
 } from './screenshots';
 export {
   Tasks,
-  type PackageCredentials,
-  type Task,
-  type TaskStatus,
-  type UsageResult,
   type TaskRetrieveResponse,
   type TaskListResponse,
   type TaskGetStatusResponse,
@@ -25,4 +21,9 @@ export {
   type TaskRunStreamedParams,
   type TaskSendMessageParams,
 } from './tasks';
-export { UiStates, type UiStateListResponse, type UiStateRetrieveParams } from './ui-states';
+export {
+  UiStates,
+  type UiStateRetrieveResponse,
+  type UiStateListResponse,
+  type UiStateRetrieveParams,
+} from './ui-states';

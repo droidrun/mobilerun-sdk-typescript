@@ -6,10 +6,10 @@ import * as PackagesAPI from './packages/packages';
 import {
   PackageCreateParams,
   PackageCreateResponse,
+  PackageListAllResponse,
   PackageListResponse,
   Packages,
 } from './packages/packages';
-import * as PackagesCredentialsAPI from './packages/credentials/credentials';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -30,9 +30,46 @@ export class Credentials extends APIResource {
 }
 
 export interface CredentialListResponse {
-  items: Array<PackagesCredentialsAPI.Credential>;
+  items: Array<CredentialListResponse.Item>;
 
   pagination: Shared.Pagination;
+}
+
+export namespace CredentialListResponse {
+  export interface Item {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Item.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+  }
+
+  export namespace Item {
+    export interface Field {
+      fieldType:
+        | 'email'
+        | 'username'
+        | 'password'
+        | 'api_token'
+        | 'phone_number'
+        | 'two_factor_secret'
+        | 'backup_codes';
+
+      value: string;
+    }
+  }
 }
 
 export interface CredentialListParams {
@@ -53,6 +90,7 @@ export declare namespace Credentials {
     Packages as Packages,
     type PackageCreateResponse as PackageCreateResponse,
     type PackageListResponse as PackageListResponse,
+    type PackageListAllResponse as PackageListAllResponse,
     type PackageCreateParams as PackageCreateParams,
   };
 }
