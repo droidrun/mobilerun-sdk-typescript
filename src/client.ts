@@ -44,6 +44,18 @@ import {
   CarrierUpdateResponse,
   Carriers,
 } from './resources/carriers';
+import {
+  FileCancelPendingResponse,
+  FileConfirmResponse,
+  FileDeleteResponse,
+  FileListParams,
+  FileListResponse,
+  FileUpdateParams,
+  FileUpdateResponse,
+  FileUploadURLParams,
+  FileUploadURLResponse,
+  Files,
+} from './resources/files';
 import { ModelListResponse, Models } from './resources/models';
 import {
   NotificationCatalogResponse,
@@ -82,6 +94,7 @@ import {
   AppEventRetrieveResponse,
   AppEvents,
 } from './resources/app-events/app-events';
+import { Assistant } from './resources/assistant/assistant';
 import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
@@ -905,6 +918,8 @@ export class Mobilerun {
   workflows: API.Workflows = new API.Workflows(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   agents: API.Agents = new API.Agents(this);
+  files: API.Files = new API.Files(this);
+  assistant: API.Assistant = new API.Assistant(this);
   appEvents: API.AppEvents = new API.AppEvents(this);
   notifications: API.Notifications = new API.Notifications(this);
   esims: API.Esims = new API.Esims(this);
@@ -925,6 +940,8 @@ Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
 Mobilerun.Webhooks = Webhooks;
 Mobilerun.Agents = Agents;
+Mobilerun.Files = Files;
+Mobilerun.Assistant = Assistant;
 Mobilerun.AppEvents = AppEvents;
 Mobilerun.Notifications = Notifications;
 Mobilerun.Esims = Esims;
@@ -1049,6 +1066,21 @@ export declare namespace Mobilerun {
   };
 
   export { Agents as Agents, type AgentListResponse as AgentListResponse };
+
+  export {
+    Files as Files,
+    type FileUpdateResponse as FileUpdateResponse,
+    type FileListResponse as FileListResponse,
+    type FileDeleteResponse as FileDeleteResponse,
+    type FileCancelPendingResponse as FileCancelPendingResponse,
+    type FileConfirmResponse as FileConfirmResponse,
+    type FileUploadURLResponse as FileUploadURLResponse,
+    type FileUpdateParams as FileUpdateParams,
+    type FileListParams as FileListParams,
+    type FileUploadURLParams as FileUploadURLParams,
+  };
+
+  export { Assistant as Assistant };
 
   export {
     AppEvents as AppEvents,

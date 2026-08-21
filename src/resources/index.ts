@@ -21,6 +21,7 @@ export {
   type AppListParams,
   type AppCreateSignedUploadURLParams,
 } from './apps';
+export { Assistant } from './assistant/assistant';
 export {
   Carriers,
   type CarrierCreateResponse,
@@ -74,6 +75,18 @@ export {
   type EsimImportParams,
   type EsimInstallParams,
 } from './esims/esims';
+export {
+  Files,
+  type FileUpdateResponse,
+  type FileListResponse,
+  type FileDeleteResponse,
+  type FileCancelPendingResponse,
+  type FileConfirmResponse,
+  type FileUploadURLResponse,
+  type FileUpdateParams,
+  type FileListParams,
+  type FileUploadURLParams,
+} from './files';
 export { Messages, type MessageListResponse, type MessageListParams } from './messages/messages';
 export { Models, type ModelListResponse } from './models';
 export {
