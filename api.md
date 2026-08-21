@@ -700,6 +700,27 @@ Methods:
 
 - <code title="get /agents">client.agents.<a href="./src/resources/agents.ts">list</a>() -> AgentListResponse</code>
 
+# Files
+
+Types:
+
+- <code><a href="./src/resources/files.ts">FileUpdateResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileListResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileDeleteResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileCancelPendingResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileConfirmResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileUploadURLResponse</a></code>
+
+Methods:
+
+- <code title="patch /agents/files/{fileId}">client.files.<a href="./src/resources/files.ts">update</a>(fileID, { ...params }) -> FileUpdateResponse</code>
+- <code title="get /agents/files">client.files.<a href="./src/resources/files.ts">list</a>({ ...params }) -> FileListResponse</code>
+- <code title="delete /agents/files/{fileId}">client.files.<a href="./src/resources/files.ts">delete</a>(fileID) -> FileDeleteResponse</code>
+- <code title="delete /agents/files/{fileId}/pending">client.files.<a href="./src/resources/files.ts">cancelPending</a>(fileID) -> FileCancelPendingResponse</code>
+- <code title="post /agents/files/{fileId}/confirm">client.files.<a href="./src/resources/files.ts">confirm</a>(fileID) -> FileConfirmResponse</code>
+- <code title="get /agents/files/{fileId}/download">client.files.<a href="./src/resources/files.ts">download</a>(fileID) -> void</code>
+- <code title="post /agents/files/upload-url">client.files.<a href="./src/resources/files.ts">uploadURL</a>({ ...params }) -> FileUploadURLResponse</code>
+
 # Assistant
 
 ## Conversations

@@ -1109,6 +1109,48 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/agents',
   },
   {
+    clientCallName: 'client.files.update',
+    fullyQualifiedName: 'files.update',
+    httpMethod: 'patch',
+    httpPath: '/agents/files/{fileId}',
+  },
+  {
+    clientCallName: 'client.files.list',
+    fullyQualifiedName: 'files.list',
+    httpMethod: 'get',
+    httpPath: '/agents/files',
+  },
+  {
+    clientCallName: 'client.files.delete',
+    fullyQualifiedName: 'files.delete',
+    httpMethod: 'delete',
+    httpPath: '/agents/files/{fileId}',
+  },
+  {
+    clientCallName: 'client.files.cancelPending',
+    fullyQualifiedName: 'files.cancelPending',
+    httpMethod: 'delete',
+    httpPath: '/agents/files/{fileId}/pending',
+  },
+  {
+    clientCallName: 'client.files.confirm',
+    fullyQualifiedName: 'files.confirm',
+    httpMethod: 'post',
+    httpPath: '/agents/files/{fileId}/confirm',
+  },
+  {
+    clientCallName: 'client.files.download',
+    fullyQualifiedName: 'files.download',
+    httpMethod: 'get',
+    httpPath: '/agents/files/{fileId}/download',
+  },
+  {
+    clientCallName: 'client.files.uploadURL',
+    fullyQualifiedName: 'files.uploadURL',
+    httpMethod: 'post',
+    httpPath: '/agents/files/upload-url',
+  },
+  {
     clientCallName: 'client.assistant.conversations.create',
     fullyQualifiedName: 'assistant.conversations.create',
     httpMethod: 'post',
