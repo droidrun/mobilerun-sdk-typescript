@@ -11,6 +11,28 @@ cd dist
 PACKAGE_NAME="$(jq -r -e '.name' ./package.json)"
 VERSION="$(jq -r -e '.version' ./package.json)"
 
+# Publishing is retry-safe per package. Release workflows may be rerun after
+# one workspace package succeeded and a later package failed.
+EXACT_VERSION_INFO="$(npm view "$PACKAGE_NAME@$VERSION" version --json 2>/dev/null || true)"
+
+if echo "$EXACT_VERSION_INFO" | jq -e '.error.code == "E404"' > /dev/null 2>&1; then
+  : # This exact version is not published yet.
+elif echo "$EXACT_VERSION_INFO" | jq -e '.error' > /dev/null 2>&1; then
+  echo "ERROR: npm returned unexpected data for $PACKAGE_NAME@$VERSION:"
+  echo "$EXACT_VERSION_INFO"
+  exit 1
+else
+  PUBLISHED_VERSION="$(echo "$EXACT_VERSION_INFO" | jq -r '.')"
+  if [[ "$PUBLISHED_VERSION" == "$VERSION" ]]; then
+    echo "$PACKAGE_NAME@$VERSION is already published; skipping"
+    exit 0
+  fi
+
+  echo "ERROR: npm returned an unexpected version for $PACKAGE_NAME@$VERSION:"
+  echo "$EXACT_VERSION_INFO"
+  exit 1
+fi
+
 # Get latest version from npm
 #
 # If the package doesn't exist, npm will return:

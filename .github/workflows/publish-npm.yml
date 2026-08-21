@@ -8,6 +8,14 @@ on:
       path:
         description: The path to run the release in, e.g. '.' or 'packages/mcp-server'
         required: true
+        type: choice
+        options:
+          - '.'
+          - 'packages/mcp-server'
+      release_tag:
+        description: Optional GitHub release tag for a manual MCP asset upload
+        required: false
+        type: string
 
   release:
     types: [published]
@@ -37,18 +45,26 @@ jobs:
       - name: Publish to NPM
         run: |
           if [ -n "$INPUT_PATH" ]; then
-            PATHS_RELEASED="[\"$INPUT_PATH\"]"
+            PATHS_RELEASED="$(jq -nc --arg path "$INPUT_PATH" '[$path]')"
           else
             PATHS_RELEASED='[\".\", \"packages/mcp-server\"]'
           fi
-          pnpm tsn scripts/publish-packages.ts "{ \"paths_released\": \"$PATHS_RELEASED\" }"
+          DATA="$(jq -nc --arg paths "$PATHS_RELEASED" '{ paths_released: $paths }')" \
+            pnpm tsn scripts/publish-packages.ts
         env:
           INPUT_PATH: ${{ github.event.inputs.path }}
           NPM_TOKEN: ${{ secrets.MOBILERUN_NPM_TOKEN || secrets.NPM_TOKEN }}
 
       - name: Upload MCP Server DXT GitHub release asset
+        if: ${{ always() }}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} \
-            packages/mcp-server/mobilerun_sdk_api.mcpb
+          if [ -z "$RELEASE_TAG" ]; then
+            echo "No release tag supplied; skipping MCP release asset upload"
+            exit 0
+          fi
+          gh release upload "$RELEASE_TAG" \
+            packages/mcp-server/mobilerun_sdk_api.mcpb \
+            --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.release_tag }}

@@ -40,22 +40,14 @@
   ```
  */
 
-import { execSync } from 'child_process';
+import { execSync, type ExecSyncOptions } from 'child_process';
 import path from 'path';
 
-function main() {
-  const data = process.argv[2] ?? process.env['DATA'];
-  if (!data) {
-    throw new Error(`Usage: publish-packages.ts '{"json": "obj"}'`);
-  }
+export type CommandRunner = (command: string, options: ExecSyncOptions) => unknown;
 
-  const rootDir = path.join(__dirname, '..');
-  console.log('root dir', rootDir);
-  console.log(`publish-packages called with ${data}`);
-
-  const outputs = JSON.parse(data);
-
-  const rawPaths = outputs.paths_released;
+export function parseReleasedPaths(data: string): string[] {
+  const outputs = JSON.parse(data) as Record<string, unknown>;
+  const rawPaths = outputs['paths_released'];
 
   if (!rawPaths) {
     console.error(JSON.stringify(outputs, null, 2));
@@ -66,7 +58,7 @@ function main() {
     throw new Error('Expected outputs `paths_released` property to be a JSON string');
   }
 
-  const paths = JSON.parse(rawPaths);
+  const paths = JSON.parse(rawPaths) as unknown;
   if (!Array.isArray(paths)) {
     console.error(JSON.stringify(outputs, null, 2));
     throw new Error('Expected outputs `paths_released` property to be an array');
@@ -75,28 +67,65 @@ function main() {
     console.error(JSON.stringify(outputs, null, 2));
     throw new Error('Expected outputs `paths_released` property to contain at least one entry');
   }
+  if (!paths.every((entry): entry is string => typeof entry === 'string' && entry.length > 0)) {
+    throw new Error('Expected every `paths_released` entry to be a non-empty string');
+  }
 
+  return paths;
+}
+
+export function publishPackages(
+  paths: string[],
+  rootDir = path.join(__dirname, '..'),
+  run: CommandRunner = execSync,
+): void {
   const publishScriptPath = path.join(rootDir, 'bin', 'publish-npm');
   console.log('Using publish script at', publishScriptPath);
 
   console.log('Ensuring root package is built');
   console.log(`$ pnpm build`);
-  execSync(`pnpm build`, { cwd: rootDir, encoding: 'utf8', stdio: 'inherit' });
+  run(`pnpm build`, { cwd: rootDir, encoding: 'utf8', stdio: 'inherit' });
 
+  const failedPackages: string[] = [];
   for (const relPackagePath of paths) {
     console.log('\n');
 
-    const packagePath = path.join(rootDir, relPackagePath);
+    const packagePath = path.resolve(rootDir, relPackagePath);
+    const relativePath = path.relative(rootDir, packagePath);
+    if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+      throw new Error(`Released package path escapes the repository: ${relPackagePath}`);
+    }
     console.log(`Publishing in directory: ${packagePath}`);
 
-    console.log(`$ pnpm install`);
-    execSync(`pnpm install`, { cwd: packagePath, encoding: 'utf8', stdio: 'inherit' });
+    try {
+      console.log(`$ pnpm install`);
+      run(`pnpm install`, { cwd: packagePath, encoding: 'utf8', stdio: 'inherit' });
 
-    console.log(`$ bash ${publishScriptPath}`);
-    execSync(`bash ${publishScriptPath}`, { cwd: packagePath, encoding: 'utf8', stdio: 'inherit' });
+      console.log(`$ bash ${publishScriptPath}`);
+      run(`bash ${publishScriptPath}`, { cwd: packagePath, encoding: 'utf8', stdio: 'inherit' });
+    } catch (error) {
+      failedPackages.push(relPackagePath);
+      console.error(`Failed to publish ${relPackagePath}:`, error);
+    }
+  }
+
+  if (failedPackages.length > 0) {
+    throw new Error(`Failed to publish package(s): ${failedPackages.join(', ')}`);
   }
 
   console.log('Finished publishing packages');
 }
 
-main();
+export function main() {
+  const data = process.argv[2] ?? process.env['DATA'];
+  if (!data) {
+    throw new Error(`Usage: publish-packages.ts '{"json": "obj"}'`);
+  }
+
+  console.log(`publish-packages called with ${data}`);
+  publishPackages(parseReleasedPaths(data));
+}
+
+if (require.main === module) {
+  main();
+}
