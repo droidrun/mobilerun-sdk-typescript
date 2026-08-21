@@ -700,6 +700,36 @@ Methods:
 
 - <code title="get /agents">client.agents.<a href="./src/resources/agents.ts">list</a>() -> AgentListResponse</code>
 
+# Assistant
+
+## Conversations
+
+Types:
+
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationCreateResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationUpdateResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationListResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationAbortResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationAnswerPermissionResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationAnswerQuestionResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationHistoryResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationRejectQuestionResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationSendResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationStreamResponse</a></code>
+
+Methods:
+
+- <code title="post /assistant/chat/sessions">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">create</a>({ ...params }) -> ConversationCreateResponse</code>
+- <code title="patch /assistant/chat/sessions/{id}">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">update</a>(id, { ...params }) -> ConversationUpdateResponse</code>
+- <code title="get /assistant/chat/sessions">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">list</a>({ ...params }) -> ConversationListResponse</code>
+- <code title="post /assistant/chat/abort">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">abort</a>({ ...params }) -> ConversationAbortResponse</code>
+- <code title="post /assistant/chat/permission">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">answerPermission</a>({ ...params }) -> ConversationAnswerPermissionResponse</code>
+- <code title="post /assistant/chat/question">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">answerQuestion</a>({ ...params }) -> ConversationAnswerQuestionResponse</code>
+- <code title="get /assistant/chat/messages">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">history</a>({ ...params }) -> ConversationHistoryResponse</code>
+- <code title="post /assistant/chat/question/reject">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">rejectQuestion</a>({ ...params }) -> ConversationRejectQuestionResponse</code>
+- <code title="post /assistant/chat/message">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">send</a>({ ...params }) -> ConversationSendResponse</code>
+- <code title="get /assistant/chat/stream">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">stream</a>({ ...params }) -> string</code>
+
 # AppEvents
 
 Types:
