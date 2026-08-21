@@ -21,6 +21,7 @@ export {
   type AppListParams,
   type AppCreateSignedUploadURLParams,
 } from './apps';
+export { Assistant } from './assistant/assistant';
 export {
   Carriers,
   type CarrierCreateResponse,
