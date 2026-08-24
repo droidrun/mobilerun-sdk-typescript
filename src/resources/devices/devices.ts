@@ -28,6 +28,8 @@ import {
 } from './apps';
 import * as BrowserAPI from './browser';
 import { Browser, BrowserExecuteScriptParams, BrowserExecuteScriptResponse } from './browser';
+import * as ClipboardAPI from './clipboard';
+import { Clipboard, ClipboardGetParams, ClipboardGetResponse, ClipboardSetParams } from './clipboard';
 import * as DeepLinkAPI from './deep-link';
 import { DeepLink, DeepLinkExecuteDeepLinkParams } from './deep-link';
 import * as FilesAPI from './files';
@@ -130,6 +132,7 @@ export class Devices extends APIResource {
   proxy: ProxyAPI.Proxy = new ProxyAPI.Proxy(this._client);
   state: StateAPI.State = new StateAPI.State(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
+  clipboard: ClipboardAPI.Clipboard = new ClipboardAPI.Clipboard(this._client);
   timezone: TimezoneAPI.Timezone = new TimezoneAPI.Timezone(this._client);
   language: LanguageAPI.Language = new LanguageAPI.Language(this._client);
   deepLink: DeepLinkAPI.DeepLink = new DeepLinkAPI.DeepLink(this._client);
@@ -518,6 +521,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
 
     cameraInjection: boolean;
 
+    clipboard: boolean;
+
     esim: boolean;
 
     files: boolean;
@@ -849,6 +854,7 @@ Devices.Profile = Profile;
 Devices.Proxy = ProxyAPIProxy;
 Devices.State = State;
 Devices.Tasks = Tasks;
+Devices.Clipboard = Clipboard;
 Devices.Timezone = Timezone;
 Devices.Language = Language;
 Devices.DeepLink = DeepLink;
@@ -963,6 +969,13 @@ export declare namespace Devices {
   };
 
   export { Tasks as Tasks, type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
+
+  export {
+    Clipboard as Clipboard,
+    type ClipboardGetResponse as ClipboardGetResponse,
+    type ClipboardGetParams as ClipboardGetParams,
+    type ClipboardSetParams as ClipboardSetParams,
+  };
 
   export {
     Timezone as Timezone,

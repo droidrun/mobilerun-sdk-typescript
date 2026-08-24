@@ -281,6 +281,17 @@ Methods:
 
 - <code title="get /devices/{deviceId}/tasks">client.devices.tasks.<a href="./src/resources/devices/tasks.ts">list</a>(deviceID, { ...params }) -> TaskListResponse</code>
 
+## Clipboard
+
+Types:
+
+- <code><a href="./src/resources/devices/clipboard.ts">ClipboardGetResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/{deviceId}/clipboard">client.devices.clipboard.<a href="./src/resources/devices/clipboard.ts">get</a>(deviceID, { ...params }) -> ClipboardGetResponse</code>
+- <code title="post /devices/{deviceId}/clipboard">client.devices.clipboard.<a href="./src/resources/devices/clipboard.ts">set</a>(deviceID, { ...params }) -> void</code>
+
 ## Timezone
 
 Types:
@@ -690,15 +701,56 @@ Methods:
 - <code title="get /webhooks/{id}/deliveries/{deliveryId}">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">retrieveAttempts</a>(deliveryID, { ...params }) -> DeliveryRetrieveAttemptsResponse</code>
 - <code title="get /webhooks/deliveries/stats">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">stats</a>({ ...params }) -> DeliveryStatsResponse</code>
 
-# Agents
+# Files
 
 Types:
 
-- <code><a href="./src/resources/agents.ts">AgentListResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileUpdateResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileListResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileDeleteResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileCancelPendingResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileConfirmResponse</a></code>
+- <code><a href="./src/resources/files.ts">FileUploadURLResponse</a></code>
 
 Methods:
 
-- <code title="get /agents">client.agents.<a href="./src/resources/agents.ts">list</a>() -> AgentListResponse</code>
+- <code title="patch /agents/files/{fileId}">client.files.<a href="./src/resources/files.ts">update</a>(fileID, { ...params }) -> FileUpdateResponse</code>
+- <code title="get /agents/files">client.files.<a href="./src/resources/files.ts">list</a>({ ...params }) -> FileListResponse</code>
+- <code title="delete /agents/files/{fileId}">client.files.<a href="./src/resources/files.ts">delete</a>(fileID) -> FileDeleteResponse</code>
+- <code title="delete /agents/files/{fileId}/pending">client.files.<a href="./src/resources/files.ts">cancelPending</a>(fileID) -> FileCancelPendingResponse</code>
+- <code title="post /agents/files/{fileId}/confirm">client.files.<a href="./src/resources/files.ts">confirm</a>(fileID) -> FileConfirmResponse</code>
+- <code title="get /agents/files/{fileId}/download">client.files.<a href="./src/resources/files.ts">download</a>(fileID) -> void</code>
+- <code title="post /agents/files/upload-url">client.files.<a href="./src/resources/files.ts">uploadURL</a>({ ...params }) -> FileUploadURLResponse</code>
+
+# Assistant
+
+## Conversations
+
+Types:
+
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationCreateResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationUpdateResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationListResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationAbortResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationAnswerPermissionResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationAnswerQuestionResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationHistoryResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationRejectQuestionResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationSendResponse</a></code>
+- <code><a href="./src/resources/assistant/conversations.ts">ConversationStreamResponse</a></code>
+
+Methods:
+
+- <code title="post /assistant/chat/sessions">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">create</a>({ ...params }) -> ConversationCreateResponse</code>
+- <code title="patch /assistant/chat/sessions/{id}">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">update</a>(id, { ...params }) -> ConversationUpdateResponse</code>
+- <code title="get /assistant/chat/sessions">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">list</a>({ ...params }) -> ConversationListResponse</code>
+- <code title="post /assistant/chat/abort">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">abort</a>({ ...params }) -> ConversationAbortResponse</code>
+- <code title="post /assistant/chat/permission">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">answerPermission</a>({ ...params }) -> ConversationAnswerPermissionResponse</code>
+- <code title="post /assistant/chat/question">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">answerQuestion</a>({ ...params }) -> ConversationAnswerQuestionResponse</code>
+- <code title="get /assistant/chat/messages">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">history</a>({ ...params }) -> ConversationHistoryResponse</code>
+- <code title="post /assistant/chat/question/reject">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">rejectQuestion</a>({ ...params }) -> ConversationRejectQuestionResponse</code>
+- <code title="post /assistant/chat/message">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">send</a>({ ...params }) -> ConversationSendResponse</code>
+- <code title="get /assistant/chat/stream">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">stream</a>({ ...params }) -> string</code>
 
 # AppEvents
 
@@ -765,7 +817,7 @@ Methods:
 - <code title="post /numbers/esims/import">client.esims.<a href="./src/resources/esims/esims.ts">import</a>({ ...params }) -> EsimImportResponse</code>
 - <code title="post /numbers/esims/{id}/install">client.esims.<a href="./src/resources/esims/esims.ts">install</a>(id, { ...params }) -> EsimInstallResponse</code>
 - <code title="get /numbers/esims/{id}/install-status">client.esims.<a href="./src/resources/esims/esims.ts">installStatus</a>(id) -> EsimInstallStatusResponse</code>
-- <code title="get /numbers/esims/selector">client.esims.<a href="./src/resources/esims/esims.ts">selector</a>() -> EsimSelectorResponse</code>
+- <code title="get /numbers/esims/selector">client.esims.<a href="./src/resources/esims/esims.ts">selector</a>({ ...params }) -> EsimSelectorResponse</code>
 
 ## Messages
 
@@ -807,6 +859,7 @@ Types:
 
 - <code><a href="./src/resources/numbers/numbers.ts">NumberCreateResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberRetrieveResponse</a></code>
+- <code><a href="./src/resources/numbers/numbers.ts">NumberUpdateResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberListResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberDeleteResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberCountriesResponse</a></code>
@@ -816,6 +869,7 @@ Methods:
 
 - <code title="post /numbers/phones">client.numbers.<a href="./src/resources/numbers/numbers.ts">create</a>({ ...params }) -> NumberCreateResponse</code>
 - <code title="get /numbers/phones/{id}">client.numbers.<a href="./src/resources/numbers/numbers.ts">retrieve</a>(id) -> NumberRetrieveResponse</code>
+- <code title="patch /numbers/phones/{id}">client.numbers.<a href="./src/resources/numbers/numbers.ts">update</a>(id, { ...params }) -> NumberUpdateResponse</code>
 - <code title="get /numbers/phones">client.numbers.<a href="./src/resources/numbers/numbers.ts">list</a>({ ...params }) -> NumberListResponse</code>
 - <code title="delete /numbers/phones/{id}">client.numbers.<a href="./src/resources/numbers/numbers.ts">delete</a>(id) -> NumberDeleteResponse</code>
 - <code title="get /numbers/phones/countries">client.numbers.<a href="./src/resources/numbers/numbers.ts">countries</a>() -> NumberCountriesResponse</code>

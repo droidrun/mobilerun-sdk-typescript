@@ -335,7 +335,7 @@ export namespace AppRetrieveResponse {
 
       sizeBytes: number | null;
 
-      source: 'user' | 'system' | 'portal' | 'store';
+      source: 'user' | 'system' | 'portal' | 'store' | 'catalog';
 
       status: 'queued' | 'available' | 'failed';
 
@@ -658,7 +658,7 @@ export namespace AppListResponse {
 
       sizeBytes: number | null;
 
-      source: 'user' | 'system' | 'portal' | 'store';
+      source: 'user' | 'system' | 'portal' | 'store' | 'catalog';
 
       status: 'queued' | 'available' | 'failed';
 
