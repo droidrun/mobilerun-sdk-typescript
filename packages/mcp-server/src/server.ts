@@ -25,7 +25,7 @@ export const newMcpServer = async ({
   new McpServer(
     {
       name: 'mobilerun_sdk_api',
-      version: '5.3.0',
+      version: '5.2.1',
     },
     {
       instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
