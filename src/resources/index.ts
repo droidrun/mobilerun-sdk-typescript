@@ -87,6 +87,23 @@ export {
   type FileListParams,
   type FileUploadURLParams,
 } from './files';
+export {
+  Mailboxes,
+  type MailboxCreateResponse,
+  type MailboxRetrieveResponse,
+  type MailboxUpdateResponse,
+  type MailboxListResponse,
+  type MailboxDeleteResponse,
+  type MailboxCapacityResponse,
+  type MailboxOtpResponse,
+  type MailboxRestartResponse,
+  type MailboxUncancelResponse,
+  type MailboxCreateParams,
+  type MailboxUpdateParams,
+  type MailboxListParams,
+  type MailboxOtpParams,
+  type MailboxRestartParams,
+} from './mailboxes/mailboxes';
 export { Messages, type MessageListResponse, type MessageListParams } from './messages/messages';
 export { Models, type ModelListResponse } from './models';
 export {
