@@ -52,6 +52,28 @@ export class Numbers extends APIResource {
   }
 
   /**
+   * Updates the phone number's user-defined display label. Omitting `label` leaves
+   * it unchanged; setting it to null or an empty string clears it. The label is
+   * capped at 100 characters, is display-only, and never affects routing. It also
+   * seeds the billing entity name when set at purchase time; a later change here
+   * does not rename the already-created billing entity.
+   *
+   * @example
+   * ```ts
+   * const number = await client.numbers.update(
+   *   '550e8400-e29b-41d4-a716-446655440000',
+   * );
+   * ```
+   */
+  update(
+    id: string,
+    body: NumberUpdateParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NumberUpdateResponse> {
+    return this._client.patch(path`/numbers/phones/${id}`, { body, ...options });
+  }
+
+  /**
    * Lists phone numbers owned by the authenticated user — both BYO (`user`) and
    * provisioned (`mobilerun`) numbers.
    *
@@ -161,6 +183,44 @@ export namespace NumberRetrieveResponse {
 
     currentPeriodEnd: string | null;
 
+    label: string | null;
+
+    phoneNumber: string | null;
+
+    purpose: string | null;
+
+    state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
+
+    updatedAt: string | null;
+  }
+}
+
+export interface NumberUpdateResponse {
+  data: NumberUpdateResponse.Data;
+}
+
+export namespace NumberUpdateResponse {
+  export interface Data {
+    id: string;
+
+    cancelAtPeriodEnd: boolean;
+
+    cancellable: boolean;
+
+    canSend: boolean;
+
+    capabilities: Array<'sms' | 'voice'> | null;
+
+    checkoutUrl: string | null;
+
+    countryCode: string | null;
+
+    createdAt: string | null;
+
+    currentPeriodEnd: string | null;
+
+    label: string | null;
+
     phoneNumber: string | null;
 
     purpose: string | null;
@@ -172,44 +232,40 @@ export namespace NumberRetrieveResponse {
 }
 
 export interface NumberListResponse {
-  data: NumberListResponse.Data;
+  items: Array<NumberListResponse.Item>;
+
+  pagination: Shared.Pagination;
 }
 
 export namespace NumberListResponse {
-  export interface Data {
-    items: Array<Data.Item>;
+  export interface Item {
+    id: string;
 
-    pagination: Shared.Pagination;
-  }
+    cancelAtPeriodEnd: boolean;
 
-  export namespace Data {
-    export interface Item {
-      id: string;
+    cancellable: boolean;
 
-      cancelAtPeriodEnd: boolean;
+    canSend: boolean;
 
-      cancellable: boolean;
+    capabilities: Array<'sms' | 'voice'> | null;
 
-      canSend: boolean;
+    checkoutUrl: string | null;
 
-      capabilities: Array<'sms' | 'voice'> | null;
+    countryCode: string | null;
 
-      checkoutUrl: string | null;
+    createdAt: string | null;
 
-      countryCode: string | null;
+    currentPeriodEnd: string | null;
 
-      createdAt: string | null;
+    label: string | null;
 
-      currentPeriodEnd: string | null;
+    phoneNumber: string | null;
 
-      phoneNumber: string | null;
+    purpose: string | null;
 
-      purpose: string | null;
+    state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
 
-      state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
-
-      updatedAt: string | null;
-    }
+    updatedAt: string | null;
   }
 }
 
@@ -236,6 +292,8 @@ export namespace NumberDeleteResponse {
     createdAt: string | null;
 
     currentPeriodEnd: string | null;
+
+    label: string | null;
 
     phoneNumber: string | null;
 
@@ -301,6 +359,13 @@ export interface NumberCreateParams {
   country?: string;
 
   /**
+   * Body param: User-defined display label — NFC-normalized, up to 100 GRAPHEMES
+   * (not UTF-16 code units; an emoji/flag may span several). Display-only, never
+   * used for routing. Also seeds the billing entity name at purchase.
+   */
+  label?: string | null;
+
+  /**
    * Body param: Optional Mobilerun Phone purpose slug from GET /numbers/purposes.
    */
   purpose?: string;
@@ -309,6 +374,15 @@ export interface NumberCreateParams {
    * Header param: Optional request idempotency key.
    */
   'Idempotency-Key'?: string;
+}
+
+export interface NumberUpdateParams {
+  /**
+   * User-defined display label — NFC-normalized, up to 100 GRAPHEMES (not UTF-16
+   * code units; an emoji/flag may span several). Display-only, never used for
+   * routing. Also seeds the billing entity name at purchase.
+   */
+  label?: string | null;
 }
 
 export interface NumberListParams {
@@ -323,11 +397,13 @@ export declare namespace Numbers {
   export {
     type NumberCreateResponse as NumberCreateResponse,
     type NumberRetrieveResponse as NumberRetrieveResponse,
+    type NumberUpdateResponse as NumberUpdateResponse,
     type NumberListResponse as NumberListResponse,
     type NumberDeleteResponse as NumberDeleteResponse,
     type NumberCountriesResponse as NumberCountriesResponse,
     type NumberPurposesResponse as NumberPurposesResponse,
     type NumberCreateParams as NumberCreateParams,
+    type NumberUpdateParams as NumberUpdateParams,
     type NumberListParams as NumberListParams,
   };
 

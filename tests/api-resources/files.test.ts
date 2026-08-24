@@ -7,51 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource numbers', () => {
-  // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.numbers.create();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('create: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.numbers.create(
-        {
-          billingPreference: 'included',
-          country: 'de',
-          label: 'Support line',
-          purpose: 'telegram',
-          'Idempotency-Key': 'x',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
-  });
-
-  // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.numbers.retrieve('550e8400-e29b-41d4-a716-446655440000');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
+describe('resource files', () => {
   // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.numbers.update('550e8400-e29b-41d4-a716-446655440000');
+    const responsePromise = client.files.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -65,9 +24,9 @@ describe('resource numbers', () => {
   test.skip('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.numbers.update(
-        '550e8400-e29b-41d4-a716-446655440000',
-        { label: 'Support line' },
+      client.files.update(
+        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        { displayName: 'x', enabled: true },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
@@ -75,7 +34,7 @@ describe('resource numbers', () => {
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.numbers.list();
+    const responsePromise = client.files.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -88,14 +47,14 @@ describe('resource numbers', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.numbers.list({ page: 1, pageSize: 1 }, { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.files.list({ zone: 'user' }, { path: '/_stainless_unknown_path' })).rejects.toThrow(
+      Mobilerun.NotFoundError,
+    );
   });
 
   // Mock server tests are disabled
   test.skip('delete', async () => {
-    const responsePromise = client.numbers.delete('550e8400-e29b-41d4-a716-446655440000');
+    const responsePromise = client.files.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -106,8 +65,8 @@ describe('resource numbers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('countries', async () => {
-    const responsePromise = client.numbers.countries();
+  test.skip('cancelPending', async () => {
+    const responsePromise = client.files.cancelPending('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -118,8 +77,8 @@ describe('resource numbers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('purposes', async () => {
-    const responsePromise = client.numbers.purposes();
+  test.skip('confirm', async () => {
+    const responsePromise = client.files.confirm('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -127,5 +86,44 @@ describe('resource numbers', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('download', async () => {
+    const responsePromise = client.files.download('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('uploadURL: only required params', async () => {
+    const responsePromise = client.files.uploadURL({
+      filename: 'x',
+      mimeType: 'x',
+      sizeBytes: 1,
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('uploadURL: required and optional params', async () => {
+    const response = await client.files.uploadURL({
+      filename: 'x',
+      mimeType: 'x',
+      sizeBytes: 1,
+      zone: 'user',
+      'Idempotency-Key': 'x',
+    });
   });
 });

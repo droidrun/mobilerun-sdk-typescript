@@ -40,54 +40,48 @@ export class Conversations extends APIResource {
 }
 
 export interface ConversationListResponse {
-  data: ConversationListResponse.Data;
+  items: Array<ConversationListResponse.Item>;
+
+  nextCursor: ConversationListResponse.NextCursor | null;
 }
 
 export namespace ConversationListResponse {
-  export interface Data {
-    items: Array<Data.Item>;
+  export interface Item {
+    esimIds: Array<string>;
 
-    nextCursor: Data.NextCursor | null;
+    lastMessage: Item.LastMessage;
+
+    peerKey: string;
+
+    unreadCount: number;
   }
 
-  export namespace Data {
-    export interface Item {
-      esimIds: Array<string>;
+  export namespace Item {
+    export interface LastMessage {
+      id: string;
 
-      lastMessage: Item.LastMessage;
+      body: string | null;
 
-      peerKey: string;
+      direction: 'inbound' | 'outbound';
 
-      unreadCount: number;
+      occurredAt: string;
+
+      status:
+        | 'received'
+        | 'queued'
+        | 'claimed'
+        | 'sending'
+        | 'sent'
+        | 'sent_unconfirmed'
+        | 'delivered'
+        | 'failed';
     }
+  }
 
-    export namespace Item {
-      export interface LastMessage {
-        id: string;
+  export interface NextCursor {
+    lastMessageId: string;
 
-        body: string | null;
-
-        direction: 'inbound' | 'outbound';
-
-        occurredAt: string;
-
-        status:
-          | 'received'
-          | 'queued'
-          | 'claimed'
-          | 'sending'
-          | 'sent'
-          | 'sent_unconfirmed'
-          | 'delivered'
-          | 'failed';
-      }
-    }
-
-    export interface NextCursor {
-      lastMessageId: string;
-
-      lastOccurredAt: string;
-    }
+    lastOccurredAt: string;
   }
 }
 

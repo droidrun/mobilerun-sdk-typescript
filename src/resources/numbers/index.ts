@@ -5,10 +5,12 @@ export {
   Numbers,
   type NumberCreateResponse,
   type NumberRetrieveResponse,
+  type NumberUpdateResponse,
   type NumberListResponse,
   type NumberDeleteResponse,
   type NumberCountriesResponse,
   type NumberPurposesResponse,
   type NumberCreateParams,
+  type NumberUpdateParams,
   type NumberListParams,
 } from './numbers';
