@@ -23,6 +23,12 @@ export {
   type AppStopParams,
 } from './apps';
 export { Browser, type BrowserExecuteScriptResponse, type BrowserExecuteScriptParams } from './browser';
+export {
+  Clipboard,
+  type ClipboardGetResponse,
+  type ClipboardGetParams,
+  type ClipboardSetParams,
+} from './clipboard';
 export { DeepLink, type DeepLinkExecuteDeepLinkParams } from './deep-link';
 export {
   Devices,

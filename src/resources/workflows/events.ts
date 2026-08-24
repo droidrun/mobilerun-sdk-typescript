@@ -110,6 +110,8 @@ export namespace EventDryRunResponse {
 
         ownerId: string;
 
+        recordingEnabled: boolean;
+
         selfHealingEnabled: boolean;
 
         selfHealingMaxAttempts: number;

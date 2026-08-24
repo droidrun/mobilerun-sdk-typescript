@@ -7,10 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource esims', () => {
+describe('resource conversations', () => {
   // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.esims.create();
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.assistant.conversations.create({ title: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,31 +21,18 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('create: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.esims.create(
-        { idempotencyKey: 'idempotencyKey', name: "Mom's phone" },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
-  });
-
-  // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.esims.retrieve('550e8400-e29b-41d4-a716-446655440000');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
+  test.skip('create: required and optional params', async () => {
+    const response = await client.assistant.conversations.create({
+      title: 'x',
+      agent: 'x',
+      description: 'description',
+      'Idempotency-Key': 'Idempotency-Key',
+    });
   });
 
   // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.esims.update('550e8400-e29b-41d4-a716-446655440000');
+    const responsePromise = client.assistant.conversations.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -56,20 +43,8 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.esims.update(
-        '550e8400-e29b-41d4-a716-446655440000',
-        { msisdn: '+33612345678', name: "Mom's phone" },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
-  });
-
-  // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.esims.list();
+    const responsePromise = client.assistant.conversations.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -83,12 +58,11 @@ describe('resource esims', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.esims.list(
+      client.assistant.conversations.list(
         {
+          kind: 'chat',
           mine: 'true',
-          page: 1,
-          pageSize: 1,
-          status: 'all',
+          workflowId: 'x',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -96,8 +70,10 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.esims.delete('550e8400-e29b-41d4-a716-446655440000');
+  test.skip('abort: only required params', async () => {
+    const responsePromise = client.assistant.conversations.abort({
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -108,8 +84,18 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('capacity', async () => {
-    const responsePromise = client.esims.capacity();
+  test.skip('abort: required and optional params', async () => {
+    const response = await client.assistant.conversations.abort({
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('answerPermission: only required params', async () => {
+    const responsePromise = client.assistant.conversations.answerPermission({
+      permissionId: 'x',
+      response: 'once',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -120,8 +106,19 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('confirmPayment', async () => {
-    const responsePromise = client.esims.confirmPayment('550e8400-e29b-41d4-a716-446655440000');
+  test.skip('answerPermission: required and optional params', async () => {
+    const response = await client.assistant.conversations.answerPermission({
+      permissionId: 'x',
+      response: 'once',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('answerQuestion: only required params', async () => {
+    const responsePromise = client.assistant.conversations.answerQuestion({
+      answers: [[{ label: 'x' }]],
+      questionId: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -132,8 +129,18 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('import', async () => {
-    const responsePromise = client.esims.import();
+  test.skip('answerQuestion: required and optional params', async () => {
+    const response = await client.assistant.conversations.answerQuestion({
+      answers: [[{ label: 'x' }]],
+      questionId: 'x',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('history: only required params', async () => {
+    const responsePromise = client.assistant.conversations.history({
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -144,32 +151,16 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('import: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.esims.import(
-        {
-          autoInstall: true,
-          carrierName: 'carrierName',
-          confirmationCode: 'confirmationCode',
-          countryCode: 'countryCode',
-          deviceId: 'physedge-dev-8f3a2c',
-          idempotencyKey: 'x',
-          lpaCode: 'LPA:1$smdp.example.com$QR-MATCH-1',
-          matchingId: 'matchingId',
-          msisdn: '+33612345678',
-          name: "Mom's phone",
-          notes: 'notes',
-          smdpAddress: 'smdp.example.com',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+  test.skip('history: required and optional params', async () => {
+    const response = await client.assistant.conversations.history({
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      limit: 1,
+    });
   });
 
   // Mock server tests are disabled
-  test.skip('install', async () => {
-    const responsePromise = client.esims.install('550e8400-e29b-41d4-a716-446655440000');
+  test.skip('rejectQuestion: only required params', async () => {
+    const responsePromise = client.assistant.conversations.rejectQuestion({ questionId: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -180,20 +171,16 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('install: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.esims.install(
-        '550e8400-e29b-41d4-a716-446655440000',
-        { deviceId: 'physedge-dev-8f3a2c' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+  test.skip('rejectQuestion: required and optional params', async () => {
+    const response = await client.assistant.conversations.rejectQuestion({ questionId: 'x' });
   });
 
   // Mock server tests are disabled
-  test.skip('installStatus', async () => {
-    const responsePromise = client.esims.installStatus('550e8400-e29b-41d4-a716-446655440000');
+  test.skip('send: only required params', async () => {
+    const responsePromise = client.assistant.conversations.send({
+      message: 'x',
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -204,8 +191,19 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('selector', async () => {
-    const responsePromise = client.esims.selector();
+  test.skip('send: required and optional params', async () => {
+    const response = await client.assistant.conversations.send({
+      message: 'x',
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      agent: 'agent',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('stream: only required params', async () => {
+    const responsePromise = client.assistant.conversations.stream({
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -216,10 +214,9 @@ describe('resource esims', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('selector: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.esims.selector({ page: 1, pageSize: 1 }, { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+  test.skip('stream: required and optional params', async () => {
+    const response = await client.assistant.conversations.stream({
+      sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
   });
 });

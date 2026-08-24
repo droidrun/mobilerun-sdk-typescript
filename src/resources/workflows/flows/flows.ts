@@ -176,6 +176,8 @@ export namespace FlowCreateResponse {
 
     ownerId: string;
 
+    recordingEnabled: boolean;
+
     selfHealingEnabled: boolean;
 
     selfHealingMaxAttempts: number;
@@ -252,6 +254,8 @@ export namespace FlowRetrieveResponse {
 
     ownerId: string;
 
+    recordingEnabled: boolean;
+
     selfHealingEnabled: boolean;
 
     selfHealingMaxAttempts: number;
@@ -327,6 +331,8 @@ export namespace FlowUpdateResponse {
     notifyWebhookId: string | null;
 
     ownerId: string;
+
+    recordingEnabled: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -405,6 +411,8 @@ export namespace FlowListResponse {
     notifyWebhookId: string | null;
 
     ownerId: string;
+
+    recordingEnabled: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -485,6 +493,8 @@ export namespace FlowCloneResponse {
     notifyWebhookId: string | null;
 
     ownerId: string;
+
+    recordingEnabled: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -688,6 +698,8 @@ export namespace FlowUnblockResponse {
 
     ownerId: string;
 
+    recordingEnabled: boolean;
+
     selfHealingEnabled: boolean;
 
     selfHealingMaxAttempts: number;
@@ -737,6 +749,8 @@ export interface FlowCreateParams {
   notifyOnSuccess?: boolean;
 
   notifyWebhookId?: string | null;
+
+  recordingEnabled?: boolean;
 
   selfHealingEnabled?: boolean;
 
@@ -803,6 +817,8 @@ export interface FlowUpdateParams {
   notifyOnSuccess?: boolean;
 
   notifyWebhookId?: string | null;
+
+  recordingEnabled?: boolean;
 
   selfHealingEnabled?: boolean;
 

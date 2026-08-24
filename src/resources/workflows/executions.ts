@@ -77,6 +77,15 @@ export namespace ExecutionRetrieveResponse {
 
     kind: 'live' | 'dry_run';
 
+    recordingDeviceId: string | null;
+
+    /**
+     * Device-recording id (devices-api) for this execution, set once the worker starts
+     * a recording. Null when the flow has recording disabled, no device is bound, or
+     * the recording failed to start.
+     */
+    recordingId: string | null;
+
     startedAt: string | null;
 
     status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid' | null;
@@ -133,6 +142,15 @@ export namespace ExecutionListResponse {
 
     kind: 'live' | 'dry_run';
 
+    recordingDeviceId: string | null;
+
+    /**
+     * Device-recording id (devices-api) for this execution, set once the worker starts
+     * a recording. Null when the flow has recording disabled, no device is bound, or
+     * the recording failed to start.
+     */
+    recordingId: string | null;
+
     startedAt: string | null;
 
     status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid' | null;
@@ -172,6 +190,15 @@ export namespace ExecutionAbortResponse {
     flowName: string | null;
 
     kind: 'live' | 'dry_run';
+
+    recordingDeviceId: string | null;
+
+    /**
+     * Device-recording id (devices-api) for this execution, set once the worker starts
+     * a recording. Null when the flow has recording disabled, no device is bound, or
+     * the recording failed to start.
+     */
+    recordingId: string | null;
 
     startedAt: string | null;
 

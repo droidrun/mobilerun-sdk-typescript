@@ -9,7 +9,7 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class Models extends APIResource {
   /**
-   * Get all LLM models
+   * List available LLM models.
    */
   list(options?: RequestOptions): APIPromise<ModelListResponse> {
     return this._client.get('/models', options);
@@ -17,23 +17,38 @@ export class Models extends APIResource {
 }
 
 export interface ModelListResponse {
-  data?: Array<ModelListResponse.Data>;
+  /**
+   * Available models
+   */
+  data: Array<ModelListResponse.Data>;
 
   /**
-   * Always "list" for list responses
+   * Object type
    */
   object?: string;
 }
 
 export namespace ModelListResponse {
   export interface Data {
-    id?: string;
+    /**
+     * Model identifier
+     */
+    id: string;
 
+    /**
+     * Model owner/provider
+     */
+    owned_by: string;
+
+    /**
+     * Creation timestamp
+     */
     created?: number;
 
+    /**
+     * Object type
+     */
     object?: string;
-
-    owned_by?: string;
   }
 }
 
