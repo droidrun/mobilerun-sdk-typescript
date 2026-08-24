@@ -31,50 +31,44 @@ export class Messages extends APIResource {
 }
 
 export interface MessageListResponse {
-  data: MessageListResponse.Data;
+  items: Array<MessageListResponse.Item>;
+
+  pagination: Shared.Pagination;
 }
 
 export namespace MessageListResponse {
-  export interface Data {
-    items: Array<Data.Item>;
+  export interface Item {
+    id: string;
 
-    pagination: Shared.Pagination;
-  }
+    body: string | null;
 
-  export namespace Data {
-    export interface Item {
-      id: string;
+    createdAt: string;
 
-      body: string | null;
+    deliveryStatus: string | null;
 
-      createdAt: string;
+    detectedSender: string | null;
 
-      deliveryStatus: string | null;
+    direction: 'inbound' | 'outbound';
 
-      detectedSender: string | null;
+    esimId: string | null;
 
-      direction: 'inbound' | 'outbound';
+    occurredAt: string;
 
-      esimId: string | null;
+    peerKey: string | null;
 
-      occurredAt: string;
+    peerNumber: string | null;
 
-      peerKey: string | null;
+    providerCode: string | null;
 
-      peerNumber: string | null;
-
-      providerCode: string | null;
-
-      status:
-        | 'received'
-        | 'queued'
-        | 'claimed'
-        | 'sending'
-        | 'sent'
-        | 'sent_unconfirmed'
-        | 'delivered'
-        | 'failed';
-    }
+    status:
+      | 'received'
+      | 'queued'
+      | 'claimed'
+      | 'sending'
+      | 'sent'
+      | 'sent_unconfirmed'
+      | 'delivered'
+      | 'failed';
   }
 }
 
