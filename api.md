@@ -701,6 +701,44 @@ Methods:
 - <code title="get /webhooks/{id}/deliveries/{deliveryId}">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">retrieveAttempts</a>(deliveryID, { ...params }) -> DeliveryRetrieveAttemptsResponse</code>
 - <code title="get /webhooks/deliveries/stats">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">stats</a>({ ...params }) -> DeliveryStatsResponse</code>
 
+# Mailboxes
+
+Types:
+
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxCreateResponse</a></code>
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxRetrieveResponse</a></code>
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxUpdateResponse</a></code>
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxListResponse</a></code>
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxDeleteResponse</a></code>
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxCapacityResponse</a></code>
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxOtpResponse</a></code>
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxRestartResponse</a></code>
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxUncancelResponse</a></code>
+
+Methods:
+
+- <code title="post /mailboxes">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">create</a>({ ...params }) -> MailboxCreateResponse</code>
+- <code title="get /mailboxes/{mailboxId}">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">retrieve</a>(mailboxID) -> MailboxRetrieveResponse</code>
+- <code title="patch /mailboxes/{mailboxId}">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">update</a>(mailboxID, { ...params }) -> MailboxUpdateResponse</code>
+- <code title="get /mailboxes">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">list</a>({ ...params }) -> MailboxListResponse</code>
+- <code title="delete /mailboxes/{mailboxId}">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">delete</a>(mailboxID) -> MailboxDeleteResponse</code>
+- <code title="get /mailboxes/capacity">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">capacity</a>() -> MailboxCapacityResponse</code>
+- <code title="get /mailboxes/{mailboxId}/otp">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">otp</a>(mailboxID, { ...params }) -> MailboxOtpResponse</code>
+- <code title="post /mailboxes/{mailboxId}/restart">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">restart</a>(mailboxID, { ...params }) -> MailboxRestartResponse</code>
+- <code title="post /mailboxes/{mailboxId}/uncancel">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">uncancel</a>(mailboxID) -> MailboxUncancelResponse</code>
+
+## Messages
+
+Types:
+
+- <code><a href="./src/resources/mailboxes/messages.ts">MessageRetrieveResponse</a></code>
+- <code><a href="./src/resources/mailboxes/messages.ts">MessageListResponse</a></code>
+
+Methods:
+
+- <code title="get /mailboxes/{mailboxId}/messages/{messageId}">client.mailboxes.messages.<a href="./src/resources/mailboxes/messages.ts">retrieve</a>(messageID, { ...params }) -> MessageRetrieveResponse</code>
+- <code title="get /mailboxes/{mailboxId}/messages">client.mailboxes.messages.<a href="./src/resources/mailboxes/messages.ts">list</a>(mailboxID, { ...params }) -> MessageListResponse</code>
+
 # Files
 
 Types:
