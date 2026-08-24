@@ -135,6 +135,23 @@ import {
   EsimUpdateResponse,
   Esims,
 } from './resources/esims/esims';
+import {
+  MailboxCapacityResponse,
+  MailboxCreateParams,
+  MailboxCreateResponse,
+  MailboxDeleteResponse,
+  MailboxListParams,
+  MailboxListResponse,
+  MailboxOtpParams,
+  MailboxOtpResponse,
+  MailboxRestartParams,
+  MailboxRestartResponse,
+  MailboxRetrieveResponse,
+  MailboxUncancelResponse,
+  MailboxUpdateParams,
+  MailboxUpdateResponse,
+  Mailboxes,
+} from './resources/mailboxes/mailboxes';
 import { MessageListParams, MessageListResponse, Messages } from './resources/messages/messages';
 import {
   NumberCountriesResponse,
@@ -919,6 +936,7 @@ export class Mobilerun {
   tasks: API.Tasks = new API.Tasks(this);
   workflows: API.Workflows = new API.Workflows(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
+  mailboxes: API.Mailboxes = new API.Mailboxes(this);
   files: API.Files = new API.Files(this);
   assistant: API.Assistant = new API.Assistant(this);
   appEvents: API.AppEvents = new API.AppEvents(this);
@@ -940,6 +958,7 @@ Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
 Mobilerun.Webhooks = Webhooks;
+Mobilerun.Mailboxes = Mailboxes;
 Mobilerun.Files = Files;
 Mobilerun.Assistant = Assistant;
 Mobilerun.AppEvents = AppEvents;
@@ -1063,6 +1082,24 @@ export declare namespace Mobilerun {
     type WebhookCreateParams as WebhookCreateParams,
     type WebhookUpdateParams as WebhookUpdateParams,
     type WebhookListParams as WebhookListParams,
+  };
+
+  export {
+    Mailboxes as Mailboxes,
+    type MailboxCreateResponse as MailboxCreateResponse,
+    type MailboxRetrieveResponse as MailboxRetrieveResponse,
+    type MailboxUpdateResponse as MailboxUpdateResponse,
+    type MailboxListResponse as MailboxListResponse,
+    type MailboxDeleteResponse as MailboxDeleteResponse,
+    type MailboxCapacityResponse as MailboxCapacityResponse,
+    type MailboxOtpResponse as MailboxOtpResponse,
+    type MailboxRestartResponse as MailboxRestartResponse,
+    type MailboxUncancelResponse as MailboxUncancelResponse,
+    type MailboxCreateParams as MailboxCreateParams,
+    type MailboxUpdateParams as MailboxUpdateParams,
+    type MailboxListParams as MailboxListParams,
+    type MailboxOtpParams as MailboxOtpParams,
+    type MailboxRestartParams as MailboxRestartParams,
   };
 
   export {
