@@ -221,15 +221,18 @@ export class Esims extends APIResource {
   /**
    * Returns a lightweight list (id, msisdn, carrierName, status, masked iccid) for
    * use in a message filter dropdown. Unlike `GET /esims`, this includes all
-   * statuses, including retired eSIMs, and is not paginated.
+   * statuses, including retired eSIMs.
    *
    * @example
    * ```ts
    * const response = await client.esims.selector();
    * ```
    */
-  selector(options?: RequestOptions): APIPromise<EsimSelectorResponse> {
-    return this._client.get('/numbers/esims/selector', options);
+  selector(
+    query: EsimSelectorParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<EsimSelectorResponse> {
+    return this._client.get('/numbers/esims/selector', { query, ...options });
   }
 }
 
@@ -405,67 +408,61 @@ export namespace EsimUpdateResponse {
 }
 
 export interface EsimListResponse {
-  data: EsimListResponse.Data;
+  items: Array<EsimListResponse.Item>;
+
+  pagination: Shared.Pagination;
 }
 
 export namespace EsimListResponse {
-  export interface Data {
-    items: Array<Data.Item>;
+  export interface Item {
+    id: string;
 
-    pagination: Shared.Pagination;
-  }
+    carrierName: string | null;
 
-  export namespace Data {
-    export interface Item {
-      id: string;
+    countryCode: string | null;
 
-      carrierName: string | null;
+    createdAt: string | null;
 
-      countryCode: string | null;
+    createdBy: string | null;
 
-      createdAt: string | null;
+    deviceId: string | null;
 
-      createdBy: string | null;
+    deviceUuid: string | null;
 
-      deviceId: string | null;
+    iccid: string | null;
 
-      deviceUuid: string | null;
+    msisdn: string | null;
 
-      iccid: string | null;
+    name: string | null;
 
-      msisdn: string | null;
+    networkStatus: 'degraded' | null;
 
-      name: string | null;
+    source: 'stocked' | 'byo';
 
-      networkStatus: 'degraded' | null;
+    status: 'in_stock' | 'owned' | 'installing' | 'installed' | 'install_failed' | 'retired';
 
-      source: 'stocked' | 'byo';
+    subscriptionId: number | null;
 
-      status: 'in_stock' | 'owned' | 'installing' | 'installed' | 'install_failed' | 'retired';
+    updatedAt: string | null;
 
-      subscriptionId: number | null;
+    cancellationScheduled?: boolean;
 
-      updatedAt: string | null;
+    checkoutUrl?: string | null;
 
-      cancellationScheduled?: boolean;
+    currentPeriodEnd?: string | null;
 
-      checkoutUrl?: string | null;
+    exempt?: boolean;
 
-      currentPeriodEnd?: string | null;
-
-      exempt?: boolean;
-
-      rentStatus?:
-        | 'not_applicable'
-        | 'exempt'
-        | 'inactive'
-        | 'awaiting_payment'
-        | 'active'
-        | 'cancel_pending'
-        | 'refund_pending'
-        | 'retiring'
-        | 'billing_error';
-    }
+    rentStatus?:
+      | 'not_applicable'
+      | 'exempt'
+      | 'inactive'
+      | 'awaiting_payment'
+      | 'active'
+      | 'cancel_pending'
+      | 'refund_pending'
+      | 'retiring'
+      | 'billing_error';
   }
 }
 
@@ -859,30 +856,26 @@ export namespace EsimInstallStatusResponse {
 }
 
 export interface EsimSelectorResponse {
-  data: EsimSelectorResponse.Data;
+  items: Array<EsimSelectorResponse.Item>;
+
+  pagination: Shared.Pagination;
 }
 
 export namespace EsimSelectorResponse {
-  export interface Data {
-    items: Array<Data.Item>;
-  }
+  export interface Item {
+    id: string;
 
-  export namespace Data {
-    export interface Item {
-      id: string;
+    carrierName: string | null;
 
-      carrierName: string | null;
+    iccid: string | null;
 
-      iccid: string | null;
+    msisdn: string | null;
 
-      msisdn: string | null;
+    name: string | null;
 
-      name: string | null;
+    source: 'stocked' | 'byo';
 
-      source: 'stocked' | 'byo';
-
-      status: 'in_stock' | 'owned' | 'installing' | 'installed' | 'install_failed' | 'retired';
-    }
+    status: 'in_stock' | 'owned' | 'installing' | 'installed' | 'install_failed' | 'retired';
   }
 }
 
@@ -892,6 +885,12 @@ export interface EsimCreateParams {
    * instead of buying again
    */
   idempotencyKey?: string;
+
+  /**
+   * Optional user-defined display label — NFC-normalized, up to 15 GRAPHEMES. Omit
+   * or null for no label.
+   */
+  name?: string | null;
 }
 
 export interface EsimUpdateParams {
@@ -982,6 +981,12 @@ export interface EsimInstallParams {
   deviceId?: string;
 }
 
+export interface EsimSelectorParams {
+  page?: number;
+
+  pageSize?: number;
+}
+
 Esims.Messages = Messages;
 
 export declare namespace Esims {
@@ -1001,6 +1006,7 @@ export declare namespace Esims {
     type EsimListParams as EsimListParams,
     type EsimImportParams as EsimImportParams,
     type EsimInstallParams as EsimInstallParams,
+    type EsimSelectorParams as EsimSelectorParams,
   };
 
   export {

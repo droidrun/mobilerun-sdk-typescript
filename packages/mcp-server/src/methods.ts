@@ -479,6 +479,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/{deviceId}/tasks',
   },
   {
+    clientCallName: 'client.devices.clipboard.get',
+    fullyQualifiedName: 'devices.clipboard.get',
+    httpMethod: 'get',
+    httpPath: '/devices/{deviceId}/clipboard',
+  },
+  {
+    clientCallName: 'client.devices.clipboard.set',
+    fullyQualifiedName: 'devices.clipboard.set',
+    httpMethod: 'post',
+    httpPath: '/devices/{deviceId}/clipboard',
+  },
+  {
     clientCallName: 'client.devices.timezone.get',
     fullyQualifiedName: 'devices.timezone.get',
     httpMethod: 'get',
@@ -1103,12 +1115,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/webhooks/deliveries/stats',
   },
   {
-    clientCallName: 'client.agents.list',
-    fullyQualifiedName: 'agents.list',
-    httpMethod: 'get',
-    httpPath: '/agents',
-  },
-  {
     clientCallName: 'client.files.update',
     fullyQualifiedName: 'files.update',
     httpMethod: 'patch',
@@ -1358,6 +1364,12 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.numbers.retrieve',
     fullyQualifiedName: 'numbers.retrieve',
     httpMethod: 'get',
+    httpPath: '/numbers/phones/{id}',
+  },
+  {
+    clientCallName: 'client.numbers.update',
+    fullyQualifiedName: 'numbers.update',
+    httpMethod: 'patch',
     httpPath: '/numbers/phones/{id}',
   },
   {

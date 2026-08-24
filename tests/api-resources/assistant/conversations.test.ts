@@ -133,7 +133,6 @@ describe('resource conversations', () => {
     const response = await client.assistant.conversations.answerQuestion({
       answers: [[{ label: 'x' }]],
       questionId: 'x',
-      'Idempotency-Key': 'Idempotency-Key',
     });
   });
 

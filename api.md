@@ -281,6 +281,17 @@ Methods:
 
 - <code title="get /devices/{deviceId}/tasks">client.devices.tasks.<a href="./src/resources/devices/tasks.ts">list</a>(deviceID, { ...params }) -> TaskListResponse</code>
 
+## Clipboard
+
+Types:
+
+- <code><a href="./src/resources/devices/clipboard.ts">ClipboardGetResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/{deviceId}/clipboard">client.devices.clipboard.<a href="./src/resources/devices/clipboard.ts">get</a>(deviceID, { ...params }) -> ClipboardGetResponse</code>
+- <code title="post /devices/{deviceId}/clipboard">client.devices.clipboard.<a href="./src/resources/devices/clipboard.ts">set</a>(deviceID, { ...params }) -> void</code>
+
 ## Timezone
 
 Types:
@@ -690,16 +701,6 @@ Methods:
 - <code title="get /webhooks/{id}/deliveries/{deliveryId}">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">retrieveAttempts</a>(deliveryID, { ...params }) -> DeliveryRetrieveAttemptsResponse</code>
 - <code title="get /webhooks/deliveries/stats">client.webhooks.deliveries.<a href="./src/resources/webhooks/deliveries.ts">stats</a>({ ...params }) -> DeliveryStatsResponse</code>
 
-# Agents
-
-Types:
-
-- <code><a href="./src/resources/agents.ts">AgentListResponse</a></code>
-
-Methods:
-
-- <code title="get /agents">client.agents.<a href="./src/resources/agents.ts">list</a>() -> AgentListResponse</code>
-
 # Files
 
 Types:
@@ -816,7 +817,7 @@ Methods:
 - <code title="post /numbers/esims/import">client.esims.<a href="./src/resources/esims/esims.ts">import</a>({ ...params }) -> EsimImportResponse</code>
 - <code title="post /numbers/esims/{id}/install">client.esims.<a href="./src/resources/esims/esims.ts">install</a>(id, { ...params }) -> EsimInstallResponse</code>
 - <code title="get /numbers/esims/{id}/install-status">client.esims.<a href="./src/resources/esims/esims.ts">installStatus</a>(id) -> EsimInstallStatusResponse</code>
-- <code title="get /numbers/esims/selector">client.esims.<a href="./src/resources/esims/esims.ts">selector</a>() -> EsimSelectorResponse</code>
+- <code title="get /numbers/esims/selector">client.esims.<a href="./src/resources/esims/esims.ts">selector</a>({ ...params }) -> EsimSelectorResponse</code>
 
 ## Messages
 
@@ -858,6 +859,7 @@ Types:
 
 - <code><a href="./src/resources/numbers/numbers.ts">NumberCreateResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberRetrieveResponse</a></code>
+- <code><a href="./src/resources/numbers/numbers.ts">NumberUpdateResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberListResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberDeleteResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberCountriesResponse</a></code>
@@ -867,6 +869,7 @@ Methods:
 
 - <code title="post /numbers/phones">client.numbers.<a href="./src/resources/numbers/numbers.ts">create</a>({ ...params }) -> NumberCreateResponse</code>
 - <code title="get /numbers/phones/{id}">client.numbers.<a href="./src/resources/numbers/numbers.ts">retrieve</a>(id) -> NumberRetrieveResponse</code>
+- <code title="patch /numbers/phones/{id}">client.numbers.<a href="./src/resources/numbers/numbers.ts">update</a>(id, { ...params }) -> NumberUpdateResponse</code>
 - <code title="get /numbers/phones">client.numbers.<a href="./src/resources/numbers/numbers.ts">list</a>({ ...params }) -> NumberListResponse</code>
 - <code title="delete /numbers/phones/{id}">client.numbers.<a href="./src/resources/numbers/numbers.ts">delete</a>(id) -> NumberDeleteResponse</code>
 - <code title="get /numbers/phones/countries">client.numbers.<a href="./src/resources/numbers/numbers.ts">countries</a>() -> NumberCountriesResponse</code>

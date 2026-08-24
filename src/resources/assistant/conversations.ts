@@ -66,7 +66,7 @@ export class Conversations extends APIResource {
   }
 
   /**
-   * Deliver a permission approval or rejection for an in-flight turn.
+   * Deliver a HITL approval/rejection for an in-flight turn.
    */
   answerPermission(
     body: ConversationAnswerPermissionParams,
@@ -76,22 +76,14 @@ export class Conversations extends APIResource {
   }
 
   /**
-   * Deliver the user's answers to the pending question for an in-flight turn.
-   * Idempotent via the `Idempotency-Key` header.
+   * Deliver the user's answers to the agent's pending question for an in-flight
+   * turn. Idempotent via the `idempotency-key` header.
    */
   answerQuestion(
-    params: ConversationAnswerQuestionParams,
+    body: ConversationAnswerQuestionParams,
     options?: RequestOptions,
   ): APIPromise<ConversationAnswerQuestionResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post('/assistant/chat/question', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+    return this._client.post('/assistant/chat/question', { body, ...options });
   }
 
   /**
@@ -106,8 +98,8 @@ export class Conversations extends APIResource {
   }
 
   /**
-   * Dismiss the pending question. Already-resolved questions return 200 (no-op) so
-   * multi-tab dismiss stays idempotent.
+   * Dismiss the agent's pending question. Already-resolved questions return 200
+   * (no-op) so multi-tab dismiss stays idempotent.
    */
   rejectQuestion(
     body: ConversationRejectQuestionParams,
@@ -130,7 +122,8 @@ export class Conversations extends APIResource {
   /**
    * Reconnect to the in-flight turn stream. Replays buffered events from the start
    * of the active turn, then continues live until the turn finishes. Responds 204
-   * when no turn is active for the requested session. Resume is best-effort. Does
+   * when no active turn exists for the requested session. Upstream streaming
+   * failures return a retryable 503 with `Retry-After`. Resume is best-effort. Does
    * not start an inactive session.
    */
   stream(
@@ -360,7 +353,7 @@ export namespace ConversationHistoryResponse {
 
     metadata?: Message.Metadata;
 
-    source?: 'cloud' | 'telegram' | 'api' | 'workflow';
+    source?: 'cloud' | 'telegram' | 'api' | 'workflow' | 'notification';
 
     synthetic?: boolean;
 
@@ -456,9 +449,6 @@ export interface ConversationAnswerPermissionParams {
 }
 
 export interface ConversationAnswerQuestionParams {
-  /**
-   * Body param
-   */
   answers: Array<
     Array<
       | ConversationAnswerQuestionParams.Label
@@ -467,16 +457,7 @@ export interface ConversationAnswerQuestionParams {
     >
   >;
 
-  /**
-   * Body param
-   */
   questionId: string;
-
-  /**
-   * Header param: Optional client key. Reusing the same key with the same question
-   * answers coalesces duplicate submits.
-   */
-  'Idempotency-Key'?: string;
 }
 
 export namespace ConversationAnswerQuestionParams {

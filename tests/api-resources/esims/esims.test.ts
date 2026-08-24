@@ -24,7 +24,10 @@ describe('resource esims', () => {
   test.skip('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.esims.create({ idempotencyKey: 'idempotencyKey' }, { path: '/_stainless_unknown_path' }),
+      client.esims.create(
+        { idempotencyKey: 'idempotencyKey', name: "Mom's phone" },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
@@ -210,5 +213,13 @@ describe('resource esims', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('selector: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.esims.selector({ page: 1, pageSize: 1 }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 });
