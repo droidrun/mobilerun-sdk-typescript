@@ -17,6 +17,7 @@ export {
   type EsimListParams,
   type EsimImportParams,
   type EsimInstallParams,
+  type EsimSelectorParams,
 } from './esims';
 export {
   Messages,

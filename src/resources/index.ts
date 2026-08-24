@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
-export { Agents, type AgentListResponse } from './agents';
 export {
   AppEvents,
   type AppEventRetrieveResponse,
@@ -21,6 +20,7 @@ export {
   type AppListParams,
   type AppCreateSignedUploadURLParams,
 } from './apps';
+export { Assistant } from './assistant/assistant';
 export {
   Carriers,
   type CarrierCreateResponse,
@@ -73,7 +73,20 @@ export {
   type EsimListParams,
   type EsimImportParams,
   type EsimInstallParams,
+  type EsimSelectorParams,
 } from './esims/esims';
+export {
+  Files,
+  type FileUpdateResponse,
+  type FileListResponse,
+  type FileDeleteResponse,
+  type FileCancelPendingResponse,
+  type FileConfirmResponse,
+  type FileUploadURLResponse,
+  type FileUpdateParams,
+  type FileListParams,
+  type FileUploadURLParams,
+} from './files';
 export { Messages, type MessageListResponse, type MessageListParams } from './messages/messages';
 export { Models, type ModelListResponse } from './models';
 export {
@@ -87,11 +100,13 @@ export {
   Numbers,
   type NumberCreateResponse,
   type NumberRetrieveResponse,
+  type NumberUpdateResponse,
   type NumberListResponse,
   type NumberDeleteResponse,
   type NumberCountriesResponse,
   type NumberPurposesResponse,
   type NumberCreateParams,
+  type NumberUpdateParams,
   type NumberListParams,
 } from './numbers/numbers';
 export {

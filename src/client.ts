@@ -17,7 +17,6 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { AgentListResponse, Agents } from './resources/agents';
 import {
   AppConfirmUploadResponse,
   AppCreateSignedUploadURLParams,
@@ -44,6 +43,18 @@ import {
   CarrierUpdateResponse,
   Carriers,
 } from './resources/carriers';
+import {
+  FileCancelPendingResponse,
+  FileConfirmResponse,
+  FileDeleteResponse,
+  FileListParams,
+  FileListResponse,
+  FileUpdateParams,
+  FileUpdateResponse,
+  FileUploadURLParams,
+  FileUploadURLResponse,
+  Files,
+} from './resources/files';
 import { ModelListResponse, Models } from './resources/models';
 import {
   NotificationCatalogResponse,
@@ -82,6 +93,7 @@ import {
   AppEventRetrieveResponse,
   AppEvents,
 } from './resources/app-events/app-events';
+import { Assistant } from './resources/assistant/assistant';
 import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
@@ -117,6 +129,7 @@ import {
   EsimListParams,
   EsimListResponse,
   EsimRetrieveResponse,
+  EsimSelectorParams,
   EsimSelectorResponse,
   EsimUpdateParams,
   EsimUpdateResponse,
@@ -132,6 +145,8 @@ import {
   NumberListResponse,
   NumberPurposesResponse,
   NumberRetrieveResponse,
+  NumberUpdateParams,
+  NumberUpdateResponse,
   Numbers,
 } from './resources/numbers/numbers';
 import { Store, StoreCategoriesResponse } from './resources/store/store';
@@ -904,7 +919,8 @@ export class Mobilerun {
   tasks: API.Tasks = new API.Tasks(this);
   workflows: API.Workflows = new API.Workflows(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
-  agents: API.Agents = new API.Agents(this);
+  files: API.Files = new API.Files(this);
+  assistant: API.Assistant = new API.Assistant(this);
   appEvents: API.AppEvents = new API.AppEvents(this);
   notifications: API.Notifications = new API.Notifications(this);
   esims: API.Esims = new API.Esims(this);
@@ -924,7 +940,8 @@ Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
 Mobilerun.Webhooks = Webhooks;
-Mobilerun.Agents = Agents;
+Mobilerun.Files = Files;
+Mobilerun.Assistant = Assistant;
 Mobilerun.AppEvents = AppEvents;
 Mobilerun.Notifications = Notifications;
 Mobilerun.Esims = Esims;
@@ -1048,7 +1065,20 @@ export declare namespace Mobilerun {
     type WebhookListParams as WebhookListParams,
   };
 
-  export { Agents as Agents, type AgentListResponse as AgentListResponse };
+  export {
+    Files as Files,
+    type FileUpdateResponse as FileUpdateResponse,
+    type FileListResponse as FileListResponse,
+    type FileDeleteResponse as FileDeleteResponse,
+    type FileCancelPendingResponse as FileCancelPendingResponse,
+    type FileConfirmResponse as FileConfirmResponse,
+    type FileUploadURLResponse as FileUploadURLResponse,
+    type FileUpdateParams as FileUpdateParams,
+    type FileListParams as FileListParams,
+    type FileUploadURLParams as FileUploadURLParams,
+  };
+
+  export { Assistant as Assistant };
 
   export {
     AppEvents as AppEvents,
@@ -1082,6 +1112,7 @@ export declare namespace Mobilerun {
     type EsimListParams as EsimListParams,
     type EsimImportParams as EsimImportParams,
     type EsimInstallParams as EsimInstallParams,
+    type EsimSelectorParams as EsimSelectorParams,
   };
 
   export {
@@ -1094,11 +1125,13 @@ export declare namespace Mobilerun {
     Numbers as Numbers,
     type NumberCreateResponse as NumberCreateResponse,
     type NumberRetrieveResponse as NumberRetrieveResponse,
+    type NumberUpdateResponse as NumberUpdateResponse,
     type NumberListResponse as NumberListResponse,
     type NumberDeleteResponse as NumberDeleteResponse,
     type NumberCountriesResponse as NumberCountriesResponse,
     type NumberPurposesResponse as NumberPurposesResponse,
     type NumberCreateParams as NumberCreateParams,
+    type NumberUpdateParams as NumberUpdateParams,
     type NumberListParams as NumberListParams,
   };
 
