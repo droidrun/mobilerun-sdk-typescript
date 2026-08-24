@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.3.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.2.1...v5.3.0) (2026-08-24)
+
+
+### Features
+
+* **sdk:** add public agents APIs ([5935bcf](https://github.com/droidrun/mobilerun-sdk-typescript/commit/5935bcfcdb07338386055decda24e6f612edc31d))
+
+
+### Chores
+
+* release 5.3.0 ([fa3a9d4](https://github.com/droidrun/mobilerun-sdk-typescript/commit/fa3a9d41f94a8f497ec2f014e36f593ac9ef0871))
+
 ## [5.2.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.2.0...v5.2.1) (2026-08-20)
 
 
