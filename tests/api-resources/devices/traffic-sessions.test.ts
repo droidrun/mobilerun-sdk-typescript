@@ -7,10 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource files', () => {
+describe('resource trafficSessions', () => {
   // Mock server tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.files.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.devices.trafficSessions.create('deviceId', { 'Idempotency-Key': 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,53 +21,69 @@ describe('resource files', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('cancelPending', async () => {
-    const responsePromise = client.files.cancelPending('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('download', async () => {
-    const responsePromise = client.files.download('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('uploadURL: only required params', async () => {
-    const responsePromise = client.files.uploadURL({
-      filename: 'x',
-      mimeType: 'x',
-      sizeBytes: 1,
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('uploadURL: required and optional params', async () => {
-    const response = await client.files.uploadURL({
-      filename: 'x',
-      mimeType: 'x',
-      sizeBytes: 1,
-      zone: 'user',
+  test.skip('create: required and optional params', async () => {
+    const response = await client.devices.trafficSessions.create('deviceId', {
       'Idempotency-Key': 'x',
+      expiresInSeconds: 60,
+      maxBodyBytes: 0,
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieve: only required params', async () => {
+    const responsePromise = client.devices.trafficSessions.retrieve('sessionId', { deviceId: 'deviceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieve: required and optional params', async () => {
+    const response = await client.devices.trafficSessions.retrieve('sessionId', { deviceId: 'deviceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('list', async () => {
+    const responsePromise = client.devices.trafficSessions.list('deviceId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.trafficSessions.list(
+        'deviceId',
+        { page: 1, pageSize: 1 },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.devices.trafficSessions.delete('sessionId', { deviceId: 'deviceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.devices.trafficSessions.delete('sessionId', { deviceId: 'deviceId' });
   });
 });

@@ -86,6 +86,12 @@ export namespace ExecutionRetrieveResponse {
      */
     recordingId: string | null;
 
+    /**
+     * Durable recording segments ordered by step/loop coordinate and retry attempt.
+     * Whole-flow recordings use -1 for every coordinate.
+     */
+    recordings: Array<Data.Recording>;
+
     startedAt: string | null;
 
     status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid' | null;
@@ -114,6 +120,36 @@ export namespace ExecutionRetrieveResponse {
       mimeType: string;
 
       sizeBytes: number;
+    }
+
+    export interface Recording {
+      id: string;
+
+      attempt: number;
+
+      childIndex: number;
+
+      flowActionId: string | null;
+
+      iterationIndex: number;
+
+      lastError: string | null;
+
+      parentIndex: number;
+
+      recordingDeviceId: string | null;
+
+      recordingId: string | null;
+
+      scope: 'flow' | 'step';
+
+      startedAt: string | null;
+
+      status: 'starting' | 'recording' | 'stopping' | 'stopped' | 'failed';
+
+      stepIndex: number;
+
+      stoppedAt: string | null;
     }
   }
 }
@@ -151,6 +187,12 @@ export namespace ExecutionListResponse {
      */
     recordingId: string | null;
 
+    /**
+     * Durable recording segments ordered by step/loop coordinate and retry attempt.
+     * Whole-flow recordings use -1 for every coordinate.
+     */
+    recordings: Array<Item.Recording>;
+
     startedAt: string | null;
 
     status: 'pending' | 'running' | 'success' | 'failed' | 'cancelled' | 'skipped' | 'invalid' | null;
@@ -168,6 +210,38 @@ export namespace ExecutionListResponse {
      * clients must not assume its presence.
      */
     result?: unknown;
+  }
+
+  export namespace Item {
+    export interface Recording {
+      id: string;
+
+      attempt: number;
+
+      childIndex: number;
+
+      flowActionId: string | null;
+
+      iterationIndex: number;
+
+      lastError: string | null;
+
+      parentIndex: number;
+
+      recordingDeviceId: string | null;
+
+      recordingId: string | null;
+
+      scope: 'flow' | 'step';
+
+      startedAt: string | null;
+
+      status: 'starting' | 'recording' | 'stopping' | 'stopped' | 'failed';
+
+      stepIndex: number;
+
+      stoppedAt: string | null;
+    }
   }
 }
 
