@@ -66,7 +66,12 @@ export class Conversations extends APIResource {
   }
 
   /**
-   * Deliver a HITL approval/rejection for an in-flight turn.
+   * Deliver a HITL approval/rejection for an in-flight turn. Interactive HITL
+   * clients must start the turn with `Accept: text/event-stream`, wait for a
+   * `tool-hitl-approval` event, and send its `permissionId` here at
+   * `/assistant/chat/permission`. Do not submit approval as free-form user text or
+   * as `confirmed: true`. For `devices.reset`, only `once` and `reject` are allowed;
+   * the generic `always` response is rejected with HTTP 400.
    */
   answerPermission(
     body: ConversationAnswerPermissionParams,
@@ -111,9 +116,12 @@ export class Conversations extends APIResource {
   /**
    * Send a single user message. The response format follows the Accept header:
    * `text/event-stream` for SSE, `application/json` for a buffered assistant reply.
-   * `sessionId` targets a concrete active chat. The resolved chat session ID is
-   * returned as `chatSessionId` in the JSON body and as the `X-Chat-Session-Id`
-   * response header on the SSE response.
+   * Interactive HITL requires `Accept: text/event-stream`: the stream can emit a
+   * `tool-hitl-approval` event, whose decision must be delivered to
+   * `/assistant/chat/permission`. Buffered JSON responses do not provide an
+   * interactive HITL continuation contract. `sessionId` targets a concrete active
+   * chat. The resolved chat session ID is returned as `chatSessionId` in the JSON
+   * body and as the `X-Chat-Session-Id` response header on the SSE response.
    */
   send(body: ConversationSendParams, options?: RequestOptions): APIPromise<ConversationSendResponse> {
     return this._client.post('/assistant/chat/message', { body, ...options });
@@ -333,6 +341,8 @@ export interface ConversationHistoryResponse {
   messages: Array<ConversationHistoryResponse.Message>;
 
   turnActive: boolean;
+
+  lastTurnOutcome?: string | null;
 
   truncated?: boolean;
 }

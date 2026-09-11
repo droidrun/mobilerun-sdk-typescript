@@ -605,6 +605,30 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/{deviceId}/recordings/{recordingId}/video',
   },
   {
+    clientCallName: 'client.devices.trafficSessions.create',
+    fullyQualifiedName: 'devices.trafficSessions.create',
+    httpMethod: 'post',
+    httpPath: '/devices/{deviceId}/traffic/sessions',
+  },
+  {
+    clientCallName: 'client.devices.trafficSessions.retrieve',
+    fullyQualifiedName: 'devices.trafficSessions.retrieve',
+    httpMethod: 'get',
+    httpPath: '/devices/{deviceId}/traffic/sessions/{sessionId}',
+  },
+  {
+    clientCallName: 'client.devices.trafficSessions.list',
+    fullyQualifiedName: 'devices.trafficSessions.list',
+    httpMethod: 'get',
+    httpPath: '/devices/{deviceId}/traffic/sessions',
+  },
+  {
+    clientCallName: 'client.devices.trafficSessions.delete',
+    fullyQualifiedName: 'devices.trafficSessions.delete',
+    httpMethod: 'delete',
+    httpPath: '/devices/{deviceId}/traffic/sessions/{sessionId}',
+  },
+  {
     clientCallName: 'client.models.list',
     fullyQualifiedName: 'models.list',
     httpMethod: 'get',
@@ -953,6 +977,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/flows/{flowId}',
   },
   {
+    clientCallName: 'client.workflows.flows.capacity',
+    fullyQualifiedName: 'workflows.flows.capacity',
+    httpMethod: 'get',
+    httpPath: '/flows/capacity',
+  },
+  {
     clientCallName: 'client.workflows.flows.clone',
     fullyQualifiedName: 'workflows.flows.clone',
     httpMethod: 'post',
@@ -1181,18 +1211,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/mailboxes/{mailboxId}/messages',
   },
   {
-    clientCallName: 'client.files.update',
-    fullyQualifiedName: 'files.update',
-    httpMethod: 'patch',
-    httpPath: '/agents/files/{fileId}',
-  },
-  {
-    clientCallName: 'client.files.list',
-    fullyQualifiedName: 'files.list',
-    httpMethod: 'get',
-    httpPath: '/agents/files',
-  },
-  {
     clientCallName: 'client.files.delete',
     fullyQualifiedName: 'files.delete',
     httpMethod: 'delete',
@@ -1203,12 +1221,6 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'files.cancelPending',
     httpMethod: 'delete',
     httpPath: '/agents/files/{fileId}/pending',
-  },
-  {
-    clientCallName: 'client.files.confirm',
-    fullyQualifiedName: 'files.confirm',
-    httpMethod: 'post',
-    httpPath: '/agents/files/{fileId}/confirm',
   },
   {
     clientCallName: 'client.files.download',
@@ -1325,84 +1337,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/notifications/preferences',
   },
   {
-    clientCallName: 'client.esims.create',
-    fullyQualifiedName: 'esims.create',
-    httpMethod: 'post',
-    httpPath: '/numbers/esims',
-  },
-  {
-    clientCallName: 'client.esims.retrieve',
-    fullyQualifiedName: 'esims.retrieve',
-    httpMethod: 'get',
-    httpPath: '/numbers/esims/{id}',
-  },
-  {
-    clientCallName: 'client.esims.update',
-    fullyQualifiedName: 'esims.update',
-    httpMethod: 'patch',
-    httpPath: '/numbers/esims/{id}',
-  },
-  {
-    clientCallName: 'client.esims.list',
-    fullyQualifiedName: 'esims.list',
-    httpMethod: 'get',
-    httpPath: '/numbers/esims',
-  },
-  {
-    clientCallName: 'client.esims.delete',
-    fullyQualifiedName: 'esims.delete',
-    httpMethod: 'delete',
-    httpPath: '/numbers/esims/{id}',
-  },
-  {
-    clientCallName: 'client.esims.capacity',
-    fullyQualifiedName: 'esims.capacity',
-    httpMethod: 'get',
-    httpPath: '/numbers/esims/capacity',
-  },
-  {
-    clientCallName: 'client.esims.confirmPayment',
-    fullyQualifiedName: 'esims.confirmPayment',
-    httpMethod: 'post',
-    httpPath: '/numbers/esims/{id}/confirm-payment',
-  },
-  {
-    clientCallName: 'client.esims.import',
-    fullyQualifiedName: 'esims.import',
-    httpMethod: 'post',
-    httpPath: '/numbers/esims/import',
-  },
-  {
-    clientCallName: 'client.esims.install',
-    fullyQualifiedName: 'esims.install',
-    httpMethod: 'post',
-    httpPath: '/numbers/esims/{id}/install',
-  },
-  {
-    clientCallName: 'client.esims.installStatus',
-    fullyQualifiedName: 'esims.installStatus',
-    httpMethod: 'get',
-    httpPath: '/numbers/esims/{id}/install-status',
-  },
-  {
-    clientCallName: 'client.esims.selector',
-    fullyQualifiedName: 'esims.selector',
-    httpMethod: 'get',
-    httpPath: '/numbers/esims/selector',
-  },
-  {
-    clientCallName: 'client.esims.messages.list',
-    fullyQualifiedName: 'esims.messages.list',
-    httpMethod: 'get',
-    httpPath: '/numbers/esims/{id}/messages',
-  },
-  {
-    clientCallName: 'client.esims.messages.send',
-    fullyQualifiedName: 'esims.messages.send',
-    httpMethod: 'post',
-    httpPath: '/numbers/esims/{id}/messages',
-  },
-  {
     clientCallName: 'client.messages.list',
     fullyQualifiedName: 'messages.list',
     httpMethod: 'get',
@@ -1449,6 +1383,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'numbers.delete',
     httpMethod: 'delete',
     httpPath: '/numbers/phones/{id}',
+  },
+  {
+    clientCallName: 'client.numbers.capacity',
+    fullyQualifiedName: 'numbers.capacity',
+    httpMethod: 'get',
+    httpPath: '/numbers/phones/capacity',
   },
   {
     clientCallName: 'client.numbers.countries',

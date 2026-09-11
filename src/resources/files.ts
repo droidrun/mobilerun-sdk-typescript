@@ -8,28 +8,6 @@ import { path } from '../internal/utils/path';
 
 export class Files extends APIResource {
   /**
-   * Partial update of `displayName` and/or `enabled`. Only files with `zone=skills`
-   * are mutable; other zones return 422 `unsupported_zone`.
-   */
-  update(
-    fileID: string,
-    body: FileUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FileUpdateResponse> {
-    return this._client.patch(path`/agents/files/${fileID}`, { body, ...options });
-  }
-
-  /**
-   * List the user's ready files, optionally filtered by zone
-   */
-  list(
-    query: FileListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FileListResponse> {
-    return this._client.get('/agents/files', { query, ...options });
-  }
-
-  /**
    * Hard-delete a file
    */
   delete(fileID: string, options?: RequestOptions): APIPromise<FileDeleteResponse> {
@@ -43,13 +21,6 @@ export class Files extends APIResource {
    */
   cancelPending(fileID: string, options?: RequestOptions): APIPromise<FileCancelPendingResponse> {
     return this._client.delete(path`/agents/files/${fileID}/pending`, options);
-  }
-
-  /**
-   * Confirm a file upload by server-side HEAD validation
-   */
-  confirm(fileID: string, options?: RequestOptions): APIPromise<FileConfirmResponse> {
-    return this._client.post(path`/agents/files/${fileID}/confirm`, options);
   }
 
   /**
@@ -79,60 +50,6 @@ export class Files extends APIResource {
   }
 }
 
-export interface FileUpdateResponse {
-  createdAt: string;
-
-  createdBy: 'user' | 'agent' | 'workflow';
-
-  displayName: string | null;
-
-  enabled: boolean;
-
-  fileId: string;
-
-  filename: string;
-
-  mimeType: string;
-
-  sizeBytes: number;
-
-  zone: 'user' | 'agent' | 'workflow' | 'skills';
-}
-
-export interface FileListResponse {
-  files: Array<FileListResponse.File>;
-
-  quota: FileListResponse.Quota;
-}
-
-export namespace FileListResponse {
-  export interface File {
-    createdAt: string;
-
-    createdBy: 'user' | 'agent' | 'workflow';
-
-    displayName: string | null;
-
-    enabled: boolean;
-
-    fileId: string;
-
-    filename: string;
-
-    mimeType: string;
-
-    sizeBytes: number;
-
-    zone: 'user' | 'agent' | 'workflow' | 'skills';
-  }
-
-  export interface Quota {
-    currentBytes: number;
-
-    quotaBytes: number;
-  }
-}
-
 export interface FileDeleteResponse {
   ok: true;
 }
@@ -141,46 +58,12 @@ export interface FileCancelPendingResponse {
   cancelled: boolean;
 }
 
-export interface FileConfirmResponse {
-  actualSizeBytes: number;
-
-  createdAt: string;
-
-  createdBy: 'user' | 'agent' | 'workflow';
-
-  displayName: string | null;
-
-  enabled: boolean;
-
-  fileId: string;
-
-  filename: string;
-
-  mimeType: string;
-
-  sizeBytes: number;
-
-  state: 'ready';
-
-  zone: 'user' | 'agent' | 'workflow' | 'skills';
-}
-
 export interface FileUploadURLResponse {
   expiresAt: string;
 
   fileId: string;
 
   putUrl: string;
-}
-
-export interface FileUpdateParams {
-  displayName?: string | null;
-
-  enabled?: boolean;
-}
-
-export interface FileListParams {
-  zone?: 'user' | 'agent' | 'workflow' | 'skills';
 }
 
 export interface FileUploadURLParams {
@@ -212,14 +95,9 @@ export interface FileUploadURLParams {
 
 export declare namespace Files {
   export {
-    type FileUpdateResponse as FileUpdateResponse,
-    type FileListResponse as FileListResponse,
     type FileDeleteResponse as FileDeleteResponse,
     type FileCancelPendingResponse as FileCancelPendingResponse,
-    type FileConfirmResponse as FileConfirmResponse,
     type FileUploadURLResponse as FileUploadURLResponse,
-    type FileUpdateParams as FileUpdateParams,
-    type FileListParams as FileListParams,
     type FileUploadURLParams as FileUploadURLParams,
   };
 }
