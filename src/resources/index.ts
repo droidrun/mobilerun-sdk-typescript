@@ -56,25 +56,7 @@ export {
   type DeviceSetNameParams,
   type DeviceTerminateParams,
 } from './devices/devices';
-export {
-  Esims,
-  type EsimCreateResponse,
-  type EsimRetrieveResponse,
-  type EsimUpdateResponse,
-  type EsimListResponse,
-  type EsimCapacityResponse,
-  type EsimConfirmPaymentResponse,
-  type EsimImportResponse,
-  type EsimInstallResponse,
-  type EsimInstallStatusResponse,
-  type EsimSelectorResponse,
-  type EsimCreateParams,
-  type EsimUpdateParams,
-  type EsimListParams,
-  type EsimImportParams,
-  type EsimInstallParams,
-  type EsimSelectorParams,
-} from './esims/esims';
+export { Esims } from './esims/esims';
 export {
   Files,
   type FileUpdateResponse,

@@ -17,10 +17,8 @@ export class Messages extends APIResource {
   conversations: ConversationsAPI.Conversations = new ConversationsAPI.Conversations(this._client);
 
   /**
-   * Lists the caller's own SMS messages, newest first. Supports filtering by
-   * direction, esimId, numberId, status, peerNumber (substring search, min 3
-   * characters), and peerKey (exact thread match). Each row includes its canonical
-   * thread key (`peerKey`).
+   * Lists SMS messages newest first, with filters for direction, eSIM, phone number,
+   * status, and conversation.
    */
   list(
     query: MessageListParams | null | undefined = {},

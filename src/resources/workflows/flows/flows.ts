@@ -66,7 +66,8 @@ export class Flows extends APIResource {
   }
 
   /**
-   * Delete a flow by its ID. Returns 404 if no flow matches.
+   * Terminally archive a flow by its ID. Archived flows cannot be restored and are
+   * hidden from customer reads. Repeating the request is idempotent for the owner.
    */
   delete(flowID: string, options?: RequestOptions): APIPromise<FlowDeleteResponse> {
     return this._client.delete(path`/flows/${flowID}`, options);
@@ -133,6 +134,8 @@ export namespace FlowCreateResponse {
   export interface Data {
     id: string;
 
+    archivedAt: string | null;
+
     blockedAt: string | null;
 
     consecutiveFailures: number;
@@ -149,6 +152,10 @@ export namespace FlowCreateResponse {
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -166,6 +173,8 @@ export namespace FlowCreateResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -176,7 +185,13 @@ export namespace FlowCreateResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -200,6 +215,12 @@ export namespace FlowCreateResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+  }
+
+  export namespace Data {
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
   }
 }
 
@@ -211,6 +232,8 @@ export namespace FlowRetrieveResponse {
   export interface Data {
     id: string;
 
+    archivedAt: string | null;
+
     blockedAt: string | null;
 
     consecutiveFailures: number;
@@ -227,6 +250,10 @@ export namespace FlowRetrieveResponse {
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -244,6 +271,8 @@ export namespace FlowRetrieveResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -254,7 +283,13 @@ export namespace FlowRetrieveResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -279,6 +314,12 @@ export namespace FlowRetrieveResponse {
      */
     userId: string;
   }
+
+  export namespace Data {
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
+  }
 }
 
 export interface FlowUpdateResponse {
@@ -288,6 +329,8 @@ export interface FlowUpdateResponse {
 export namespace FlowUpdateResponse {
   export interface Data {
     id: string;
+
+    archivedAt: string | null;
 
     blockedAt: string | null;
 
@@ -305,6 +348,10 @@ export namespace FlowUpdateResponse {
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -322,6 +369,8 @@ export namespace FlowUpdateResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -332,7 +381,13 @@ export namespace FlowUpdateResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -356,6 +411,12 @@ export namespace FlowUpdateResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+  }
+
+  export namespace Data {
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
   }
 }
 
@@ -369,6 +430,8 @@ export namespace FlowListResponse {
   export interface Item {
     id: string;
 
+    archivedAt: string | null;
+
     blockedAt: string | null;
 
     consecutiveFailures: number;
@@ -385,6 +448,10 @@ export namespace FlowListResponse {
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -402,6 +469,8 @@ export namespace FlowListResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -412,7 +481,13 @@ export namespace FlowListResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Item.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -436,6 +511,12 @@ export namespace FlowListResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+  }
+
+  export namespace Item {
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
   }
 }
 
@@ -451,6 +532,8 @@ export namespace FlowCloneResponse {
   export interface Data {
     id: string;
 
+    archivedAt: string | null;
+
     blockedAt: string | null;
 
     consecutiveFailures: number;
@@ -467,6 +550,10 @@ export namespace FlowCloneResponse {
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -484,6 +571,8 @@ export namespace FlowCloneResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -494,7 +583,13 @@ export namespace FlowCloneResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -518,6 +613,12 @@ export namespace FlowCloneResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+  }
+
+  export namespace Data {
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
   }
 }
 
@@ -548,9 +649,13 @@ export namespace FlowDryRunResponse {
     export interface Action {
       continueOnError: boolean;
 
+      flowActionId: string;
+
       method: string;
 
       name: string;
+
+      recordingEnabled: boolean;
 
       service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
 
@@ -655,6 +760,8 @@ export namespace FlowUnblockResponse {
   export interface Data {
     id: string;
 
+    archivedAt: string | null;
+
     blockedAt: string | null;
 
     consecutiveFailures: number;
@@ -671,6 +778,10 @@ export namespace FlowUnblockResponse {
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -688,6 +799,8 @@ export namespace FlowUnblockResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -698,7 +811,13 @@ export namespace FlowUnblockResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -722,6 +841,12 @@ export namespace FlowUnblockResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+  }
+
+  export namespace Data {
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
   }
 }
 
@@ -750,7 +875,13 @@ export interface FlowCreateParams {
 
   notifyWebhookId?: string | null;
 
+  /**
+   * @deprecated Deprecated compatibility field. true maps to
+   * recordingPolicy.mode="flow"; false maps to "off".
+   */
   recordingEnabled?: boolean;
+
+  recordingPolicy?: FlowCreateParams.RecordingPolicy;
 
   selfHealingEnabled?: boolean;
 
@@ -770,6 +901,8 @@ export namespace FlowCreateParams {
     nameOverride?: string;
 
     overrides?: Action.Overrides | null;
+
+    recordingEnabled?: boolean;
   }
 
   export namespace Action {
@@ -783,6 +916,8 @@ export namespace FlowCreateParams {
       nameOverride?: string;
 
       overrides?: Child.Overrides | null;
+
+      recordingEnabled?: boolean;
     }
 
     export namespace Child {
@@ -794,6 +929,10 @@ export namespace FlowCreateParams {
     export interface Overrides {
       params?: { [key: string]: unknown };
     }
+  }
+
+  export interface RecordingPolicy {
+    mode: 'off' | 'flow' | 'selected_steps';
   }
 }
 
@@ -810,6 +949,11 @@ export interface FlowUpdateParams {
 
   healthMonitoringEnabled?: boolean;
 
+  /**
+   * Set the visible agent lifecycle. Archive remains available only through DELETE.
+   */
+  lifecycleStatus?: 'enabled' | 'disabled';
+
   name?: string;
 
   notifyOnFailure?: boolean;
@@ -818,13 +962,25 @@ export interface FlowUpdateParams {
 
   notifyWebhookId?: string | null;
 
+  /**
+   * @deprecated Deprecated compatibility field. true maps to
+   * recordingPolicy.mode="flow"; false maps to "off".
+   */
   recordingEnabled?: boolean;
+
+  recordingPolicy?: FlowUpdateParams.RecordingPolicy;
 
   selfHealingEnabled?: boolean;
 
   selfHealingMaxAttempts?: number;
 
   triggerId?: string;
+}
+
+export namespace FlowUpdateParams {
+  export interface RecordingPolicy {
+    mode: 'off' | 'flow' | 'selected_steps';
+  }
 }
 
 export interface FlowListParams {
