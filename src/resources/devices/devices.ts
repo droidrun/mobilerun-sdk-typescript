@@ -231,10 +231,9 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Wakes a parked device: capacity is preflighted (the device's data may be
-   * replicated to another node if its home is full), the device starts running
-   * again, and per-minute billing resumes. On a device that is not parked this is a
-   * no-op ready transition.
+   * Wakes a parked device: backend readiness and any required capacity are
+   * preflighted, the same device starts running again, and per-minute billing
+   * resumes. On a device that is not parked this is a no-op ready transition.
    */
   resume(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/resume`, {
@@ -315,6 +314,11 @@ export interface DeviceCreateResponse {
 
   name: string;
 
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
+
   state: string;
 
   stateMessage: string;
@@ -360,6 +364,11 @@ export interface DeviceRetrieveResponse {
   createdAt: string;
 
   name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
 
   state: string;
 
@@ -418,6 +427,11 @@ export namespace DeviceListResponse {
     createdAt: string;
 
     name: string;
+
+    /**
+     * Operating system the device runs.
+     */
+    platform: 'android' | 'ios';
 
     state: string;
 
@@ -543,6 +557,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
 
     proxy: boolean;
 
+    recording: boolean;
+
     reset: boolean;
 
     shell: boolean;
@@ -554,6 +570,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     stream: boolean;
 
     time: boolean;
+
+    trafficInspection: boolean;
   }
 }
 
@@ -567,6 +585,11 @@ export interface DeviceSetNameResponse {
   createdAt: string;
 
   name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
 
   state: string;
 
@@ -613,6 +636,11 @@ export interface DeviceWaitReadyResponse {
   createdAt: string;
 
   name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
 
   state: string;
 

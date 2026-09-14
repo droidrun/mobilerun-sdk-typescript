@@ -40,6 +40,7 @@ describe('resource executions', () => {
         {
           flowId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
           from: 'from',
+          invocationId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
           orderBy: 'startedAt',
           orderByDirection: 'asc',
           page: 1,
