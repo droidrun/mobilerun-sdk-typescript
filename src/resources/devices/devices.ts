@@ -102,6 +102,18 @@ import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimezoneAPI from './timezone';
 import { Timezone, TimezoneGetParams, TimezoneGetResponse, TimezoneSetParams } from './timezone';
+import * as TrafficSessionsAPI from './traffic-sessions';
+import {
+  TrafficSessionCreateParams,
+  TrafficSessionCreateResponse,
+  TrafficSessionDeleteParams,
+  TrafficSessionDeleteResponse,
+  TrafficSessionListParams,
+  TrafficSessionListResponse,
+  TrafficSessionRetrieveParams,
+  TrafficSessionRetrieveResponse,
+  TrafficSessions,
+} from './traffic-sessions';
 import * as EsimAPI from './esim/esim';
 import {
   Esim,
@@ -140,6 +152,7 @@ export class Devices extends APIResource {
   kiosk: KioskAPI.Kiosk = new KioskAPI.Kiosk(this._client);
   mediaSessions: MediaSessionsAPI.MediaSessions = new MediaSessionsAPI.MediaSessions(this._client);
   recordings: RecordingsAPI.Recordings = new RecordingsAPI.Recordings(this._client);
+  trafficSessions: TrafficSessionsAPI.TrafficSessions = new TrafficSessionsAPI.TrafficSessions(this._client);
 
   /**
    * Requests a new device for the authenticated user from the device spec in the
@@ -231,10 +244,9 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Wakes a parked device: capacity is preflighted (the device's data may be
-   * replicated to another node if its home is full), the device starts running
-   * again, and per-minute billing resumes. On a device that is not parked this is a
-   * no-op ready transition.
+   * Wakes a parked device: backend readiness and any required capacity are
+   * preflighted, the same device starts running again, and per-minute billing
+   * resumes. On a device that is not parked this is a no-op ready transition.
    */
   resume(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/resume`, {
@@ -315,6 +327,11 @@ export interface DeviceCreateResponse {
 
   name: string;
 
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
+
   state: string;
 
   stateMessage: string;
@@ -360,6 +377,11 @@ export interface DeviceRetrieveResponse {
   createdAt: string;
 
   name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
 
   state: string;
 
@@ -418,6 +440,11 @@ export namespace DeviceListResponse {
     createdAt: string;
 
     name: string;
+
+    /**
+     * Operating system the device runs.
+     */
+    platform: 'android' | 'ios';
 
     state: string;
 
@@ -543,6 +570,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
 
     proxy: boolean;
 
+    recording: boolean;
+
     reset: boolean;
 
     shell: boolean;
@@ -554,6 +583,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     stream: boolean;
 
     time: boolean;
+
+    trafficInspection: boolean;
   }
 }
 
@@ -567,6 +598,11 @@ export interface DeviceSetNameResponse {
   createdAt: string;
 
   name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
 
   state: string;
 
@@ -613,6 +649,11 @@ export interface DeviceWaitReadyResponse {
   createdAt: string;
 
   name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
 
   state: string;
 
@@ -862,6 +903,7 @@ Devices.Browser = Browser;
 Devices.Kiosk = Kiosk;
 Devices.MediaSessions = MediaSessions;
 Devices.Recordings = Recordings;
+Devices.TrafficSessions = TrafficSessions;
 
 export declare namespace Devices {
   export {
@@ -1028,5 +1070,17 @@ export declare namespace Devices {
     type RecordingStopParams as RecordingStopParams,
     type RecordingTrajectoryParams as RecordingTrajectoryParams,
     type RecordingVideoParams as RecordingVideoParams,
+  };
+
+  export {
+    TrafficSessions as TrafficSessions,
+    type TrafficSessionCreateResponse as TrafficSessionCreateResponse,
+    type TrafficSessionRetrieveResponse as TrafficSessionRetrieveResponse,
+    type TrafficSessionListResponse as TrafficSessionListResponse,
+    type TrafficSessionDeleteResponse as TrafficSessionDeleteResponse,
+    type TrafficSessionCreateParams as TrafficSessionCreateParams,
+    type TrafficSessionRetrieveParams as TrafficSessionRetrieveParams,
+    type TrafficSessionListParams as TrafficSessionListParams,
+    type TrafficSessionDeleteParams as TrafficSessionDeleteParams,
   };
 }
