@@ -51,9 +51,9 @@ export class Keyboard extends APIResource {
   }
 
   /**
-   * Types the given text into the focused input field. Supports optionally clearing
-   * the field first and a stealth mode that emulates human typing speed and error
-   * rate on supported devices.
+   * Types text into the focused input field. The optional completionMode defaults to
+   * accepted for backwards-compatible low latency; committed additionally waits for
+   * the complete text or a quiescent UI state.
    */
   write(deviceID: string, params: KeyboardWriteParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -99,6 +99,13 @@ export interface KeyboardWriteParams {
    * Body param
    */
   clear?: boolean;
+
+  /**
+   * Body param: Completion guarantee. accepted returns after the input provider
+   * accepts the operation; committed additionally waits for the focused UI state to
+   * contain the complete text or become quiescent.
+   */
+  completionMode?: 'accepted' | 'committed';
 
   /**
    * Body param: Per-character mistake rate for humantouch typing. -1 uses server

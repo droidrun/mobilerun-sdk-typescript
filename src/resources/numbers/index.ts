@@ -8,9 +8,11 @@ export {
   type NumberUpdateResponse,
   type NumberListResponse,
   type NumberDeleteResponse,
+  type NumberCapacityResponse,
   type NumberCountriesResponse,
   type NumberPurposesResponse,
   type NumberCreateParams,
   type NumberUpdateParams,
   type NumberListParams,
+  type NumberCapacityParams,
 } from './numbers';
