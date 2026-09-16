@@ -49,7 +49,9 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Verifies the APK file exists in R2 and sets the app status to available.
+   * Verifies the uploaded files in R2 and sets the app version status to available.
+   * Idempotent: replaying confirmation for an already-available version returns the
+   * same successful response without re-verifying the files.
    *
    * @example
    * ```ts
@@ -834,11 +836,18 @@ export interface AppStorageUsageResponse {
 export namespace AppStorageUsageResponse {
   export interface Data {
     /**
-     * Remaining bytes — the reliable maximum size for the next upload. Advisory
+     * Remaining bytes — the reliable maximum TOTAL size for the next upload. Advisory
      * snapshot: the quota is enforced under a lock at confirm, so concurrent uploads
      * may reduce actual headroom.
      */
     availableBytes: number;
+
+    /**
+     * Per-file upload cap in bytes (env.MAX_UPLOAD_FILE_BYTES). A single file larger
+     * than this is rejected at confirm even when it fits the remaining quota. Source
+     * of truth for the client-side per-file limit.
+     */
+    maxFileBytes: number;
 
     /**
      * Total storage allowance for the user, in bytes

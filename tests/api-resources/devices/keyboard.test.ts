@@ -66,6 +66,7 @@ describe('resource keyboard', () => {
     const response = await client.devices.keyboard.write('deviceId', {
       text: 'text',
       clear: true,
+      completionMode: 'accepted',
       errorRate: 0,
       stealth: true,
       wpm: 0,

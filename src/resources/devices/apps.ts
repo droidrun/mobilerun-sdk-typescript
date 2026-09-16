@@ -79,15 +79,16 @@ export class Apps extends APIResource {
 
   /**
    * Requests an app install on the device. The request body must supply exactly one
-   * of an Android packageName or an iOS bundleId; protected packages are rejected.
-   * background (default false) selects the response contract: false installs inline
-   * and returns the outcome directly (200 on success, an error status on failure);
-   * true accepts the request and runs the download + install in the background,
-   * returning 202 immediately — poll list-app-installs for the backend's view of
-   * that attempt's status. Refuses with 409 once 2 other installs are already
-   * running on the device, in either mode; a repeat request for an app that already
-   * has an install running is also refused with 409 rather than superseding it —
-   * retry once that attempt reaches a terminal state.
+   * of an Android packageName or an iOS bundleId; optional country and versionCode
+   * select an exact regional uploaded Android version, and protected packages are
+   * rejected. background (default false) selects the response contract: false
+   * installs inline and returns the outcome directly (200 on success, an error
+   * status on failure); true accepts the request and runs the download + install in
+   * the background, returning 202 immediately — poll list-app-installs for the
+   * backend's view of that attempt's status. Refuses with 409 once 2 other installs
+   * are already running on the device, in either mode; a repeat request for an app
+   * that already has an install running is also refused with 409 rather than
+   * superseding it — retry once that attempt reaches a terminal state.
    */
   install(deviceID: string, params: AppInstallParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -107,11 +108,11 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Reports the backend's view of background app-install attempts on this device —
-   * status reflects the install ATTEMPT, not device ground truth; list-apps remains
-   * authoritative for what is actually installed. Records are in-memory and lost on
-   * service restart; terminal records are kept ~15 minutes. Not gated on device
-   * readiness, so it also answers while the device is offline or crashed.
+   * Reports the backend's durable view of background app-install attempts on this
+   * device — status reflects the install ATTEMPT, not device ground truth; list-apps
+   * remains authoritative for what is actually installed. Terminal and projected
+   * timeout records are kept ~15 minutes. Not gated on device readiness, so it also
+   * answers while the device is offline or crashed.
    */
   listInstalls(
     deviceID: string,
@@ -249,10 +250,9 @@ export namespace AppListInstallsResponse {
     updatedAt: string;
 
     /**
-     * Closed set: download_failed, adb_install_failed, panic, timeout, failed. Only
-     * present when status is failed.
+     * Only present when status is failed.
      */
-    errorClass?: string;
+    errorClass?: 'download_failed' | 'adb_install_failed' | 'panic' | 'timeout' | 'failed';
   }
 }
 
@@ -319,9 +319,21 @@ export declare namespace AppInstallParams {
     background?: boolean;
 
     /**
+     * Body param: Optional ISO 3166-1 alpha-2 country of the uploaded app version
+     * (e.g. MY or SG).
+     */
+    country?: string;
+
+    /**
      * Body param: Android package name (e.g. com.example.app)
      */
     packageName?: string;
+
+    /**
+     * Body param: Optional exact app-library version code. Use with country when
+     * multiple regional versions share an identifier.
+     */
+    versionCode?: number;
 
     /**
      * Header param
@@ -346,6 +358,18 @@ export declare namespace AppInstallParams {
      * Body param: iOS bundle identifier (e.g. com.example.app)
      */
     bundleId?: string;
+
+    /**
+     * Body param: Optional ISO 3166-1 alpha-2 country of the uploaded app version
+     * (e.g. MY or SG).
+     */
+    country?: string;
+
+    /**
+     * Body param: Optional exact app-library version code. Use with country when
+     * multiple regional versions share an identifier.
+     */
+    versionCode?: number;
 
     /**
      * Header param
