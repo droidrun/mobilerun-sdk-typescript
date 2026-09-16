@@ -320,8 +320,20 @@ export interface RecordingDeleteParams {
 export interface RecordingStartParams {
   name?: string;
 
+  /**
+   * Capture quality from 1 (lowest) to 10 (full stream quality). Defaults to the
+   * device's full quality. Honored by devices recording through the portal stream
+   * bridge.
+   */
+  quality?: number;
+
   retentionDays?: number;
 
+  /**
+   * Artifacts to capture: trajectory (input actions), video, and audio (captured
+   * into the video artifact, so it requires video; honored by portal stream-bridge
+   * recorders). Defaults to trajectory and video.
+   */
   types?: Array<string> | null;
 }
 

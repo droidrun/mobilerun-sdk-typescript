@@ -370,6 +370,8 @@ export namespace WebhookEventTypesResponse {
           toast: boolean;
 
           webhook: boolean;
+
+          agent?: boolean;
         }
       }
     }

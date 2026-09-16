@@ -135,3 +135,14 @@ export {
   type TimezoneGetParams,
   type TimezoneSetParams,
 } from './timezone';
+export {
+  TrafficSessions,
+  type TrafficSessionCreateResponse,
+  type TrafficSessionRetrieveResponse,
+  type TrafficSessionListResponse,
+  type TrafficSessionDeleteResponse,
+  type TrafficSessionCreateParams,
+  type TrafficSessionRetrieveParams,
+  type TrafficSessionListParams,
+  type TrafficSessionDeleteParams,
+} from './traffic-sessions';

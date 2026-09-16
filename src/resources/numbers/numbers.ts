@@ -13,9 +13,8 @@ export class Numbers extends APIResource {
   messages: MessagesAPI.Messages = new MessagesAPI.Messages(this._client);
 
   /**
-   * Starts a Mobilerun Phone purchase for the authenticated owner. Accepted requests
-   * always return the same asynchronous envelope; poll GET /numbers/phones/{id} for
-   * its business state. `purpose` and `country` are mutually exclusive.
+   * Starts a phone-number purchase. Poll the returned phone number for status
+   * updates. `purpose` and `country` cannot be combined.
    *
    * @example
    * ```ts
@@ -52,11 +51,8 @@ export class Numbers extends APIResource {
   }
 
   /**
-   * Updates the phone number's user-defined display label. Omitting `label` leaves
-   * it unchanged; setting it to null or an empty string clears it. The label is
-   * capped at 100 characters, is display-only, and never affects routing. It also
-   * seeds the billing entity name when set at purchase time; a later change here
-   * does not rename the already-created billing entity.
+   * Updates the display label. Omitting `label` leaves it unchanged; null or an
+   * empty string clears it.
    *
    * @example
    * ```ts
@@ -74,8 +70,7 @@ export class Numbers extends APIResource {
   }
 
   /**
-   * Lists phone numbers owned by the authenticated user — both BYO (`user`) and
-   * provisioned (`mobilerun`) numbers.
+   * Lists the caller's phone numbers.
    *
    * @example
    * ```ts
@@ -90,23 +85,9 @@ export class Numbers extends APIResource {
   }
 
   /**
-   * Cancels a Mobilerun Phone. The outcome depends on the number's current state:
-   *
-   * - If the number is still awaiting payment and no payment for it is currently
-   *   being processed, the checkout is closed immediately and the number is retired.
-   * - If the number is on the standard paid plan and already paid and in service,
-   *   cancellation is scheduled for the end of the current billing period rather
-   *   than taking effect immediately. The number stays usable through the period
-   *   already paid for, with no partial refund. Calling this again while a
-   *   cancellation is already scheduled is a no-op that returns the same result. The
-   *   response's `state` reflects this as `cancel_scheduled` with
-   *   `cancelAtPeriodEnd: true`; `currentPeriodEnd` is populated once billing
-   *   confirms the cancellation.
-   *
-   * Any other state (already refunding, a permanent billing failure, a payment
-   * currently being processed, an included-plan number, or a non-hosted/BYO number)
-   * returns 409 `not_cancellable`. Returns 404 if the number doesn't exist or isn't
-   * owned by the caller.
+   * Cancels a pending purchase or schedules cancellation of an active paid phone
+   * number. Repeating a scheduled cancellation is safe. Returns 409 when
+   * cancellation is not available.
    *
    * @example
    * ```ts
@@ -120,8 +101,22 @@ export class Numbers extends APIResource {
   }
 
   /**
-   * Lists the countries currently offered for a dedicated Mobilerun Phone, with live
-   * stock status. Pass `country` as the `country` field on POST /numbers/phones.
+   * Returns included phone capacity for a country. Creating a phone is
+   * authoritative.
+   *
+   * @example
+   * ```ts
+   * const response = await client.numbers.capacity({
+   *   country: 'de',
+   * });
+   * ```
+   */
+  capacity(query: NumberCapacityParams, options?: RequestOptions): APIPromise<NumberCapacityResponse> {
+    return this._client.get('/numbers/phones/capacity', { query, ...options });
+  }
+
+  /**
+   * Lists available countries and current phone-number availability.
    *
    * @example
    * ```ts
@@ -305,6 +300,26 @@ export namespace NumberDeleteResponse {
   }
 }
 
+export interface NumberCapacityResponse {
+  data: NumberCapacityResponse.Data;
+}
+
+export namespace NumberCapacityResponse {
+  export interface Data {
+    included: number;
+
+    /**
+     * @deprecated Deprecated — always equal to `remaining`. Migrate to `remaining`;
+     * this field will be removed in a future revision.
+     */
+    includedRemaining: number;
+
+    remaining: number;
+
+    status: 'available' | 'exhausted' | 'not_included';
+  }
+}
+
 export interface NumberCountriesResponse {
   data: NumberCountriesResponse.Data;
 }
@@ -347,14 +362,14 @@ export namespace NumberPurposesResponse {
 
 export interface NumberCreateParams {
   /**
-   * Body param: Prefer a free package seat ('included', default) or force the paid
-   * checkout ('rent')
+   * Body param: Use included capacity when available, require included capacity
+   * without paid fallback (included_only), or start a paid checkout (rent).
    */
-  billingPreference?: 'included' | 'rent';
+  billingPreference?: 'included' | 'included_only' | 'rent';
 
   /**
    * Body param: Optional ISO 3166-1 alpha-2 country code from GET
-   * /numbers/countries. Cannot be combined with `purpose`.
+   * /numbers/phones/countries. Cannot be combined with `purpose`.
    */
   country?: string;
 
@@ -366,7 +381,7 @@ export interface NumberCreateParams {
   label?: string | null;
 
   /**
-   * Body param: Optional Mobilerun Phone purpose slug from GET /numbers/purposes.
+   * Body param: Optional purpose from GET /numbers/phones/purposes.
    */
   purpose?: string;
 
@@ -391,6 +406,13 @@ export interface NumberListParams {
   pageSize?: number;
 }
 
+export interface NumberCapacityParams {
+  /**
+   * ISO 3166-1 alpha-2 country code from GET /numbers/phones/countries.
+   */
+  country: string;
+}
+
 Numbers.Messages = Messages;
 
 export declare namespace Numbers {
@@ -400,11 +422,13 @@ export declare namespace Numbers {
     type NumberUpdateResponse as NumberUpdateResponse,
     type NumberListResponse as NumberListResponse,
     type NumberDeleteResponse as NumberDeleteResponse,
+    type NumberCapacityResponse as NumberCapacityResponse,
     type NumberCountriesResponse as NumberCountriesResponse,
     type NumberPurposesResponse as NumberPurposesResponse,
     type NumberCreateParams as NumberCreateParams,
     type NumberUpdateParams as NumberUpdateParams,
     type NumberListParams as NumberListParams,
+    type NumberCapacityParams as NumberCapacityParams,
   };
 
   export {
