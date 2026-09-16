@@ -97,7 +97,9 @@ describe('resource apps', () => {
     const response = await client.devices.apps.install('deviceId', {
       bundleId: 'x',
       background: true,
+      country: 'se',
       packageName: 'x',
+      versionCode: 1,
       'X-Device-Display-ID': 0,
     });
   });

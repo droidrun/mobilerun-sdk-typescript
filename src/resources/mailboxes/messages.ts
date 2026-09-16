@@ -27,8 +27,8 @@ export class Messages extends APIResource {
   }
 
   /**
-   * Lists messages for a mailbox with keyset pagination and time/sender/hasOtp
-   * filters for polling.
+   * Lists mailbox messages with cursor pagination and optional time, sender, and OTP
+   * filters.
    *
    * @example
    * ```ts

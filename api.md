@@ -830,44 +830,7 @@ Methods:
 
 # Esims
 
-Types:
-
-- <code><a href="./src/resources/esims/esims.ts">EsimCreateResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimRetrieveResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimUpdateResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimListResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimCapacityResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimConfirmPaymentResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimImportResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimInstallResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimInstallStatusResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimSelectorResponse</a></code>
-
-Methods:
-
-- <code title="post /numbers/esims">client.esims.<a href="./src/resources/esims/esims.ts">create</a>({ ...params }) -> EsimCreateResponse</code>
-- <code title="get /numbers/esims/{id}">client.esims.<a href="./src/resources/esims/esims.ts">retrieve</a>(id) -> EsimRetrieveResponse</code>
-- <code title="patch /numbers/esims/{id}">client.esims.<a href="./src/resources/esims/esims.ts">update</a>(id, { ...params }) -> EsimUpdateResponse</code>
-- <code title="get /numbers/esims">client.esims.<a href="./src/resources/esims/esims.ts">list</a>({ ...params }) -> EsimListResponse</code>
-- <code title="delete /numbers/esims/{id}">client.esims.<a href="./src/resources/esims/esims.ts">delete</a>(id) -> void</code>
-- <code title="get /numbers/esims/capacity">client.esims.<a href="./src/resources/esims/esims.ts">capacity</a>() -> EsimCapacityResponse</code>
-- <code title="post /numbers/esims/{id}/confirm-payment">client.esims.<a href="./src/resources/esims/esims.ts">confirmPayment</a>(id) -> EsimConfirmPaymentResponse</code>
-- <code title="post /numbers/esims/import">client.esims.<a href="./src/resources/esims/esims.ts">import</a>({ ...params }) -> EsimImportResponse</code>
-- <code title="post /numbers/esims/{id}/install">client.esims.<a href="./src/resources/esims/esims.ts">install</a>(id, { ...params }) -> EsimInstallResponse</code>
-- <code title="get /numbers/esims/{id}/install-status">client.esims.<a href="./src/resources/esims/esims.ts">installStatus</a>(id) -> EsimInstallStatusResponse</code>
-- <code title="get /numbers/esims/selector">client.esims.<a href="./src/resources/esims/esims.ts">selector</a>({ ...params }) -> EsimSelectorResponse</code>
-
 ## Messages
-
-Types:
-
-- <code><a href="./src/resources/esims/messages.ts">MessageListResponse</a></code>
-- <code><a href="./src/resources/esims/messages.ts">MessageSendResponse</a></code>
-
-Methods:
-
-- <code title="get /numbers/esims/{id}/messages">client.esims.messages.<a href="./src/resources/esims/messages.ts">list</a>(id, { ...params }) -> MessageListResponse</code>
-- <code title="post /numbers/esims/{id}/messages">client.esims.messages.<a href="./src/resources/esims/messages.ts">send</a>(id, { ...params }) -> MessageSendResponse</code>
 
 # Messages
 

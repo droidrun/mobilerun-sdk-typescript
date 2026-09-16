@@ -116,25 +116,7 @@ import {
   DeviceWaitReadyResponse,
   Devices,
 } from './resources/devices/devices';
-import {
-  EsimCapacityResponse,
-  EsimConfirmPaymentResponse,
-  EsimCreateParams,
-  EsimCreateResponse,
-  EsimImportParams,
-  EsimImportResponse,
-  EsimInstallParams,
-  EsimInstallResponse,
-  EsimInstallStatusResponse,
-  EsimListParams,
-  EsimListResponse,
-  EsimRetrieveResponse,
-  EsimSelectorParams,
-  EsimSelectorResponse,
-  EsimUpdateParams,
-  EsimUpdateResponse,
-  Esims,
-} from './resources/esims/esims';
+import { Esims } from './resources/esims/esims';
 import {
   MailboxCapacityResponse,
   MailboxCreateParams,
@@ -1132,25 +1114,7 @@ export declare namespace Mobilerun {
     type NotificationUpdatePreferencesParams as NotificationUpdatePreferencesParams,
   };
 
-  export {
-    Esims as Esims,
-    type EsimCreateResponse as EsimCreateResponse,
-    type EsimRetrieveResponse as EsimRetrieveResponse,
-    type EsimUpdateResponse as EsimUpdateResponse,
-    type EsimListResponse as EsimListResponse,
-    type EsimCapacityResponse as EsimCapacityResponse,
-    type EsimConfirmPaymentResponse as EsimConfirmPaymentResponse,
-    type EsimImportResponse as EsimImportResponse,
-    type EsimInstallResponse as EsimInstallResponse,
-    type EsimInstallStatusResponse as EsimInstallStatusResponse,
-    type EsimSelectorResponse as EsimSelectorResponse,
-    type EsimCreateParams as EsimCreateParams,
-    type EsimUpdateParams as EsimUpdateParams,
-    type EsimListParams as EsimListParams,
-    type EsimImportParams as EsimImportParams,
-    type EsimInstallParams as EsimInstallParams,
-    type EsimSelectorParams as EsimSelectorParams,
-  };
+  export { Esims as Esims };
 
   export {
     Messages as Messages,
