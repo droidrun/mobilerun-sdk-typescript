@@ -142,11 +142,10 @@ export class Devices extends APIResource {
   recordings: RecordingsAPI.Recordings = new RecordingsAPI.Recordings(this._client);
 
   /**
-   * Requests a new device for the authenticated user from the device spec in the
-   * request body. Optional query parameters select the canonical device type, target
-   * country, billing mode, and a profile to use as the base spec; deprecated
-   * device-type aliases remain accepted only during the documented compatibility
-   * grace period. The response returns the device and its stream token.
+   * Requests a new device from the specification in the request body. Optional query
+   * parameters select the canonical device type, country, billing mode, and base
+   * profile. Returns the device, its resolved billing strategy, and its stream
+   * token.
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<DeviceCreateResponse> {
     const { billing, query_country, deviceType, profileId, ...body } = params;
@@ -177,7 +176,11 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Returns the number of claimed devices for the user, broken down by device type.
+   * Deprecated: use GET /devices/summary instead. Returns the number of active
+   * claimed devices for the user, broken down by device type, in the legacy response
+   * shape.
+   *
+   * @deprecated
    */
   count(options?: RequestOptions): APIPromise<DeviceCountResponse> {
     return this._client.get('/devices/count', options);
@@ -231,10 +234,9 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Wakes a parked device: capacity is preflighted (the device's data may be
-   * replicated to another node if its home is full), the device starts running
-   * again, and per-minute billing resumes. On a device that is not parked this is a
-   * no-op ready transition.
+   * Wakes a parked device: backend readiness and any required capacity are
+   * preflighted, the same device starts running again, and per-minute billing
+   * resumes. On a device that is not parked this is a no-op ready transition.
    */
   resume(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/resume`, {
@@ -286,7 +288,11 @@ export class Devices extends APIResource {
    * for a future time or chained from a previous device via the request body, in
    * which case a service key is required.
    */
-  terminate(deviceID: string, body: DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
+  terminate(
+    deviceID: string,
+    body: DeviceTerminateParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
     return this._client.delete(path`/devices/${deviceID}`, {
       body,
       ...options,
@@ -314,6 +320,11 @@ export interface DeviceCreateResponse {
   createdAt: string;
 
   name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
 
   state: string;
 
@@ -360,6 +371,11 @@ export interface DeviceRetrieveResponse {
   createdAt: string;
 
   name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
 
   state: string;
 
@@ -418,6 +434,11 @@ export namespace DeviceListResponse {
     createdAt: string;
 
     name: string;
+
+    /**
+     * Operating system the device runs.
+     */
+    platform: 'android' | 'ios';
 
     state: string;
 
@@ -543,6 +564,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
 
     proxy: boolean;
 
+    recording: boolean;
+
     reset: boolean;
 
     shell: boolean;
@@ -554,6 +577,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     stream: boolean;
 
     time: boolean;
+
+    trafficInspection: boolean;
   }
 }
 
@@ -567,6 +592,11 @@ export interface DeviceSetNameResponse {
   createdAt: string;
 
   name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
 
   state: string;
 
@@ -614,6 +644,11 @@ export interface DeviceWaitReadyResponse {
 
   name: string;
 
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
+
   state: string;
 
   stateMessage: string;
@@ -651,10 +686,13 @@ export interface DeviceWaitReadyResponse {
 
 export interface DeviceCreateParams {
   /**
-   * Query param: Billing mode. 'auto' uses a subscription slot when available and
-   * otherwise bills per minute; 'subscription' requires an available subscription
-   * slot; 'minute' bills per minute. Only cloud phone and cloud emulator devices
-   * support per-minute billing.
+   * Query param: Billing mode. 'auto' tries subscription first, then minute billing
+   * if no subscription entitlement exists or all subscription slots are in use,
+   * provided minute billing is enabled. When subscription billing is disabled, auto
+   * uses minutes directly. Billing-service failures never trigger fallback.
+   * 'subscription' requires an available subscription slot and never falls back.
+   * 'minute' uses minute billing only, subject to balance and concurrency checks.
+   * Modes depend on the device type's billing configuration.
    */
   billing?: 'auto' | 'subscription' | 'minute';
 
@@ -665,18 +703,12 @@ export interface DeviceCreateParams {
   query_country?: string;
 
   /**
-   * Query param: Deprecated device type aliases are accepted during a compatibility
-   * grace period: dedicated_premium_device maps to android_cloud_phone,
-   * dedicated_physical_device maps to android_physical_phone, dedicated_ios_device
-   * maps to ios_stealth_phone, and dedicated_emulated_device maps to
-   * android_emulator.
+   * Query param: Use android*cloud_phone for a cloud Android phone. Only canonical
+   * identifiers are accepted. Other backends are deployment-specific; recognized but
+   * unavailable types return DEVICE_TYPE_UNAVAILABLE (422). Retired dedicated*\*
+   * aliases are rejected with a canonical replacement.
    */
-  deviceType?:
-    | 'android_cloud_phone'
-    | 'dedicated_premium_device'
-    | 'dedicated_physical_device'
-    | 'dedicated_ios_device'
-    | 'dedicated_emulated_device';
+  deviceType?: string;
 
   /**
    * Query param: Profile ID to use as device spec
@@ -816,17 +848,15 @@ export interface DeviceListParams {
   > | null;
 
   /**
-   * Deprecated device type aliases are accepted during a compatibility grace period:
-   * dedicated_premium_device maps to android_cloud_phone, dedicated_physical_device
-   * maps to android_physical_phone, dedicated_ios_device maps to ios_stealth_phone,
-   * and dedicated_emulated_device maps to android_emulator.
+   * Canonical device type. Retired dedicated\_\* aliases are no longer accepted.
+   * Availability depends on the deployment.
    */
   type?:
     | 'android_cloud_phone'
-    | 'dedicated_premium_device'
-    | 'dedicated_physical_device'
-    | 'dedicated_ios_device'
-    | 'dedicated_emulated_device';
+    | 'android_physical_phone'
+    | 'ios_stealth_phone'
+    | 'android_emulator'
+    | 'ios_simulator';
 }
 
 export interface DeviceFingerprintParams {
