@@ -134,7 +134,15 @@ export namespace TaskRetrieveResponse {
 
     ownerId: string;
 
-    status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
+    status:
+      | 'prepared'
+      | 'queued'
+      | 'created'
+      | 'running'
+      | 'cancelling'
+      | 'completed'
+      | 'failed'
+      | 'cancelled';
 
     task: string;
 
@@ -146,8 +154,6 @@ export namespace TaskRetrieveResponse {
     userId: string;
 
     accessibility?: boolean;
-
-    agentId?: number;
 
     apps?: Array<string>;
 
@@ -175,11 +181,6 @@ export namespace TaskRetrieveResponse {
 
     maxSteps?: number;
 
-    /**
-     * Memory namespace for cross-task personalization
-     */
-    memoryNamespace?: string;
-
     message?: string | null;
 
     output?: { [key: string]: unknown } | null;
@@ -187,6 +188,22 @@ export namespace TaskRetrieveResponse {
     outputSchema?: { [key: string]: unknown } | null;
 
     reasoning?: boolean;
+
+    recordingDeviceId?: string | null;
+
+    /**
+     * Record device video for the whole task and persist a retrievable reference
+     */
+    recordingEnabled?: boolean;
+
+    recordingId?: string | null;
+
+    /**
+     * Where the task came from: 'api' for tasks created via POST /tasks, 'agent' for
+     * tasks spawned by an agent step. Agent tasks are readable (status, trajectory,
+     * media) but not controllable via this API.
+     */
+    source?: 'api' | 'agent';
 
     stealth?: boolean;
 
@@ -201,6 +218,10 @@ export namespace TaskRetrieveResponse {
 
     succeeded?: boolean | null;
 
+    /**
+     * @deprecated Deprecated and ignored. Sampling behavior is controlled by the model
+     * provider.
+     */
     temperature?: number;
 
     updatedAt?: string;
@@ -249,7 +270,15 @@ export namespace TaskListResponse {
 
     ownerId: string;
 
-    status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
+    status:
+      | 'prepared'
+      | 'queued'
+      | 'created'
+      | 'running'
+      | 'cancelling'
+      | 'completed'
+      | 'failed'
+      | 'cancelled';
 
     task: string;
 
@@ -261,8 +290,6 @@ export namespace TaskListResponse {
     userId: string;
 
     accessibility?: boolean;
-
-    agentId?: number;
 
     apps?: Array<string>;
 
@@ -290,11 +317,6 @@ export namespace TaskListResponse {
 
     maxSteps?: number;
 
-    /**
-     * Memory namespace for cross-task personalization
-     */
-    memoryNamespace?: string;
-
     message?: string | null;
 
     output?: { [key: string]: unknown } | null;
@@ -302,6 +324,22 @@ export namespace TaskListResponse {
     outputSchema?: { [key: string]: unknown } | null;
 
     reasoning?: boolean;
+
+    recordingDeviceId?: string | null;
+
+    /**
+     * Record device video for the whole task and persist a retrievable reference
+     */
+    recordingEnabled?: boolean;
+
+    recordingId?: string | null;
+
+    /**
+     * Where the task came from: 'api' for tasks created via POST /tasks, 'agent' for
+     * tasks spawned by an agent step. Agent tasks are readable (status, trajectory,
+     * media) but not controllable via this API.
+     */
+    source?: 'api' | 'agent';
 
     stealth?: boolean;
 
@@ -316,6 +354,10 @@ export namespace TaskListResponse {
 
     succeeded?: boolean | null;
 
+    /**
+     * @deprecated Deprecated and ignored. Sampling behavior is controlled by the model
+     * provider.
+     */
     temperature?: number;
 
     updatedAt?: string;
@@ -338,7 +380,7 @@ export interface TaskGetStatusResponse {
   /**
    * The status of the task
    */
-  status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
+  status: 'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
   /**
    * Execution metadata for abnormal terminal outcomes
@@ -359,6 +401,16 @@ export interface TaskGetStatusResponse {
    * Structured output if outputSchema was set
    */
   output?: { [key: string]: unknown } | null;
+
+  /**
+   * Device ID associated with recordingId
+   */
+  recordingDeviceId?: string | null;
+
+  /**
+   * ID of the task's whole-task video recording, if recordingEnabled was set
+   */
+  recordingId?: string | null;
 
   /**
    * Number of steps taken
@@ -1060,7 +1112,7 @@ export interface TaskRunResponse {
   /**
    * The status of the task (queued or created)
    */
-  status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
+  status: 'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
   /**
    * The URL of the stream (null when queued)
@@ -1108,7 +1160,21 @@ export interface TaskListParams {
    */
   query?: string | null;
 
-  status?: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled' | null;
+  /**
+   * Only tasks created via the API ('api') or spawned by an agent step ('agent').
+   */
+  source?: 'api' | 'agent' | null;
+
+  status?:
+    | 'prepared'
+    | 'queued'
+    | 'created'
+    | 'running'
+    | 'cancelling'
+    | 'completed'
+    | 'failed'
+    | 'cancelled'
+    | null;
 }
 
 export interface TaskRunParams {
@@ -1126,11 +1192,6 @@ export interface TaskRunParams {
    * Body param
    */
   accessibility?: boolean;
-
-  /**
-   * Body param
-   */
-  agentId?: number;
 
   /**
    * Body param
@@ -1153,7 +1214,7 @@ export interface TaskRunParams {
   displayId?: number;
 
   /**
-   * Body param
+   * Body param: Maximum agent execution time in seconds (1–2700).
    */
   executionTimeout?: number;
 
@@ -1164,7 +1225,7 @@ export interface TaskRunParams {
 
   /**
    * Body param: The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.5-flash')
+   * 'openai/gpt-5.6-luna')
    */
   llmModel?: string;
 
@@ -1172,11 +1233,6 @@ export interface TaskRunParams {
    * Body param
    */
   maxSteps?: number;
-
-  /**
-   * Body param: Memory namespace for cross-task personalization
-   */
-  memoryNamespace?: string;
 
   /**
    * Body param
@@ -1187,6 +1243,12 @@ export interface TaskRunParams {
    * Body param
    */
   reasoning?: boolean;
+
+  /**
+   * Body param: Record device video for the whole task and persist a retrievable
+   * reference
+   */
+  recordingEnabled?: boolean;
 
   /**
    * Body param
@@ -1200,7 +1262,14 @@ export interface TaskRunParams {
   subagentModel?: string;
 
   /**
-   * Body param
+   * Body param: Optional custom behavioral overlay applied on top of the agent's
+   * default system prompts. Never echoed back in responses or errors.
+   */
+  systemPrompt?: string | null;
+
+  /**
+   * @deprecated Body param: Deprecated and ignored. Sampling behavior is controlled
+   * by the model provider.
    */
   temperature?: number;
 
@@ -1238,8 +1307,6 @@ export interface TaskRunStreamedParams {
 
   accessibility?: boolean;
 
-  agentId?: number;
-
   apps?: Array<string>;
 
   continueOnFailure?: boolean;
@@ -1251,25 +1318,28 @@ export interface TaskRunStreamedParams {
    */
   displayId?: number;
 
+  /**
+   * Maximum agent execution time in seconds (1–2700).
+   */
   executionTimeout?: number;
 
   files?: Array<string>;
 
   /**
-   * The LLM model identifier to use for the task (e.g. 'google/gemini-3.5-flash')
+   * The LLM model identifier to use for the task (e.g. 'openai/gpt-5.6-luna')
    */
   llmModel?: string;
 
   maxSteps?: number;
 
-  /**
-   * Memory namespace for cross-task personalization
-   */
-  memoryNamespace?: string;
-
   outputSchema?: { [key: string]: unknown } | null;
 
   reasoning?: boolean;
+
+  /**
+   * Record device video for the whole task and persist a retrievable reference
+   */
+  recordingEnabled?: boolean;
 
   stealth?: boolean;
 
@@ -1278,6 +1348,16 @@ export interface TaskRunStreamedParams {
    */
   subagentModel?: string;
 
+  /**
+   * Optional custom behavioral overlay applied on top of the agent's default system
+   * prompts. Never echoed back in responses or errors.
+   */
+  systemPrompt?: string | null;
+
+  /**
+   * @deprecated Deprecated and ignored. Sampling behavior is controlled by the model
+   * provider.
+   */
   temperature?: number;
 
   vision?: boolean;

@@ -293,14 +293,23 @@ export interface TriggerDeleteResponse {
 
 export interface TriggerFireResponse {
   /**
+   * True when at least one attached flow was skipped because it already had an
+   * execution for this (flow, invocationId). Only ever true when the client supplied
+   * invocationId.
+   */
+  deduplicated: boolean;
+
+  /**
    * Number of flow executions enqueued. May be 0 if no flows are attached to this
-   * trigger, or if all attached flows are currently in cooldown.
+   * trigger, if all attached flows are currently in cooldown, or if every attached
+   * flow was deduplicated.
    */
   enqueuedCount: number;
 
   /**
-   * Unique ID for this fire invocation. Job IDs in the execution queue are derived
-   * from it (one per enqueued flow).
+   * Unique ID for this fire invocation (echoes the client-supplied invocationId, or
+   * a generated one). Job IDs in the execution queue are derived from it (one per
+   * enqueued flow).
    */
   invocationId: string;
 }
@@ -456,6 +465,13 @@ export interface TriggerFireParams {
    * otherwise only "must be a JSON object" is enforced.
    */
   payload: { [key: string]: unknown };
+
+  /**
+   * Optional client-supplied idempotency key. When provided, a flow that already has
+   * an execution for this (flow, invocationId) is skipped and `deduplicated` is
+   * true. When omitted a fresh server-side id is generated (no dedup).
+   */
+  invocationId?: string;
 }
 
 export declare namespace Triggers {

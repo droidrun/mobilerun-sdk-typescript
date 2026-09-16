@@ -117,25 +117,6 @@ import {
   Devices,
 } from './resources/devices/devices';
 import {
-  EsimCapacityResponse,
-  EsimConfirmPaymentResponse,
-  EsimCreateParams,
-  EsimCreateResponse,
-  EsimImportParams,
-  EsimImportResponse,
-  EsimInstallParams,
-  EsimInstallResponse,
-  EsimInstallStatusResponse,
-  EsimListParams,
-  EsimListResponse,
-  EsimRetrieveResponse,
-  EsimSelectorParams,
-  EsimSelectorResponse,
-  EsimUpdateParams,
-  EsimUpdateResponse,
-  Esims,
-} from './resources/esims/esims';
-import {
   MailboxCapacityResponse,
   MailboxCreateParams,
   MailboxCreateResponse,
@@ -154,6 +135,8 @@ import {
 } from './resources/mailboxes/mailboxes';
 import { MessageListParams, MessageListResponse, Messages } from './resources/messages/messages';
 import {
+  NumberCapacityParams,
+  NumberCapacityResponse,
   NumberCountriesResponse,
   NumberCreateParams,
   NumberCreateResponse,
@@ -941,7 +924,6 @@ export class Mobilerun {
   assistant: API.Assistant = new API.Assistant(this);
   appEvents: API.AppEvents = new API.AppEvents(this);
   notifications: API.Notifications = new API.Notifications(this);
-  esims: API.Esims = new API.Esims(this);
   messages: API.Messages = new API.Messages(this);
   numbers: API.Numbers = new API.Numbers(this);
   store: API.Store = new API.Store(this);
@@ -963,7 +945,6 @@ Mobilerun.Files = Files;
 Mobilerun.Assistant = Assistant;
 Mobilerun.AppEvents = AppEvents;
 Mobilerun.Notifications = Notifications;
-Mobilerun.Esims = Esims;
 Mobilerun.Messages = Messages;
 Mobilerun.Numbers = Numbers;
 Mobilerun.Store = Store;
@@ -1133,26 +1114,6 @@ export declare namespace Mobilerun {
   };
 
   export {
-    Esims as Esims,
-    type EsimCreateResponse as EsimCreateResponse,
-    type EsimRetrieveResponse as EsimRetrieveResponse,
-    type EsimUpdateResponse as EsimUpdateResponse,
-    type EsimListResponse as EsimListResponse,
-    type EsimCapacityResponse as EsimCapacityResponse,
-    type EsimConfirmPaymentResponse as EsimConfirmPaymentResponse,
-    type EsimImportResponse as EsimImportResponse,
-    type EsimInstallResponse as EsimInstallResponse,
-    type EsimInstallStatusResponse as EsimInstallStatusResponse,
-    type EsimSelectorResponse as EsimSelectorResponse,
-    type EsimCreateParams as EsimCreateParams,
-    type EsimUpdateParams as EsimUpdateParams,
-    type EsimListParams as EsimListParams,
-    type EsimImportParams as EsimImportParams,
-    type EsimInstallParams as EsimInstallParams,
-    type EsimSelectorParams as EsimSelectorParams,
-  };
-
-  export {
     Messages as Messages,
     type MessageListResponse as MessageListResponse,
     type MessageListParams as MessageListParams,
@@ -1165,11 +1126,13 @@ export declare namespace Mobilerun {
     type NumberUpdateResponse as NumberUpdateResponse,
     type NumberListResponse as NumberListResponse,
     type NumberDeleteResponse as NumberDeleteResponse,
+    type NumberCapacityResponse as NumberCapacityResponse,
     type NumberCountriesResponse as NumberCountriesResponse,
     type NumberPurposesResponse as NumberPurposesResponse,
     type NumberCreateParams as NumberCreateParams,
     type NumberUpdateParams as NumberUpdateParams,
     type NumberListParams as NumberListParams,
+    type NumberCapacityParams as NumberCapacityParams,
   };
 
   export { Store as Store, type StoreCategoriesResponse as StoreCategoriesResponse };
