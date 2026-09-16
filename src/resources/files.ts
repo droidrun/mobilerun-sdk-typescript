@@ -97,6 +97,44 @@ export interface FileUpdateResponse {
   sizeBytes: number;
 
   zone: 'user' | 'agent' | 'workflow' | 'skills';
+
+  collectionStatus?: FileUpdateResponse.UnionMember0 | FileUpdateResponse.UnionMember1;
+}
+
+export namespace FileUpdateResponse {
+  export interface UnionMember0 {
+    completeness: 'complete' | 'partial' | 'none' | 'unknown';
+
+    coverage: 'exhaustive' | 'bounded' | 'unknown';
+
+    endReached: boolean;
+
+    records: UnionMember0.Records;
+
+    resumable: boolean;
+
+    version: 1;
+  }
+
+  export namespace UnionMember0 {
+    export interface Records {
+      reported: number;
+
+      unit: string;
+    }
+  }
+
+  export interface UnionMember1 {
+    completeness: 'unknown';
+
+    coverage: 'unknown';
+
+    endReached: false;
+
+    resumable: false;
+
+    version: 1;
+  }
 }
 
 export interface FileListResponse {
@@ -124,6 +162,44 @@ export namespace FileListResponse {
     sizeBytes: number;
 
     zone: 'user' | 'agent' | 'workflow' | 'skills';
+
+    collectionStatus?: File.UnionMember0 | File.UnionMember1;
+  }
+
+  export namespace File {
+    export interface UnionMember0 {
+      completeness: 'complete' | 'partial' | 'none' | 'unknown';
+
+      coverage: 'exhaustive' | 'bounded' | 'unknown';
+
+      endReached: boolean;
+
+      records: UnionMember0.Records;
+
+      resumable: boolean;
+
+      version: 1;
+    }
+
+    export namespace UnionMember0 {
+      export interface Records {
+        reported: number;
+
+        unit: string;
+      }
+    }
+
+    export interface UnionMember1 {
+      completeness: 'unknown';
+
+      coverage: 'unknown';
+
+      endReached: false;
+
+      resumable: false;
+
+      version: 1;
+    }
   }
 
   export interface Quota {
@@ -163,6 +239,44 @@ export interface FileConfirmResponse {
   state: 'ready';
 
   zone: 'user' | 'agent' | 'workflow' | 'skills';
+
+  collectionStatus?: FileConfirmResponse.UnionMember0 | FileConfirmResponse.UnionMember1;
+}
+
+export namespace FileConfirmResponse {
+  export interface UnionMember0 {
+    completeness: 'complete' | 'partial' | 'none' | 'unknown';
+
+    coverage: 'exhaustive' | 'bounded' | 'unknown';
+
+    endReached: boolean;
+
+    records: UnionMember0.Records;
+
+    resumable: boolean;
+
+    version: 1;
+  }
+
+  export namespace UnionMember0 {
+    export interface Records {
+      reported: number;
+
+      unit: string;
+    }
+  }
+
+  export interface UnionMember1 {
+    completeness: 'unknown';
+
+    coverage: 'unknown';
+
+    endReached: false;
+
+    resumable: false;
+
+    version: 1;
+  }
 }
 
 export interface FileUploadURLResponse {

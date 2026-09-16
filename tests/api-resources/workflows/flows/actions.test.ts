@@ -47,12 +47,14 @@ describe('resource actions', () => {
           continueOnError: true,
           nameOverride: 'x',
           overrides: { params: { foo: 'bar' } },
+          recordingEnabled: true,
         },
       ],
       continueOnError: true,
       nameOverride: 'x',
       overrides: { params: { foo: 'bar' } },
       parentFlowActionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      recordingEnabled: true,
     });
   });
 
@@ -105,11 +107,13 @@ describe('resource actions', () => {
               continueOnError: true,
               nameOverride: 'x',
               overrides: { params: { foo: 'bar' } },
+              recordingEnabled: true,
             },
           ],
           continueOnError: true,
           nameOverride: 'x',
           overrides: { params: { foo: 'bar' } },
+          recordingEnabled: true,
         },
       ],
     });

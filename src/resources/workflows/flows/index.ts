@@ -17,6 +17,7 @@ export {
   type FlowUpdateResponse,
   type FlowListResponse,
   type FlowDeleteResponse,
+  type FlowCapacityResponse,
   type FlowCloneResponse,
   type FlowDryRunResponse,
   type FlowListRepairsResponse,
