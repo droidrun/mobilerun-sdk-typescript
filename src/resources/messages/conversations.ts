@@ -6,17 +6,8 @@ import { RequestOptions } from '../../internal/request-options';
 
 export class Conversations extends APIResource {
   /**
-   * Lists the caller's own SMS conversations, one row per thread. Each row includes
-   * the most recent message in the thread, its unread inbound count, and the eSIMs
-   * it was seen through. Optional `esimId` or `numberId` narrows to threads on one
-   * eSIM or number.
-   *
-   * Cursor-paginated via `limit` (default 20, max 100) and
-   * `cursorLastOccurredAt`/`cursorLastMessageId` (both required together, taken from
-   * a previous page's `nextCursor`). Pagination follows each thread's most recent
-   * activity rather than a fixed snapshot, so a thread with new activity can move
-   * ahead of an in-progress page fetch. Clients that need a stable ordering should
-   * snapshot their own view.
+   * Lists SMS conversations by recent activity. Use both cursor fields from
+   * `nextCursor` to fetch the next page.
    */
   list(
     query: ConversationListParams | null | undefined = {},
@@ -26,10 +17,8 @@ export class Conversations extends APIResource {
   }
 
   /**
-   * Marks the caller's own inbound messages in a conversation thread as read, up to
-   * and including the given `(upToOccurredAt, upToMessageId)` cursor — typically a
-   * conversation row's `lastMessage`. Idempotent: repeating the call with the same
-   * cursor updates 0 rows. Returns the number of rows updated.
+   * Marks inbound messages in a conversation as read through the supplied cursor.
+   * Repeating the request is safe.
    */
   markRead(
     body: ConversationMarkReadParams,
