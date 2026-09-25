@@ -167,6 +167,8 @@ export namespace ConversationCreateResponse {
 
     createdAt: string;
 
+    creditsUsed: number | null;
+
     description: string | null;
 
     lastActiveAt: string;
@@ -209,6 +211,8 @@ export namespace ConversationUpdateResponse {
 
     createdAt: string;
 
+    creditsUsed: number | null;
+
     description: string | null;
 
     lastActiveAt: string;
@@ -250,6 +254,8 @@ export namespace ConversationListResponse {
     costUsd: number;
 
     createdAt: string;
+
+    creditsUsed: number | null;
 
     description: string | null;
 
@@ -294,6 +300,8 @@ export namespace ConversationListResponse {
     costUsd: number;
 
     createdAt: string;
+
+    creditsUsed: number | null;
 
     description: string | null;
 

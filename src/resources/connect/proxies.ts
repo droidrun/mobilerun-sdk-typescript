@@ -92,6 +92,13 @@ export interface ProxyRetrieveResponse {
 
   host: string;
 
+  /**
+   * Display name for the proxy. Set it on create or change it with PATCH; when no
+   * name has been set, a label generated from the proxy's country, type, and id is
+   * returned instead — so this is never empty.
+   */
+  name: string;
+
   password: string;
 
   port: number;
@@ -146,6 +153,13 @@ export namespace ProxyListResponse {
     createdAt: string;
 
     host: string;
+
+    /**
+     * Display name for the proxy. Set it on create or change it with PATCH; when no
+     * name has been set, a label generated from the proxy's country, type, and id is
+     * returned instead — so this is never empty.
+     */
+    name: string;
 
     port: number;
 
@@ -216,6 +230,13 @@ export interface ProxyBuyResponse {
   createdAt: string;
 
   host: string;
+
+  /**
+   * Display name for the proxy. Set it on create or change it with PATCH; when no
+   * name has been set, a label generated from the proxy's country, type, and id is
+   * returned instead — so this is never empty.
+   */
+  name: string;
 
   password: string;
 
@@ -473,6 +494,13 @@ export interface ProxyBuyParams {
    * Body param
    */
   type: 'dedicated_residential' | 'residential' | 'mobile';
+
+  /**
+   * Body param: Display name for the proxy, up to 64 characters excluding
+   * surrounding whitespace, and containing no NUL. Omit it (or send only whitespace)
+   * to get a generated label built from the country, type, and id.
+   */
+  name?: string;
 
   /**
    * Header param: Optional idempotency key, unique per owner (1-128 characters after

@@ -64,6 +64,7 @@ describe('resource proxies', () => {
     const response = await client.connect.proxies.buy({
       country: 'country',
       type: 'dedicated_residential',
+      name: 'name',
       'Idempotency-Key': 'Idempotency-Key',
     });
   });
