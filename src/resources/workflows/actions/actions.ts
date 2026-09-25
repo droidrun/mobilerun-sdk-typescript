@@ -81,7 +81,7 @@ export namespace ActionCreateResponse {
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
     updatedAt: string | null;
 
@@ -118,7 +118,7 @@ export namespace ActionRetrieveResponse {
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
     updatedAt: string | null;
 
@@ -155,7 +155,7 @@ export namespace ActionUpdateResponse {
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
     updatedAt: string | null;
 
@@ -194,7 +194,7 @@ export namespace ActionListResponse {
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
     updatedAt: string | null;
 
@@ -242,7 +242,7 @@ export interface ActionListParams {
 
   search?: string;
 
-  service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+  service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 }
 
 Actions.Services = Services;

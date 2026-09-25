@@ -755,6 +755,11 @@ export namespace TaskGetTrajectoryResponse {
 
       code?: string | null;
 
+      /**
+       * Classification of tool-call markup in an LLM response.
+       */
+      tool_call_status?: 'valid' | 'no_markup' | 'malformed';
+
       usage?: Data.Usage | null;
     }
 
@@ -1225,7 +1230,7 @@ export interface TaskRunParams {
 
   /**
    * Body param: The LLM model identifier to use for the task (e.g.
-   * 'openai/gpt-5.6-luna')
+   * 'openai/gpt-6-luna')
    */
   llmModel?: string;
 
@@ -1326,7 +1331,7 @@ export interface TaskRunStreamedParams {
   files?: Array<string>;
 
   /**
-   * The LLM model identifier to use for the task (e.g. 'openai/gpt-5.6-luna')
+   * The LLM model identifier to use for the task (e.g. 'openai/gpt-6-luna')
    */
   llmModel?: string;
 

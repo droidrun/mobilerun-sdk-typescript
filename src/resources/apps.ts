@@ -473,7 +473,7 @@ export namespace AppListResponse {
 
       sizeBytes: number | null;
 
-      source: 'user' | 'system' | 'portal' | 'store' | 'catalog';
+      source: 'user' | 'system' | 'portal' | 'store';
 
       status: 'queued' | 'available' | 'failed';
 
@@ -804,7 +804,7 @@ export namespace AppListVersionsResponse {
 
     sizeBytes: number | null;
 
-    source: 'user' | 'system' | 'portal' | 'store' | 'catalog';
+    source: 'user' | 'system' | 'portal' | 'store';
 
     status: 'queued' | 'available' | 'failed';
 

@@ -60,6 +60,13 @@ export namespace ExecutionRetrieveResponse {
     createdBy: string | null;
 
     /**
+     * OneDrive/Google Drive delivery lifecycle for this run's recording, file, and
+     * screenshot uploads, ordered by startedAt. Empty when the flow has no delivery
+     * configured.
+     */
+    deliveries: Array<Data.Delivery>;
+
+    /**
      * Device this execution targets (the job's deviceId). Null for device-less
      * (event-only) runs.
      */
@@ -91,6 +98,12 @@ export namespace ExecutionRetrieveResponse {
 
     kind: 'live' | 'dry_run' | 'verification';
 
+    /**
+     * Live progress read from step_progress; null for runs started before this
+     * feature.
+     */
+    progress: Data.Progress | null;
+
     recordingDeviceId: string | null;
 
     /**
@@ -105,6 +118,13 @@ export namespace ExecutionRetrieveResponse {
      * Whole-flow recordings use -1 for every coordinate.
      */
     recordings: Array<Data.Recording>;
+
+    /**
+     * Screenshots captured by tasks.run/agent.run steps, ordered by seq. Image bytes
+     * are never returned here — fetch a fresh signed URL via GET
+     * /executions/{id}/screenshots/{screenshotId}.
+     */
+    screenshots: Array<Data.Screenshot>;
 
     startedAt: string | null;
 
@@ -126,6 +146,28 @@ export namespace ExecutionRetrieveResponse {
   }
 
   export namespace Data {
+    export interface Delivery {
+      artifact: 'recording' | 'file' | 'screenshot';
+
+      destination: 'one_drive' | 'google_drive';
+
+      errorCode: string | null;
+
+      filename: string;
+
+      finishedAt: string | null;
+
+      folder: string | null;
+
+      startedAt: string | null;
+
+      status: 'waiting' | 'uploading' | 'succeeded' | 'failed' | 'unknown' | 'cancelled';
+
+      stepIndex: number | null;
+
+      webUrl: string | null;
+    }
+
     export interface File {
       fileId: string;
 
@@ -134,6 +176,38 @@ export namespace ExecutionRetrieveResponse {
       mimeType: string;
 
       sizeBytes: number;
+    }
+
+    /**
+     * Live progress read from step_progress; null for runs started before this
+     * feature.
+     */
+    export interface Progress {
+      currentIndex: number | null;
+
+      steps: Array<Progress.Step>;
+
+      total: number;
+    }
+
+    export namespace Progress {
+      export interface Step {
+        finishedAt: string | null;
+
+        index: number;
+
+        method: string;
+
+        name: string;
+
+        service: string;
+
+        sessionId: string | null;
+
+        startedAt: string | null;
+
+        status: 'pending' | 'running' | 'success' | 'failed' | 'skipped' | 'cancelled';
+      }
     }
 
     export interface Recording {
@@ -164,6 +238,24 @@ export namespace ExecutionRetrieveResponse {
       stepIndex: number;
 
       stoppedAt: string | null;
+    }
+
+    export interface Screenshot {
+      id: string;
+
+      capturedAt: string | null;
+
+      iterationIndex: number;
+
+      mimeType: string;
+
+      seq: number;
+
+      source: 'task' | 'agent';
+
+      stepIndex: number;
+
+      stepName: string;
     }
   }
 }
