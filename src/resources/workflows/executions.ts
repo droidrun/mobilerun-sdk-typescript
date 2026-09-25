@@ -17,8 +17,9 @@ export class Executions extends APIResource {
 
   /**
    * Return a paginated history of flow executions. Supports filtering by `flowId`,
-   * `triggerId`, `status`, and a `from`/`to` time range, plus free-text `search` and
-   * ordering by startedAt, finishedAt, or status.
+   * `triggerId`, `invocationId` (the client/verify key), `status`, and a `from`/`to`
+   * time range, plus free-text `search` and ordering by startedAt, finishedAt, or
+   * status.
    */
   list(
     query: ExecutionListParams | null | undefined = {},
@@ -58,6 +59,19 @@ export namespace ExecutionRetrieveResponse {
 
     createdBy: string | null;
 
+    /**
+     * OneDrive/Google Drive delivery lifecycle for this run's recording, file, and
+     * screenshot uploads, ordered by startedAt. Empty when the flow has no delivery
+     * configured.
+     */
+    deliveries: Array<Data.Delivery>;
+
+    /**
+     * Device this execution targets (the job's deviceId). Null for device-less
+     * (event-only) runs.
+     */
+    deviceId: string | null;
+
     error: string | null;
 
     eventId: string | null;
@@ -75,7 +89,20 @@ export namespace ExecutionRetrieveResponse {
 
     flowName: string | null;
 
-    kind: 'live' | 'dry_run';
+    /**
+     * Client/verify invocation key this row belongs to. Set on live custom fires (one
+     * row per device fan-out) and on verification runs; null for event/schedule live
+     * rows.
+     */
+    invocationId: string | null;
+
+    kind: 'live' | 'dry_run' | 'verification';
+
+    /**
+     * Live progress read from step_progress; null for runs started before this
+     * feature.
+     */
+    progress: Data.Progress | null;
 
     recordingDeviceId: string | null;
 
@@ -85,6 +112,19 @@ export namespace ExecutionRetrieveResponse {
      * the recording failed to start.
      */
     recordingId: string | null;
+
+    /**
+     * Durable recording segments ordered by step/loop coordinate and retry attempt.
+     * Whole-flow recordings use -1 for every coordinate.
+     */
+    recordings: Array<Data.Recording>;
+
+    /**
+     * Screenshots captured by tasks.run/agent.run steps, ordered by seq. Image bytes
+     * are never returned here — fetch a fresh signed URL via GET
+     * /executions/{id}/screenshots/{screenshotId}.
+     */
+    screenshots: Array<Data.Screenshot>;
 
     startedAt: string | null;
 
@@ -106,6 +146,28 @@ export namespace ExecutionRetrieveResponse {
   }
 
   export namespace Data {
+    export interface Delivery {
+      artifact: 'recording' | 'file' | 'screenshot';
+
+      destination: 'one_drive' | 'google_drive';
+
+      errorCode: string | null;
+
+      filename: string;
+
+      finishedAt: string | null;
+
+      folder: string | null;
+
+      startedAt: string | null;
+
+      status: 'waiting' | 'uploading' | 'succeeded' | 'failed' | 'unknown' | 'cancelled';
+
+      stepIndex: number | null;
+
+      webUrl: string | null;
+    }
+
     export interface File {
       fileId: string;
 
@@ -114,6 +176,86 @@ export namespace ExecutionRetrieveResponse {
       mimeType: string;
 
       sizeBytes: number;
+    }
+
+    /**
+     * Live progress read from step_progress; null for runs started before this
+     * feature.
+     */
+    export interface Progress {
+      currentIndex: number | null;
+
+      steps: Array<Progress.Step>;
+
+      total: number;
+    }
+
+    export namespace Progress {
+      export interface Step {
+        finishedAt: string | null;
+
+        index: number;
+
+        method: string;
+
+        name: string;
+
+        service: string;
+
+        sessionId: string | null;
+
+        startedAt: string | null;
+
+        status: 'pending' | 'running' | 'success' | 'failed' | 'skipped' | 'cancelled';
+      }
+    }
+
+    export interface Recording {
+      id: string;
+
+      attempt: number;
+
+      childIndex: number;
+
+      flowActionId: string | null;
+
+      iterationIndex: number;
+
+      lastError: string | null;
+
+      parentIndex: number;
+
+      recordingDeviceId: string | null;
+
+      recordingId: string | null;
+
+      scope: 'flow' | 'step';
+
+      startedAt: string | null;
+
+      status: 'starting' | 'recording' | 'stopping' | 'stopped' | 'failed';
+
+      stepIndex: number;
+
+      stoppedAt: string | null;
+    }
+
+    export interface Screenshot {
+      id: string;
+
+      capturedAt: string | null;
+
+      iterationIndex: number;
+
+      mimeType: string;
+
+      seq: number;
+
+      source: 'task' | 'agent';
+
+      stepIndex: number;
+
+      stepName: string;
     }
   }
 }
@@ -130,6 +272,12 @@ export namespace ExecutionListResponse {
 
     createdBy: string | null;
 
+    /**
+     * Device this execution targets (the job's deviceId). Null for device-less
+     * (event-only) runs.
+     */
+    deviceId: string | null;
+
     error: string | null;
 
     eventId: string | null;
@@ -140,7 +288,14 @@ export namespace ExecutionListResponse {
 
     flowName: string | null;
 
-    kind: 'live' | 'dry_run';
+    /**
+     * Client/verify invocation key this row belongs to. Set on live custom fires (one
+     * row per device fan-out) and on verification runs; null for event/schedule live
+     * rows.
+     */
+    invocationId: string | null;
+
+    kind: 'live' | 'dry_run' | 'verification';
 
     recordingDeviceId: string | null;
 
@@ -150,6 +305,12 @@ export namespace ExecutionListResponse {
      * the recording failed to start.
      */
     recordingId: string | null;
+
+    /**
+     * Durable recording segments ordered by step/loop coordinate and retry attempt.
+     * Whole-flow recordings use -1 for every coordinate.
+     */
+    recordings: Array<Item.Recording>;
 
     startedAt: string | null;
 
@@ -169,6 +330,38 @@ export namespace ExecutionListResponse {
      */
     result?: unknown;
   }
+
+  export namespace Item {
+    export interface Recording {
+      id: string;
+
+      attempt: number;
+
+      childIndex: number;
+
+      flowActionId: string | null;
+
+      iterationIndex: number;
+
+      lastError: string | null;
+
+      parentIndex: number;
+
+      recordingDeviceId: string | null;
+
+      recordingId: string | null;
+
+      scope: 'flow' | 'step';
+
+      startedAt: string | null;
+
+      status: 'starting' | 'recording' | 'stopping' | 'stopped' | 'failed';
+
+      stepIndex: number;
+
+      stoppedAt: string | null;
+    }
+  }
 }
 
 export interface ExecutionAbortResponse {
@@ -178,6 +371,12 @@ export interface ExecutionAbortResponse {
 export namespace ExecutionAbortResponse {
   export interface Data {
     id: string;
+
+    /**
+     * Device this execution targets (the job's deviceId). Null for device-less
+     * (event-only) runs.
+     */
+    deviceId: string | null;
 
     error: string | null;
 
@@ -189,7 +388,14 @@ export namespace ExecutionAbortResponse {
 
     flowName: string | null;
 
-    kind: 'live' | 'dry_run';
+    /**
+     * Client/verify invocation key this row belongs to. Set on live custom fires (one
+     * row per device fan-out) and on verification runs; null for event/schedule live
+     * rows.
+     */
+    invocationId: string | null;
+
+    kind: 'live' | 'dry_run' | 'verification';
 
     recordingDeviceId: string | null;
 
@@ -258,6 +464,8 @@ export interface ExecutionListParams {
   flowId?: string;
 
   from?: string | null;
+
+  invocationId?: string;
 
   orderBy?: 'startedAt' | 'finishedAt' | 'status';
 

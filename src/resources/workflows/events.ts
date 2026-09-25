@@ -49,11 +49,15 @@ export namespace EventDryRunResponse {
       export interface Action {
         continueOnError: boolean;
 
+        flowActionId: string;
+
         method: string;
 
         name: string;
 
-        service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+        recordingEnabled: boolean;
+
+        service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
         /**
          * Nested child actions (loop/branch bodies), each the same shape as a
@@ -67,6 +71,8 @@ export namespace EventDryRunResponse {
       export interface Flow {
         id: string;
 
+        archivedAt: string | null;
+
         blockedAt: string | null;
 
         consecutiveFailures: number;
@@ -79,10 +85,16 @@ export namespace EventDryRunResponse {
 
         createdBy: string | null;
 
+        delivery: Flow.Delivery | null;
+
         description: string | null;
 
         deviceIds: Array<string>;
 
+        /**
+         * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+         * enabled.
+         */
         enabled: boolean;
 
         healthMonitoringEnabled: boolean;
@@ -100,6 +112,8 @@ export namespace EventDryRunResponse {
 
         lastTriggeredAt: string | null;
 
+        lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
         name: string;
 
         notifyOnFailure: boolean;
@@ -110,7 +124,13 @@ export namespace EventDryRunResponse {
 
         ownerId: string;
 
+        /**
+         * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+         * recordingEnabled=true, "off" = recordingEnabled=false).
+         */
         recordingEnabled: boolean;
+
+        recordingPolicy: Flow.RecordingPolicy;
 
         selfHealingEnabled: boolean;
 
@@ -134,6 +154,28 @@ export namespace EventDryRunResponse {
          * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
          */
         userId: string;
+      }
+
+      export namespace Flow {
+        export interface Delivery {
+          destination: 'one_drive' | 'google_drive';
+
+          folder?: string;
+
+          recording?: Delivery.Recording;
+
+          screenshots?: unknown;
+        }
+
+        export namespace Delivery {
+          export interface Recording {
+            filename: string;
+          }
+        }
+
+        export interface RecordingPolicy {
+          mode: 'off' | 'flow' | 'selected_steps';
+        }
       }
 
       export interface Gates {

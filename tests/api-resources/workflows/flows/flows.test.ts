@@ -38,17 +38,25 @@ describe('resource flows', () => {
               continueOnError: true,
               nameOverride: 'x',
               overrides: { params: { foo: 'bar' } },
+              recordingEnabled: true,
             },
           ],
           continueOnError: true,
           nameOverride: 'x',
           overrides: { params: { foo: 'bar' } },
+          recordingEnabled: true,
         },
       ],
       name: 'x',
       triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       cooldownScope: 'flow',
       cooldownSeconds: 0,
+      delivery: {
+        destination: 'one_drive',
+        folder: 'x',
+        recording: { filename: 'x' },
+        screenshots: {},
+      },
       description: 'description',
       deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       enabled: true,
@@ -57,6 +65,7 @@ describe('resource flows', () => {
       notifyOnSuccess: true,
       notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       recordingEnabled: true,
+      recordingPolicy: { mode: 'off' },
       selfHealingEnabled: true,
       selfHealingMaxAttempts: 1,
     });
@@ -95,15 +104,23 @@ describe('resource flows', () => {
         {
           cooldownScope: 'flow',
           cooldownSeconds: 0,
+          delivery: {
+            destination: 'one_drive',
+            folder: 'x',
+            recording: { filename: 'x' },
+            screenshots: {},
+          },
           description: 'description',
           deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
           enabled: true,
           healthMonitoringEnabled: true,
+          lifecycleStatus: 'enabled',
           name: 'x',
           notifyOnFailure: true,
           notifyOnSuccess: true,
           notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
           recordingEnabled: true,
+          recordingPolicy: { mode: 'off' },
           selfHealingEnabled: true,
           selfHealingMaxAttempts: 1,
           triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
@@ -150,6 +167,18 @@ describe('resource flows', () => {
   // Mock server tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.workflows.flows.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('capacity', async () => {
+    const responsePromise = client.workflows.flows.capacity();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
