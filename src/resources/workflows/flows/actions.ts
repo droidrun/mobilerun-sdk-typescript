@@ -75,6 +75,12 @@ export namespace ActionListResponse {
     parentFlowActionId: string | null;
 
     position: number;
+
+    /**
+     * Selected for per-step recording under the flow's "selected_steps" recording
+     * policy.
+     */
+    recordingEnabled: boolean;
   }
 
   export namespace Data {
@@ -107,6 +113,12 @@ export namespace ActionAddResponse {
     parentFlowActionId: string | null;
 
     position: number;
+
+    /**
+     * Selected for per-step recording under the flow's "selected_steps" recording
+     * policy.
+     */
+    recordingEnabled: boolean;
   }
 
   export namespace Data {
@@ -143,6 +155,12 @@ export namespace ActionReplaceResponse {
     parentFlowActionId: string | null;
 
     position: number;
+
+    /**
+     * Selected for per-step recording under the flow's "selected_steps" recording
+     * policy.
+     */
+    recordingEnabled: boolean;
   }
 
   export namespace Data {
@@ -166,6 +184,8 @@ export interface ActionAddParams {
   overrides?: ActionAddParams.Overrides | null;
 
   parentFlowActionId?: string | null;
+
+  recordingEnabled?: boolean;
 }
 
 export namespace ActionAddParams {
@@ -179,6 +199,8 @@ export namespace ActionAddParams {
     nameOverride?: string;
 
     overrides?: Child.Overrides | null;
+
+    recordingEnabled?: boolean;
   }
 
   export namespace Child {
@@ -213,6 +235,8 @@ export namespace ActionReplaceParams {
     nameOverride?: string;
 
     overrides?: Action.Overrides | null;
+
+    recordingEnabled?: boolean;
   }
 
   export namespace Action {
@@ -226,6 +250,8 @@ export namespace ActionReplaceParams {
       nameOverride?: string;
 
       overrides?: Child.Overrides | null;
+
+      recordingEnabled?: boolean;
     }
 
     export namespace Child {

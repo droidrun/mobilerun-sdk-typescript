@@ -25,6 +25,7 @@ describe('resource mailboxes', () => {
     const response = await client.mailboxes.create({
       clientRequestId: 'x',
       billingPreference: 'included',
+      domainId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       label: 'label',
       localPart: 'jane-doe',
     });

@@ -56,6 +56,7 @@ import {
 } from './actions/actions';
 import * as FlowsAPI from './flows/flows';
 import {
+  FlowCapacityResponse,
   FlowCloneParams,
   FlowCloneResponse,
   FlowCreateParams,
@@ -132,6 +133,7 @@ export declare namespace Workflows {
     type FlowUpdateResponse as FlowUpdateResponse,
     type FlowListResponse as FlowListResponse,
     type FlowDeleteResponse as FlowDeleteResponse,
+    type FlowCapacityResponse as FlowCapacityResponse,
     type FlowCloneResponse as FlowCloneResponse,
     type FlowDryRunResponse as FlowDryRunResponse,
     type FlowListRepairsResponse as FlowListRepairsResponse,
