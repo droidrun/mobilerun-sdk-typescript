@@ -51,6 +51,12 @@ describe('resource flows', () => {
       triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       cooldownScope: 'flow',
       cooldownSeconds: 0,
+      delivery: {
+        destination: 'one_drive',
+        folder: 'x',
+        recording: { filename: 'x' },
+        screenshots: {},
+      },
       description: 'description',
       deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       enabled: true,
@@ -98,6 +104,12 @@ describe('resource flows', () => {
         {
           cooldownScope: 'flow',
           cooldownSeconds: 0,
+          delivery: {
+            destination: 'one_drive',
+            folder: 'x',
+            recording: { filename: 'x' },
+            screenshots: {},
+          },
           description: 'description',
           deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
           enabled: true,

@@ -158,6 +158,8 @@ export namespace FlowCreateResponse {
 
     createdBy: string | null;
 
+    delivery: Data.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
@@ -228,6 +230,22 @@ export namespace FlowCreateResponse {
   }
 
   export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
     export interface RecordingPolicy {
       mode: 'off' | 'flow' | 'selected_steps';
     }
@@ -256,6 +274,8 @@ export namespace FlowRetrieveResponse {
 
     createdBy: string | null;
 
+    delivery: Data.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
@@ -326,6 +346,22 @@ export namespace FlowRetrieveResponse {
   }
 
   export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
     export interface RecordingPolicy {
       mode: 'off' | 'flow' | 'selected_steps';
     }
@@ -354,6 +390,8 @@ export namespace FlowUpdateResponse {
 
     createdBy: string | null;
 
+    delivery: Data.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
@@ -424,6 +462,22 @@ export namespace FlowUpdateResponse {
   }
 
   export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
     export interface RecordingPolicy {
       mode: 'off' | 'flow' | 'selected_steps';
     }
@@ -453,6 +507,8 @@ export namespace FlowListResponse {
     createdAt: string | null;
 
     createdBy: string | null;
+
+    delivery: Item.Delivery | null;
 
     description: string | null;
 
@@ -524,6 +580,22 @@ export namespace FlowListResponse {
   }
 
   export namespace Item {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
     export interface RecordingPolicy {
       mode: 'off' | 'flow' | 'selected_steps';
     }
@@ -569,6 +641,8 @@ export namespace FlowCloneResponse {
     createdAt: string | null;
 
     createdBy: string | null;
+
+    delivery: Data.Delivery | null;
 
     description: string | null;
 
@@ -640,6 +714,22 @@ export namespace FlowCloneResponse {
   }
 
   export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
     export interface RecordingPolicy {
       mode: 'off' | 'flow' | 'selected_steps';
     }
@@ -681,7 +771,7 @@ export namespace FlowDryRunResponse {
 
       recordingEnabled: boolean;
 
-      service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+      service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
       /**
        * Nested child actions (loop/branch bodies), each the same shape as a
@@ -798,6 +888,8 @@ export namespace FlowUnblockResponse {
 
     createdBy: string | null;
 
+    delivery: Data.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
@@ -868,6 +960,22 @@ export namespace FlowUnblockResponse {
   }
 
   export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
     export interface RecordingPolicy {
       mode: 'off' | 'flow' | 'selected_steps';
     }
@@ -885,6 +993,8 @@ export interface FlowCreateParams {
 
   cooldownSeconds?: number | null;
 
+  delivery?: FlowCreateParams.Delivery;
+
   description?: string;
 
   deviceIds?: Array<string>;
@@ -899,10 +1009,6 @@ export interface FlowCreateParams {
 
   notifyWebhookId?: string | null;
 
-  /**
-   * @deprecated Deprecated compatibility field. true maps to
-   * recordingPolicy.mode="flow"; false maps to "off".
-   */
   recordingEnabled?: boolean;
 
   recordingPolicy?: FlowCreateParams.RecordingPolicy;
@@ -955,6 +1061,22 @@ export namespace FlowCreateParams {
     }
   }
 
+  export interface Delivery {
+    destination: 'one_drive' | 'google_drive';
+
+    folder?: string;
+
+    recording?: Delivery.Recording;
+
+    screenshots?: unknown;
+  }
+
+  export namespace Delivery {
+    export interface Recording {
+      filename: string;
+    }
+  }
+
   export interface RecordingPolicy {
     mode: 'off' | 'flow' | 'selected_steps';
   }
@@ -964,6 +1086,8 @@ export interface FlowUpdateParams {
   cooldownScope?: 'flow' | 'device';
 
   cooldownSeconds?: number | null;
+
+  delivery?: FlowUpdateParams.Delivery | null;
 
   description?: string;
 
@@ -1002,6 +1126,22 @@ export interface FlowUpdateParams {
 }
 
 export namespace FlowUpdateParams {
+  export interface Delivery {
+    destination: 'one_drive' | 'google_drive';
+
+    folder?: string;
+
+    recording?: Delivery.Recording;
+
+    screenshots?: unknown;
+  }
+
+  export namespace Delivery {
+    export interface Recording {
+      filename: string;
+    }
+  }
+
   export interface RecordingPolicy {
     mode: 'off' | 'flow' | 'selected_steps';
   }
