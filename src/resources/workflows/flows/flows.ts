@@ -66,10 +66,21 @@ export class Flows extends APIResource {
   }
 
   /**
-   * Delete a flow by its ID. Returns 404 if no flow matches.
+   * Terminally archive a flow by its ID. Archived flows cannot be restored and are
+   * hidden from customer reads. Repeating the request is idempotent for the owner.
    */
   delete(flowID: string, options?: RequestOptions): APIPromise<FlowDeleteResponse> {
     return this._client.delete(path`/flows/${flowID}`, options);
+  }
+
+  /**
+   * Returns an owner-scoped snapshot of finite included workflow-agent capacity
+   * after locally stored enabled and disabled agents. Available only while slot
+   * enforcement is enabled; otherwise returns 503. This is advisory; create and
+   * clone perform authoritative admission under an owner lock.
+   */
+  capacity(options?: RequestOptions): APIPromise<FlowCapacityResponse> {
+    return this._client.get('/flows/capacity', options);
   }
 
   /**
@@ -133,6 +144,8 @@ export namespace FlowCreateResponse {
   export interface Data {
     id: string;
 
+    archivedAt: string | null;
+
     blockedAt: string | null;
 
     consecutiveFailures: number;
@@ -145,10 +158,16 @@ export namespace FlowCreateResponse {
 
     createdBy: string | null;
 
+    delivery: Data.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -166,6 +185,8 @@ export namespace FlowCreateResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -176,7 +197,13 @@ export namespace FlowCreateResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -200,6 +227,28 @@ export namespace FlowCreateResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+  }
+
+  export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
   }
 }
 
@@ -211,6 +260,8 @@ export namespace FlowRetrieveResponse {
   export interface Data {
     id: string;
 
+    archivedAt: string | null;
+
     blockedAt: string | null;
 
     consecutiveFailures: number;
@@ -223,10 +274,16 @@ export namespace FlowRetrieveResponse {
 
     createdBy: string | null;
 
+    delivery: Data.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -244,6 +301,8 @@ export namespace FlowRetrieveResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -254,7 +313,13 @@ export namespace FlowRetrieveResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -279,6 +344,28 @@ export namespace FlowRetrieveResponse {
      */
     userId: string;
   }
+
+  export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
+  }
 }
 
 export interface FlowUpdateResponse {
@@ -288,6 +375,8 @@ export interface FlowUpdateResponse {
 export namespace FlowUpdateResponse {
   export interface Data {
     id: string;
+
+    archivedAt: string | null;
 
     blockedAt: string | null;
 
@@ -301,10 +390,16 @@ export namespace FlowUpdateResponse {
 
     createdBy: string | null;
 
+    delivery: Data.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -322,6 +417,8 @@ export namespace FlowUpdateResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -332,7 +429,13 @@ export namespace FlowUpdateResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -356,6 +459,28 @@ export namespace FlowUpdateResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+  }
+
+  export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
   }
 }
 
@@ -369,6 +494,8 @@ export namespace FlowListResponse {
   export interface Item {
     id: string;
 
+    archivedAt: string | null;
+
     blockedAt: string | null;
 
     consecutiveFailures: number;
@@ -381,10 +508,16 @@ export namespace FlowListResponse {
 
     createdBy: string | null;
 
+    delivery: Item.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -402,6 +535,8 @@ export namespace FlowListResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -412,7 +547,13 @@ export namespace FlowListResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Item.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -437,10 +578,46 @@ export namespace FlowListResponse {
      */
     userId: string;
   }
+
+  export namespace Item {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
+  }
 }
 
 export interface FlowDeleteResponse {
   message: string;
+}
+
+export interface FlowCapacityResponse {
+  data: FlowCapacityResponse.Data;
+}
+
+export namespace FlowCapacityResponse {
+  export interface Data {
+    included: number;
+
+    remaining: number;
+
+    status: 'available' | 'exhausted' | 'not_included';
+  }
 }
 
 export interface FlowCloneResponse {
@@ -450,6 +627,8 @@ export interface FlowCloneResponse {
 export namespace FlowCloneResponse {
   export interface Data {
     id: string;
+
+    archivedAt: string | null;
 
     blockedAt: string | null;
 
@@ -463,10 +642,16 @@ export namespace FlowCloneResponse {
 
     createdBy: string | null;
 
+    delivery: Data.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -484,6 +669,8 @@ export namespace FlowCloneResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -494,7 +681,13 @@ export namespace FlowCloneResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -518,6 +711,28 @@ export namespace FlowCloneResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+  }
+
+  export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
   }
 }
 
@@ -548,11 +763,15 @@ export namespace FlowDryRunResponse {
     export interface Action {
       continueOnError: boolean;
 
+      flowActionId: string;
+
       method: string;
 
       name: string;
 
-      service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+      recordingEnabled: boolean;
+
+      service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
       /**
        * Nested child actions (loop/branch bodies), each the same shape as a
@@ -655,6 +874,8 @@ export namespace FlowUnblockResponse {
   export interface Data {
     id: string;
 
+    archivedAt: string | null;
+
     blockedAt: string | null;
 
     consecutiveFailures: number;
@@ -667,10 +888,16 @@ export namespace FlowUnblockResponse {
 
     createdBy: string | null;
 
+    delivery: Data.Delivery | null;
+
     description: string | null;
 
     deviceIds: Array<string>;
 
+    /**
+     * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+     * enabled.
+     */
     enabled: boolean;
 
     healthMonitoringEnabled: boolean;
@@ -688,6 +915,8 @@ export namespace FlowUnblockResponse {
 
     lastTriggeredAt: string | null;
 
+    lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
     name: string;
 
     notifyOnFailure: boolean;
@@ -698,7 +927,13 @@ export namespace FlowUnblockResponse {
 
     ownerId: string;
 
+    /**
+     * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+     * recordingEnabled=true, "off" = recordingEnabled=false).
+     */
     recordingEnabled: boolean;
+
+    recordingPolicy: Data.RecordingPolicy;
 
     selfHealingEnabled: boolean;
 
@@ -723,6 +958,28 @@ export namespace FlowUnblockResponse {
      */
     userId: string;
   }
+
+  export namespace Data {
+    export interface Delivery {
+      destination: 'one_drive' | 'google_drive';
+
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
+    }
+  }
 }
 
 export interface FlowCreateParams {
@@ -735,6 +992,8 @@ export interface FlowCreateParams {
   cooldownScope?: 'flow' | 'device';
 
   cooldownSeconds?: number | null;
+
+  delivery?: FlowCreateParams.Delivery;
 
   description?: string;
 
@@ -751,6 +1010,8 @@ export interface FlowCreateParams {
   notifyWebhookId?: string | null;
 
   recordingEnabled?: boolean;
+
+  recordingPolicy?: FlowCreateParams.RecordingPolicy;
 
   selfHealingEnabled?: boolean;
 
@@ -770,6 +1031,8 @@ export namespace FlowCreateParams {
     nameOverride?: string;
 
     overrides?: Action.Overrides | null;
+
+    recordingEnabled?: boolean;
   }
 
   export namespace Action {
@@ -783,6 +1046,8 @@ export namespace FlowCreateParams {
       nameOverride?: string;
 
       overrides?: Child.Overrides | null;
+
+      recordingEnabled?: boolean;
     }
 
     export namespace Child {
@@ -795,12 +1060,34 @@ export namespace FlowCreateParams {
       params?: { [key: string]: unknown };
     }
   }
+
+  export interface Delivery {
+    destination: 'one_drive' | 'google_drive';
+
+    folder?: string;
+
+    recording?: Delivery.Recording;
+
+    screenshots?: unknown;
+  }
+
+  export namespace Delivery {
+    export interface Recording {
+      filename: string;
+    }
+  }
+
+  export interface RecordingPolicy {
+    mode: 'off' | 'flow' | 'selected_steps';
+  }
 }
 
 export interface FlowUpdateParams {
   cooldownScope?: 'flow' | 'device';
 
   cooldownSeconds?: number | null;
+
+  delivery?: FlowUpdateParams.Delivery | null;
 
   description?: string;
 
@@ -810,6 +1097,11 @@ export interface FlowUpdateParams {
 
   healthMonitoringEnabled?: boolean;
 
+  /**
+   * Set the visible agent lifecycle. Archive remains available only through DELETE.
+   */
+  lifecycleStatus?: 'enabled' | 'disabled';
+
   name?: string;
 
   notifyOnFailure?: boolean;
@@ -818,13 +1110,41 @@ export interface FlowUpdateParams {
 
   notifyWebhookId?: string | null;
 
+  /**
+   * @deprecated Deprecated compatibility field. true maps to
+   * recordingPolicy.mode="flow"; false maps to "off".
+   */
   recordingEnabled?: boolean;
+
+  recordingPolicy?: FlowUpdateParams.RecordingPolicy;
 
   selfHealingEnabled?: boolean;
 
   selfHealingMaxAttempts?: number;
 
   triggerId?: string;
+}
+
+export namespace FlowUpdateParams {
+  export interface Delivery {
+    destination: 'one_drive' | 'google_drive';
+
+    folder?: string;
+
+    recording?: Delivery.Recording;
+
+    screenshots?: unknown;
+  }
+
+  export namespace Delivery {
+    export interface Recording {
+      filename: string;
+    }
+  }
+
+  export interface RecordingPolicy {
+    mode: 'off' | 'flow' | 'selected_steps';
+  }
 }
 
 export interface FlowListParams {
@@ -874,6 +1194,7 @@ export declare namespace Flows {
     type FlowUpdateResponse as FlowUpdateResponse,
     type FlowListResponse as FlowListResponse,
     type FlowDeleteResponse as FlowDeleteResponse,
+    type FlowCapacityResponse as FlowCapacityResponse,
     type FlowCloneResponse as FlowCloneResponse,
     type FlowDryRunResponse as FlowDryRunResponse,
     type FlowListRepairsResponse as FlowListRepairsResponse,
