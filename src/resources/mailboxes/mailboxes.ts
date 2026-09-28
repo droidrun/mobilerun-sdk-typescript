@@ -18,13 +18,10 @@ export class Mailboxes extends APIResource {
   messages: MessagesAPI.Messages = new MessagesAPI.Messages(this._client);
 
   /**
-   * Reserves a permanently-allocated, individually-rented mailbox and starts an
-   * Autumn rental checkout. An optional localPart selects the full address local
-   * part; omitting it keeps the default random, non-guessable mx\_-prefixed address.
-   * The address is withheld until the first payment is confirmed. Idempotent on
-   * (owner, clientRequestId): same key + payload replays (200); a conflicting or
-   * already-held local part returns 409. 201 when the checkout URL is already
-   * persisted, otherwise 202 (poll GET for the URL).
+   * Creates a mailbox on the default domain or a connected custom domain. An
+   * optional `localPart` selects the address. Replaying the same `clientRequestId`
+   * and payload returns the original mailbox. Poll the mailbox when a 202 response
+   * does not yet include a checkout URL.
    *
    * @example
    * ```ts
@@ -86,10 +83,9 @@ export class Mailboxes extends APIResource {
   }
 
   /**
-   * For paid rent, schedules end-of-cycle cancellation. For an included generation,
-   * archives immediately and releases its package seat. This never deletes the
-   * mailbox, its address, or its messages — the address is permanently reserved.
-   * Idempotent.
+   * Cancels a pending mailbox or schedules an active paid mailbox for cancellation.
+   * Existing addresses and messages are retained. Repeating the request is safe. An
+   * external inbox (Gmail) cannot be cancelled here; disconnect the link instead.
    *
    * @example
    * ```ts
@@ -103,8 +99,7 @@ export class Mailboxes extends APIResource {
   }
 
   /**
-   * Returns the authoritative number of package-funded mailbox claims currently
-   * available after local reservations.
+   * Returns the number of mailboxes currently available through included capacity.
    *
    * @example
    * ```ts
@@ -116,9 +111,8 @@ export class Mailboxes extends APIResource {
   }
 
   /**
-   * Returns the highest-confidence, most recent OTP for the mailbox, restricted to
-   * messages of completed/active paid intervals. Does not wait server-side (SDKs
-   * poll). 200 with the best code, 204 when none matches.
+   * Returns the most likely recent OTP for the mailbox. Returns 204 when no matching
+   * code is available.
    *
    * @example
    * ```ts
@@ -136,8 +130,8 @@ export class Mailboxes extends APIResource {
   }
 
   /**
-   * Starts a new generation on an archived mailbox, reusing the same permanent
-   * address. Uses included capacity first unless paid rent is requested.
+   * Restarts an archived mailbox with the same address. Uses included capacity when
+   * available unless paid service is requested.
    *
    * @example
    * ```ts
@@ -155,8 +149,8 @@ export class Mailboxes extends APIResource {
   }
 
   /**
-   * Retracts a scheduled end-of-cycle cancellation for the current generation. Only
-   * valid while cancellation is pending.
+   * Withdraws a scheduled cancellation. Only available while cancellation is
+   * pending.
    *
    * @example
    * ```ts
@@ -180,7 +174,7 @@ export namespace MailboxCreateResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -192,9 +186,13 @@ export namespace MailboxCreateResponse {
 
     currentPeriodEnd: string | null;
 
+    domainId: string | null;
+
     inboundMessages: Data.InboundMessages;
 
     label: string | null;
+
+    provider: 'matix' | 'gmail';
 
     status:
       | 'provisioning'
@@ -202,7 +200,10 @@ export namespace MailboxCreateResponse {
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -228,7 +229,7 @@ export namespace MailboxRetrieveResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -240,9 +241,13 @@ export namespace MailboxRetrieveResponse {
 
     currentPeriodEnd: string | null;
 
+    domainId: string | null;
+
     inboundMessages: Data.InboundMessages;
 
     label: string | null;
+
+    provider: 'matix' | 'gmail';
 
     status:
       | 'provisioning'
@@ -250,7 +255,10 @@ export namespace MailboxRetrieveResponse {
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -276,7 +284,7 @@ export namespace MailboxUpdateResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -288,9 +296,13 @@ export namespace MailboxUpdateResponse {
 
     currentPeriodEnd: string | null;
 
+    domainId: string | null;
+
     inboundMessages: Data.InboundMessages;
 
     label: string | null;
+
+    provider: 'matix' | 'gmail';
 
     status:
       | 'provisioning'
@@ -298,7 +310,10 @@ export namespace MailboxUpdateResponse {
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -326,7 +341,7 @@ export namespace MailboxListResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -338,9 +353,13 @@ export namespace MailboxListResponse {
 
     currentPeriodEnd: string | null;
 
+    domainId: string | null;
+
     inboundMessages: Item.InboundMessages;
 
     label: string | null;
+
+    provider: 'matix' | 'gmail';
 
     status:
       | 'provisioning'
@@ -348,7 +367,10 @@ export namespace MailboxListResponse {
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Item {
@@ -374,7 +396,7 @@ export namespace MailboxDeleteResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -386,9 +408,13 @@ export namespace MailboxDeleteResponse {
 
     currentPeriodEnd: string | null;
 
+    domainId: string | null;
+
     inboundMessages: Data.InboundMessages;
 
     label: string | null;
+
+    provider: 'matix' | 'gmail';
 
     status:
       | 'provisioning'
@@ -396,7 +422,10 @@ export namespace MailboxDeleteResponse {
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -418,7 +447,13 @@ export interface MailboxCapacityResponse {
 
 export namespace MailboxCapacityResponse {
   export interface Data {
+    included: number;
+
     includedRemaining: number;
+
+    remaining: number;
+
+    status: 'available' | 'exhausted' | 'not_included';
   }
 }
 
@@ -429,7 +464,7 @@ export interface MailboxOtpResponse {
 export namespace MailboxOtpResponse {
   export interface Data {
     /**
-     * String to preserve leading zeros
+     * OTP code as text to preserve leading zeros.
      */
     code: string;
 
@@ -455,7 +490,7 @@ export namespace MailboxRestartResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -467,9 +502,13 @@ export namespace MailboxRestartResponse {
 
     currentPeriodEnd: string | null;
 
+    domainId: string | null;
+
     inboundMessages: Data.InboundMessages;
 
     label: string | null;
+
+    provider: 'matix' | 'gmail';
 
     status:
       | 'provisioning'
@@ -477,7 +516,10 @@ export namespace MailboxRestartResponse {
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -503,7 +545,7 @@ export namespace MailboxUncancelResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -515,9 +557,13 @@ export namespace MailboxUncancelResponse {
 
     currentPeriodEnd: string | null;
 
+    domainId: string | null;
+
     inboundMessages: Data.InboundMessages;
 
     label: string | null;
+
+    provider: 'matix' | 'gmail';
 
     status:
       | 'provisioning'
@@ -525,7 +571,10 @@ export namespace MailboxUncancelResponse {
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -545,17 +594,22 @@ export interface MailboxCreateParams {
   clientRequestId: string;
 
   /**
-   * Funding preference. Omit or use included for included-first activation; rent
-   * always preserves package capacity and starts paid checkout.
+   * included uses package capacity when available and otherwise starts paid
+   * checkout; included_only fails without creating a paid reservation when no
+   * included slot remains; rent always starts paid checkout.
    */
-  billingPreference?: 'included' | 'rent';
+  billingPreference?: 'included' | 'included_only' | 'rent';
+
+  /**
+   * Optional active custom mailbox domain owned by the caller. Omit to use the
+   * system domain.
+   */
+  domainId?: string;
 
   label?: string;
 
   /**
-   * Optional full mailbox local part (the address before "@"). Trimmed and
-   * lowercased before validation. Omit for a random, non-guessable mx\_-prefixed
-   * address.
+   * Optional mailbox name before the "@". Omit to generate a random address.
    */
   localPart?: string;
 }
@@ -582,10 +636,11 @@ export interface MailboxOtpParams {
 
 export interface MailboxRestartParams {
   /**
-   * Funding preference. Omit or use included for included-first activation; rent
-   * always preserves package capacity and starts paid checkout.
+   * included uses package capacity when available and otherwise starts paid
+   * checkout; included_only fails without creating a paid reservation when no
+   * included slot remains; rent always starts paid checkout.
    */
-  billingPreference?: 'included' | 'rent';
+  billingPreference?: 'included' | 'included_only' | 'rent';
 }
 
 Mailboxes.Messages = Messages;
