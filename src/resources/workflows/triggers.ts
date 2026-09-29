@@ -293,14 +293,23 @@ export interface TriggerDeleteResponse {
 
 export interface TriggerFireResponse {
   /**
+   * True when at least one attached flow was skipped because it already had an
+   * execution for this (flow, invocationId). Only ever true when the client supplied
+   * invocationId.
+   */
+  deduplicated: boolean;
+
+  /**
    * Number of flow executions enqueued. May be 0 if no flows are attached to this
-   * trigger, or if all attached flows are currently in cooldown.
+   * trigger, if all attached flows are currently in cooldown, or if every attached
+   * flow was deduplicated.
    */
   enqueuedCount: number;
 
   /**
-   * Unique ID for this fire invocation. Job IDs in the execution queue are derived
-   * from it (one per enqueued flow).
+   * Unique ID for this fire invocation (echoes the client-supplied invocationId, or
+   * a generated one). Job IDs in the execution queue are derived from it (one per
+   * enqueued flow).
    */
   invocationId: string;
 }

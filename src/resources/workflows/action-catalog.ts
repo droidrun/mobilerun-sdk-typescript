@@ -44,9 +44,13 @@ export namespace ActionCatalogRetrieveResponse {
 
     name: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+    provider: 'mobilerun' | 'oneDrive' | 'googleDrive';
+
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
     updatedAt: string | null;
+
+    outputSchema?: unknown;
 
     paramsSchema?: unknown;
   }
@@ -70,9 +74,13 @@ export namespace ActionCatalogListResponse {
 
     name: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+    provider: 'mobilerun' | 'oneDrive' | 'googleDrive';
+
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
     updatedAt: string | null;
+
+    outputSchema?: unknown;
 
     paramsSchema?: unknown;
   }
@@ -83,7 +91,7 @@ export interface ActionCatalogListParams {
 
   pageSize?: number;
 
-  service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+  service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 }
 
 export declare namespace ActionCatalog {

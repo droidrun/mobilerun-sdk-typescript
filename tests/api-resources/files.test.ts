@@ -123,7 +123,6 @@ describe('resource files', () => {
       mimeType: 'x',
       sizeBytes: 1,
       zone: 'user',
-      'Idempotency-Key': 'x',
     });
   });
 });

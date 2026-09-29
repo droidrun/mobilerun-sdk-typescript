@@ -371,6 +371,22 @@ Methods:
 - <code title="get /devices/{deviceId}/recordings/{recordingId}/trajectory">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">trajectory</a>(recordingID, { ...params }) -> void</code>
 - <code title="get /devices/{deviceId}/recordings/{recordingId}/video">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">video</a>(recordingID, { ...params }) -> void</code>
 
+## TrafficSessions
+
+Types:
+
+- <code><a href="./src/resources/devices/traffic-sessions.ts">TrafficSessionCreateResponse</a></code>
+- <code><a href="./src/resources/devices/traffic-sessions.ts">TrafficSessionRetrieveResponse</a></code>
+- <code><a href="./src/resources/devices/traffic-sessions.ts">TrafficSessionListResponse</a></code>
+- <code><a href="./src/resources/devices/traffic-sessions.ts">TrafficSessionDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /devices/{deviceId}/traffic/sessions">client.devices.trafficSessions.<a href="./src/resources/devices/traffic-sessions.ts">create</a>(deviceID, { ...params }) -> TrafficSessionCreateResponse</code>
+- <code title="get /devices/{deviceId}/traffic/sessions/{sessionId}">client.devices.trafficSessions.<a href="./src/resources/devices/traffic-sessions.ts">retrieve</a>(sessionID, { ...params }) -> TrafficSessionRetrieveResponse</code>
+- <code title="get /devices/{deviceId}/traffic/sessions">client.devices.trafficSessions.<a href="./src/resources/devices/traffic-sessions.ts">list</a>(deviceID, { ...params }) -> TrafficSessionListResponse</code>
+- <code title="delete /devices/{deviceId}/traffic/sessions/{sessionId}">client.devices.trafficSessions.<a href="./src/resources/devices/traffic-sessions.ts">delete</a>(sessionID, { ...params }) -> TrafficSessionDeleteResponse</code>
+
 # Models
 
 Types:
@@ -591,6 +607,7 @@ Types:
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowUpdateResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowListResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowDeleteResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowCapacityResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowCloneResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowDryRunResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowListRepairsResponse</a></code>
@@ -603,6 +620,7 @@ Methods:
 - <code title="patch /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">update</a>(flowID, { ...params }) -> FlowUpdateResponse</code>
 - <code title="get /flows">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">list</a>({ ...params }) -> FlowListResponse</code>
 - <code title="delete /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">delete</a>(flowID) -> FlowDeleteResponse</code>
+- <code title="get /flows/capacity">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">capacity</a>() -> FlowCapacityResponse</code>
 - <code title="post /flows/{flowId}/clone">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">clone</a>(flowID, { ...params }) -> FlowCloneResponse</code>
 - <code title="post /flows/{flowId}/dry-run">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">dryRun</a>(flowID, { ...params }) -> FlowDryRunResponse</code>
 - <code title="get /flows/{flowId}/repairs">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">listRepairs</a>(flowID) -> FlowListRepairsResponse</code>
@@ -828,47 +846,6 @@ Methods:
 - <code title="get /notifications/preferences">client.notifications.<a href="./src/resources/notifications.ts">getPreferences</a>() -> NotificationGetPreferencesResponse</code>
 - <code title="patch /notifications/preferences">client.notifications.<a href="./src/resources/notifications.ts">updatePreferences</a>({ ...params }) -> NotificationUpdatePreferencesResponse</code>
 
-# Esims
-
-Types:
-
-- <code><a href="./src/resources/esims/esims.ts">EsimCreateResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimRetrieveResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimUpdateResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimListResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimCapacityResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimConfirmPaymentResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimImportResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimInstallResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimInstallStatusResponse</a></code>
-- <code><a href="./src/resources/esims/esims.ts">EsimSelectorResponse</a></code>
-
-Methods:
-
-- <code title="post /numbers/esims">client.esims.<a href="./src/resources/esims/esims.ts">create</a>({ ...params }) -> EsimCreateResponse</code>
-- <code title="get /numbers/esims/{id}">client.esims.<a href="./src/resources/esims/esims.ts">retrieve</a>(id) -> EsimRetrieveResponse</code>
-- <code title="patch /numbers/esims/{id}">client.esims.<a href="./src/resources/esims/esims.ts">update</a>(id, { ...params }) -> EsimUpdateResponse</code>
-- <code title="get /numbers/esims">client.esims.<a href="./src/resources/esims/esims.ts">list</a>({ ...params }) -> EsimListResponse</code>
-- <code title="delete /numbers/esims/{id}">client.esims.<a href="./src/resources/esims/esims.ts">delete</a>(id) -> void</code>
-- <code title="get /numbers/esims/capacity">client.esims.<a href="./src/resources/esims/esims.ts">capacity</a>() -> EsimCapacityResponse</code>
-- <code title="post /numbers/esims/{id}/confirm-payment">client.esims.<a href="./src/resources/esims/esims.ts">confirmPayment</a>(id) -> EsimConfirmPaymentResponse</code>
-- <code title="post /numbers/esims/import">client.esims.<a href="./src/resources/esims/esims.ts">import</a>({ ...params }) -> EsimImportResponse</code>
-- <code title="post /numbers/esims/{id}/install">client.esims.<a href="./src/resources/esims/esims.ts">install</a>(id, { ...params }) -> EsimInstallResponse</code>
-- <code title="get /numbers/esims/{id}/install-status">client.esims.<a href="./src/resources/esims/esims.ts">installStatus</a>(id) -> EsimInstallStatusResponse</code>
-- <code title="get /numbers/esims/selector">client.esims.<a href="./src/resources/esims/esims.ts">selector</a>({ ...params }) -> EsimSelectorResponse</code>
-
-## Messages
-
-Types:
-
-- <code><a href="./src/resources/esims/messages.ts">MessageListResponse</a></code>
-- <code><a href="./src/resources/esims/messages.ts">MessageSendResponse</a></code>
-
-Methods:
-
-- <code title="get /numbers/esims/{id}/messages">client.esims.messages.<a href="./src/resources/esims/messages.ts">list</a>(id, { ...params }) -> MessageListResponse</code>
-- <code title="post /numbers/esims/{id}/messages">client.esims.messages.<a href="./src/resources/esims/messages.ts">send</a>(id, { ...params }) -> MessageSendResponse</code>
-
 # Messages
 
 Types:
@@ -900,6 +877,7 @@ Types:
 - <code><a href="./src/resources/numbers/numbers.ts">NumberUpdateResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberListResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberDeleteResponse</a></code>
+- <code><a href="./src/resources/numbers/numbers.ts">NumberCapacityResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberCountriesResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberPurposesResponse</a></code>
 
@@ -910,6 +888,7 @@ Methods:
 - <code title="patch /numbers/phones/{id}">client.numbers.<a href="./src/resources/numbers/numbers.ts">update</a>(id, { ...params }) -> NumberUpdateResponse</code>
 - <code title="get /numbers/phones">client.numbers.<a href="./src/resources/numbers/numbers.ts">list</a>({ ...params }) -> NumberListResponse</code>
 - <code title="delete /numbers/phones/{id}">client.numbers.<a href="./src/resources/numbers/numbers.ts">delete</a>(id) -> NumberDeleteResponse</code>
+- <code title="get /numbers/phones/capacity">client.numbers.<a href="./src/resources/numbers/numbers.ts">capacity</a>({ ...params }) -> NumberCapacityResponse</code>
 - <code title="get /numbers/phones/countries">client.numbers.<a href="./src/resources/numbers/numbers.ts">countries</a>() -> NumberCountriesResponse</code>
 - <code title="get /numbers/phones/purposes">client.numbers.<a href="./src/resources/numbers/numbers.ts">purposes</a>() -> NumberPurposesResponse</code>
 

@@ -68,16 +68,8 @@ export class Tasks extends APIResource {
    * Create and dispatch a new agent task. Returns the task ID and device stream
    * details.
    */
-  run(params: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post('/tasks', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+  run(body: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
+    return this._client.post('/tasks', { body, ...options });
   }
 
   /**
@@ -134,7 +126,15 @@ export namespace TaskRetrieveResponse {
 
     ownerId: string;
 
-    status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
+    status:
+      | 'prepared'
+      | 'queued'
+      | 'created'
+      | 'running'
+      | 'cancelling'
+      | 'completed'
+      | 'failed'
+      | 'cancelled';
 
     task: string;
 
@@ -146,8 +146,6 @@ export namespace TaskRetrieveResponse {
     userId: string;
 
     accessibility?: boolean;
-
-    agentId?: number;
 
     apps?: Array<string>;
 
@@ -175,11 +173,6 @@ export namespace TaskRetrieveResponse {
 
     maxSteps?: number;
 
-    /**
-     * Memory namespace for cross-task personalization
-     */
-    memoryNamespace?: string;
-
     message?: string | null;
 
     output?: { [key: string]: unknown } | null;
@@ -187,6 +180,22 @@ export namespace TaskRetrieveResponse {
     outputSchema?: { [key: string]: unknown } | null;
 
     reasoning?: boolean;
+
+    recordingDeviceId?: string | null;
+
+    /**
+     * Record device video for the whole task and persist a retrievable reference
+     */
+    recordingEnabled?: boolean;
+
+    recordingId?: string | null;
+
+    /**
+     * Where the task came from: 'api' for tasks created via POST /tasks, 'agent' for
+     * tasks spawned by an agent step. Agent tasks are readable (status, trajectory,
+     * media) but not controllable via this API.
+     */
+    source?: 'api' | 'agent';
 
     stealth?: boolean;
 
@@ -201,6 +210,10 @@ export namespace TaskRetrieveResponse {
 
     succeeded?: boolean | null;
 
+    /**
+     * @deprecated Deprecated and ignored. Sampling behavior is controlled by the model
+     * provider.
+     */
     temperature?: number;
 
     updatedAt?: string;
@@ -249,7 +262,15 @@ export namespace TaskListResponse {
 
     ownerId: string;
 
-    status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
+    status:
+      | 'prepared'
+      | 'queued'
+      | 'created'
+      | 'running'
+      | 'cancelling'
+      | 'completed'
+      | 'failed'
+      | 'cancelled';
 
     task: string;
 
@@ -261,8 +282,6 @@ export namespace TaskListResponse {
     userId: string;
 
     accessibility?: boolean;
-
-    agentId?: number;
 
     apps?: Array<string>;
 
@@ -290,11 +309,6 @@ export namespace TaskListResponse {
 
     maxSteps?: number;
 
-    /**
-     * Memory namespace for cross-task personalization
-     */
-    memoryNamespace?: string;
-
     message?: string | null;
 
     output?: { [key: string]: unknown } | null;
@@ -302,6 +316,22 @@ export namespace TaskListResponse {
     outputSchema?: { [key: string]: unknown } | null;
 
     reasoning?: boolean;
+
+    recordingDeviceId?: string | null;
+
+    /**
+     * Record device video for the whole task and persist a retrievable reference
+     */
+    recordingEnabled?: boolean;
+
+    recordingId?: string | null;
+
+    /**
+     * Where the task came from: 'api' for tasks created via POST /tasks, 'agent' for
+     * tasks spawned by an agent step. Agent tasks are readable (status, trajectory,
+     * media) but not controllable via this API.
+     */
+    source?: 'api' | 'agent';
 
     stealth?: boolean;
 
@@ -316,6 +346,10 @@ export namespace TaskListResponse {
 
     succeeded?: boolean | null;
 
+    /**
+     * @deprecated Deprecated and ignored. Sampling behavior is controlled by the model
+     * provider.
+     */
     temperature?: number;
 
     updatedAt?: string;
@@ -338,7 +372,7 @@ export interface TaskGetStatusResponse {
   /**
    * The status of the task
    */
-  status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
+  status: 'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
   /**
    * Execution metadata for abnormal terminal outcomes
@@ -359,6 +393,16 @@ export interface TaskGetStatusResponse {
    * Structured output if outputSchema was set
    */
   output?: { [key: string]: unknown } | null;
+
+  /**
+   * Device ID associated with recordingId
+   */
+  recordingDeviceId?: string | null;
+
+  /**
+   * ID of the task's whole-task video recording, if recordingEnabled was set
+   */
+  recordingId?: string | null;
 
   /**
    * Number of steps taken
@@ -702,6 +746,11 @@ export namespace TaskGetTrajectoryResponse {
       thought: string;
 
       code?: string | null;
+
+      /**
+       * Classification of tool-call markup in an LLM response.
+       */
+      tool_call_status?: 'valid' | 'no_markup' | 'malformed';
 
       usage?: Data.Usage | null;
     }
@@ -1060,7 +1109,7 @@ export interface TaskRunResponse {
   /**
    * The status of the task (queued or created)
    */
-  status: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
+  status: 'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
   /**
    * The URL of the stream (null when queued)
@@ -1108,116 +1157,89 @@ export interface TaskListParams {
    */
   query?: string | null;
 
-  status?: 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled' | null;
+  /**
+   * Only tasks created via the API ('api') or spawned by an agent step ('agent').
+   */
+  source?: 'api' | 'agent' | null;
+
+  status?:
+    | 'prepared'
+    | 'queued'
+    | 'created'
+    | 'running'
+    | 'cancelling'
+    | 'completed'
+    | 'failed'
+    | 'cancelled'
+    | null;
 }
 
 export interface TaskRunParams {
   /**
-   * Body param: The ID of the device to run the task on.
+   * The ID of the device to run the task on.
    */
   deviceId: string;
 
-  /**
-   * Body param
-   */
   task: string;
 
-  /**
-   * Body param
-   */
   accessibility?: boolean;
 
-  /**
-   * Body param
-   */
-  agentId?: number;
-
-  /**
-   * Body param
-   */
   apps?: Array<string>;
 
-  /**
-   * Body param
-   */
   continueOnFailure?: boolean;
 
-  /**
-   * Body param
-   */
   credentials?: Array<TaskRunParams.Credential>;
 
   /**
-   * Body param: The display ID of the device to run the task on.
+   * The display ID of the device to run the task on.
    */
   displayId?: number;
 
   /**
-   * Body param
+   * Maximum agent execution time in seconds (1–2700).
    */
   executionTimeout?: number;
 
-  /**
-   * Body param
-   */
   files?: Array<string>;
 
   /**
-   * Body param: The LLM model identifier to use for the task (e.g.
-   * 'google/gemini-3.5-flash')
+   * The LLM model identifier to use for the task (e.g. 'openai/gpt-6-luna')
    */
   llmModel?: string;
 
-  /**
-   * Body param
-   */
   maxSteps?: number;
 
-  /**
-   * Body param: Memory namespace for cross-task personalization
-   */
-  memoryNamespace?: string;
-
-  /**
-   * Body param
-   */
   outputSchema?: { [key: string]: unknown } | null;
 
-  /**
-   * Body param
-   */
   reasoning?: boolean;
 
   /**
-   * Body param
+   * Record device video for the whole task and persist a retrievable reference
    */
+  recordingEnabled?: boolean;
+
   stealth?: boolean;
 
   /**
-   * Body param: LLM model used by sub-agent roles: executor, app_opener,
-   * structured_output
+   * LLM model used by sub-agent roles: executor, app_opener, structured_output
    */
   subagentModel?: string;
 
   /**
-   * Body param
+   * Optional custom behavioral overlay applied on top of the agent's default system
+   * prompts. Never echoed back in responses or errors.
+   */
+  systemPrompt?: string | null;
+
+  /**
+   * @deprecated Deprecated and ignored. Sampling behavior is controlled by the model
+   * provider.
    */
   temperature?: number;
 
-  /**
-   * Body param
-   */
   vision?: boolean;
 
-  /**
-   * Body param
-   */
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
-
-  /**
-   * Header param
-   */
-  'Idempotency-Key'?: string;
 }
 
 export namespace TaskRunParams {
@@ -1238,8 +1260,6 @@ export interface TaskRunStreamedParams {
 
   accessibility?: boolean;
 
-  agentId?: number;
-
   apps?: Array<string>;
 
   continueOnFailure?: boolean;
@@ -1251,25 +1271,28 @@ export interface TaskRunStreamedParams {
    */
   displayId?: number;
 
+  /**
+   * Maximum agent execution time in seconds (1–2700).
+   */
   executionTimeout?: number;
 
   files?: Array<string>;
 
   /**
-   * The LLM model identifier to use for the task (e.g. 'google/gemini-3.5-flash')
+   * The LLM model identifier to use for the task (e.g. 'openai/gpt-6-luna')
    */
   llmModel?: string;
 
   maxSteps?: number;
 
-  /**
-   * Memory namespace for cross-task personalization
-   */
-  memoryNamespace?: string;
-
   outputSchema?: { [key: string]: unknown } | null;
 
   reasoning?: boolean;
+
+  /**
+   * Record device video for the whole task and persist a retrievable reference
+   */
+  recordingEnabled?: boolean;
 
   stealth?: boolean;
 
@@ -1278,6 +1301,16 @@ export interface TaskRunStreamedParams {
    */
   subagentModel?: string;
 
+  /**
+   * Optional custom behavioral overlay applied on top of the agent's default system
+   * prompts. Never echoed back in responses or errors.
+   */
+  systemPrompt?: string | null;
+
+  /**
+   * @deprecated Deprecated and ignored. Sampling behavior is controlled by the model
+   * provider.
+   */
   temperature?: number;
 
   vision?: boolean;
