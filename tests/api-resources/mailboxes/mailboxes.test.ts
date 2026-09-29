@@ -9,8 +9,8 @@ const client = new Mobilerun({
 
 describe('resource mailboxes', () => {
   // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.mailboxes.create({ clientRequestId: 'x' });
+  test.skip('create', async () => {
+    const responsePromise = client.mailboxes.create();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,13 +21,19 @@ describe('resource mailboxes', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.mailboxes.create({
-      clientRequestId: 'x',
-      billingPreference: 'included',
-      label: 'label',
-      localPart: 'jane-doe',
-    });
+  test.skip('create: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.mailboxes.create(
+        {
+          billingPreference: 'included',
+          domainId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          label: 'label',
+          localPart: 'jane-doe',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled

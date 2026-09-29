@@ -84,22 +84,32 @@ export interface ProxyRetrieveResponse {
 
   host: string;
 
+  /**
+   * Display name for the proxy. Set it on create or change it with PATCH; when no
+   * name has been set, a label generated from the proxy's country, type, and id is
+   * returned instead — so this is never empty.
+   */
+  name: string;
+
   password: string;
 
   port: number;
 
   /**
-   * Lifecycle of a proxy. A freshly created proxy is `provisioning` — or
-   * `pending_payment` until the customer completes checkout — and becomes `active`
-   * once its upstream is assigned. `cancelling` retains full access through the paid
-   * period; when the subscription expires the proxy is `ended`. `error` marks a
-   * failed provisioning attempt.
+   * Lifecycle of a proxy. A freshly created proxy is `checking` while its billing
+   * identity is being resolved — clients should poll until a `paymentUrl` or a later
+   * status appears — then `provisioning` — or `pending_payment` until the customer
+   * completes checkout — and becomes `active` once its upstream is assigned.
+   * `cancelling` retains full access through the paid period; when the subscription
+   * expires the proxy is `ended`. `error` marks a failed provisioning attempt.
    */
-  status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
+  status: 'checking' | 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
 
   type: 'dedicated_residential' | 'residential' | 'mobile';
 
   username: string;
+
+  billingMode?: 'included' | 'standalone_paid';
 
   /**
    * Checkout URL to complete payment while status is `pending_payment`. Null once
@@ -136,20 +146,30 @@ export namespace ProxyListResponse {
 
     host: string;
 
+    /**
+     * Display name for the proxy. Set it on create or change it with PATCH; when no
+     * name has been set, a label generated from the proxy's country, type, and id is
+     * returned instead — so this is never empty.
+     */
+    name: string;
+
     port: number;
 
     /**
-     * Lifecycle of a proxy. A freshly created proxy is `provisioning` — or
-     * `pending_payment` until the customer completes checkout — and becomes `active`
-     * once its upstream is assigned. `cancelling` retains full access through the paid
-     * period; when the subscription expires the proxy is `ended`. `error` marks a
-     * failed provisioning attempt.
+     * Lifecycle of a proxy. A freshly created proxy is `checking` while its billing
+     * identity is being resolved — clients should poll until a `paymentUrl` or a later
+     * status appears — then `provisioning` — or `pending_payment` until the customer
+     * completes checkout — and becomes `active` once its upstream is assigned.
+     * `cancelling` retains full access through the paid period; when the subscription
+     * expires the proxy is `ended`. `error` marks a failed provisioning attempt.
      */
-    status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
+    status: 'checking' | 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
 
     type: 'dedicated_residential' | 'residential' | 'mobile';
 
     username: string;
+
+    billingMode?: 'included' | 'standalone_paid';
   }
 
   /**
@@ -203,22 +223,32 @@ export interface ProxyBuyResponse {
 
   host: string;
 
+  /**
+   * Display name for the proxy. Set it on create or change it with PATCH; when no
+   * name has been set, a label generated from the proxy's country, type, and id is
+   * returned instead — so this is never empty.
+   */
+  name: string;
+
   password: string;
 
   port: number;
 
   /**
-   * Lifecycle of a proxy. A freshly created proxy is `provisioning` — or
-   * `pending_payment` until the customer completes checkout — and becomes `active`
-   * once its upstream is assigned. `cancelling` retains full access through the paid
-   * period; when the subscription expires the proxy is `ended`. `error` marks a
-   * failed provisioning attempt.
+   * Lifecycle of a proxy. A freshly created proxy is `checking` while its billing
+   * identity is being resolved — clients should poll until a `paymentUrl` or a later
+   * status appears — then `provisioning` — or `pending_payment` until the customer
+   * completes checkout — and becomes `active` once its upstream is assigned.
+   * `cancelling` retains full access through the paid period; when the subscription
+   * expires the proxy is `ended`. `error` marks a failed provisioning attempt.
    */
-  status: 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
+  status: 'checking' | 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
 
   type: 'dedicated_residential' | 'residential' | 'mobile';
 
   username: string;
+
+  billingMode?: 'included' | 'standalone_paid';
 
   /**
    * Checkout URL to complete payment while status is `pending_payment`. Null once
@@ -453,6 +483,13 @@ export interface ProxyBuyParams {
   country: string;
 
   type: 'dedicated_residential' | 'residential' | 'mobile';
+
+  /**
+   * Display name for the proxy, up to 64 characters excluding surrounding
+   * whitespace, and containing no NUL. Omit it (or send only whitespace) to get a
+   * generated label built from the country, type, and id.
+   */
+  name?: string;
 }
 
 export interface ProxyListConnectionsParams {

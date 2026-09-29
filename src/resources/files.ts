@@ -66,16 +66,8 @@ export class Files extends APIResource {
   /**
    * Mint a presigned PUT URL for a user file upload
    */
-  uploadURL(params: FileUploadURLParams, options?: RequestOptions): APIPromise<FileUploadURLResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post('/agents/files/upload-url', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+  uploadURL(body: FileUploadURLParams, options?: RequestOptions): APIPromise<FileUploadURLResponse> {
+    return this._client.post('/agents/files/upload-url', { body, ...options });
   }
 }
 
@@ -97,6 +89,44 @@ export interface FileUpdateResponse {
   sizeBytes: number;
 
   zone: 'user' | 'agent' | 'workflow' | 'skills';
+
+  collectionStatus?: FileUpdateResponse.UnionMember0 | FileUpdateResponse.UnionMember1;
+}
+
+export namespace FileUpdateResponse {
+  export interface UnionMember0 {
+    completeness: 'complete' | 'partial' | 'none' | 'unknown';
+
+    coverage: 'exhaustive' | 'bounded' | 'unknown';
+
+    endReached: boolean;
+
+    records: UnionMember0.Records;
+
+    resumable: boolean;
+
+    version: 1;
+  }
+
+  export namespace UnionMember0 {
+    export interface Records {
+      reported: number;
+
+      unit: string;
+    }
+  }
+
+  export interface UnionMember1 {
+    completeness: 'unknown';
+
+    coverage: 'unknown';
+
+    endReached: false;
+
+    resumable: false;
+
+    version: 1;
+  }
 }
 
 export interface FileListResponse {
@@ -124,6 +154,44 @@ export namespace FileListResponse {
     sizeBytes: number;
 
     zone: 'user' | 'agent' | 'workflow' | 'skills';
+
+    collectionStatus?: File.UnionMember0 | File.UnionMember1;
+  }
+
+  export namespace File {
+    export interface UnionMember0 {
+      completeness: 'complete' | 'partial' | 'none' | 'unknown';
+
+      coverage: 'exhaustive' | 'bounded' | 'unknown';
+
+      endReached: boolean;
+
+      records: UnionMember0.Records;
+
+      resumable: boolean;
+
+      version: 1;
+    }
+
+    export namespace UnionMember0 {
+      export interface Records {
+        reported: number;
+
+        unit: string;
+      }
+    }
+
+    export interface UnionMember1 {
+      completeness: 'unknown';
+
+      coverage: 'unknown';
+
+      endReached: false;
+
+      resumable: false;
+
+      version: 1;
+    }
   }
 
   export interface Quota {
@@ -163,6 +231,44 @@ export interface FileConfirmResponse {
   state: 'ready';
 
   zone: 'user' | 'agent' | 'workflow' | 'skills';
+
+  collectionStatus?: FileConfirmResponse.UnionMember0 | FileConfirmResponse.UnionMember1;
+}
+
+export namespace FileConfirmResponse {
+  export interface UnionMember0 {
+    completeness: 'complete' | 'partial' | 'none' | 'unknown';
+
+    coverage: 'exhaustive' | 'bounded' | 'unknown';
+
+    endReached: boolean;
+
+    records: UnionMember0.Records;
+
+    resumable: boolean;
+
+    version: 1;
+  }
+
+  export namespace UnionMember0 {
+    export interface Records {
+      reported: number;
+
+      unit: string;
+    }
+  }
+
+  export interface UnionMember1 {
+    completeness: 'unknown';
+
+    coverage: 'unknown';
+
+    endReached: false;
+
+    resumable: false;
+
+    version: 1;
+  }
 }
 
 export interface FileUploadURLResponse {
@@ -184,30 +290,13 @@ export interface FileListParams {
 }
 
 export interface FileUploadURLParams {
-  /**
-   * Body param
-   */
   filename: string;
 
-  /**
-   * Body param
-   */
   mimeType: string;
 
-  /**
-   * Body param
-   */
   sizeBytes: number;
 
-  /**
-   * Body param
-   */
   zone?: 'user' | 'skills';
-
-  /**
-   * Header param
-   */
-  'Idempotency-Key'?: string;
 }
 
 export declare namespace Files {

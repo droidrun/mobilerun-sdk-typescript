@@ -26,7 +26,6 @@ describe('resource conversations', () => {
       title: 'x',
       agent: 'x',
       description: 'description',
-      'Idempotency-Key': 'Idempotency-Key',
     });
   });
 
@@ -87,6 +86,7 @@ describe('resource conversations', () => {
   test.skip('abort: required and optional params', async () => {
     const response = await client.assistant.conversations.abort({
       sessionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      expectedTurnId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
   });
 

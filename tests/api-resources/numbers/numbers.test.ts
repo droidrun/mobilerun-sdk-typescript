@@ -30,7 +30,6 @@ describe('resource numbers', () => {
           country: 'de',
           label: 'Support line',
           purpose: 'telegram',
-          'Idempotency-Key': 'x',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -103,6 +102,23 @@ describe('resource numbers', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('capacity: only required params', async () => {
+    const responsePromise = client.numbers.capacity({ country: 'de' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('capacity: required and optional params', async () => {
+    const response = await client.numbers.capacity({ country: 'de' });
   });
 
   // Mock server tests are disabled
