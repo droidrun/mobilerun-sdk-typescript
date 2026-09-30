@@ -9,8 +9,8 @@ const client = new Mobilerun({
 
 describe('resource trafficSessions', () => {
   // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.devices.trafficSessions.create('deviceId', { 'Idempotency-Key': 'x' });
+  test.skip('create', async () => {
+    const responsePromise = client.devices.trafficSessions.create('deviceId', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,15 +18,6 @@ describe('resource trafficSessions', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.devices.trafficSessions.create('deviceId', {
-      'Idempotency-Key': 'x',
-      expiresInSeconds: 60,
-      maxBodyBytes: 0,
-    });
   });
 
   // Mock server tests are disabled

@@ -26,7 +26,6 @@ describe('resource conversations', () => {
       title: 'x',
       agent: 'x',
       description: 'description',
-      'Idempotency-Key': 'Idempotency-Key',
     });
   });
 

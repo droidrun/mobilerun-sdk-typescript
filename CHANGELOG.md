@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.5.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.4.0...v5.5.0) (2026-09-16)
+
+
+### Chores
+
+* release 5.5.0 ([d65ead3](https://github.com/droidrun/mobilerun-sdk-typescript/commit/d65ead3d3fe2e70b8a85e1b75f7b6ddbea91ffda))
+* **release:** bump version 5.5.0 ([0e948b8](https://github.com/droidrun/mobilerun-sdk-typescript/commit/0e948b8abc70b60039350285d7f0d8146651ebb5))
+
 ## [5.4.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.3.0...v5.4.0) (2026-08-24)
 
 

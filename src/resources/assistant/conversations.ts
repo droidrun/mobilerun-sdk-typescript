@@ -14,16 +14,8 @@ export class Conversations extends APIResource {
    * caller within the 24-hour idempotency window returns the already-created session
    * instead of a second one.
    */
-  create(params: ConversationCreateParams, options?: RequestOptions): APIPromise<ConversationCreateResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post('/assistant/chat/sessions', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+  create(body: ConversationCreateParams, options?: RequestOptions): APIPromise<ConversationCreateResponse> {
+    return this._client.post('/assistant/chat/sessions', { body, ...options });
   }
 
   /**
@@ -167,6 +159,8 @@ export namespace ConversationCreateResponse {
 
     createdAt: string;
 
+    creditsUsed: number | null;
+
     description: string | null;
 
     lastActiveAt: string;
@@ -209,6 +203,8 @@ export namespace ConversationUpdateResponse {
 
     createdAt: string;
 
+    creditsUsed: number | null;
+
     description: string | null;
 
     lastActiveAt: string;
@@ -250,6 +246,8 @@ export namespace ConversationListResponse {
     costUsd: number;
 
     createdAt: string;
+
+    creditsUsed: number | null;
 
     description: string | null;
 
@@ -294,6 +292,8 @@ export namespace ConversationListResponse {
     costUsd: number;
 
     createdAt: string;
+
+    creditsUsed: number | null;
 
     description: string | null;
 
@@ -429,27 +429,11 @@ export interface ConversationSendResponse {
 export type ConversationStreamResponse = string;
 
 export interface ConversationCreateParams {
-  /**
-   * Body param
-   */
   title: string;
 
-  /**
-   * Body param
-   */
   agent?: string;
 
-  /**
-   * Body param
-   */
   description?: string;
-
-  /**
-   * Header param: Optional client key. Reusing the same key with the same request
-   * body by the same authenticated caller within 24 hours returns the
-   * already-created session instead of a second one.
-   */
-  'Idempotency-Key'?: string;
 }
 
 export interface ConversationUpdateParams {

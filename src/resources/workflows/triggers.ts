@@ -465,13 +465,6 @@ export interface TriggerFireParams {
    * otherwise only "must be a JSON object" is enforced.
    */
   payload: { [key: string]: unknown };
-
-  /**
-   * Optional client-supplied idempotency key. When provided, a flow that already has
-   * an execution for this (flow, invocationId) is skipped and `deduplicated` is
-   * true. When omitted a fresh server-side id is generated (no dedup).
-   */
-  invocationId?: string;
 }
 
 export declare namespace Triggers {

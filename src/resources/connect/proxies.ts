@@ -29,16 +29,8 @@ export class Proxies extends APIResource {
   /**
    * Provisions a proxy of the requested type for the caller in the selected country.
    */
-  buy(params: ProxyBuyParams, options?: RequestOptions): APIPromise<ProxyBuyResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post('/connect/proxies', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+  buy(body: ProxyBuyParams, options?: RequestOptions): APIPromise<ProxyBuyResponse> {
+    return this._client.post('/connect/proxies', { body, ...options });
   }
 
   /**
@@ -91,6 +83,13 @@ export interface ProxyRetrieveResponse {
   createdAt: string;
 
   host: string;
+
+  /**
+   * Display name for the proxy. Set it on create or change it with PATCH; when no
+   * name has been set, a label generated from the proxy's country, type, and id is
+   * returned instead — so this is never empty.
+   */
+  name: string;
 
   password: string;
 
@@ -146,6 +145,13 @@ export namespace ProxyListResponse {
     createdAt: string;
 
     host: string;
+
+    /**
+     * Display name for the proxy. Set it on create or change it with PATCH; when no
+     * name has been set, a label generated from the proxy's country, type, and id is
+     * returned instead — so this is never empty.
+     */
+    name: string;
 
     port: number;
 
@@ -216,6 +222,13 @@ export interface ProxyBuyResponse {
   createdAt: string;
 
   host: string;
+
+  /**
+   * Display name for the proxy. Set it on create or change it with PATCH; when no
+   * name has been set, a label generated from the proxy's country, type, and id is
+   * returned instead — so this is never empty.
+   */
+  name: string;
 
   password: string;
 
@@ -465,22 +478,18 @@ export interface ProxyListParams {
 
 export interface ProxyBuyParams {
   /**
-   * Body param: ISO 3166-1 alpha-2 country code to provision the proxy in.
+   * ISO 3166-1 alpha-2 country code to provision the proxy in.
    */
   country: string;
 
-  /**
-   * Body param
-   */
   type: 'dedicated_residential' | 'residential' | 'mobile';
 
   /**
-   * Header param: Optional idempotency key, unique per owner (1-128 characters after
-   * trimming; surrounding whitespace is ignored). Reusing a key returns the
-   * originally created proxy with its original credentials, regardless of changed
-   * request parameters.
+   * Display name for the proxy, up to 64 characters excluding surrounding
+   * whitespace, and containing no NUL. Omit it (or send only whitespace) to get a
+   * generated label built from the country, type, and id.
    */
-  'Idempotency-Key'?: string;
+  name?: string;
 }
 
 export interface ProxyListConnectionsParams {

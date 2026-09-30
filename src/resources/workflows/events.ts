@@ -57,7 +57,7 @@ export namespace EventDryRunResponse {
 
         recordingEnabled: boolean;
 
-        service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks';
+        service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
 
         /**
          * Nested child actions (loop/branch bodies), each the same shape as a
@@ -84,6 +84,8 @@ export namespace EventDryRunResponse {
         createdAt: string | null;
 
         createdBy: string | null;
+
+        delivery: Flow.Delivery | null;
 
         description: string | null;
 
@@ -155,6 +157,22 @@ export namespace EventDryRunResponse {
       }
 
       export namespace Flow {
+        export interface Delivery {
+          destination: 'one_drive' | 'google_drive';
+
+          folder?: string;
+
+          recording?: Delivery.Recording;
+
+          screenshots?: unknown;
+        }
+
+        export namespace Delivery {
+          export interface Recording {
+            filename: string;
+          }
+        }
+
         export interface RecordingPolicy {
           mode: 'off' | 'flow' | 'selected_steps';
         }

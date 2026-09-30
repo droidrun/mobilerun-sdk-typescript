@@ -336,6 +336,7 @@ export class Mobilerun {
     }
 
     this._options = options;
+    this.idempotencyHeader = 'Idempotency-Key';
 
     this.apiKey = apiKey;
   }

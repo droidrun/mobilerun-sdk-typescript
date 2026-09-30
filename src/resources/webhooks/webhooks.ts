@@ -372,6 +372,8 @@ export namespace WebhookEventTypesResponse {
           webhook: boolean;
 
           agent?: boolean;
+
+          live?: boolean;
         }
       }
     }

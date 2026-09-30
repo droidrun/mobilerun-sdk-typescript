@@ -5,7 +5,6 @@ import * as Shared from '../shared';
 import * as MessagesAPI from './messages';
 import { MessageListParams, MessageListResponse, Messages } from './messages';
 import { APIPromise } from '../../core/api-promise';
-import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -22,18 +21,10 @@ export class Numbers extends APIResource {
    * ```
    */
   create(
-    params: NumberCreateParams | null | undefined = {},
+    body: NumberCreateParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<NumberCreateResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params ?? {};
-    return this._client.post('/numbers/phones', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+    return this._client.post('/numbers/phones', { body, ...options });
   }
 
   /**
@@ -362,33 +353,28 @@ export namespace NumberPurposesResponse {
 
 export interface NumberCreateParams {
   /**
-   * Body param: Use included capacity when available, require included capacity
-   * without paid fallback (included_only), or start a paid checkout (rent).
+   * Use included capacity when available, require included capacity without paid
+   * fallback (included_only), or start a paid checkout (rent).
    */
   billingPreference?: 'included' | 'included_only' | 'rent';
 
   /**
-   * Body param: Optional ISO 3166-1 alpha-2 country code from GET
-   * /numbers/phones/countries. Cannot be combined with `purpose`.
+   * Optional ISO 3166-1 alpha-2 country code from GET /numbers/phones/countries.
+   * Cannot be combined with `purpose`.
    */
   country?: string;
 
   /**
-   * Body param: User-defined display label — NFC-normalized, up to 100 GRAPHEMES
-   * (not UTF-16 code units; an emoji/flag may span several). Display-only, never
-   * used for routing. Also seeds the billing entity name at purchase.
+   * User-defined display label — NFC-normalized, up to 100 GRAPHEMES (not UTF-16
+   * code units; an emoji/flag may span several). Display-only, never used for
+   * routing. Also seeds the billing entity name at purchase.
    */
   label?: string | null;
 
   /**
-   * Body param: Optional purpose from GET /numbers/phones/purposes.
+   * Optional purpose from GET /numbers/phones/purposes.
    */
   purpose?: string;
-
-  /**
-   * Header param: Optional request idempotency key.
-   */
-  'Idempotency-Key'?: string;
 }
 
 export interface NumberUpdateParams {
