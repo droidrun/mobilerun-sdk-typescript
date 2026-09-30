@@ -15,6 +15,10 @@ export class Actions extends APIResource {
    * Create a reusable action from a catalog entry (`catalogEntryId`), with an
    * optional `params` object supplying the values for that entry's service method.
    * Returns 400 if the params are invalid for the chosen catalog entry.
+   *
+   * Supports an optional `Idempotency-Key` header (1-255 printable ASCII
+   * characters). Replays with the same key and an identical body return the original
+   * 201; a changed body under the same key returns 422 `idempotency_key_reused`.
    */
   create(body: ActionCreateParams, options?: RequestOptions): APIPromise<ActionCreateResponse> {
     return this._client.post('/actions', { body, ...options });

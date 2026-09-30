@@ -3,7 +3,13 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as MessagesAPI from './messages';
-import { MessageListParams, MessageListResponse, Messages } from './messages';
+import {
+  MessageListParams,
+  MessageListResponse,
+  MessageSendParams,
+  MessageSendResponse,
+  Messages,
+} from './messages';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -153,10 +159,21 @@ export namespace NumberRetrieveResponse {
   export interface Data {
     id: string;
 
+    /**
+     * Actions currently available for this phone number.
+     */
+    actions: Data.Actions;
+
     cancelAtPeriodEnd: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.cancel`
+     */
     cancellable: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.send`
+     */
     canSend: boolean;
 
     capabilities: Array<'sms' | 'voice'> | null;
@@ -179,6 +196,26 @@ export namespace NumberRetrieveResponse {
 
     updatedAt: string | null;
   }
+
+  export namespace Data {
+    /**
+     * Actions currently available for this phone number.
+     */
+    export interface Actions {
+      /**
+       * True when DELETE /numbers/phones/{id} would currently succeed.
+       */
+      cancel: boolean;
+
+      /**
+       * True when this number passes the send gate of POST
+       * /numbers/phones/{id}/messages: self-service sending is switched on and the
+       * number is active and able to send SMS. Daily and burst limits and recipient/body
+       * checks still apply; the send endpoint stays the final judge.
+       */
+      send: boolean;
+    }
+  }
 }
 
 export interface NumberUpdateResponse {
@@ -189,10 +226,21 @@ export namespace NumberUpdateResponse {
   export interface Data {
     id: string;
 
+    /**
+     * Actions currently available for this phone number.
+     */
+    actions: Data.Actions;
+
     cancelAtPeriodEnd: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.cancel`
+     */
     cancellable: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.send`
+     */
     canSend: boolean;
 
     capabilities: Array<'sms' | 'voice'> | null;
@@ -214,6 +262,26 @@ export namespace NumberUpdateResponse {
     state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
 
     updatedAt: string | null;
+  }
+
+  export namespace Data {
+    /**
+     * Actions currently available for this phone number.
+     */
+    export interface Actions {
+      /**
+       * True when DELETE /numbers/phones/{id} would currently succeed.
+       */
+      cancel: boolean;
+
+      /**
+       * True when this number passes the send gate of POST
+       * /numbers/phones/{id}/messages: self-service sending is switched on and the
+       * number is active and able to send SMS. Daily and burst limits and recipient/body
+       * checks still apply; the send endpoint stays the final judge.
+       */
+      send: boolean;
+    }
   }
 }
 
@@ -227,10 +295,21 @@ export namespace NumberListResponse {
   export interface Item {
     id: string;
 
+    /**
+     * Actions currently available for this phone number.
+     */
+    actions: Item.Actions;
+
     cancelAtPeriodEnd: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.cancel`
+     */
     cancellable: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.send`
+     */
     canSend: boolean;
 
     capabilities: Array<'sms' | 'voice'> | null;
@@ -253,6 +332,26 @@ export namespace NumberListResponse {
 
     updatedAt: string | null;
   }
+
+  export namespace Item {
+    /**
+     * Actions currently available for this phone number.
+     */
+    export interface Actions {
+      /**
+       * True when DELETE /numbers/phones/{id} would currently succeed.
+       */
+      cancel: boolean;
+
+      /**
+       * True when this number passes the send gate of POST
+       * /numbers/phones/{id}/messages: self-service sending is switched on and the
+       * number is active and able to send SMS. Daily and burst limits and recipient/body
+       * checks still apply; the send endpoint stays the final judge.
+       */
+      send: boolean;
+    }
+  }
 }
 
 export interface NumberDeleteResponse {
@@ -263,10 +362,21 @@ export namespace NumberDeleteResponse {
   export interface Data {
     id: string;
 
+    /**
+     * Actions currently available for this phone number.
+     */
+    actions: Data.Actions;
+
     cancelAtPeriodEnd: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.cancel`
+     */
     cancellable: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.send`
+     */
     canSend: boolean;
 
     capabilities: Array<'sms' | 'voice'> | null;
@@ -288,6 +398,26 @@ export namespace NumberDeleteResponse {
     state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
 
     updatedAt: string | null;
+  }
+
+  export namespace Data {
+    /**
+     * Actions currently available for this phone number.
+     */
+    export interface Actions {
+      /**
+       * True when DELETE /numbers/phones/{id} would currently succeed.
+       */
+      cancel: boolean;
+
+      /**
+       * True when this number passes the send gate of POST
+       * /numbers/phones/{id}/messages: self-service sending is switched on and the
+       * number is active and able to send SMS. Daily and burst limits and recipient/body
+       * checks still apply; the send endpoint stays the final judge.
+       */
+      send: boolean;
+    }
   }
 }
 
@@ -420,6 +550,8 @@ export declare namespace Numbers {
   export {
     Messages as Messages,
     type MessageListResponse as MessageListResponse,
+    type MessageSendResponse as MessageSendResponse,
     type MessageListParams as MessageListParams,
+    type MessageSendParams as MessageSendParams,
   };
 }

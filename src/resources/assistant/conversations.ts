@@ -12,7 +12,8 @@ export class Conversations extends APIResource {
    * Creates a titled agent session. Setup may occur on the first prompt. Idempotent
    * via the `Idempotency-Key` header — a duplicate submit by the same authenticated
    * caller within the 24-hour idempotency window returns the already-created session
-   * instead of a second one.
+   * instead of a second one. Reusing the same key with a different request body is a
+   * 422 `idempotency_key_reused`.
    */
   create(body: ConversationCreateParams, options?: RequestOptions): APIPromise<ConversationCreateResponse> {
     return this._client.post('/assistant/chat/sessions', { body, ...options });

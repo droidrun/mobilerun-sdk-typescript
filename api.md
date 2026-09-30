@@ -119,6 +119,7 @@ Types:
 - <code><a href="./src/resources/devices/devices.ts">DeviceFingerprintResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceRetrieveCapabilitiesResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceSetNameResponse</a></code>
+- <code><a href="./src/resources/devices/devices.ts">DeviceSummaryResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceWaitReadyResponse</a></code>
 
 Methods:
@@ -134,6 +135,7 @@ Methods:
 - <code title="get /devices/{deviceId}/capabilities">client.devices.<a href="./src/resources/devices/devices.ts">retrieveCapabilities</a>(deviceID) -> DeviceRetrieveCapabilitiesResponse</code>
 - <code title="put /devices/{deviceId}/name">client.devices.<a href="./src/resources/devices/devices.ts">setName</a>(deviceID, { ...params }) -> DeviceSetNameResponse</code>
 - <code title="post /devices/{deviceId}/stop">client.devices.<a href="./src/resources/devices/devices.ts">stop</a>(deviceID) -> void</code>
+- <code title="get /devices/summary">client.devices.<a href="./src/resources/devices/devices.ts">summary</a>({ ...params }) -> DeviceSummaryResponse</code>
 - <code title="delete /devices/{deviceId}">client.devices.<a href="./src/resources/devices/devices.ts">terminate</a>(deviceID, { ...params }) -> void</code>
 - <code title="get /devices/{deviceId}/wait">client.devices.<a href="./src/resources/devices/devices.ts">waitReady</a>(deviceID) -> DeviceWaitReadyResponse</code>
 
@@ -452,17 +454,21 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/connect/proxies.ts">ProxyRetrieveResponse</a></code>
+- <code><a href="./src/resources/connect/proxies.ts">ProxyUpdateResponse</a></code>
 - <code><a href="./src/resources/connect/proxies.ts">ProxyListResponse</a></code>
 - <code><a href="./src/resources/connect/proxies.ts">ProxyBuyResponse</a></code>
+- <code><a href="./src/resources/connect/proxies.ts">ProxyEnsureHealthyResponse</a></code>
 - <code><a href="./src/resources/connect/proxies.ts">ProxyListConnectionsResponse</a></code>
 - <code><a href="./src/resources/connect/proxies.ts">ProxyPingResponse</a></code>
 
 Methods:
 
 - <code title="get /connect/proxies/{id}">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">retrieve</a>(id) -> ProxyRetrieveResponse</code>
+- <code title="patch /connect/proxies/{id}">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">update</a>(id, { ...params }) -> ProxyUpdateResponse</code>
 - <code title="get /connect/proxies">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
 - <code title="post /connect/proxies">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">buy</a>({ ...params }) -> ProxyBuyResponse</code>
 - <code title="delete /connect/proxies/{id}">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">cancel</a>(id) -> void</code>
+- <code title="post /connect/proxies/{id}/ensure-healthy">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">ensureHealthy</a>(id) -> ProxyEnsureHealthyResponse</code>
 - <code title="get /connect/proxies/{id}/connections">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">listConnections</a>(id, { ...params }) -> ProxyListConnectionsResponse</code>
 - <code title="get /connect/proxies/{id}/ping">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">ping</a>(id) -> ProxyPingResponse</code>
 
@@ -607,11 +613,17 @@ Types:
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowUpdateResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowListResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowDeleteResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowActivateResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowCapacityResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowCloneResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowDeliveryOptionsResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowDryRunResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowListRepairsResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowRunResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowTemplateContextResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowUnblockResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowValidateResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowVerifyResponse</a></code>
 
 Methods:
 
@@ -620,11 +632,17 @@ Methods:
 - <code title="patch /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">update</a>(flowID, { ...params }) -> FlowUpdateResponse</code>
 - <code title="get /flows">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">list</a>({ ...params }) -> FlowListResponse</code>
 - <code title="delete /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">delete</a>(flowID) -> FlowDeleteResponse</code>
+- <code title="post /flows/{flowId}/activate">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">activate</a>(flowID, { ...params }) -> FlowActivateResponse</code>
 - <code title="get /flows/capacity">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">capacity</a>() -> FlowCapacityResponse</code>
 - <code title="post /flows/{flowId}/clone">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">clone</a>(flowID, { ...params }) -> FlowCloneResponse</code>
+- <code title="get /flows/{flowId}/delivery-options">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">deliveryOptions</a>(flowID) -> FlowDeliveryOptionsResponse</code>
 - <code title="post /flows/{flowId}/dry-run">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">dryRun</a>(flowID, { ...params }) -> FlowDryRunResponse</code>
 - <code title="get /flows/{flowId}/repairs">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">listRepairs</a>(flowID) -> FlowListRepairsResponse</code>
+- <code title="post /flows/{flowId}/run">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">run</a>(flowID, { ...params }) -> FlowRunResponse</code>
+- <code title="get /flows/template-context">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">templateContext</a>({ ...params }) -> FlowTemplateContextResponse</code>
 - <code title="post /flows/{flowId}/unblock">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">unblock</a>(flowID) -> FlowUnblockResponse</code>
+- <code title="post /flows/validate">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">validate</a>({ ...params }) -> FlowValidateResponse</code>
+- <code title="post /flows/{flowId}/verify">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">verify</a>(flowID, { ...params }) -> FlowVerifyResponse</code>
 
 ### Actions
 
@@ -658,17 +676,23 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/workflows/executions.ts">ExecutionRetrieveResponse</a></code>
-- <code><a href="./src/resources/workflows/executions.ts">ExecutionListResponse</a></code>
-- <code><a href="./src/resources/workflows/executions.ts">ExecutionAbortResponse</a></code>
-- <code><a href="./src/resources/workflows/executions.ts">ExecutionGetMetricsResponse</a></code>
+- <code><a href="./src/resources/workflows/executions/executions.ts">ExecutionRetrieveResponse</a></code>
+- <code><a href="./src/resources/workflows/executions/executions.ts">ExecutionListResponse</a></code>
+- <code><a href="./src/resources/workflows/executions/executions.ts">ExecutionAbortResponse</a></code>
+- <code><a href="./src/resources/workflows/executions/executions.ts">ExecutionGetMetricsResponse</a></code>
 
 Methods:
 
-- <code title="get /executions/{executionId}">client.workflows.executions.<a href="./src/resources/workflows/executions.ts">retrieve</a>(executionID) -> ExecutionRetrieveResponse</code>
-- <code title="get /executions">client.workflows.executions.<a href="./src/resources/workflows/executions.ts">list</a>({ ...params }) -> ExecutionListResponse</code>
-- <code title="post /executions/{executionId}/abort">client.workflows.executions.<a href="./src/resources/workflows/executions.ts">abort</a>(executionID) -> ExecutionAbortResponse</code>
-- <code title="get /executions/metrics">client.workflows.executions.<a href="./src/resources/workflows/executions.ts">getMetrics</a>({ ...params }) -> ExecutionGetMetricsResponse</code>
+- <code title="get /executions/{executionId}">client.workflows.executions.<a href="./src/resources/workflows/executions/executions.ts">retrieve</a>(executionID) -> ExecutionRetrieveResponse</code>
+- <code title="get /executions">client.workflows.executions.<a href="./src/resources/workflows/executions/executions.ts">list</a>({ ...params }) -> ExecutionListResponse</code>
+- <code title="post /executions/{executionId}/abort">client.workflows.executions.<a href="./src/resources/workflows/executions/executions.ts">abort</a>(executionID) -> ExecutionAbortResponse</code>
+- <code title="get /executions/metrics">client.workflows.executions.<a href="./src/resources/workflows/executions/executions.ts">getMetrics</a>({ ...params }) -> ExecutionGetMetricsResponse</code>
+
+### Screenshots
+
+Methods:
+
+- <code title="get /executions/{executionId}/screenshots/{screenshotId}">client.workflows.executions.screenshots.<a href="./src/resources/workflows/executions/screenshots.ts">retrieve</a>(screenshotID, { ...params }) -> void</code>
 
 ## Timezones
 
@@ -703,6 +727,18 @@ Methods:
 - <code title="post /webhooks/{id}/rotate-secret">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">rotateSecret</a>(id) -> WebhookRotateSecretResponse</code>
 - <code title="post /webhooks/{id}/test">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">testDelivery</a>(id) -> WebhookTestDeliveryResponse</code>
 
+## Integrations
+
+Types:
+
+- <code><a href="./src/resources/webhooks/integrations.ts">IntegrationListResponse</a></code>
+- <code><a href="./src/resources/webhooks/integrations.ts">IntegrationListTargetsResponse</a></code>
+
+Methods:
+
+- <code title="get /webhooks/integrations">client.webhooks.integrations.<a href="./src/resources/webhooks/integrations.ts">list</a>() -> IntegrationListResponse</code>
+- <code title="get /webhooks/integrations/{capabilityId}/targets">client.webhooks.integrations.<a href="./src/resources/webhooks/integrations.ts">listTargets</a>(capabilityID, { ...params }) -> IntegrationListTargetsResponse</code>
+
 ## Deliveries
 
 Types:
@@ -729,6 +765,7 @@ Types:
 - <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxListResponse</a></code>
 - <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxDeleteResponse</a></code>
 - <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxCapacityResponse</a></code>
+- <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxDisconnectResponse</a></code>
 - <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxOtpResponse</a></code>
 - <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxRestartResponse</a></code>
 - <code><a href="./src/resources/mailboxes/mailboxes.ts">MailboxUncancelResponse</a></code>
@@ -741,9 +778,22 @@ Methods:
 - <code title="get /mailboxes">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">list</a>({ ...params }) -> MailboxListResponse</code>
 - <code title="delete /mailboxes/{mailboxId}">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">delete</a>(mailboxID) -> MailboxDeleteResponse</code>
 - <code title="get /mailboxes/capacity">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">capacity</a>() -> MailboxCapacityResponse</code>
+- <code title="post /mailboxes/{mailboxId}/disconnect">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">disconnect</a>(mailboxID) -> MailboxDisconnectResponse</code>
 - <code title="get /mailboxes/{mailboxId}/otp">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">otp</a>(mailboxID, { ...params }) -> MailboxOtpResponse</code>
 - <code title="post /mailboxes/{mailboxId}/restart">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">restart</a>(mailboxID, { ...params }) -> MailboxRestartResponse</code>
 - <code title="post /mailboxes/{mailboxId}/uncancel">client.mailboxes.<a href="./src/resources/mailboxes/mailboxes.ts">uncancel</a>(mailboxID) -> MailboxUncancelResponse</code>
+
+## Connections
+
+Types:
+
+- <code><a href="./src/resources/mailboxes/connections.ts">ConnectionCreateResponse</a></code>
+- <code><a href="./src/resources/mailboxes/connections.ts">ConnectionRetrieveResponse</a></code>
+
+Methods:
+
+- <code title="post /mailboxes/connections">client.mailboxes.connections.<a href="./src/resources/mailboxes/connections.ts">create</a>({ ...params }) -> ConnectionCreateResponse</code>
+- <code title="get /mailboxes/connections/{connectionId}">client.mailboxes.connections.<a href="./src/resources/mailboxes/connections.ts">retrieve</a>(connectionID) -> ConnectionRetrieveResponse</code>
 
 ## Messages
 
@@ -836,12 +886,14 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/notifications.ts">NotificationApplyPreferencesPresetResponse</a></code>
 - <code><a href="./src/resources/notifications.ts">NotificationCatalogResponse</a></code>
 - <code><a href="./src/resources/notifications.ts">NotificationGetPreferencesResponse</a></code>
 - <code><a href="./src/resources/notifications.ts">NotificationUpdatePreferencesResponse</a></code>
 
 Methods:
 
+- <code title="post /notifications/preferences/apply-preset">client.notifications.<a href="./src/resources/notifications.ts">applyPreferencesPreset</a>({ ...params }) -> NotificationApplyPreferencesPresetResponse</code>
 - <code title="get /notifications/catalog">client.notifications.<a href="./src/resources/notifications.ts">catalog</a>() -> NotificationCatalogResponse</code>
 - <code title="get /notifications/preferences">client.notifications.<a href="./src/resources/notifications.ts">getPreferences</a>() -> NotificationGetPreferencesResponse</code>
 - <code title="patch /notifications/preferences">client.notifications.<a href="./src/resources/notifications.ts">updatePreferences</a>({ ...params }) -> NotificationUpdatePreferencesResponse</code>
@@ -850,10 +902,12 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/messages/messages.ts">MessageRetrieveResponse</a></code>
 - <code><a href="./src/resources/messages/messages.ts">MessageListResponse</a></code>
 
 Methods:
 
+- <code title="get /numbers/messages/{id}">client.messages.<a href="./src/resources/messages/messages.ts">retrieve</a>(id) -> MessageRetrieveResponse</code>
 - <code title="get /numbers/messages">client.messages.<a href="./src/resources/messages/messages.ts">list</a>({ ...params }) -> MessageListResponse</code>
 
 ## Conversations
@@ -897,10 +951,12 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/numbers/messages.ts">MessageListResponse</a></code>
+- <code><a href="./src/resources/numbers/messages.ts">MessageSendResponse</a></code>
 
 Methods:
 
 - <code title="get /numbers/phones/{id}/messages">client.numbers.messages.<a href="./src/resources/numbers/messages.ts">list</a>(id, { ...params }) -> MessageListResponse</code>
+- <code title="post /numbers/phones/{id}/messages">client.numbers.messages.<a href="./src/resources/numbers/messages.ts">send</a>(id, { ...params }) -> MessageSendResponse</code>
 
 # Store
 

@@ -6,6 +6,27 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Notifications extends APIResource {
   /**
+   * Replaces your muted event types with a server-computed preset: `recommended`
+   * mutes the mobilerun-default noisy lifecycle/progress events, `failures` mutes
+   * everything except failures/timeouts/invalid runs, and `everything` unmutes all.
+   * The response returns the muted types that were actually stored.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.notifications.applyPreferencesPreset({
+   *     preset: 'recommended',
+   *   });
+   * ```
+   */
+  applyPreferencesPreset(
+    body: NotificationApplyPreferencesPresetParams,
+    options?: RequestOptions,
+  ): APIPromise<NotificationApplyPreferencesPresetResponse> {
+    return this._client.post('/notifications/preferences/apply-preset', { body, ...options });
+  }
+
+  /**
    * Returns the catalog of notifiable event types grouped by source category. Each
    * event lists its type identifier, label, and description, which can be referenced
    * when muting event types in notification preferences.
@@ -58,6 +79,16 @@ export class Notifications extends APIResource {
   }
 }
 
+export interface NotificationApplyPreferencesPresetResponse {
+  data: NotificationApplyPreferencesPresetResponse.Data;
+}
+
+export namespace NotificationApplyPreferencesPresetResponse {
+  export interface Data {
+    mutedTypes: Array<string>;
+  }
+}
+
 export interface NotificationCatalogResponse {
   data: Array<NotificationCatalogResponse.Data>;
 }
@@ -104,15 +135,21 @@ export namespace NotificationUpdatePreferencesResponse {
   }
 }
 
+export interface NotificationApplyPreferencesPresetParams {
+  preset: 'recommended' | 'failures' | 'everything';
+}
+
 export interface NotificationUpdatePreferencesParams {
   mutedTypes: Array<string>;
 }
 
 export declare namespace Notifications {
   export {
+    type NotificationApplyPreferencesPresetResponse as NotificationApplyPreferencesPresetResponse,
     type NotificationCatalogResponse as NotificationCatalogResponse,
     type NotificationGetPreferencesResponse as NotificationGetPreferencesResponse,
     type NotificationUpdatePreferencesResponse as NotificationUpdatePreferencesResponse,
+    type NotificationApplyPreferencesPresetParams as NotificationApplyPreferencesPresetParams,
     type NotificationUpdatePreferencesParams as NotificationUpdatePreferencesParams,
   };
 }

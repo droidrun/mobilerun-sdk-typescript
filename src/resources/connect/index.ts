@@ -5,10 +5,13 @@ export { Countries, type CountryListResponse, type CountryListParams } from './c
 export {
   Proxies,
   type ProxyRetrieveResponse,
+  type ProxyUpdateResponse,
   type ProxyListResponse,
   type ProxyBuyResponse,
+  type ProxyEnsureHealthyResponse,
   type ProxyListConnectionsResponse,
   type ProxyPingResponse,
+  type ProxyUpdateParams,
   type ProxyListParams,
   type ProxyBuyParams,
   type ProxyListConnectionsParams,

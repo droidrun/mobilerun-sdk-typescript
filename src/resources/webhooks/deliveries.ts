@@ -11,12 +11,8 @@ export class Deliveries extends APIResource {
    * Returns a paginated feed of webhook deliveries across all of your subscriptions,
    * with the originating endpoint URL included on each record. Results can be
    * filtered by delivery status (pending, success, skipped, or dead), by a `since`
-   * timestamp, and by `eventId` (exact match against the originating event id).
-   *
-   * @example
-   * ```ts
-   * const deliveries = await client.webhooks.deliveries.list();
-   * ```
+   * timestamp, by `eventId` (exact match against the originating event id), and/or
+   * by endpoint delivery `kind`.
    */
   list(
     query: DeliveryListParams | null | undefined = {},
@@ -30,14 +26,6 @@ export class Deliveries extends APIResource {
    * identified by its id. Each record reports the event, delivery status, attempt
    * count, and the last response code or error. Results can be filtered by `eventId`
    * (exact match against the originating event id).
-   *
-   * @example
-   * ```ts
-   * const response =
-   *   await client.webhooks.deliveries.listForWebhook(
-   *     '550e8400-e29b-41d4-a716-446655440000',
-   *   );
-   * ```
    */
   listForWebhook(
     id: string,
@@ -51,15 +39,6 @@ export class Deliveries extends APIResource {
    * Returns a single delivery for a webhook subscription along with the full list of
    * captured attempt records. Each attempt includes the request URL, method, headers
    * and body, whether it was signed, and the response status, headers, and snippet.
-   *
-   * @example
-   * ```ts
-   * const response =
-   *   await client.webhooks.deliveries.retrieveAttempts(
-   *     '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-   *     { id: '550e8400-e29b-41d4-a716-446655440000' },
-   *   );
-   * ```
    */
   retrieveAttempts(
     deliveryID: string,
@@ -73,13 +52,8 @@ export class Deliveries extends APIResource {
   /**
    * Returns aggregate delivery statistics across all of your webhooks, including the
    * total count, a breakdown by status (pending, success, skipped, dead), and the
-   * overall success rate. An optional `since` timestamp narrows the reporting
-   * window.
-   *
-   * @example
-   * ```ts
-   * const response = await client.webhooks.deliveries.stats();
-   * ```
+   * overall success rate. Optional `since` and endpoint delivery `kind` filters
+   * narrow the reporting window.
    */
   stats(
     query: DeliveryStatsParams | null | undefined = {},
@@ -115,7 +89,18 @@ export namespace DeliveryListResponse {
 
     endpointId: string;
 
-    endpointUrl: string;
+    endpointKind: 'http' | 'integration';
+
+    /**
+     * Integration target label of the parent webhook (e.g. `#ops`); null for `http`
+     * webhooks.
+     */
+    endpointLabel: string | null;
+
+    /**
+     * Delivery URL of the parent webhook; null for `integration` webhooks.
+     */
+    endpointUrl: string | null;
 
     eventId: string;
 
@@ -281,6 +266,11 @@ export interface DeliveryListParams {
    */
   eventId?: string;
 
+  /**
+   * Only include deliveries to endpoints of this kind.
+   */
+  kind?: 'http' | 'integration';
+
   page?: number;
 
   pageSize?: number;
@@ -306,6 +296,11 @@ export interface DeliveryRetrieveAttemptsParams {
 }
 
 export interface DeliveryStatsParams {
+  /**
+   * Only include deliveries to endpoints of this kind.
+   */
+  kind?: 'http' | 'integration';
+
   since?: string;
 }
 

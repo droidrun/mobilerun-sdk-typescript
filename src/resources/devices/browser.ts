@@ -11,9 +11,11 @@ export class Browser extends APIResource {
    * Evaluates a JavaScript expression exactly once in the device's single, confirmed
    * foreground Chrome tab via the Chrome DevTools Protocol and returns its
    * JSON-serialized result. A responsive browser state without exactly one visible
-   * page returns DEVICE_NO_BROWSER_TARGET (400). Transient discovery or target-probe
-   * transport failures return CDP_TRANSPORT_UNAVAILABLE (503) with Retry-After and
-   * an executionOutcome; the service never retries a user script after sending it.
+   * page returns DEVICE_NO_BROWSER_TARGET (400). Transient discovery, page-dial, or
+   * visibility-probe transport failures return CDP_TRANSPORT_UNAVAILABLE (503) with
+   * Retry-After and an executionOutcome; the service may start Chrome once and retry
+   * selection before Runtime.evaluate, but dial or probe recovery is skipped for a
+   * backgrounded Chrome, and a user script is never retried after its write or read.
    * Devices without browser support return an unsupported-feature error.
    */
   executeScript(

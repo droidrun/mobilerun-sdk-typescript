@@ -14,19 +14,32 @@ import {
   DeliveryStatsParams,
   DeliveryStatsResponse,
 } from './deliveries';
+import * as IntegrationsAPI from './integrations';
+import {
+  IntegrationListResponse,
+  IntegrationListTargetsParams,
+  IntegrationListTargetsResponse,
+  Integrations,
+} from './integrations';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Webhooks extends APIResource {
+  integrations: IntegrationsAPI.Integrations = new IntegrationsAPI.Integrations(this._client);
   deliveries: DeliveriesAPI.Deliveries = new DeliveriesAPI.Deliveries(this._client);
 
   /**
-   * Creates a webhook subscription with a delivery URL and an optional list of event
-   * types to subscribe to (defaults to all when omitted). The response includes the
-   * generated signing secret, which is returned only once at creation time and
-   * cannot be retrieved later.
+   * Creates a webhook subscription and an optional list of event types to subscribe
+   * to (defaults to all when omitted). `kind: "http"` (the default) delivers signed
+   * JSON to a URL; the response includes the generated signing secret, which is
+   * returned only once at creation time and cannot be retrieved later.
+   * `kind: "integration"` posts each event as a message into a connected integration
+   * target (e.g. a Slack channel): pick the `capability` from
+   * `GET /webhooks/integrations` and the `args` from
+   * `GET /webhooks/integrations/{capabilityId}/targets`. Integration webhooks have
+   * no signing secret.
    *
    * @example
    * ```ts
@@ -40,16 +53,9 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Returns a single webhook subscription by id, including its URL, subscribed event
-   * types, state, and system-observed delivery health. The signing secret is never
-   * included.
-   *
-   * @example
-   * ```ts
-   * const webhook = await client.webhooks.retrieve(
-   *   '550e8400-e29b-41d4-a716-446655440000',
-   * );
-   * ```
+   * Returns a single webhook subscription by id, including its URL (or integration
+   * target), subscribed event types, state, and system-observed delivery health. The
+   * signing secret is never included.
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<WebhookRetrieveResponse> {
     return this._client.get(path`/webhooks/${id}`, options);
@@ -59,14 +65,8 @@ export class Webhooks extends APIResource {
    * Updates a webhook subscription. Any combination of the subscribed event types,
    * state (ACTIVE or DISABLED), and description may be changed, and at least one
    * field must be supplied. Setting state to ACTIVE re-enables a subscription that
-   * was auto-blocked after sustained delivery failures.
-   *
-   * @example
-   * ```ts
-   * const webhook = await client.webhooks.update(
-   *   '550e8400-e29b-41d4-a716-446655440000',
-   * );
-   * ```
+   * was auto-blocked after sustained delivery failures. The URL or integration
+   * target cannot be changed; delete and recreate the webhook instead.
    */
   update(
     id: string,
@@ -78,14 +78,10 @@ export class Webhooks extends APIResource {
 
   /**
    * Returns a paginated list of your webhook subscriptions, optionally filtered by
-   * status (active, failing, blocked, or disabled) and/or by `search` (a
-   * case-insensitive substring match against the URL or description). The response
-   * also includes per-status counts across all of your subscriptions.
-   *
-   * @example
-   * ```ts
-   * const webhooks = await client.webhooks.list();
-   * ```
+   * status (active, failing, blocked, or disabled), by `search` (a case-insensitive
+   * substring match against the URL or description), and/or by delivery `kind`. The
+   * response also includes per-status counts across all of your subscriptions (of
+   * the requested `kind`, if given; the other filters do not apply to the counts).
    */
   list(
     query: WebhookListParams | null | undefined = {},
@@ -97,13 +93,6 @@ export class Webhooks extends APIResource {
   /**
    * Deletes a webhook subscription so it stops receiving deliveries. Returns 204 No
    * Content on success.
-   *
-   * @example
-   * ```ts
-   * await client.webhooks.delete(
-   *   '550e8400-e29b-41d4-a716-446655440000',
-   * );
-   * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/webhooks/${id}`, {
@@ -116,11 +105,6 @@ export class Webhooks extends APIResource {
    * Returns the catalog of event types that webhook subscriptions can subscribe to,
    * grouped by source. Use the returned type identifiers as the `eventTypes` values
    * when creating or updating a webhook.
-   *
-   * @example
-   * ```ts
-   * const response = await client.webhooks.eventTypes();
-   * ```
    */
   eventTypes(options?: RequestOptions): APIPromise<WebhookEventTypesResponse> {
     return this._client.get('/event-types', options);
@@ -129,30 +113,17 @@ export class Webhooks extends APIResource {
   /**
    * Generates a new signing secret for the webhook subscription and returns it once
    * in the response. The previous secret is replaced immediately, so any signature
-   * verification on your endpoint must be updated to use the new value.
-   *
-   * @example
-   * ```ts
-   * const response = await client.webhooks.rotateSecret(
-   *   '550e8400-e29b-41d4-a716-446655440000',
-   * );
-   * ```
+   * verification on your endpoint must be updated to use the new value. Only `http`
+   * webhooks have a signing secret; for `integration` webhooks this returns 400.
    */
   rotateSecret(id: string, options?: RequestOptions): APIPromise<WebhookRotateSecretResponse> {
     return this._client.post(path`/webhooks/${id}/rotate-secret`, options);
   }
 
   /**
-   * Sends a single test payload to the webhook subscription URL to verify
-   * connectivity. The response reports whether the attempt succeeded along with the
-   * returned HTTP status code or error, if any.
-   *
-   * @example
-   * ```ts
-   * const response = await client.webhooks.testDelivery(
-   *   '550e8400-e29b-41d4-a716-446655440000',
-   * );
-   * ```
+   * Sends a single test payload to the webhook subscription URL (or a test message
+   * to its integration target) to verify connectivity. The response reports whether
+   * the attempt succeeded along with the returned HTTP status code or error, if any.
    */
   testDelivery(id: string, options?: RequestOptions): APIPromise<WebhookTestDeliveryResponse> {
     return this._client.post(path`/webhooks/${id}/test`, options);
@@ -169,6 +140,11 @@ export namespace WebhookCreateResponse {
 
     blockedAt: string | null;
 
+    /**
+     * Why the webhook was blocked, e.g. `integration_disconnected` (reconnect the
+     * integration) or `integration_target_invalid` (the channel is gone or not
+     * allowed).
+     */
     blockedReason: string | null;
 
     createdAt: string;
@@ -189,17 +165,59 @@ export namespace WebhookCreateResponse {
     health: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Signing secret — shown only once. Store it now.
+     * Integration target; null for `http` webhooks.
      */
-    secret: string;
+    integration: Data.Integration | null;
 
+    /**
+     * `http` posts signed JSON to `url`; `integration` posts a message through a
+     * connected integration (e.g. a Slack channel).
+     */
+    kind: 'http' | 'integration';
+
+    /**
+     * Always false for `integration` webhooks.
+     */
     signingEnabled: boolean;
 
     state: 'ACTIVE' | 'DISABLED' | 'DELETED';
 
     updatedAt: string;
 
-    url: string;
+    /**
+     * Delivery URL; null for `integration` webhooks.
+     */
+    url: string | null;
+
+    /**
+     * Signing secret for `http` webhooks — shown only once. Store it now. Absent for
+     * `integration` webhooks.
+     */
+    secret?: string;
+  }
+
+  export namespace Data {
+    /**
+     * Integration target; null for `http` webhooks.
+     */
+    export interface Integration {
+      args: { [key: string]: unknown };
+
+      capability: Integration.Capability;
+
+      /**
+       * Target name at creation time, e.g. `#ops`.
+       */
+      label: string;
+    }
+
+    export namespace Integration {
+      export interface Capability {
+        id: string;
+
+        revision: number;
+      }
+    }
   }
 }
 
@@ -213,6 +231,11 @@ export namespace WebhookRetrieveResponse {
 
     blockedAt: string | null;
 
+    /**
+     * Why the webhook was blocked, e.g. `integration_disconnected` (reconnect the
+     * integration) or `integration_target_invalid` (the channel is gone or not
+     * allowed).
+     */
     blockedReason: string | null;
 
     createdAt: string;
@@ -232,13 +255,54 @@ export namespace WebhookRetrieveResponse {
      */
     health: 'healthy' | 'failing' | 'blocked';
 
+    /**
+     * Integration target; null for `http` webhooks.
+     */
+    integration: Data.Integration | null;
+
+    /**
+     * `http` posts signed JSON to `url`; `integration` posts a message through a
+     * connected integration (e.g. a Slack channel).
+     */
+    kind: 'http' | 'integration';
+
+    /**
+     * Always false for `integration` webhooks.
+     */
     signingEnabled: boolean;
 
     state: 'ACTIVE' | 'DISABLED' | 'DELETED';
 
     updatedAt: string;
 
-    url: string;
+    /**
+     * Delivery URL; null for `integration` webhooks.
+     */
+    url: string | null;
+  }
+
+  export namespace Data {
+    /**
+     * Integration target; null for `http` webhooks.
+     */
+    export interface Integration {
+      args: { [key: string]: unknown };
+
+      capability: Integration.Capability;
+
+      /**
+       * Target name at creation time, e.g. `#ops`.
+       */
+      label: string;
+    }
+
+    export namespace Integration {
+      export interface Capability {
+        id: string;
+
+        revision: number;
+      }
+    }
   }
 }
 
@@ -252,6 +316,11 @@ export namespace WebhookUpdateResponse {
 
     blockedAt: string | null;
 
+    /**
+     * Why the webhook was blocked, e.g. `integration_disconnected` (reconnect the
+     * integration) or `integration_target_invalid` (the channel is gone or not
+     * allowed).
+     */
     blockedReason: string | null;
 
     createdAt: string;
@@ -271,13 +340,54 @@ export namespace WebhookUpdateResponse {
      */
     health: 'healthy' | 'failing' | 'blocked';
 
+    /**
+     * Integration target; null for `http` webhooks.
+     */
+    integration: Data.Integration | null;
+
+    /**
+     * `http` posts signed JSON to `url`; `integration` posts a message through a
+     * connected integration (e.g. a Slack channel).
+     */
+    kind: 'http' | 'integration';
+
+    /**
+     * Always false for `integration` webhooks.
+     */
     signingEnabled: boolean;
 
     state: 'ACTIVE' | 'DISABLED' | 'DELETED';
 
     updatedAt: string;
 
-    url: string;
+    /**
+     * Delivery URL; null for `integration` webhooks.
+     */
+    url: string | null;
+  }
+
+  export namespace Data {
+    /**
+     * Integration target; null for `http` webhooks.
+     */
+    export interface Integration {
+      args: { [key: string]: unknown };
+
+      capability: Integration.Capability;
+
+      /**
+       * Target name at creation time, e.g. `#ops`.
+       */
+      label: string;
+    }
+
+    export namespace Integration {
+      export interface Capability {
+        id: string;
+
+        revision: number;
+      }
+    }
   }
 }
 
@@ -307,6 +417,11 @@ export namespace WebhookListResponse {
 
     blockedAt: string | null;
 
+    /**
+     * Why the webhook was blocked, e.g. `integration_disconnected` (reconnect the
+     * integration) or `integration_target_invalid` (the channel is gone or not
+     * allowed).
+     */
     blockedReason: string | null;
 
     createdAt: string;
@@ -326,13 +441,54 @@ export namespace WebhookListResponse {
      */
     health: 'healthy' | 'failing' | 'blocked';
 
+    /**
+     * Integration target; null for `http` webhooks.
+     */
+    integration: Item.Integration | null;
+
+    /**
+     * `http` posts signed JSON to `url`; `integration` posts a message through a
+     * connected integration (e.g. a Slack channel).
+     */
+    kind: 'http' | 'integration';
+
+    /**
+     * Always false for `integration` webhooks.
+     */
     signingEnabled: boolean;
 
     state: 'ACTIVE' | 'DISABLED' | 'DELETED';
 
     updatedAt: string;
 
-    url: string;
+    /**
+     * Delivery URL; null for `integration` webhooks.
+     */
+    url: string | null;
+  }
+
+  export namespace Item {
+    /**
+     * Integration target; null for `http` webhooks.
+     */
+    export interface Integration {
+      args: { [key: string]: unknown };
+
+      capability: Integration.Capability;
+
+      /**
+       * Target name at creation time, e.g. `#ops`.
+       */
+      label: string;
+    }
+
+    export namespace Integration {
+      export interface Capability {
+        id: string;
+
+        revision: number;
+      }
+    }
   }
 }
 
@@ -359,6 +515,11 @@ export namespace WebhookEventTypesResponse {
         description: string;
 
         surfaces: Event.Surfaces;
+
+        /**
+         * Short human title, as used in integration messages.
+         */
+        title: string;
 
         type: string;
       }
@@ -390,6 +551,11 @@ export namespace WebhookRotateSecretResponse {
 
     blockedAt: string | null;
 
+    /**
+     * Why the webhook was blocked, e.g. `integration_disconnected` (reconnect the
+     * integration) or `integration_target_invalid` (the channel is gone or not
+     * allowed).
+     */
     blockedReason: string | null;
 
     createdAt: string;
@@ -410,17 +576,58 @@ export namespace WebhookRotateSecretResponse {
     health: 'healthy' | 'failing' | 'blocked';
 
     /**
+     * Integration target; null for `http` webhooks.
+     */
+    integration: Data.Integration | null;
+
+    /**
+     * `http` posts signed JSON to `url`; `integration` posts a message through a
+     * connected integration (e.g. a Slack channel).
+     */
+    kind: 'http' | 'integration';
+
+    /**
      * Signing secret — shown only once. Store it now.
      */
     secret: string;
 
+    /**
+     * Always false for `integration` webhooks.
+     */
     signingEnabled: boolean;
 
     state: 'ACTIVE' | 'DISABLED' | 'DELETED';
 
     updatedAt: string;
 
-    url: string;
+    /**
+     * Delivery URL; null for `integration` webhooks.
+     */
+    url: string | null;
+  }
+
+  export namespace Data {
+    /**
+     * Integration target; null for `http` webhooks.
+     */
+    export interface Integration {
+      args: { [key: string]: unknown };
+
+      capability: Integration.Capability;
+
+      /**
+       * Target name at creation time, e.g. `#ops`.
+       */
+      label: string;
+    }
+
+    export namespace Integration {
+      export interface Capability {
+        id: string;
+
+        revision: number;
+      }
+    }
   }
 }
 
@@ -438,12 +645,45 @@ export namespace WebhookTestDeliveryResponse {
   }
 }
 
-export interface WebhookCreateParams {
-  url: string;
+export type WebhookCreateParams = WebhookCreateParams.Variant0 | WebhookCreateParams.Variant1;
 
-  description?: string;
+export declare namespace WebhookCreateParams {
+  export interface Variant0 {
+    url: string;
 
-  eventTypes?: Array<string>;
+    description?: string;
+
+    eventTypes?: Array<string>;
+
+    /**
+     * Delivery transport. Omitted ⇒ `http`.
+     */
+    kind?: 'http';
+  }
+
+  export interface Variant1 {
+    /**
+     * Target args exactly as returned by
+     * `GET /webhooks/integrations/{capabilityId}/targets`.
+     */
+    args: { [key: string]: unknown };
+
+    capability: Variant1.Capability;
+
+    kind: 'integration';
+
+    description?: string;
+
+    eventTypes?: Array<string>;
+  }
+
+  export namespace Variant1 {
+    export interface Capability {
+      id: string;
+
+      revision: number;
+    }
+  }
 }
 
 export interface WebhookUpdateParams {
@@ -459,6 +699,11 @@ export interface WebhookListParams {
    * Only include webhooks created by this actor id. Mutually exclusive with `mine`.
    */
   createdBy?: string;
+
+  /**
+   * Only include webhooks of this delivery kind.
+   */
+  kind?: 'http' | 'integration';
 
   /**
    * When true, only include webhooks created by you (not just owned by your org).
@@ -477,6 +722,7 @@ export interface WebhookListParams {
   status?: 'active' | 'failing' | 'blocked' | 'disabled';
 }
 
+Webhooks.Integrations = Integrations;
 Webhooks.Deliveries = Deliveries;
 
 export declare namespace Webhooks {
@@ -491,6 +737,13 @@ export declare namespace Webhooks {
     type WebhookCreateParams as WebhookCreateParams,
     type WebhookUpdateParams as WebhookUpdateParams,
     type WebhookListParams as WebhookListParams,
+  };
+
+  export {
+    Integrations as Integrations,
+    type IntegrationListResponse as IntegrationListResponse,
+    type IntegrationListTargetsResponse as IntegrationListTargetsResponse,
+    type IntegrationListTargetsParams as IntegrationListTargetsParams,
   };
 
   export {

@@ -297,6 +297,17 @@ export class Devices extends APIResource {
   }
 
   /**
+   * Returns the total number of the user's devices and counts grouped by current
+   * state and device type.
+   */
+  summary(
+    query: DeviceSummaryParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<DeviceSummaryResponse> {
+    return this._client.get('/devices/summary', { query, ...options });
+  }
+
+  /**
    * Terminates the device and releases its resources. Termination can be scheduled
    * for a future time or chained from a previous device via the request body, in
    * which case a service key is required.
@@ -646,6 +657,19 @@ export interface DeviceSetNameResponse {
   userId?: string;
 }
 
+export interface DeviceSummaryResponse {
+  byState: { [key: string]: number };
+
+  byType: { [key: string]: number };
+
+  total: number;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
 export interface DeviceWaitReadyResponse {
   id: string;
 
@@ -845,6 +869,12 @@ export interface DeviceListParams {
 
   pageSize?: number;
 
+  /**
+   * Filter by the device's platform as served in the platform field (runtime,
+   * announced, else type-derived).
+   */
+  platform?: 'android' | 'ios';
+
   providerId?: string;
 
   state?: Array<
@@ -869,7 +899,8 @@ export interface DeviceListParams {
     | 'android_physical_phone'
     | 'ios_stealth_phone'
     | 'android_emulator'
-    | 'ios_simulator';
+    | 'ios_simulator'
+    | 'device_slot';
 }
 
 export interface DeviceFingerprintParams {
@@ -878,6 +909,21 @@ export interface DeviceFingerprintParams {
 
 export interface DeviceSetNameParams {
   name: string;
+}
+
+export interface DeviceSummaryParams {
+  state?: Array<
+    | 'creating'
+    | 'assigned'
+    | 'ready'
+    | 'rebooting'
+    | 'migrating'
+    | 'resetting'
+    | 'terminated'
+    | 'maintenance'
+    | 'stopped'
+    | 'unknown'
+  > | null;
 }
 
 export interface DeviceTerminateParams {
@@ -916,11 +962,13 @@ export declare namespace Devices {
     type DeviceFingerprintResponse as DeviceFingerprintResponse,
     type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
     type DeviceSetNameResponse as DeviceSetNameResponse,
+    type DeviceSummaryResponse as DeviceSummaryResponse,
     type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
     type DeviceFingerprintParams as DeviceFingerprintParams,
     type DeviceSetNameParams as DeviceSetNameParams,
+    type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 

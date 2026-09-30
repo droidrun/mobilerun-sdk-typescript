@@ -36,12 +36,14 @@ describe('resource flows', () => {
               actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
               position: 0,
               continueOnError: true,
+              key: 'key',
               nameOverride: 'x',
               overrides: { params: { foo: 'bar' } },
               recordingEnabled: true,
             },
           ],
           continueOnError: true,
+          key: 'key',
           nameOverride: 'x',
           overrides: { params: { foo: 'bar' } },
           recordingEnabled: true,
@@ -177,6 +179,27 @@ describe('resource flows', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('activate: only required params', async () => {
+    const responsePromise = client.workflows.flows.activate('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      verificationExecutionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('activate: required and optional params', async () => {
+    const response = await client.workflows.flows.activate('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      verificationExecutionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('capacity', async () => {
     const responsePromise = client.workflows.flows.capacity();
     const rawResponse = await responsePromise.asResponse();
@@ -210,6 +233,18 @@ describe('resource flows', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('deliveryOptions', async () => {
+    const responsePromise = client.workflows.flows.deliveryOptions('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // Mock server tests are disabled
@@ -249,6 +284,53 @@ describe('resource flows', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('run', async () => {
+    const responsePromise = client.workflows.flows.run('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('run: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.workflows.flows.run(
+        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        { payload: { foo: 'bar' } },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('templateContext', async () => {
+    const responsePromise = client.workflows.flows.templateContext();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('templateContext: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.workflows.flows.templateContext(
+        { templateResolutionVersion: 2 },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('unblock', async () => {
     const responsePromise = client.workflows.flows.unblock('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
@@ -258,5 +340,92 @@ describe('resource flows', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('validate: only required params', async () => {
+    const responsePromise = client.workflows.flows.validate({
+      actions: [{ actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 }],
+      name: 'x',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('validate: required and optional params', async () => {
+    const response = await client.workflows.flows.validate({
+      actions: [
+        {
+          actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          position: 0,
+          children: [
+            {
+              actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+              position: 0,
+              continueOnError: true,
+              key: 'key',
+              nameOverride: 'x',
+              overrides: { params: { foo: 'bar' } },
+              recordingEnabled: true,
+            },
+          ],
+          continueOnError: true,
+          key: 'key',
+          nameOverride: 'x',
+          overrides: { params: { foo: 'bar' } },
+          recordingEnabled: true,
+        },
+      ],
+      name: 'x',
+      cooldownScope: 'flow',
+      cooldownSeconds: 0,
+      delivery: {
+        destination: 'one_drive',
+        folder: 'x',
+        recording: { filename: 'x' },
+        screenshots: {},
+      },
+      description: 'description',
+      deviceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+      enabled: true,
+      healthMonitoringEnabled: true,
+      notifyOnFailure: true,
+      notifyOnSuccess: true,
+      notifyWebhookId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      recordingEnabled: true,
+      recordingPolicy: { mode: 'off' },
+      selfHealingEnabled: true,
+      selfHealingMaxAttempts: 1,
+      triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('verify: only required params', async () => {
+    const responsePromise = client.workflows.flows.verify('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      invocationId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('verify: required and optional params', async () => {
+    const response = await client.workflows.flows.verify('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      invocationId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      payload: { foo: 'bar' },
+    });
   });
 });

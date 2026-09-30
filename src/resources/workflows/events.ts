@@ -51,6 +51,8 @@ export namespace EventDryRunResponse {
 
         flowActionId: string;
 
+        key: string;
+
         method: string;
 
         name: string;
@@ -141,8 +143,9 @@ export namespace EventDryRunResponse {
         /**
          * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
          * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
-         * a whole-token null stays JSON null). Existing flows stay 1; new flows default
-         * to 2.
+         * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
+         * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
+         * Existing flows stay 1; new flows default to the current version.
          */
         templateResolutionVersion: number;
 
@@ -209,7 +212,7 @@ export namespace EventDryRunResponse {
 
         ownerId: string;
 
-        scheduleRule: unknown;
+        scheduleRule: Trigger.ScheduleRule;
 
         timezone: string | null;
 
@@ -223,6 +226,43 @@ export namespace EventDryRunResponse {
         conditions?: unknown;
 
         nextFireTime?: string | null;
+      }
+
+      export namespace Trigger {
+        export interface ScheduleRule {
+          type: 'once' | 'cron' | 'recurring';
+
+          /**
+           * ISO 8601 datetime (for type=once)
+           */
+          dateTime?: string;
+
+          /**
+           * Cron expression (for type=cron)
+           */
+          expression?: string;
+
+          /**
+           * Optional per-occurrence random window around the nominal schedule time
+           */
+          jitter?: ScheduleRule.Jitter;
+
+          /**
+           * RRULE string (for type=recurring)
+           */
+          rrule?: string;
+        }
+
+        export namespace ScheduleRule {
+          /**
+           * Optional per-occurrence random window around the nominal schedule time
+           */
+          export interface Jitter {
+            afterMinutes?: number;
+
+            beforeMinutes?: number;
+          }
+        }
       }
     }
 

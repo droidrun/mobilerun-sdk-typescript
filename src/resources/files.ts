@@ -195,9 +195,13 @@ export namespace FileListResponse {
   }
 
   export interface Quota {
-    currentBytes: number;
+    includedBytes: number | null;
 
-    quotaBytes: number;
+    maxBytes: number | null;
+
+    overageAllowed: boolean;
+
+    usedBytes: number;
   }
 }
 

@@ -2,6 +2,13 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
+import * as ConnectionsAPI from './connections';
+import {
+  ConnectionCreateParams,
+  ConnectionCreateResponse,
+  ConnectionRetrieveResponse,
+  Connections,
+} from './connections';
 import * as MessagesAPI from './messages';
 import {
   MessageListParams,
@@ -15,13 +22,15 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Mailboxes extends APIResource {
+  connections: ConnectionsAPI.Connections = new ConnectionsAPI.Connections(this._client);
   messages: MessagesAPI.Messages = new MessagesAPI.Messages(this._client);
 
   /**
    * Creates a mailbox on the default domain or a connected custom domain. An
-   * optional `localPart` selects the address. Replaying the same `clientRequestId`
-   * and payload returns the original mailbox. Poll the mailbox when a 202 response
-   * does not yet include a checkout URL.
+   * optional `localPart` selects the address. Replaying the same Idempotency-Key
+   * (or, during migration, the deprecated `clientRequestId` body field) and payload
+   * returns the original mailbox. Poll the mailbox when a 202 response does not yet
+   * include a checkout URL.
    *
    * @example
    * ```ts
@@ -109,6 +118,20 @@ export class Mailboxes extends APIResource {
    */
   capacity(options?: RequestOptions): APIPromise<MailboxCapacityResponse> {
     return this._client.get('/mailboxes/capacity', options);
+  }
+
+  /**
+   * Removes only this mailbox link. The agent Composio connection stays in place.
+   *
+   * @example
+   * ```ts
+   * const response = await client.mailboxes.disconnect(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
+   */
+  disconnect(mailboxID: string, options?: RequestOptions): APIPromise<MailboxDisconnectResponse> {
+    return this._client.post(path`/mailboxes/${mailboxID}/disconnect`, options);
   }
 
   /**
@@ -458,6 +481,61 @@ export namespace MailboxCapacityResponse {
   }
 }
 
+export interface MailboxDisconnectResponse {
+  data: MailboxDisconnectResponse.Data;
+}
+
+export namespace MailboxDisconnectResponse {
+  export interface Data {
+    id: string;
+
+    address: string | null;
+
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
+
+    cancelAtPeriodEnd: boolean;
+
+    checkoutExpiresAt: string | null;
+
+    checkoutUrl: string | null;
+
+    createdAt: string;
+
+    currentPeriodEnd: string | null;
+
+    domainId: string | null;
+
+    inboundMessages: Data.InboundMessages;
+
+    label: string | null;
+
+    provider: 'matix' | 'gmail';
+
+    status:
+      | 'provisioning'
+      | 'awaiting_payment'
+      | 'active'
+      | 'cancel_scheduled'
+      | 'archived'
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
+  }
+
+  export namespace Data {
+    export interface InboundMessages {
+      exhausted: boolean;
+
+      included: number;
+
+      resetsAt: string | null;
+
+      used: number;
+    }
+  }
+}
+
 export interface MailboxOtpResponse {
   data: MailboxOtpResponse.Data;
 }
@@ -642,6 +720,7 @@ export interface MailboxRestartParams {
   billingPreference?: 'included' | 'included_only' | 'rent';
 }
 
+Mailboxes.Connections = Connections;
 Mailboxes.Messages = Messages;
 
 export declare namespace Mailboxes {
@@ -652,6 +731,7 @@ export declare namespace Mailboxes {
     type MailboxListResponse as MailboxListResponse,
     type MailboxDeleteResponse as MailboxDeleteResponse,
     type MailboxCapacityResponse as MailboxCapacityResponse,
+    type MailboxDisconnectResponse as MailboxDisconnectResponse,
     type MailboxOtpResponse as MailboxOtpResponse,
     type MailboxRestartResponse as MailboxRestartResponse,
     type MailboxUncancelResponse as MailboxUncancelResponse,
@@ -660,6 +740,13 @@ export declare namespace Mailboxes {
     type MailboxListParams as MailboxListParams,
     type MailboxOtpParams as MailboxOtpParams,
     type MailboxRestartParams as MailboxRestartParams,
+  };
+
+  export {
+    Connections as Connections,
+    type ConnectionCreateResponse as ConnectionCreateResponse,
+    type ConnectionRetrieveResponse as ConnectionRetrieveResponse,
+    type ConnectionCreateParams as ConnectionCreateParams,
   };
 
   export {

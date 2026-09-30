@@ -9,6 +9,18 @@ const client = new Mobilerun({
 
 describe('resource messages', () => {
   // Mock server tests are disabled
+  test.skip('retrieve', async () => {
+    const responsePromise = client.messages.retrieve('550e8400-e29b-41d4-a716-446655440000');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.messages.list();
     const rawResponse = await responsePromise.asResponse();

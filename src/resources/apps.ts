@@ -123,8 +123,11 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Returns the user’s total storage quota, bytes used, and remaining bytes — the
-   * reliable maximum size for the next upload.
+   * Returns the user’s storage allowance from Autumn storage_mb (decimal bytes):
+   * bytes used, bytes included in the plan, the hard maximum (included + max
+   * purchasable overage; null = unlimited) and whether usage above the included
+   * amount is billed as overage. With storage billing off there is no limit: only
+   * usedBytes is set.
    *
    * @example
    * ```ts
@@ -836,26 +839,26 @@ export interface AppStorageUsageResponse {
 export namespace AppStorageUsageResponse {
   export interface Data {
     /**
-     * Remaining bytes — the reliable maximum TOTAL size for the next upload. Advisory
-     * snapshot: the quota is enforced under a lock at confirm, so concurrent uploads
-     * may reduce actual headroom.
+     * Bytes included in the plan (Autumn granted). Null when unlimited, unknown, or
+     * storage billing is off.
      */
-    availableBytes: number;
+    includedBytes: number | null;
 
     /**
-     * Per-file upload cap in bytes (env.MAX_UPLOAD_FILE_BYTES). A single file larger
-     * than this is rejected at confirm even when it fits the remaining quota. Source
-     * of truth for the client-side per-file limit.
+     * Hard admission bound in bytes: included + max purchasable overage, or included
+     * when overage is not allowed. Null = unlimited, unknown, or storage billing is
+     * off.
      */
-    maxFileBytes: number;
+    maxBytes: number | null;
 
     /**
-     * Total storage allowance for the user, in bytes
+     * True when usage above includedBytes is billed as overage instead of blocked
      */
-    quotaBytes: number;
+    overageAllowed: boolean;
 
     /**
-     * Bytes currently consumed across all of the user’s app versions
+     * Bytes currently used (decimal: Autumn storage_mb × 1,000,000; the local sum of
+     * the user’s app versions when storage billing is off)
      */
     usedBytes: number;
   }
