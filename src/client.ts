@@ -57,6 +57,8 @@ import {
 } from './resources/files';
 import { ModelListResponse, Models } from './resources/models';
 import {
+  NotificationApplyPreferencesPresetParams,
+  NotificationApplyPreferencesPresetResponse,
   NotificationCatalogResponse,
   NotificationGetPreferencesResponse,
   NotificationUpdatePreferencesParams,
@@ -112,6 +114,8 @@ import {
   DeviceRetrieveResponse,
   DeviceSetNameParams,
   DeviceSetNameResponse,
+  DeviceSummaryParams,
+  DeviceSummaryResponse,
   DeviceTerminateParams,
   DeviceWaitReadyResponse,
   Devices,
@@ -121,6 +125,7 @@ import {
   MailboxCreateParams,
   MailboxCreateResponse,
   MailboxDeleteResponse,
+  MailboxDisconnectResponse,
   MailboxListParams,
   MailboxListResponse,
   MailboxOtpParams,
@@ -133,7 +138,12 @@ import {
   MailboxUpdateResponse,
   Mailboxes,
 } from './resources/mailboxes/mailboxes';
-import { MessageListParams, MessageListResponse, Messages } from './resources/messages/messages';
+import {
+  MessageListParams,
+  MessageListResponse,
+  MessageRetrieveResponse,
+  Messages,
+} from './resources/messages/messages';
 import {
   NumberCapacityParams,
   NumberCapacityResponse,
@@ -336,6 +346,7 @@ export class Mobilerun {
     }
 
     this._options = options;
+    this.idempotencyHeader = 'Idempotency-Key';
 
     this.apiKey = apiKey;
   }
@@ -995,11 +1006,13 @@ export declare namespace Mobilerun {
     type DeviceFingerprintResponse as DeviceFingerprintResponse,
     type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
     type DeviceSetNameResponse as DeviceSetNameResponse,
+    type DeviceSummaryResponse as DeviceSummaryResponse,
     type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
     type DeviceFingerprintParams as DeviceFingerprintParams,
     type DeviceSetNameParams as DeviceSetNameParams,
+    type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 
@@ -1073,6 +1086,7 @@ export declare namespace Mobilerun {
     type MailboxListResponse as MailboxListResponse,
     type MailboxDeleteResponse as MailboxDeleteResponse,
     type MailboxCapacityResponse as MailboxCapacityResponse,
+    type MailboxDisconnectResponse as MailboxDisconnectResponse,
     type MailboxOtpResponse as MailboxOtpResponse,
     type MailboxRestartResponse as MailboxRestartResponse,
     type MailboxUncancelResponse as MailboxUncancelResponse,
@@ -1107,14 +1121,17 @@ export declare namespace Mobilerun {
 
   export {
     Notifications as Notifications,
+    type NotificationApplyPreferencesPresetResponse as NotificationApplyPreferencesPresetResponse,
     type NotificationCatalogResponse as NotificationCatalogResponse,
     type NotificationGetPreferencesResponse as NotificationGetPreferencesResponse,
     type NotificationUpdatePreferencesResponse as NotificationUpdatePreferencesResponse,
+    type NotificationApplyPreferencesPresetParams as NotificationApplyPreferencesPresetParams,
     type NotificationUpdatePreferencesParams as NotificationUpdatePreferencesParams,
   };
 
   export {
     Messages as Messages,
+    type MessageRetrieveResponse as MessageRetrieveResponse,
     type MessageListResponse as MessageListResponse,
     type MessageListParams as MessageListParams,
   };

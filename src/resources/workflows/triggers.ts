@@ -12,6 +12,10 @@ export class Triggers extends APIResource {
    * Each type requires its own fields (e.g. `eventType` and optional `conditions`
    * for events, `scheduleRule` and `timezone` for schedules, `customPayloadSchema`
    * for custom triggers); mismatched fields are rejected.
+   *
+   * Supports an optional `Idempotency-Key` header (1-255 printable ASCII
+   * characters). Replays with the same key and an identical body return the original
+   * 201; a changed body under the same key returns 422 `idempotency_key_reused`.
    */
   create(body: TriggerCreateParams, options?: RequestOptions): APIPromise<TriggerCreateResponse> {
     return this._client.post('/triggers', { body, ...options });
@@ -74,6 +78,16 @@ export class Triggers extends APIResource {
    *
    * Only triggers with `activation = "custom"` can be fired through this endpoint;
    * event and schedule triggers return 409.
+   *
+   * Supports an optional `Idempotency-Key` header (1-255 printable ASCII
+   * characters), which maps to the derived `invocationId` used for fan-out
+   * deduplication (the deprecated `invocationId` body field wins when both are
+   * supplied, and a mismatch between them is logged). The payload is bound to the
+   * key on the first accepted fire, before fan-out. A repeat with the same key and
+   * an identical payload returns 202 with `Idempotent-Replayed: true`
+   * (`deduplicated: true` when flows were skipped; `enqueuedCount` counts only
+   * executions enqueued by that call); a changed payload under the same key returns
+   * 422 `idempotency_key_reused`.
    */
   fire(
     triggerID: string,
@@ -186,7 +200,7 @@ export namespace TriggerRetrieveResponse {
 
     ownerId: string;
 
-    scheduleRule: unknown;
+    scheduleRule: Data.ScheduleRule;
 
     timezone: string | null;
 
@@ -200,6 +214,43 @@ export namespace TriggerRetrieveResponse {
     conditions?: unknown;
 
     nextFireTime?: string | null;
+  }
+
+  export namespace Data {
+    export interface ScheduleRule {
+      type: 'once' | 'cron' | 'recurring';
+
+      /**
+       * ISO 8601 datetime (for type=once)
+       */
+      dateTime?: string;
+
+      /**
+       * Cron expression (for type=cron)
+       */
+      expression?: string;
+
+      /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      jitter?: ScheduleRule.Jitter;
+
+      /**
+       * RRULE string (for type=recurring)
+       */
+      rrule?: string;
+    }
+
+    export namespace ScheduleRule {
+      /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      export interface Jitter {
+        afterMinutes?: number;
+
+        beforeMinutes?: number;
+      }
+    }
   }
 }
 
@@ -227,7 +278,7 @@ export namespace TriggerUpdateResponse {
 
     ownerId: string;
 
-    scheduleRule: unknown;
+    scheduleRule: Data.ScheduleRule;
 
     timezone: string | null;
 
@@ -241,6 +292,43 @@ export namespace TriggerUpdateResponse {
     conditions?: unknown;
 
     nextFireTime?: string | null;
+  }
+
+  export namespace Data {
+    export interface ScheduleRule {
+      type: 'once' | 'cron' | 'recurring';
+
+      /**
+       * ISO 8601 datetime (for type=once)
+       */
+      dateTime?: string;
+
+      /**
+       * Cron expression (for type=cron)
+       */
+      expression?: string;
+
+      /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      jitter?: ScheduleRule.Jitter;
+
+      /**
+       * RRULE string (for type=recurring)
+       */
+      rrule?: string;
+    }
+
+    export namespace ScheduleRule {
+      /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      export interface Jitter {
+        afterMinutes?: number;
+
+        beforeMinutes?: number;
+      }
+    }
   }
 }
 
@@ -270,7 +358,7 @@ export namespace TriggerListResponse {
 
     ownerId: string;
 
-    scheduleRule: unknown;
+    scheduleRule: Item.ScheduleRule;
 
     timezone: string | null;
 
@@ -284,6 +372,43 @@ export namespace TriggerListResponse {
     conditions?: unknown;
 
     nextFireTime?: string | null;
+  }
+
+  export namespace Item {
+    export interface ScheduleRule {
+      type: 'once' | 'cron' | 'recurring';
+
+      /**
+       * ISO 8601 datetime (for type=once)
+       */
+      dateTime?: string;
+
+      /**
+       * Cron expression (for type=cron)
+       */
+      expression?: string;
+
+      /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      jitter?: ScheduleRule.Jitter;
+
+      /**
+       * RRULE string (for type=recurring)
+       */
+      rrule?: string;
+    }
+
+    export namespace ScheduleRule {
+      /**
+       * Optional per-occurrence random window around the nominal schedule time
+       */
+      export interface Jitter {
+        afterMinutes?: number;
+
+        beforeMinutes?: number;
+      }
+    }
   }
 }
 
@@ -465,13 +590,6 @@ export interface TriggerFireParams {
    * otherwise only "must be a JSON object" is enforced.
    */
   payload: { [key: string]: unknown };
-
-  /**
-   * Optional client-supplied idempotency key. When provided, a flow that already has
-   * an execution for this (flow, invocationId) is skipped and `deduplicated` is
-   * true. When omitted a fresh server-side id is generated (no dedup).
-   */
-  invocationId?: string;
 }
 
 export declare namespace Triggers {

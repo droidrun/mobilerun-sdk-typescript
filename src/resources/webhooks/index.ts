@@ -12,6 +12,12 @@ export {
   type DeliveryStatsParams,
 } from './deliveries';
 export {
+  Integrations,
+  type IntegrationListResponse,
+  type IntegrationListTargetsResponse,
+  type IntegrationListTargetsParams,
+} from './integrations';
+export {
   Webhooks,
   type WebhookCreateResponse,
   type WebhookRetrieveResponse,

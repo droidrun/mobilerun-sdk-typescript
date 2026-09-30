@@ -3,9 +3,14 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as MessagesAPI from './messages';
-import { MessageListParams, MessageListResponse, Messages } from './messages';
+import {
+  MessageListParams,
+  MessageListResponse,
+  MessageSendParams,
+  MessageSendResponse,
+  Messages,
+} from './messages';
 import { APIPromise } from '../../core/api-promise';
-import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -22,18 +27,10 @@ export class Numbers extends APIResource {
    * ```
    */
   create(
-    params: NumberCreateParams | null | undefined = {},
+    body: NumberCreateParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<NumberCreateResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params ?? {};
-    return this._client.post('/numbers/phones', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+    return this._client.post('/numbers/phones', { body, ...options });
   }
 
   /**
@@ -162,10 +159,21 @@ export namespace NumberRetrieveResponse {
   export interface Data {
     id: string;
 
+    /**
+     * Actions currently available for this phone number.
+     */
+    actions: Data.Actions;
+
     cancelAtPeriodEnd: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.cancel`
+     */
     cancellable: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.send`
+     */
     canSend: boolean;
 
     capabilities: Array<'sms' | 'voice'> | null;
@@ -188,6 +196,26 @@ export namespace NumberRetrieveResponse {
 
     updatedAt: string | null;
   }
+
+  export namespace Data {
+    /**
+     * Actions currently available for this phone number.
+     */
+    export interface Actions {
+      /**
+       * True when DELETE /numbers/phones/{id} would currently succeed.
+       */
+      cancel: boolean;
+
+      /**
+       * True when this number passes the send gate of POST
+       * /numbers/phones/{id}/messages: self-service sending is switched on and the
+       * number is active and able to send SMS. Daily and burst limits and recipient/body
+       * checks still apply; the send endpoint stays the final judge.
+       */
+      send: boolean;
+    }
+  }
 }
 
 export interface NumberUpdateResponse {
@@ -198,10 +226,21 @@ export namespace NumberUpdateResponse {
   export interface Data {
     id: string;
 
+    /**
+     * Actions currently available for this phone number.
+     */
+    actions: Data.Actions;
+
     cancelAtPeriodEnd: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.cancel`
+     */
     cancellable: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.send`
+     */
     canSend: boolean;
 
     capabilities: Array<'sms' | 'voice'> | null;
@@ -223,6 +262,26 @@ export namespace NumberUpdateResponse {
     state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
 
     updatedAt: string | null;
+  }
+
+  export namespace Data {
+    /**
+     * Actions currently available for this phone number.
+     */
+    export interface Actions {
+      /**
+       * True when DELETE /numbers/phones/{id} would currently succeed.
+       */
+      cancel: boolean;
+
+      /**
+       * True when this number passes the send gate of POST
+       * /numbers/phones/{id}/messages: self-service sending is switched on and the
+       * number is active and able to send SMS. Daily and burst limits and recipient/body
+       * checks still apply; the send endpoint stays the final judge.
+       */
+      send: boolean;
+    }
   }
 }
 
@@ -236,10 +295,21 @@ export namespace NumberListResponse {
   export interface Item {
     id: string;
 
+    /**
+     * Actions currently available for this phone number.
+     */
+    actions: Item.Actions;
+
     cancelAtPeriodEnd: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.cancel`
+     */
     cancellable: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.send`
+     */
     canSend: boolean;
 
     capabilities: Array<'sms' | 'voice'> | null;
@@ -262,6 +332,26 @@ export namespace NumberListResponse {
 
     updatedAt: string | null;
   }
+
+  export namespace Item {
+    /**
+     * Actions currently available for this phone number.
+     */
+    export interface Actions {
+      /**
+       * True when DELETE /numbers/phones/{id} would currently succeed.
+       */
+      cancel: boolean;
+
+      /**
+       * True when this number passes the send gate of POST
+       * /numbers/phones/{id}/messages: self-service sending is switched on and the
+       * number is active and able to send SMS. Daily and burst limits and recipient/body
+       * checks still apply; the send endpoint stays the final judge.
+       */
+      send: boolean;
+    }
+  }
 }
 
 export interface NumberDeleteResponse {
@@ -272,10 +362,21 @@ export namespace NumberDeleteResponse {
   export interface Data {
     id: string;
 
+    /**
+     * Actions currently available for this phone number.
+     */
+    actions: Data.Actions;
+
     cancelAtPeriodEnd: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.cancel`
+     */
     cancellable: boolean;
 
+    /**
+     * @deprecated Deprecated: use `actions.send`
+     */
     canSend: boolean;
 
     capabilities: Array<'sms' | 'voice'> | null;
@@ -297,6 +398,26 @@ export namespace NumberDeleteResponse {
     state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
 
     updatedAt: string | null;
+  }
+
+  export namespace Data {
+    /**
+     * Actions currently available for this phone number.
+     */
+    export interface Actions {
+      /**
+       * True when DELETE /numbers/phones/{id} would currently succeed.
+       */
+      cancel: boolean;
+
+      /**
+       * True when this number passes the send gate of POST
+       * /numbers/phones/{id}/messages: self-service sending is switched on and the
+       * number is active and able to send SMS. Daily and burst limits and recipient/body
+       * checks still apply; the send endpoint stays the final judge.
+       */
+      send: boolean;
+    }
   }
 }
 
@@ -362,33 +483,28 @@ export namespace NumberPurposesResponse {
 
 export interface NumberCreateParams {
   /**
-   * Body param: Use included capacity when available, require included capacity
-   * without paid fallback (included_only), or start a paid checkout (rent).
+   * Use included capacity when available, require included capacity without paid
+   * fallback (included_only), or start a paid checkout (rent).
    */
   billingPreference?: 'included' | 'included_only' | 'rent';
 
   /**
-   * Body param: Optional ISO 3166-1 alpha-2 country code from GET
-   * /numbers/phones/countries. Cannot be combined with `purpose`.
+   * Optional ISO 3166-1 alpha-2 country code from GET /numbers/phones/countries.
+   * Cannot be combined with `purpose`.
    */
   country?: string;
 
   /**
-   * Body param: User-defined display label — NFC-normalized, up to 100 GRAPHEMES
-   * (not UTF-16 code units; an emoji/flag may span several). Display-only, never
-   * used for routing. Also seeds the billing entity name at purchase.
+   * User-defined display label — NFC-normalized, up to 100 GRAPHEMES (not UTF-16
+   * code units; an emoji/flag may span several). Display-only, never used for
+   * routing. Also seeds the billing entity name at purchase.
    */
   label?: string | null;
 
   /**
-   * Body param: Optional purpose from GET /numbers/phones/purposes.
+   * Optional purpose from GET /numbers/phones/purposes.
    */
   purpose?: string;
-
-  /**
-   * Header param: Optional request idempotency key.
-   */
-  'Idempotency-Key'?: string;
 }
 
 export interface NumberUpdateParams {
@@ -434,6 +550,8 @@ export declare namespace Numbers {
   export {
     Messages as Messages,
     type MessageListResponse as MessageListResponse,
+    type MessageSendResponse as MessageSendResponse,
     type MessageListParams as MessageListParams,
+    type MessageSendParams as MessageSendParams,
   };
 }

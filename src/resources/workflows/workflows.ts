@@ -16,16 +16,6 @@ import {
   EventIngestResponse,
   Events,
 } from './events';
-import * as ExecutionsAPI from './executions';
-import {
-  ExecutionAbortResponse,
-  ExecutionGetMetricsParams,
-  ExecutionGetMetricsResponse,
-  ExecutionListParams,
-  ExecutionListResponse,
-  ExecutionRetrieveResponse,
-  Executions,
-} from './executions';
 import * as TimezonesAPI from './timezones';
 import { TimezoneListResponse, Timezones } from './timezones';
 import * as TriggersAPI from './triggers';
@@ -54,23 +44,44 @@ import {
   ActionUpdateResponse,
   Actions,
 } from './actions/actions';
+import * as ExecutionsAPI from './executions/executions';
+import {
+  ExecutionAbortResponse,
+  ExecutionGetMetricsParams,
+  ExecutionGetMetricsResponse,
+  ExecutionListParams,
+  ExecutionListResponse,
+  ExecutionRetrieveResponse,
+  Executions,
+} from './executions/executions';
 import * as FlowsAPI from './flows/flows';
 import {
+  FlowActivateParams,
+  FlowActivateResponse,
   FlowCapacityResponse,
   FlowCloneParams,
   FlowCloneResponse,
   FlowCreateParams,
   FlowCreateResponse,
   FlowDeleteResponse,
+  FlowDeliveryOptionsResponse,
   FlowDryRunParams,
   FlowDryRunResponse,
   FlowListParams,
   FlowListRepairsResponse,
   FlowListResponse,
   FlowRetrieveResponse,
+  FlowRunParams,
+  FlowRunResponse,
+  FlowTemplateContextParams,
+  FlowTemplateContextResponse,
   FlowUnblockResponse,
   FlowUpdateParams,
   FlowUpdateResponse,
+  FlowValidateParams,
+  FlowValidateResponse,
+  FlowVerifyParams,
+  FlowVerifyResponse,
   Flows,
 } from './flows/flows';
 
@@ -133,16 +144,27 @@ export declare namespace Workflows {
     type FlowUpdateResponse as FlowUpdateResponse,
     type FlowListResponse as FlowListResponse,
     type FlowDeleteResponse as FlowDeleteResponse,
+    type FlowActivateResponse as FlowActivateResponse,
     type FlowCapacityResponse as FlowCapacityResponse,
     type FlowCloneResponse as FlowCloneResponse,
+    type FlowDeliveryOptionsResponse as FlowDeliveryOptionsResponse,
     type FlowDryRunResponse as FlowDryRunResponse,
     type FlowListRepairsResponse as FlowListRepairsResponse,
+    type FlowRunResponse as FlowRunResponse,
+    type FlowTemplateContextResponse as FlowTemplateContextResponse,
     type FlowUnblockResponse as FlowUnblockResponse,
+    type FlowValidateResponse as FlowValidateResponse,
+    type FlowVerifyResponse as FlowVerifyResponse,
     type FlowCreateParams as FlowCreateParams,
     type FlowUpdateParams as FlowUpdateParams,
     type FlowListParams as FlowListParams,
+    type FlowActivateParams as FlowActivateParams,
     type FlowCloneParams as FlowCloneParams,
     type FlowDryRunParams as FlowDryRunParams,
+    type FlowRunParams as FlowRunParams,
+    type FlowTemplateContextParams as FlowTemplateContextParams,
+    type FlowValidateParams as FlowValidateParams,
+    type FlowVerifyParams as FlowVerifyParams,
   };
 
   export {

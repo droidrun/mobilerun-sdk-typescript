@@ -66,16 +66,8 @@ export class Files extends APIResource {
   /**
    * Mint a presigned PUT URL for a user file upload
    */
-  uploadURL(params: FileUploadURLParams, options?: RequestOptions): APIPromise<FileUploadURLResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post('/agents/files/upload-url', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+  uploadURL(body: FileUploadURLParams, options?: RequestOptions): APIPromise<FileUploadURLResponse> {
+    return this._client.post('/agents/files/upload-url', { body, ...options });
   }
 }
 
@@ -203,9 +195,13 @@ export namespace FileListResponse {
   }
 
   export interface Quota {
-    currentBytes: number;
+    includedBytes: number | null;
 
-    quotaBytes: number;
+    maxBytes: number | null;
+
+    overageAllowed: boolean;
+
+    usedBytes: number;
   }
 }
 
@@ -298,30 +294,13 @@ export interface FileListParams {
 }
 
 export interface FileUploadURLParams {
-  /**
-   * Body param
-   */
   filename: string;
 
-  /**
-   * Body param
-   */
   mimeType: string;
 
-  /**
-   * Body param
-   */
   sizeBytes: number;
 
-  /**
-   * Body param
-   */
   zone?: 'user' | 'skills';
-
-  /**
-   * Header param
-   */
-  'Idempotency-Key'?: string;
 }
 
 export declare namespace Files {

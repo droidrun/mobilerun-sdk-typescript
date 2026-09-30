@@ -36,4 +36,29 @@ describe('resource messages', () => {
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
+
+  // Mock server tests are disabled
+  test.skip('send: only required params', async () => {
+    const responsePromise = client.numbers.messages.send('550e8400-e29b-41d4-a716-446655440000', {
+      body: 'x',
+      to: '+15551230001',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('send: required and optional params', async () => {
+    const response = await client.numbers.messages.send('550e8400-e29b-41d4-a716-446655440000', {
+      body: 'x',
+      to: '+15551230001',
+      clientRequestId: 'x',
+      deliveryReport: true,
+    });
+  });
 });

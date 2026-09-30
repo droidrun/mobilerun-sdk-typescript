@@ -8,12 +8,15 @@ import {
   Proxies,
   ProxyBuyParams,
   ProxyBuyResponse,
+  ProxyEnsureHealthyResponse,
   ProxyListConnectionsParams,
   ProxyListConnectionsResponse,
   ProxyListParams,
   ProxyListResponse,
   ProxyPingResponse,
   ProxyRetrieveResponse,
+  ProxyUpdateParams,
+  ProxyUpdateResponse,
 } from './proxies';
 import * as UsersAPI from './users';
 import {
@@ -49,10 +52,13 @@ export declare namespace Connect {
   export {
     Proxies as Proxies,
     type ProxyRetrieveResponse as ProxyRetrieveResponse,
+    type ProxyUpdateResponse as ProxyUpdateResponse,
     type ProxyListResponse as ProxyListResponse,
     type ProxyBuyResponse as ProxyBuyResponse,
+    type ProxyEnsureHealthyResponse as ProxyEnsureHealthyResponse,
     type ProxyListConnectionsResponse as ProxyListConnectionsResponse,
     type ProxyPingResponse as ProxyPingResponse,
+    type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
     type ProxyBuyParams as ProxyBuyParams,
     type ProxyListConnectionsParams as ProxyListConnectionsParams,

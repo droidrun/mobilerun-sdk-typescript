@@ -39,11 +39,13 @@ export {
   type DeviceFingerprintResponse,
   type DeviceRetrieveCapabilitiesResponse,
   type DeviceSetNameResponse,
+  type DeviceSummaryResponse,
   type DeviceWaitReadyResponse,
   type DeviceCreateParams,
   type DeviceListParams,
   type DeviceFingerprintParams,
   type DeviceSetNameParams,
+  type DeviceSummaryParams,
   type DeviceTerminateParams,
 } from './devices';
 export {
