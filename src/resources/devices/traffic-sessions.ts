@@ -3,7 +3,6 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
-import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -14,15 +13,10 @@ export class TrafficSessions extends APIResource {
    */
   create(
     deviceID: string,
-    params: TrafficSessionCreateParams,
+    body: TrafficSessionCreateParams,
     options?: RequestOptions,
   ): APIPromise<TrafficSessionCreateResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/traffic/sessions`, {
-      body,
-      ...options,
-      headers: buildHeaders([{ 'Idempotency-Key': idempotencyKey }, options?.headers]),
-    });
+    return this._client.post(path`/devices/${deviceID}/traffic/sessions`, { body, ...options });
   }
 
   /**
@@ -255,19 +249,8 @@ export namespace TrafficSessionDeleteResponse {
 }
 
 export interface TrafficSessionCreateParams {
-  /**
-   * Header param
-   */
-  'Idempotency-Key': string;
-
-  /**
-   * Body param
-   */
   expiresInSeconds?: number;
 
-  /**
-   * Body param
-   */
   maxBodyBytes?: number;
 }
 

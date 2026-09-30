@@ -25,12 +25,13 @@ export class Mailboxes extends APIResource {
    *
    * @example
    * ```ts
-   * const mailbox = await client.mailboxes.create({
-   *   clientRequestId: 'x',
-   * });
+   * const mailbox = await client.mailboxes.create();
    * ```
    */
-  create(body: MailboxCreateParams, options?: RequestOptions): APIPromise<MailboxCreateResponse> {
+  create(
+    body: MailboxCreateParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<MailboxCreateResponse> {
     return this._client.post('/mailboxes', { body, ...options });
   }
 
@@ -84,7 +85,8 @@ export class Mailboxes extends APIResource {
 
   /**
    * Cancels a pending mailbox or schedules an active paid mailbox for cancellation.
-   * Existing addresses and messages are retained. Repeating the request is safe.
+   * Existing addresses and messages are retained. Repeating the request is safe. An
+   * external inbox (Gmail) cannot be cancelled here; disconnect the link instead.
    *
    * @example
    * ```ts
@@ -173,7 +175,7 @@ export namespace MailboxCreateResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -191,13 +193,18 @@ export namespace MailboxCreateResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -223,7 +230,7 @@ export namespace MailboxRetrieveResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -241,13 +248,18 @@ export namespace MailboxRetrieveResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -273,7 +285,7 @@ export namespace MailboxUpdateResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -291,13 +303,18 @@ export namespace MailboxUpdateResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -325,7 +342,7 @@ export namespace MailboxListResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -343,13 +360,18 @@ export namespace MailboxListResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Item {
@@ -375,7 +397,7 @@ export namespace MailboxDeleteResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -393,13 +415,18 @@ export namespace MailboxDeleteResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -464,7 +491,7 @@ export namespace MailboxRestartResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -482,13 +509,18 @@ export namespace MailboxRestartResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -514,7 +546,7 @@ export namespace MailboxUncancelResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -532,13 +564,18 @@ export namespace MailboxUncancelResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -555,8 +592,6 @@ export namespace MailboxUncancelResponse {
 }
 
 export interface MailboxCreateParams {
-  clientRequestId: string;
-
   /**
    * included uses package capacity when available and otherwise starts paid
    * checkout; included_only fails without creating a paid reservation when no

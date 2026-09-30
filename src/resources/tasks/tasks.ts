@@ -68,16 +68,8 @@ export class Tasks extends APIResource {
    * Create and dispatch a new agent task. Returns the task ID and device stream
    * details.
    */
-  run(params: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post('/tasks', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+  run(body: TaskRunParams, options?: RequestOptions): APIPromise<TaskRunResponse> {
+    return this._client.post('/tasks', { body, ...options });
   }
 
   /**
@@ -755,6 +747,11 @@ export namespace TaskGetTrajectoryResponse {
 
       code?: string | null;
 
+      /**
+       * Classification of tool-call markup in an LLM response.
+       */
+      tool_call_status?: 'valid' | 'no_markup' | 'malformed';
+
       usage?: Data.Usage | null;
     }
 
@@ -1179,114 +1176,70 @@ export interface TaskListParams {
 
 export interface TaskRunParams {
   /**
-   * Body param: The ID of the device to run the task on.
+   * The ID of the device to run the task on.
    */
   deviceId: string;
 
-  /**
-   * Body param
-   */
   task: string;
 
-  /**
-   * Body param
-   */
   accessibility?: boolean;
 
-  /**
-   * Body param
-   */
   apps?: Array<string>;
 
-  /**
-   * Body param
-   */
   continueOnFailure?: boolean;
 
-  /**
-   * Body param
-   */
   credentials?: Array<TaskRunParams.Credential>;
 
   /**
-   * Body param: The display ID of the device to run the task on.
+   * The display ID of the device to run the task on.
    */
   displayId?: number;
 
   /**
-   * Body param: Maximum agent execution time in seconds (1–2700).
+   * Maximum agent execution time in seconds (1–2700).
    */
   executionTimeout?: number;
 
-  /**
-   * Body param
-   */
   files?: Array<string>;
 
   /**
-   * Body param: The LLM model identifier to use for the task (e.g.
-   * 'openai/gpt-5.6-luna')
+   * The LLM model identifier to use for the task (e.g. 'openai/gpt-6-luna')
    */
   llmModel?: string;
 
-  /**
-   * Body param
-   */
   maxSteps?: number;
 
-  /**
-   * Body param
-   */
   outputSchema?: { [key: string]: unknown } | null;
 
-  /**
-   * Body param
-   */
   reasoning?: boolean;
 
   /**
-   * Body param: Record device video for the whole task and persist a retrievable
-   * reference
+   * Record device video for the whole task and persist a retrievable reference
    */
   recordingEnabled?: boolean;
 
-  /**
-   * Body param
-   */
   stealth?: boolean;
 
   /**
-   * Body param: LLM model used by sub-agent roles: executor, app_opener,
-   * structured_output
+   * LLM model used by sub-agent roles: executor, app_opener, structured_output
    */
   subagentModel?: string;
 
   /**
-   * Body param: Optional custom behavioral overlay applied on top of the agent's
-   * default system prompts. Never echoed back in responses or errors.
+   * Optional custom behavioral overlay applied on top of the agent's default system
+   * prompts. Never echoed back in responses or errors.
    */
   systemPrompt?: string | null;
 
   /**
-   * @deprecated Body param: Deprecated and ignored. Sampling behavior is controlled
-   * by the model provider.
+   * @deprecated Deprecated and ignored. Sampling behavior is controlled by the model
+   * provider.
    */
   temperature?: number;
 
-  /**
-   * Body param
-   */
   vision?: boolean;
 
-  /**
-   * Body param
-   */
   vpnCountry?: 'US' | 'BR' | 'FR' | 'DE' | 'IN' | 'JP' | 'KR' | 'ZA' | null;
-
-  /**
-   * Header param
-   */
-  'Idempotency-Key'?: string;
 }
 
 export namespace TaskRunParams {
@@ -1326,7 +1279,7 @@ export interface TaskRunStreamedParams {
   files?: Array<string>;
 
   /**
-   * The LLM model identifier to use for the task (e.g. 'openai/gpt-5.6-luna')
+   * The LLM model identifier to use for the task (e.g. 'openai/gpt-6-luna')
    */
   llmModel?: string;
 
