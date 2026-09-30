@@ -26,6 +26,7 @@ describe('resource webhooks', () => {
       url: 'https://example.com/webhooks/droidrun',
       description: 'description',
       eventTypes: ['task.run.completed', 'task.run.failed'],
+      kind: 'http',
     });
   });
 
@@ -88,6 +89,7 @@ describe('resource webhooks', () => {
       client.webhooks.list(
         {
           createdBy: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          kind: 'http',
           mine: 'true',
           page: 1,
           pageSize: 1,

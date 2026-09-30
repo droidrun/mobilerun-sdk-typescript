@@ -49,11 +49,13 @@ export {
   type DeviceFingerprintResponse,
   type DeviceRetrieveCapabilitiesResponse,
   type DeviceSetNameResponse,
+  type DeviceSummaryResponse,
   type DeviceWaitReadyResponse,
   type DeviceCreateParams,
   type DeviceListParams,
   type DeviceFingerprintParams,
   type DeviceSetNameParams,
+  type DeviceSummaryParams,
   type DeviceTerminateParams,
 } from './devices/devices';
 export {
@@ -76,6 +78,7 @@ export {
   type MailboxListResponse,
   type MailboxDeleteResponse,
   type MailboxCapacityResponse,
+  type MailboxDisconnectResponse,
   type MailboxOtpResponse,
   type MailboxRestartResponse,
   type MailboxUncancelResponse,
@@ -85,13 +88,20 @@ export {
   type MailboxOtpParams,
   type MailboxRestartParams,
 } from './mailboxes/mailboxes';
-export { Messages, type MessageListResponse, type MessageListParams } from './messages/messages';
+export {
+  Messages,
+  type MessageRetrieveResponse,
+  type MessageListResponse,
+  type MessageListParams,
+} from './messages/messages';
 export { Models, type ModelListResponse } from './models';
 export {
   Notifications,
+  type NotificationApplyPreferencesPresetResponse,
   type NotificationCatalogResponse,
   type NotificationGetPreferencesResponse,
   type NotificationUpdatePreferencesResponse,
+  type NotificationApplyPreferencesPresetParams,
   type NotificationUpdatePreferencesParams,
 } from './notifications';
 export {

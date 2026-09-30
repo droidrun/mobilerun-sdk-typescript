@@ -27,6 +27,7 @@ describe('resource deliveries', () => {
       client.webhooks.deliveries.list(
         {
           eventId: 'x',
+          kind: 'http',
           page: 1,
           pageSize: 1,
           since: '2019-12-27T18:11:19.117Z',
@@ -105,7 +106,7 @@ describe('resource deliveries', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.webhooks.deliveries.stats(
-        { since: '2019-12-27T18:11:19.117Z' },
+        { kind: 'http', since: '2019-12-27T18:11:19.117Z' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);

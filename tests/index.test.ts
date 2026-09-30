@@ -454,6 +454,18 @@ describe('instantiate client', () => {
   });
 });
 
+describe('idempotency', () => {
+  test.skip('key can be set per-request', async () => {
+    const client = new Mobilerun({
+      baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+      apiKey: 'My API Key',
+    });
+    await client.apps.confirmUpload('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+      idempotencyKey: 'my-idempotency-key',
+    });
+  });
+});
+
 describe('request building', () => {
   const client = new Mobilerun({ apiKey: 'My API Key' });
 

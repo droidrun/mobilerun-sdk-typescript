@@ -2,6 +2,13 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
+import * as ConnectionsAPI from './connections';
+import {
+  ConnectionCreateParams,
+  ConnectionCreateResponse,
+  ConnectionRetrieveResponse,
+  Connections,
+} from './connections';
 import * as MessagesAPI from './messages';
 import {
   MessageListParams,
@@ -15,22 +22,25 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Mailboxes extends APIResource {
+  connections: ConnectionsAPI.Connections = new ConnectionsAPI.Connections(this._client);
   messages: MessagesAPI.Messages = new MessagesAPI.Messages(this._client);
 
   /**
    * Creates a mailbox on the default domain or a connected custom domain. An
-   * optional `localPart` selects the address. Replaying the same `clientRequestId`
-   * and payload returns the original mailbox. Poll the mailbox when a 202 response
-   * does not yet include a checkout URL.
+   * optional `localPart` selects the address. Replaying the same Idempotency-Key
+   * (or, during migration, the deprecated `clientRequestId` body field) and payload
+   * returns the original mailbox. Poll the mailbox when a 202 response does not yet
+   * include a checkout URL.
    *
    * @example
    * ```ts
-   * const mailbox = await client.mailboxes.create({
-   *   clientRequestId: 'x',
-   * });
+   * const mailbox = await client.mailboxes.create();
    * ```
    */
-  create(body: MailboxCreateParams, options?: RequestOptions): APIPromise<MailboxCreateResponse> {
+  create(
+    body: MailboxCreateParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<MailboxCreateResponse> {
     return this._client.post('/mailboxes', { body, ...options });
   }
 
@@ -84,7 +94,8 @@ export class Mailboxes extends APIResource {
 
   /**
    * Cancels a pending mailbox or schedules an active paid mailbox for cancellation.
-   * Existing addresses and messages are retained. Repeating the request is safe.
+   * Existing addresses and messages are retained. Repeating the request is safe. An
+   * external inbox (Gmail) cannot be cancelled here; disconnect the link instead.
    *
    * @example
    * ```ts
@@ -107,6 +118,20 @@ export class Mailboxes extends APIResource {
    */
   capacity(options?: RequestOptions): APIPromise<MailboxCapacityResponse> {
     return this._client.get('/mailboxes/capacity', options);
+  }
+
+  /**
+   * Removes only this mailbox link. The agent Composio connection stays in place.
+   *
+   * @example
+   * ```ts
+   * const response = await client.mailboxes.disconnect(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
+   * ```
+   */
+  disconnect(mailboxID: string, options?: RequestOptions): APIPromise<MailboxDisconnectResponse> {
+    return this._client.post(path`/mailboxes/${mailboxID}/disconnect`, options);
   }
 
   /**
@@ -173,7 +198,7 @@ export namespace MailboxCreateResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -191,13 +216,18 @@ export namespace MailboxCreateResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -223,7 +253,7 @@ export namespace MailboxRetrieveResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -241,13 +271,18 @@ export namespace MailboxRetrieveResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -273,7 +308,7 @@ export namespace MailboxUpdateResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -291,13 +326,18 @@ export namespace MailboxUpdateResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -325,7 +365,7 @@ export namespace MailboxListResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -343,13 +383,18 @@ export namespace MailboxListResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Item {
@@ -375,7 +420,7 @@ export namespace MailboxDeleteResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -393,13 +438,18 @@ export namespace MailboxDeleteResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -428,6 +478,61 @@ export namespace MailboxCapacityResponse {
     remaining: number;
 
     status: 'available' | 'exhausted' | 'not_included';
+  }
+}
+
+export interface MailboxDisconnectResponse {
+  data: MailboxDisconnectResponse.Data;
+}
+
+export namespace MailboxDisconnectResponse {
+  export interface Data {
+    id: string;
+
+    address: string | null;
+
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
+
+    cancelAtPeriodEnd: boolean;
+
+    checkoutExpiresAt: string | null;
+
+    checkoutUrl: string | null;
+
+    createdAt: string;
+
+    currentPeriodEnd: string | null;
+
+    domainId: string | null;
+
+    inboundMessages: Data.InboundMessages;
+
+    label: string | null;
+
+    provider: 'matix' | 'gmail';
+
+    status:
+      | 'provisioning'
+      | 'awaiting_payment'
+      | 'active'
+      | 'cancel_scheduled'
+      | 'archived'
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
+  }
+
+  export namespace Data {
+    export interface InboundMessages {
+      exhausted: boolean;
+
+      included: number;
+
+      resetsAt: string | null;
+
+      used: number;
+    }
   }
 }
 
@@ -464,7 +569,7 @@ export namespace MailboxRestartResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -482,13 +587,18 @@ export namespace MailboxRestartResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -514,7 +624,7 @@ export namespace MailboxUncancelResponse {
 
     address: string | null;
 
-    billingMode: 'rent' | 'included' | 'domain';
+    billingMode: 'rent' | 'included' | 'domain' | 'external';
 
     cancelAtPeriodEnd: boolean;
 
@@ -532,13 +642,18 @@ export namespace MailboxUncancelResponse {
 
     label: string | null;
 
+    provider: 'matix' | 'gmail';
+
     status:
       | 'provisioning'
       | 'awaiting_payment'
       | 'active'
       | 'cancel_scheduled'
       | 'archived'
-      | 'billing_error';
+      | 'billing_error'
+      | 'pending_connection'
+      | 'connection_expired'
+      | 'connection_removed';
   }
 
   export namespace Data {
@@ -555,8 +670,6 @@ export namespace MailboxUncancelResponse {
 }
 
 export interface MailboxCreateParams {
-  clientRequestId: string;
-
   /**
    * included uses package capacity when available and otherwise starts paid
    * checkout; included_only fails without creating a paid reservation when no
@@ -607,6 +720,7 @@ export interface MailboxRestartParams {
   billingPreference?: 'included' | 'included_only' | 'rent';
 }
 
+Mailboxes.Connections = Connections;
 Mailboxes.Messages = Messages;
 
 export declare namespace Mailboxes {
@@ -617,6 +731,7 @@ export declare namespace Mailboxes {
     type MailboxListResponse as MailboxListResponse,
     type MailboxDeleteResponse as MailboxDeleteResponse,
     type MailboxCapacityResponse as MailboxCapacityResponse,
+    type MailboxDisconnectResponse as MailboxDisconnectResponse,
     type MailboxOtpResponse as MailboxOtpResponse,
     type MailboxRestartResponse as MailboxRestartResponse,
     type MailboxUncancelResponse as MailboxUncancelResponse,
@@ -625,6 +740,13 @@ export declare namespace Mailboxes {
     type MailboxListParams as MailboxListParams,
     type MailboxOtpParams as MailboxOtpParams,
     type MailboxRestartParams as MailboxRestartParams,
+  };
+
+  export {
+    Connections as Connections,
+    type ConnectionCreateResponse as ConnectionCreateResponse,
+    type ConnectionRetrieveResponse as ConnectionRetrieveResponse,
+    type ConnectionCreateParams as ConnectionCreateParams,
   };
 
   export {

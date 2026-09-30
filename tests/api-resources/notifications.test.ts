@@ -9,6 +9,23 @@ const client = new Mobilerun({
 
 describe('resource notifications', () => {
   // Mock server tests are disabled
+  test.skip('applyPreferencesPreset: only required params', async () => {
+    const responsePromise = client.notifications.applyPreferencesPreset({ preset: 'recommended' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('applyPreferencesPreset: required and optional params', async () => {
+    const response = await client.notifications.applyPreferencesPreset({ preset: 'recommended' });
+  });
+
+  // Mock server tests are disabled
   test.skip('catalog', async () => {
     const responsePromise = client.notifications.catalog();
     const rawResponse = await responsePromise.asResponse();

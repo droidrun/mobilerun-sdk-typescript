@@ -19,6 +19,10 @@ export class Actions extends APIResource {
    * under a `parentFlowActionId` or supplying its own `children`. Supports a
    * `nameOverride`, param `overrides`, and `continueOnError`. Returns 404 if the
    * flow does not exist.
+   *
+   * Supports an optional `Idempotency-Key` header (1-255 printable ASCII
+   * characters). Replays with the same key and an identical body return the original
+   * 201; a changed body under the same key returns 422 `idempotency_key_reused`.
    */
   add(flowID: string, body: ActionAddParams, options?: RequestOptions): APIPromise<ActionAddResponse> {
     return this._client.post(path`/flows/${flowID}/actions`, { body, ...options });
@@ -68,6 +72,8 @@ export namespace ActionListResponse {
 
     flowId: string;
 
+    key: string;
+
     nameOverride: string | null;
 
     overrides: Data.Overrides | null;
@@ -105,6 +111,8 @@ export namespace ActionAddResponse {
     createdAt: string | null;
 
     flowId: string;
+
+    key: string;
 
     nameOverride: string | null;
 
@@ -148,6 +156,8 @@ export namespace ActionReplaceResponse {
 
     flowId: string;
 
+    key: string;
+
     nameOverride: string | null;
 
     overrides: Data.Overrides | null;
@@ -179,6 +189,15 @@ export interface ActionAddParams {
 
   continueOnError?: boolean;
 
+  /**
+   * Stable identifier used by template resolution v2+ to address this step as
+   * {{key.field}}. Omitted keys are derived from the step name whenever a flow is
+   * created. For template resolution v3, replacing an existing flow's full action
+   * tree requires every step to carry an explicit key — a missing key is rejected
+   * there, not derived, so a name change can never silently move a step's key.
+   */
+  key?: string;
+
   nameOverride?: string;
 
   overrides?: ActionAddParams.Overrides | null;
@@ -195,6 +214,15 @@ export namespace ActionAddParams {
     position: number;
 
     continueOnError?: boolean;
+
+    /**
+     * Stable identifier used by template resolution v2+ to address this step as
+     * {{key.field}}. Omitted keys are derived from the step name whenever a flow is
+     * created. For template resolution v3, replacing an existing flow's full action
+     * tree requires every step to carry an explicit key — a missing key is rejected
+     * there, not derived, so a name change can never silently move a step's key.
+     */
+    key?: string;
 
     nameOverride?: string;
 
@@ -232,6 +260,15 @@ export namespace ActionReplaceParams {
 
     continueOnError?: boolean;
 
+    /**
+     * Stable identifier used by template resolution v2+ to address this step as
+     * {{key.field}}. Omitted keys are derived from the step name whenever a flow is
+     * created. For template resolution v3, replacing an existing flow's full action
+     * tree requires every step to carry an explicit key — a missing key is rejected
+     * there, not derived, so a name change can never silently move a step's key.
+     */
+    key?: string;
+
     nameOverride?: string;
 
     overrides?: Action.Overrides | null;
@@ -246,6 +283,15 @@ export namespace ActionReplaceParams {
       position: number;
 
       continueOnError?: boolean;
+
+      /**
+       * Stable identifier used by template resolution v2+ to address this step as
+       * {{key.field}}. Omitted keys are derived from the step name whenever a flow is
+       * created. For template resolution v3, replacing an existing flow's full action
+       * tree requires every step to carry an explicit key — a missing key is rejected
+       * there, not derived, so a name change can never silently move a step's key.
+       */
+      key?: string;
 
       nameOverride?: string;
 

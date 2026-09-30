@@ -221,6 +221,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/devices/{deviceId}/stop',
   },
   {
+    clientCallName: 'client.devices.summary',
+    fullyQualifiedName: 'devices.summary',
+    httpMethod: 'get',
+    httpPath: '/devices/summary',
+  },
+  {
     clientCallName: 'client.devices.terminate',
     fullyQualifiedName: 'devices.terminate',
     httpMethod: 'delete',
@@ -713,6 +719,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/connect/proxies/{id}',
   },
   {
+    clientCallName: 'client.connect.proxies.update',
+    fullyQualifiedName: 'connect.proxies.update',
+    httpMethod: 'patch',
+    httpPath: '/connect/proxies/{id}',
+  },
+  {
     clientCallName: 'client.connect.proxies.list',
     fullyQualifiedName: 'connect.proxies.list',
     httpMethod: 'get',
@@ -729,6 +741,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'connect.proxies.cancel',
     httpMethod: 'delete',
     httpPath: '/connect/proxies/{id}',
+  },
+  {
+    clientCallName: 'client.connect.proxies.ensureHealthy',
+    fullyQualifiedName: 'connect.proxies.ensureHealthy',
+    httpMethod: 'post',
+    httpPath: '/connect/proxies/{id}/ensure-healthy',
   },
   {
     clientCallName: 'client.connect.proxies.listConnections',
@@ -977,6 +995,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/flows/{flowId}',
   },
   {
+    clientCallName: 'client.workflows.flows.activate',
+    fullyQualifiedName: 'workflows.flows.activate',
+    httpMethod: 'post',
+    httpPath: '/flows/{flowId}/activate',
+  },
+  {
     clientCallName: 'client.workflows.flows.capacity',
     fullyQualifiedName: 'workflows.flows.capacity',
     httpMethod: 'get',
@@ -987,6 +1011,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'workflows.flows.clone',
     httpMethod: 'post',
     httpPath: '/flows/{flowId}/clone',
+  },
+  {
+    clientCallName: 'client.workflows.flows.deliveryOptions',
+    fullyQualifiedName: 'workflows.flows.deliveryOptions',
+    httpMethod: 'get',
+    httpPath: '/flows/{flowId}/delivery-options',
   },
   {
     clientCallName: 'client.workflows.flows.dryRun',
@@ -1001,10 +1031,34 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/flows/{flowId}/repairs',
   },
   {
+    clientCallName: 'client.workflows.flows.run',
+    fullyQualifiedName: 'workflows.flows.run',
+    httpMethod: 'post',
+    httpPath: '/flows/{flowId}/run',
+  },
+  {
+    clientCallName: 'client.workflows.flows.templateContext',
+    fullyQualifiedName: 'workflows.flows.templateContext',
+    httpMethod: 'get',
+    httpPath: '/flows/template-context',
+  },
+  {
     clientCallName: 'client.workflows.flows.unblock',
     fullyQualifiedName: 'workflows.flows.unblock',
     httpMethod: 'post',
     httpPath: '/flows/{flowId}/unblock',
+  },
+  {
+    clientCallName: 'client.workflows.flows.validate',
+    fullyQualifiedName: 'workflows.flows.validate',
+    httpMethod: 'post',
+    httpPath: '/flows/validate',
+  },
+  {
+    clientCallName: 'client.workflows.flows.verify',
+    fullyQualifiedName: 'workflows.flows.verify',
+    httpMethod: 'post',
+    httpPath: '/flows/{flowId}/verify',
   },
   {
     clientCallName: 'client.workflows.flows.actions.list',
@@ -1067,6 +1121,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/executions/metrics',
   },
   {
+    clientCallName: 'client.workflows.executions.screenshots.retrieve',
+    fullyQualifiedName: 'workflows.executions.screenshots.retrieve',
+    httpMethod: 'get',
+    httpPath: '/executions/{executionId}/screenshots/{screenshotId}',
+  },
+  {
     clientCallName: 'client.workflows.timezones.list',
     fullyQualifiedName: 'workflows.timezones.list',
     httpMethod: 'get',
@@ -1119,6 +1179,18 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'webhooks.testDelivery',
     httpMethod: 'post',
     httpPath: '/webhooks/{id}/test',
+  },
+  {
+    clientCallName: 'client.webhooks.integrations.list',
+    fullyQualifiedName: 'webhooks.integrations.list',
+    httpMethod: 'get',
+    httpPath: '/webhooks/integrations',
+  },
+  {
+    clientCallName: 'client.webhooks.integrations.listTargets',
+    fullyQualifiedName: 'webhooks.integrations.listTargets',
+    httpMethod: 'get',
+    httpPath: '/webhooks/integrations/{capabilityId}/targets',
   },
   {
     clientCallName: 'client.webhooks.deliveries.list',
@@ -1181,6 +1253,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/mailboxes/capacity',
   },
   {
+    clientCallName: 'client.mailboxes.disconnect',
+    fullyQualifiedName: 'mailboxes.disconnect',
+    httpMethod: 'post',
+    httpPath: '/mailboxes/{mailboxId}/disconnect',
+  },
+  {
     clientCallName: 'client.mailboxes.otp',
     fullyQualifiedName: 'mailboxes.otp',
     httpMethod: 'get',
@@ -1197,6 +1275,18 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'mailboxes.uncancel',
     httpMethod: 'post',
     httpPath: '/mailboxes/{mailboxId}/uncancel',
+  },
+  {
+    clientCallName: 'client.mailboxes.connections.create',
+    fullyQualifiedName: 'mailboxes.connections.create',
+    httpMethod: 'post',
+    httpPath: '/mailboxes/connections',
+  },
+  {
+    clientCallName: 'client.mailboxes.connections.retrieve',
+    fullyQualifiedName: 'mailboxes.connections.retrieve',
+    httpMethod: 'get',
+    httpPath: '/mailboxes/connections/{connectionId}',
   },
   {
     clientCallName: 'client.mailboxes.messages.retrieve',
@@ -1337,6 +1427,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/app-events/catalog',
   },
   {
+    clientCallName: 'client.notifications.applyPreferencesPreset',
+    fullyQualifiedName: 'notifications.applyPreferencesPreset',
+    httpMethod: 'post',
+    httpPath: '/notifications/preferences/apply-preset',
+  },
+  {
     clientCallName: 'client.notifications.catalog',
     fullyQualifiedName: 'notifications.catalog',
     httpMethod: 'get',
@@ -1353,6 +1449,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'notifications.updatePreferences',
     httpMethod: 'patch',
     httpPath: '/notifications/preferences',
+  },
+  {
+    clientCallName: 'client.messages.retrieve',
+    fullyQualifiedName: 'messages.retrieve',
+    httpMethod: 'get',
+    httpPath: '/numbers/messages/{id}',
   },
   {
     clientCallName: 'client.messages.list',
@@ -1424,6 +1526,12 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.numbers.messages.list',
     fullyQualifiedName: 'numbers.messages.list',
     httpMethod: 'get',
+    httpPath: '/numbers/phones/{id}/messages',
+  },
+  {
+    clientCallName: 'client.numbers.messages.send',
+    fullyQualifiedName: 'numbers.messages.send',
+    httpMethod: 'post',
     httpPath: '/numbers/phones/{id}/messages',
   },
   {

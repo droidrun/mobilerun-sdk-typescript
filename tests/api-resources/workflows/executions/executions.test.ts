@@ -39,7 +39,7 @@ describe('resource executions', () => {
       client.workflows.executions.list(
         {
           flowId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-          from: 'from',
+          from: '2019-12-27T18:11:19.117Z',
           invocationId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
           orderBy: 'startedAt',
           orderByDirection: 'asc',
@@ -47,7 +47,7 @@ describe('resource executions', () => {
           pageSize: 1,
           search: 'x',
           status: 'pending',
-          to: 'to',
+          to: '2019-12-27T18:11:19.117Z',
           triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
         },
         { path: '/_stainless_unknown_path' },
@@ -86,8 +86,8 @@ describe('resource executions', () => {
       client.workflows.executions.getMetrics(
         {
           flowId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-          from: 'from',
-          to: 'to',
+          from: '2019-12-27T18:11:19.117Z',
+          to: '2019-12-27T18:11:19.117Z',
           triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
         },
         { path: '/_stainless_unknown_path' },
