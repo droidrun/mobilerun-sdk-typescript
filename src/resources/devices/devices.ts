@@ -155,11 +155,10 @@ export class Devices extends APIResource {
   trafficSessions: TrafficSessionsAPI.TrafficSessions = new TrafficSessionsAPI.TrafficSessions(this._client);
 
   /**
-   * Requests a new device for the authenticated user from the device spec in the
-   * request body. Optional query parameters select the canonical device type, target
-   * country, billing mode, and a profile to use as the base spec; deprecated
-   * device-type aliases remain accepted only during the documented compatibility
-   * grace period. The response returns the device and its stream token.
+   * Requests a new device from the specification in the request body. Optional query
+   * parameters select the canonical device type, country, billing mode, and base
+   * profile. Returns the device, its resolved billing strategy, and its stream
+   * token.
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<DeviceCreateResponse> {
     const { billing, query_country, deviceType, profileId, ...body } = params;
@@ -190,7 +189,11 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Returns the number of claimed devices for the user, broken down by device type.
+   * Deprecated: use GET /devices/summary instead. Returns the number of active
+   * claimed devices for the user, broken down by device type, in the legacy response
+   * shape.
+   *
+   * @deprecated
    */
   count(options?: RequestOptions): APIPromise<DeviceCountResponse> {
     return this._client.get('/devices/count', options);
@@ -294,11 +297,26 @@ export class Devices extends APIResource {
   }
 
   /**
+   * Returns the total number of the user's devices and counts grouped by current
+   * state and device type.
+   */
+  summary(
+    query: DeviceSummaryParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<DeviceSummaryResponse> {
+    return this._client.get('/devices/summary', { query, ...options });
+  }
+
+  /**
    * Terminates the device and releases its resources. Termination can be scheduled
    * for a future time or chained from a previous device via the request body, in
    * which case a service key is required.
    */
-  terminate(deviceID: string, body: DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
+  terminate(
+    deviceID: string,
+    body: DeviceTerminateParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
     return this._client.delete(path`/devices/${deviceID}`, {
       body,
       ...options,
@@ -639,6 +657,19 @@ export interface DeviceSetNameResponse {
   userId?: string;
 }
 
+export interface DeviceSummaryResponse {
+  byState: { [key: string]: number };
+
+  byType: { [key: string]: number };
+
+  total: number;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
 export interface DeviceWaitReadyResponse {
   id: string;
 
@@ -692,10 +723,13 @@ export interface DeviceWaitReadyResponse {
 
 export interface DeviceCreateParams {
   /**
-   * Query param: Billing mode. 'auto' uses a subscription slot when available and
-   * otherwise bills per minute; 'subscription' requires an available subscription
-   * slot; 'minute' bills per minute. Only cloud phone and cloud emulator devices
-   * support per-minute billing.
+   * Query param: Billing mode. 'auto' tries subscription first, then minute billing
+   * if no subscription entitlement exists or all subscription slots are in use,
+   * provided minute billing is enabled. When subscription billing is disabled, auto
+   * uses minutes directly. Billing-service failures never trigger fallback.
+   * 'subscription' requires an available subscription slot and never falls back.
+   * 'minute' uses minute billing only, subject to balance and concurrency checks.
+   * Modes depend on the device type's billing configuration.
    */
   billing?: 'auto' | 'subscription' | 'minute';
 
@@ -706,18 +740,12 @@ export interface DeviceCreateParams {
   query_country?: string;
 
   /**
-   * Query param: Deprecated device type aliases are accepted during a compatibility
-   * grace period: dedicated_premium_device maps to android_cloud_phone,
-   * dedicated_physical_device maps to android_physical_phone, dedicated_ios_device
-   * maps to ios_stealth_phone, and dedicated_emulated_device maps to
-   * android_emulator.
+   * Query param: Use android*cloud_phone for a cloud Android phone. Only canonical
+   * identifiers are accepted. Other backends are deployment-specific; recognized but
+   * unavailable types return DEVICE_TYPE_UNAVAILABLE (422). Retired dedicated*\*
+   * aliases are rejected with a canonical replacement.
    */
-  deviceType?:
-    | 'android_cloud_phone'
-    | 'dedicated_premium_device'
-    | 'dedicated_physical_device'
-    | 'dedicated_ios_device'
-    | 'dedicated_emulated_device';
+  deviceType?: string;
 
   /**
    * Query param: Profile ID to use as device spec
@@ -841,6 +869,12 @@ export interface DeviceListParams {
 
   pageSize?: number;
 
+  /**
+   * Filter by the device's platform as served in the platform field (runtime,
+   * announced, else type-derived).
+   */
+  platform?: 'android' | 'ios';
+
   providerId?: string;
 
   state?: Array<
@@ -857,17 +891,16 @@ export interface DeviceListParams {
   > | null;
 
   /**
-   * Deprecated device type aliases are accepted during a compatibility grace period:
-   * dedicated_premium_device maps to android_cloud_phone, dedicated_physical_device
-   * maps to android_physical_phone, dedicated_ios_device maps to ios_stealth_phone,
-   * and dedicated_emulated_device maps to android_emulator.
+   * Canonical device type. Retired dedicated\_\* aliases are no longer accepted.
+   * Availability depends on the deployment.
    */
   type?:
     | 'android_cloud_phone'
-    | 'dedicated_premium_device'
-    | 'dedicated_physical_device'
-    | 'dedicated_ios_device'
-    | 'dedicated_emulated_device';
+    | 'android_physical_phone'
+    | 'ios_stealth_phone'
+    | 'android_emulator'
+    | 'ios_simulator'
+    | 'device_slot';
 }
 
 export interface DeviceFingerprintParams {
@@ -876,6 +909,21 @@ export interface DeviceFingerprintParams {
 
 export interface DeviceSetNameParams {
   name: string;
+}
+
+export interface DeviceSummaryParams {
+  state?: Array<
+    | 'creating'
+    | 'assigned'
+    | 'ready'
+    | 'rebooting'
+    | 'migrating'
+    | 'resetting'
+    | 'terminated'
+    | 'maintenance'
+    | 'stopped'
+    | 'unknown'
+  > | null;
 }
 
 export interface DeviceTerminateParams {
@@ -914,11 +962,13 @@ export declare namespace Devices {
     type DeviceFingerprintResponse as DeviceFingerprintResponse,
     type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
     type DeviceSetNameResponse as DeviceSetNameResponse,
+    type DeviceSummaryResponse as DeviceSummaryResponse,
     type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
     type DeviceFingerprintParams as DeviceFingerprintParams,
     type DeviceSetNameParams as DeviceSetNameParams,
+    type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 

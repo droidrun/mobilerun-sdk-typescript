@@ -58,6 +58,7 @@ describe('resource devices', () => {
           orderByDirection: 'asc',
           page: 0,
           pageSize: 0,
+          platform: 'android',
           providerId: 'providerId',
           state: ['creating'],
           type: 'android_cloud_phone',
@@ -181,8 +182,8 @@ describe('resource devices', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('terminate', async () => {
-    const responsePromise = client.devices.terminate('deviceId', {});
+  test.skip('summary', async () => {
+    const responsePromise = client.devices.summary();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -190,6 +191,38 @@ describe('resource devices', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('summary: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.summary({ state: ['creating'] }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('terminate', async () => {
+    const responsePromise = client.devices.terminate('deviceId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('terminate: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.terminate(
+        'deviceId',
+        { previousDeviceId: 'previousDeviceId', terminateAt: '2019-12-27T18:11:19.117Z' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled

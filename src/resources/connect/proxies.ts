@@ -16,6 +16,13 @@ export class Proxies extends APIResource {
   }
 
   /**
+   * Renames the proxy identified by the path ID.
+   */
+  update(id: string, body: ProxyUpdateParams, options?: RequestOptions): APIPromise<ProxyUpdateResponse> {
+    return this._client.patch(path`/connect/proxies/${id}`, { body, ...options });
+  }
+
+  /**
    * Returns proxies owned by the calling tenant (the X-Owner-Id header, falling back
    * to X-User-ID). Credentials are omitted from the list.
    */
@@ -29,16 +36,8 @@ export class Proxies extends APIResource {
   /**
    * Provisions a proxy of the requested type for the caller in the selected country.
    */
-  buy(params: ProxyBuyParams, options?: RequestOptions): APIPromise<ProxyBuyResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
-    return this._client.post('/connect/proxies', {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
-    });
+  buy(body: ProxyBuyParams, options?: RequestOptions): APIPromise<ProxyBuyResponse> {
+    return this._client.post('/connect/proxies', { body, ...options });
   }
 
   /**
@@ -50,6 +49,20 @@ export class Proxies extends APIResource {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
+  }
+
+  /**
+   * Checks right now that the proxy's upstream accepts a connection through its
+   * current session. If the upstream refuses the session and the proxy is a rotating
+   * (sticky-session) proxy, the proxy is moved onto a fresh session that has been
+   * checked to work; its credentials and country stay the same, its exit IP changes.
+   * Intended for callers that are about to depend on the proxy (e.g. while
+   * provisioning a phone). After `rotated`, the gateway uses the new session within
+   * about 30 seconds. A `refused` or `unreachable` result is not an error: the
+   * response describes the proxy's state.
+   */
+  ensureHealthy(id: string, options?: RequestOptions): APIPromise<ProxyEnsureHealthyResponse> {
+    return this._client.post(path`/connect/proxies/${id}/ensure-healthy`, options);
   }
 
   /**
@@ -92,6 +105,13 @@ export interface ProxyRetrieveResponse {
 
   host: string;
 
+  /**
+   * Display name for the proxy. Set it on create or change it with PATCH; when no
+   * name has been set, a label generated from the proxy's country, type, and id is
+   * returned instead — so this is never empty.
+   */
+  name: string;
+
   password: string;
 
   port: number;
@@ -117,6 +137,47 @@ export interface ProxyRetrieveResponse {
    * paid or when no payment was required.
    */
   paymentUrl?: string | null;
+}
+
+/**
+ * A provisioned proxy without its credentials.
+ */
+export interface ProxyUpdateResponse {
+  id: string;
+
+  /**
+   * ISO 3166-1 alpha-2 country code (lowercase).
+   */
+  country: string;
+
+  createdAt: string;
+
+  host: string;
+
+  /**
+   * Display name for the proxy. Set it on create or change it with PATCH; when no
+   * name has been set, a label generated from the proxy's country, type, and id is
+   * returned instead — so this is never empty.
+   */
+  name: string;
+
+  port: number;
+
+  /**
+   * Lifecycle of a proxy. A freshly created proxy is `checking` while its billing
+   * identity is being resolved — clients should poll until a `paymentUrl` or a later
+   * status appears — then `provisioning` — or `pending_payment` until the customer
+   * completes checkout — and becomes `active` once its upstream is assigned.
+   * `cancelling` retains full access through the paid period; when the subscription
+   * expires the proxy is `ended`. `error` marks a failed provisioning attempt.
+   */
+  status: 'checking' | 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
+
+  type: 'dedicated_residential' | 'residential' | 'mobile';
+
+  username: string;
+
+  billingMode?: 'included' | 'standalone_paid';
 }
 
 /**
@@ -146,6 +207,13 @@ export namespace ProxyListResponse {
     createdAt: string;
 
     host: string;
+
+    /**
+     * Display name for the proxy. Set it on create or change it with PATCH; when no
+     * name has been set, a label generated from the proxy's country, type, and id is
+     * returned instead — so this is never empty.
+     */
+    name: string;
 
     port: number;
 
@@ -217,6 +285,13 @@ export interface ProxyBuyResponse {
 
   host: string;
 
+  /**
+   * Display name for the proxy. Set it on create or change it with PATCH; when no
+   * name has been set, a label generated from the proxy's country, type, and id is
+   * returned instead — so this is never empty.
+   */
+  name: string;
+
   password: string;
 
   port: number;
@@ -242,6 +317,22 @@ export interface ProxyBuyResponse {
    * paid or when no payment was required.
    */
   paymentUrl?: string | null;
+}
+
+/**
+ * The outcome of an ensure-healthy check.
+ */
+export interface ProxyEnsureHealthyResponse {
+  proxyId: string;
+
+  /**
+   * `healthy`: the upstream accepted the current session. `rotated`: the session was
+   * refused and the proxy now uses a fresh, checked session; retry through the
+   * proxy. `refused`: the session was refused and could not be replaced.
+   * `unreachable`: the upstream could not be reached; the session was left
+   * unchanged.
+   */
+  status: 'healthy' | 'rotated' | 'refused' | 'unreachable';
 }
 
 /**
@@ -446,6 +537,16 @@ export namespace ProxyPingResponse {
   }
 }
 
+export interface ProxyUpdateParams {
+  /**
+   * New display name, up to 64 characters excluding surrounding whitespace, and
+   * containing no NUL. Send null (or an empty/whitespace-only string) to drop a
+   * custom name and go back to the generated label. Omit to leave the name
+   * unchanged.
+   */
+  name?: string | null;
+}
+
 export interface ProxyListParams {
   /**
    * Filter to proxies in this country (ISO 3166-1 alpha-2, lowercase).
@@ -465,22 +566,18 @@ export interface ProxyListParams {
 
 export interface ProxyBuyParams {
   /**
-   * Body param: ISO 3166-1 alpha-2 country code to provision the proxy in.
+   * ISO 3166-1 alpha-2 country code to provision the proxy in.
    */
   country: string;
 
-  /**
-   * Body param
-   */
   type: 'dedicated_residential' | 'residential' | 'mobile';
 
   /**
-   * Header param: Optional idempotency key, unique per owner (1-128 characters after
-   * trimming; surrounding whitespace is ignored). Reusing a key returns the
-   * originally created proxy with its original credentials, regardless of changed
-   * request parameters.
+   * Display name for the proxy, up to 64 characters excluding surrounding
+   * whitespace, and containing no NUL. Omit it (or send only whitespace) to get a
+   * generated label built from the country, type, and id.
    */
-  'Idempotency-Key'?: string;
+  name?: string;
 }
 
 export interface ProxyListConnectionsParams {
@@ -615,10 +712,13 @@ export interface ProxyListConnectionsParams {
 export declare namespace Proxies {
   export {
     type ProxyRetrieveResponse as ProxyRetrieveResponse,
+    type ProxyUpdateResponse as ProxyUpdateResponse,
     type ProxyListResponse as ProxyListResponse,
     type ProxyBuyResponse as ProxyBuyResponse,
+    type ProxyEnsureHealthyResponse as ProxyEnsureHealthyResponse,
     type ProxyListConnectionsResponse as ProxyListConnectionsResponse,
     type ProxyPingResponse as ProxyPingResponse,
+    type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
     type ProxyBuyParams as ProxyBuyParams,
     type ProxyListConnectionsParams as ProxyListConnectionsParams,

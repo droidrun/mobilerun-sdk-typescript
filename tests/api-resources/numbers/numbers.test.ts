@@ -30,7 +30,6 @@ describe('resource numbers', () => {
           country: 'de',
           label: 'Support line',
           purpose: 'telegram',
-          'Idempotency-Key': 'x',
         },
         { path: '/_stainless_unknown_path' },
       ),

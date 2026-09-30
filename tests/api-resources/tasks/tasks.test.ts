@@ -124,7 +124,6 @@ describe('resource tasks', () => {
       temperature: 0,
       vision: true,
       vpnCountry: 'US',
-      'Idempotency-Key': 'x',
     });
   });
 

@@ -7,4 +7,9 @@ export {
   type ConversationListParams,
   type ConversationMarkReadParams,
 } from './conversations';
-export { Messages, type MessageListResponse, type MessageListParams } from './messages';
+export {
+  Messages,
+  type MessageRetrieveResponse,
+  type MessageListResponse,
+  type MessageListParams,
+} from './messages';
