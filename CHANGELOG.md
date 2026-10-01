@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.6.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.5.0...v5.6.0) (2026-09-30)
+
+
+### Chores
+
+* release 5.6.0 ([347202f](https://github.com/droidrun/mobilerun-sdk-typescript/commit/347202fc4ec43a67645072f0a3cc6c3555805204))
+* **sdk:** release 5.6.0 ([0f0e5e3](https://github.com/droidrun/mobilerun-sdk-typescript/commit/0f0e5e3348337d66bfe3b0fb05b6ef2549324240))
+* **stlc:** re-anchor typescript tracking ([6c6e756](https://github.com/droidrun/mobilerun-sdk-typescript/commit/6c6e756da098538a62f4a02aeaaa2bf714748d00))
+
 ## [5.5.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.4.0...v5.5.0) (2026-09-16)
 
 
