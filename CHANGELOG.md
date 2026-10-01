@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.6.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.6.0...v5.6.1) (2026-10-01)
+
+
+### Bug Fixes
+
+* **sdk:** repair post-5.6.0 tracking ([87c0174](https://github.com/droidrun/mobilerun-sdk-typescript/commit/87c017495d78071ac3b60b6cbe0d2fd91087a971))
+
 ## [5.6.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v5.5.0...v5.6.0) (2026-09-30)
 
 
