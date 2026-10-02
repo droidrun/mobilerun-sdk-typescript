@@ -92,9 +92,9 @@ export class Flows extends APIResource {
 
   /**
    * Returns an owner-scoped snapshot of finite included workflow-agent capacity
-   * after locally stored enabled and disabled agents. Available only while slot
-   * enforcement is enabled; otherwise returns 503. This is advisory; create and
-   * clone perform authoritative admission under an owner lock.
+   * after accounting for enabled and disabled agents. Returns 503 when a finite
+   * capacity snapshot is unavailable, including for unlimited plans. This is
+   * advisory; create and clone perform the authoritative capacity check.
    */
   capacity(options?: RequestOptions): APIPromise<FlowCapacityResponse> {
     return this._client.get('/flows/capacity', options);
@@ -121,8 +121,8 @@ export class Flows extends APIResource {
    * Return the recording/delivery readiness for a flow (recording mode, whether
    * delivery can include the recording, whether a files.upload action exists, the
    * first direct OneDrive/Google Drive upload step if any) plus, per destination,
-   * whether the flow owner has an active integrations-api connection. Returns 404 if
-   * the flow does not exist.
+   * whether the flow owner has an active connection. Returns 404 if the flow does
+   * not exist.
    */
   deliveryOptions(flowID: string, options?: RequestOptions): APIPromise<FlowDeliveryOptionsResponse> {
     return this._client.get(path`/flows/${flowID}/delivery-options`, options);
@@ -203,8 +203,8 @@ export class Flows extends APIResource {
   }
 
   /**
-   * Run a bound, deduplicated **verification** of this flow on exactly one device
-   * through the real worker.
+   * Run a bound, deduplicated **verification** of this flow on exactly one device as
+   * a real run.
    *
    * Unlike a normal trigger firing, verification:
    *
@@ -304,7 +304,7 @@ export namespace FlowCreateResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -324,8 +324,11 @@ export namespace FlowCreateResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -421,7 +424,7 @@ export namespace FlowRetrieveResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -441,8 +444,11 @@ export namespace FlowRetrieveResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -538,7 +544,7 @@ export namespace FlowUpdateResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -558,8 +564,11 @@ export namespace FlowUpdateResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -657,7 +666,7 @@ export namespace FlowListResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -677,8 +686,11 @@ export namespace FlowListResponse {
 
   export namespace Item {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -778,7 +790,7 @@ export namespace FlowActivateResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -798,8 +810,11 @@ export namespace FlowActivateResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -909,7 +924,7 @@ export namespace FlowCloneResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -929,8 +944,11 @@ export namespace FlowCloneResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -959,7 +977,7 @@ export namespace FlowDeliveryOptionsResponse {
     canDeliverRecording: boolean;
 
     /**
-     * Delivery destinations in registry order.
+     * Delivery destinations in their canonical order.
      */
     destinations: Array<Data.Destination>;
 
@@ -978,7 +996,7 @@ export namespace FlowDeliveryOptionsResponse {
 
       iconUrl: string | null;
 
-      key: 'one_drive' | 'google_drive';
+      key: 'mobilerun' | 'one_drive' | 'google_drive';
 
       label: string;
     }
@@ -1263,7 +1281,7 @@ export namespace FlowUnblockResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -1283,8 +1301,11 @@ export namespace FlowUnblockResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -1472,8 +1493,11 @@ export namespace FlowCreateParams {
   }
 
   export interface Delivery {
-    destination: 'one_drive' | 'google_drive';
+    destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+    /**
+     * not allowed when destination is mobilerun
+     */
     folder?: string;
 
     recording?: Delivery.Recording;
@@ -1537,8 +1561,11 @@ export interface FlowUpdateParams {
 
 export namespace FlowUpdateParams {
   export interface Delivery {
-    destination: 'one_drive' | 'google_drive';
+    destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+    /**
+     * not allowed when destination is mobilerun
+     */
     folder?: string;
 
     recording?: Delivery.Recording;
@@ -1744,8 +1771,11 @@ export namespace FlowValidateParams {
   }
 
   export interface Delivery {
-    destination: 'one_drive' | 'google_drive';
+    destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+    /**
+     * not allowed when destination is mobilerun
+     */
     folder?: string;
 
     recording?: Delivery.Recording;

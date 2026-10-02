@@ -259,11 +259,8 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Returns the set of capabilities supported by this device. For a legacy device
-   * this reflects the live instance's actual tools rather than its static type; for
-   * a core-managed device it is resolved from provider/pool configuration without
-   * guaranteeing a live instance. Used to determine which tools and features are
-   * available for the device.
+   * Returns the set of capabilities supported by this device. Used to determine
+   * which tools and features are available for the device.
    */
   retrieveCapabilities(
     deviceID: string,
@@ -308,9 +305,9 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Terminates the device and releases its resources. Termination can be scheduled
-   * for a future time or chained from a previous device via the request body, in
-   * which case a service key is required.
+   * Terminates the device and releases its resources. The optional `terminateAt` and
+   * `previousDeviceId` body fields are not available to API-key callers; requests
+   * that set them are rejected with 401.
    */
   terminate(
     deviceID: string,
@@ -854,14 +851,13 @@ export interface DeviceListParams {
   createdBy?: string;
 
   /**
-   * When true, only return devices created by the calling user (resolved from
-   * X-User-ID, never a client-supplied id).
+   * When true, only return devices created by the authenticated caller.
    */
   mine?: boolean;
 
   name?: string;
 
-  orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt';
+  orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt' | 'gridPosition';
 
   orderByDirection?: 'asc' | 'desc';
 

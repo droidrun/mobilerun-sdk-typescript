@@ -215,6 +215,13 @@ export interface StateScreenshotParams {
   hideOverlay?: boolean;
 
   /**
+   * Query param: Also store the screenshot in the device's active recording. The
+   * response is unchanged; the X-Screenshot-Saved header reports whether it was
+   * stored.
+   */
+  save?: boolean;
+
+  /**
    * Header param
    */
   'X-Device-Display-ID'?: number;
