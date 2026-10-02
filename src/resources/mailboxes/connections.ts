@@ -7,10 +7,10 @@ import { path } from '../../internal/utils/path';
 
 export class Connections extends APIResource {
   /**
-   * Links the caller’s Gmail account through the shared integrations connect.
-   * Replaying the same Idempotency-Key (or, during migration, the deprecated
-   * `clientRequestId` body field) returns the same mailbox. When Gmail is already
-   * active, redirectUrl is null and the mailbox is usable immediately.
+   * Links the caller’s Gmail account. Replaying the same Idempotency-Key (or the
+   * deprecated `clientRequestId` body field, still accepted as a fallback) returns
+   * the same mailbox. When Gmail is already active, redirectUrl is null and the
+   * mailbox is usable immediately.
    *
    * @example
    * ```ts
@@ -69,8 +69,7 @@ export interface ConnectionCreateParams {
   provider: 'gmail';
 
   /**
-   * sha256 hex of the browser-held connect binding secret; forwarded to integrations
-   * connect
+   * sha256 hex of the browser-held connect binding secret.
    */
   bindingHash?: string;
 

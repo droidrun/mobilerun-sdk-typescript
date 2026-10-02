@@ -553,27 +553,18 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryStartEvent {
-    /**
-     * Implicit entry event sent to kick off a `Workflow.run()`.
-     */
     data: unknown;
 
     event: 'StartEvent';
   }
 
   export interface TrajectoryFinalizeEvent {
-    /**
-     * Trigger finalization.
-     */
     data: TrajectoryFinalizeEvent.Data;
 
     event: 'FinalizeEvent';
   }
 
   export namespace TrajectoryFinalizeEvent {
-    /**
-     * Trigger finalization.
-     */
     export interface Data {
       reason: string;
 
@@ -582,26 +573,6 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryStopEvent {
-    /**
-     * Terminal event that signals the workflow has completed.
-     *
-     * The `result` property contains the return value of the workflow run. When a
-     * custom stop event subclass is used, the workflow result is that event instance
-     * itself.
-     *
-     * Examples:
-     * `python # default stop event: result holds the value return StopEvent(result={"answer": 42}) `
-     *
-     *     Subclassing to provide a custom result:
-     *
-     *     ```python
-     *     class MyStopEv(StopEvent):
-     *         pass
-     *
-     *     @step
-     *     async def my_step(self, ctx: Context, ev: StartEvent) -> MyStopEv:
-     *         return MyStopEv(result={"answer": 42})
-     */
     data: unknown;
 
     event: 'StopEvent';
@@ -609,10 +580,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryResultEvent {
     /**
-     * Lazy wrapper — avoids importing droidrun at module level.
-     *
-     * The worker uses droidrun's ResultEvent directly; this model only exists so the
-     * API OpenAPI schema can reference it without the heavy droidrun import.
+     * Final result of a task run.
      */
     data: TrajectoryResultEvent.Data;
 
@@ -621,10 +589,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryResultEvent {
     /**
-     * Lazy wrapper — avoids importing droidrun at module level.
-     *
-     * The worker uses droidrun's ResultEvent directly; this model only exists so the
-     * API OpenAPI schema can reference it without the heavy droidrun import.
+     * Final result of a task run.
      */
     export interface Data {
       message?: string | null;
@@ -638,33 +603,18 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryManagerInputEvent {
-    /**
-     * Trigger Manager workflow for planning
-     */
     data: unknown;
 
     event: 'ManagerInputEvent';
   }
 
   export interface TrajectoryManagerPlanEvent {
-    /**
-     * Coordination event from ManagerAgent to MobileAgent.
-     *
-     * Used for workflow step routing only (NOT streamed to frontend). For internal
-     * events with memory_update metadata, see ManagerPlanDetailsEvent.
-     */
     data: TrajectoryManagerPlanEvent.Data;
 
     event: 'ManagerPlanEvent';
   }
 
   export namespace TrajectoryManagerPlanEvent {
-    /**
-     * Coordination event from ManagerAgent to MobileAgent.
-     *
-     * Used for workflow step routing only (NOT streamed to frontend). For internal
-     * events with memory_update metadata, see ManagerPlanDetailsEvent.
-     */
     export interface Data {
       current_subgoal: string;
 
@@ -679,36 +629,24 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryExecutorInputEvent {
-    /**
-     * Trigger Executor workflow for action execution
-     */
     data: TrajectoryExecutorInputEvent.Data;
 
     event: 'ExecutorInputEvent';
   }
 
   export namespace TrajectoryExecutorInputEvent {
-    /**
-     * Trigger Executor workflow for action execution
-     */
     export interface Data {
       current_subgoal: string;
     }
   }
 
   export interface TrajectoryExecutorResultEvent {
-    /**
-     * Executor finished with action result.
-     */
     data: TrajectoryExecutorResultEvent.Data;
 
     event: 'ExecutorResultEvent';
   }
 
   export namespace TrajectoryExecutorResultEvent {
-    /**
-     * Executor finished with action result.
-     */
     export interface Data {
       action: { [key: string]: unknown };
 
@@ -721,27 +659,18 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryFastAgentInputEvent {
-    /**
-     * Input ready for LLM.
-     */
     data: unknown;
 
     event: 'FastAgentInputEvent';
   }
 
   export interface TrajectoryFastAgentResponseEvent {
-    /**
-     * LLM response received.
-     */
     data: TrajectoryFastAgentResponseEvent.Data;
 
     event: 'FastAgentResponseEvent';
   }
 
   export namespace TrajectoryFastAgentResponseEvent {
-    /**
-     * LLM response received.
-     */
     export interface Data {
       thought: string;
 
@@ -769,54 +698,36 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryFastAgentToolCallEvent {
-    /**
-     * Tool calls ready to execute.
-     */
     data: TrajectoryFastAgentToolCallEvent.Data;
 
     event: 'FastAgentToolCallEvent';
   }
 
   export namespace TrajectoryFastAgentToolCallEvent {
-    /**
-     * Tool calls ready to execute.
-     */
     export interface Data {
       tool_calls_repr: string;
     }
   }
 
   export interface TrajectoryFastAgentOutputEvent {
-    /**
-     * Tool execution result.
-     */
     data: TrajectoryFastAgentOutputEvent.Data;
 
     event: 'FastAgentOutputEvent';
   }
 
   export namespace TrajectoryFastAgentOutputEvent {
-    /**
-     * Tool execution result.
-     */
     export interface Data {
       output: string;
     }
   }
 
   export interface TrajectoryFastAgentEndEvent {
-    /**
-     * FastAgent finished.
-     */
     data: TrajectoryFastAgentEndEvent.Data;
 
     event: 'FastAgentEndEvent';
   }
 
   export namespace TrajectoryFastAgentEndEvent {
-    /**
-     * FastAgent finished.
-     */
     export interface Data {
       reason: string;
 
@@ -855,18 +766,12 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryToolExecutionEvent {
-    /**
-     * Emitted after every tool call dispatched through ToolRegistry.
-     */
     data: TrajectoryToolExecutionEvent.Data;
 
     event: 'ToolExecutionEvent';
   }
 
   export namespace TrajectoryToolExecutionEvent {
-    /**
-     * Emitted after every tool call dispatched through ToolRegistry.
-     */
     export interface Data {
       success: boolean;
 
@@ -893,27 +798,18 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryManagerContextEvent {
-    /**
-     * Context prepared, ready for LLM call.
-     */
     data: unknown;
 
     event: 'ManagerContextEvent';
   }
 
   export interface TrajectoryManagerResponseEvent {
-    /**
-     * LLM response received, ready for parsing.
-     */
     data: TrajectoryManagerResponseEvent.Data;
 
     event: 'ManagerResponseEvent';
   }
 
   export namespace TrajectoryManagerResponseEvent {
-    /**
-     * LLM response received, ready for parsing.
-     */
     export interface Data {
       response: string;
 
@@ -934,18 +830,12 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryManagerPlanDetailsEvent {
-    /**
-     * Plan parsed and ready (internal event with full details).
-     */
     data: TrajectoryManagerPlanDetailsEvent.Data;
 
     event: 'ManagerPlanDetailsEvent';
   }
 
   export namespace TrajectoryManagerPlanDetailsEvent {
-    /**
-     * Plan parsed and ready (internal event with full details).
-     */
     export interface Data {
       plan: string;
 
@@ -966,36 +856,24 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryExecutorContextEvent {
-    /**
-     * Context prepared, ready for LLM call.
-     */
     data: TrajectoryExecutorContextEvent.Data;
 
     event: 'ExecutorContextEvent';
   }
 
   export namespace TrajectoryExecutorContextEvent {
-    /**
-     * Context prepared, ready for LLM call.
-     */
     export interface Data {
       subgoal: string;
     }
   }
 
   export interface TrajectoryExecutorResponseEvent {
-    /**
-     * LLM response received, ready for parsing.
-     */
     data: TrajectoryExecutorResponseEvent.Data;
 
     event: 'ExecutorResponseEvent';
   }
 
   export namespace TrajectoryExecutorResponseEvent {
-    /**
-     * LLM response received, ready for parsing.
-     */
     export interface Data {
       response: string;
 
@@ -1016,18 +894,12 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryExecutorActionEvent {
-    /**
-     * Action parsed, ready to execute.
-     */
     data: TrajectoryExecutorActionEvent.Data;
 
     event: 'ExecutorActionEvent';
   }
 
   export namespace TrajectoryExecutorActionEvent {
-    /**
-     * Action parsed, ready to execute.
-     */
     export interface Data {
       action_json: string;
 
@@ -1040,18 +912,12 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryExecutorActionResultEvent {
-    /**
-     * Action execution result (internal event with full details).
-     */
     data: TrajectoryExecutorActionResultEvent.Data;
 
     event: 'ExecutorActionResultEvent';
   }
 
   export namespace TrajectoryExecutorActionResultEvent {
-    /**
-     * Action execution result (internal event with full details).
-     */
     export interface Data {
       action: { [key: string]: unknown };
 

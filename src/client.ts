@@ -30,19 +30,7 @@ import {
   AppStorageUsageResponse,
   Apps,
 } from './resources/apps';
-import {
-  CarrierCreateParams,
-  CarrierCreateResponse,
-  CarrierDeleteResponse,
-  CarrierListParams,
-  CarrierListResponse,
-  CarrierLookupParams,
-  CarrierLookupResponse,
-  CarrierRetrieveResponse,
-  CarrierUpdateParams,
-  CarrierUpdateResponse,
-  Carriers,
-} from './resources/carriers';
+import { Carriers } from './resources/carriers';
 import {
   FileCancelPendingResponse,
   FileConfirmResponse,
@@ -56,26 +44,8 @@ import {
   Files,
 } from './resources/files';
 import { ModelListResponse, Models } from './resources/models';
-import {
-  NotificationApplyPreferencesPresetParams,
-  NotificationApplyPreferencesPresetResponse,
-  NotificationCatalogResponse,
-  NotificationGetPreferencesResponse,
-  NotificationUpdatePreferencesParams,
-  NotificationUpdatePreferencesResponse,
-  Notifications,
-} from './resources/notifications';
-import {
-  ProfileCreateParams,
-  ProfileCreateResponse,
-  ProfileDeleteResponse,
-  ProfileListParams,
-  ProfileListResponse,
-  ProfileRetrieveResponse,
-  ProfileUpdateParams,
-  ProfileUpdateResponse,
-  Profiles,
-} from './resources/profiles';
+import { Notifications } from './resources/notifications';
+import { Profiles } from './resources/profiles';
 import {
   Proxies,
   ProxyCreateParams,
@@ -83,18 +53,11 @@ import {
   ProxyDeleteResponse,
   ProxyListParams,
   ProxyListResponse,
-  ProxyLookupParams,
-  ProxyLookupResponse,
   ProxyRetrieveResponse,
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
-import {
-  AppEventListParams,
-  AppEventListResponse,
-  AppEventRetrieveResponse,
-  AppEvents,
-} from './resources/app-events/app-events';
+import { AppEvents } from './resources/app-events/app-events';
 import { Assistant } from './resources/assistant/assistant';
 import { Connect } from './resources/connect/connect';
 import {
@@ -159,7 +122,7 @@ import {
   NumberUpdateResponse,
   Numbers,
 } from './resources/numbers/numbers';
-import { Store, StoreCategoriesResponse } from './resources/store/store';
+import { Store } from './resources/store/store';
 import {
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
@@ -178,7 +141,6 @@ import {
 import {
   WebhookCreateParams,
   WebhookCreateResponse,
-  WebhookEventTypesResponse,
   WebhookListParams,
   WebhookListResponse,
   WebhookRetrieveResponse,
@@ -917,9 +879,6 @@ export class Mobilerun {
   carriers: API.Carriers = new API.Carriers(this);
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
-  /**
-   * LLM Models
-   */
   models: API.Models = new API.Models(this);
   profiles: API.Profiles = new API.Profiles(this);
   proxies: API.Proxies = new API.Proxies(this);
@@ -977,19 +936,7 @@ export declare namespace Mobilerun {
     type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
   };
 
-  export {
-    Carriers as Carriers,
-    type CarrierCreateResponse as CarrierCreateResponse,
-    type CarrierRetrieveResponse as CarrierRetrieveResponse,
-    type CarrierUpdateResponse as CarrierUpdateResponse,
-    type CarrierListResponse as CarrierListResponse,
-    type CarrierDeleteResponse as CarrierDeleteResponse,
-    type CarrierLookupResponse as CarrierLookupResponse,
-    type CarrierCreateParams as CarrierCreateParams,
-    type CarrierUpdateParams as CarrierUpdateParams,
-    type CarrierListParams as CarrierListParams,
-    type CarrierLookupParams as CarrierLookupParams,
-  };
+  export { Carriers as Carriers };
 
   export {
     Credentials as Credentials,
@@ -1018,17 +965,7 @@ export declare namespace Mobilerun {
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
-  export {
-    Profiles as Profiles,
-    type ProfileCreateResponse as ProfileCreateResponse,
-    type ProfileRetrieveResponse as ProfileRetrieveResponse,
-    type ProfileUpdateResponse as ProfileUpdateResponse,
-    type ProfileListResponse as ProfileListResponse,
-    type ProfileDeleteResponse as ProfileDeleteResponse,
-    type ProfileCreateParams as ProfileCreateParams,
-    type ProfileUpdateParams as ProfileUpdateParams,
-    type ProfileListParams as ProfileListParams,
-  };
+  export { Profiles as Profiles };
 
   export {
     Proxies as Proxies,
@@ -1037,11 +974,9 @@ export declare namespace Mobilerun {
     type ProxyUpdateResponse as ProxyUpdateResponse,
     type ProxyListResponse as ProxyListResponse,
     type ProxyDeleteResponse as ProxyDeleteResponse,
-    type ProxyLookupResponse as ProxyLookupResponse,
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
-    type ProxyLookupParams as ProxyLookupParams,
   };
 
   export { Connect as Connect };
@@ -1070,7 +1005,6 @@ export declare namespace Mobilerun {
     type WebhookRetrieveResponse as WebhookRetrieveResponse,
     type WebhookUpdateResponse as WebhookUpdateResponse,
     type WebhookListResponse as WebhookListResponse,
-    type WebhookEventTypesResponse as WebhookEventTypesResponse,
     type WebhookRotateSecretResponse as WebhookRotateSecretResponse,
     type WebhookTestDeliveryResponse as WebhookTestDeliveryResponse,
     type WebhookCreateParams as WebhookCreateParams,
@@ -1112,22 +1046,9 @@ export declare namespace Mobilerun {
 
   export { Assistant as Assistant };
 
-  export {
-    AppEvents as AppEvents,
-    type AppEventRetrieveResponse as AppEventRetrieveResponse,
-    type AppEventListResponse as AppEventListResponse,
-    type AppEventListParams as AppEventListParams,
-  };
+  export { AppEvents as AppEvents };
 
-  export {
-    Notifications as Notifications,
-    type NotificationApplyPreferencesPresetResponse as NotificationApplyPreferencesPresetResponse,
-    type NotificationCatalogResponse as NotificationCatalogResponse,
-    type NotificationGetPreferencesResponse as NotificationGetPreferencesResponse,
-    type NotificationUpdatePreferencesResponse as NotificationUpdatePreferencesResponse,
-    type NotificationApplyPreferencesPresetParams as NotificationApplyPreferencesPresetParams,
-    type NotificationUpdatePreferencesParams as NotificationUpdatePreferencesParams,
-  };
+  export { Notifications as Notifications };
 
   export {
     Messages as Messages,
@@ -1152,7 +1073,7 @@ export declare namespace Mobilerun {
     type NumberCapacityParams as NumberCapacityParams,
   };
 
-  export { Store as Store, type StoreCategoriesResponse as StoreCategoriesResponse };
+  export { Store as Store };
 
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;

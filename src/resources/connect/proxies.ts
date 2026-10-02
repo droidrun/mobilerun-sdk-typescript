@@ -6,6 +6,9 @@ import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Manage your Mobilerun Connect Proxies
+ */
 export class Proxies extends APIResource {
   /**
    * Returns the proxy identified by the path ID. The response includes the proxy's
@@ -23,8 +26,7 @@ export class Proxies extends APIResource {
   }
 
   /**
-   * Returns proxies owned by the calling tenant (the X-Owner-Id header, falling back
-   * to X-User-ID). Credentials are omitted from the list.
+   * Returns proxies owned by the caller. Credentials are omitted from the list.
    */
   list(
     query: ProxyListParams | null | undefined = {},
@@ -68,8 +70,8 @@ export class Proxies extends APIResource {
   /**
    * Returns the connection history recorded for this proxy, one item per connection
    * (aggregated across the connection's lifetime). Supports filtering on every
-   * property plus ordering and pagination. Returns 503 when the connection-insights
-   * backend is disabled or unreachable.
+   * property plus ordering and pagination. Returns 503 when connection history is
+   * temporarily unavailable.
    */
   listConnections(
     id: string,
@@ -394,7 +396,7 @@ export namespace ProxyListConnectionsResponse {
     protocol: 'tcp' | 'udp' | 'unknown';
 
     /**
-     * Upstream provider that served the connection.
+     * Identifier of the upstream provider that served the connection.
      */
     provider: string;
 
@@ -679,7 +681,7 @@ export interface ProxyListConnectionsParams {
   protocol?: 'tcp' | 'udp' | 'unknown';
 
   /**
-   * Filter to connections served by this upstream provider.
+   * Filter to connections served by this upstream provider identifier.
    */
   provider?: string;
 

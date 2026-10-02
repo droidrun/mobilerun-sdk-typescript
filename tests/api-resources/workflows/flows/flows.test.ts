@@ -54,7 +54,7 @@ describe('resource flows', () => {
       cooldownScope: 'flow',
       cooldownSeconds: 0,
       delivery: {
-        destination: 'one_drive',
+        destination: 'mobilerun',
         folder: 'x',
         recording: { filename: 'x' },
         screenshots: {},
@@ -107,7 +107,7 @@ describe('resource flows', () => {
           cooldownScope: 'flow',
           cooldownSeconds: 0,
           delivery: {
-            destination: 'one_drive',
+            destination: 'mobilerun',
             folder: 'x',
             recording: { filename: 'x' },
             screenshots: {},
@@ -386,7 +386,7 @@ describe('resource flows', () => {
       cooldownScope: 'flow',
       cooldownSeconds: 0,
       delivery: {
-        destination: 'one_drive',
+        destination: 'mobilerun',
         folder: 'x',
         recording: { filename: 'x' },
         screenshots: {},

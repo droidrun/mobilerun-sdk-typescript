@@ -34,8 +34,7 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Deletes an uploaded app by ID. Removes files from R2 storage and the database
-   * entry.
+   * Deletes an uploaded app by ID. Removes its files and metadata.
    *
    * @example
    * ```ts
@@ -49,7 +48,7 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Verifies the uploaded files in R2 and sets the app version status to available.
+   * Verifies the uploaded files and sets the app version status to available.
    * Idempotent: replaying confirmation for an already-available version returns the
    * same successful response without re-verifying the files.
    *
@@ -65,8 +64,7 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Creates or updates an app and returns pre-signed Cloudflare R2 upload URLs for
-   * each file
+   * Creates or updates an app and returns pre-signed upload URLs for each file
    *
    * @example
    * ```ts
@@ -123,11 +121,10 @@ export class Apps extends APIResource {
   }
 
   /**
-   * Returns the user’s storage allowance from Autumn storage_mb (decimal bytes):
-   * bytes used, bytes included in the plan, the hard maximum (included + max
-   * purchasable overage; null = unlimited) and whether usage above the included
-   * amount is billed as overage. With storage billing off there is no limit: only
-   * usedBytes is set.
+   * Returns the user’s storage allowance in bytes: bytes used, bytes included in the
+   * plan, the hard maximum (included + max purchasable overage; null = unlimited)
+   * and whether usage above the included amount is billed as overage. With storage
+   * billing off there is no limit: only usedBytes is set.
    *
    * @example
    * ```ts
@@ -510,17 +507,17 @@ export interface AppConfirmUploadResponse {
 
 export interface AppCreateSignedUploadURLResponse {
   /**
-   * App ID in the database
+   * App ID
    */
   appId: string;
 
   /**
-   * Pre-signed Cloudflare R2 URLs for uploading app files
+   * Pre-signed upload URLs for uploading app files
    */
   r2UploadUrls: Array<AppCreateSignedUploadURLResponse.R2UploadURL>;
 
   /**
-   * App version ID in the database
+   * App version ID
    */
   versionId: string;
 }
@@ -839,8 +836,8 @@ export interface AppStorageUsageResponse {
 export namespace AppStorageUsageResponse {
   export interface Data {
     /**
-     * Bytes included in the plan (Autumn granted). Null when unlimited, unknown, or
-     * storage billing is off.
+     * Bytes included in the plan. Null when unlimited, unknown, or storage billing is
+     * off.
      */
     includedBytes: number | null;
 
@@ -857,8 +854,8 @@ export namespace AppStorageUsageResponse {
     overageAllowed: boolean;
 
     /**
-     * Bytes currently used (decimal: Autumn storage_mb × 1,000,000; the local sum of
-     * the user’s app versions when storage billing is off)
+     * Bytes currently used (the sum of the user’s app versions when storage billing is
+     * off)
      */
     usedBytes: number;
   }
