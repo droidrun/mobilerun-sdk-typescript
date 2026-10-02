@@ -102,15 +102,6 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Returns the catalog of event types that webhook subscriptions can subscribe to,
-   * grouped by source. Use the returned type identifiers as the `eventTypes` values
-   * when creating or updating a webhook.
-   */
-  eventTypes(options?: RequestOptions): APIPromise<WebhookEventTypesResponse> {
-    return this._client.get('/event-types', options);
-  }
-
-  /**
    * Generates a new signing secret for the webhook subscription and returns it once
    * in the response. The previous secret is replaced immediately, so any signature
    * verification on your endpoint must be updated to use the new value. Only `http`
@@ -492,55 +483,6 @@ export namespace WebhookListResponse {
   }
 }
 
-export interface WebhookEventTypesResponse {
-  data: WebhookEventTypesResponse.Data;
-}
-
-export namespace WebhookEventTypesResponse {
-  export interface Data {
-    schemaVersion: 1;
-
-    sources: Array<Data.Source>;
-  }
-
-  export namespace Data {
-    export interface Source {
-      events: Array<Source.Event>;
-
-      source: string;
-    }
-
-    export namespace Source {
-      export interface Event {
-        description: string;
-
-        surfaces: Event.Surfaces;
-
-        /**
-         * Short human title, as used in integration messages.
-         */
-        title: string;
-
-        type: string;
-      }
-
-      export namespace Event {
-        export interface Surfaces {
-          feed: boolean;
-
-          toast: boolean;
-
-          webhook: boolean;
-
-          agent?: boolean;
-
-          live?: boolean;
-        }
-      }
-    }
-  }
-}
-
 export interface WebhookRotateSecretResponse {
   data: WebhookRotateSecretResponse.Data;
 }
@@ -731,7 +673,6 @@ export declare namespace Webhooks {
     type WebhookRetrieveResponse as WebhookRetrieveResponse,
     type WebhookUpdateResponse as WebhookUpdateResponse,
     type WebhookListResponse as WebhookListResponse,
-    type WebhookEventTypesResponse as WebhookEventTypesResponse,
     type WebhookRotateSecretResponse as WebhookRotateSecretResponse,
     type WebhookTestDeliveryResponse as WebhookTestDeliveryResponse,
     type WebhookCreateParams as WebhookCreateParams,

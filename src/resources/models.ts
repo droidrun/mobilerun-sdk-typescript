@@ -4,12 +4,13 @@ import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
-/**
- * LLM Models
- */
 export class Models extends APIResource {
   /**
-   * List available LLM models.
+   * The single model-list endpoint for all consumers. Served unauthenticated by the
+   * gateway: at the edge it sits behind api-key rate limiting and cloud-auth (so
+   * callers use an API key); in-cluster callers reach it directly. Takes no headers
+   * and needs no service key. Team-scoped when PLATFORM_CATALOG_TEAM_ID is set;
+   * token prices are never included.
    */
   list(options?: RequestOptions): APIPromise<ModelListResponse> {
     return this._client.get('/models', options);
@@ -17,38 +18,26 @@ export class Models extends APIResource {
 }
 
 export interface ModelListResponse {
-  /**
-   * Available models
-   */
   data: Array<ModelListResponse.Data>;
 
-  /**
-   * Object type
-   */
-  object?: string;
+  object: 'list';
 }
 
 export namespace ModelListResponse {
   export interface Data {
-    /**
-     * Model identifier
-     */
     id: string;
 
-    /**
-     * Model owner/provider
-     */
+    created: number;
+
+    object: 'model';
+
     owned_by: string;
 
-    /**
-     * Creation timestamp
-     */
-    created?: number;
+    group?: 'recommended' | 'fast' | 'more';
 
-    /**
-     * Object type
-     */
-    object?: string;
+    label?: string;
+
+    order?: number;
   }
 }
 

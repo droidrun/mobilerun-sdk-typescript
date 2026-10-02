@@ -38,24 +38,6 @@ Methods:
 
 # Carriers
 
-Types:
-
-- <code><a href="./src/resources/carriers.ts">CarrierCreateResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierRetrieveResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierUpdateResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierListResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierDeleteResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierLookupResponse</a></code>
-
-Methods:
-
-- <code title="post /carriers">client.carriers.<a href="./src/resources/carriers.ts">create</a>({ ...params }) -> CarrierCreateResponse</code>
-- <code title="get /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">retrieve</a>(carrierID) -> CarrierRetrieveResponse</code>
-- <code title="patch /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">update</a>(carrierID, { ...params }) -> CarrierUpdateResponse</code>
-- <code title="get /carriers">client.carriers.<a href="./src/resources/carriers.ts">list</a>({ ...params }) -> CarrierListResponse</code>
-- <code title="delete /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">delete</a>(carrierID) -> CarrierDeleteResponse</code>
-- <code title="get /carriers/lookup">client.carriers.<a href="./src/resources/carriers.ts">lookup</a>({ ...params }) -> CarrierLookupResponse</code>
-
 # Credentials
 
 Types:
@@ -401,22 +383,6 @@ Methods:
 
 # Profiles
 
-Types:
-
-- <code><a href="./src/resources/profiles.ts">ProfileCreateResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileRetrieveResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileUpdateResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileListResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> ProfileCreateResponse</code>
-- <code title="get /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">retrieve</a>(profileID) -> ProfileRetrieveResponse</code>
-- <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> ProfileUpdateResponse</code>
-- <code title="get /profiles">client.profiles.<a href="./src/resources/profiles.ts">list</a>({ ...params }) -> ProfileListResponse</code>
-- <code title="delete /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">delete</a>(profileID) -> ProfileDeleteResponse</code>
-
 # Proxies
 
 Types:
@@ -426,7 +392,6 @@ Types:
 - <code><a href="./src/resources/proxies.ts">ProxyUpdateResponse</a></code>
 - <code><a href="./src/resources/proxies.ts">ProxyListResponse</a></code>
 - <code><a href="./src/resources/proxies.ts">ProxyDeleteResponse</a></code>
-- <code><a href="./src/resources/proxies.ts">ProxyLookupResponse</a></code>
 
 Methods:
 
@@ -435,7 +400,6 @@ Methods:
 - <code title="put /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">update</a>(proxyID, { ...params }) -> ProxyUpdateResponse</code>
 - <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
 - <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
-- <code title="post /proxies/lookup">client.proxies.<a href="./src/resources/proxies.ts">lookup</a>({ ...params }) -> ProxyLookupResponse</code>
 
 # Connect
 
@@ -712,7 +676,6 @@ Types:
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookRetrieveResponse</a></code>
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookUpdateResponse</a></code>
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookListResponse</a></code>
-- <code><a href="./src/resources/webhooks/webhooks.ts">WebhookEventTypesResponse</a></code>
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookRotateSecretResponse</a></code>
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookTestDeliveryResponse</a></code>
 
@@ -723,7 +686,6 @@ Methods:
 - <code title="patch /webhooks/{id}">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">update</a>(id, { ...params }) -> WebhookUpdateResponse</code>
 - <code title="get /webhooks">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">list</a>({ ...params }) -> WebhookListResponse</code>
 - <code title="delete /webhooks/{id}">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">delete</a>(id) -> void</code>
-- <code title="get /event-types">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">eventTypes</a>() -> WebhookEventTypesResponse</code>
 - <code title="post /webhooks/{id}/rotate-secret">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">rotateSecret</a>(id) -> WebhookRotateSecretResponse</code>
 - <code title="post /webhooks/{id}/test">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">testDelivery</a>(id) -> WebhookTestDeliveryResponse</code>
 
@@ -860,43 +822,9 @@ Methods:
 
 # AppEvents
 
-Types:
-
-- <code><a href="./src/resources/app-events/app-events.ts">AppEventRetrieveResponse</a></code>
-- <code><a href="./src/resources/app-events/app-events.ts">AppEventListResponse</a></code>
-
-Methods:
-
-- <code title="get /app-events/{id}">client.appEvents.<a href="./src/resources/app-events/app-events.ts">retrieve</a>(id) -> AppEventRetrieveResponse</code>
-- <code title="get /app-events">client.appEvents.<a href="./src/resources/app-events/app-events.ts">list</a>({ ...params }) -> AppEventListResponse</code>
-
 ## Catalog
 
-Types:
-
-- <code><a href="./src/resources/app-events/catalog.ts">CatalogRetrieveResponse</a></code>
-- <code><a href="./src/resources/app-events/catalog.ts">CatalogListResponse</a></code>
-
-Methods:
-
-- <code title="get /app-events/catalog/{appEventType}">client.appEvents.catalog.<a href="./src/resources/app-events/catalog.ts">retrieve</a>(appEventType) -> CatalogRetrieveResponse</code>
-- <code title="get /app-events/catalog">client.appEvents.catalog.<a href="./src/resources/app-events/catalog.ts">list</a>() -> CatalogListResponse</code>
-
 # Notifications
-
-Types:
-
-- <code><a href="./src/resources/notifications.ts">NotificationApplyPreferencesPresetResponse</a></code>
-- <code><a href="./src/resources/notifications.ts">NotificationCatalogResponse</a></code>
-- <code><a href="./src/resources/notifications.ts">NotificationGetPreferencesResponse</a></code>
-- <code><a href="./src/resources/notifications.ts">NotificationUpdatePreferencesResponse</a></code>
-
-Methods:
-
-- <code title="post /notifications/preferences/apply-preset">client.notifications.<a href="./src/resources/notifications.ts">applyPreferencesPreset</a>({ ...params }) -> NotificationApplyPreferencesPresetResponse</code>
-- <code title="get /notifications/catalog">client.notifications.<a href="./src/resources/notifications.ts">catalog</a>() -> NotificationCatalogResponse</code>
-- <code title="get /notifications/preferences">client.notifications.<a href="./src/resources/notifications.ts">getPreferences</a>() -> NotificationGetPreferencesResponse</code>
-- <code title="patch /notifications/preferences">client.notifications.<a href="./src/resources/notifications.ts">updatePreferences</a>({ ...params }) -> NotificationUpdatePreferencesResponse</code>
 
 # Messages
 
@@ -960,24 +888,4 @@ Methods:
 
 # Store
 
-Types:
-
-- <code><a href="./src/resources/store/store.ts">StoreCategoriesResponse</a></code>
-
-Methods:
-
-- <code title="get /store/categories">client.store.<a href="./src/resources/store/store.ts">categories</a>() -> StoreCategoriesResponse</code>
-
 ## Apps
-
-Types:
-
-- <code><a href="./src/resources/store/apps.ts">AppRetrieveResponse</a></code>
-- <code><a href="./src/resources/store/apps.ts">AppListResponse</a></code>
-- <code><a href="./src/resources/store/apps.ts">AppAddToWorkspaceResponse</a></code>
-
-Methods:
-
-- <code title="get /store/apps/{appId}">client.store.apps.<a href="./src/resources/store/apps.ts">retrieve</a>(appID) -> AppRetrieveResponse</code>
-- <code title="get /store/apps">client.store.apps.<a href="./src/resources/store/apps.ts">list</a>({ ...params }) -> AppListResponse</code>
-- <code title="post /store/apps/{appId}/add">client.store.apps.<a href="./src/resources/store/apps.ts">addToWorkspace</a>(appID) -> AppAddToWorkspaceResponse</code>

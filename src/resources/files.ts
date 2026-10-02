@@ -37,9 +37,9 @@ export class Files extends APIResource {
   }
 
   /**
-   * Soft-cancels an in-flight upload before confirm. Only acts on `pending` rows —
-   * refuses to touch `ready` to avoid wiping confirmed files. Idempotent:
-   * `{ cancelled: false }` if the row exists but is no longer pending.
+   * Soft-cancels an in-flight upload before confirm. Only acts on `pending` uploads
+   * — refuses to touch `ready` files, so confirmed files are never removed.
+   * Idempotent: `{ cancelled: false }` if the file exists but is no longer pending.
    */
   cancelPending(fileID: string, options?: RequestOptions): APIPromise<FileCancelPendingResponse> {
     return this._client.delete(path`/agents/files/${fileID}/pending`, options);
