@@ -215,6 +215,18 @@ export namespace AppListResponse {
     versionCode: number;
 
     versionName: string;
+
+    availableUpdate?: AppListResponseItem.AvailableUpdate;
+  }
+
+  export namespace AppListResponseItem {
+    export interface AvailableUpdate {
+      country: string;
+
+      versionCode: number;
+
+      versionName: string;
+    }
   }
 }
 
@@ -266,6 +278,12 @@ export interface AppListParams {
    * Query param
    */
   includeSystemApps?: boolean;
+
+  /**
+   * Query param: Resolve availableUpdate for Android user apps (one library lookup
+   * per app). Off by default.
+   */
+  includeUpdates?: boolean;
 
   /**
    * Header param

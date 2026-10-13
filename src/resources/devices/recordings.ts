@@ -30,6 +30,20 @@ export class Recordings extends APIResource {
   }
 
   /**
+   * Screenshots saved into the recording with
+   * `GET /devices/{deviceId}/screenshot?save=true`, oldest first, each with a
+   * presigned download URL.
+   */
+  screenshots(
+    recordingID: string,
+    params: RecordingScreenshotsParams,
+    options?: RequestOptions,
+  ): APIPromise<RecordingScreenshotsResponse | null> {
+    const { deviceId } = params;
+    return this._client.get(path`/devices/${deviceId}/recordings/${recordingID}/screenshots`, options);
+  }
+
+  /**
    * Start a device recording
    */
   start(
@@ -145,6 +159,24 @@ export namespace RecordingListResponse {
 
       limitReason?: string;
     }
+  }
+}
+
+export type RecordingScreenshotsResponse =
+  Array<RecordingScreenshotsResponse.RecordingScreenshotsResponseItem>;
+
+export namespace RecordingScreenshotsResponse {
+  export interface RecordingScreenshotsResponseItem {
+    id: string;
+
+    capturedAt: string;
+
+    sizeBytes: number;
+
+    /**
+     * Presigned download URL, valid for 15 minutes.
+     */
+    url: string;
   }
 }
 
@@ -317,23 +349,27 @@ export interface RecordingDeleteParams {
   deviceId: string;
 }
 
+export interface RecordingScreenshotsParams {
+  deviceId: string;
+}
+
 export interface RecordingStartParams {
   name?: string;
 
   /**
    * Capture quality from 1 (lowest) to 10 (full stream quality). Defaults to the
-   * device's full quality. Honored by devices recording through the portal stream
-   * bridge.
+   * device's full quality. Honored only by devices that support adjustable capture
+   * quality.
    */
   quality?: number;
 
   retentionDays?: number;
 
   /**
-   * Artifacts to capture: trajectory (input actions; on portal stream-bridge devices
-   * only when the handset announces trajectory capture), video, and audio (captured
-   * into the video artifact, so it requires video; honored by portal stream-bridge
-   * recorders). Defaults to trajectory and video, narrowed to what the device
+   * Artifacts to capture: trajectory (input actions; on some devices only when the
+   * device announces trajectory capture), video, and audio (captured into the video
+   * artifact, so it requires video; honored only by devices that support audio
+   * capture). Defaults to trajectory and video, narrowed to what the device
    * produces.
    */
   types?: Array<string> | null;
@@ -358,11 +394,13 @@ export interface RecordingVideoParams {
 export declare namespace Recordings {
   export {
     type RecordingListResponse as RecordingListResponse,
+    type RecordingScreenshotsResponse as RecordingScreenshotsResponse,
     type RecordingStartResponse as RecordingStartResponse,
     type RecordingStatusResponse as RecordingStatusResponse,
     type RecordingStopResponse as RecordingStopResponse,
     type RecordingListParams as RecordingListParams,
     type RecordingDeleteParams as RecordingDeleteParams,
+    type RecordingScreenshotsParams as RecordingScreenshotsParams,
     type RecordingStartParams as RecordingStartParams,
     type RecordingStatusParams as RecordingStatusParams,
     type RecordingStopParams as RecordingStopParams,

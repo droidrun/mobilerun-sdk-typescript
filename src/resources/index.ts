@@ -2,12 +2,6 @@
 
 export * from './shared';
 export {
-  AppEvents,
-  type AppEventRetrieveResponse,
-  type AppEventListResponse,
-  type AppEventListParams,
-} from './app-events/app-events';
-export {
   Apps,
   type AppRetrieveResponse,
   type AppListResponse,
@@ -21,19 +15,6 @@ export {
   type AppCreateSignedUploadURLParams,
 } from './apps';
 export { Assistant } from './assistant/assistant';
-export {
-  Carriers,
-  type CarrierCreateResponse,
-  type CarrierRetrieveResponse,
-  type CarrierUpdateResponse,
-  type CarrierListResponse,
-  type CarrierDeleteResponse,
-  type CarrierLookupResponse,
-  type CarrierCreateParams,
-  type CarrierUpdateParams,
-  type CarrierListParams,
-  type CarrierLookupParams,
-} from './carriers';
 export { Connect } from './connect/connect';
 export {
   Credentials,
@@ -96,15 +77,6 @@ export {
 } from './messages/messages';
 export { Models, type ModelListResponse } from './models';
 export {
-  Notifications,
-  type NotificationApplyPreferencesPresetResponse,
-  type NotificationCatalogResponse,
-  type NotificationGetPreferencesResponse,
-  type NotificationUpdatePreferencesResponse,
-  type NotificationApplyPreferencesPresetParams,
-  type NotificationUpdatePreferencesParams,
-} from './notifications';
-export {
   Numbers,
   type NumberCreateResponse,
   type NumberRetrieveResponse,
@@ -113,23 +85,11 @@ export {
   type NumberDeleteResponse,
   type NumberCapacityResponse,
   type NumberCountriesResponse,
-  type NumberPurposesResponse,
   type NumberCreateParams,
   type NumberUpdateParams,
   type NumberListParams,
   type NumberCapacityParams,
 } from './numbers/numbers';
-export {
-  Profiles,
-  type ProfileCreateResponse,
-  type ProfileRetrieveResponse,
-  type ProfileUpdateResponse,
-  type ProfileListResponse,
-  type ProfileDeleteResponse,
-  type ProfileCreateParams,
-  type ProfileUpdateParams,
-  type ProfileListParams,
-} from './profiles';
 export {
   Proxies,
   type ProxyCreateResponse,
@@ -137,13 +97,10 @@ export {
   type ProxyUpdateResponse,
   type ProxyListResponse,
   type ProxyDeleteResponse,
-  type ProxyLookupResponse,
   type ProxyCreateParams,
   type ProxyUpdateParams,
   type ProxyListParams,
-  type ProxyLookupParams,
 } from './proxies';
-export { Store, type StoreCategoriesResponse } from './store/store';
 export {
   Tasks,
   type TaskRetrieveResponse,
@@ -165,7 +122,6 @@ export {
   type WebhookRetrieveResponse,
   type WebhookUpdateResponse,
   type WebhookListResponse,
-  type WebhookEventTypesResponse,
   type WebhookRotateSecretResponse,
   type WebhookTestDeliveryResponse,
   type WebhookCreateParams,
