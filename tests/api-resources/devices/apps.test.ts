@@ -29,6 +29,7 @@ describe('resource apps', () => {
         {
           includeProtectedApps: true,
           includeSystemApps: true,
+          includeUpdates: true,
           'X-Device-Display-ID': 0,
         },
         { path: '/_stainless_unknown_path' },

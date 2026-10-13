@@ -50,6 +50,23 @@ describe('resource recordings', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('screenshots: only required params', async () => {
+    const responsePromise = client.devices.recordings.screenshots('recordingId', { deviceId: 'deviceId' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('screenshots: required and optional params', async () => {
+    const response = await client.devices.recordings.screenshots('recordingId', { deviceId: 'deviceId' });
+  });
+
+  // Mock server tests are disabled
   test.skip('start', async () => {
     const responsePromise = client.devices.recordings.start('deviceId', {});
     const rawResponse = await responsePromise.asResponse();
