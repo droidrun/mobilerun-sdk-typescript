@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as TimezoneAPI from './timezone';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -11,23 +12,9 @@ export class Timezone extends APIResource {
    * Returns the device's current timezone identifier. Devices that do not support
    * timezone control return an unsupported-feature error.
    */
-  get(
-    deviceID: string,
-    params: TimezoneGetParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TimezoneGetResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/timezone`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  get(deviceID: string, params: TimezoneGetParams | null | undefined = {}, options?: RequestOptions): APIPromise<TimezoneGetResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/timezone`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -35,20 +22,8 @@ export class Timezone extends APIResource {
    * not support timezone control return an unsupported-feature error.
    */
   set(deviceID: string, params: TimezoneSetParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/timezone`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/timezone`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
@@ -81,6 +56,6 @@ export declare namespace Timezone {
   export {
     type TimezoneGetResponse as TimezoneGetResponse,
     type TimezoneGetParams as TimezoneGetParams,
-    type TimezoneSetParams as TimezoneSetParams,
+    type TimezoneSetParams as TimezoneSetParams
   };
 }

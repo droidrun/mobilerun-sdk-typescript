@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ConversationsAPI from './conversations';
 import { APIPromise } from '../../core/api-promise';
 import { Stream } from '../../core/streaming';
 import { buildHeaders } from '../../internal/headers';
@@ -27,11 +28,7 @@ export class Conversations extends APIResource {
    * (description, status, pinned) remain updateable; archiving a bound chat stays
    * allowed.
    */
-  update(
-    id: string,
-    body: ConversationUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<ConversationUpdateResponse> {
+  update(id: string, body: ConversationUpdateParams, options?: RequestOptions): APIPromise<ConversationUpdateResponse> {
     return this._client.patch(path`/assistant/chat/sessions/${id}`, { body, ...options });
   }
 
@@ -43,10 +40,7 @@ export class Conversations extends APIResource {
    * (`workflowId` required, or the request 400s), no status filter, newest episode
    * first.
    */
-  list(
-    query: ConversationListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ConversationListResponse> {
+  list(query: ConversationListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ConversationListResponse> {
     return this._client.get('/assistant/chat/sessions', { query, ...options });
   }
 
@@ -66,10 +60,7 @@ export class Conversations extends APIResource {
    * as `confirmed: true`. For `devices.reset`, only `once` and `reject` are allowed;
    * the generic `always` response is rejected with HTTP 400.
    */
-  answerPermission(
-    body: ConversationAnswerPermissionParams,
-    options?: RequestOptions,
-  ): APIPromise<ConversationAnswerPermissionResponse> {
+  answerPermission(body: ConversationAnswerPermissionParams, options?: RequestOptions): APIPromise<ConversationAnswerPermissionResponse> {
     return this._client.post('/assistant/chat/permission', { body, ...options });
   }
 
@@ -77,10 +68,7 @@ export class Conversations extends APIResource {
    * Deliver the user's answers to the agent's pending question for an in-flight
    * turn. Idempotent via the `idempotency-key` header.
    */
-  answerQuestion(
-    body: ConversationAnswerQuestionParams,
-    options?: RequestOptions,
-  ): APIPromise<ConversationAnswerQuestionResponse> {
+  answerQuestion(body: ConversationAnswerQuestionParams, options?: RequestOptions): APIPromise<ConversationAnswerQuestionResponse> {
     return this._client.post('/assistant/chat/question', { body, ...options });
   }
 
@@ -88,10 +76,7 @@ export class Conversations extends APIResource {
    * Return the user's chat history for the given session. History remains readable
    * after the session is no longer active.
    */
-  history(
-    query: ConversationHistoryParams,
-    options?: RequestOptions,
-  ): APIPromise<ConversationHistoryResponse> {
+  history(query: ConversationHistoryParams, options?: RequestOptions): APIPromise<ConversationHistoryResponse> {
     return this._client.get('/assistant/chat/messages', { query, ...options });
   }
 
@@ -99,10 +84,7 @@ export class Conversations extends APIResource {
    * Dismiss the agent's pending question. Already-resolved questions return 200
    * (no-op) so multi-tab dismiss stays idempotent.
    */
-  rejectQuestion(
-    body: ConversationRejectQuestionParams,
-    options?: RequestOptions,
-  ): APIPromise<ConversationRejectQuestionResponse> {
+  rejectQuestion(body: ConversationRejectQuestionParams, options?: RequestOptions): APIPromise<ConversationRejectQuestionResponse> {
     return this._client.post('/assistant/chat/question/reject', { body, ...options });
   }
 
@@ -127,16 +109,8 @@ export class Conversations extends APIResource {
    * failures return a retryable 503 with `Retry-After`. Resume is best-effort. Does
    * not start an inactive session.
    */
-  stream(
-    query: ConversationStreamParams,
-    options?: RequestOptions,
-  ): APIPromise<Stream<ConversationStreamResponse>> {
-    return this._client.get('/assistant/chat/stream', {
-      query,
-      ...options,
-      headers: buildHeaders([{ Accept: 'text/event-stream' }, options?.headers]),
-      stream: true,
-    }) as APIPromise<Stream<ConversationStreamResponse>>;
+  stream(query: ConversationStreamParams, options?: RequestOptions): APIPromise<Stream<ConversationStreamResponse>> {
+    return this._client.get('/assistant/chat/stream', { query, ...options, headers: buildHeaders([{Accept: 'text/event-stream'}, options?.headers]), stream: true }) as APIPromise<Stream<ConversationStreamResponse>>;
   }
 }
 
@@ -380,7 +354,7 @@ export namespace ConversationHistoryResponse {
     export interface Part {
       type: string;
 
-      [k: string]: unknown;
+    [k: string]: unknown
     }
 
     export interface Metadata {
@@ -427,7 +401,7 @@ export interface ConversationSendResponse {
   errorText?: string;
 }
 
-export type ConversationStreamResponse = string;
+export type ConversationStreamResponse = string
 
 export interface ConversationCreateParams {
   title: string;
@@ -468,13 +442,7 @@ export interface ConversationAnswerPermissionParams {
 }
 
 export interface ConversationAnswerQuestionParams {
-  answers: Array<
-    Array<
-      | ConversationAnswerQuestionParams.Label
-      | ConversationAnswerQuestionParams.Custom
-      | ConversationAnswerQuestionParams.UnionMember2
-    >
-  >;
+  answers: Array<Array<ConversationAnswerQuestionParams.Label | ConversationAnswerQuestionParams.Custom | ConversationAnswerQuestionParams.UnionMember2>>;
 
   questionId: string;
 }
@@ -538,6 +506,6 @@ export declare namespace Conversations {
     type ConversationHistoryParams as ConversationHistoryParams,
     type ConversationRejectQuestionParams as ConversationRejectQuestionParams,
     type ConversationSendParams as ConversationSendParams,
-    type ConversationStreamParams as ConversationStreamParams,
+    type ConversationStreamParams as ConversationStreamParams
   };
 }

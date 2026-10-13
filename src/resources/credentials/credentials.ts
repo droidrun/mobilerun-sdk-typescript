@@ -1,15 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as CredentialsAPI from './credentials';
 import * as Shared from '../shared';
 import * as PackagesAPI from './packages/packages';
-import {
-  PackageCreateParams,
-  PackageCreateResponse,
-  PackageListAllResponse,
-  PackageListResponse,
-  Packages,
-} from './packages/packages';
+import { PackageCreateParams, PackageCreateResponse, PackageListAllResponse, PackageListResponse, Packages } from './packages/packages';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -21,10 +16,7 @@ export class Credentials extends APIResource {
    * across every package. Accepts standard pagination query parameters and responds
    * with the credential items plus pagination metadata.
    */
-  list(
-    query: CredentialListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CredentialListResponse> {
+  list(query: CredentialListParams | null | undefined = {}, options?: RequestOptions): APIPromise<CredentialListResponse> {
     return this._client.get('/credentials', { query, ...options });
   }
 }
@@ -58,14 +50,7 @@ export namespace CredentialListResponse {
 
   export namespace Item {
     export interface Field {
-      fieldType:
-        | 'email'
-        | 'username'
-        | 'password'
-        | 'api_token'
-        | 'phone_number'
-        | 'two_factor_secret'
-        | 'backup_codes';
+      fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
 
       value: string;
     }
@@ -83,7 +68,7 @@ Credentials.Packages = Packages;
 export declare namespace Credentials {
   export {
     type CredentialListResponse as CredentialListResponse,
-    type CredentialListParams as CredentialListParams,
+    type CredentialListParams as CredentialListParams
   };
 
   export {
@@ -91,6 +76,6 @@ export declare namespace Credentials {
     type PackageCreateResponse as PackageCreateResponse,
     type PackageListResponse as PackageListResponse,
     type PackageListAllResponse as PackageListAllResponse,
-    type PackageCreateParams as PackageCreateParams,
+    type PackageCreateParams as PackageCreateParams
   };
 }

@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ActionCatalogAPI from './action-catalog';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -20,10 +21,7 @@ export class ActionCatalog extends APIResource {
    * actions are created from, each carrying its parameter schema. Supports filtering
    * by `service`.
    */
-  list(
-    query: ActionCatalogListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ActionCatalogListResponse> {
+  list(query: ActionCatalogListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ActionCatalogListResponse> {
     return this._client.get('/action-catalog', { query, ...options });
   }
 }
@@ -98,6 +96,6 @@ export declare namespace ActionCatalog {
   export {
     type ActionCatalogRetrieveResponse as ActionCatalogRetrieveResponse,
     type ActionCatalogListResponse as ActionCatalogListResponse,
-    type ActionCatalogListParams as ActionCatalogListParams,
+    type ActionCatalogListParams as ActionCatalogListParams
   };
 }

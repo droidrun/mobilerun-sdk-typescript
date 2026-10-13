@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as FilesAPI from './files';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -11,21 +12,14 @@ export class Files extends APIResource {
    * Partial update of `displayName` and/or `enabled`. Only files with `zone=skills`
    * are mutable; other zones return 422 `unsupported_zone`.
    */
-  update(
-    fileID: string,
-    body: FileUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FileUpdateResponse> {
+  update(fileID: string, body: FileUpdateParams | null | undefined = {}, options?: RequestOptions): APIPromise<FileUpdateResponse> {
     return this._client.patch(path`/agents/files/${fileID}`, { body, ...options });
   }
 
   /**
    * List the user's ready files, optionally filtered by zone
    */
-  list(
-    query: FileListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FileListResponse> {
+  list(query: FileListParams | null | undefined = {}, options?: RequestOptions): APIPromise<FileListResponse> {
     return this._client.get('/agents/files', { query, ...options });
   }
 
@@ -37,9 +31,9 @@ export class Files extends APIResource {
   }
 
   /**
-   * Soft-cancels an in-flight upload before confirm. Only acts on `pending` rows —
-   * refuses to touch `ready` to avoid wiping confirmed files. Idempotent:
-   * `{ cancelled: false }` if the row exists but is no longer pending.
+   * Soft-cancels an in-flight upload before confirm. Only acts on `pending` uploads
+   * — refuses to touch `ready` files, so confirmed files are never removed.
+   * Idempotent: `{ cancelled: false }` if the file exists but is no longer pending.
    */
   cancelPending(fileID: string, options?: RequestOptions): APIPromise<FileCancelPendingResponse> {
     return this._client.delete(path`/agents/files/${fileID}/pending`, options);
@@ -57,10 +51,7 @@ export class Files extends APIResource {
    * owned by another tenant all return the same 404 response.
    */
   download(fileID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.get(path`/agents/files/${fileID}/download`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.get(path`/agents/files/${fileID}/download`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -313,6 +304,6 @@ export declare namespace Files {
     type FileUploadURLResponse as FileUploadURLResponse,
     type FileUpdateParams as FileUpdateParams,
     type FileListParams as FileListParams,
-    type FileUploadURLParams as FileUploadURLParams,
+    type FileUploadURLParams as FileUploadURLParams
   };
 }

@@ -1,15 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as MessagesAPI from './messages';
 import * as Shared from '../shared';
 import * as ConversationsAPI from './conversations';
-import {
-  ConversationListParams,
-  ConversationListResponse,
-  ConversationMarkReadParams,
-  ConversationMarkReadResponse,
-  Conversations,
-} from './conversations';
+import { ConversationListParams, ConversationListResponse, ConversationMarkReadParams, ConversationMarkReadResponse, Conversations } from './conversations';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -30,10 +25,7 @@ export class Messages extends APIResource {
    * Lists SMS messages newest first, with filters for direction, eSIM, phone number,
    * status, and conversation.
    */
-  list(
-    query: MessageListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<MessageListResponse> {
+  list(query: MessageListParams | null | undefined = {}, options?: RequestOptions): APIPromise<MessageListResponse> {
     return this._client.get('/numbers/messages', { query, ...options });
   }
 }
@@ -66,15 +58,7 @@ export namespace MessageRetrieveResponse {
 
     providerCode: string | null;
 
-    status:
-      | 'received'
-      | 'queued'
-      | 'claimed'
-      | 'sending'
-      | 'sent'
-      | 'sent_unconfirmed'
-      | 'delivered'
-      | 'failed';
+    status: 'received' | 'queued' | 'claimed' | 'sending' | 'sent' | 'sent_unconfirmed' | 'delivered' | 'failed';
   }
 }
 
@@ -108,15 +92,7 @@ export namespace MessageListResponse {
 
     providerCode: string | null;
 
-    status:
-      | 'received'
-      | 'queued'
-      | 'claimed'
-      | 'sending'
-      | 'sent'
-      | 'sent_unconfirmed'
-      | 'delivered'
-      | 'failed';
+    status: 'received' | 'queued' | 'claimed' | 'sending' | 'sent' | 'sent_unconfirmed' | 'delivered' | 'failed';
   }
 }
 
@@ -135,16 +111,7 @@ export interface MessageListParams {
 
   peerNumber?: string;
 
-  status?:
-    | 'all'
-    | 'received'
-    | 'queued'
-    | 'claimed'
-    | 'sending'
-    | 'sent'
-    | 'sent_unconfirmed'
-    | 'delivered'
-    | 'failed';
+  status?: 'all' | 'received' | 'queued' | 'claimed' | 'sending' | 'sent' | 'sent_unconfirmed' | 'delivered' | 'failed';
 }
 
 Messages.Conversations = Conversations;
@@ -153,7 +120,7 @@ export declare namespace Messages {
   export {
     type MessageRetrieveResponse as MessageRetrieveResponse,
     type MessageListResponse as MessageListResponse,
-    type MessageListParams as MessageListParams,
+    type MessageListParams as MessageListParams
   };
 
   export {
@@ -161,6 +128,6 @@ export declare namespace Messages {
     type ConversationListResponse as ConversationListResponse,
     type ConversationMarkReadResponse as ConversationMarkReadResponse,
     type ConversationListParams as ConversationListParams,
-    type ConversationMarkReadParams as ConversationMarkReadParams,
+    type ConversationMarkReadParams as ConversationMarkReadParams
   };
 }

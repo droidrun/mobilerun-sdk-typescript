@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as ApnAPI from './apn';
 import { APIPromise } from '../../../core/api-promise';
 import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
@@ -11,23 +12,9 @@ export class Apn extends APIResource {
    * Returns the access point names (APNs) configured for the device's active eSIM
    * subscriptions.
    */
-  list(
-    deviceID: string,
-    params: ApnListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ApnListResponse | null> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/esim/apn`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  list(deviceID: string, params: ApnListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ApnListResponse | null> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/esim/apn`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -35,20 +22,8 @@ export class Apn extends APIResource {
    * eSIM subscription in the request body.
    */
   select(deviceID: string, params: ApnSelectParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.put(path`/devices/${deviceID}/esim/apn`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.put(path`/devices/${deviceID}/esim/apn`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -57,24 +32,12 @@ export class Apn extends APIResource {
    * values when omitted.
    */
   set(deviceID: string, params: ApnSetParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/esim/apn`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/esim/apn`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
-export type ApnListResponse = Array<ApnListResponse.ApnListResponseItem>;
+export type ApnListResponse = Array<ApnListResponse.ApnListResponseItem>
 
 export namespace ApnListResponse {
   export interface ApnListResponseItem {
@@ -173,6 +136,6 @@ export declare namespace Apn {
     type ApnListResponse as ApnListResponse,
     type ApnListParams as ApnListParams,
     type ApnSelectParams as ApnSelectParams,
-    type ApnSetParams as ApnSetParams,
+    type ApnSetParams as ApnSetParams
   };
 }

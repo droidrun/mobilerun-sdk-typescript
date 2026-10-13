@@ -1,22 +1,12 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as MailboxesAPI from './mailboxes';
 import * as Shared from '../shared';
 import * as ConnectionsAPI from './connections';
-import {
-  ConnectionCreateParams,
-  ConnectionCreateResponse,
-  ConnectionRetrieveResponse,
-  Connections,
-} from './connections';
+import { ConnectionCreateParams, ConnectionCreateResponse, ConnectionRetrieveResponse, Connections } from './connections';
 import * as MessagesAPI from './messages';
-import {
-  MessageListParams,
-  MessageListResponse,
-  MessageRetrieveParams,
-  MessageRetrieveResponse,
-  Messages,
-} from './messages';
+import { MessageListParams, MessageListResponse, MessageRetrieveParams, MessageRetrieveResponse, Messages } from './messages';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -27,9 +17,9 @@ export class Mailboxes extends APIResource {
 
   /**
    * Creates a mailbox on the default domain or a connected custom domain. An
-   * optional `localPart` selects the address. Replaying the same Idempotency-Key
-   * (or, during migration, the deprecated `clientRequestId` body field) and payload
-   * returns the original mailbox. Poll the mailbox when a 202 response does not yet
+   * optional `localPart` selects the address. Replaying the same Idempotency-Key and
+   * payload returns the original mailbox. Fresh requests and replays return 202 with
+   * the current mailbox state. Poll the mailbox when the response does not yet
    * include a checkout URL.
    *
    * @example
@@ -37,10 +27,7 @@ export class Mailboxes extends APIResource {
    * const mailbox = await client.mailboxes.create();
    * ```
    */
-  create(
-    body: MailboxCreateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<MailboxCreateResponse> {
+  create(body: MailboxCreateParams | null | undefined = {}, options?: RequestOptions): APIPromise<MailboxCreateResponse> {
     return this._client.post('/mailboxes', { body, ...options });
   }
 
@@ -69,11 +56,7 @@ export class Mailboxes extends APIResource {
    * );
    * ```
    */
-  update(
-    mailboxID: string,
-    body: MailboxUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<MailboxUpdateResponse> {
+  update(mailboxID: string, body: MailboxUpdateParams, options?: RequestOptions): APIPromise<MailboxUpdateResponse> {
     return this._client.patch(path`/mailboxes/${mailboxID}`, { body, ...options });
   }
 
@@ -85,10 +68,7 @@ export class Mailboxes extends APIResource {
    * const mailboxes = await client.mailboxes.list();
    * ```
    */
-  list(
-    query: MailboxListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<MailboxListResponse> {
+  list(query: MailboxListParams | null | undefined = {}, options?: RequestOptions): APIPromise<MailboxListResponse> {
     return this._client.get('/mailboxes', { query, ...options });
   }
 
@@ -121,7 +101,8 @@ export class Mailboxes extends APIResource {
   }
 
   /**
-   * Removes only this mailbox link. The agent Composio connection stays in place.
+   * Removes only this mailbox link. The Gmail connection used by your agents stays
+   * in place.
    *
    * @example
    * ```ts
@@ -145,11 +126,7 @@ export class Mailboxes extends APIResource {
    * );
    * ```
    */
-  otp(
-    mailboxID: string,
-    query: MailboxOtpParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<MailboxOtpResponse> {
+  otp(mailboxID: string, query: MailboxOtpParams | null | undefined = {}, options?: RequestOptions): APIPromise<MailboxOtpResponse> {
     return this._client.get(path`/mailboxes/${mailboxID}/otp`, { query, ...options });
   }
 
@@ -164,11 +141,7 @@ export class Mailboxes extends APIResource {
    * );
    * ```
    */
-  restart(
-    mailboxID: string,
-    body: MailboxRestartParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<MailboxRestartResponse> {
+  restart(mailboxID: string, body: MailboxRestartParams | null | undefined = {}, options?: RequestOptions): APIPromise<MailboxRestartResponse> {
     return this._client.post(path`/mailboxes/${mailboxID}/restart`, { body, ...options });
   }
 
@@ -218,16 +191,7 @@ export namespace MailboxCreateResponse {
 
     provider: 'matix' | 'gmail';
 
-    status:
-      | 'provisioning'
-      | 'awaiting_payment'
-      | 'active'
-      | 'cancel_scheduled'
-      | 'archived'
-      | 'billing_error'
-      | 'pending_connection'
-      | 'connection_expired'
-      | 'connection_removed';
+    status: 'provisioning' | 'awaiting_payment' | 'active' | 'cancel_scheduled' | 'archived' | 'billing_error' | 'pending_connection' | 'connection_expired' | 'connection_removed';
   }
 
   export namespace Data {
@@ -273,16 +237,7 @@ export namespace MailboxRetrieveResponse {
 
     provider: 'matix' | 'gmail';
 
-    status:
-      | 'provisioning'
-      | 'awaiting_payment'
-      | 'active'
-      | 'cancel_scheduled'
-      | 'archived'
-      | 'billing_error'
-      | 'pending_connection'
-      | 'connection_expired'
-      | 'connection_removed';
+    status: 'provisioning' | 'awaiting_payment' | 'active' | 'cancel_scheduled' | 'archived' | 'billing_error' | 'pending_connection' | 'connection_expired' | 'connection_removed';
   }
 
   export namespace Data {
@@ -328,16 +283,7 @@ export namespace MailboxUpdateResponse {
 
     provider: 'matix' | 'gmail';
 
-    status:
-      | 'provisioning'
-      | 'awaiting_payment'
-      | 'active'
-      | 'cancel_scheduled'
-      | 'archived'
-      | 'billing_error'
-      | 'pending_connection'
-      | 'connection_expired'
-      | 'connection_removed';
+    status: 'provisioning' | 'awaiting_payment' | 'active' | 'cancel_scheduled' | 'archived' | 'billing_error' | 'pending_connection' | 'connection_expired' | 'connection_removed';
   }
 
   export namespace Data {
@@ -385,16 +331,7 @@ export namespace MailboxListResponse {
 
     provider: 'matix' | 'gmail';
 
-    status:
-      | 'provisioning'
-      | 'awaiting_payment'
-      | 'active'
-      | 'cancel_scheduled'
-      | 'archived'
-      | 'billing_error'
-      | 'pending_connection'
-      | 'connection_expired'
-      | 'connection_removed';
+    status: 'provisioning' | 'awaiting_payment' | 'active' | 'cancel_scheduled' | 'archived' | 'billing_error' | 'pending_connection' | 'connection_expired' | 'connection_removed';
   }
 
   export namespace Item {
@@ -440,16 +377,7 @@ export namespace MailboxDeleteResponse {
 
     provider: 'matix' | 'gmail';
 
-    status:
-      | 'provisioning'
-      | 'awaiting_payment'
-      | 'active'
-      | 'cancel_scheduled'
-      | 'archived'
-      | 'billing_error'
-      | 'pending_connection'
-      | 'connection_expired'
-      | 'connection_removed';
+    status: 'provisioning' | 'awaiting_payment' | 'active' | 'cancel_scheduled' | 'archived' | 'billing_error' | 'pending_connection' | 'connection_expired' | 'connection_removed';
   }
 
   export namespace Data {
@@ -511,16 +439,7 @@ export namespace MailboxDisconnectResponse {
 
     provider: 'matix' | 'gmail';
 
-    status:
-      | 'provisioning'
-      | 'awaiting_payment'
-      | 'active'
-      | 'cancel_scheduled'
-      | 'archived'
-      | 'billing_error'
-      | 'pending_connection'
-      | 'connection_expired'
-      | 'connection_removed';
+    status: 'provisioning' | 'awaiting_payment' | 'active' | 'cancel_scheduled' | 'archived' | 'billing_error' | 'pending_connection' | 'connection_expired' | 'connection_removed';
   }
 
   export namespace Data {
@@ -589,16 +508,7 @@ export namespace MailboxRestartResponse {
 
     provider: 'matix' | 'gmail';
 
-    status:
-      | 'provisioning'
-      | 'awaiting_payment'
-      | 'active'
-      | 'cancel_scheduled'
-      | 'archived'
-      | 'billing_error'
-      | 'pending_connection'
-      | 'connection_expired'
-      | 'connection_removed';
+    status: 'provisioning' | 'awaiting_payment' | 'active' | 'cancel_scheduled' | 'archived' | 'billing_error' | 'pending_connection' | 'connection_expired' | 'connection_removed';
   }
 
   export namespace Data {
@@ -644,16 +554,7 @@ export namespace MailboxUncancelResponse {
 
     provider: 'matix' | 'gmail';
 
-    status:
-      | 'provisioning'
-      | 'awaiting_payment'
-      | 'active'
-      | 'cancel_scheduled'
-      | 'archived'
-      | 'billing_error'
-      | 'pending_connection'
-      | 'connection_expired'
-      | 'connection_removed';
+    status: 'provisioning' | 'awaiting_payment' | 'active' | 'cancel_scheduled' | 'archived' | 'billing_error' | 'pending_connection' | 'connection_expired' | 'connection_removed';
   }
 
   export namespace Data {
@@ -739,14 +640,14 @@ export declare namespace Mailboxes {
     type MailboxUpdateParams as MailboxUpdateParams,
     type MailboxListParams as MailboxListParams,
     type MailboxOtpParams as MailboxOtpParams,
-    type MailboxRestartParams as MailboxRestartParams,
+    type MailboxRestartParams as MailboxRestartParams
   };
 
   export {
     Connections as Connections,
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionRetrieveResponse as ConnectionRetrieveResponse,
-    type ConnectionCreateParams as ConnectionCreateParams,
+    type ConnectionCreateParams as ConnectionCreateParams
   };
 
   export {
@@ -754,6 +655,6 @@ export declare namespace Mailboxes {
     type MessageRetrieveResponse as MessageRetrieveResponse,
     type MessageListResponse as MessageListResponse,
     type MessageRetrieveParams as MessageRetrieveParams,
-    type MessageListParams as MessageListParams,
+    type MessageListParams as MessageListParams
   };
 }

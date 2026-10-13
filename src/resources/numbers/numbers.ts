@@ -1,15 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as NumbersAPI from './numbers';
 import * as Shared from '../shared';
 import * as MessagesAPI from './messages';
-import {
-  MessageListParams,
-  MessageListResponse,
-  MessageSendParams,
-  MessageSendResponse,
-  Messages,
-} from './messages';
+import { MessageListParams, MessageListResponse, MessageSendParams, MessageSendResponse, Messages } from './messages';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -19,17 +14,14 @@ export class Numbers extends APIResource {
 
   /**
    * Starts a phone-number purchase. Poll the returned phone number for status
-   * updates. `purpose` and `country` cannot be combined.
+   * updates.
    *
    * @example
    * ```ts
    * const number = await client.numbers.create();
    * ```
    */
-  create(
-    body: NumberCreateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<NumberCreateResponse> {
+  create(body: NumberCreateParams | null | undefined = {}, options?: RequestOptions): APIPromise<NumberCreateResponse> {
     return this._client.post('/numbers/phones', { body, ...options });
   }
 
@@ -58,11 +50,7 @@ export class Numbers extends APIResource {
    * );
    * ```
    */
-  update(
-    id: string,
-    body: NumberUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<NumberUpdateResponse> {
+  update(id: string, body: NumberUpdateParams | null | undefined = {}, options?: RequestOptions): APIPromise<NumberUpdateResponse> {
     return this._client.patch(path`/numbers/phones/${id}`, { body, ...options });
   }
 
@@ -74,10 +62,7 @@ export class Numbers extends APIResource {
    * const numbers = await client.numbers.list();
    * ```
    */
-  list(
-    query: NumberListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<NumberListResponse> {
+  list(query: NumberListParams | null | undefined = {}, options?: RequestOptions): APIPromise<NumberListResponse> {
     return this._client.get('/numbers/phones', { query, ...options });
   }
 
@@ -122,18 +107,6 @@ export class Numbers extends APIResource {
    */
   countries(options?: RequestOptions): APIPromise<NumberCountriesResponse> {
     return this._client.get('/numbers/phones/countries', options);
-  }
-
-  /**
-   * Lists the optional purposes currently available for a Mobilerun Phone.
-   *
-   * @example
-   * ```ts
-   * const response = await client.numbers.purposes();
-   * ```
-   */
-  purposes(options?: RequestOptions): APIPromise<NumberPurposesResponse> {
-    return this._client.get('/numbers/phones/purposes', options);
   }
 }
 
@@ -185,6 +158,13 @@ export namespace NumberRetrieveResponse {
     createdAt: string | null;
 
     currentPeriodEnd: string | null;
+
+    /**
+     * Why setup failed. Null unless state is failed, and null when the failure has no
+     * classified reason. out_of_stock: no number is currently available for the
+     * requested country.
+     */
+    failureReason: 'out_of_stock' | 'unknown' | null;
 
     label: string | null;
 
@@ -252,6 +232,13 @@ export namespace NumberUpdateResponse {
     createdAt: string | null;
 
     currentPeriodEnd: string | null;
+
+    /**
+     * Why setup failed. Null unless state is failed, and null when the failure has no
+     * classified reason. out_of_stock: no number is currently available for the
+     * requested country.
+     */
+    failureReason: 'out_of_stock' | 'unknown' | null;
 
     label: string | null;
 
@@ -322,6 +309,13 @@ export namespace NumberListResponse {
 
     currentPeriodEnd: string | null;
 
+    /**
+     * Why setup failed. Null unless state is failed, and null when the failure has no
+     * classified reason. out_of_stock: no number is currently available for the
+     * requested country.
+     */
+    failureReason: 'out_of_stock' | 'unknown' | null;
+
     label: string | null;
 
     phoneNumber: string | null;
@@ -388,6 +382,13 @@ export namespace NumberDeleteResponse {
     createdAt: string | null;
 
     currentPeriodEnd: string | null;
+
+    /**
+     * Why setup failed. Null unless state is failed, and null when the failure has no
+     * classified reason. out_of_stock: no number is currently available for the
+     * requested country.
+     */
+    failureReason: 'out_of_stock' | 'unknown' | null;
 
     label: string | null;
 
@@ -463,24 +464,6 @@ export namespace NumberCountriesResponse {
   }
 }
 
-export interface NumberPurposesResponse {
-  data: NumberPurposesResponse.Data;
-}
-
-export namespace NumberPurposesResponse {
-  export interface Data {
-    items: Array<Data.Item>;
-  }
-
-  export namespace Data {
-    export interface Item {
-      label: string;
-
-      slug: string;
-    }
-  }
-}
-
 export interface NumberCreateParams {
   /**
    * Use included capacity when available, require included capacity without paid
@@ -490,28 +473,22 @@ export interface NumberCreateParams {
 
   /**
    * Optional ISO 3166-1 alpha-2 country code from GET /numbers/phones/countries.
-   * Cannot be combined with `purpose`.
    */
   country?: string;
 
   /**
    * User-defined display label — NFC-normalized, up to 100 GRAPHEMES (not UTF-16
    * code units; an emoji/flag may span several). Display-only, never used for
-   * routing. Also seeds the billing entity name at purchase.
+   * routing.
    */
   label?: string | null;
-
-  /**
-   * Optional purpose from GET /numbers/phones/purposes.
-   */
-  purpose?: string;
 }
 
 export interface NumberUpdateParams {
   /**
    * User-defined display label — NFC-normalized, up to 100 GRAPHEMES (not UTF-16
    * code units; an emoji/flag may span several). Display-only, never used for
-   * routing. Also seeds the billing entity name at purchase.
+   * routing.
    */
   label?: string | null;
 }
@@ -540,11 +517,10 @@ export declare namespace Numbers {
     type NumberDeleteResponse as NumberDeleteResponse,
     type NumberCapacityResponse as NumberCapacityResponse,
     type NumberCountriesResponse as NumberCountriesResponse,
-    type NumberPurposesResponse as NumberPurposesResponse,
     type NumberCreateParams as NumberCreateParams,
     type NumberUpdateParams as NumberUpdateParams,
     type NumberListParams as NumberListParams,
-    type NumberCapacityParams as NumberCapacityParams,
+    type NumberCapacityParams as NumberCapacityParams
   };
 
   export {
@@ -552,6 +528,6 @@ export declare namespace Numbers {
     type MessageListResponse as MessageListResponse,
     type MessageSendResponse as MessageSendResponse,
     type MessageListParams as MessageListParams,
-    type MessageSendParams as MessageSendParams,
+    type MessageSendParams as MessageSendParams
   };
 }

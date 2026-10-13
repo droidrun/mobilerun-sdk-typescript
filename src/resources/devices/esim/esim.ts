@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as EsimAPI from './esim';
 import * as ApnAPI from './apn';
 import { Apn, ApnListParams, ApnListResponse, ApnSelectParams, ApnSetParams } from './apn';
 import { APIPromise } from '../../../core/api-promise';
@@ -14,46 +15,17 @@ export class Esim extends APIResource {
   /**
    * Returns the eSIM subscriptions currently provisioned on the device.
    */
-  list(
-    deviceID: string,
-    params: EsimListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<EsimListResponse | null> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/esim`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  list(deviceID: string, params: EsimListParams | null | undefined = {}, options?: RequestOptions): APIPromise<EsimListResponse | null> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/esim`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Download profile and/or enable subscription.
    */
-  activate(
-    deviceID: string,
-    params: EsimActivateParams,
-    options?: RequestOptions,
-  ): APIPromise<EsimActivateResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/esim`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  activate(deviceID: string, params: EsimActivateParams, options?: RequestOptions): APIPromise<EsimActivateResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/esim`, { body, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -61,20 +33,8 @@ export class Esim extends APIResource {
    * becomes the active subscription.
    */
   enable(deviceID: string, params: EsimEnableParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.put(path`/devices/${deviceID}/esim`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.put(path`/devices/${deviceID}/esim`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -82,20 +42,8 @@ export class Esim extends APIResource {
    * device.
    */
   remove(deviceID: string, params: EsimRemoveParams, options?: RequestOptions): APIPromise<void> {
-    const { subId, 'X-Device-Display-ID': xDeviceDisplayID } = params;
-    return this._client.delete(path`/devices/${deviceID}/esim`, {
-      query: { subId },
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { subId, 'X-Device-Display-ID': xDeviceDisplayID } = params
+    return this._client.delete(path`/devices/${deviceID}/esim`, { query: { subId }, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -103,46 +51,20 @@ export class Esim extends APIResource {
    * in the request body.
    */
   setRoaming(deviceID: string, params: EsimSetRoamingParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.put(path`/devices/${deviceID}/esim/roaming`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.put(path`/devices/${deviceID}/esim/roaming`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Returns the connectivity status of the device's eSIM subscriptions.
    */
-  status(
-    deviceID: string,
-    params: EsimStatusParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<EsimStatusResponse | null> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/esim/status`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  status(deviceID: string, params: EsimStatusParams | null | undefined = {}, options?: RequestOptions): APIPromise<EsimStatusResponse | null> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/esim/status`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
-export type EsimListResponse = Array<EsimListResponse.EsimListResponseItem>;
+export type EsimListResponse = Array<EsimListResponse.EsimListResponseItem>
 
 export namespace EsimListResponse {
   export interface EsimListResponseItem {
@@ -188,7 +110,7 @@ export interface EsimActivateResponse {
   $schema?: string;
 }
 
-export type EsimStatusResponse = Array<EsimStatusResponse.EsimStatusResponseItem>;
+export type EsimStatusResponse = Array<EsimStatusResponse.EsimStatusResponseItem>
 
 export namespace EsimStatusResponse {
   export interface EsimStatusResponseItem {
@@ -299,7 +221,7 @@ export declare namespace Esim {
     type EsimEnableParams as EsimEnableParams,
     type EsimRemoveParams as EsimRemoveParams,
     type EsimSetRoamingParams as EsimSetRoamingParams,
-    type EsimStatusParams as EsimStatusParams,
+    type EsimStatusParams as EsimStatusParams
   };
 
   export {
@@ -307,6 +229,6 @@ export declare namespace Esim {
     type ApnListResponse as ApnListResponse,
     type ApnListParams as ApnListParams,
     type ApnSelectParams as ApnSelectParams,
-    type ApnSetParams as ApnSetParams,
+    type ApnSetParams as ApnSetParams
   };
 }

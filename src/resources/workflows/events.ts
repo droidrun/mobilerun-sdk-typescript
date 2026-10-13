@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as EventsAPI from './events';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -103,14 +104,7 @@ export namespace EventDryRunResponse {
 
         lastFailureAt: string | null;
 
-        lastFailureCode:
-          | 'device_not_found'
-          | 'permission_denied'
-          | 'client_error'
-          | 'transient'
-          | 'logic'
-          | 'invalid_config'
-          | null;
+        lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config' | null;
 
         lastTriggeredAt: string | null;
 
@@ -141,7 +135,7 @@ export namespace EventDryRunResponse {
         status: 'healthy' | 'failing' | 'blocked';
 
         /**
-         * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+         * Template-resolver semantics this flow runs under. 1 = legacy
          * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
          * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
          * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -161,8 +155,11 @@ export namespace EventDryRunResponse {
 
       export namespace Flow {
         export interface Delivery {
-          destination: 'one_drive' | 'google_drive';
+          destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+          /**
+           * not allowed when destination is mobilerun
+           */
           folder?: string;
 
           recording?: Delivery.Recording;
@@ -307,6 +304,6 @@ export declare namespace Events {
     type EventDryRunResponse as EventDryRunResponse,
     type EventIngestResponse as EventIngestResponse,
     type EventDryRunParams as EventDryRunParams,
-    type EventIngestParams as EventIngestParams,
+    type EventIngestParams as EventIngestParams
   };
 }

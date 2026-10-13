@@ -2,10 +2,7 @@
 
 import Mobilerun, { toFile } from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource files', () => {
   // Mock server tests are disabled
@@ -39,10 +36,7 @@ describe('resource files', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.devices.files.delete('deviceId', {
-      path: 'path',
-      'X-Device-Display-ID': 0,
-    });
+    const response = await client.devices.files.delete('deviceId', { path: 'path', 'X-Device-Display-ID': 0 });
   });
 
   // Mock server tests are disabled
@@ -59,18 +53,12 @@ describe('resource files', () => {
 
   // Mock server tests are disabled
   test.skip('download: required and optional params', async () => {
-    const response = await client.devices.files.download('deviceId', {
-      path: 'path',
-      'X-Device-Display-ID': 0,
-    });
+    const response = await client.devices.files.download('deviceId', { path: 'path', 'X-Device-Display-ID': 0 });
   });
 
   // Mock server tests are disabled
   test.skip('upload: only required params', async () => {
-    const responsePromise = client.devices.files.upload('deviceId', {
-      path: 'path',
-      file: await toFile(Buffer.from('Example data'), 'README.md'),
-    });
+    const responsePromise = client.devices.files.upload('deviceId', { path: 'path', file: await toFile(Buffer.from('Example data'), 'README.md') });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -83,9 +71,9 @@ describe('resource files', () => {
   // Mock server tests are disabled
   test.skip('upload: required and optional params', async () => {
     const response = await client.devices.files.upload('deviceId', {
-      path: 'path',
-      file: await toFile(Buffer.from('Example data'), 'README.md'),
-      'X-Device-Display-ID': 0,
-    });
+    path: 'path',
+    file: await toFile(Buffer.from('Example data'), 'README.md'),
+    'X-Device-Display-ID': 0,
+  });
   });
 });

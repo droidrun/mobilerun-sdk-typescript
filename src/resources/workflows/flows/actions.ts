@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as ActionsAPI from './actions';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -32,12 +33,8 @@ export class Actions extends APIResource {
    * Remove a single action from a flow by its `flowActionId`. Returns 404 if the
    * flow or flow action does not exist.
    */
-  remove(
-    flowActionID: string,
-    params: ActionRemoveParams,
-    options?: RequestOptions,
-  ): APIPromise<ActionRemoveResponse> {
-    const { flowId } = params;
+  remove(flowActionID: string, params: ActionRemoveParams, options?: RequestOptions): APIPromise<ActionRemoveResponse> {
+    const { flowId } = params
     return this._client.delete(path`/flows/${flowId}/actions/${flowActionID}`, options);
   }
 
@@ -47,11 +44,7 @@ export class Actions extends APIResource {
    * include nested `children`, a `nameOverride`, param `overrides`, and a
    * `continueOnError` flag. Returns 404 if the flow does not exist.
    */
-  replace(
-    flowID: string,
-    body: ActionReplaceParams,
-    options?: RequestOptions,
-  ): APIPromise<ActionReplaceResponse> {
+  replace(flowID: string, body: ActionReplaceParams, options?: RequestOptions): APIPromise<ActionReplaceResponse> {
     return this._client.put(path`/flows/${flowID}/actions`, { body, ...options });
   }
 }
@@ -320,6 +313,6 @@ export declare namespace Actions {
     type ActionReplaceResponse as ActionReplaceResponse,
     type ActionAddParams as ActionAddParams,
     type ActionRemoveParams as ActionRemoveParams,
-    type ActionReplaceParams as ActionReplaceParams,
+    type ActionReplaceParams as ActionReplaceParams
   };
 }

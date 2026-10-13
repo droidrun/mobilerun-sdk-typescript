@@ -1,31 +1,12 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as DevicesAPI from './devices';
 import * as Shared from '../shared';
 import * as ActionsAPI from './actions';
-import {
-  ActionGlobalParams,
-  ActionOverlayVisibleParams,
-  ActionOverlayVisibleResponse,
-  ActionSetOverlayVisibleParams,
-  ActionSwipeParams,
-  ActionTapParams,
-  Actions,
-} from './actions';
+import { ActionGlobalParams, ActionOverlayVisibleParams, ActionOverlayVisibleResponse, ActionSetOverlayVisibleParams, ActionSwipeParams, ActionTapParams, Actions } from './actions';
 import * as AppsAPI from './apps';
-import {
-  AppDeleteParams,
-  AppGrantPermissionParams,
-  AppInstallParams,
-  AppListInstallsParams,
-  AppListInstallsResponse,
-  AppListParams,
-  AppListResponse,
-  AppRevokePermissionParams,
-  AppStartParams,
-  AppStopParams,
-  Apps,
-} from './apps';
+import { AppDeleteParams, AppGrantPermissionParams, AppInstallParams, AppListInstallsParams, AppListInstallsResponse, AppListParams, AppListResponse, AppRevokePermissionParams, AppStartParams, AppStopParams, Apps } from './apps';
 import * as BrowserAPI from './browser';
 import { Browser, BrowserExecuteScriptParams, BrowserExecuteScriptResponse } from './browser';
 import * as ClipboardAPI from './clipboard';
@@ -33,15 +14,7 @@ import { Clipboard, ClipboardGetParams, ClipboardGetResponse, ClipboardSetParams
 import * as DeepLinkAPI from './deep-link';
 import { DeepLink, DeepLinkExecuteDeepLinkParams } from './deep-link';
 import * as FilesAPI from './files';
-import {
-  FileDeleteParams,
-  FileDownloadParams,
-  FileDownloadResponse,
-  FileListParams,
-  FileListResponse,
-  FileUploadParams,
-  Files,
-} from './files';
+import { FileDeleteParams, FileDownloadParams, FileDownloadResponse, FileListParams, FileListResponse, FileUploadParams, Files } from './files';
 import * as KeyboardAPI from './keyboard';
 import { Keyboard, KeyboardClearParams, KeyboardKeyParams, KeyboardWriteParams } from './keyboard';
 import * as KioskAPI from './kiosk';
@@ -51,82 +24,27 @@ import { Language, LanguageGetParams, LanguageGetResponse, LanguageSetParams } f
 import * as LocationAPI from './location';
 import { Location, LocationGetParams, LocationResetParams, LocationSetParams } from './location';
 import * as MediaSessionsAPI from './media-sessions';
-import {
-  MediaSessionActivateParams,
-  MediaSessionActivateResponse,
-  MediaSessionCreateParams,
-  MediaSessionCreateResponse,
-  MediaSessionDeleteParams,
-  MediaSessionRetrieveCurrentResponse,
-  MediaSessions,
-} from './media-sessions';
+import { MediaSessionActivateParams, MediaSessionActivateResponse, MediaSessionCreateParams, MediaSessionCreateResponse, MediaSessionDeleteParams, MediaSessionRetrieveCurrentResponse, MediaSessions } from './media-sessions';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
 import { Profile, ProfileUpdateParams } from './profile';
 import * as ProxyAPI from './proxy';
-import {
-  Proxy as ProxyAPIProxy,
-  ProxyConnectParams,
-  ProxyDisconnectParams,
-  ProxyStatusParams,
-  ProxyStatusResponse,
-} from './proxy';
+import { Proxy as ProxyAPIProxy, ProxyConnectParams, ProxyDisconnectParams, ProxyStatusParams, ProxyStatusResponse } from './proxy';
 import * as RecordingsAPI from './recordings';
-import {
-  RecordingDeleteParams,
-  RecordingListParams,
-  RecordingListResponse,
-  RecordingStartParams,
-  RecordingStartResponse,
-  RecordingStatusParams,
-  RecordingStatusResponse,
-  RecordingStopParams,
-  RecordingStopResponse,
-  RecordingTrajectoryParams,
-  RecordingVideoParams,
-  Recordings,
-} from './recordings';
+import { RecordingDeleteParams, RecordingListParams, RecordingListResponse, RecordingScreenshotsParams, RecordingScreenshotsResponse, RecordingStartParams, RecordingStartResponse, RecordingStatusParams, RecordingStatusResponse, RecordingStopParams, RecordingStopResponse, RecordingTrajectoryParams, RecordingVideoParams, Recordings } from './recordings';
+import * as ScreenshotsAPI from './screenshots';
+import { ScreenshotCaptureParams, ScreenshotCaptureResponse, ScreenshotDeleteParams, ScreenshotImageParams, ScreenshotListParams, ScreenshotListResponse, Screenshots } from './screenshots';
 import * as StateAPI from './state';
-import {
-  A11YNode,
-  State,
-  StateScreenshotParams,
-  StateScreenshotResponse,
-  StateTimeParams,
-  StateTimeResponse,
-  StateUiParams,
-  StateUiResponse,
-} from './state';
+import { A11YNode, State, StateScreenshotParams, StateScreenshotResponse, StateTimeParams, StateTimeResponse, StateUiParams, StateUiResponse } from './state';
 import * as TasksAPI from './tasks';
 import { TaskListParams, TaskListResponse, Tasks } from './tasks';
 import * as TimezoneAPI from './timezone';
 import { Timezone, TimezoneGetParams, TimezoneGetResponse, TimezoneSetParams } from './timezone';
 import * as TrafficSessionsAPI from './traffic-sessions';
-import {
-  TrafficSessionCreateParams,
-  TrafficSessionCreateResponse,
-  TrafficSessionDeleteParams,
-  TrafficSessionDeleteResponse,
-  TrafficSessionListParams,
-  TrafficSessionListResponse,
-  TrafficSessionRetrieveParams,
-  TrafficSessionRetrieveResponse,
-  TrafficSessions,
-} from './traffic-sessions';
+import { TrafficSessionCreateParams, TrafficSessionCreateResponse, TrafficSessionDeleteParams, TrafficSessionDeleteResponse, TrafficSessionListParams, TrafficSessionListResponse, TrafficSessionRetrieveParams, TrafficSessionRetrieveResponse, TrafficSessions } from './traffic-sessions';
 import * as EsimAPI from './esim/esim';
-import {
-  Esim,
-  EsimActivateParams,
-  EsimActivateResponse,
-  EsimEnableParams,
-  EsimListParams,
-  EsimListResponse,
-  EsimRemoveParams,
-  EsimSetRoamingParams,
-  EsimStatusParams,
-  EsimStatusResponse,
-} from './esim/esim';
+import { Esim, EsimActivateParams, EsimActivateResponse, EsimEnableParams, EsimListParams, EsimListResponse, EsimRemoveParams, EsimSetRoamingParams, EsimStatusParams, EsimStatusResponse } from './esim/esim';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -142,6 +60,7 @@ export class Devices extends APIResource {
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
   profile: ProfileAPI.Profile = new ProfileAPI.Profile(this._client);
   proxy: ProxyAPI.Proxy = new ProxyAPI.Proxy(this._client);
+  screenshots: ScreenshotsAPI.Screenshots = new ScreenshotsAPI.Screenshots(this._client);
   state: StateAPI.State = new StateAPI.State(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
   clipboard: ClipboardAPI.Clipboard = new ClipboardAPI.Clipboard(this._client);
@@ -161,12 +80,8 @@ export class Devices extends APIResource {
    * token.
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<DeviceCreateResponse> {
-    const { billing, query_country, deviceType, profileId, ...body } = params;
-    return this._client.post('/devices', {
-      query: { billing, country: query_country, deviceType, profileId },
-      body,
-      ...options,
-    });
+    const { billing, query_country, deviceType, profileId, ...body } = params
+    return this._client.post('/devices', { query: { billing, country: query_country, deviceType, profileId }, body, ...options });
   }
 
   /**
@@ -180,11 +95,12 @@ export class Devices extends APIResource {
 
   /**
    * Returns a paginated list of the user's devices along with pagination metadata.
+   * By default every device except terminated and unknown-state ones is listed,
+   * including stopped and maintenance devices; narrow with e.g. `state=ready` or
+   * `state=stopped,maintenance`, and pass `state=terminated` or `state=unknown` to
+   * see those.
    */
-  list(
-    query: DeviceListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DeviceListResponse> {
+  list(query: DeviceListParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeviceListResponse> {
     return this._client.get('/devices', { query, ...options });
   }
 
@@ -204,23 +120,9 @@ export class Devices extends APIResource {
    * display, identifiers, and carrier. Devices without fingerprint support return an
    * unsupported-feature error.
    */
-  fingerprint(
-    deviceID: string,
-    params: DeviceFingerprintParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DeviceFingerprintResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/fingerprint`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  fingerprint(deviceID: string, params: DeviceFingerprintParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeviceFingerprintResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/fingerprint`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -228,10 +130,7 @@ export class Devices extends APIResource {
    * lifecycle and becomes ready again once the restart completes.
    */
   reboot(deviceID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.post(path`/devices/${deviceID}/reboot`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.post(path`/devices/${deviceID}/reboot`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -240,10 +139,7 @@ export class Devices extends APIResource {
    * lifecycle before becoming ready again.
    */
   reset(deviceID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.post(path`/devices/${deviceID}/reset`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.post(path`/devices/${deviceID}/reset`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -252,23 +148,14 @@ export class Devices extends APIResource {
    * resumes. On a device that is not parked this is a no-op ready transition.
    */
   resume(deviceID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.post(path`/devices/${deviceID}/resume`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.post(path`/devices/${deviceID}/resume`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
-   * Returns the set of capabilities supported by this device. For a legacy device
-   * this reflects the live instance's actual tools rather than its static type; for
-   * a core-managed device it is resolved from provider/pool configuration without
-   * guaranteeing a live instance. Used to determine which tools and features are
-   * available for the device.
+   * Returns the set of capabilities supported by this device. Used to determine
+   * which tools and features are available for the device.
    */
-  retrieveCapabilities(
-    deviceID: string,
-    options?: RequestOptions,
-  ): APIPromise<DeviceRetrieveCapabilitiesResponse> {
+  retrieveCapabilities(deviceID: string, options?: RequestOptions): APIPromise<DeviceRetrieveCapabilitiesResponse> {
     return this._client.get(path`/devices/${deviceID}/capabilities`, options);
   }
 
@@ -276,11 +163,7 @@ export class Devices extends APIResource {
    * Sets the display name for a device from the name in the request body and returns
    * the updated device.
    */
-  setName(
-    deviceID: string,
-    body: DeviceSetNameParams,
-    options?: RequestOptions,
-  ): APIPromise<DeviceSetNameResponse> {
+  setName(deviceID: string, body: DeviceSetNameParams, options?: RequestOptions): APIPromise<DeviceSetNameResponse> {
     return this._client.put(path`/devices/${deviceID}/name`, { body, ...options });
   }
 
@@ -290,38 +173,24 @@ export class Devices extends APIResource {
    * stop=true support this; others return 404.
    */
   stop(deviceID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.post(path`/devices/${deviceID}/stop`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.post(path`/devices/${deviceID}/stop`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
    * Returns the total number of the user's devices and counts grouped by current
    * state and device type.
    */
-  summary(
-    query: DeviceSummaryParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DeviceSummaryResponse> {
+  summary(query: DeviceSummaryParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeviceSummaryResponse> {
     return this._client.get('/devices/summary', { query, ...options });
   }
 
   /**
-   * Terminates the device and releases its resources. Termination can be scheduled
-   * for a future time or chained from a previous device via the request body, in
-   * which case a service key is required.
+   * Terminates the device and releases its resources. The optional `terminateAt` and
+   * `previousDeviceId` body fields are not available to API-key callers; requests
+   * that set them are rejected with 401.
    */
-  terminate(
-    deviceID: string,
-    body: DeviceTerminateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<void> {
-    return this._client.delete(path`/devices/${deviceID}`, {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+  terminate(deviceID: string, body: DeviceTerminateParams | null | undefined = {}, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/devices/${deviceID}`, { body, ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -500,7 +369,7 @@ export namespace DeviceListResponse {
   }
 }
 
-export type DeviceCountResponse = { [key: string]: number };
+export type DeviceCountResponse = { [key: string]: number }
 
 export interface DeviceFingerprintResponse {
   carrier: Shared.DeviceCarrier;
@@ -849,21 +718,37 @@ export interface DeviceListParams {
   country?: string;
 
   /**
+   * Include devices created at or after this RFC3339 timestamp.
+   */
+  createdAfter?: string;
+
+  /**
+   * Include devices created before this RFC3339 timestamp (exclusive). Must be later
+   * than createdAfter when both are set.
+   */
+  createdBefore?: string;
+
+  /**
    * Filter to devices created by this user id. Mutually exclusive with mine.
    */
   createdBy?: string;
 
   /**
-   * When true, only return devices created by the calling user (resolved from
-   * X-User-ID, never a client-supplied id).
+   * When true, only return devices created by the authenticated caller.
    */
   mine?: boolean;
 
   name?: string;
 
-  orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt';
+  orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt' | 'gridPosition';
 
   orderByDirection?: 'asc' | 'desc';
+
+  /**
+   * Filter by tenant owner UUIDs. Comma-separated or repeated parameters. Only
+   * allowed for service-key callers without X-User-ID.
+   */
+  ownerId?: Array<string> | null;
 
   page?: number;
 
@@ -877,30 +762,18 @@ export interface DeviceListParams {
 
   providerId?: string;
 
-  state?: Array<
-    | 'creating'
-    | 'assigned'
-    | 'ready'
-    | 'rebooting'
-    | 'migrating'
-    | 'resetting'
-    | 'terminated'
-    | 'maintenance'
-    | 'stopped'
-    | 'unknown'
-  > | null;
+  /**
+   * Filter by current device state. Comma-separated (state=ready,stopped). Defaults
+   * to every state except terminated and unknown, so stopped and maintenance devices
+   * are listed; pass state=terminated or state=unknown to see those.
+   */
+  state?: Array<'creating' | 'assigned' | 'ready' | 'rebooting' | 'migrating' | 'resetting' | 'terminated' | 'maintenance' | 'stopped' | 'unknown'> | null;
 
   /**
    * Canonical device type. Retired dedicated\_\* aliases are no longer accepted.
    * Availability depends on the deployment.
    */
-  type?:
-    | 'android_cloud_phone'
-    | 'android_physical_phone'
-    | 'ios_stealth_phone'
-    | 'android_emulator'
-    | 'ios_simulator'
-    | 'device_slot';
+  type?: 'android_cloud_phone' | 'android_physical_phone' | 'ios_stealth_phone' | 'android_emulator' | 'ios_simulator' | 'device_slot';
 }
 
 export interface DeviceFingerprintParams {
@@ -912,18 +785,7 @@ export interface DeviceSetNameParams {
 }
 
 export interface DeviceSummaryParams {
-  state?: Array<
-    | 'creating'
-    | 'assigned'
-    | 'ready'
-    | 'rebooting'
-    | 'migrating'
-    | 'resetting'
-    | 'terminated'
-    | 'maintenance'
-    | 'stopped'
-    | 'unknown'
-  > | null;
+  state?: Array<'creating' | 'assigned' | 'ready' | 'rebooting' | 'migrating' | 'resetting' | 'terminated' | 'maintenance' | 'stopped' | 'unknown'> | null;
 }
 
 export interface DeviceTerminateParams {
@@ -941,6 +803,7 @@ Devices.Location = Location;
 Devices.Packages = Packages;
 Devices.Profile = Profile;
 Devices.Proxy = ProxyAPIProxy;
+Devices.Screenshots = Screenshots;
 Devices.State = State;
 Devices.Tasks = Tasks;
 Devices.Clipboard = Clipboard;
@@ -969,7 +832,7 @@ export declare namespace Devices {
     type DeviceFingerprintParams as DeviceFingerprintParams,
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceSummaryParams as DeviceSummaryParams,
-    type DeviceTerminateParams as DeviceTerminateParams,
+    type DeviceTerminateParams as DeviceTerminateParams
   };
 
   export {
@@ -979,7 +842,7 @@ export declare namespace Devices {
     type ActionOverlayVisibleParams as ActionOverlayVisibleParams,
     type ActionSetOverlayVisibleParams as ActionSetOverlayVisibleParams,
     type ActionSwipeParams as ActionSwipeParams,
-    type ActionTapParams as ActionTapParams,
+    type ActionTapParams as ActionTapParams
   };
 
   export {
@@ -993,7 +856,7 @@ export declare namespace Devices {
     type AppListInstallsParams as AppListInstallsParams,
     type AppRevokePermissionParams as AppRevokePermissionParams,
     type AppStartParams as AppStartParams,
-    type AppStopParams as AppStopParams,
+    type AppStopParams as AppStopParams
   };
 
   export {
@@ -1006,7 +869,7 @@ export declare namespace Devices {
     type EsimEnableParams as EsimEnableParams,
     type EsimRemoveParams as EsimRemoveParams,
     type EsimSetRoamingParams as EsimSetRoamingParams,
-    type EsimStatusParams as EsimStatusParams,
+    type EsimStatusParams as EsimStatusParams
   };
 
   export {
@@ -1016,37 +879,50 @@ export declare namespace Devices {
     type FileListParams as FileListParams,
     type FileDeleteParams as FileDeleteParams,
     type FileDownloadParams as FileDownloadParams,
-    type FileUploadParams as FileUploadParams,
+    type FileUploadParams as FileUploadParams
   };
 
   export {
     Keyboard as Keyboard,
     type KeyboardClearParams as KeyboardClearParams,
     type KeyboardKeyParams as KeyboardKeyParams,
-    type KeyboardWriteParams as KeyboardWriteParams,
+    type KeyboardWriteParams as KeyboardWriteParams
   };
 
   export {
     Location as Location,
     type LocationGetParams as LocationGetParams,
     type LocationResetParams as LocationResetParams,
-    type LocationSetParams as LocationSetParams,
+    type LocationSetParams as LocationSetParams
   };
 
   export {
     Packages as Packages,
     type PackageListResponse as PackageListResponse,
-    type PackageListParams as PackageListParams,
+    type PackageListParams as PackageListParams
   };
 
-  export { Profile as Profile, type ProfileUpdateParams as ProfileUpdateParams };
+  export {
+    Profile as Profile,
+    type ProfileUpdateParams as ProfileUpdateParams
+  };
 
   export {
     ProxyAPIProxy as Proxy,
     type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
-    type ProxyStatusParams as ProxyStatusParams,
+    type ProxyStatusParams as ProxyStatusParams
+  };
+
+  export {
+    Screenshots as Screenshots,
+    type ScreenshotListResponse as ScreenshotListResponse,
+    type ScreenshotCaptureResponse as ScreenshotCaptureResponse,
+    type ScreenshotListParams as ScreenshotListParams,
+    type ScreenshotDeleteParams as ScreenshotDeleteParams,
+    type ScreenshotCaptureParams as ScreenshotCaptureParams,
+    type ScreenshotImageParams as ScreenshotImageParams
   };
 
   export {
@@ -1057,44 +933,51 @@ export declare namespace Devices {
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
     type StateTimeParams as StateTimeParams,
-    type StateUiParams as StateUiParams,
+    type StateUiParams as StateUiParams
   };
 
-  export { Tasks as Tasks, type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
+  export {
+    Tasks as Tasks,
+    type TaskListResponse as TaskListResponse,
+    type TaskListParams as TaskListParams
+  };
 
   export {
     Clipboard as Clipboard,
     type ClipboardGetResponse as ClipboardGetResponse,
     type ClipboardGetParams as ClipboardGetParams,
-    type ClipboardSetParams as ClipboardSetParams,
+    type ClipboardSetParams as ClipboardSetParams
   };
 
   export {
     Timezone as Timezone,
     type TimezoneGetResponse as TimezoneGetResponse,
     type TimezoneGetParams as TimezoneGetParams,
-    type TimezoneSetParams as TimezoneSetParams,
+    type TimezoneSetParams as TimezoneSetParams
   };
 
   export {
     Language as Language,
     type LanguageGetResponse as LanguageGetResponse,
     type LanguageGetParams as LanguageGetParams,
-    type LanguageSetParams as LanguageSetParams,
+    type LanguageSetParams as LanguageSetParams
   };
 
-  export { DeepLink as DeepLink, type DeepLinkExecuteDeepLinkParams as DeepLinkExecuteDeepLinkParams };
+  export {
+    DeepLink as DeepLink,
+    type DeepLinkExecuteDeepLinkParams as DeepLinkExecuteDeepLinkParams
+  };
 
   export {
     Browser as Browser,
     type BrowserExecuteScriptResponse as BrowserExecuteScriptResponse,
-    type BrowserExecuteScriptParams as BrowserExecuteScriptParams,
+    type BrowserExecuteScriptParams as BrowserExecuteScriptParams
   };
 
   export {
     Kiosk as Kiosk,
     type KioskDisableParams as KioskDisableParams,
-    type KioskEnableParams as KioskEnableParams,
+    type KioskEnableParams as KioskEnableParams
   };
 
   export {
@@ -1104,22 +987,24 @@ export declare namespace Devices {
     type MediaSessionRetrieveCurrentResponse as MediaSessionRetrieveCurrentResponse,
     type MediaSessionCreateParams as MediaSessionCreateParams,
     type MediaSessionDeleteParams as MediaSessionDeleteParams,
-    type MediaSessionActivateParams as MediaSessionActivateParams,
+    type MediaSessionActivateParams as MediaSessionActivateParams
   };
 
   export {
     Recordings as Recordings,
     type RecordingListResponse as RecordingListResponse,
+    type RecordingScreenshotsResponse as RecordingScreenshotsResponse,
     type RecordingStartResponse as RecordingStartResponse,
     type RecordingStatusResponse as RecordingStatusResponse,
     type RecordingStopResponse as RecordingStopResponse,
     type RecordingListParams as RecordingListParams,
     type RecordingDeleteParams as RecordingDeleteParams,
+    type RecordingScreenshotsParams as RecordingScreenshotsParams,
     type RecordingStartParams as RecordingStartParams,
     type RecordingStatusParams as RecordingStatusParams,
     type RecordingStopParams as RecordingStopParams,
     type RecordingTrajectoryParams as RecordingTrajectoryParams,
-    type RecordingVideoParams as RecordingVideoParams,
+    type RecordingVideoParams as RecordingVideoParams
   };
 
   export {
@@ -1131,6 +1016,6 @@ export declare namespace Devices {
     type TrafficSessionCreateParams as TrafficSessionCreateParams,
     type TrafficSessionRetrieveParams as TrafficSessionRetrieveParams,
     type TrafficSessionListParams as TrafficSessionListParams,
-    type TrafficSessionDeleteParams as TrafficSessionDeleteParams,
+    type TrafficSessionDeleteParams as TrafficSessionDeleteParams
   };
 }

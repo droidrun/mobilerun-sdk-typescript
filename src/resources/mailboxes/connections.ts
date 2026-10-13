@@ -1,16 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ConnectionsAPI from './connections';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 export class Connections extends APIResource {
   /**
-   * Links the caller’s Gmail account through the shared integrations connect.
-   * Replaying the same Idempotency-Key (or, during migration, the deprecated
-   * `clientRequestId` body field) returns the same mailbox. When Gmail is already
-   * active, redirectUrl is null and the mailbox is usable immediately.
+   * Links the caller’s Gmail account. Replaying the same Idempotency-Key returns the
+   * same mailbox. When Gmail is already active, redirectUrl is null and the mailbox
+   * is usable immediately.
    *
    * @example
    * ```ts
@@ -69,15 +69,9 @@ export interface ConnectionCreateParams {
   provider: 'gmail';
 
   /**
-   * sha256 hex of the browser-held connect binding secret; forwarded to integrations
-   * connect
+   * sha256 hex of the browser-held connect binding secret.
    */
   bindingHash?: string;
-
-  /**
-   * @deprecated Use the Idempotency-Key header.
-   */
-  clientRequestId?: string;
 
   label?: string;
 }
@@ -86,6 +80,6 @@ export declare namespace Connections {
   export {
     type ConnectionCreateResponse as ConnectionCreateResponse,
     type ConnectionRetrieveResponse as ConnectionRetrieveResponse,
-    type ConnectionCreateParams as ConnectionCreateParams,
+    type ConnectionCreateParams as ConnectionCreateParams
   };
 }

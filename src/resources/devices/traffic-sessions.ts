@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as TrafficSessionsAPI from './traffic-sessions';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -11,46 +12,30 @@ export class TrafficSessions extends APIResource {
    * Starts one live-only decoded HTTP/1.1, HTTP/2, HTTP/3 and WebSocket traffic
    * session.
    */
-  create(
-    deviceID: string,
-    body: TrafficSessionCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<TrafficSessionCreateResponse> {
+  create(deviceID: string, body: TrafficSessionCreateParams, options?: RequestOptions): APIPromise<TrafficSessionCreateResponse> {
     return this._client.post(path`/devices/${deviceID}/traffic/sessions`, { body, ...options });
   }
 
   /**
    * Returns status and the device stream credential for a live session.
    */
-  retrieve(
-    sessionID: string,
-    params: TrafficSessionRetrieveParams,
-    options?: RequestOptions,
-  ): APIPromise<TrafficSessionRetrieveResponse> {
-    const { deviceId } = params;
+  retrieve(sessionID: string, params: TrafficSessionRetrieveParams, options?: RequestOptions): APIPromise<TrafficSessionRetrieveResponse> {
+    const { deviceId } = params
     return this._client.get(path`/devices/${deviceId}/traffic/sessions/${sessionID}`, options);
   }
 
   /**
    * List device traffic sessions
    */
-  list(
-    deviceID: string,
-    query: TrafficSessionListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TrafficSessionListResponse> {
+  list(deviceID: string, query: TrafficSessionListParams | null | undefined = {}, options?: RequestOptions): APIPromise<TrafficSessionListResponse> {
     return this._client.get(path`/devices/${deviceID}/traffic/sessions`, { query, ...options });
   }
 
   /**
    * Stop device traffic inspection
    */
-  delete(
-    sessionID: string,
-    params: TrafficSessionDeleteParams,
-    options?: RequestOptions,
-  ): APIPromise<TrafficSessionDeleteResponse> {
-    const { deviceId } = params;
+  delete(sessionID: string, params: TrafficSessionDeleteParams, options?: RequestOptions): APIPromise<TrafficSessionDeleteResponse> {
+    const { deviceId } = params
     return this._client.delete(path`/devices/${deviceId}/traffic/sessions/${sessionID}`, options);
   }
 }
@@ -277,6 +262,6 @@ export declare namespace TrafficSessions {
     type TrafficSessionCreateParams as TrafficSessionCreateParams,
     type TrafficSessionRetrieveParams as TrafficSessionRetrieveParams,
     type TrafficSessionListParams as TrafficSessionListParams,
-    type TrafficSessionDeleteParams as TrafficSessionDeleteParams,
+    type TrafficSessionDeleteParams as TrafficSessionDeleteParams
   };
 }

@@ -1,11 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Mobilerun from '@mobilerun/sdk';
+import Mobilerun, { toFile } from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource connections', () => {
   // Mock server tests are disabled
@@ -23,11 +20,10 @@ describe('resource connections', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.mailboxes.connections.create({
-      provider: 'gmail',
-      bindingHash: 'ecc2efdd09bd231a9ad9bd2aada37aa7ccc3d38a03cc25beb6c28aa0aaa316be',
-      clientRequestId: 'x',
-      label: 'label',
-    });
+    provider: 'gmail',
+    bindingHash: 'ecc2efdd09bd231a9ad9bd2aada37aa7ccc3d38a03cc25beb6c28aa0aaa316be',
+    label: 'label',
+  });
   });
 
   // Mock server tests are disabled

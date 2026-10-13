@@ -1,11 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Mobilerun from '@mobilerun/sdk';
+import Mobilerun, { toFile } from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource mailboxes', () => {
   // Mock server tests are disabled
@@ -23,17 +20,14 @@ describe('resource mailboxes', () => {
   // Mock server tests are disabled
   test.skip('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.mailboxes.create(
-        {
-          billingPreference: 'included',
-          domainId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-          label: 'label',
-          localPart: 'jane-doe',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.mailboxes.create({
+    billingPreference: 'included',
+    domainId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    label: 'label',
+    localPart: 'jane-doe',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -50,9 +44,7 @@ describe('resource mailboxes', () => {
 
   // Mock server tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.mailboxes.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      label: 'label',
-    });
+    const responsePromise = client.mailboxes.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { label: 'label' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -64,9 +56,7 @@ describe('resource mailboxes', () => {
 
   // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
-    const response = await client.mailboxes.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
-      label: 'label',
-    });
+    const response = await client.mailboxes.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { label: 'label' });
   });
 
   // Mock server tests are disabled
@@ -84,9 +74,9 @@ describe('resource mailboxes', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.mailboxes.list({ page: 1, pageSize: 1 }, { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.mailboxes.list({ page: 1, pageSize: 1 }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -140,18 +130,14 @@ describe('resource mailboxes', () => {
   // Mock server tests are disabled
   test.skip('otp: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.mailboxes.otp(
-        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        {
-          after: '2019-12-27T18:11:19.117Z',
-          maxLength: 3,
-          minLength: 3,
-          sender: 'sender',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.mailboxes.otp('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
+    after: '2019-12-27T18:11:19.117Z',
+    maxLength: 3,
+    minLength: 3,
+    sender: 'sender',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -169,13 +155,9 @@ describe('resource mailboxes', () => {
   // Mock server tests are disabled
   test.skip('restart: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.mailboxes.restart(
-        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        { billingPreference: 'included' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.mailboxes.restart('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', { billingPreference: 'included' }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled

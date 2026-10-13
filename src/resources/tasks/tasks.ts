@@ -1,14 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as TasksAPI from './tasks';
 import * as Shared from '../shared';
 import * as ScreenshotsAPI from './screenshots';
-import {
-  ScreenshotListResponse,
-  ScreenshotRetrieveParams,
-  ScreenshotRetrieveResponse,
-  Screenshots,
-} from './screenshots';
+import { ScreenshotListResponse, ScreenshotRetrieveParams, ScreenshotRetrieveResponse, Screenshots } from './screenshots';
 import * as UiStatesAPI from './ui-states';
 import { UiStateListResponse, UiStateRetrieveParams, UiStateRetrieveResponse, UiStates } from './ui-states';
 import { APIPromise } from '../../core/api-promise';
@@ -33,10 +29,7 @@ export class Tasks extends APIResource {
   /**
    * List tasks with optional filtering, sorting, and pagination.
    */
-  list(
-    query: TaskListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TaskListResponse> {
+  list(query: TaskListParams | null | undefined = {}, options?: RequestOptions): APIPromise<TaskListResponse> {
     return this._client.get('/tasks', { query, ...options });
   }
 
@@ -44,10 +37,7 @@ export class Tasks extends APIResource {
    * Attach to a running task and receive its events as an SSE stream.
    */
   attach(taskID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.get(path`/tasks/${taskID}/attach`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.get(path`/tasks/${taskID}/attach`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -84,11 +74,7 @@ export class Tasks extends APIResource {
    * Send a message to a running agent task. The message ID is delivered via SSE
    * (UserMessageEvent with action=queued).
    */
-  sendMessage(
-    taskID: string,
-    body: TaskSendMessageParams,
-    options?: RequestOptions,
-  ): APIPromise<TaskSendMessageResponse> {
+  sendMessage(taskID: string, body: TaskSendMessageParams, options?: RequestOptions): APIPromise<TaskSendMessageResponse> {
     return this._client.post(path`/tasks/${taskID}/message`, { body, ...options });
   }
 
@@ -126,15 +112,7 @@ export namespace TaskRetrieveResponse {
 
     ownerId: string;
 
-    status:
-      | 'prepared'
-      | 'queued'
-      | 'created'
-      | 'running'
-      | 'cancelling'
-      | 'completed'
-      | 'failed'
-      | 'cancelled';
+    status: 'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
     task: string;
 
@@ -171,6 +149,12 @@ export namespace TaskRetrieveResponse {
 
     finishedAt?: string | null;
 
+    /**
+     * Whether human-like input was requested. Always equal to the deprecated stealth
+     * field.
+     */
+    humanize?: boolean;
+
     maxSteps?: number;
 
     message?: string | null;
@@ -197,6 +181,10 @@ export namespace TaskRetrieveResponse {
      */
     source?: 'api' | 'agent';
 
+    /**
+     * @deprecated Deprecated: use humanize. Both names must agree when supplied
+     * together.
+     */
     stealth?: boolean;
 
     steps?: number | null;
@@ -262,15 +250,7 @@ export namespace TaskListResponse {
 
     ownerId: string;
 
-    status:
-      | 'prepared'
-      | 'queued'
-      | 'created'
-      | 'running'
-      | 'cancelling'
-      | 'completed'
-      | 'failed'
-      | 'cancelled';
+    status: 'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
     task: string;
 
@@ -307,6 +287,12 @@ export namespace TaskListResponse {
 
     finishedAt?: string | null;
 
+    /**
+     * Whether human-like input was requested. Always equal to the deprecated stealth
+     * field.
+     */
+    humanize?: boolean;
+
     maxSteps?: number;
 
     message?: string | null;
@@ -333,6 +319,10 @@ export namespace TaskListResponse {
      */
     source?: 'api' | 'agent';
 
+    /**
+     * @deprecated Deprecated: use humanize. Both names must agree when supplied
+     * together.
+     */
     stealth?: boolean;
 
     steps?: number | null;
@@ -444,39 +434,7 @@ export interface TaskGetTrajectoryResponse {
   /**
    * The trajectory of the task
    */
-  trajectory: Array<
-    | TaskGetTrajectoryResponse.TrajectoryQueuedEvent
-    | TaskGetTrajectoryResponse.TrajectoryCreatedEvent
-    | TaskGetTrajectoryResponse.TrajectoryExceptionEvent
-    | TaskGetTrajectoryResponse.TrajectoryCancelEvent
-    | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent
-    | TaskGetTrajectoryResponse.TrajectoryStartEvent
-    | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent
-    | TaskGetTrajectoryResponse.TrajectoryStopEvent
-    | TaskGetTrajectoryResponse.TrajectoryResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerPlanEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentInputEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentToolCallEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentOutputEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentEndEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentExecuteEvent
-    | TaskGetTrajectoryResponse.TrajectoryFastAgentResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryToolExecutionEvent
-    | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerContextEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryManagerPlanDetailsEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorContextEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent
-    | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent
-    | TaskGetTrajectoryResponse.TrajectoryUserMessageEvent
-    | TaskGetTrajectoryResponse.TrajectoryUnknownEvent
-  >;
+  trajectory: Array<TaskGetTrajectoryResponse.TrajectoryQueuedEvent | TaskGetTrajectoryResponse.TrajectoryCreatedEvent | TaskGetTrajectoryResponse.TrajectoryExceptionEvent | TaskGetTrajectoryResponse.TrajectoryCancelEvent | TaskGetTrajectoryResponse.TrajectoryScreenshotEvent | TaskGetTrajectoryResponse.TrajectoryStartEvent | TaskGetTrajectoryResponse.TrajectoryFinalizeEvent | TaskGetTrajectoryResponse.TrajectoryStopEvent | TaskGetTrajectoryResponse.TrajectoryResultEvent | TaskGetTrajectoryResponse.TrajectoryManagerInputEvent | TaskGetTrajectoryResponse.TrajectoryManagerPlanEvent | TaskGetTrajectoryResponse.TrajectoryExecutorInputEvent | TaskGetTrajectoryResponse.TrajectoryExecutorResultEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentInputEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentResponseEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentToolCallEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentOutputEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentEndEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentExecuteEvent | TaskGetTrajectoryResponse.TrajectoryFastAgentResultEvent | TaskGetTrajectoryResponse.TrajectoryToolExecutionEvent | TaskGetTrajectoryResponse.TrajectoryRecordUiStateEvent | TaskGetTrajectoryResponse.TrajectoryManagerContextEvent | TaskGetTrajectoryResponse.TrajectoryManagerResponseEvent | TaskGetTrajectoryResponse.TrajectoryManagerPlanDetailsEvent | TaskGetTrajectoryResponse.TrajectoryExecutorContextEvent | TaskGetTrajectoryResponse.TrajectoryExecutorResponseEvent | TaskGetTrajectoryResponse.TrajectoryExecutorActionEvent | TaskGetTrajectoryResponse.TrajectoryExecutorActionResultEvent | TaskGetTrajectoryResponse.TrajectoryUserMessageEvent | TaskGetTrajectoryResponse.TrajectoryUnknownEvent>;
 }
 
 export namespace TaskGetTrajectoryResponse {
@@ -553,27 +511,18 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryStartEvent {
-    /**
-     * Implicit entry event sent to kick off a `Workflow.run()`.
-     */
     data: unknown;
 
     event: 'StartEvent';
   }
 
   export interface TrajectoryFinalizeEvent {
-    /**
-     * Trigger finalization.
-     */
     data: TrajectoryFinalizeEvent.Data;
 
     event: 'FinalizeEvent';
   }
 
   export namespace TrajectoryFinalizeEvent {
-    /**
-     * Trigger finalization.
-     */
     export interface Data {
       reason: string;
 
@@ -582,26 +531,6 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryStopEvent {
-    /**
-     * Terminal event that signals the workflow has completed.
-     *
-     * The `result` property contains the return value of the workflow run. When a
-     * custom stop event subclass is used, the workflow result is that event instance
-     * itself.
-     *
-     * Examples:
-     * `python # default stop event: result holds the value return StopEvent(result={"answer": 42}) `
-     *
-     *     Subclassing to provide a custom result:
-     *
-     *     ```python
-     *     class MyStopEv(StopEvent):
-     *         pass
-     *
-     *     @step
-     *     async def my_step(self, ctx: Context, ev: StartEvent) -> MyStopEv:
-     *         return MyStopEv(result={"answer": 42})
-     */
     data: unknown;
 
     event: 'StopEvent';
@@ -609,10 +538,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export interface TrajectoryResultEvent {
     /**
-     * Lazy wrapper — avoids importing droidrun at module level.
-     *
-     * The worker uses droidrun's ResultEvent directly; this model only exists so the
-     * API OpenAPI schema can reference it without the heavy droidrun import.
+     * Final result event of a task.
      */
     data: TrajectoryResultEvent.Data;
 
@@ -621,10 +547,7 @@ export namespace TaskGetTrajectoryResponse {
 
   export namespace TrajectoryResultEvent {
     /**
-     * Lazy wrapper — avoids importing droidrun at module level.
-     *
-     * The worker uses droidrun's ResultEvent directly; this model only exists so the
-     * API OpenAPI schema can reference it without the heavy droidrun import.
+     * Final result event of a task.
      */
     export interface Data {
       message?: string | null;
@@ -638,33 +561,18 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryManagerInputEvent {
-    /**
-     * Trigger Manager workflow for planning
-     */
     data: unknown;
 
     event: 'ManagerInputEvent';
   }
 
   export interface TrajectoryManagerPlanEvent {
-    /**
-     * Coordination event from ManagerAgent to MobileAgent.
-     *
-     * Used for workflow step routing only (NOT streamed to frontend). For internal
-     * events with memory_update metadata, see ManagerPlanDetailsEvent.
-     */
     data: TrajectoryManagerPlanEvent.Data;
 
     event: 'ManagerPlanEvent';
   }
 
   export namespace TrajectoryManagerPlanEvent {
-    /**
-     * Coordination event from ManagerAgent to MobileAgent.
-     *
-     * Used for workflow step routing only (NOT streamed to frontend). For internal
-     * events with memory_update metadata, see ManagerPlanDetailsEvent.
-     */
     export interface Data {
       current_subgoal: string;
 
@@ -679,36 +587,24 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryExecutorInputEvent {
-    /**
-     * Trigger Executor workflow for action execution
-     */
     data: TrajectoryExecutorInputEvent.Data;
 
     event: 'ExecutorInputEvent';
   }
 
   export namespace TrajectoryExecutorInputEvent {
-    /**
-     * Trigger Executor workflow for action execution
-     */
     export interface Data {
       current_subgoal: string;
     }
   }
 
   export interface TrajectoryExecutorResultEvent {
-    /**
-     * Executor finished with action result.
-     */
     data: TrajectoryExecutorResultEvent.Data;
 
     event: 'ExecutorResultEvent';
   }
 
   export namespace TrajectoryExecutorResultEvent {
-    /**
-     * Executor finished with action result.
-     */
     export interface Data {
       action: { [key: string]: unknown };
 
@@ -721,27 +617,18 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryFastAgentInputEvent {
-    /**
-     * Input ready for LLM.
-     */
     data: unknown;
 
     event: 'FastAgentInputEvent';
   }
 
   export interface TrajectoryFastAgentResponseEvent {
-    /**
-     * LLM response received.
-     */
     data: TrajectoryFastAgentResponseEvent.Data;
 
     event: 'FastAgentResponseEvent';
   }
 
   export namespace TrajectoryFastAgentResponseEvent {
-    /**
-     * LLM response received.
-     */
     export interface Data {
       thought: string;
 
@@ -769,54 +656,36 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryFastAgentToolCallEvent {
-    /**
-     * Tool calls ready to execute.
-     */
     data: TrajectoryFastAgentToolCallEvent.Data;
 
     event: 'FastAgentToolCallEvent';
   }
 
   export namespace TrajectoryFastAgentToolCallEvent {
-    /**
-     * Tool calls ready to execute.
-     */
     export interface Data {
       tool_calls_repr: string;
     }
   }
 
   export interface TrajectoryFastAgentOutputEvent {
-    /**
-     * Tool execution result.
-     */
     data: TrajectoryFastAgentOutputEvent.Data;
 
     event: 'FastAgentOutputEvent';
   }
 
   export namespace TrajectoryFastAgentOutputEvent {
-    /**
-     * Tool execution result.
-     */
     export interface Data {
       output: string;
     }
   }
 
   export interface TrajectoryFastAgentEndEvent {
-    /**
-     * FastAgent finished.
-     */
     data: TrajectoryFastAgentEndEvent.Data;
 
     event: 'FastAgentEndEvent';
   }
 
   export namespace TrajectoryFastAgentEndEvent {
-    /**
-     * FastAgent finished.
-     */
     export interface Data {
       reason: string;
 
@@ -855,18 +724,12 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryToolExecutionEvent {
-    /**
-     * Emitted after every tool call dispatched through ToolRegistry.
-     */
     data: TrajectoryToolExecutionEvent.Data;
 
     event: 'ToolExecutionEvent';
   }
 
   export namespace TrajectoryToolExecutionEvent {
-    /**
-     * Emitted after every tool call dispatched through ToolRegistry.
-     */
     export interface Data {
       success: boolean;
 
@@ -893,27 +756,18 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryManagerContextEvent {
-    /**
-     * Context prepared, ready for LLM call.
-     */
     data: unknown;
 
     event: 'ManagerContextEvent';
   }
 
   export interface TrajectoryManagerResponseEvent {
-    /**
-     * LLM response received, ready for parsing.
-     */
     data: TrajectoryManagerResponseEvent.Data;
 
     event: 'ManagerResponseEvent';
   }
 
   export namespace TrajectoryManagerResponseEvent {
-    /**
-     * LLM response received, ready for parsing.
-     */
     export interface Data {
       response: string;
 
@@ -934,18 +788,12 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryManagerPlanDetailsEvent {
-    /**
-     * Plan parsed and ready (internal event with full details).
-     */
     data: TrajectoryManagerPlanDetailsEvent.Data;
 
     event: 'ManagerPlanDetailsEvent';
   }
 
   export namespace TrajectoryManagerPlanDetailsEvent {
-    /**
-     * Plan parsed and ready (internal event with full details).
-     */
     export interface Data {
       plan: string;
 
@@ -966,36 +814,24 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryExecutorContextEvent {
-    /**
-     * Context prepared, ready for LLM call.
-     */
     data: TrajectoryExecutorContextEvent.Data;
 
     event: 'ExecutorContextEvent';
   }
 
   export namespace TrajectoryExecutorContextEvent {
-    /**
-     * Context prepared, ready for LLM call.
-     */
     export interface Data {
       subgoal: string;
     }
   }
 
   export interface TrajectoryExecutorResponseEvent {
-    /**
-     * LLM response received, ready for parsing.
-     */
     data: TrajectoryExecutorResponseEvent.Data;
 
     event: 'ExecutorResponseEvent';
   }
 
   export namespace TrajectoryExecutorResponseEvent {
-    /**
-     * LLM response received, ready for parsing.
-     */
     export interface Data {
       response: string;
 
@@ -1016,18 +852,12 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryExecutorActionEvent {
-    /**
-     * Action parsed, ready to execute.
-     */
     data: TrajectoryExecutorActionEvent.Data;
 
     event: 'ExecutorActionEvent';
   }
 
   export namespace TrajectoryExecutorActionEvent {
-    /**
-     * Action parsed, ready to execute.
-     */
     export interface Data {
       action_json: string;
 
@@ -1040,18 +870,12 @@ export namespace TaskGetTrajectoryResponse {
   }
 
   export interface TrajectoryExecutorActionResultEvent {
-    /**
-     * Action execution result (internal event with full details).
-     */
     data: TrajectoryExecutorActionResultEvent.Data;
 
     event: 'ExecutorActionResultEvent';
   }
 
   export namespace TrajectoryExecutorActionResultEvent {
-    /**
-     * Action execution result (internal event with full details).
-     */
     export interface Data {
       action: { [key: string]: unknown };
 
@@ -1117,7 +941,7 @@ export interface TaskRunResponse {
   streamUrl?: string | null;
 }
 
-export type TaskRunStreamedResponse = unknown;
+export type TaskRunStreamedResponse = unknown
 
 export interface TaskSendMessageResponse {
   /**
@@ -1162,16 +986,7 @@ export interface TaskListParams {
    */
   source?: 'api' | 'agent' | null;
 
-  status?:
-    | 'prepared'
-    | 'queued'
-    | 'created'
-    | 'running'
-    | 'cancelling'
-    | 'completed'
-    | 'failed'
-    | 'cancelled'
-    | null;
+  status?: 'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled' | null;
 }
 
 export interface TaskRunParams {
@@ -1203,6 +1018,12 @@ export interface TaskRunParams {
   files?: Array<string>;
 
   /**
+   * Request human-like input where supported by the device. Replaces the deprecated
+   * stealth field; both must agree when supplied together.
+   */
+  humanize?: boolean;
+
+  /**
    * The LLM model identifier to use for the task (e.g. 'openai/gpt-6-luna')
    */
   llmModel?: string;
@@ -1218,6 +1039,10 @@ export interface TaskRunParams {
    */
   recordingEnabled?: boolean;
 
+  /**
+   * @deprecated Deprecated: use humanize. Both names must agree when supplied
+   * together.
+   */
   stealth?: boolean;
 
   /**
@@ -1279,6 +1104,12 @@ export interface TaskRunStreamedParams {
   files?: Array<string>;
 
   /**
+   * Request human-like input where supported by the device. Replaces the deprecated
+   * stealth field; both must agree when supplied together.
+   */
+  humanize?: boolean;
+
+  /**
    * The LLM model identifier to use for the task (e.g. 'openai/gpt-6-luna')
    */
   llmModel?: string;
@@ -1294,6 +1125,10 @@ export interface TaskRunStreamedParams {
    */
   recordingEnabled?: boolean;
 
+  /**
+   * @deprecated Deprecated: use humanize. Both names must agree when supplied
+   * together.
+   */
   stealth?: boolean;
 
   /**
@@ -1349,20 +1184,20 @@ export declare namespace Tasks {
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
-    type TaskSendMessageParams as TaskSendMessageParams,
+    type TaskSendMessageParams as TaskSendMessageParams
   };
 
   export {
     Screenshots as Screenshots,
     type ScreenshotRetrieveResponse as ScreenshotRetrieveResponse,
     type ScreenshotListResponse as ScreenshotListResponse,
-    type ScreenshotRetrieveParams as ScreenshotRetrieveParams,
+    type ScreenshotRetrieveParams as ScreenshotRetrieveParams
   };
 
   export {
     UiStates as UiStates,
     type UiStateRetrieveResponse as UiStateRetrieveResponse,
     type UiStateListResponse as UiStateListResponse,
-    type UiStateRetrieveParams as UiStateRetrieveParams,
+    type UiStateRetrieveParams as UiStateRetrieveParams
   };
 }

@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as StateAPI from './state';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -8,49 +9,23 @@ import { path } from '../../internal/utils/path';
 
 export class State extends APIResource {
   /**
-   * Captures the device screen and returns it as a PNG image. An optional
-   * hideOverlay query parameter excludes the accessibility overlay from the capture.
+   * Deprecated: use POST /devices/{deviceId}/screenshots. Captures the device screen
+   * and returns it as a PNG image. An optional hideOverlay query parameter excludes
+   * the accessibility overlay from the capture.
+   *
+   * @deprecated
    */
-  screenshot(
-    deviceID: string,
-    params: StateScreenshotParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/screenshot`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  screenshot(deviceID: string, params: StateScreenshotParams | null | undefined = {}, options?: RequestOptions): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/screenshot`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Returns the device's current wall-clock time as an RFC 3339 timestamp.
    */
-  time(
-    deviceID: string,
-    params: StateTimeParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<string> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/time`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  time(deviceID: string, params: StateTimeParams | null | undefined = {}, options?: RequestOptions): APIPromise<string> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/time`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -58,24 +33,9 @@ export class State extends APIResource {
    * on-screen elements. An optional filter query reduces the result to interactive
    * elements.
    */
-  ui(
-    deviceID: string,
-    params: StateUiParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<StateUiResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/ui-state`, {
-      query,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  ui(deviceID: string, params: StateUiParams | null | undefined = {}, options?: RequestOptions): APIPromise<StateUiResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...query } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/ui-state`, { query, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
@@ -129,9 +89,9 @@ export namespace A11YNode {
   }
 }
 
-export type StateScreenshotResponse = string;
+export type StateScreenshotResponse = string
 
-export type StateTimeResponse = string;
+export type StateTimeResponse = string
 
 export interface StateUiResponse {
   a11y_tree: A11YNode;
@@ -215,6 +175,13 @@ export interface StateScreenshotParams {
   hideOverlay?: boolean;
 
   /**
+   * Query param: Store the screenshot as device media: in the owner's active
+   * recording, or standalone for 7 days. Without save=true nothing is stored. The
+   * PNG response is unchanged; X-Screenshot-Saved reports whether it was stored.
+   */
+  save?: boolean;
+
+  /**
    * Header param
    */
   'X-Device-Display-ID'?: number;
@@ -244,6 +211,6 @@ export declare namespace State {
     type StateUiResponse as StateUiResponse,
     type StateScreenshotParams as StateScreenshotParams,
     type StateTimeParams as StateTimeParams,
-    type StateUiParams as StateUiParams,
+    type StateUiParams as StateUiParams
   };
 }

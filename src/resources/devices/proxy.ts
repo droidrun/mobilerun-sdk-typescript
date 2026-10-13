@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ProxyAPI from './proxy';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -13,67 +14,26 @@ export class Proxy extends APIResource {
    * automatically; the legacy flat host/port/user/password fields remain supported.
    */
   connect(deviceID: string, params: ProxyConnectParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/proxy`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/proxy`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Disconnects the device's active proxy connection and clears its stored proxy
    * state. Returns successfully if no proxy is connected.
    */
-  disconnect(
-    deviceID: string,
-    params: ProxyDisconnectParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.delete(path`/devices/${deviceID}/proxy`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  disconnect(deviceID: string, params: ProxyDisconnectParams | null | undefined = {}, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.delete(path`/devices/${deviceID}/proxy`, { ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Returns the device's current proxy connection state, including whether a proxy
    * is connected and its protocol and name.
    */
-  status(
-    deviceID: string,
-    params: ProxyStatusParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ProxyStatusResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/proxy`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  status(deviceID: string, params: ProxyStatusParams | null | undefined = {}, options?: RequestOptions): APIPromise<ProxyStatusResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/proxy`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
@@ -191,6 +151,6 @@ export declare namespace Proxy {
     type ProxyStatusResponse as ProxyStatusResponse,
     type ProxyConnectParams as ProxyConnectParams,
     type ProxyDisconnectParams as ProxyDisconnectParams,
-    type ProxyStatusParams as ProxyStatusParams,
+    type ProxyStatusParams as ProxyStatusParams
   };
 }
