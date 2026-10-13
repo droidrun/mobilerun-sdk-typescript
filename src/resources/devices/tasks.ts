@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as TasksAPI from './tasks';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -11,11 +12,7 @@ export class Tasks extends APIResource {
    * Returns a paginated list of tasks that have run on the device, along with
    * pagination metadata.
    */
-  list(
-    deviceID: string,
-    query: TaskListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TaskListResponse> {
+  list(deviceID: string, query: TaskListParams | null | undefined = {}, options?: RequestOptions): APIPromise<TaskListResponse> {
     return this._client.get(path`/devices/${deviceID}/tasks`, { query, ...options });
   }
 }
@@ -52,5 +49,8 @@ export interface TaskListParams {
 }
 
 export declare namespace Tasks {
-  export { type TaskListResponse as TaskListResponse, type TaskListParams as TaskListParams };
+  export {
+    type TaskListResponse as TaskListResponse,
+    type TaskListParams as TaskListParams
+  };
 }

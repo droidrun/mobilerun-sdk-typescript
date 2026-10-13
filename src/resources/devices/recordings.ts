@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as RecordingsAPI from './recordings';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -10,11 +11,7 @@ export class Recordings extends APIResource {
   /**
    * List device recordings
    */
-  list(
-    deviceID: string,
-    query: RecordingListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<RecordingListResponse | null> {
+  list(deviceID: string, query: RecordingListParams | null | undefined = {}, options?: RequestOptions): APIPromise<RecordingListResponse | null> {
     return this._client.get(path`/devices/${deviceID}/recordings`, { query, ...options });
   }
 
@@ -22,76 +19,61 @@ export class Recordings extends APIResource {
    * Delete a device recording
    */
   delete(recordingID: string, params: RecordingDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId } = params;
-    return this._client.delete(path`/devices/${deviceId}/recordings/${recordingID}`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    const { deviceId } = params
+    return this._client.delete(path`/devices/${deviceId}/recordings/${recordingID}`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
+  }
+
+  /**
+   * Screenshots saved into the recording with
+   * `GET /devices/{deviceId}/screenshot?save=true`, oldest first, each with a
+   * presigned download URL.
+   */
+  screenshots(recordingID: string, params: RecordingScreenshotsParams, options?: RequestOptions): APIPromise<RecordingScreenshotsResponse | null> {
+    const { deviceId } = params
+    return this._client.get(path`/devices/${deviceId}/recordings/${recordingID}/screenshots`, options);
   }
 
   /**
    * Start a device recording
    */
-  start(
-    deviceID: string,
-    body: RecordingStartParams,
-    options?: RequestOptions,
-  ): APIPromise<RecordingStartResponse> {
+  start(deviceID: string, body: RecordingStartParams, options?: RequestOptions): APIPromise<RecordingStartResponse> {
     return this._client.post(path`/devices/${deviceID}/recordings`, { body, ...options });
   }
 
   /**
    * Get a device recording
    */
-  status(
-    recordingID: string,
-    params: RecordingStatusParams,
-    options?: RequestOptions,
-  ): APIPromise<RecordingStatusResponse> {
-    const { deviceId } = params;
+  status(recordingID: string, params: RecordingStatusParams, options?: RequestOptions): APIPromise<RecordingStatusResponse> {
+    const { deviceId } = params
     return this._client.get(path`/devices/${deviceId}/recordings/${recordingID}`, options);
   }
 
   /**
    * Stop a device recording
    */
-  stop(
-    recordingID: string,
-    params: RecordingStopParams,
-    options?: RequestOptions,
-  ): APIPromise<RecordingStopResponse> {
-    const { deviceId } = params;
+  stop(recordingID: string, params: RecordingStopParams, options?: RequestOptions): APIPromise<RecordingStopResponse> {
+    const { deviceId } = params
     return this._client.post(path`/devices/${deviceId}/recordings/${recordingID}`, options);
   }
 
   /**
    * Get a device recording trajectory
    */
-  trajectory(
-    recordingID: string,
-    params: RecordingTrajectoryParams,
-    options?: RequestOptions,
-  ): APIPromise<void> {
-    const { deviceId } = params;
-    return this._client.get(path`/devices/${deviceId}/recordings/${recordingID}/trajectory`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+  trajectory(recordingID: string, params: RecordingTrajectoryParams, options?: RequestOptions): APIPromise<void> {
+    const { deviceId } = params
+    return this._client.get(path`/devices/${deviceId}/recordings/${recordingID}/trajectory`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
    * Get a device recording video
    */
   video(recordingID: string, params: RecordingVideoParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId } = params;
-    return this._client.get(path`/devices/${deviceId}/recordings/${recordingID}/video`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    const { deviceId } = params
+    return this._client.get(path`/devices/${deviceId}/recordings/${recordingID}/video`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 }
 
-export type RecordingListResponse = Array<RecordingListResponse.RecordingListResponseItem>;
+export type RecordingListResponse = Array<RecordingListResponse.RecordingListResponseItem>
 
 export namespace RecordingListResponse {
   export interface RecordingListResponseItem {
@@ -145,6 +127,23 @@ export namespace RecordingListResponse {
 
       limitReason?: string;
     }
+  }
+}
+
+export type RecordingScreenshotsResponse = Array<RecordingScreenshotsResponse.RecordingScreenshotsResponseItem>
+
+export namespace RecordingScreenshotsResponse {
+  export interface RecordingScreenshotsResponseItem {
+    id: string;
+
+    capturedAt: string;
+
+    sizeBytes: number;
+
+    /**
+     * Presigned download URL, valid for 15 minutes.
+     */
+    url: string;
   }
 }
 
@@ -317,23 +316,27 @@ export interface RecordingDeleteParams {
   deviceId: string;
 }
 
+export interface RecordingScreenshotsParams {
+  deviceId: string;
+}
+
 export interface RecordingStartParams {
   name?: string;
 
   /**
    * Capture quality from 1 (lowest) to 10 (full stream quality). Defaults to the
-   * device's full quality. Honored by devices recording through the portal stream
-   * bridge.
+   * device's full quality. Honored only by devices that support adjustable capture
+   * quality.
    */
   quality?: number;
 
   retentionDays?: number;
 
   /**
-   * Artifacts to capture: trajectory (input actions; on portal stream-bridge devices
-   * only when the handset announces trajectory capture), video, and audio (captured
-   * into the video artifact, so it requires video; honored by portal stream-bridge
-   * recorders). Defaults to trajectory and video, narrowed to what the device
+   * Artifacts to capture: trajectory (input actions; on some devices only when the
+   * device announces trajectory capture), video, and audio (captured into the video
+   * artifact, so it requires video; honored only by devices that support audio
+   * capture). Defaults to trajectory and video, narrowed to what the device
    * produces.
    */
   types?: Array<string> | null;
@@ -358,15 +361,17 @@ export interface RecordingVideoParams {
 export declare namespace Recordings {
   export {
     type RecordingListResponse as RecordingListResponse,
+    type RecordingScreenshotsResponse as RecordingScreenshotsResponse,
     type RecordingStartResponse as RecordingStartResponse,
     type RecordingStatusResponse as RecordingStatusResponse,
     type RecordingStopResponse as RecordingStopResponse,
     type RecordingListParams as RecordingListParams,
     type RecordingDeleteParams as RecordingDeleteParams,
+    type RecordingScreenshotsParams as RecordingScreenshotsParams,
     type RecordingStartParams as RecordingStartParams,
     type RecordingStatusParams as RecordingStatusParams,
     type RecordingStopParams as RecordingStopParams,
     type RecordingTrajectoryParams as RecordingTrajectoryParams,
-    type RecordingVideoParams as RecordingVideoParams,
+    type RecordingVideoParams as RecordingVideoParams
   };
 }

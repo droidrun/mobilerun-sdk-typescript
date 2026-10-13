@@ -1,5 +1,6 @@
 import assert from 'assert';
-import { _iterSSEMessages } from '@mobilerun/sdk/core/streaming';
+import { Stream, _iterSSEMessages } from '@mobilerun/sdk/core/streaming';
+import { APIError } from '@mobilerun/sdk/core/error';
 import { ReadableStreamFrom } from '@mobilerun/sdk/internal/shims';
 
 describe('streaming decoding', () => {
@@ -217,3 +218,5 @@ describe('streaming decoding', () => {
     expect(event.done).toBeTruthy();
   });
 });
+
+;

@@ -2,29 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as ConversationsAPI from './conversations';
-import {
-  ConversationAbortParams,
-  ConversationAbortResponse,
-  ConversationAnswerPermissionParams,
-  ConversationAnswerPermissionResponse,
-  ConversationAnswerQuestionParams,
-  ConversationAnswerQuestionResponse,
-  ConversationCreateParams,
-  ConversationCreateResponse,
-  ConversationHistoryParams,
-  ConversationHistoryResponse,
-  ConversationListParams,
-  ConversationListResponse,
-  ConversationRejectQuestionParams,
-  ConversationRejectQuestionResponse,
-  ConversationSendParams,
-  ConversationSendResponse,
-  ConversationStreamParams,
-  ConversationStreamResponse,
-  ConversationUpdateParams,
-  ConversationUpdateResponse,
-  Conversations,
-} from './conversations';
+import { ConversationAbortParams, ConversationAbortResponse, ConversationAnswerPermissionParams, ConversationAnswerPermissionResponse, ConversationAnswerQuestionParams, ConversationAnswerQuestionResponse, ConversationCreateParams, ConversationCreateResponse, ConversationHistoryParams, ConversationHistoryResponse, ConversationListParams, ConversationListResponse, ConversationRejectQuestionParams, ConversationRejectQuestionResponse, ConversationSendParams, ConversationSendResponse, ConversationStreamParams, ConversationStreamResponse, ConversationUpdateParams, ConversationUpdateResponse, Conversations } from './conversations';
 
 export class Assistant extends APIResource {
   conversations: ConversationsAPI.Conversations = new ConversationsAPI.Conversations(this._client);
@@ -54,6 +32,6 @@ export declare namespace Assistant {
     type ConversationHistoryParams as ConversationHistoryParams,
     type ConversationRejectQuestionParams as ConversationRejectQuestionParams,
     type ConversationSendParams as ConversationSendParams,
-    type ConversationStreamParams as ConversationStreamParams,
+    type ConversationStreamParams as ConversationStreamParams
   };
 }

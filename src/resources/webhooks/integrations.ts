@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as IntegrationsAPI from './integrations';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -20,11 +21,7 @@ export class Integrations extends APIResource {
    * member of) for an integration. Pass a target's `args` together with the
    * integration `capability` to `POST /webhooks` with `kind: "integration"`.
    */
-  listTargets(
-    capabilityID: string,
-    query: IntegrationListTargetsParams,
-    options?: RequestOptions,
-  ): APIPromise<IntegrationListTargetsResponse> {
+  listTargets(capabilityID: string, query: IntegrationListTargetsParams, options?: RequestOptions): APIPromise<IntegrationListTargetsResponse> {
     return this._client.get(path`/webhooks/integrations/${capabilityID}/targets`, { query, ...options });
   }
 }
@@ -102,6 +99,6 @@ export declare namespace Integrations {
   export {
     type IntegrationListResponse as IntegrationListResponse,
     type IntegrationListTargetsResponse as IntegrationListTargetsResponse,
-    type IntegrationListTargetsParams as IntegrationListTargetsParams,
+    type IntegrationListTargetsParams as IntegrationListTargetsParams
   };
 }

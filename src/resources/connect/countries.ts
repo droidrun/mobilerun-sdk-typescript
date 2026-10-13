@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as CountriesAPI from './countries';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -13,10 +14,7 @@ export class Countries extends APIResource {
    * lists the proxy types available there; without a ?type filter, every covered
    * country is returned.
    */
-  list(
-    query: CountryListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CountryListResponse> {
+  list(query: CountryListParams | null | undefined = {}, options?: RequestOptions): APIPromise<CountryListResponse> {
     return this._client.get('/connect/countries', { query, ...options });
   }
 }
@@ -102,5 +100,8 @@ export interface CountryListParams {
 }
 
 export declare namespace Countries {
-  export { type CountryListResponse as CountryListResponse, type CountryListParams as CountryListParams };
+  export {
+    type CountryListResponse as CountryListResponse,
+    type CountryListParams as CountryListParams
+  };
 }

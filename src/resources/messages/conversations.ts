@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ConversationsAPI from './conversations';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -9,10 +10,7 @@ export class Conversations extends APIResource {
    * Lists SMS conversations by recent activity. Use both cursor fields from
    * `nextCursor` to fetch the next page.
    */
-  list(
-    query: ConversationListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ConversationListResponse> {
+  list(query: ConversationListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ConversationListResponse> {
     return this._client.get('/numbers/messages/conversations', { query, ...options });
   }
 
@@ -20,10 +18,7 @@ export class Conversations extends APIResource {
    * Marks inbound messages in a conversation as read through the supplied cursor.
    * Repeating the request is safe.
    */
-  markRead(
-    body: ConversationMarkReadParams,
-    options?: RequestOptions,
-  ): APIPromise<ConversationMarkReadResponse> {
+  markRead(body: ConversationMarkReadParams, options?: RequestOptions): APIPromise<ConversationMarkReadResponse> {
     return this._client.post('/numbers/messages/conversations/read', { body, ...options });
   }
 }
@@ -55,15 +50,7 @@ export namespace ConversationListResponse {
 
       occurredAt: string;
 
-      status:
-        | 'received'
-        | 'queued'
-        | 'claimed'
-        | 'sending'
-        | 'sent'
-        | 'sent_unconfirmed'
-        | 'delivered'
-        | 'failed';
+      status: 'received' | 'queued' | 'claimed' | 'sending' | 'sent' | 'sent_unconfirmed' | 'delivered' | 'failed';
     }
   }
 
@@ -116,6 +103,6 @@ export declare namespace Conversations {
     type ConversationListResponse as ConversationListResponse,
     type ConversationMarkReadResponse as ConversationMarkReadResponse,
     type ConversationListParams as ConversationListParams,
-    type ConversationMarkReadParams as ConversationMarkReadParams,
+    type ConversationMarkReadParams as ConversationMarkReadParams
   };
 }

@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as MessagesAPI from './messages';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -17,12 +18,8 @@ export class Messages extends APIResource {
    * );
    * ```
    */
-  retrieve(
-    messageID: string,
-    params: MessageRetrieveParams,
-    options?: RequestOptions,
-  ): APIPromise<MessageRetrieveResponse> {
-    const { mailboxId } = params;
+  retrieve(messageID: string, params: MessageRetrieveParams, options?: RequestOptions): APIPromise<MessageRetrieveResponse> {
+    const { mailboxId } = params
     return this._client.get(path`/mailboxes/${mailboxId}/messages/${messageID}`, options);
   }
 
@@ -37,11 +34,7 @@ export class Messages extends APIResource {
    * );
    * ```
    */
-  list(
-    mailboxID: string,
-    query: MessageListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<MessageListResponse> {
+  list(mailboxID: string, query: MessageListParams | null | undefined = {}, options?: RequestOptions): APIPromise<MessageListResponse> {
     return this._client.get(path`/mailboxes/${mailboxID}/messages`, { query, ...options });
   }
 }
@@ -129,6 +122,6 @@ export declare namespace Messages {
     type MessageRetrieveResponse as MessageRetrieveResponse,
     type MessageListResponse as MessageListResponse,
     type MessageRetrieveParams as MessageRetrieveParams,
-    type MessageListParams as MessageListParams,
+    type MessageListParams as MessageListParams
   };
 }

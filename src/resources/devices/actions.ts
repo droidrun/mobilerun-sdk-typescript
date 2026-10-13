@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ActionsAPI from './actions';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -12,89 +13,37 @@ export class Actions extends APIResource {
    * to the home screen, identified by an action code.
    */
   global(deviceID: string, params: ActionGlobalParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/global`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/global`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Returns whether the accessibility overlay is currently visible on the device.
    */
-  overlayVisible(
-    deviceID: string,
-    params: ActionOverlayVisibleParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ActionOverlayVisibleResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/overlay`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  overlayVisible(deviceID: string, params: ActionOverlayVisibleParams | null | undefined = {}, options?: RequestOptions): APIPromise<ActionOverlayVisibleResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/overlay`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Shows or hides the accessibility overlay on the device based on the visibility
    * flag in the request body.
    */
-  setOverlayVisible(
-    deviceID: string,
-    params: ActionSetOverlayVisibleParams,
-    options?: RequestOptions,
-  ): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/overlay`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  setOverlayVisible(deviceID: string, params: ActionSetOverlayVisibleParams, options?: RequestOptions): APIPromise<void> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/overlay`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
    * Swipes from a start coordinate to an end coordinate over the given duration in
    * milliseconds. An optional stealth flag applies human-like jitter and curved
-   * paths on devices that support it.
+   * paths on devices that support it. With holdMs > 0 the request returns 422 when
+   * combined with stealth, when duration + holdMs exceeds 9000 ms, or on devices
+   * that do not support it.
    */
   swipe(deviceID: string, params: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/swipe`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/swipe`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -102,20 +51,8 @@ export class Actions extends APIResource {
    * routes the tap through human-like input on devices that support it.
    */
   tap(deviceID: string, params: ActionTapParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/tap`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/tap`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
@@ -183,6 +120,13 @@ export interface ActionSwipeParams {
   startY: number;
 
   /**
+   * Body param: Keep the finger at the end point for holdMs and suppress fling
+   * before lifting, so content moves by about the finger travel. Supported on
+   * Android cloud phones.
+   */
+  holdMs?: number;
+
+  /**
    * Body param
    */
   stealth?: boolean;
@@ -222,6 +166,6 @@ export declare namespace Actions {
     type ActionOverlayVisibleParams as ActionOverlayVisibleParams,
     type ActionSetOverlayVisibleParams as ActionSetOverlayVisibleParams,
     type ActionSwipeParams as ActionSwipeParams,
-    type ActionTapParams as ActionTapParams,
+    type ActionTapParams as ActionTapParams
   };
 }

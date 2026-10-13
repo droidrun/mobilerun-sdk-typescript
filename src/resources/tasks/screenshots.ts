@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ScreenshotsAPI from './screenshots';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -12,12 +13,8 @@ export class Screenshots extends APIResource {
   /**
    * Get a specific screenshot by index.
    */
-  retrieve(
-    index: number,
-    params: ScreenshotRetrieveParams,
-    options?: RequestOptions,
-  ): APIPromise<ScreenshotRetrieveResponse> {
-    const { task_id } = params;
+  retrieve(index: number, params: ScreenshotRetrieveParams, options?: RequestOptions): APIPromise<ScreenshotRetrieveResponse> {
+    const { task_id } = params
     return this._client.get(path`/tasks/${task_id}/screenshots/${index}`, options);
   }
 
@@ -51,6 +48,6 @@ export declare namespace Screenshots {
   export {
     type ScreenshotRetrieveResponse as ScreenshotRetrieveResponse,
     type ScreenshotListResponse as ScreenshotListResponse,
-    type ScreenshotRetrieveParams as ScreenshotRetrieveParams,
+    type ScreenshotRetrieveParams as ScreenshotRetrieveParams
   };
 }

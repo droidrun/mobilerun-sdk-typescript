@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as MediaSessionsAPI from './media-sessions';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -11,11 +12,7 @@ export class MediaSessions extends APIResource {
    * Allocates an exclusive relay path and returns one-time publish and control
    * credentials. The relay publisher must be established before activation.
    */
-  create(
-    deviceID: string,
-    body: MediaSessionCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<MediaSessionCreateResponse> {
+  create(deviceID: string, body: MediaSessionCreateParams, options?: RequestOptions): APIPromise<MediaSessionCreateResponse> {
     return this._client.post(path`/devices/${deviceID}/media-sessions`, { body, ...options });
   }
 
@@ -24,40 +21,24 @@ export class MediaSessions extends APIResource {
    * kicks the relay publisher.
    */
   delete(sessionID: string, params: MediaSessionDeleteParams, options?: RequestOptions): APIPromise<void> {
-    const { deviceId, 'X-Media-Control-Token': xMediaControlToken } = params;
-    return this._client.delete(path`/devices/${deviceId}/media-sessions/${sessionID}`, {
-      ...options,
-      headers: buildHeaders([
-        { Accept: '*/*', 'X-Media-Control-Token': xMediaControlToken },
-        options?.headers,
-      ]),
-    });
+    const { deviceId, 'X-Media-Control-Token': xMediaControlToken } = params
+    return this._client.delete(path`/devices/${deviceId}/media-sessions/${sessionID}`, { ...options, headers: buildHeaders([{Accept: '*/*', 'X-Media-Control-Token': xMediaControlToken}, options?.headers]) });
   }
 
   /**
    * Validates relay codecs and attaches one private RTSP source to either the
    * virtual microphone or the combined microphone-and-camera pipeline.
    */
-  activate(
-    sessionID: string,
-    params: MediaSessionActivateParams,
-    options?: RequestOptions,
-  ): APIPromise<MediaSessionActivateResponse> {
-    const { deviceId, 'X-Media-Control-Token': xMediaControlToken } = params;
-    return this._client.post(path`/devices/${deviceId}/media-sessions/${sessionID}/activate`, {
-      ...options,
-      headers: buildHeaders([{ 'X-Media-Control-Token': xMediaControlToken }, options?.headers]),
-    });
+  activate(sessionID: string, params: MediaSessionActivateParams, options?: RequestOptions): APIPromise<MediaSessionActivateResponse> {
+    const { deviceId, 'X-Media-Control-Token': xMediaControlToken } = params
+    return this._client.post(path`/devices/${deviceId}/media-sessions/${sessionID}/activate`, { ...options, headers: buildHeaders([{'X-Media-Control-Token': xMediaControlToken}, options?.headers]) });
   }
 
   /**
    * Returns status only. Publish URLs and credentials are never replayed after
    * creation.
    */
-  retrieveCurrent(
-    deviceID: string,
-    options?: RequestOptions,
-  ): APIPromise<MediaSessionRetrieveCurrentResponse> {
+  retrieveCurrent(deviceID: string, options?: RequestOptions): APIPromise<MediaSessionRetrieveCurrentResponse> {
     return this._client.get(path`/devices/${deviceID}/media-sessions/current`, options);
   }
 }
@@ -163,6 +144,6 @@ export declare namespace MediaSessions {
     type MediaSessionRetrieveCurrentResponse as MediaSessionRetrieveCurrentResponse,
     type MediaSessionCreateParams as MediaSessionCreateParams,
     type MediaSessionDeleteParams as MediaSessionDeleteParams,
-    type MediaSessionActivateParams as MediaSessionActivateParams,
+    type MediaSessionActivateParams as MediaSessionActivateParams
   };
 }

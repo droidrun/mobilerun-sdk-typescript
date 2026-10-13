@@ -1,16 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as PackagesAPI from './packages';
 import * as CredentialsAPI from './credentials/credentials';
-import {
-  CredentialCreateParams,
-  CredentialCreateResponse,
-  CredentialDeleteParams,
-  CredentialDeleteResponse,
-  CredentialRetrieveParams,
-  CredentialRetrieveResponse,
-  Credentials,
-} from './credentials/credentials';
+import { CredentialCreateParams, CredentialCreateResponse, CredentialDeleteParams, CredentialDeleteResponse, CredentialRetrieveParams, CredentialRetrieveResponse, Credentials } from './credentials/credentials';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -86,14 +79,7 @@ export namespace PackageListResponse {
 
   export namespace Data {
     export interface Field {
-      fieldType:
-        | 'email'
-        | 'username'
-        | 'password'
-        | 'api_token'
-        | 'phone_number'
-        | 'two_factor_secret'
-        | 'backup_codes';
+      fieldType: 'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
 
       value: string;
     }
@@ -121,7 +107,7 @@ export declare namespace Packages {
     type PackageCreateResponse as PackageCreateResponse,
     type PackageListResponse as PackageListResponse,
     type PackageListAllResponse as PackageListAllResponse,
-    type PackageCreateParams as PackageCreateParams,
+    type PackageCreateParams as PackageCreateParams
   };
 
   export {
@@ -131,6 +117,6 @@ export declare namespace Packages {
     type CredentialDeleteResponse as CredentialDeleteResponse,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialRetrieveParams as CredentialRetrieveParams,
-    type CredentialDeleteParams as CredentialDeleteParams,
+    type CredentialDeleteParams as CredentialDeleteParams
   };
 }

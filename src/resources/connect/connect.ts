@@ -4,33 +4,9 @@ import { APIResource } from '../../core/resource';
 import * as CountriesAPI from './countries';
 import { Countries, CountryListParams, CountryListResponse } from './countries';
 import * as ProxiesAPI from './proxies';
-import {
-  Proxies,
-  ProxyBuyParams,
-  ProxyBuyResponse,
-  ProxyEnsureHealthyResponse,
-  ProxyListConnectionsParams,
-  ProxyListConnectionsResponse,
-  ProxyListParams,
-  ProxyListResponse,
-  ProxyPingResponse,
-  ProxyRetrieveResponse,
-  ProxyUpdateParams,
-  ProxyUpdateResponse,
-} from './proxies';
+import { Proxies, ProxyBuyParams, ProxyBuyResponse, ProxyEnsureHealthyResponse, ProxyListConnectionsParams, ProxyListConnectionsResponse, ProxyListParams, ProxyListResponse, ProxyPingResponse, ProxyRetrieveResponse, ProxyUpdateParams, ProxyUpdateResponse } from './proxies';
 import * as UsersAPI from './users';
-import {
-  UserCreateParams,
-  UserCreateResponse,
-  UserListConnectionsParams,
-  UserListConnectionsResponse,
-  UserListParams,
-  UserListResponse,
-  UserRetrieveResponse,
-  UserUpdateParams,
-  UserUpdateResponse,
-  Users,
-} from './users';
+import { UserCreateParams, UserCreateResponse, UserListConnectionsParams, UserListConnectionsResponse, UserListParams, UserListResponse, UserRetrieveResponse, UserUpdateParams, UserUpdateResponse, Users } from './users';
 
 export class Connect extends APIResource {
   countries: CountriesAPI.Countries = new CountriesAPI.Countries(this._client);
@@ -46,7 +22,7 @@ export declare namespace Connect {
   export {
     Countries as Countries,
     type CountryListResponse as CountryListResponse,
-    type CountryListParams as CountryListParams,
+    type CountryListParams as CountryListParams
   };
 
   export {
@@ -61,7 +37,7 @@ export declare namespace Connect {
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
     type ProxyBuyParams as ProxyBuyParams,
-    type ProxyListConnectionsParams as ProxyListConnectionsParams,
+    type ProxyListConnectionsParams as ProxyListConnectionsParams
   };
 
   export {
@@ -74,6 +50,6 @@ export declare namespace Connect {
     type UserCreateParams as UserCreateParams,
     type UserUpdateParams as UserUpdateParams,
     type UserListParams as UserListParams,
-    type UserListConnectionsParams as UserListConnectionsParams,
+    type UserListConnectionsParams as UserListConnectionsParams
   };
 }

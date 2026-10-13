@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as DeliveriesAPI from './deliveries';
 import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -14,10 +15,7 @@ export class Deliveries extends APIResource {
    * timestamp, by `eventId` (exact match against the originating event id), and/or
    * by endpoint delivery `kind`.
    */
-  list(
-    query: DeliveryListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DeliveryListResponse> {
+  list(query: DeliveryListParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeliveryListResponse> {
     return this._client.get('/webhooks/deliveries', { query, ...options });
   }
 
@@ -27,11 +25,7 @@ export class Deliveries extends APIResource {
    * count, and the last response code or error. Results can be filtered by `eventId`
    * (exact match against the originating event id).
    */
-  listForWebhook(
-    id: string,
-    query: DeliveryListForWebhookParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DeliveryListForWebhookResponse> {
+  listForWebhook(id: string, query: DeliveryListForWebhookParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeliveryListForWebhookResponse> {
     return this._client.get(path`/webhooks/${id}/deliveries`, { query, ...options });
   }
 
@@ -40,12 +34,8 @@ export class Deliveries extends APIResource {
    * captured attempt records. Each attempt includes the request URL, method, headers
    * and body, whether it was signed, and the response status, headers, and snippet.
    */
-  retrieveAttempts(
-    deliveryID: string,
-    params: DeliveryRetrieveAttemptsParams,
-    options?: RequestOptions,
-  ): APIPromise<DeliveryRetrieveAttemptsResponse> {
-    const { id } = params;
+  retrieveAttempts(deliveryID: string, params: DeliveryRetrieveAttemptsParams, options?: RequestOptions): APIPromise<DeliveryRetrieveAttemptsResponse> {
+    const { id } = params
     return this._client.get(path`/webhooks/${id}/deliveries/${deliveryID}`, options);
   }
 
@@ -55,10 +45,7 @@ export class Deliveries extends APIResource {
    * overall success rate. Optional `since` and endpoint delivery `kind` filters
    * narrow the reporting window.
    */
-  stats(
-    query: DeliveryStatsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<DeliveryStatsResponse> {
+  stats(query: DeliveryStatsParams | null | undefined = {}, options?: RequestOptions): APIPromise<DeliveryStatsResponse> {
     return this._client.get('/webhooks/deliveries/stats', { query, ...options });
   }
 }
@@ -313,6 +300,6 @@ export declare namespace Deliveries {
     type DeliveryListParams as DeliveryListParams,
     type DeliveryListForWebhookParams as DeliveryListForWebhookParams,
     type DeliveryRetrieveAttemptsParams as DeliveryRetrieveAttemptsParams,
-    type DeliveryStatsParams as DeliveryStatsParams,
+    type DeliveryStatsParams as DeliveryStatsParams
   };
 }

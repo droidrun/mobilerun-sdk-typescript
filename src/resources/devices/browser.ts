@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as BrowserAPI from './browser';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -18,24 +19,9 @@ export class Browser extends APIResource {
    * backgrounded Chrome, and a user script is never retried after its write or read.
    * Devices without browser support return an unsupported-feature error.
    */
-  executeScript(
-    deviceID: string,
-    params: BrowserExecuteScriptParams,
-    options?: RequestOptions,
-  ): APIPromise<BrowserExecuteScriptResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/browser/execute-script`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  executeScript(deviceID: string, params: BrowserExecuteScriptParams, options?: RequestOptions): APIPromise<BrowserExecuteScriptResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/browser/execute-script`, { body, ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
@@ -72,6 +58,6 @@ export interface BrowserExecuteScriptParams {
 export declare namespace Browser {
   export {
     type BrowserExecuteScriptResponse as BrowserExecuteScriptResponse,
-    type BrowserExecuteScriptParams as BrowserExecuteScriptParams,
+    type BrowserExecuteScriptParams as BrowserExecuteScriptParams
   };
 }

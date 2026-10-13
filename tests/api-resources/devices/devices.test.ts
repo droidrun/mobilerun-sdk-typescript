@@ -1,11 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Mobilerun from '@mobilerun/sdk';
+import Mobilerun, { toFile } from '@mobilerun/sdk';
 
-const client = new Mobilerun({
-  apiKey: 'My API Key',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Mobilerun({ apiKey: 'My API Key', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource devices', () => {
   // Mock server tests are disabled
@@ -47,25 +44,25 @@ describe('resource devices', () => {
   // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.devices.list(
-        {
-          country: 'country',
-          createdBy: 'createdBy',
-          mine: true,
-          name: 'name',
-          orderBy: 'id',
-          orderByDirection: 'asc',
-          page: 0,
-          pageSize: 0,
-          platform: 'android',
-          providerId: 'providerId',
-          state: ['creating'],
-          type: 'android_cloud_phone',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.devices.list({
+    country: 'country',
+    createdAfter: '2019-12-27T18:11:19.117Z',
+    createdBefore: '2019-12-27T18:11:19.117Z',
+    createdBy: 'createdBy',
+    mine: true,
+    name: 'name',
+    orderBy: 'id',
+    orderByDirection: 'asc',
+    ownerId: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+    page: 0,
+    pageSize: 0,
+    platform: 'android',
+    providerId: 'providerId',
+    state: ['creating'],
+    type: 'android_cloud_phone',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -95,13 +92,9 @@ describe('resource devices', () => {
   // Mock server tests are disabled
   test.skip('fingerprint: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.devices.fingerprint(
-        'deviceId',
-        { 'X-Device-Display-ID': 0 },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.devices.fingerprint('deviceId', { 'X-Device-Display-ID': 0 }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -196,9 +189,9 @@ describe('resource devices', () => {
   // Mock server tests are disabled
   test.skip('summary: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.devices.summary({ state: ['creating'] }, { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.devices.summary({ state: ['creating'] }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -216,13 +209,9 @@ describe('resource devices', () => {
   // Mock server tests are disabled
   test.skip('terminate: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.devices.terminate(
-        'deviceId',
-        { previousDeviceId: 'previousDeviceId', terminateAt: '2019-12-27T18:11:19.117Z' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Mobilerun.NotFoundError);
+    await expect(client.devices.terminate('deviceId', { previousDeviceId: 'previousDeviceId', terminateAt: '2019-12-27T18:11:19.117Z' }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled

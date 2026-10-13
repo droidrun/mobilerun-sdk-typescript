@@ -1,18 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as FlowsAPI from './flows';
 import * as Shared from '../../shared';
 import * as ActionsAPI from './actions';
-import {
-  ActionAddParams,
-  ActionAddResponse,
-  ActionListResponse,
-  ActionRemoveParams,
-  ActionRemoveResponse,
-  ActionReplaceParams,
-  ActionReplaceResponse,
-  Actions,
-} from './actions';
+import { ActionAddParams, ActionAddResponse, ActionListResponse, ActionRemoveParams, ActionRemoveResponse, ActionReplaceParams, ActionReplaceResponse, Actions } from './actions';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -48,11 +40,7 @@ export class Flows extends APIResource {
    * managed through the flow-actions endpoints, not here. Returns 404 if the flow
    * does not exist.
    */
-  update(
-    flowID: string,
-    body: FlowUpdateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FlowUpdateResponse> {
+  update(flowID: string, body: FlowUpdateParams | null | undefined = {}, options?: RequestOptions): APIPromise<FlowUpdateResponse> {
     return this._client.patch(path`/flows/${flowID}`, { body, ...options });
   }
 
@@ -62,10 +50,7 @@ export class Flows extends APIResource {
    * created by the calling actor), `createdBy` (flows created by a given actor id —
    * mutually exclusive with `mine`), plus free-text `search` and ordering.
    */
-  list(
-    query: FlowListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FlowListResponse> {
+  list(query: FlowListParams | null | undefined = {}, options?: RequestOptions): APIPromise<FlowListResponse> {
     return this._client.get('/flows', { query, ...options });
   }
 
@@ -82,19 +67,15 @@ export class Flows extends APIResource {
    * and the flow graph has not changed since verification. Repeating activation is
    * idempotent for an already-enabled flow.
    */
-  activate(
-    flowID: string,
-    body: FlowActivateParams,
-    options?: RequestOptions,
-  ): APIPromise<FlowActivateResponse> {
+  activate(flowID: string, body: FlowActivateParams, options?: RequestOptions): APIPromise<FlowActivateResponse> {
     return this._client.post(path`/flows/${flowID}/activate`, { body, ...options });
   }
 
   /**
    * Returns an owner-scoped snapshot of finite included workflow-agent capacity
-   * after locally stored enabled and disabled agents. Available only while slot
-   * enforcement is enabled; otherwise returns 503. This is advisory; create and
-   * clone perform authoritative admission under an owner lock.
+   * after accounting for enabled and disabled agents. Returns 503 when a finite
+   * capacity snapshot is unavailable, including for unlimited plans. This is
+   * advisory; create and clone perform the authoritative capacity check.
    */
   capacity(options?: RequestOptions): APIPromise<FlowCapacityResponse> {
     return this._client.get('/flows/capacity', options);
@@ -109,11 +90,7 @@ export class Flows extends APIResource {
    * characters). Replays with the same key and an identical body return the original
    * 201; a changed body under the same key returns 422 `idempotency_key_reused`.
    */
-  clone(
-    flowID: string,
-    body: FlowCloneParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FlowCloneResponse> {
+  clone(flowID: string, body: FlowCloneParams | null | undefined = {}, options?: RequestOptions): APIPromise<FlowCloneResponse> {
     return this._client.post(path`/flows/${flowID}/clone`, { body, ...options });
   }
 
@@ -121,8 +98,8 @@ export class Flows extends APIResource {
    * Return the recording/delivery readiness for a flow (recording mode, whether
    * delivery can include the recording, whether a files.upload action exists, the
    * first direct OneDrive/Google Drive upload step if any) plus, per destination,
-   * whether the flow owner has an active integrations-api connection. Returns 404 if
-   * the flow does not exist.
+   * whether the flow owner has an active connection. Returns 404 if the flow does
+   * not exist.
    */
   deliveryOptions(flowID: string, options?: RequestOptions): APIPromise<FlowDeliveryOptionsResponse> {
     return this._client.get(path`/flows/${flowID}/delivery-options`, options);
@@ -144,11 +121,7 @@ export class Flows extends APIResource {
    * — alongside the gates that decide it (enabled, device attached, blocked,
    * cooldown). `rateLimited` is informational and is not folded into `wouldFire`.
    */
-  dryRun(
-    flowID: string,
-    body: FlowDryRunParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FlowDryRunResponse> {
+  dryRun(flowID: string, body: FlowDryRunParams | null | undefined = {}, options?: RequestOptions): APIPromise<FlowDryRunResponse> {
     return this._client.post(path`/flows/${flowID}/dry-run`, { body, ...options });
   }
 
@@ -169,21 +142,14 @@ export class Flows extends APIResource {
    * status and the original `executionIds`; a changed body under the same key
    * returns 422 `idempotency_key_reused`.
    */
-  run(
-    flowID: string,
-    body: FlowRunParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FlowRunResponse> {
+  run(flowID: string, body: FlowRunParams | null | undefined = {}, options?: RequestOptions): APIPromise<FlowRunResponse> {
     return this._client.post(path`/flows/${flowID}/run`, { body, ...options });
   }
 
   /**
    * Get flow template context
    */
-  templateContext(
-    query: FlowTemplateContextParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<FlowTemplateContextResponse> {
+  templateContext(query: FlowTemplateContextParams | null | undefined = {}, options?: RequestOptions): APIPromise<FlowTemplateContextResponse> {
     return this._client.get('/flows/template-context', { query, ...options });
   }
 
@@ -203,8 +169,8 @@ export class Flows extends APIResource {
   }
 
   /**
-   * Run a bound, deduplicated **verification** of this flow on exactly one device
-   * through the real worker.
+   * Run a bound, deduplicated **verification** of this flow on exactly one device as
+   * a real run.
    *
    * Unlike a normal trigger firing, verification:
    *
@@ -266,14 +232,7 @@ export namespace FlowCreateResponse {
 
     lastFailureAt: string | null;
 
-    lastFailureCode:
-      | 'device_not_found'
-      | 'permission_denied'
-      | 'client_error'
-      | 'transient'
-      | 'logic'
-      | 'invalid_config'
-      | null;
+    lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config' | null;
 
     lastTriggeredAt: string | null;
 
@@ -304,7 +263,7 @@ export namespace FlowCreateResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -324,8 +283,11 @@ export namespace FlowCreateResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -383,14 +345,7 @@ export namespace FlowRetrieveResponse {
 
     lastFailureAt: string | null;
 
-    lastFailureCode:
-      | 'device_not_found'
-      | 'permission_denied'
-      | 'client_error'
-      | 'transient'
-      | 'logic'
-      | 'invalid_config'
-      | null;
+    lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config' | null;
 
     lastTriggeredAt: string | null;
 
@@ -421,7 +376,7 @@ export namespace FlowRetrieveResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -441,8 +396,11 @@ export namespace FlowRetrieveResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -500,14 +458,7 @@ export namespace FlowUpdateResponse {
 
     lastFailureAt: string | null;
 
-    lastFailureCode:
-      | 'device_not_found'
-      | 'permission_denied'
-      | 'client_error'
-      | 'transient'
-      | 'logic'
-      | 'invalid_config'
-      | null;
+    lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config' | null;
 
     lastTriggeredAt: string | null;
 
@@ -538,7 +489,7 @@ export namespace FlowUpdateResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -558,8 +509,11 @@ export namespace FlowUpdateResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -619,14 +573,7 @@ export namespace FlowListResponse {
 
     lastFailureAt: string | null;
 
-    lastFailureCode:
-      | 'device_not_found'
-      | 'permission_denied'
-      | 'client_error'
-      | 'transient'
-      | 'logic'
-      | 'invalid_config'
-      | null;
+    lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config' | null;
 
     lastTriggeredAt: string | null;
 
@@ -657,7 +604,7 @@ export namespace FlowListResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -677,8 +624,11 @@ export namespace FlowListResponse {
 
   export namespace Item {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -740,14 +690,7 @@ export namespace FlowActivateResponse {
 
     lastFailureAt: string | null;
 
-    lastFailureCode:
-      | 'device_not_found'
-      | 'permission_denied'
-      | 'client_error'
-      | 'transient'
-      | 'logic'
-      | 'invalid_config'
-      | null;
+    lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config' | null;
 
     lastTriggeredAt: string | null;
 
@@ -778,7 +721,7 @@ export namespace FlowActivateResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -798,8 +741,11 @@ export namespace FlowActivateResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -871,14 +817,7 @@ export namespace FlowCloneResponse {
 
     lastFailureAt: string | null;
 
-    lastFailureCode:
-      | 'device_not_found'
-      | 'permission_denied'
-      | 'client_error'
-      | 'transient'
-      | 'logic'
-      | 'invalid_config'
-      | null;
+    lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config' | null;
 
     lastTriggeredAt: string | null;
 
@@ -909,7 +848,7 @@ export namespace FlowCloneResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -929,8 +868,11 @@ export namespace FlowCloneResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -959,7 +901,7 @@ export namespace FlowDeliveryOptionsResponse {
     canDeliverRecording: boolean;
 
     /**
-     * Delivery destinations in registry order.
+     * Delivery destinations in their canonical order.
      */
     destinations: Array<Data.Destination>;
 
@@ -978,7 +920,7 @@ export namespace FlowDeliveryOptionsResponse {
 
       iconUrl: string | null;
 
-      key: 'one_drive' | 'google_drive';
+      key: 'mobilerun' | 'one_drive' | 'google_drive';
 
       label: string;
     }
@@ -1225,14 +1167,7 @@ export namespace FlowUnblockResponse {
 
     lastFailureAt: string | null;
 
-    lastFailureCode:
-      | 'device_not_found'
-      | 'permission_denied'
-      | 'client_error'
-      | 'transient'
-      | 'logic'
-      | 'invalid_config'
-      | null;
+    lastFailureCode: 'device_not_found' | 'permission_denied' | 'client_error' | 'transient' | 'logic' | 'invalid_config' | null;
 
     lastTriggeredAt: string | null;
 
@@ -1263,7 +1198,7 @@ export namespace FlowUnblockResponse {
     status: 'healthy' | 'failing' | 'blocked';
 
     /**
-     * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+     * Template-resolver semantics this flow runs under. 1 = legacy
      * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
      * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
      * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -1283,8 +1218,11 @@ export namespace FlowUnblockResponse {
 
   export namespace Data {
     export interface Delivery {
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+      /**
+       * not allowed when destination is mobilerun
+       */
       folder?: string;
 
       recording?: Delivery.Recording;
@@ -1472,8 +1410,11 @@ export namespace FlowCreateParams {
   }
 
   export interface Delivery {
-    destination: 'one_drive' | 'google_drive';
+    destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+    /**
+     * not allowed when destination is mobilerun
+     */
     folder?: string;
 
     recording?: Delivery.Recording;
@@ -1537,8 +1478,11 @@ export interface FlowUpdateParams {
 
 export namespace FlowUpdateParams {
   export interface Delivery {
-    destination: 'one_drive' | 'google_drive';
+    destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+    /**
+     * not allowed when destination is mobilerun
+     */
     folder?: string;
 
     recording?: Delivery.Recording;
@@ -1600,6 +1544,13 @@ export interface FlowDryRunParams {
 }
 
 export interface FlowRunParams {
+  /**
+   * Record and keep this run's scripts.run screenshots
+   * (device.screenshot(save=True)) even without flow delivery. Used for a one-off
+   * proof run.
+   */
+  captureScreenshots?: boolean;
+
   payload?: { [key: string]: unknown };
 }
 
@@ -1744,8 +1695,11 @@ export namespace FlowValidateParams {
   }
 
   export interface Delivery {
-    destination: 'one_drive' | 'google_drive';
+    destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+    /**
+     * not allowed when destination is mobilerun
+     */
     folder?: string;
 
     recording?: Delivery.Recording;
@@ -1811,7 +1765,7 @@ export declare namespace Flows {
     type FlowRunParams as FlowRunParams,
     type FlowTemplateContextParams as FlowTemplateContextParams,
     type FlowValidateParams as FlowValidateParams,
-    type FlowVerifyParams as FlowVerifyParams,
+    type FlowVerifyParams as FlowVerifyParams
   };
 
   export {
@@ -1822,6 +1776,6 @@ export declare namespace Flows {
     type ActionReplaceResponse as ActionReplaceResponse,
     type ActionAddParams as ActionAddParams,
     type ActionRemoveParams as ActionRemoveParams,
-    type ActionReplaceParams as ActionReplaceParams,
+    type ActionReplaceParams as ActionReplaceParams
   };
 }

@@ -2,88 +2,19 @@
 
 import { APIResource } from '../../core/resource';
 import * as ActionCatalogAPI from './action-catalog';
-import {
-  ActionCatalog,
-  ActionCatalogListParams,
-  ActionCatalogListResponse,
-  ActionCatalogRetrieveResponse,
-} from './action-catalog';
+import { ActionCatalog, ActionCatalogListParams, ActionCatalogListResponse, ActionCatalogRetrieveResponse } from './action-catalog';
 import * as EventsAPI from './events';
-import {
-  EventDryRunParams,
-  EventDryRunResponse,
-  EventIngestParams,
-  EventIngestResponse,
-  Events,
-} from './events';
+import { EventDryRunParams, EventDryRunResponse, EventIngestParams, EventIngestResponse, Events } from './events';
 import * as TimezonesAPI from './timezones';
 import { TimezoneListResponse, Timezones } from './timezones';
 import * as TriggersAPI from './triggers';
-import {
-  TriggerCreateParams,
-  TriggerCreateResponse,
-  TriggerDeleteResponse,
-  TriggerFireParams,
-  TriggerFireResponse,
-  TriggerListParams,
-  TriggerListResponse,
-  TriggerRetrieveResponse,
-  TriggerUpdateParams,
-  TriggerUpdateResponse,
-  Triggers,
-} from './triggers';
+import { TriggerCreateParams, TriggerCreateResponse, TriggerDeleteResponse, TriggerFireParams, TriggerFireResponse, TriggerListParams, TriggerListResponse, TriggerRetrieveResponse, TriggerUpdateParams, TriggerUpdateResponse, Triggers } from './triggers';
 import * as ActionsAPI from './actions/actions';
-import {
-  ActionCreateParams,
-  ActionCreateResponse,
-  ActionDeleteResponse,
-  ActionListParams,
-  ActionListResponse,
-  ActionRetrieveResponse,
-  ActionUpdateParams,
-  ActionUpdateResponse,
-  Actions,
-} from './actions/actions';
+import { ActionCreateParams, ActionCreateResponse, ActionDeleteResponse, ActionListParams, ActionListResponse, ActionRetrieveResponse, ActionUpdateParams, ActionUpdateResponse, Actions } from './actions/actions';
 import * as ExecutionsAPI from './executions/executions';
-import {
-  ExecutionAbortResponse,
-  ExecutionGetMetricsParams,
-  ExecutionGetMetricsResponse,
-  ExecutionListParams,
-  ExecutionListResponse,
-  ExecutionRetrieveResponse,
-  Executions,
-} from './executions/executions';
+import { ExecutionAbortResponse, ExecutionGetMetricsParams, ExecutionGetMetricsResponse, ExecutionListParams, ExecutionListResponse, ExecutionRetrieveResponse, Executions } from './executions/executions';
 import * as FlowsAPI from './flows/flows';
-import {
-  FlowActivateParams,
-  FlowActivateResponse,
-  FlowCapacityResponse,
-  FlowCloneParams,
-  FlowCloneResponse,
-  FlowCreateParams,
-  FlowCreateResponse,
-  FlowDeleteResponse,
-  FlowDeliveryOptionsResponse,
-  FlowDryRunParams,
-  FlowDryRunResponse,
-  FlowListParams,
-  FlowListRepairsResponse,
-  FlowListResponse,
-  FlowRetrieveResponse,
-  FlowRunParams,
-  FlowRunResponse,
-  FlowTemplateContextParams,
-  FlowTemplateContextResponse,
-  FlowUnblockResponse,
-  FlowUpdateParams,
-  FlowUpdateResponse,
-  FlowValidateParams,
-  FlowValidateResponse,
-  FlowVerifyParams,
-  FlowVerifyResponse,
-  Flows,
-} from './flows/flows';
+import { FlowActivateParams, FlowActivateResponse, FlowCapacityResponse, FlowCloneParams, FlowCloneResponse, FlowCreateParams, FlowCreateResponse, FlowDeleteResponse, FlowDeliveryOptionsResponse, FlowDryRunParams, FlowDryRunResponse, FlowListParams, FlowListRepairsResponse, FlowListResponse, FlowRetrieveResponse, FlowRunParams, FlowRunResponse, FlowTemplateContextParams, FlowTemplateContextResponse, FlowUnblockResponse, FlowUpdateParams, FlowUpdateResponse, FlowValidateParams, FlowValidateResponse, FlowVerifyParams, FlowVerifyResponse, Flows } from './flows/flows';
 
 export class Workflows extends APIResource {
   triggers: TriggersAPI.Triggers = new TriggersAPI.Triggers(this._client);
@@ -115,14 +46,14 @@ export declare namespace Workflows {
     type TriggerCreateParams as TriggerCreateParams,
     type TriggerUpdateParams as TriggerUpdateParams,
     type TriggerListParams as TriggerListParams,
-    type TriggerFireParams as TriggerFireParams,
+    type TriggerFireParams as TriggerFireParams
   };
 
   export {
     ActionCatalog as ActionCatalog,
     type ActionCatalogRetrieveResponse as ActionCatalogRetrieveResponse,
     type ActionCatalogListResponse as ActionCatalogListResponse,
-    type ActionCatalogListParams as ActionCatalogListParams,
+    type ActionCatalogListParams as ActionCatalogListParams
   };
 
   export {
@@ -134,7 +65,7 @@ export declare namespace Workflows {
     type ActionDeleteResponse as ActionDeleteResponse,
     type ActionCreateParams as ActionCreateParams,
     type ActionUpdateParams as ActionUpdateParams,
-    type ActionListParams as ActionListParams,
+    type ActionListParams as ActionListParams
   };
 
   export {
@@ -164,7 +95,7 @@ export declare namespace Workflows {
     type FlowRunParams as FlowRunParams,
     type FlowTemplateContextParams as FlowTemplateContextParams,
     type FlowValidateParams as FlowValidateParams,
-    type FlowVerifyParams as FlowVerifyParams,
+    type FlowVerifyParams as FlowVerifyParams
   };
 
   export {
@@ -172,7 +103,7 @@ export declare namespace Workflows {
     type EventDryRunResponse as EventDryRunResponse,
     type EventIngestResponse as EventIngestResponse,
     type EventDryRunParams as EventDryRunParams,
-    type EventIngestParams as EventIngestParams,
+    type EventIngestParams as EventIngestParams
   };
 
   export {
@@ -182,8 +113,11 @@ export declare namespace Workflows {
     type ExecutionAbortResponse as ExecutionAbortResponse,
     type ExecutionGetMetricsResponse as ExecutionGetMetricsResponse,
     type ExecutionListParams as ExecutionListParams,
-    type ExecutionGetMetricsParams as ExecutionGetMetricsParams,
+    type ExecutionGetMetricsParams as ExecutionGetMetricsParams
   };
 
-  export { Timezones as Timezones, type TimezoneListResponse as TimezoneListResponse };
+  export {
+    Timezones as Timezones,
+    type TimezoneListResponse as TimezoneListResponse
+  };
 }

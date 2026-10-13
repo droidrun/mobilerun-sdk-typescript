@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ClipboardAPI from './clipboard';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -11,23 +12,9 @@ export class Clipboard extends APIResource {
    * Returns the current text content of the device's clipboard. Devices without
    * clipboard support return an unsupported-feature error.
    */
-  get(
-    deviceID: string,
-    params: ClipboardGetParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ClipboardGetResponse> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {};
-    return this._client.get(path`/devices/${deviceID}/clipboard`, {
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+  get(deviceID: string, params: ClipboardGetParams | null | undefined = {}, options?: RequestOptions): APIPromise<ClipboardGetResponse> {
+    const { 'X-Device-Display-ID': xDeviceDisplayID } = params ?? {}
+    return this._client.get(path`/devices/${deviceID}/clipboard`, { ...options, headers: buildHeaders([{...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 
   /**
@@ -36,20 +23,8 @@ export class Clipboard extends APIResource {
    * unsupported-feature error.
    */
   set(deviceID: string, params: ClipboardSetParams, options?: RequestOptions): APIPromise<void> {
-    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
-    return this._client.post(path`/devices/${deviceID}/clipboard`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          Accept: '*/*',
-          ...(xDeviceDisplayID?.toString() != null ?
-            { 'X-Device-Display-ID': xDeviceDisplayID?.toString() }
-          : undefined),
-        },
-        options?.headers,
-      ]),
-    });
+    const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params
+    return this._client.post(path`/devices/${deviceID}/clipboard`, { body, ...options, headers: buildHeaders([{Accept: '*/*', ...(xDeviceDisplayID?.toString() != null ? { 'X-Device-Display-ID': xDeviceDisplayID?.toString() } : undefined)}, options?.headers]) });
   }
 }
 
@@ -82,6 +57,6 @@ export declare namespace Clipboard {
   export {
     type ClipboardGetResponse as ClipboardGetResponse,
     type ClipboardGetParams as ClipboardGetParams,
-    type ClipboardSetParams as ClipboardSetParams,
+    type ClipboardSetParams as ClipboardSetParams
   };
 }
