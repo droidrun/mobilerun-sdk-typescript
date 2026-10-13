@@ -33,8 +33,8 @@ export class Executions extends APIResource {
   }
 
   /**
-   * Signals the worker to stop the execution between steps and marks it cancelled.
-   * Idempotent-ish: already-terminal executions return 409.
+   * Stops the execution between steps and marks it cancelled. Idempotent-ish:
+   * already-terminal executions return 409.
    */
   abort(executionID: string, options?: RequestOptions): APIPromise<ExecutionAbortResponse> {
     return this._client.post(path`/executions/${executionID}/abort`, options);
@@ -103,17 +103,16 @@ export namespace ExecutionRetrieveResponse {
     kind: 'live' | 'dry_run' | 'verification';
 
     /**
-     * Live progress read from step_progress; null for runs started before this
-     * feature.
+     * Live progress; null for runs started before this feature.
      */
     progress: Data.Progress | null;
 
     recordingDeviceId: string | null;
 
     /**
-     * Device-recording id (devices-api) for this execution, set once the worker starts
-     * a recording. Null when the flow has recording disabled, no device is bound, or
-     * the recording failed to start.
+     * Device recording id for this execution, set once recording starts. Null when the
+     * flow has recording disabled, no device is bound, or the recording failed to
+     * start.
      */
     recordingId: string | null;
 
@@ -124,8 +123,9 @@ export namespace ExecutionRetrieveResponse {
     recordings: Array<Data.Recording>;
 
     /**
-     * Screenshots captured by tasks.run/agent.run steps, ordered by seq. Image bytes
-     * are never returned here — fetch a fresh signed URL via GET
+     * Screenshots captured by tasks.run/agent.run steps and saved by scripts into the
+     * flow screenshots recording (source recording), ordered by seq. Image bytes are
+     * never returned here — fetch a fresh signed URL via GET
      * /executions/{id}/screenshots/{screenshotId}.
      */
     screenshots: Array<Data.Screenshot>;
@@ -141,10 +141,9 @@ export namespace ExecutionRetrieveResponse {
     /**
      * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
      * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
-     * step that opted into a verdict — null otherwise. Table-backed steps (current
-     * executions) also carry a `status` string (e.g. success/failed/stopped, see
-     * deriveStepStatus); it is optional and absent on legacy blob-only executions, so
-     * clients must not assume its presence.
+     * step that opted into a verdict — null otherwise. Steps of current executions
+     * also carry a `status` string (e.g. success/failed/stopped); it is optional and
+     * absent on older executions, so clients must not assume its presence.
      */
     result?: unknown;
   }
@@ -153,7 +152,7 @@ export namespace ExecutionRetrieveResponse {
     export interface Delivery {
       artifact: 'recording' | 'file' | 'screenshot';
 
-      destination: 'one_drive' | 'google_drive';
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       errorCode: string | null;
 
@@ -183,8 +182,7 @@ export namespace ExecutionRetrieveResponse {
     }
 
     /**
-     * Live progress read from step_progress; null for runs started before this
-     * feature.
+     * Live progress; null for runs started before this feature.
      */
     export interface Progress {
       currentIndex: number | null;
@@ -255,7 +253,7 @@ export namespace ExecutionRetrieveResponse {
 
       seq: number;
 
-      source: 'task' | 'agent';
+      source: 'task' | 'agent' | 'recording';
 
       stepIndex: number;
 
@@ -304,9 +302,9 @@ export namespace ExecutionListResponse {
     recordingDeviceId: string | null;
 
     /**
-     * Device-recording id (devices-api) for this execution, set once the worker starts
-     * a recording. Null when the flow has recording disabled, no device is bound, or
-     * the recording failed to start.
+     * Device recording id for this execution, set once recording starts. Null when the
+     * flow has recording disabled, no device is bound, or the recording failed to
+     * start.
      */
     recordingId: string | null;
 
@@ -327,10 +325,9 @@ export namespace ExecutionListResponse {
     /**
      * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
      * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
-     * step that opted into a verdict — null otherwise. Table-backed steps (current
-     * executions) also carry a `status` string (e.g. success/failed/stopped, see
-     * deriveStepStatus); it is optional and absent on legacy blob-only executions, so
-     * clients must not assume its presence.
+     * step that opted into a verdict — null otherwise. Steps of current executions
+     * also carry a `status` string (e.g. success/failed/stopped); it is optional and
+     * absent on older executions, so clients must not assume its presence.
      */
     result?: unknown;
   }
@@ -404,9 +401,9 @@ export namespace ExecutionAbortResponse {
     recordingDeviceId: string | null;
 
     /**
-     * Device-recording id (devices-api) for this execution, set once the worker starts
-     * a recording. Null when the flow has recording disabled, no device is bound, or
-     * the recording failed to start.
+     * Device recording id for this execution, set once recording starts. Null when the
+     * flow has recording disabled, no device is bound, or the recording failed to
+     * start.
      */
     recordingId: string | null;
 
@@ -421,10 +418,9 @@ export namespace ExecutionAbortResponse {
     /**
      * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
      * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
-     * step that opted into a verdict — null otherwise. Table-backed steps (current
-     * executions) also carry a `status` string (e.g. success/failed/stopped, see
-     * deriveStepStatus); it is optional and absent on legacy blob-only executions, so
-     * clients must not assume its presence.
+     * step that opted into a verdict — null otherwise. Steps of current executions
+     * also carry a `status` string (e.g. success/failed/stopped); it is optional and
+     * absent on older executions, so clients must not assume its presence.
      */
     result?: unknown;
   }

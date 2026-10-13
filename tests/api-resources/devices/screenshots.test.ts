@@ -7,10 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource notifications', () => {
+describe('resource screenshots', () => {
   // Mock server tests are disabled
-  test.skip('applyPreferencesPreset: only required params', async () => {
-    const responsePromise = client.notifications.applyPreferencesPreset({ preset: 'recommended' });
+  test.skip('list', async () => {
+    const responsePromise = client.devices.screenshots.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,13 +21,20 @@ describe('resource notifications', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('applyPreferencesPreset: required and optional params', async () => {
-    const response = await client.notifications.applyPreferencesPreset({ preset: 'recommended' });
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.screenshots.list(
+        'deviceId',
+        { cursor: 'cursor', limit: 1 },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
-  test.skip('catalog', async () => {
-    const responsePromise = client.notifications.catalog();
+  test.skip('delete: only required params', async () => {
+    const responsePromise = client.devices.screenshots.delete('screenshotId', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -38,8 +45,13 @@ describe('resource notifications', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('getPreferences', async () => {
-    const responsePromise = client.notifications.getPreferences();
+  test.skip('delete: required and optional params', async () => {
+    const response = await client.devices.screenshots.delete('screenshotId', { deviceId: 'deviceId' });
+  });
+
+  // Mock server tests are disabled
+  test.skip('capture', async () => {
+    const responsePromise = client.devices.screenshots.capture('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -50,10 +62,24 @@ describe('resource notifications', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('updatePreferences: only required params', async () => {
-    const responsePromise = client.notifications.updatePreferences({
-      mutedTypes: ['workflow.run.running', 'task.run.running'],
-    });
+  test.skip('capture: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.screenshots.capture(
+        'deviceId',
+        {
+          hideOverlay: true,
+          save: true,
+          'X-Device-Display-ID': 0,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('image: only required params', async () => {
+    const responsePromise = client.devices.screenshots.image('screenshotId', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -64,9 +90,7 @@ describe('resource notifications', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('updatePreferences: required and optional params', async () => {
-    const response = await client.notifications.updatePreferences({
-      mutedTypes: ['workflow.run.running', 'task.run.running'],
-    });
+  test.skip('image: required and optional params', async () => {
+    const response = await client.devices.screenshots.image('screenshotId', { deviceId: 'deviceId' });
   });
 });

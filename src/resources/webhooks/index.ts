@@ -23,7 +23,6 @@ export {
   type WebhookRetrieveResponse,
   type WebhookUpdateResponse,
   type WebhookListResponse,
-  type WebhookEventTypesResponse,
   type WebhookRotateSecretResponse,
   type WebhookTestDeliveryResponse,
   type WebhookCreateParams,

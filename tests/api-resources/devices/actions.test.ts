@@ -95,6 +95,7 @@ describe('resource actions', () => {
       endY: 0,
       startX: 0,
       startY: 0,
+      holdMs: 0,
       stealth: true,
       'X-Device-Display-ID': 0,
     });
