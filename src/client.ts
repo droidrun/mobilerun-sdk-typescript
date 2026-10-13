@@ -31,19 +31,6 @@ import {
   Apps,
 } from './resources/apps';
 import {
-  CarrierCreateParams,
-  CarrierCreateResponse,
-  CarrierDeleteResponse,
-  CarrierListParams,
-  CarrierListResponse,
-  CarrierLookupParams,
-  CarrierLookupResponse,
-  CarrierRetrieveResponse,
-  CarrierUpdateParams,
-  CarrierUpdateResponse,
-  Carriers,
-} from './resources/carriers';
-import {
   FileCancelPendingResponse,
   FileConfirmResponse,
   FileDeleteResponse,
@@ -57,44 +44,16 @@ import {
 } from './resources/files';
 import { ModelListResponse, Models } from './resources/models';
 import {
-  NotificationApplyPreferencesPresetParams,
-  NotificationApplyPreferencesPresetResponse,
-  NotificationCatalogResponse,
-  NotificationGetPreferencesResponse,
-  NotificationUpdatePreferencesParams,
-  NotificationUpdatePreferencesResponse,
-  Notifications,
-} from './resources/notifications';
-import {
-  ProfileCreateParams,
-  ProfileCreateResponse,
-  ProfileDeleteResponse,
-  ProfileListParams,
-  ProfileListResponse,
-  ProfileRetrieveResponse,
-  ProfileUpdateParams,
-  ProfileUpdateResponse,
-  Profiles,
-} from './resources/profiles';
-import {
   Proxies,
   ProxyCreateParams,
   ProxyCreateResponse,
   ProxyDeleteResponse,
   ProxyListParams,
   ProxyListResponse,
-  ProxyLookupParams,
-  ProxyLookupResponse,
   ProxyRetrieveResponse,
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
-import {
-  AppEventListParams,
-  AppEventListResponse,
-  AppEventRetrieveResponse,
-  AppEvents,
-} from './resources/app-events/app-events';
 import { Assistant } from './resources/assistant/assistant';
 import { Connect } from './resources/connect/connect';
 import {
@@ -153,13 +112,11 @@ import {
   NumberDeleteResponse,
   NumberListParams,
   NumberListResponse,
-  NumberPurposesResponse,
   NumberRetrieveResponse,
   NumberUpdateParams,
   NumberUpdateResponse,
   Numbers,
 } from './resources/numbers/numbers';
-import { Store, StoreCategoriesResponse } from './resources/store/store';
 import {
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
@@ -178,7 +135,6 @@ import {
 import {
   WebhookCreateParams,
   WebhookCreateResponse,
-  WebhookEventTypesResponse,
   WebhookListParams,
   WebhookListResponse,
   WebhookRetrieveResponse,
@@ -914,14 +870,9 @@ export class Mobilerun {
   static toFile = Uploads.toFile;
 
   apps: API.Apps = new API.Apps(this);
-  carriers: API.Carriers = new API.Carriers(this);
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
-  /**
-   * LLM Models
-   */
   models: API.Models = new API.Models(this);
-  profiles: API.Profiles = new API.Profiles(this);
   proxies: API.Proxies = new API.Proxies(this);
   connect: API.Connect = new API.Connect(this);
   /**
@@ -933,19 +884,14 @@ export class Mobilerun {
   mailboxes: API.Mailboxes = new API.Mailboxes(this);
   files: API.Files = new API.Files(this);
   assistant: API.Assistant = new API.Assistant(this);
-  appEvents: API.AppEvents = new API.AppEvents(this);
-  notifications: API.Notifications = new API.Notifications(this);
   messages: API.Messages = new API.Messages(this);
   numbers: API.Numbers = new API.Numbers(this);
-  store: API.Store = new API.Store(this);
 }
 
 Mobilerun.Apps = Apps;
-Mobilerun.Carriers = Carriers;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
 Mobilerun.Models = Models;
-Mobilerun.Profiles = Profiles;
 Mobilerun.Proxies = Proxies;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
@@ -954,11 +900,8 @@ Mobilerun.Webhooks = Webhooks;
 Mobilerun.Mailboxes = Mailboxes;
 Mobilerun.Files = Files;
 Mobilerun.Assistant = Assistant;
-Mobilerun.AppEvents = AppEvents;
-Mobilerun.Notifications = Notifications;
 Mobilerun.Messages = Messages;
 Mobilerun.Numbers = Numbers;
-Mobilerun.Store = Store;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
@@ -975,20 +918,6 @@ export declare namespace Mobilerun {
     type AppStorageUsageResponse as AppStorageUsageResponse,
     type AppListParams as AppListParams,
     type AppCreateSignedUploadURLParams as AppCreateSignedUploadURLParams,
-  };
-
-  export {
-    Carriers as Carriers,
-    type CarrierCreateResponse as CarrierCreateResponse,
-    type CarrierRetrieveResponse as CarrierRetrieveResponse,
-    type CarrierUpdateResponse as CarrierUpdateResponse,
-    type CarrierListResponse as CarrierListResponse,
-    type CarrierDeleteResponse as CarrierDeleteResponse,
-    type CarrierLookupResponse as CarrierLookupResponse,
-    type CarrierCreateParams as CarrierCreateParams,
-    type CarrierUpdateParams as CarrierUpdateParams,
-    type CarrierListParams as CarrierListParams,
-    type CarrierLookupParams as CarrierLookupParams,
   };
 
   export {
@@ -1019,29 +948,15 @@ export declare namespace Mobilerun {
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
   export {
-    Profiles as Profiles,
-    type ProfileCreateResponse as ProfileCreateResponse,
-    type ProfileRetrieveResponse as ProfileRetrieveResponse,
-    type ProfileUpdateResponse as ProfileUpdateResponse,
-    type ProfileListResponse as ProfileListResponse,
-    type ProfileDeleteResponse as ProfileDeleteResponse,
-    type ProfileCreateParams as ProfileCreateParams,
-    type ProfileUpdateParams as ProfileUpdateParams,
-    type ProfileListParams as ProfileListParams,
-  };
-
-  export {
     Proxies as Proxies,
     type ProxyCreateResponse as ProxyCreateResponse,
     type ProxyRetrieveResponse as ProxyRetrieveResponse,
     type ProxyUpdateResponse as ProxyUpdateResponse,
     type ProxyListResponse as ProxyListResponse,
     type ProxyDeleteResponse as ProxyDeleteResponse,
-    type ProxyLookupResponse as ProxyLookupResponse,
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
-    type ProxyLookupParams as ProxyLookupParams,
   };
 
   export { Connect as Connect };
@@ -1070,7 +985,6 @@ export declare namespace Mobilerun {
     type WebhookRetrieveResponse as WebhookRetrieveResponse,
     type WebhookUpdateResponse as WebhookUpdateResponse,
     type WebhookListResponse as WebhookListResponse,
-    type WebhookEventTypesResponse as WebhookEventTypesResponse,
     type WebhookRotateSecretResponse as WebhookRotateSecretResponse,
     type WebhookTestDeliveryResponse as WebhookTestDeliveryResponse,
     type WebhookCreateParams as WebhookCreateParams,
@@ -1113,23 +1027,6 @@ export declare namespace Mobilerun {
   export { Assistant as Assistant };
 
   export {
-    AppEvents as AppEvents,
-    type AppEventRetrieveResponse as AppEventRetrieveResponse,
-    type AppEventListResponse as AppEventListResponse,
-    type AppEventListParams as AppEventListParams,
-  };
-
-  export {
-    Notifications as Notifications,
-    type NotificationApplyPreferencesPresetResponse as NotificationApplyPreferencesPresetResponse,
-    type NotificationCatalogResponse as NotificationCatalogResponse,
-    type NotificationGetPreferencesResponse as NotificationGetPreferencesResponse,
-    type NotificationUpdatePreferencesResponse as NotificationUpdatePreferencesResponse,
-    type NotificationApplyPreferencesPresetParams as NotificationApplyPreferencesPresetParams,
-    type NotificationUpdatePreferencesParams as NotificationUpdatePreferencesParams,
-  };
-
-  export {
     Messages as Messages,
     type MessageRetrieveResponse as MessageRetrieveResponse,
     type MessageListResponse as MessageListResponse,
@@ -1145,14 +1042,11 @@ export declare namespace Mobilerun {
     type NumberDeleteResponse as NumberDeleteResponse,
     type NumberCapacityResponse as NumberCapacityResponse,
     type NumberCountriesResponse as NumberCountriesResponse,
-    type NumberPurposesResponse as NumberPurposesResponse,
     type NumberCreateParams as NumberCreateParams,
     type NumberUpdateParams as NumberUpdateParams,
     type NumberListParams as NumberListParams,
     type NumberCapacityParams as NumberCapacityParams,
   };
-
-  export { Store as Store, type StoreCategoriesResponse as StoreCategoriesResponse };
 
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;

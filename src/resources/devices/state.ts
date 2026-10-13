@@ -8,8 +8,11 @@ import { path } from '../../internal/utils/path';
 
 export class State extends APIResource {
   /**
-   * Captures the device screen and returns it as a PNG image. An optional
-   * hideOverlay query parameter excludes the accessibility overlay from the capture.
+   * Deprecated: use POST /devices/{deviceId}/screenshots. Captures the device screen
+   * and returns it as a PNG image. An optional hideOverlay query parameter excludes
+   * the accessibility overlay from the capture.
+   *
+   * @deprecated
    */
   screenshot(
     deviceID: string,
@@ -213,6 +216,13 @@ export interface StateScreenshotParams {
    * Query param
    */
   hideOverlay?: boolean;
+
+  /**
+   * Query param: Store the screenshot as device media: in the owner's active
+   * recording, or standalone for 7 days. Without save=true nothing is stored. The
+   * PNG response is unchanged; X-Screenshot-Saved reports whether it was stored.
+   */
+  save?: boolean;
 
   /**
    * Header param

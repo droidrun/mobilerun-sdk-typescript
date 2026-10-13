@@ -57,8 +57,8 @@ export class Users extends APIResource {
   /**
    * Returns the connection history recorded for this user, one item per connection
    * (aggregated across the connection's lifetime). Supports filtering on every
-   * property plus ordering and pagination. Returns 503 when the connection-insights
-   * backend is disabled or unreachable.
+   * property plus ordering and pagination. Returns 503 when connection history is
+   * temporarily unavailable.
    */
   listConnections(
     id: string,
@@ -247,7 +247,7 @@ export namespace UserListConnectionsResponse {
     protocol: 'tcp' | 'udp' | 'unknown';
 
     /**
-     * Upstream provider that served the connection.
+     * Identifier of the upstream provider that served the connection.
      */
     provider: string;
 
@@ -472,7 +472,7 @@ export interface UserListConnectionsParams {
   protocol?: 'tcp' | 'udp' | 'unknown';
 
   /**
-   * Filter to connections served by this upstream provider.
+   * Filter to connections served by this upstream provider identifier.
    */
   provider?: string;
 
