@@ -68,6 +68,7 @@ describe('resource keyboard', () => {
       clear: true,
       completionMode: 'accepted',
       errorRate: 0,
+      humanize: true,
       stealth: true,
       wpm: 0,
       'X-Device-Display-ID': 0,

@@ -77,9 +77,9 @@ export class Actions extends APIResource {
 
   /**
    * Swipes from a start coordinate to an end coordinate over the given duration in
-   * milliseconds. An optional stealth flag applies human-like jitter and curved
+   * milliseconds. An optional humanize flag applies human-like jitter and curved
    * paths on devices that support it. With holdMs > 0 the request returns 422 when
-   * combined with stealth, when duration + holdMs exceeds 9000 ms, or on devices
+   * combined with humanize, when duration + holdMs exceeds 9000 ms, or on devices
    * that do not support it.
    */
   swipe(deviceID: string, params: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
@@ -100,7 +100,7 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Taps the device screen at the given x/y coordinates. An optional stealth flag
+   * Taps the device screen at the given x/y coordinates. An optional humanize flag
    * routes the tap through human-like input on devices that support it.
    */
   tap(deviceID: string, params: ActionTapParams, options?: RequestOptions): APIPromise<void> {
@@ -192,7 +192,14 @@ export interface ActionSwipeParams {
   holdMs?: number;
 
   /**
-   * Body param
+   * Body param: Request human-like input where supported by the device. Defaults to
+   * false.
+   */
+  humanize?: boolean;
+
+  /**
+   * @deprecated Body param: Deprecated: use humanize. Both names must agree when
+   * supplied together.
    */
   stealth?: boolean;
 
@@ -214,7 +221,14 @@ export interface ActionTapParams {
   y: number;
 
   /**
-   * Body param
+   * Body param: Request human-like input where supported by the device. Defaults to
+   * false.
+   */
+  humanize?: boolean;
+
+  /**
+   * @deprecated Body param: Deprecated: use humanize. Both names must agree when
+   * supplied together.
    */
   stealth?: boolean;
 

@@ -114,12 +114,19 @@ export interface KeyboardWriteParams {
   errorRate?: number;
 
   /**
-   * Body param
+   * Body param: Request human-like input where supported by the device. Defaults to
+   * false.
+   */
+  humanize?: boolean;
+
+  /**
+   * @deprecated Body param: Deprecated: use humanize. Both names must agree when
+   * supplied together.
    */
   stealth?: boolean;
 
   /**
-   * Body param: Words per minute for stealth typing. 0 uses the device default.
+   * Body param: Words per minute for humanized typing. 0 uses the device default.
    */
   wpm?: number;
 

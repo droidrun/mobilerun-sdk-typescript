@@ -6,11 +6,9 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Models extends APIResource {
   /**
-   * The single model-list endpoint for all consumers. Served unauthenticated by the
-   * gateway: at the edge it sits behind api-key rate limiting and cloud-auth (so
-   * callers use an API key); in-cluster callers reach it directly. Takes no headers
-   * and needs no service key. Team-scoped when PLATFORM_CATALOG_TEAM_ID is set;
-   * token prices are never included.
+   * Returns the available LLM models with their identifiers, providers, and optional
+   * display metadata. Requires only your normal API authentication. Token prices are
+   * not included.
    */
   list(options?: RequestOptions): APIPromise<ModelListResponse> {
     return this._client.get('/models', options);
@@ -40,8 +38,8 @@ export namespace ModelListResponse {
     order?: number;
 
     /**
-     * Model pickers this model is offered in, from LiteLLM model_info.ui_surfaces.
-     * Omitted when unset, which means every picker.
+     * Model pickers in which this model is available. When omitted, the model is
+     * available in every picker.
      */
     surfaces?: Array<'assistant' | 'tasks'>;
   }

@@ -96,6 +96,7 @@ describe('resource actions', () => {
       startX: 0,
       startY: 0,
       holdMs: 0,
+      humanize: true,
       stealth: true,
       'X-Device-Display-ID': 0,
     });
@@ -118,6 +119,7 @@ describe('resource actions', () => {
     const response = await client.devices.actions.tap('deviceId', {
       x: 0,
       y: 0,
+      humanize: true,
       stealth: true,
       'X-Device-Display-ID': 0,
     });

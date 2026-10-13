@@ -890,8 +890,8 @@ export interface DeviceListParams {
   orderByDirection?: 'asc' | 'desc';
 
   /**
-   * Filter by tenant owner UUIDs. Comma-separated or repeated parameters. Only
-   * allowed for service-key callers without X-User-ID.
+   * Filter by owner IDs. Comma-separated or repeated parameters. Restricted to
+   * platform administrators.
    */
   ownerId?: Array<string> | null;
 
