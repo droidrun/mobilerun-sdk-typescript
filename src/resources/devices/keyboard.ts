@@ -119,7 +119,7 @@ export interface KeyboardWriteParams {
   stealth?: boolean;
 
   /**
-   * Body param: Words per minute for stealth typing. 0 uses portal default.
+   * Body param: Words per minute for stealth typing. 0 uses the device default.
    */
   wpm?: number;
 

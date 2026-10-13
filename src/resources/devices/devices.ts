@@ -77,6 +77,8 @@ import {
   RecordingDeleteParams,
   RecordingListParams,
   RecordingListResponse,
+  RecordingScreenshotsParams,
+  RecordingScreenshotsResponse,
   RecordingStartParams,
   RecordingStartResponse,
   RecordingStatusParams,
@@ -87,6 +89,16 @@ import {
   RecordingVideoParams,
   Recordings,
 } from './recordings';
+import * as ScreenshotsAPI from './screenshots';
+import {
+  ScreenshotCaptureParams,
+  ScreenshotCaptureResponse,
+  ScreenshotDeleteParams,
+  ScreenshotImageParams,
+  ScreenshotListParams,
+  ScreenshotListResponse,
+  Screenshots,
+} from './screenshots';
 import * as StateAPI from './state';
 import {
   A11YNode,
@@ -142,6 +154,7 @@ export class Devices extends APIResource {
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
   profile: ProfileAPI.Profile = new ProfileAPI.Profile(this._client);
   proxy: ProxyAPI.Proxy = new ProxyAPI.Proxy(this._client);
+  screenshots: ScreenshotsAPI.Screenshots = new ScreenshotsAPI.Screenshots(this._client);
   state: StateAPI.State = new StateAPI.State(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
   clipboard: ClipboardAPI.Clipboard = new ClipboardAPI.Clipboard(this._client);
@@ -180,6 +193,10 @@ export class Devices extends APIResource {
 
   /**
    * Returns a paginated list of the user's devices along with pagination metadata.
+   * By default every device except terminated and unknown-state ones is listed,
+   * including stopped and maintenance devices; narrow with e.g. `state=ready` or
+   * `state=stopped,maintenance`, and pass `state=terminated` or `state=unknown` to
+   * see those.
    */
   list(
     query: DeviceListParams | null | undefined = {},
@@ -259,11 +276,8 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Returns the set of capabilities supported by this device. For a legacy device
-   * this reflects the live instance's actual tools rather than its static type; for
-   * a core-managed device it is resolved from provider/pool configuration without
-   * guaranteeing a live instance. Used to determine which tools and features are
-   * available for the device.
+   * Returns the set of capabilities supported by this device. Used to determine
+   * which tools and features are available for the device.
    */
   retrieveCapabilities(
     deviceID: string,
@@ -308,9 +322,9 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Terminates the device and releases its resources. Termination can be scheduled
-   * for a future time or chained from a previous device via the request body, in
-   * which case a service key is required.
+   * Terminates the device and releases its resources. The optional `terminateAt` and
+   * `previousDeviceId` body fields are not available to API-key callers; requests
+   * that set them are rejected with 401.
    */
   terminate(
     deviceID: string,
@@ -849,21 +863,37 @@ export interface DeviceListParams {
   country?: string;
 
   /**
+   * Include devices created at or after this RFC3339 timestamp.
+   */
+  createdAfter?: string;
+
+  /**
+   * Include devices created before this RFC3339 timestamp (exclusive). Must be later
+   * than createdAfter when both are set.
+   */
+  createdBefore?: string;
+
+  /**
    * Filter to devices created by this user id. Mutually exclusive with mine.
    */
   createdBy?: string;
 
   /**
-   * When true, only return devices created by the calling user (resolved from
-   * X-User-ID, never a client-supplied id).
+   * When true, only return devices created by the authenticated caller.
    */
   mine?: boolean;
 
   name?: string;
 
-  orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt';
+  orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt' | 'gridPosition';
 
   orderByDirection?: 'asc' | 'desc';
+
+  /**
+   * Filter by tenant owner UUIDs. Comma-separated or repeated parameters. Only
+   * allowed for service-key callers without X-User-ID.
+   */
+  ownerId?: Array<string> | null;
 
   page?: number;
 
@@ -877,6 +907,11 @@ export interface DeviceListParams {
 
   providerId?: string;
 
+  /**
+   * Filter by current device state. Comma-separated (state=ready,stopped). Defaults
+   * to every state except terminated and unknown, so stopped and maintenance devices
+   * are listed; pass state=terminated or state=unknown to see those.
+   */
   state?: Array<
     | 'creating'
     | 'assigned'
@@ -941,6 +976,7 @@ Devices.Location = Location;
 Devices.Packages = Packages;
 Devices.Profile = Profile;
 Devices.Proxy = ProxyAPIProxy;
+Devices.Screenshots = Screenshots;
 Devices.State = State;
 Devices.Tasks = Tasks;
 Devices.Clipboard = Clipboard;
@@ -1050,6 +1086,16 @@ export declare namespace Devices {
   };
 
   export {
+    Screenshots as Screenshots,
+    type ScreenshotListResponse as ScreenshotListResponse,
+    type ScreenshotCaptureResponse as ScreenshotCaptureResponse,
+    type ScreenshotListParams as ScreenshotListParams,
+    type ScreenshotDeleteParams as ScreenshotDeleteParams,
+    type ScreenshotCaptureParams as ScreenshotCaptureParams,
+    type ScreenshotImageParams as ScreenshotImageParams,
+  };
+
+  export {
     State as State,
     type A11YNode as A11YNode,
     type StateScreenshotResponse as StateScreenshotResponse,
@@ -1110,11 +1156,13 @@ export declare namespace Devices {
   export {
     Recordings as Recordings,
     type RecordingListResponse as RecordingListResponse,
+    type RecordingScreenshotsResponse as RecordingScreenshotsResponse,
     type RecordingStartResponse as RecordingStartResponse,
     type RecordingStatusResponse as RecordingStatusResponse,
     type RecordingStopResponse as RecordingStopResponse,
     type RecordingListParams as RecordingListParams,
     type RecordingDeleteParams as RecordingDeleteParams,
+    type RecordingScreenshotsParams as RecordingScreenshotsParams,
     type RecordingStartParams as RecordingStartParams,
     type RecordingStatusParams as RecordingStatusParams,
     type RecordingStopParams as RecordingStopParams,

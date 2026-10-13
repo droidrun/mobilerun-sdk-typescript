@@ -141,7 +141,7 @@ export namespace EventDryRunResponse {
         status: 'healthy' | 'failing' | 'blocked';
 
         /**
-         * Template-resolver semantics this flow runs under (MVA-23). 1 = legacy
+         * Template-resolver semantics this flow runs under. 1 = legacy
          * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
          * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
          * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
@@ -161,8 +161,11 @@ export namespace EventDryRunResponse {
 
       export namespace Flow {
         export interface Delivery {
-          destination: 'one_drive' | 'google_drive';
+          destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
+          /**
+           * not allowed when destination is mobilerun
+           */
           folder?: string;
 
           recording?: Delivery.Recording;

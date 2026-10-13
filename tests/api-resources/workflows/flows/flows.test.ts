@@ -54,7 +54,7 @@ describe('resource flows', () => {
       cooldownScope: 'flow',
       cooldownSeconds: 0,
       delivery: {
-        destination: 'one_drive',
+        destination: 'mobilerun',
         folder: 'x',
         recording: { filename: 'x' },
         screenshots: {},
@@ -107,7 +107,7 @@ describe('resource flows', () => {
           cooldownScope: 'flow',
           cooldownSeconds: 0,
           delivery: {
-            destination: 'one_drive',
+            destination: 'mobilerun',
             folder: 'x',
             recording: { filename: 'x' },
             screenshots: {},
@@ -301,7 +301,10 @@ describe('resource flows', () => {
     await expect(
       client.workflows.flows.run(
         '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        { payload: { foo: 'bar' } },
+        {
+          captureScreenshots: true,
+          payload: { foo: 'bar' },
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
@@ -386,7 +389,7 @@ describe('resource flows', () => {
       cooldownScope: 'flow',
       cooldownSeconds: 0,
       delivery: {
-        destination: 'one_drive',
+        destination: 'mobilerun',
         folder: 'x',
         recording: { filename: 'x' },
         screenshots: {},

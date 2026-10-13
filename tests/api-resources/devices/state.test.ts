@@ -26,7 +26,11 @@ describe('resource state', () => {
     await expect(
       client.devices.state.screenshot(
         'deviceId',
-        { hideOverlay: true, 'X-Device-Display-ID': 0 },
+        {
+          hideOverlay: true,
+          save: true,
+          'X-Device-Display-ID': 0,
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);

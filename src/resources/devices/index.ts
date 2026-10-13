@@ -109,17 +109,28 @@ export {
 export {
   Recordings,
   type RecordingListResponse,
+  type RecordingScreenshotsResponse,
   type RecordingStartResponse,
   type RecordingStatusResponse,
   type RecordingStopResponse,
   type RecordingListParams,
   type RecordingDeleteParams,
+  type RecordingScreenshotsParams,
   type RecordingStartParams,
   type RecordingStatusParams,
   type RecordingStopParams,
   type RecordingTrajectoryParams,
   type RecordingVideoParams,
 } from './recordings';
+export {
+  Screenshots,
+  type ScreenshotListResponse,
+  type ScreenshotCaptureResponse,
+  type ScreenshotListParams,
+  type ScreenshotDeleteParams,
+  type ScreenshotCaptureParams,
+  type ScreenshotImageParams,
+} from './screenshots';
 export {
   State,
   type A11YNode,
