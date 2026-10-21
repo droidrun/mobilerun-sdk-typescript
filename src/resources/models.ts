@@ -4,12 +4,11 @@ import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
-/**
- * LLM Models
- */
 export class Models extends APIResource {
   /**
-   * List available LLM models.
+   * Returns the available LLM models with their identifiers, providers, and optional
+   * display metadata. Requires only your normal API authentication. Token prices are
+   * not included.
    */
   list(options?: RequestOptions): APIPromise<ModelListResponse> {
     return this._client.get('/models', options);
@@ -17,38 +16,32 @@ export class Models extends APIResource {
 }
 
 export interface ModelListResponse {
-  /**
-   * Available models
-   */
   data: Array<ModelListResponse.Data>;
 
-  /**
-   * Object type
-   */
-  object?: string;
+  object: 'list';
 }
 
 export namespace ModelListResponse {
   export interface Data {
-    /**
-     * Model identifier
-     */
     id: string;
 
-    /**
-     * Model owner/provider
-     */
+    created: number;
+
+    object: 'model';
+
     owned_by: string;
 
-    /**
-     * Creation timestamp
-     */
-    created?: number;
+    group?: 'recommended' | 'fast' | 'more';
+
+    label?: string;
+
+    order?: number;
 
     /**
-     * Object type
+     * Model pickers in which this model is available. When omitted, the model is
+     * available in every picker.
      */
-    object?: string;
+    surfaces?: Array<'assistant' | 'tasks'>;
   }
 }
 

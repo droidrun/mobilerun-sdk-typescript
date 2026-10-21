@@ -7,13 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource mediaSessions', () => {
+describe('resource screenshots', () => {
   // Mock server tests are disabled
-  test.skip('create: only required params', async () => {
-    const responsePromise = client.devices.mediaSessions.create('deviceId', {
-      camera: true,
-      microphone: true,
-    });
+  test.skip('list', async () => {
+    const responsePromise = client.devices.screenshots.list('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,19 +21,20 @@ describe('resource mediaSessions', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('create: required and optional params', async () => {
-    const response = await client.devices.mediaSessions.create('deviceId', {
-      camera: true,
-      microphone: true,
-    });
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.screenshots.list(
+        'deviceId',
+        { cursor: 'cursor', limit: 1 },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
-    const responsePromise = client.devices.mediaSessions.delete('sessionId', {
-      deviceId: 'deviceId',
-      'X-Media-Control-Token': 'X-Media-Control-Token',
-    });
+    const responsePromise = client.devices.screenshots.delete('screenshotId', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,18 +46,12 @@ describe('resource mediaSessions', () => {
 
   // Mock server tests are disabled
   test.skip('delete: required and optional params', async () => {
-    const response = await client.devices.mediaSessions.delete('sessionId', {
-      deviceId: 'deviceId',
-      'X-Media-Control-Token': 'X-Media-Control-Token',
-    });
+    const response = await client.devices.screenshots.delete('screenshotId', { deviceId: 'deviceId' });
   });
 
   // Mock server tests are disabled
-  test.skip('activate: only required params', async () => {
-    const responsePromise = client.devices.mediaSessions.activate('sessionId', {
-      deviceId: 'deviceId',
-      'X-Media-Control-Token': 'X-Media-Control-Token',
-    });
+  test.skip('capture', async () => {
+    const responsePromise = client.devices.screenshots.capture('deviceId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -70,16 +62,24 @@ describe('resource mediaSessions', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('activate: required and optional params', async () => {
-    const response = await client.devices.mediaSessions.activate('sessionId', {
-      deviceId: 'deviceId',
-      'X-Media-Control-Token': 'X-Media-Control-Token',
-    });
+  test.skip('capture: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.screenshots.capture(
+        'deviceId',
+        {
+          hideOverlay: true,
+          save: true,
+          'X-Device-Display-ID': 0,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
-  test.skip('retrieveCurrent', async () => {
-    const responsePromise = client.devices.mediaSessions.retrieveCurrent('deviceId');
+  test.skip('image: only required params', async () => {
+    const responsePromise = client.devices.screenshots.image('screenshotId', { deviceId: 'deviceId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -87,5 +87,10 @@ describe('resource mediaSessions', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('image: required and optional params', async () => {
+    const response = await client.devices.screenshots.image('screenshotId', { deviceId: 'deviceId' });
   });
 });

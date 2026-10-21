@@ -54,7 +54,7 @@ describe('resource flows', () => {
       cooldownScope: 'flow',
       cooldownSeconds: 0,
       delivery: {
-        destination: 'one_drive',
+        destination: 'mobilerun',
         folder: 'x',
         recording: { filename: 'x' },
         screenshots: {},
@@ -107,7 +107,7 @@ describe('resource flows', () => {
           cooldownScope: 'flow',
           cooldownSeconds: 0,
           delivery: {
-            destination: 'one_drive',
+            destination: 'mobilerun',
             folder: 'x',
             recording: { filename: 'x' },
             screenshots: {},
@@ -150,6 +150,7 @@ describe('resource flows', () => {
     await expect(
       client.workflows.flows.list(
         {
+          agentId: 'unassigned',
           createdBy: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
           enabled: 'true',
           mine: 'true',
@@ -209,6 +210,14 @@ describe('resource flows', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('capacity: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.workflows.flows.capacity({ agentId: 'unassigned' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -301,7 +310,10 @@ describe('resource flows', () => {
     await expect(
       client.workflows.flows.run(
         '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-        { payload: { foo: 'bar' } },
+        {
+          captureScreenshots: true,
+          payload: { foo: 'bar' },
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
@@ -386,7 +398,7 @@ describe('resource flows', () => {
       cooldownScope: 'flow',
       cooldownSeconds: 0,
       delivery: {
-        destination: 'one_drive',
+        destination: 'mobilerun',
         folder: 'x',
         recording: { filename: 'x' },
         screenshots: {},

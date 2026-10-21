@@ -72,7 +72,7 @@ export class Triggers extends APIResource {
    * Payload validation:
    *
    * - If the trigger has a `customPayloadSchema`, the payload is validated against
-   *   it (JSON Schema via AJV).
+   *   it (JSON Schema).
    * - If no schema is configured, the payload only needs to be a JSON object — any
    *   keys and values are accepted.
    *
@@ -81,13 +81,11 @@ export class Triggers extends APIResource {
    *
    * Supports an optional `Idempotency-Key` header (1-255 printable ASCII
    * characters), which maps to the derived `invocationId` used for fan-out
-   * deduplication (the deprecated `invocationId` body field wins when both are
-   * supplied, and a mismatch between them is logged). The payload is bound to the
-   * key on the first accepted fire, before fan-out. A repeat with the same key and
-   * an identical payload returns 202 with `Idempotent-Replayed: true`
-   * (`deduplicated: true` when flows were skipped; `enqueuedCount` counts only
-   * executions enqueued by that call); a changed payload under the same key returns
-   * 422 `idempotency_key_reused`.
+   * deduplication. The payload is bound to the key on the first accepted fire,
+   * before fan-out. A repeat with the same key and an identical payload returns 202
+   * with `Idempotent-Replayed: true` (`deduplicated: true` when flows were skipped;
+   * `enqueuedCount` counts only executions enqueued by that call); a changed payload
+   * under the same key returns 422 `idempotency_key_reused`.
    */
   fire(
     triggerID: string,
@@ -419,8 +417,8 @@ export interface TriggerDeleteResponse {
 export interface TriggerFireResponse {
   /**
    * True when at least one attached flow was skipped because it already had an
-   * execution for this (flow, invocationId). Only ever true when the client supplied
-   * invocationId.
+   * execution for this (flow, invocationId). Only ever true when the request carried
+   * an `Idempotency-Key`.
    */
   deduplicated: boolean;
 
@@ -432,9 +430,8 @@ export interface TriggerFireResponse {
   enqueuedCount: number;
 
   /**
-   * Unique ID for this fire invocation (echoes the client-supplied invocationId, or
-   * a generated one). Job IDs in the execution queue are derived from it (one per
-   * enqueued flow).
+   * Unique ID for this fire invocation (derived from the `Idempotency-Key` header
+   * when one is sent, otherwise generated).
    */
   invocationId: string;
 }

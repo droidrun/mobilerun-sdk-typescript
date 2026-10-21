@@ -27,9 +27,9 @@ export class Mailboxes extends APIResource {
 
   /**
    * Creates a mailbox on the default domain or a connected custom domain. An
-   * optional `localPart` selects the address. Replaying the same Idempotency-Key
-   * (or, during migration, the deprecated `clientRequestId` body field) and payload
-   * returns the original mailbox. Poll the mailbox when a 202 response does not yet
+   * optional `localPart` selects the address. Replaying the same Idempotency-Key and
+   * payload returns the original mailbox. Fresh requests and replays return 202 with
+   * the current mailbox state. Poll the mailbox when the response does not yet
    * include a checkout URL.
    *
    * @example
@@ -121,7 +121,8 @@ export class Mailboxes extends APIResource {
   }
 
   /**
-   * Removes only this mailbox link. The agent Composio connection stays in place.
+   * Removes only this mailbox link. The Gmail connection used by your agents stays
+   * in place.
    *
    * @example
    * ```ts

@@ -79,16 +79,22 @@ export class Apps extends APIResource {
 
   /**
    * Requests an app install on the device. The request body must supply exactly one
-   * of an Android packageName or an iOS bundleId; optional country and versionCode
-   * select an exact regional uploaded Android version, and protected packages are
-   * rejected. background (default false) selects the response contract: false
-   * installs inline and returns the outcome directly (200 on success, an error
-   * status on failure); true accepts the request and runs the download + install in
-   * the background, returning 202 immediately — poll list-app-installs for the
-   * backend's view of that attempt's status. Refuses with 409 once 2 other installs
-   * are already running on the device, in either mode; a repeat request for an app
-   * that already has an install running is also refused with 409 rather than
-   * superseding it — retry once that attempt reaches a terminal state.
+   * of an Android packageName, an iOS bundleId, or an https apkUrl: the device
+   * downloads and installs the APK itself; supported on Android cloud phones with
+   * the on-device installer, otherwise 409 APP_URL_INSTALL_UNSUPPORTED. URL installs
+   * are not stored in your app library, protected-package checks do not apply, and
+   * devices-api never logs the URL — your own tooling may. For packageName installs,
+   * optional country and versionCode select an exact regional uploaded Android
+   * version, and protected packages are rejected. background (default false) selects
+   * the response contract: false installs inline and returns the outcome directly
+   * (200 on success, an error status on failure); true accepts the request and runs
+   * the download + install in the background, returning 202 immediately — poll
+   * list-app-installs for the backend's view of that attempt's status. Refuses with
+   * 409 once 2 other installs are already running on the device, in either mode; a
+   * repeat request for an app that already has an install running is also refused
+   * with 409 rather than superseding it — retry once that attempt reaches a terminal
+   * state. Synchronous failures report APP_DOWNLOAD_FAILED (502) when the app file
+   * cannot be downloaded or APP_INSTALL_TIMEOUT (504) when the install times out.
    */
   install(deviceID: string, params: AppInstallParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -215,6 +221,18 @@ export namespace AppListResponse {
     versionCode: number;
 
     versionName: string;
+
+    availableUpdate?: AppListResponseItem.AvailableUpdate;
+  }
+
+  export namespace AppListResponseItem {
+    export interface AvailableUpdate {
+      country: string;
+
+      versionCode: number;
+
+      versionName: string;
+    }
   }
 }
 
@@ -266,6 +284,12 @@ export interface AppListParams {
    * Query param
    */
   includeSystemApps?: boolean;
+
+  /**
+   * Query param: Resolve availableUpdate for Android user apps (one library lookup
+   * per app). Off by default.
+   */
+  includeUpdates?: boolean;
 
   /**
    * Header param
