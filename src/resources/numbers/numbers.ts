@@ -164,6 +164,9 @@ export namespace NumberRetrieveResponse {
      */
     canSend: boolean;
 
+    /**
+     * @deprecated Deprecated: use `lineCapabilities`
+     */
     capabilities: Array<'sms' | 'voice'> | null;
 
     checkoutUrl: string | null;
@@ -182,6 +185,12 @@ export namespace NumberRetrieveResponse {
     failureReason: 'out_of_stock' | 'unknown' | null;
 
     label: string | null;
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    lineCapabilities: Data.LineCapabilities;
 
     phoneNumber: string | null;
 
@@ -209,6 +218,28 @@ export namespace NumberRetrieveResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    export interface LineCapabilities {
+      sms: LineCapabilities.SMS;
+    }
+
+    export namespace LineCapabilities {
+      export interface SMS {
+        /**
+         * This line can receive on this channel.
+         */
+        inbound: boolean;
+
+        /**
+         * This line can send on this channel.
+         */
+        outbound: boolean;
+      }
     }
   }
 }
@@ -238,6 +269,9 @@ export namespace NumberUpdateResponse {
      */
     canSend: boolean;
 
+    /**
+     * @deprecated Deprecated: use `lineCapabilities`
+     */
     capabilities: Array<'sms' | 'voice'> | null;
 
     checkoutUrl: string | null;
@@ -256,6 +290,12 @@ export namespace NumberUpdateResponse {
     failureReason: 'out_of_stock' | 'unknown' | null;
 
     label: string | null;
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    lineCapabilities: Data.LineCapabilities;
 
     phoneNumber: string | null;
 
@@ -283,6 +323,28 @@ export namespace NumberUpdateResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    export interface LineCapabilities {
+      sms: LineCapabilities.SMS;
+    }
+
+    export namespace LineCapabilities {
+      export interface SMS {
+        /**
+         * This line can receive on this channel.
+         */
+        inbound: boolean;
+
+        /**
+         * This line can send on this channel.
+         */
+        outbound: boolean;
+      }
     }
   }
 }
@@ -314,6 +376,9 @@ export namespace NumberListResponse {
      */
     canSend: boolean;
 
+    /**
+     * @deprecated Deprecated: use `lineCapabilities`
+     */
     capabilities: Array<'sms' | 'voice'> | null;
 
     checkoutUrl: string | null;
@@ -332,6 +397,12 @@ export namespace NumberListResponse {
     failureReason: 'out_of_stock' | 'unknown' | null;
 
     label: string | null;
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    lineCapabilities: Item.LineCapabilities;
 
     phoneNumber: string | null;
 
@@ -359,6 +430,28 @@ export namespace NumberListResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    export interface LineCapabilities {
+      sms: LineCapabilities.SMS;
+    }
+
+    export namespace LineCapabilities {
+      export interface SMS {
+        /**
+         * This line can receive on this channel.
+         */
+        inbound: boolean;
+
+        /**
+         * This line can send on this channel.
+         */
+        outbound: boolean;
+      }
     }
   }
 }
@@ -388,6 +481,9 @@ export namespace NumberDeleteResponse {
      */
     canSend: boolean;
 
+    /**
+     * @deprecated Deprecated: use `lineCapabilities`
+     */
     capabilities: Array<'sms' | 'voice'> | null;
 
     checkoutUrl: string | null;
@@ -406,6 +502,12 @@ export namespace NumberDeleteResponse {
     failureReason: 'out_of_stock' | 'unknown' | null;
 
     label: string | null;
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    lineCapabilities: Data.LineCapabilities;
 
     phoneNumber: string | null;
 
@@ -433,6 +535,28 @@ export namespace NumberDeleteResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    export interface LineCapabilities {
+      sms: LineCapabilities.SMS;
+    }
+
+    export namespace LineCapabilities {
+      export interface SMS {
+        /**
+         * This line can receive on this channel.
+         */
+        inbound: boolean;
+
+        /**
+         * This line can send on this channel.
+         */
+        outbound: boolean;
+      }
     }
   }
 }

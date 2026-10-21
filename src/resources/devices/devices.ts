@@ -50,16 +50,6 @@ import * as LanguageAPI from './language';
 import { Language, LanguageGetParams, LanguageGetResponse, LanguageSetParams } from './language';
 import * as LocationAPI from './location';
 import { Location, LocationGetParams, LocationResetParams, LocationSetParams } from './location';
-import * as MediaSessionsAPI from './media-sessions';
-import {
-  MediaSessionActivateParams,
-  MediaSessionActivateResponse,
-  MediaSessionCreateParams,
-  MediaSessionCreateResponse,
-  MediaSessionDeleteParams,
-  MediaSessionRetrieveCurrentResponse,
-  MediaSessions,
-} from './media-sessions';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
@@ -163,7 +153,6 @@ export class Devices extends APIResource {
   deepLink: DeepLinkAPI.DeepLink = new DeepLinkAPI.DeepLink(this._client);
   browser: BrowserAPI.Browser = new BrowserAPI.Browser(this._client);
   kiosk: KioskAPI.Kiosk = new KioskAPI.Kiosk(this._client);
-  mediaSessions: MediaSessionsAPI.MediaSessions = new MediaSessionsAPI.MediaSessions(this._client);
   recordings: RecordingsAPI.Recordings = new RecordingsAPI.Recordings(this._client);
   trafficSessions: TrafficSessionsAPI.TrafficSessions = new TrafficSessionsAPI.TrafficSessions(this._client);
 
@@ -617,6 +606,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     time: boolean;
 
     trafficInspection: boolean;
+
+    mediaInjectionTransport?: 'direct';
   }
 }
 
@@ -889,12 +880,6 @@ export interface DeviceListParams {
 
   orderByDirection?: 'asc' | 'desc';
 
-  /**
-   * Filter by owner IDs. Comma-separated or repeated parameters. Restricted to
-   * platform administrators.
-   */
-  ownerId?: Array<string> | null;
-
   page?: number;
 
   pageSize?: number;
@@ -906,6 +891,12 @@ export interface DeviceListParams {
   platform?: 'android' | 'ios';
 
   providerId?: string;
+
+  /**
+   * Case-insensitive search: matches devices whose name contains the term or whose
+   * ID starts with it. Combined with all other filters.
+   */
+  search?: string;
 
   /**
    * Filter by current device state. Comma-separated (state=ready,stopped). Defaults
@@ -985,7 +976,6 @@ Devices.Language = Language;
 Devices.DeepLink = DeepLink;
 Devices.Browser = Browser;
 Devices.Kiosk = Kiosk;
-Devices.MediaSessions = MediaSessions;
 Devices.Recordings = Recordings;
 Devices.TrafficSessions = TrafficSessions;
 
@@ -1141,16 +1131,6 @@ export declare namespace Devices {
     Kiosk as Kiosk,
     type KioskDisableParams as KioskDisableParams,
     type KioskEnableParams as KioskEnableParams,
-  };
-
-  export {
-    MediaSessions as MediaSessions,
-    type MediaSessionCreateResponse as MediaSessionCreateResponse,
-    type MediaSessionActivateResponse as MediaSessionActivateResponse,
-    type MediaSessionRetrieveCurrentResponse as MediaSessionRetrieveCurrentResponse,
-    type MediaSessionCreateParams as MediaSessionCreateParams,
-    type MediaSessionDeleteParams as MediaSessionDeleteParams,
-    type MediaSessionActivateParams as MediaSessionActivateParams,
   };
 
   export {

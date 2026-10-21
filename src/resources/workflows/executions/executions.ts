@@ -61,6 +61,11 @@ export namespace ExecutionRetrieveResponse {
   export interface Data {
     id: string;
 
+    /**
+     * Current agent assignment of the owner-scoped parent flow; null when unassigned.
+     */
+    agentId: string | null;
+
     createdBy: string | null;
 
     /**
@@ -209,6 +214,13 @@ export namespace ExecutionRetrieveResponse {
         startedAt: string | null;
 
         status: 'pending' | 'running' | 'success' | 'failed' | 'skipped' | 'cancelled';
+
+        /**
+         * Zero-based retry attempt of the execution job during which this step last ran (0
+         * = initial attempt). Not a per-step retry counter; may undercount after crash
+         * recovery.
+         */
+        attempt?: number;
       }
     }
 
