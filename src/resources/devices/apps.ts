@@ -79,16 +79,12 @@ export class Apps extends APIResource {
 
   /**
    * Requests an app install on the device. The request body must supply exactly one
-   * of an Android packageName, an iOS bundleId, or an https apkUrl: the device
-   * downloads and installs the APK itself; supported on Android cloud phones with
-   * the on-device installer, otherwise 409 APP_URL_INSTALL_UNSUPPORTED. URL installs
-   * are not stored in your app library, protected-package checks do not apply, and
-   * devices-api never logs the URL — your own tooling may. For packageName installs,
-   * optional country and versionCode select an exact regional uploaded Android
-   * version, and protected packages are rejected. background (default false) selects
-   * the response contract: false installs inline and returns the outcome directly
-   * (200 on success, an error status on failure); true accepts the request and runs
-   * the download + install in the background, returning 202 immediately — poll
+   * of an Android packageName or an iOS bundleId. For packageName installs, optional
+   * country and versionCode select an exact regional uploaded Android version, and
+   * protected packages are rejected. background (default false) selects the response
+   * contract: false installs inline and returns the outcome directly (200 on
+   * success, an error status on failure); true accepts the request and runs the
+   * download + install in the background, returning 202 immediately — poll
    * list-app-installs for the backend's view of that attempt's status. Refuses with
    * 409 once 2 other installs are already running on the device, in either mode; a
    * repeat request for an app that already has an install running is also refused
