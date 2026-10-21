@@ -51,6 +51,8 @@ describe('resource devices', () => {
       client.devices.list(
         {
           country: 'country',
+          createdAfter: '2019-12-27T18:11:19.117Z',
+          createdBefore: '2019-12-27T18:11:19.117Z',
           createdBy: 'createdBy',
           mine: true,
           name: 'name',
@@ -60,6 +62,7 @@ describe('resource devices', () => {
           pageSize: 0,
           platform: 'android',
           providerId: 'providerId',
+          search: 'search',
           state: ['creating'],
           type: 'android_cloud_phone',
         },

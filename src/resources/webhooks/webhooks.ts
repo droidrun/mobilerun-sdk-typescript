@@ -39,7 +39,12 @@ export class Webhooks extends APIResource {
    * target (e.g. a Slack channel): pick the `capability` from
    * `GET /webhooks/integrations` and the `args` from
    * `GET /webhooks/integrations/{capabilityId}/targets`. Integration webhooks have
-   * no signing secret.
+   * no signing secret. Send an `Idempotency-Key` header to make the create safe to
+   * retry: the same key with the same body returns the existing webhook (status 201,
+   * `Idempotent-Replayed: true`) instead of creating a second one, and the same key
+   * with a different body is a 422. A replayed create does not return the signing
+   * secret again; use rotate-secret if the original response was lost. If that
+   * webhook was deleted in the meantime, the retry is a 404.
    *
    * @example
    * ```ts
@@ -99,15 +104,6 @@ export class Webhooks extends APIResource {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
-  }
-
-  /**
-   * Returns the catalog of event types that webhook subscriptions can subscribe to,
-   * grouped by source. Use the returned type identifiers as the `eventTypes` values
-   * when creating or updating a webhook.
-   */
-  eventTypes(options?: RequestOptions): APIPromise<WebhookEventTypesResponse> {
-    return this._client.get('/event-types', options);
   }
 
   /**
@@ -492,55 +488,6 @@ export namespace WebhookListResponse {
   }
 }
 
-export interface WebhookEventTypesResponse {
-  data: WebhookEventTypesResponse.Data;
-}
-
-export namespace WebhookEventTypesResponse {
-  export interface Data {
-    schemaVersion: 1;
-
-    sources: Array<Data.Source>;
-  }
-
-  export namespace Data {
-    export interface Source {
-      events: Array<Source.Event>;
-
-      source: string;
-    }
-
-    export namespace Source {
-      export interface Event {
-        description: string;
-
-        surfaces: Event.Surfaces;
-
-        /**
-         * Short human title, as used in integration messages.
-         */
-        title: string;
-
-        type: string;
-      }
-
-      export namespace Event {
-        export interface Surfaces {
-          feed: boolean;
-
-          toast: boolean;
-
-          webhook: boolean;
-
-          agent?: boolean;
-
-          live?: boolean;
-        }
-      }
-    }
-  }
-}
-
 export interface WebhookRotateSecretResponse {
   data: WebhookRotateSecretResponse.Data;
 }
@@ -731,7 +678,6 @@ export declare namespace Webhooks {
     type WebhookRetrieveResponse as WebhookRetrieveResponse,
     type WebhookUpdateResponse as WebhookUpdateResponse,
     type WebhookListResponse as WebhookListResponse,
-    type WebhookEventTypesResponse as WebhookEventTypesResponse,
     type WebhookRotateSecretResponse as WebhookRotateSecretResponse,
     type WebhookTestDeliveryResponse as WebhookTestDeliveryResponse,
     type WebhookCreateParams as WebhookCreateParams,

@@ -25,7 +25,6 @@ describe('resource connections', () => {
     const response = await client.mailboxes.connections.create({
       provider: 'gmail',
       bindingHash: 'ecc2efdd09bd231a9ad9bd2aada37aa7ccc3d38a03cc25beb6c28aa0aaa316be',
-      clientRequestId: 'x',
       label: 'label',
     });
   });

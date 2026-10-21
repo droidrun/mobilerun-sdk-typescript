@@ -77,8 +77,10 @@ export class Actions extends APIResource {
 
   /**
    * Swipes from a start coordinate to an end coordinate over the given duration in
-   * milliseconds. An optional stealth flag applies human-like jitter and curved
-   * paths on devices that support it.
+   * milliseconds. An optional humanize flag applies human-like jitter and curved
+   * paths on devices that support it. With holdMs > 0 the request returns 422 when
+   * combined with humanize, when duration + holdMs exceeds 9000 ms, or on devices
+   * that do not support it.
    */
   swipe(deviceID: string, params: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -98,7 +100,7 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Taps the device screen at the given x/y coordinates. An optional stealth flag
+   * Taps the device screen at the given x/y coordinates. An optional humanize flag
    * routes the tap through human-like input on devices that support it.
    */
   tap(deviceID: string, params: ActionTapParams, options?: RequestOptions): APIPromise<void> {
@@ -183,7 +185,21 @@ export interface ActionSwipeParams {
   startY: number;
 
   /**
-   * Body param
+   * Body param: Keep the finger at the end point for holdMs and suppress fling
+   * before lifting, so content moves by about the finger travel. Supported on
+   * Android cloud phones.
+   */
+  holdMs?: number;
+
+  /**
+   * Body param: Request human-like input where supported by the device. Defaults to
+   * false.
+   */
+  humanize?: boolean;
+
+  /**
+   * @deprecated Body param: Deprecated: use humanize. Both names must agree when
+   * supplied together.
    */
   stealth?: boolean;
 
@@ -205,7 +221,14 @@ export interface ActionTapParams {
   y: number;
 
   /**
-   * Body param
+   * Body param: Request human-like input where supported by the device. Defaults to
+   * false.
+   */
+  humanize?: boolean;
+
+  /**
+   * @deprecated Body param: Deprecated: use humanize. Both names must agree when
+   * supplied together.
    */
   stealth?: boolean;
 
