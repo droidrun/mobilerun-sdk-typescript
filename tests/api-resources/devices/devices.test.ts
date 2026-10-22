@@ -51,11 +51,14 @@ describe('resource devices', () => {
       client.devices.list(
         {
           country: 'country',
+          createdAfter: '2019-12-27T18:11:19.117Z',
+          createdBefore: '2019-12-27T18:11:19.117Z',
           createdBy: 'createdBy',
           mine: true,
           name: 'name',
           orderBy: 'id',
           orderByDirection: 'asc',
+          ownerId: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
           page: 0,
           pageSize: 0,
           platform: 'android',

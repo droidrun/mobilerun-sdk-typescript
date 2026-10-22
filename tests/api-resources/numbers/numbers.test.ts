@@ -29,7 +29,6 @@ describe('resource numbers', () => {
           billingPreference: 'included',
           country: 'de',
           label: 'Support line',
-          purpose: 'telegram',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -124,18 +123,6 @@ describe('resource numbers', () => {
   // Mock server tests are disabled
   test.skip('countries', async () => {
     const responsePromise = client.numbers.countries();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('purposes', async () => {
-    const responsePromise = client.numbers.purposes();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
