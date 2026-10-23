@@ -58,6 +58,7 @@ import * as FlowsAPI from './flows/flows';
 import {
   FlowActivateParams,
   FlowActivateResponse,
+  FlowCapacityParams,
   FlowCapacityResponse,
   FlowCloneParams,
   FlowCloneResponse,
@@ -159,6 +160,7 @@ export declare namespace Workflows {
     type FlowUpdateParams as FlowUpdateParams,
     type FlowListParams as FlowListParams,
     type FlowActivateParams as FlowActivateParams,
+    type FlowCapacityParams as FlowCapacityParams,
     type FlowCloneParams as FlowCloneParams,
     type FlowDryRunParams as FlowDryRunParams,
     type FlowRunParams as FlowRunParams,
