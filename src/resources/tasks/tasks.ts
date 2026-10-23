@@ -1095,7 +1095,8 @@ export interface TaskRunParams {
   humanize?: boolean;
 
   /**
-   * The LLM model identifier to use for the task (e.g. 'openai/gpt-6-luna')
+   * The LLM model identifier to use for the task (e.g.
+   * 'mobilerun/mobile-agent-fast')
    */
   llmModel?: string;
 
@@ -1181,7 +1182,8 @@ export interface TaskRunStreamedParams {
   humanize?: boolean;
 
   /**
-   * The LLM model identifier to use for the task (e.g. 'openai/gpt-6-luna')
+   * The LLM model identifier to use for the task (e.g.
+   * 'mobilerun/mobile-agent-fast')
    */
   llmModel?: string;
 

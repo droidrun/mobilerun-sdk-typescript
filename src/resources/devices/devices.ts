@@ -50,16 +50,6 @@ import * as LanguageAPI from './language';
 import { Language, LanguageGetParams, LanguageGetResponse, LanguageSetParams } from './language';
 import * as LocationAPI from './location';
 import { Location, LocationGetParams, LocationResetParams, LocationSetParams } from './location';
-import * as MediaSessionsAPI from './media-sessions';
-import {
-  MediaSessionActivateParams,
-  MediaSessionActivateResponse,
-  MediaSessionCreateParams,
-  MediaSessionCreateResponse,
-  MediaSessionDeleteParams,
-  MediaSessionRetrieveCurrentResponse,
-  MediaSessions,
-} from './media-sessions';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
@@ -163,7 +153,6 @@ export class Devices extends APIResource {
   deepLink: DeepLinkAPI.DeepLink = new DeepLinkAPI.DeepLink(this._client);
   browser: BrowserAPI.Browser = new BrowserAPI.Browser(this._client);
   kiosk: KioskAPI.Kiosk = new KioskAPI.Kiosk(this._client);
-  mediaSessions: MediaSessionsAPI.MediaSessions = new MediaSessionsAPI.MediaSessions(this._client);
   recordings: RecordingsAPI.Recordings = new RecordingsAPI.Recordings(this._client);
   trafficSessions: TrafficSessionsAPI.TrafficSessions = new TrafficSessionsAPI.TrafficSessions(this._client);
 
@@ -252,12 +241,24 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Resets the device back to a clean state, clearing installed apps and user data
-   * accumulated during the session. The device transitions through its reset
-   * lifecycle before becoming ready again.
+   * Resets the device. The optional body `mode` selects what is erased: `full` is a
+   * factory reset that erases installed apps, accounts and storage and gives the
+   * device a new identity; `identity` gives the device a new fingerprint and keeps
+   * its apps and data. When `mode` is omitted the reset is `full`, or `identity` on
+   * devices whose capabilities report `factoryReset=false`. A mode the device does
+   * not support (see `factoryReset` / `identityReset` in the device capabilities) is
+   * refused with 400 `DEVICE_TOOL_UNSUPPORTED`; legacy devices accept an explicit
+   * mode only when it is the one their capabilities advertise, and always accept a
+   * reset without a mode. The device transitions through its reset lifecycle before
+   * becoming ready again.
    */
-  reset(deviceID: string, options?: RequestOptions): APIPromise<void> {
+  reset(
+    deviceID: string,
+    body: DeviceResetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/reset`, {
+      body,
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -584,6 +585,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
 
     esim: boolean;
 
+    factoryReset: boolean;
+
     files: boolean;
 
     fingerprint: boolean;
@@ -593,6 +596,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     geo: boolean;
 
     humanTouch: boolean;
+
+    identityReset: boolean;
 
     language: boolean;
 
@@ -617,6 +622,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     time: boolean;
 
     trafficInspection: boolean;
+
+    mediaInjectionTransport?: 'direct';
   }
 }
 
@@ -889,12 +896,6 @@ export interface DeviceListParams {
 
   orderByDirection?: 'asc' | 'desc';
 
-  /**
-   * Filter by owner IDs. Comma-separated or repeated parameters. Restricted to
-   * platform administrators.
-   */
-  ownerId?: Array<string> | null;
-
   page?: number;
 
   pageSize?: number;
@@ -906,6 +907,12 @@ export interface DeviceListParams {
   platform?: 'android' | 'ios';
 
   providerId?: string;
+
+  /**
+   * Case-insensitive search: matches devices whose name contains the term or whose
+   * ID starts with it. Combined with all other filters.
+   */
+  search?: string;
 
   /**
    * Filter by current device state. Comma-separated (state=ready,stopped). Defaults
@@ -940,6 +947,16 @@ export interface DeviceListParams {
 
 export interface DeviceFingerprintParams {
   'X-Device-Display-ID'?: number;
+}
+
+export interface DeviceResetParams {
+  /**
+   * What to erase. full: factory reset — erases the user data (apps, accounts,
+   * storage) and gives the device a new identity. identity: new device fingerprint,
+   * apps and data are kept. When omitted: full, or identity on devices whose
+   * capabilities report factoryReset=false.
+   */
+  mode?: 'full' | 'identity';
 }
 
 export interface DeviceSetNameParams {
@@ -985,7 +1002,6 @@ Devices.Language = Language;
 Devices.DeepLink = DeepLink;
 Devices.Browser = Browser;
 Devices.Kiosk = Kiosk;
-Devices.MediaSessions = MediaSessions;
 Devices.Recordings = Recordings;
 Devices.TrafficSessions = TrafficSessions;
 
@@ -1003,6 +1019,7 @@ export declare namespace Devices {
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
     type DeviceFingerprintParams as DeviceFingerprintParams,
+    type DeviceResetParams as DeviceResetParams,
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
@@ -1141,16 +1158,6 @@ export declare namespace Devices {
     Kiosk as Kiosk,
     type KioskDisableParams as KioskDisableParams,
     type KioskEnableParams as KioskEnableParams,
-  };
-
-  export {
-    MediaSessions as MediaSessions,
-    type MediaSessionCreateResponse as MediaSessionCreateResponse,
-    type MediaSessionActivateResponse as MediaSessionActivateResponse,
-    type MediaSessionRetrieveCurrentResponse as MediaSessionRetrieveCurrentResponse,
-    type MediaSessionCreateParams as MediaSessionCreateParams,
-    type MediaSessionDeleteParams as MediaSessionDeleteParams,
-    type MediaSessionActivateParams as MediaSessionActivateParams,
   };
 
   export {

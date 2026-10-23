@@ -48,6 +48,8 @@ export namespace MessageRetrieveResponse {
 
     body: string | null;
 
+    classification: Data.Classification | null;
+
     createdAt: string;
 
     deliveryStatus: string | null;
@@ -76,6 +78,12 @@ export namespace MessageRetrieveResponse {
       | 'delivered'
       | 'failed';
   }
+
+  export namespace Data {
+    export interface Classification {
+      spam: boolean;
+    }
+  }
 }
 
 export interface MessageListResponse {
@@ -89,6 +97,8 @@ export namespace MessageListResponse {
     id: string;
 
     body: string | null;
+
+    classification: Item.Classification | null;
 
     createdAt: string;
 
@@ -117,6 +127,12 @@ export namespace MessageListResponse {
       | 'sent_unconfirmed'
       | 'delivered'
       | 'failed';
+  }
+
+  export namespace Item {
+    export interface Classification {
+      spam: boolean;
+    }
   }
 }
 

@@ -57,10 +57,11 @@ export class Flows extends APIResource {
   }
 
   /**
-   * Return a paginated list of flows. Supports filtering by `triggerId`, `enabled`,
-   * one or more health `status` values (healthy, failing, blocked), `mine` (flows
-   * created by the calling actor), `createdBy` (flows created by a given actor id —
-   * mutually exclusive with `mine`), plus free-text `search` and ordering.
+   * Return a paginated list of flows. Supports filtering by `agentId` (UUID or
+   * `unassigned`; omit for all buckets), `triggerId`, `enabled`, one or more health
+   * `status` values (healthy, failing, blocked), `mine` (flows created by the
+   * calling actor), `createdBy` (flows created by a given actor id — mutually
+   * exclusive with `mine`), plus free-text `search` and ordering.
    */
   list(
     query: FlowListParams | null | undefined = {},
@@ -91,13 +92,16 @@ export class Flows extends APIResource {
   }
 
   /**
-   * Returns an owner-scoped snapshot of finite included workflow-agent capacity
-   * after accounting for enabled and disabled agents. Returns 503 when a finite
-   * capacity snapshot is unavailable, including for unlimited plans. This is
-   * advisory; create and clone perform the authoritative capacity check.
+   * Returns the environment routine limit and remaining capacity for this owner and
+   * agent bucket, counting enabled and disabled non-deleted flows. Omit agentId (or
+   * use unassigned) for the unassigned bucket. This is advisory; create and clone
+   * enforce admission under a bucket lock.
    */
-  capacity(options?: RequestOptions): APIPromise<FlowCapacityResponse> {
-    return this._client.get('/flows/capacity', options);
+  capacity(
+    query: FlowCapacityParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<FlowCapacityResponse> {
+    return this._client.get('/flows/capacity', { query, ...options });
   }
 
   /**
@@ -236,6 +240,8 @@ export namespace FlowCreateResponse {
   export interface Data {
     id: string;
 
+    agentId: string | null;
+
     archivedAt: string | null;
 
     blockedAt: string | null;
@@ -356,6 +362,8 @@ export namespace FlowRetrieveResponse {
   export interface Data {
     id: string;
 
+    agentId: string | null;
+
     archivedAt: string | null;
 
     blockedAt: string | null;
@@ -475,6 +483,8 @@ export interface FlowUpdateResponse {
 export namespace FlowUpdateResponse {
   export interface Data {
     id: string;
+
+    agentId: string | null;
 
     archivedAt: string | null;
 
@@ -597,6 +607,8 @@ export interface FlowListResponse {
 export namespace FlowListResponse {
   export interface Item {
     id: string;
+
+    agentId: string | null;
 
     archivedAt: string | null;
 
@@ -722,6 +734,8 @@ export namespace FlowActivateResponse {
   export interface Data {
     id: string;
 
+    agentId: string | null;
+
     archivedAt: string | null;
 
     blockedAt: string | null;
@@ -844,7 +858,7 @@ export namespace FlowCapacityResponse {
 
     remaining: number;
 
-    status: 'available' | 'exhausted' | 'not_included';
+    status: 'available' | 'exhausted';
   }
 }
 
@@ -855,6 +869,8 @@ export interface FlowCloneResponse {
 export namespace FlowCloneResponse {
   export interface Data {
     id: string;
+
+    agentId: string | null;
 
     archivedAt: string | null;
 
@@ -1212,6 +1228,8 @@ export interface FlowUnblockResponse {
 export namespace FlowUnblockResponse {
   export interface Data {
     id: string;
+
+    agentId: string | null;
 
     archivedAt: string | null;
 
@@ -1585,6 +1603,12 @@ export namespace FlowUpdateParams {
 }
 
 export interface FlowListParams {
+  /**
+   * Agent bucket UUID or unassigned. Omit on list to include every bucket; omit on
+   * capacity for unassigned.
+   */
+  agentId?: (string & {}) | 'unassigned';
+
   createdBy?: string;
 
   /**
@@ -1614,6 +1638,14 @@ export interface FlowListParams {
 
 export interface FlowActivateParams {
   verificationExecutionId: string;
+}
+
+export interface FlowCapacityParams {
+  /**
+   * Agent bucket UUID or unassigned. Omit on list to include every bucket; omit on
+   * capacity for unassigned.
+   */
+  agentId?: (string & {}) | 'unassigned';
 }
 
 export interface FlowCloneParams {
@@ -1843,6 +1875,7 @@ export declare namespace Flows {
     type FlowUpdateParams as FlowUpdateParams,
     type FlowListParams as FlowListParams,
     type FlowActivateParams as FlowActivateParams,
+    type FlowCapacityParams as FlowCapacityParams,
     type FlowCloneParams as FlowCloneParams,
     type FlowDryRunParams as FlowDryRunParams,
     type FlowRunParams as FlowRunParams,
