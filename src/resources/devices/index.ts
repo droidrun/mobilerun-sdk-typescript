@@ -44,6 +44,7 @@ export {
   type DeviceCreateParams,
   type DeviceListParams,
   type DeviceFingerprintParams,
+  type DeviceResetParams,
   type DeviceSetNameParams,
   type DeviceSummaryParams,
   type DeviceTerminateParams,

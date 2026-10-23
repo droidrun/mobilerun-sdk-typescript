@@ -407,7 +407,7 @@ export namespace ConversationHistoryResponse {
        * turn, matching live cloud ordering.
        */
       export interface Steer {
-        kiloMessageID: string;
+        agentMessageId: string;
 
         state: 'accepted' | 'consumed' | 'dropped';
 
