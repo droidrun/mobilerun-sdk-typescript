@@ -28,13 +28,15 @@ export class Messages extends APIResource {
   }
 
   /**
-   * Queues an SMS from one of the caller's numbers that can send. Same idempotency
-   * contract as the eSIM send: replaying an Idempotency-Key with the same payload
-   * returns the original message, reusing it with a different payload returns 422.
-   * 409 capability_unavailable: this number cannot send right now. 422
-   * invalid_recipient / unsupported_destination / body_too_long: the recipient or
-   * text does not fit the number. 429 daily_limit_reached: the rolling 24 h limit
-   * for the account is used up; 429 rate_limited: too many sends in a short window.
+   * Queues an SMS from one of the caller's numbers that can send. Replaying an
+   * Idempotency-Key with the same payload returns the original message, reusing it
+   * with a different payload returns 422. 409 capability_unavailable: this number
+   * cannot send right now. 422 invalid_recipient / unsupported_destination /
+   * body_too_long: the recipient or text does not fit the number. 429
+   * daily_limit_reached: the rolling 24 h limit for the account is used up; 429
+   * rate_limited: too many sends by the owner in a short window; 429
+   * number_rate_limited: too many outbound sends from this number in the configured
+   * window (all sends from this number count, including those made on your behalf).
    * 403 send_disabled: self-service SMS send is switched off.
    *
    * @example
@@ -62,6 +64,8 @@ export namespace MessageListResponse {
 
     body: string | null;
 
+    classification: Item.Classification | null;
+
     createdAt: string;
 
     deliveryStatus: string | null;
@@ -88,6 +92,12 @@ export namespace MessageListResponse {
       | 'delivered'
       | 'failed';
   }
+
+  export namespace Item {
+    export interface Classification {
+      spam: boolean;
+    }
+  }
 }
 
 export interface MessageSendResponse {
@@ -99,6 +109,8 @@ export namespace MessageSendResponse {
     id: string;
 
     body: string | null;
+
+    classification: Data.Classification | null;
 
     createdAt: string;
 
@@ -125,6 +137,12 @@ export namespace MessageSendResponse {
       | 'sent_unconfirmed'
       | 'delivered'
       | 'failed';
+  }
+
+  export namespace Data {
+    export interface Classification {
+      spam: boolean;
+    }
   }
 }
 
@@ -140,8 +158,8 @@ export interface MessageListParams {
 
 export interface MessageSendParams {
   /**
-   * SMS body text, up to 1600 characters (rejected with 400 beyond that, before
-   * hashing). A number's own limit may be lower and is answered 422 body_too_long.
+   * SMS body text, up to 1600 characters (longer bodies are rejected with 400). A
+   * number's own limit may be lower and is answered 422 body_too_long.
    */
   body: string;
 
@@ -151,12 +169,6 @@ export interface MessageSendParams {
    * with 422 invalid_recipient.
    */
   to: string;
-
-  /**
-   * @deprecated Deprecated: use the Idempotency-Key header instead. Optional
-   * idempotency key. Replaying the same key and payload returns the original send.
-   */
-  clientRequestId?: string;
 
   /**
    * Request a delivery report. Defaults to false.

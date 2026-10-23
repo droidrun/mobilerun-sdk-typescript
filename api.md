@@ -36,26 +36,6 @@ Methods:
 - <code title="post /apps/{id}/mark-failed">client.apps.<a href="./src/resources/apps.ts">markFailed</a>(id) -> AppMarkFailedResponse</code>
 - <code title="get /apps/storage-usage">client.apps.<a href="./src/resources/apps.ts">storageUsage</a>() -> AppStorageUsageResponse</code>
 
-# Carriers
-
-Types:
-
-- <code><a href="./src/resources/carriers.ts">CarrierCreateResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierRetrieveResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierUpdateResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierListResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierDeleteResponse</a></code>
-- <code><a href="./src/resources/carriers.ts">CarrierLookupResponse</a></code>
-
-Methods:
-
-- <code title="post /carriers">client.carriers.<a href="./src/resources/carriers.ts">create</a>({ ...params }) -> CarrierCreateResponse</code>
-- <code title="get /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">retrieve</a>(carrierID) -> CarrierRetrieveResponse</code>
-- <code title="patch /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">update</a>(carrierID, { ...params }) -> CarrierUpdateResponse</code>
-- <code title="get /carriers">client.carriers.<a href="./src/resources/carriers.ts">list</a>({ ...params }) -> CarrierListResponse</code>
-- <code title="delete /carriers/{carrierId}">client.carriers.<a href="./src/resources/carriers.ts">delete</a>(carrierID) -> CarrierDeleteResponse</code>
-- <code title="get /carriers/lookup">client.carriers.<a href="./src/resources/carriers.ts">lookup</a>({ ...params }) -> CarrierLookupResponse</code>
-
 # Credentials
 
 Types:
@@ -130,7 +110,7 @@ Methods:
 - <code title="get /devices/count">client.devices.<a href="./src/resources/devices/devices.ts">count</a>() -> DeviceCountResponse</code>
 - <code title="get /devices/{deviceId}/fingerprint">client.devices.<a href="./src/resources/devices/devices.ts">fingerprint</a>(deviceID, { ...params }) -> DeviceFingerprintResponse</code>
 - <code title="post /devices/{deviceId}/reboot">client.devices.<a href="./src/resources/devices/devices.ts">reboot</a>(deviceID) -> void</code>
-- <code title="post /devices/{deviceId}/reset">client.devices.<a href="./src/resources/devices/devices.ts">reset</a>(deviceID) -> void</code>
+- <code title="post /devices/{deviceId}/reset">client.devices.<a href="./src/resources/devices/devices.ts">reset</a>(deviceID, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/resume">client.devices.<a href="./src/resources/devices/devices.ts">resume</a>(deviceID) -> void</code>
 - <code title="get /devices/{deviceId}/capabilities">client.devices.<a href="./src/resources/devices/devices.ts">retrieveCapabilities</a>(deviceID) -> DeviceRetrieveCapabilitiesResponse</code>
 - <code title="put /devices/{deviceId}/name">client.devices.<a href="./src/resources/devices/devices.ts">setName</a>(deviceID, { ...params }) -> DeviceSetNameResponse</code>
@@ -258,6 +238,20 @@ Methods:
 - <code title="delete /devices/{deviceId}/proxy">client.devices.proxy.<a href="./src/resources/devices/proxy.ts">disconnect</a>(deviceID, { ...params }) -> void</code>
 - <code title="get /devices/{deviceId}/proxy">client.devices.proxy.<a href="./src/resources/devices/proxy.ts">status</a>(deviceID, { ...params }) -> ProxyStatusResponse</code>
 
+## Screenshots
+
+Types:
+
+- <code><a href="./src/resources/devices/screenshots.ts">ScreenshotListResponse</a></code>
+- <code><a href="./src/resources/devices/screenshots.ts">ScreenshotCaptureResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/{deviceId}/screenshots">client.devices.screenshots.<a href="./src/resources/devices/screenshots.ts">list</a>(deviceID, { ...params }) -> ScreenshotListResponse</code>
+- <code title="delete /devices/{deviceId}/screenshots/{screenshotId}">client.devices.screenshots.<a href="./src/resources/devices/screenshots.ts">delete</a>(screenshotID, { ...params }) -> void</code>
+- <code title="post /devices/{deviceId}/screenshots">client.devices.screenshots.<a href="./src/resources/devices/screenshots.ts">capture</a>(deviceID, { ...params }) -> string</code>
+- <code title="get /devices/{deviceId}/screenshots/{screenshotId}/image">client.devices.screenshots.<a href="./src/resources/devices/screenshots.ts">image</a>(screenshotID, { ...params }) -> void</code>
+
 ## State
 
 Types:
@@ -339,26 +333,12 @@ Methods:
 - <code title="delete /devices/{deviceId}/kiosk">client.devices.kiosk.<a href="./src/resources/devices/kiosk.ts">disable</a>(deviceID, { ...params }) -> void</code>
 - <code title="put /devices/{deviceId}/kiosk">client.devices.kiosk.<a href="./src/resources/devices/kiosk.ts">enable</a>(deviceID, { ...params }) -> void</code>
 
-## MediaSessions
-
-Types:
-
-- <code><a href="./src/resources/devices/media-sessions.ts">MediaSessionCreateResponse</a></code>
-- <code><a href="./src/resources/devices/media-sessions.ts">MediaSessionActivateResponse</a></code>
-- <code><a href="./src/resources/devices/media-sessions.ts">MediaSessionRetrieveCurrentResponse</a></code>
-
-Methods:
-
-- <code title="post /devices/{deviceId}/media-sessions">client.devices.mediaSessions.<a href="./src/resources/devices/media-sessions.ts">create</a>(deviceID, { ...params }) -> MediaSessionCreateResponse</code>
-- <code title="delete /devices/{deviceId}/media-sessions/{sessionId}">client.devices.mediaSessions.<a href="./src/resources/devices/media-sessions.ts">delete</a>(sessionID, { ...params }) -> void</code>
-- <code title="post /devices/{deviceId}/media-sessions/{sessionId}/activate">client.devices.mediaSessions.<a href="./src/resources/devices/media-sessions.ts">activate</a>(sessionID, { ...params }) -> MediaSessionActivateResponse</code>
-- <code title="get /devices/{deviceId}/media-sessions/current">client.devices.mediaSessions.<a href="./src/resources/devices/media-sessions.ts">retrieveCurrent</a>(deviceID) -> MediaSessionRetrieveCurrentResponse</code>
-
 ## Recordings
 
 Types:
 
 - <code><a href="./src/resources/devices/recordings.ts">RecordingListResponse</a></code>
+- <code><a href="./src/resources/devices/recordings.ts">RecordingScreenshotsResponse</a></code>
 - <code><a href="./src/resources/devices/recordings.ts">RecordingStartResponse</a></code>
 - <code><a href="./src/resources/devices/recordings.ts">RecordingStatusResponse</a></code>
 - <code><a href="./src/resources/devices/recordings.ts">RecordingStopResponse</a></code>
@@ -367,6 +347,7 @@ Methods:
 
 - <code title="get /devices/{deviceId}/recordings">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">list</a>(deviceID, { ...params }) -> RecordingListResponse | null</code>
 - <code title="delete /devices/{deviceId}/recordings/{recordingId}">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">delete</a>(recordingID, { ...params }) -> void</code>
+- <code title="get /devices/{deviceId}/recordings/{recordingId}/screenshots">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">screenshots</a>(recordingID, { ...params }) -> RecordingScreenshotsResponse | null</code>
 - <code title="post /devices/{deviceId}/recordings">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">start</a>(deviceID, { ...params }) -> RecordingStartResponse</code>
 - <code title="get /devices/{deviceId}/recordings/{recordingId}">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">status</a>(recordingID, { ...params }) -> RecordingStatusResponse</code>
 - <code title="post /devices/{deviceId}/recordings/{recordingId}">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">stop</a>(recordingID, { ...params }) -> RecordingStopResponse</code>
@@ -399,24 +380,6 @@ Methods:
 
 - <code title="get /models">client.models.<a href="./src/resources/models.ts">list</a>() -> ModelListResponse</code>
 
-# Profiles
-
-Types:
-
-- <code><a href="./src/resources/profiles.ts">ProfileCreateResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileRetrieveResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileUpdateResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileListResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> ProfileCreateResponse</code>
-- <code title="get /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">retrieve</a>(profileID) -> ProfileRetrieveResponse</code>
-- <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> ProfileUpdateResponse</code>
-- <code title="get /profiles">client.profiles.<a href="./src/resources/profiles.ts">list</a>({ ...params }) -> ProfileListResponse</code>
-- <code title="delete /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">delete</a>(profileID) -> ProfileDeleteResponse</code>
-
 # Proxies
 
 Types:
@@ -426,7 +389,6 @@ Types:
 - <code><a href="./src/resources/proxies.ts">ProxyUpdateResponse</a></code>
 - <code><a href="./src/resources/proxies.ts">ProxyListResponse</a></code>
 - <code><a href="./src/resources/proxies.ts">ProxyDeleteResponse</a></code>
-- <code><a href="./src/resources/proxies.ts">ProxyLookupResponse</a></code>
 
 Methods:
 
@@ -435,7 +397,6 @@ Methods:
 - <code title="put /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">update</a>(proxyID, { ...params }) -> ProxyUpdateResponse</code>
 - <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
 - <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
-- <code title="post /proxies/lookup">client.proxies.<a href="./src/resources/proxies.ts">lookup</a>({ ...params }) -> ProxyLookupResponse</code>
 
 # Connect
 
@@ -633,7 +594,7 @@ Methods:
 - <code title="get /flows">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">list</a>({ ...params }) -> FlowListResponse</code>
 - <code title="delete /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">delete</a>(flowID) -> FlowDeleteResponse</code>
 - <code title="post /flows/{flowId}/activate">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">activate</a>(flowID, { ...params }) -> FlowActivateResponse</code>
-- <code title="get /flows/capacity">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">capacity</a>() -> FlowCapacityResponse</code>
+- <code title="get /flows/capacity">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">capacity</a>({ ...params }) -> FlowCapacityResponse</code>
 - <code title="post /flows/{flowId}/clone">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">clone</a>(flowID, { ...params }) -> FlowCloneResponse</code>
 - <code title="get /flows/{flowId}/delivery-options">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">deliveryOptions</a>(flowID) -> FlowDeliveryOptionsResponse</code>
 - <code title="post /flows/{flowId}/dry-run">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">dryRun</a>(flowID, { ...params }) -> FlowDryRunResponse</code>
@@ -712,7 +673,6 @@ Types:
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookRetrieveResponse</a></code>
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookUpdateResponse</a></code>
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookListResponse</a></code>
-- <code><a href="./src/resources/webhooks/webhooks.ts">WebhookEventTypesResponse</a></code>
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookRotateSecretResponse</a></code>
 - <code><a href="./src/resources/webhooks/webhooks.ts">WebhookTestDeliveryResponse</a></code>
 
@@ -723,7 +683,6 @@ Methods:
 - <code title="patch /webhooks/{id}">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">update</a>(id, { ...params }) -> WebhookUpdateResponse</code>
 - <code title="get /webhooks">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">list</a>({ ...params }) -> WebhookListResponse</code>
 - <code title="delete /webhooks/{id}">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">delete</a>(id) -> void</code>
-- <code title="get /event-types">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">eventTypes</a>() -> WebhookEventTypesResponse</code>
 - <code title="post /webhooks/{id}/rotate-secret">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">rotateSecret</a>(id) -> WebhookRotateSecretResponse</code>
 - <code title="post /webhooks/{id}/test">client.webhooks.<a href="./src/resources/webhooks/webhooks.ts">testDelivery</a>(id) -> WebhookTestDeliveryResponse</code>
 
@@ -858,46 +817,6 @@ Methods:
 - <code title="post /assistant/chat/message">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">send</a>({ ...params }) -> ConversationSendResponse</code>
 - <code title="get /assistant/chat/stream">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">stream</a>({ ...params }) -> string</code>
 
-# AppEvents
-
-Types:
-
-- <code><a href="./src/resources/app-events/app-events.ts">AppEventRetrieveResponse</a></code>
-- <code><a href="./src/resources/app-events/app-events.ts">AppEventListResponse</a></code>
-
-Methods:
-
-- <code title="get /app-events/{id}">client.appEvents.<a href="./src/resources/app-events/app-events.ts">retrieve</a>(id) -> AppEventRetrieveResponse</code>
-- <code title="get /app-events">client.appEvents.<a href="./src/resources/app-events/app-events.ts">list</a>({ ...params }) -> AppEventListResponse</code>
-
-## Catalog
-
-Types:
-
-- <code><a href="./src/resources/app-events/catalog.ts">CatalogRetrieveResponse</a></code>
-- <code><a href="./src/resources/app-events/catalog.ts">CatalogListResponse</a></code>
-
-Methods:
-
-- <code title="get /app-events/catalog/{appEventType}">client.appEvents.catalog.<a href="./src/resources/app-events/catalog.ts">retrieve</a>(appEventType) -> CatalogRetrieveResponse</code>
-- <code title="get /app-events/catalog">client.appEvents.catalog.<a href="./src/resources/app-events/catalog.ts">list</a>() -> CatalogListResponse</code>
-
-# Notifications
-
-Types:
-
-- <code><a href="./src/resources/notifications.ts">NotificationApplyPreferencesPresetResponse</a></code>
-- <code><a href="./src/resources/notifications.ts">NotificationCatalogResponse</a></code>
-- <code><a href="./src/resources/notifications.ts">NotificationGetPreferencesResponse</a></code>
-- <code><a href="./src/resources/notifications.ts">NotificationUpdatePreferencesResponse</a></code>
-
-Methods:
-
-- <code title="post /notifications/preferences/apply-preset">client.notifications.<a href="./src/resources/notifications.ts">applyPreferencesPreset</a>({ ...params }) -> NotificationApplyPreferencesPresetResponse</code>
-- <code title="get /notifications/catalog">client.notifications.<a href="./src/resources/notifications.ts">catalog</a>() -> NotificationCatalogResponse</code>
-- <code title="get /notifications/preferences">client.notifications.<a href="./src/resources/notifications.ts">getPreferences</a>() -> NotificationGetPreferencesResponse</code>
-- <code title="patch /notifications/preferences">client.notifications.<a href="./src/resources/notifications.ts">updatePreferences</a>({ ...params }) -> NotificationUpdatePreferencesResponse</code>
-
 # Messages
 
 Types:
@@ -933,7 +852,6 @@ Types:
 - <code><a href="./src/resources/numbers/numbers.ts">NumberDeleteResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberCapacityResponse</a></code>
 - <code><a href="./src/resources/numbers/numbers.ts">NumberCountriesResponse</a></code>
-- <code><a href="./src/resources/numbers/numbers.ts">NumberPurposesResponse</a></code>
 
 Methods:
 
@@ -944,7 +862,6 @@ Methods:
 - <code title="delete /numbers/phones/{id}">client.numbers.<a href="./src/resources/numbers/numbers.ts">delete</a>(id) -> NumberDeleteResponse</code>
 - <code title="get /numbers/phones/capacity">client.numbers.<a href="./src/resources/numbers/numbers.ts">capacity</a>({ ...params }) -> NumberCapacityResponse</code>
 - <code title="get /numbers/phones/countries">client.numbers.<a href="./src/resources/numbers/numbers.ts">countries</a>() -> NumberCountriesResponse</code>
-- <code title="get /numbers/phones/purposes">client.numbers.<a href="./src/resources/numbers/numbers.ts">purposes</a>() -> NumberPurposesResponse</code>
 
 ## Messages
 
@@ -957,27 +874,3 @@ Methods:
 
 - <code title="get /numbers/phones/{id}/messages">client.numbers.messages.<a href="./src/resources/numbers/messages.ts">list</a>(id, { ...params }) -> MessageListResponse</code>
 - <code title="post /numbers/phones/{id}/messages">client.numbers.messages.<a href="./src/resources/numbers/messages.ts">send</a>(id, { ...params }) -> MessageSendResponse</code>
-
-# Store
-
-Types:
-
-- <code><a href="./src/resources/store/store.ts">StoreCategoriesResponse</a></code>
-
-Methods:
-
-- <code title="get /store/categories">client.store.<a href="./src/resources/store/store.ts">categories</a>() -> StoreCategoriesResponse</code>
-
-## Apps
-
-Types:
-
-- <code><a href="./src/resources/store/apps.ts">AppRetrieveResponse</a></code>
-- <code><a href="./src/resources/store/apps.ts">AppListResponse</a></code>
-- <code><a href="./src/resources/store/apps.ts">AppAddToWorkspaceResponse</a></code>
-
-Methods:
-
-- <code title="get /store/apps/{appId}">client.store.apps.<a href="./src/resources/store/apps.ts">retrieve</a>(appID) -> AppRetrieveResponse</code>
-- <code title="get /store/apps">client.store.apps.<a href="./src/resources/store/apps.ts">list</a>({ ...params }) -> AppListResponse</code>
-- <code title="post /store/apps/{appId}/add">client.store.apps.<a href="./src/resources/store/apps.ts">addToWorkspace</a>(appID) -> AppAddToWorkspaceResponse</code>

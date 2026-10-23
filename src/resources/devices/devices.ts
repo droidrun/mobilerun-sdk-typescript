@@ -50,16 +50,6 @@ import * as LanguageAPI from './language';
 import { Language, LanguageGetParams, LanguageGetResponse, LanguageSetParams } from './language';
 import * as LocationAPI from './location';
 import { Location, LocationGetParams, LocationResetParams, LocationSetParams } from './location';
-import * as MediaSessionsAPI from './media-sessions';
-import {
-  MediaSessionActivateParams,
-  MediaSessionActivateResponse,
-  MediaSessionCreateParams,
-  MediaSessionCreateResponse,
-  MediaSessionDeleteParams,
-  MediaSessionRetrieveCurrentResponse,
-  MediaSessions,
-} from './media-sessions';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
@@ -77,6 +67,8 @@ import {
   RecordingDeleteParams,
   RecordingListParams,
   RecordingListResponse,
+  RecordingScreenshotsParams,
+  RecordingScreenshotsResponse,
   RecordingStartParams,
   RecordingStartResponse,
   RecordingStatusParams,
@@ -87,6 +79,16 @@ import {
   RecordingVideoParams,
   Recordings,
 } from './recordings';
+import * as ScreenshotsAPI from './screenshots';
+import {
+  ScreenshotCaptureParams,
+  ScreenshotCaptureResponse,
+  ScreenshotDeleteParams,
+  ScreenshotImageParams,
+  ScreenshotListParams,
+  ScreenshotListResponse,
+  Screenshots,
+} from './screenshots';
 import * as StateAPI from './state';
 import {
   A11YNode,
@@ -142,6 +144,7 @@ export class Devices extends APIResource {
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
   profile: ProfileAPI.Profile = new ProfileAPI.Profile(this._client);
   proxy: ProxyAPI.Proxy = new ProxyAPI.Proxy(this._client);
+  screenshots: ScreenshotsAPI.Screenshots = new ScreenshotsAPI.Screenshots(this._client);
   state: StateAPI.State = new StateAPI.State(this._client);
   tasks: TasksAPI.Tasks = new TasksAPI.Tasks(this._client);
   clipboard: ClipboardAPI.Clipboard = new ClipboardAPI.Clipboard(this._client);
@@ -150,7 +153,6 @@ export class Devices extends APIResource {
   deepLink: DeepLinkAPI.DeepLink = new DeepLinkAPI.DeepLink(this._client);
   browser: BrowserAPI.Browser = new BrowserAPI.Browser(this._client);
   kiosk: KioskAPI.Kiosk = new KioskAPI.Kiosk(this._client);
-  mediaSessions: MediaSessionsAPI.MediaSessions = new MediaSessionsAPI.MediaSessions(this._client);
   recordings: RecordingsAPI.Recordings = new RecordingsAPI.Recordings(this._client);
   trafficSessions: TrafficSessionsAPI.TrafficSessions = new TrafficSessionsAPI.TrafficSessions(this._client);
 
@@ -180,6 +182,10 @@ export class Devices extends APIResource {
 
   /**
    * Returns a paginated list of the user's devices along with pagination metadata.
+   * By default every device except terminated and unknown-state ones is listed,
+   * including stopped and maintenance devices; narrow with e.g. `state=ready` or
+   * `state=stopped,maintenance`, and pass `state=terminated` or `state=unknown` to
+   * see those.
    */
   list(
     query: DeviceListParams | null | undefined = {},
@@ -235,12 +241,24 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Resets the device back to a clean state, clearing installed apps and user data
-   * accumulated during the session. The device transitions through its reset
-   * lifecycle before becoming ready again.
+   * Resets the device. The optional body `mode` selects what is erased: `full` is a
+   * factory reset that erases installed apps, accounts and storage and gives the
+   * device a new identity; `identity` gives the device a new fingerprint and keeps
+   * its apps and data. When `mode` is omitted the reset is `full`, or `identity` on
+   * devices whose capabilities report `factoryReset=false`. A mode the device does
+   * not support (see `factoryReset` / `identityReset` in the device capabilities) is
+   * refused with 400 `DEVICE_TOOL_UNSUPPORTED`; legacy devices accept an explicit
+   * mode only when it is the one their capabilities advertise, and always accept a
+   * reset without a mode. The device transitions through its reset lifecycle before
+   * becoming ready again.
    */
-  reset(deviceID: string, options?: RequestOptions): APIPromise<void> {
+  reset(
+    deviceID: string,
+    body: DeviceResetParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/reset`, {
+      body,
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -259,11 +277,8 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Returns the set of capabilities supported by this device. For a legacy device
-   * this reflects the live instance's actual tools rather than its static type; for
-   * a core-managed device it is resolved from provider/pool configuration without
-   * guaranteeing a live instance. Used to determine which tools and features are
-   * available for the device.
+   * Returns the set of capabilities supported by this device. Used to determine
+   * which tools and features are available for the device.
    */
   retrieveCapabilities(
     deviceID: string,
@@ -308,9 +323,9 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Terminates the device and releases its resources. Termination can be scheduled
-   * for a future time or chained from a previous device via the request body, in
-   * which case a service key is required.
+   * Terminates the device and releases its resources. The optional `terminateAt` and
+   * `previousDeviceId` body fields are not available to API-key callers; requests
+   * that set them are rejected with 401.
    */
   terminate(
     deviceID: string,
@@ -570,6 +585,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
 
     esim: boolean;
 
+    factoryReset: boolean;
+
     files: boolean;
 
     fingerprint: boolean;
@@ -579,6 +596,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     geo: boolean;
 
     humanTouch: boolean;
+
+    identityReset: boolean;
 
     language: boolean;
 
@@ -603,6 +622,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     time: boolean;
 
     trafficInspection: boolean;
+
+    mediaInjectionTransport?: 'direct';
   }
 }
 
@@ -849,19 +870,29 @@ export interface DeviceListParams {
   country?: string;
 
   /**
+   * Include devices created at or after this RFC3339 timestamp.
+   */
+  createdAfter?: string;
+
+  /**
+   * Include devices created before this RFC3339 timestamp (exclusive). Must be later
+   * than createdAfter when both are set.
+   */
+  createdBefore?: string;
+
+  /**
    * Filter to devices created by this user id. Mutually exclusive with mine.
    */
   createdBy?: string;
 
   /**
-   * When true, only return devices created by the calling user (resolved from
-   * X-User-ID, never a client-supplied id).
+   * When true, only return devices created by the authenticated caller.
    */
   mine?: boolean;
 
   name?: string;
 
-  orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt';
+  orderBy?: 'id' | 'createdAt' | 'updatedAt' | 'assignedAt' | 'gridPosition';
 
   orderByDirection?: 'asc' | 'desc';
 
@@ -877,6 +908,17 @@ export interface DeviceListParams {
 
   providerId?: string;
 
+  /**
+   * Case-insensitive search: matches devices whose name contains the term or whose
+   * ID starts with it. Combined with all other filters.
+   */
+  search?: string;
+
+  /**
+   * Filter by current device state. Comma-separated (state=ready,stopped). Defaults
+   * to every state except terminated and unknown, so stopped and maintenance devices
+   * are listed; pass state=terminated or state=unknown to see those.
+   */
   state?: Array<
     | 'creating'
     | 'assigned'
@@ -905,6 +947,16 @@ export interface DeviceListParams {
 
 export interface DeviceFingerprintParams {
   'X-Device-Display-ID'?: number;
+}
+
+export interface DeviceResetParams {
+  /**
+   * What to erase. full: factory reset — erases the user data (apps, accounts,
+   * storage) and gives the device a new identity. identity: new device fingerprint,
+   * apps and data are kept. When omitted: full, or identity on devices whose
+   * capabilities report factoryReset=false.
+   */
+  mode?: 'full' | 'identity';
 }
 
 export interface DeviceSetNameParams {
@@ -941,6 +993,7 @@ Devices.Location = Location;
 Devices.Packages = Packages;
 Devices.Profile = Profile;
 Devices.Proxy = ProxyAPIProxy;
+Devices.Screenshots = Screenshots;
 Devices.State = State;
 Devices.Tasks = Tasks;
 Devices.Clipboard = Clipboard;
@@ -949,7 +1002,6 @@ Devices.Language = Language;
 Devices.DeepLink = DeepLink;
 Devices.Browser = Browser;
 Devices.Kiosk = Kiosk;
-Devices.MediaSessions = MediaSessions;
 Devices.Recordings = Recordings;
 Devices.TrafficSessions = TrafficSessions;
 
@@ -967,6 +1019,7 @@ export declare namespace Devices {
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
     type DeviceFingerprintParams as DeviceFingerprintParams,
+    type DeviceResetParams as DeviceResetParams,
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
@@ -1050,6 +1103,16 @@ export declare namespace Devices {
   };
 
   export {
+    Screenshots as Screenshots,
+    type ScreenshotListResponse as ScreenshotListResponse,
+    type ScreenshotCaptureResponse as ScreenshotCaptureResponse,
+    type ScreenshotListParams as ScreenshotListParams,
+    type ScreenshotDeleteParams as ScreenshotDeleteParams,
+    type ScreenshotCaptureParams as ScreenshotCaptureParams,
+    type ScreenshotImageParams as ScreenshotImageParams,
+  };
+
+  export {
     State as State,
     type A11YNode as A11YNode,
     type StateScreenshotResponse as StateScreenshotResponse,
@@ -1098,23 +1161,15 @@ export declare namespace Devices {
   };
 
   export {
-    MediaSessions as MediaSessions,
-    type MediaSessionCreateResponse as MediaSessionCreateResponse,
-    type MediaSessionActivateResponse as MediaSessionActivateResponse,
-    type MediaSessionRetrieveCurrentResponse as MediaSessionRetrieveCurrentResponse,
-    type MediaSessionCreateParams as MediaSessionCreateParams,
-    type MediaSessionDeleteParams as MediaSessionDeleteParams,
-    type MediaSessionActivateParams as MediaSessionActivateParams,
-  };
-
-  export {
     Recordings as Recordings,
     type RecordingListResponse as RecordingListResponse,
+    type RecordingScreenshotsResponse as RecordingScreenshotsResponse,
     type RecordingStartResponse as RecordingStartResponse,
     type RecordingStatusResponse as RecordingStatusResponse,
     type RecordingStopResponse as RecordingStopResponse,
     type RecordingListParams as RecordingListParams,
     type RecordingDeleteParams as RecordingDeleteParams,
+    type RecordingScreenshotsParams as RecordingScreenshotsParams,
     type RecordingStartParams as RecordingStartParams,
     type RecordingStatusParams as RecordingStatusParams,
     type RecordingStopParams as RecordingStopParams,

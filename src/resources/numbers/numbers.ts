@@ -19,7 +19,7 @@ export class Numbers extends APIResource {
 
   /**
    * Starts a phone-number purchase. Poll the returned phone number for status
-   * updates. `purpose` and `country` cannot be combined.
+   * updates.
    *
    * @example
    * ```ts
@@ -123,18 +123,6 @@ export class Numbers extends APIResource {
   countries(options?: RequestOptions): APIPromise<NumberCountriesResponse> {
     return this._client.get('/numbers/phones/countries', options);
   }
-
-  /**
-   * Lists the optional purposes currently available for a Mobilerun Phone.
-   *
-   * @example
-   * ```ts
-   * const response = await client.numbers.purposes();
-   * ```
-   */
-  purposes(options?: RequestOptions): APIPromise<NumberPurposesResponse> {
-    return this._client.get('/numbers/phones/purposes', options);
-  }
 }
 
 export interface NumberCreateResponse {
@@ -176,6 +164,9 @@ export namespace NumberRetrieveResponse {
      */
     canSend: boolean;
 
+    /**
+     * @deprecated Deprecated: use `lineCapabilities`
+     */
     capabilities: Array<'sms' | 'voice'> | null;
 
     checkoutUrl: string | null;
@@ -186,7 +177,20 @@ export namespace NumberRetrieveResponse {
 
     currentPeriodEnd: string | null;
 
+    /**
+     * Why setup failed. Null unless state is failed, and null when the failure has no
+     * classified reason. out_of_stock: no number is currently available for the
+     * requested country.
+     */
+    failureReason: 'out_of_stock' | 'unknown' | null;
+
     label: string | null;
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    lineCapabilities: Data.LineCapabilities;
 
     phoneNumber: string | null;
 
@@ -214,6 +218,28 @@ export namespace NumberRetrieveResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    export interface LineCapabilities {
+      sms: LineCapabilities.SMS;
+    }
+
+    export namespace LineCapabilities {
+      export interface SMS {
+        /**
+         * This line can receive on this channel.
+         */
+        inbound: boolean;
+
+        /**
+         * This line can send on this channel.
+         */
+        outbound: boolean;
+      }
     }
   }
 }
@@ -243,6 +269,9 @@ export namespace NumberUpdateResponse {
      */
     canSend: boolean;
 
+    /**
+     * @deprecated Deprecated: use `lineCapabilities`
+     */
     capabilities: Array<'sms' | 'voice'> | null;
 
     checkoutUrl: string | null;
@@ -253,7 +282,20 @@ export namespace NumberUpdateResponse {
 
     currentPeriodEnd: string | null;
 
+    /**
+     * Why setup failed. Null unless state is failed, and null when the failure has no
+     * classified reason. out_of_stock: no number is currently available for the
+     * requested country.
+     */
+    failureReason: 'out_of_stock' | 'unknown' | null;
+
     label: string | null;
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    lineCapabilities: Data.LineCapabilities;
 
     phoneNumber: string | null;
 
@@ -281,6 +323,28 @@ export namespace NumberUpdateResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    export interface LineCapabilities {
+      sms: LineCapabilities.SMS;
+    }
+
+    export namespace LineCapabilities {
+      export interface SMS {
+        /**
+         * This line can receive on this channel.
+         */
+        inbound: boolean;
+
+        /**
+         * This line can send on this channel.
+         */
+        outbound: boolean;
+      }
     }
   }
 }
@@ -312,6 +376,9 @@ export namespace NumberListResponse {
      */
     canSend: boolean;
 
+    /**
+     * @deprecated Deprecated: use `lineCapabilities`
+     */
     capabilities: Array<'sms' | 'voice'> | null;
 
     checkoutUrl: string | null;
@@ -322,7 +389,20 @@ export namespace NumberListResponse {
 
     currentPeriodEnd: string | null;
 
+    /**
+     * Why setup failed. Null unless state is failed, and null when the failure has no
+     * classified reason. out_of_stock: no number is currently available for the
+     * requested country.
+     */
+    failureReason: 'out_of_stock' | 'unknown' | null;
+
     label: string | null;
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    lineCapabilities: Item.LineCapabilities;
 
     phoneNumber: string | null;
 
@@ -350,6 +430,28 @@ export namespace NumberListResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    export interface LineCapabilities {
+      sms: LineCapabilities.SMS;
+    }
+
+    export namespace LineCapabilities {
+      export interface SMS {
+        /**
+         * This line can receive on this channel.
+         */
+        inbound: boolean;
+
+        /**
+         * This line can send on this channel.
+         */
+        outbound: boolean;
+      }
     }
   }
 }
@@ -379,6 +481,9 @@ export namespace NumberDeleteResponse {
      */
     canSend: boolean;
 
+    /**
+     * @deprecated Deprecated: use `lineCapabilities`
+     */
     capabilities: Array<'sms' | 'voice'> | null;
 
     checkoutUrl: string | null;
@@ -389,7 +494,20 @@ export namespace NumberDeleteResponse {
 
     currentPeriodEnd: string | null;
 
+    /**
+     * Why setup failed. Null unless state is failed, and null when the failure has no
+     * classified reason. out_of_stock: no number is currently available for the
+     * requested country.
+     */
+    failureReason: 'out_of_stock' | 'unknown' | null;
+
     label: string | null;
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    lineCapabilities: Data.LineCapabilities;
 
     phoneNumber: string | null;
 
@@ -417,6 +535,28 @@ export namespace NumberDeleteResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * What this line supports in principle, per channel. Use `actions` for what you
+     * can do right now.
+     */
+    export interface LineCapabilities {
+      sms: LineCapabilities.SMS;
+    }
+
+    export namespace LineCapabilities {
+      export interface SMS {
+        /**
+         * This line can receive on this channel.
+         */
+        inbound: boolean;
+
+        /**
+         * This line can send on this channel.
+         */
+        outbound: boolean;
+      }
     }
   }
 }
@@ -463,24 +603,6 @@ export namespace NumberCountriesResponse {
   }
 }
 
-export interface NumberPurposesResponse {
-  data: NumberPurposesResponse.Data;
-}
-
-export namespace NumberPurposesResponse {
-  export interface Data {
-    items: Array<Data.Item>;
-  }
-
-  export namespace Data {
-    export interface Item {
-      label: string;
-
-      slug: string;
-    }
-  }
-}
-
 export interface NumberCreateParams {
   /**
    * Use included capacity when available, require included capacity without paid
@@ -490,28 +612,22 @@ export interface NumberCreateParams {
 
   /**
    * Optional ISO 3166-1 alpha-2 country code from GET /numbers/phones/countries.
-   * Cannot be combined with `purpose`.
    */
   country?: string;
 
   /**
    * User-defined display label — NFC-normalized, up to 100 GRAPHEMES (not UTF-16
    * code units; an emoji/flag may span several). Display-only, never used for
-   * routing. Also seeds the billing entity name at purchase.
+   * routing.
    */
   label?: string | null;
-
-  /**
-   * Optional purpose from GET /numbers/phones/purposes.
-   */
-  purpose?: string;
 }
 
 export interface NumberUpdateParams {
   /**
    * User-defined display label — NFC-normalized, up to 100 GRAPHEMES (not UTF-16
    * code units; an emoji/flag may span several). Display-only, never used for
-   * routing. Also seeds the billing entity name at purchase.
+   * routing.
    */
   label?: string | null;
 }
@@ -540,7 +656,6 @@ export declare namespace Numbers {
     type NumberDeleteResponse as NumberDeleteResponse,
     type NumberCapacityResponse as NumberCapacityResponse,
     type NumberCountriesResponse as NumberCountriesResponse,
-    type NumberPurposesResponse as NumberPurposesResponse,
     type NumberCreateParams as NumberCreateParams,
     type NumberUpdateParams as NumberUpdateParams,
     type NumberListParams as NumberListParams,
