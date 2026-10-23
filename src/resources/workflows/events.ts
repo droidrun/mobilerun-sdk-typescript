@@ -73,6 +73,8 @@ export namespace EventDryRunResponse {
       export interface Flow {
         id: string;
 
+        agentId: string | null;
+
         archivedAt: string | null;
 
         blockedAt: string | null;

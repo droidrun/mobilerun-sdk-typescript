@@ -58,11 +58,11 @@ describe('resource devices', () => {
           name: 'name',
           orderBy: 'id',
           orderByDirection: 'asc',
-          ownerId: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
           page: 0,
           pageSize: 0,
           platform: 'android',
           providerId: 'providerId',
+          search: 'search',
           state: ['creating'],
           type: 'android_cloud_phone',
         },
@@ -129,6 +129,14 @@ describe('resource devices', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('reset: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.reset('deviceId', { mode: 'full' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled

@@ -110,7 +110,7 @@ Methods:
 - <code title="get /devices/count">client.devices.<a href="./src/resources/devices/devices.ts">count</a>() -> DeviceCountResponse</code>
 - <code title="get /devices/{deviceId}/fingerprint">client.devices.<a href="./src/resources/devices/devices.ts">fingerprint</a>(deviceID, { ...params }) -> DeviceFingerprintResponse</code>
 - <code title="post /devices/{deviceId}/reboot">client.devices.<a href="./src/resources/devices/devices.ts">reboot</a>(deviceID) -> void</code>
-- <code title="post /devices/{deviceId}/reset">client.devices.<a href="./src/resources/devices/devices.ts">reset</a>(deviceID) -> void</code>
+- <code title="post /devices/{deviceId}/reset">client.devices.<a href="./src/resources/devices/devices.ts">reset</a>(deviceID, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/resume">client.devices.<a href="./src/resources/devices/devices.ts">resume</a>(deviceID) -> void</code>
 - <code title="get /devices/{deviceId}/capabilities">client.devices.<a href="./src/resources/devices/devices.ts">retrieveCapabilities</a>(deviceID) -> DeviceRetrieveCapabilitiesResponse</code>
 - <code title="put /devices/{deviceId}/name">client.devices.<a href="./src/resources/devices/devices.ts">setName</a>(deviceID, { ...params }) -> DeviceSetNameResponse</code>
@@ -332,21 +332,6 @@ Methods:
 
 - <code title="delete /devices/{deviceId}/kiosk">client.devices.kiosk.<a href="./src/resources/devices/kiosk.ts">disable</a>(deviceID, { ...params }) -> void</code>
 - <code title="put /devices/{deviceId}/kiosk">client.devices.kiosk.<a href="./src/resources/devices/kiosk.ts">enable</a>(deviceID, { ...params }) -> void</code>
-
-## MediaSessions
-
-Types:
-
-- <code><a href="./src/resources/devices/media-sessions.ts">MediaSessionCreateResponse</a></code>
-- <code><a href="./src/resources/devices/media-sessions.ts">MediaSessionActivateResponse</a></code>
-- <code><a href="./src/resources/devices/media-sessions.ts">MediaSessionRetrieveCurrentResponse</a></code>
-
-Methods:
-
-- <code title="post /devices/{deviceId}/media-sessions">client.devices.mediaSessions.<a href="./src/resources/devices/media-sessions.ts">create</a>(deviceID, { ...params }) -> MediaSessionCreateResponse</code>
-- <code title="delete /devices/{deviceId}/media-sessions/{sessionId}">client.devices.mediaSessions.<a href="./src/resources/devices/media-sessions.ts">delete</a>(sessionID, { ...params }) -> void</code>
-- <code title="post /devices/{deviceId}/media-sessions/{sessionId}/activate">client.devices.mediaSessions.<a href="./src/resources/devices/media-sessions.ts">activate</a>(sessionID, { ...params }) -> MediaSessionActivateResponse</code>
-- <code title="get /devices/{deviceId}/media-sessions/current">client.devices.mediaSessions.<a href="./src/resources/devices/media-sessions.ts">retrieveCurrent</a>(deviceID) -> MediaSessionRetrieveCurrentResponse</code>
 
 ## Recordings
 
@@ -609,7 +594,7 @@ Methods:
 - <code title="get /flows">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">list</a>({ ...params }) -> FlowListResponse</code>
 - <code title="delete /flows/{flowId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">delete</a>(flowID) -> FlowDeleteResponse</code>
 - <code title="post /flows/{flowId}/activate">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">activate</a>(flowID, { ...params }) -> FlowActivateResponse</code>
-- <code title="get /flows/capacity">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">capacity</a>() -> FlowCapacityResponse</code>
+- <code title="get /flows/capacity">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">capacity</a>({ ...params }) -> FlowCapacityResponse</code>
 - <code title="post /flows/{flowId}/clone">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">clone</a>(flowID, { ...params }) -> FlowCloneResponse</code>
 - <code title="get /flows/{flowId}/delivery-options">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">deliveryOptions</a>(flowID) -> FlowDeliveryOptionsResponse</code>
 - <code title="post /flows/{flowId}/dry-run">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">dryRun</a>(flowID, { ...params }) -> FlowDryRunResponse</code>
