@@ -55,6 +55,7 @@ export {
   type FlowUpdateParams,
   type FlowListParams,
   type FlowActivateParams,
+  type FlowCapacityParams,
   type FlowCloneParams,
   type FlowDryRunParams,
   type FlowRunParams,

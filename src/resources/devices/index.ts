@@ -44,6 +44,7 @@ export {
   type DeviceCreateParams,
   type DeviceListParams,
   type DeviceFingerprintParams,
+  type DeviceResetParams,
   type DeviceSetNameParams,
   type DeviceSummaryParams,
   type DeviceTerminateParams,
@@ -88,15 +89,6 @@ export {
   type LocationResetParams,
   type LocationSetParams,
 } from './location';
-export {
-  MediaSessions,
-  type MediaSessionCreateResponse,
-  type MediaSessionActivateResponse,
-  type MediaSessionRetrieveCurrentResponse,
-  type MediaSessionCreateParams,
-  type MediaSessionDeleteParams,
-  type MediaSessionActivateParams,
-} from './media-sessions';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
 export { Profile, type ProfileUpdateParams } from './profile';
 export {

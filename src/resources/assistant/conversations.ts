@@ -370,6 +370,8 @@ export namespace ConversationHistoryResponse {
 
     synthetic?: boolean;
 
+    turnId?: string | null;
+
     /**
      * @deprecated Deprecated: use createdBy.
      */
@@ -390,7 +392,31 @@ export namespace ConversationHistoryResponse {
 
       agentSessionId?: string;
 
+      /**
+       * Steer user rows appear directly above the collapsed assistant group of their
+       * turn, matching live cloud ordering.
+       */
+      steer?: Metadata.Steer;
+
       turnAnchorMessageId?: string;
+    }
+
+    export namespace Metadata {
+      /**
+       * Steer user rows appear directly above the collapsed assistant group of their
+       * turn, matching live cloud ordering.
+       */
+      export interface Steer {
+        agentMessageId: string;
+
+        state: 'accepted' | 'consumed' | 'dropped';
+
+        targetRole: 'root' | 'worker';
+
+        consumedAt?: string;
+
+        dropReason?: 'turn_closed' | 'aborted';
+      }
     }
   }
 
