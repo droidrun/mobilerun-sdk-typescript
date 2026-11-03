@@ -54,6 +54,15 @@ export class Proxies extends APIResource {
   }
 
   /**
+   * Refreshes a pending dedicated proxy's checkout on explicit payment intent.
+   * Already-paid proxies (provisioning, active, or cancelling) return their current
+   * status without a payment URL. An expired checkout requires a new purchase.
+   */
+  checkout(id: string, options?: RequestOptions): APIPromise<ProxyCheckoutResponse> {
+    return this._client.post(path`/connect/proxies/${id}/checkout`, options);
+  }
+
+  /**
    * Checks right now that the proxy's upstream accepts a connection through its
    * current session. If the upstream refuses the session and the proxy is a rotating
    * (sticky-session) proxy, the proxy is moved onto a fresh session that has been
@@ -317,6 +326,23 @@ export interface ProxyBuyResponse {
   /**
    * Checkout URL to complete payment while status is `pending_payment`. Null once
    * paid or when no payment was required.
+   */
+  paymentUrl?: string | null;
+}
+
+export interface ProxyCheckoutResponse {
+  /**
+   * Lifecycle of a proxy. A freshly created proxy is `checking` while its billing
+   * identity is being resolved — clients should poll until a `paymentUrl` or a later
+   * status appears — then `provisioning` — or `pending_payment` until the customer
+   * completes checkout — and becomes `active` once its upstream is assigned.
+   * `cancelling` retains full access through the paid period; when the subscription
+   * expires the proxy is `ended`. `error` marks a failed provisioning attempt.
+   */
+  status: 'checking' | 'pending_payment' | 'provisioning' | 'active' | 'cancelling' | 'ended' | 'error';
+
+  /**
+   * Payable checkout URL; omitted after payment.
    */
   paymentUrl?: string | null;
 }
@@ -717,6 +743,7 @@ export declare namespace Proxies {
     type ProxyUpdateResponse as ProxyUpdateResponse,
     type ProxyListResponse as ProxyListResponse,
     type ProxyBuyResponse as ProxyBuyResponse,
+    type ProxyCheckoutResponse as ProxyCheckoutResponse,
     type ProxyEnsureHealthyResponse as ProxyEnsureHealthyResponse,
     type ProxyListConnectionsResponse as ProxyListConnectionsResponse,
     type ProxyPingResponse as ProxyPingResponse,
