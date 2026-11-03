@@ -32,22 +32,6 @@ export class Credentials extends APIResource {
   }
 
   /**
-   * Fetches a single credential by `packageName` and `credentialName`, including all
-   * of its stored fields. Returns not found if no matching credential exists.
-   */
-  retrieve(
-    credentialName: string,
-    params: CredentialRetrieveParams,
-    options?: RequestOptions,
-  ): APIPromise<CredentialRetrieveResponse> {
-    const { packageName } = params;
-    return this._client.get(
-      path`/credentials/packages/${packageName}/credentials/${credentialName}`,
-      options,
-    );
-  }
-
-  /**
    * Permanently deletes the credential identified by `packageName` and
    * `credentialName`, removing all of its fields. Returns the deleted credential.
    */
@@ -91,6 +75,10 @@ export namespace CredentialCreateResponse {
      * for credentials created before rollout.
      */
     userId: string | null;
+
+    link?: Data.Link;
+
+    source?: 'mobilerun' | 'onepassword';
   }
 
   export namespace Data {
@@ -106,46 +94,34 @@ export namespace CredentialCreateResponse {
 
       value: string;
     }
-  }
-}
 
-export interface CredentialRetrieveResponse {
-  data: CredentialRetrieveResponse.Data;
-}
+    export interface Link {
+      fieldMap: Array<Link.FieldMap>;
 
-export namespace CredentialRetrieveResponse {
-  export interface Data {
-    createdBy: string | null;
+      itemId: string;
 
-    credentialName: string;
+      itemTitle: string;
 
-    fields: Array<Data.Field>;
+      provider: 'onepassword';
 
-    ownerId: string;
+      vaultId: string;
 
-    packageName: string;
+      vaultName: string;
+    }
 
-    secretPath: string;
+    export namespace Link {
+      export interface FieldMap {
+        fieldId: string;
 
-    /**
-     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
-     * for credentials created before rollout.
-     */
-    userId: string | null;
-  }
-
-  export namespace Data {
-    export interface Field {
-      fieldType:
-        | 'email'
-        | 'username'
-        | 'password'
-        | 'api_token'
-        | 'phone_number'
-        | 'two_factor_secret'
-        | 'backup_codes';
-
-      value: string;
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes';
+      }
     }
   }
 }
@@ -177,6 +153,10 @@ export namespace CredentialDeleteResponse {
      * for credentials created before rollout.
      */
     userId: string | null;
+
+    link?: Data.Link;
+
+    source?: 'mobilerun' | 'onepassword';
   }
 
   export namespace Data {
@@ -191,6 +171,35 @@ export namespace CredentialDeleteResponse {
         | 'backup_codes';
 
       value: string;
+    }
+
+    export interface Link {
+      fieldMap: Array<Link.FieldMap>;
+
+      itemId: string;
+
+      itemTitle: string;
+
+      provider: 'onepassword';
+
+      vaultId: string;
+
+      vaultName: string;
+    }
+
+    export namespace Link {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes';
+      }
     }
   }
 }
@@ -216,10 +225,6 @@ export namespace CredentialCreateParams {
   }
 }
 
-export interface CredentialRetrieveParams {
-  packageName: string;
-}
-
 export interface CredentialDeleteParams {
   packageName: string;
 }
@@ -229,10 +234,8 @@ Credentials.Fields = Fields;
 export declare namespace Credentials {
   export {
     type CredentialCreateResponse as CredentialCreateResponse,
-    type CredentialRetrieveResponse as CredentialRetrieveResponse,
     type CredentialDeleteResponse as CredentialDeleteResponse,
     type CredentialCreateParams as CredentialCreateParams,
-    type CredentialRetrieveParams as CredentialRetrieveParams,
     type CredentialDeleteParams as CredentialDeleteParams,
   };
 

@@ -163,9 +163,9 @@ export class Devices extends APIResource {
    * token.
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<DeviceCreateResponse> {
-    const { billing, query_country, deviceType, profileId, ...body } = params;
+    const { billing, query_country, deviceType, profileId, template, ...body } = params;
     return this._client.post('/devices', {
-      query: { billing, country: query_country, deviceType, profileId },
+      query: { billing, country: query_country, deviceType, profileId, template },
       body,
       ...options,
     });
@@ -231,7 +231,10 @@ export class Devices extends APIResource {
 
   /**
    * Triggers a reboot of the device. The device transitions through its reboot
-   * lifecycle and becomes ready again once the restart completes.
+   * lifecycle and becomes ready again once the restart completes. Only devices whose
+   * capabilities report `reboot=true` can be rebooted. Personal (BYOD) devices
+   * cannot be rebooted remotely: the request is refused with 400
+   * `DEVICE_TOOL_UNSUPPORTED` and nothing happens on the device.
    */
   reboot(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/reboot`, {
@@ -323,9 +326,13 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Terminates the device and releases its resources. The optional `terminateAt` and
-   * `previousDeviceId` body fields are not available to API-key callers; requests
-   * that set them are rejected with 401.
+   * Terminates the device and releases its resources. For a personal (BYOD) device
+   * the owner (API key or user) can instead remove the phone from the account so
+   * anyone can pair it again; the phone must be disconnected first, otherwise the
+   * request is rejected with 409 BYOD_DEVICE_CONNECTED. Other subscription-billed
+   * devices are service-managed and require a service key. The optional
+   * `terminateAt` and `previousDeviceId` body fields also require a service key;
+   * requests that set them without one are rejected with 401.
    */
   terminate(
     deviceID: string,
@@ -550,8 +557,6 @@ export namespace DeviceFingerprintResponse {
 
     hardware?: string;
 
-    imageRepository?: string;
-
     manufacturer?: string;
 
     model?: string;
@@ -606,6 +611,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     microphoneInjection: boolean;
 
     proxy: boolean;
+
+    reboot: boolean;
 
     recording: boolean;
 
@@ -774,6 +781,15 @@ export interface DeviceCreateParams {
   profileId?: string;
 
   /**
+   * Query param: Optional device template, e.g. onboarding. The device gets the
+   * template's Android version and preinstalled apps and is ready in seconds when a
+   * prepared phone is available; otherwise it boots with the same setup. Country,
+   * name and proxy still come from this request. Cannot be combined with profileId,
+   * apps or androidVersion. Omit it to create from the request alone.
+   */
+  template?: string;
+
+  /**
    * Body param
    */
   androidVersion?: number;
@@ -940,6 +956,7 @@ export interface DeviceListParams {
     | 'android_cloud_phone'
     | 'android_physical_phone'
     | 'ios_stealth_phone'
+    | 'ios_phone'
     | 'android_emulator'
     | 'ios_simulator'
     | 'device_slot';
