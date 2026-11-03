@@ -31,8 +31,9 @@ export class Language extends APIResource {
 
   /**
    * Sets the device language/locale to the BCP-47 locale in the request body. An
-   * optional restart flag applies the change immediately by restarting the zygote
-   * instead of waiting for the next reboot.
+   * optional restart flag applies the change immediately by restarting the Android
+   * system framework (open apps are closed) instead of waiting for the next reboot;
+   * some devices ignore it.
    */
   set(deviceID: string, params: LanguageSetParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
@@ -73,8 +74,9 @@ export interface LanguageSetParams {
   locale: string;
 
   /**
-   * Body param: Restart zygote so the locale change takes full effect immediately.
-   * Without it, the locale is written but won't fully apply until the next reboot.
+   * Body param: Restart the Android system framework so the locale change takes full
+   * effect immediately; open apps are closed. Without it, the change may not fully
+   * apply until the next reboot. Some devices ignore this flag.
    */
   restart?: boolean;
 
