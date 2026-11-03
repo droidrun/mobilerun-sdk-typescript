@@ -8,6 +8,7 @@ export {
   type ProxyUpdateResponse,
   type ProxyListResponse,
   type ProxyBuyResponse,
+  type ProxyCheckoutResponse,
   type ProxyEnsureHealthyResponse,
   type ProxyListConnectionsResponse,
   type ProxyPingResponse,
