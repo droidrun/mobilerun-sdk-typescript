@@ -65,13 +65,11 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">CredentialCreateResponse</a></code>
-- <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">CredentialRetrieveResponse</a></code>
 - <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">CredentialDeleteResponse</a></code>
 
 Methods:
 
 - <code title="post /credentials/packages/{packageName}">client.credentials.packages.credentials.<a href="./src/resources/credentials/packages/credentials/credentials.ts">create</a>(packageName, { ...params }) -> CredentialCreateResponse</code>
-- <code title="get /credentials/packages/{packageName}/credentials/{credentialName}">client.credentials.packages.credentials.<a href="./src/resources/credentials/packages/credentials/credentials.ts">retrieve</a>(credentialName, { ...params }) -> CredentialRetrieveResponse</code>
 - <code title="delete /credentials/packages/{packageName}/credentials/{credentialName}">client.credentials.packages.credentials.<a href="./src/resources/credentials/packages/credentials/credentials.ts">delete</a>(credentialName, { ...params }) -> CredentialDeleteResponse</code>
 
 #### Fields
@@ -87,6 +85,52 @@ Methods:
 - <code title="post /credentials/packages/{packageName}/credentials/{credentialName}/fields">client.credentials.packages.credentials.fields.<a href="./src/resources/credentials/packages/credentials/fields.ts">create</a>(credentialName, { ...params }) -> FieldCreateResponse</code>
 - <code title="patch /credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}">client.credentials.packages.credentials.fields.<a href="./src/resources/credentials/packages/credentials/fields.ts">update</a>(fieldType, { ...params }) -> FieldUpdateResponse</code>
 - <code title="delete /credentials/packages/{packageName}/credentials/{credentialName}/fields/{fieldType}">client.credentials.packages.credentials.fields.<a href="./src/resources/credentials/packages/credentials/fields.ts">delete</a>(fieldType, { ...params }) -> FieldDeleteResponse</code>
+
+### Links
+
+Types:
+
+- <code><a href="./src/resources/credentials/packages/links.ts">LinkCreateResponse</a></code>
+
+Methods:
+
+- <code title="post /credentials/packages/{packageName}/links">client.credentials.packages.links.<a href="./src/resources/credentials/packages/links.ts">create</a>(packageName, { ...params }) -> LinkCreateResponse</code>
+
+## Onepassword
+
+Types:
+
+- <code><a href="./src/resources/credentials/onepassword/onepassword.ts">OnepasswordRetrieveResponse</a></code>
+- <code><a href="./src/resources/credentials/onepassword/onepassword.ts">OnepasswordConnectResponse</a></code>
+- <code><a href="./src/resources/credentials/onepassword/onepassword.ts">OnepasswordDisconnectResponse</a></code>
+
+Methods:
+
+- <code title="get /credentials/onepassword">client.credentials.onepassword.<a href="./src/resources/credentials/onepassword/onepassword.ts">retrieve</a>() -> OnepasswordRetrieveResponse</code>
+- <code title="put /credentials/onepassword">client.credentials.onepassword.<a href="./src/resources/credentials/onepassword/onepassword.ts">connect</a>({ ...params }) -> OnepasswordConnectResponse</code>
+- <code title="delete /credentials/onepassword">client.credentials.onepassword.<a href="./src/resources/credentials/onepassword/onepassword.ts">disconnect</a>() -> OnepasswordDisconnectResponse</code>
+
+### Vaults
+
+#### Items
+
+Types:
+
+- <code><a href="./src/resources/credentials/onepassword/vaults/items/items.ts">ItemListResponse</a></code>
+
+Methods:
+
+- <code title="get /credentials/onepassword/vaults/{vaultId}/items">client.credentials.onepassword.vaults.items.<a href="./src/resources/credentials/onepassword/vaults/items/items.ts">list</a>(vaultID) -> ItemListResponse</code>
+
+##### Fields
+
+Types:
+
+- <code><a href="./src/resources/credentials/onepassword/vaults/items/fields.ts">FieldListResponse</a></code>
+
+Methods:
+
+- <code title="get /credentials/onepassword/vaults/{vaultId}/items/{itemId}/fields">client.credentials.onepassword.vaults.items.fields.<a href="./src/resources/credentials/onepassword/vaults/items/fields.ts">list</a>(itemID, { ...params }) -> FieldListResponse</code>
 
 # Devices
 
@@ -418,6 +462,7 @@ Types:
 - <code><a href="./src/resources/connect/proxies.ts">ProxyUpdateResponse</a></code>
 - <code><a href="./src/resources/connect/proxies.ts">ProxyListResponse</a></code>
 - <code><a href="./src/resources/connect/proxies.ts">ProxyBuyResponse</a></code>
+- <code><a href="./src/resources/connect/proxies.ts">ProxyCheckoutResponse</a></code>
 - <code><a href="./src/resources/connect/proxies.ts">ProxyEnsureHealthyResponse</a></code>
 - <code><a href="./src/resources/connect/proxies.ts">ProxyListConnectionsResponse</a></code>
 - <code><a href="./src/resources/connect/proxies.ts">ProxyPingResponse</a></code>
@@ -429,6 +474,7 @@ Methods:
 - <code title="get /connect/proxies">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
 - <code title="post /connect/proxies">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">buy</a>({ ...params }) -> ProxyBuyResponse</code>
 - <code title="delete /connect/proxies/{id}">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">cancel</a>(id) -> void</code>
+- <code title="post /connect/proxies/{id}/checkout">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">checkout</a>(id) -> ProxyCheckoutResponse</code>
 - <code title="post /connect/proxies/{id}/ensure-healthy">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">ensureHealthy</a>(id) -> ProxyEnsureHealthyResponse</code>
 - <code title="get /connect/proxies/{id}/connections">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">listConnections</a>(id, { ...params }) -> ProxyListConnectionsResponse</code>
 - <code title="get /connect/proxies/{id}/ping">client.connect.proxies.<a href="./src/resources/connect/proxies.ts">ping</a>(id) -> ProxyPingResponse</code>
