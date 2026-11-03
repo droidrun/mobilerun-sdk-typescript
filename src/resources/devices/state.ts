@@ -117,6 +117,8 @@ export interface A11YNode {
 
   text: string;
 
+  hint?: string;
+
   isVisibleToUser?: boolean;
 }
 

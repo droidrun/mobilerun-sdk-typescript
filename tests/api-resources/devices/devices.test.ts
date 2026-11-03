@@ -135,7 +135,11 @@ describe('resource devices', () => {
   test.skip('reset: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.devices.reset('deviceId', { mode: 'full' }, { path: '/_stainless_unknown_path' }),
+      client.devices.reset(
+        'deviceId',
+        { mode: 'full', preserve: ['proxy'] },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
