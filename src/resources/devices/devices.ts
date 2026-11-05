@@ -163,9 +163,9 @@ export class Devices extends APIResource {
    * token.
    */
   create(params: DeviceCreateParams, options?: RequestOptions): APIPromise<DeviceCreateResponse> {
-    const { billing, query_country, deviceType, profileId, ...body } = params;
+    const { billing, query_country, deviceType, profileId, template, ...body } = params;
     return this._client.post('/devices', {
-      query: { billing, country: query_country, deviceType, profileId },
+      query: { billing, country: query_country, deviceType, profileId, template },
       body,
       ...options,
     });
@@ -231,7 +231,10 @@ export class Devices extends APIResource {
 
   /**
    * Triggers a reboot of the device. The device transitions through its reboot
-   * lifecycle and becomes ready again once the restart completes.
+   * lifecycle and becomes ready again once the restart completes. Only devices whose
+   * capabilities report `reboot=true` can be rebooted. Personal (BYOD) devices
+   * cannot be rebooted remotely: the request is refused with 400
+   * `DEVICE_TOOL_UNSUPPORTED` and nothing happens on the device.
    */
   reboot(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/reboot`, {
@@ -241,16 +244,13 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Resets the device. The optional body `mode` selects what is erased: `full` is a
-   * factory reset that erases installed apps, accounts and storage and gives the
-   * device a new identity; `identity` gives the device a new fingerprint and keeps
-   * its apps and data. When `mode` is omitted the reset is `full`, or `identity` on
-   * devices whose capabilities report `factoryReset=false`. A mode the device does
-   * not support (see `factoryReset` / `identityReset` in the device capabilities) is
-   * refused with 400 `DEVICE_TOOL_UNSUPPORTED`; legacy devices accept an explicit
-   * mode only when it is the one their capabilities advertise, and always accept a
-   * reset without a mode. The device transitions through its reset lifecycle before
-   * becoming ready again.
+   * Resets the device. `mode` selects what is erased: `full` (factory reset: apps,
+   * accounts, storage, new identity) or `identity` (new fingerprint, apps and data
+   * kept). Without `mode` the reset is `full`, or `identity` on devices with
+   * `factoryReset=false`. A mode or `preserve` value the device does not support is
+   * refused with 400 `DEVICE_TOOL_UNSUPPORTED`. `preserve` restores the latest
+   * proxy, location, locale or timezone set through the API after the reset; omitted
+   * or empty preserves nothing. The device becomes ready again after the reset.
    */
   reset(
     deviceID: string,
@@ -265,9 +265,9 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Wakes a parked device: backend readiness and any required capacity are
-   * preflighted, the same device starts running again, and per-minute billing
-   * resumes. On a device that is not parked this is a no-op ready transition.
+   * Wakes a parked device: it first checks that the device can run again, then the
+   * same device starts and per-minute billing resumes. On a device that is not
+   * parked, the request does nothing.
    */
   resume(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/resume`, {
@@ -323,9 +323,13 @@ export class Devices extends APIResource {
   }
 
   /**
-   * Terminates the device and releases its resources. The optional `terminateAt` and
-   * `previousDeviceId` body fields are not available to API-key callers; requests
-   * that set them are rejected with 401.
+   * Terminates the device and releases its resources. For a personal (BYOD) device
+   * the owner (API key or user) can instead remove the phone from the account so
+   * anyone can pair it again; the phone must be disconnected first, otherwise the
+   * request is rejected with 409 BYOD_DEVICE_CONNECTED. Other subscription-billed
+   * devices cannot be terminated with this request; it is rejected with 401. The
+   * `terminateAt` and `previousDeviceId` body fields are reserved for internal use;
+   * requests that set them are rejected with 401.
    */
   terminate(
     deviceID: string,
@@ -550,8 +554,6 @@ export namespace DeviceFingerprintResponse {
 
     hardware?: string;
 
-    imageRepository?: string;
-
     manufacturer?: string;
 
     model?: string;
@@ -606,6 +608,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
     microphoneInjection: boolean;
 
     proxy: boolean;
+
+    reboot: boolean;
 
     recording: boolean;
 
@@ -761,17 +765,26 @@ export interface DeviceCreateParams {
   query_country?: string;
 
   /**
-   * Query param: Use android*cloud_phone for a cloud Android phone. Only canonical
-   * identifiers are accepted. Other backends are deployment-specific; recognized but
-   * unavailable types return DEVICE_TYPE_UNAVAILABLE (422). Retired dedicated*\*
-   * aliases are rejected with a canonical replacement.
+   * Query param: Device type: android_cloud_phone (cloud Android phone), ios_phone
+   * or device_slot. Any other value is rejected with 422. Not every device type is
+   * available for creation; an unavailable type returns DEVICE_TYPE_UNAVAILABLE
+   * (422).
    */
-  deviceType?: string;
+  deviceType?: 'android_cloud_phone' | 'ios_phone' | 'device_slot';
 
   /**
    * Query param: Profile ID to use as device spec
    */
   profileId?: string;
+
+  /**
+   * Query param: Optional device template, e.g. onboarding. The device gets the
+   * template's Android version and preinstalled apps and is ready in seconds when a
+   * prepared phone is available; otherwise it boots with the same setup. Country,
+   * name and proxy still come from this request. Cannot be combined with profileId,
+   * apps or androidVersion. Omit it to create from the request alone.
+   */
+  template?: string;
 
   /**
    * Body param
@@ -901,8 +914,7 @@ export interface DeviceListParams {
   pageSize?: number;
 
   /**
-   * Filter by the device's platform as served in the platform field (runtime,
-   * announced, else type-derived).
+   * Filter by the device's platform as served in the platform field.
    */
   platform?: 'android' | 'ios';
 
@@ -933,16 +945,9 @@ export interface DeviceListParams {
   > | null;
 
   /**
-   * Canonical device type. Retired dedicated\_\* aliases are no longer accepted.
-   * Availability depends on the deployment.
+   * Filter by device type.
    */
-  type?:
-    | 'android_cloud_phone'
-    | 'android_physical_phone'
-    | 'ios_stealth_phone'
-    | 'android_emulator'
-    | 'ios_simulator'
-    | 'device_slot';
+  type?: 'android_cloud_phone' | 'ios_phone' | 'device_slot';
 }
 
 export interface DeviceFingerprintParams {
@@ -957,6 +962,12 @@ export interface DeviceResetParams {
    * capabilities report factoryReset=false.
    */
   mode?: 'full' | 'identity';
+
+  /**
+   * Device configuration to restore after the reset: the latest value set through
+   * the API. Omitted, null or empty preserves nothing.
+   */
+  preserve?: Array<'proxy' | 'location' | 'locale' | 'timezone'> | null;
 }
 
 export interface DeviceSetNameParams {

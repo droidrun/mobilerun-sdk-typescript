@@ -1096,7 +1096,8 @@ export interface TaskRunParams {
 
   /**
    * The LLM model identifier to use for the task (e.g.
-   * 'mobilerun/mobile-agent-fast')
+   * 'mobilerun/mobile-agent-fast'). When omitted with reasoning=false, the fast-mode
+   * default model is used.
    */
   llmModel?: string;
 
@@ -1183,7 +1184,8 @@ export interface TaskRunStreamedParams {
 
   /**
    * The LLM model identifier to use for the task (e.g.
-   * 'mobilerun/mobile-agent-fast')
+   * 'mobilerun/mobile-agent-fast'). When omitted with reasoning=false, the fast-mode
+   * default model is used.
    */
   llmModel?: string;
 

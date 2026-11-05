@@ -98,6 +98,10 @@ export namespace FieldCreateResponse {
      * for credentials created before rollout.
      */
     userId: string | null;
+
+    link?: Data.Link;
+
+    source?: 'mobilerun' | 'onepassword';
   }
 
   export namespace Data {
@@ -112,6 +116,35 @@ export namespace FieldCreateResponse {
         | 'backup_codes';
 
       value: string;
+    }
+
+    export interface Link {
+      fieldMap: Array<Link.FieldMap>;
+
+      itemId: string;
+
+      itemTitle: string;
+
+      provider: 'onepassword';
+
+      vaultId: string;
+
+      vaultName: string;
+    }
+
+    export namespace Link {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes';
+      }
     }
   }
 }
@@ -143,6 +176,10 @@ export namespace FieldUpdateResponse {
      * for credentials created before rollout.
      */
     userId: string | null;
+
+    link?: Data.Link;
+
+    source?: 'mobilerun' | 'onepassword';
   }
 
   export namespace Data {
@@ -157,6 +194,35 @@ export namespace FieldUpdateResponse {
         | 'backup_codes';
 
       value: string;
+    }
+
+    export interface Link {
+      fieldMap: Array<Link.FieldMap>;
+
+      itemId: string;
+
+      itemTitle: string;
+
+      provider: 'onepassword';
+
+      vaultId: string;
+
+      vaultName: string;
+    }
+
+    export namespace Link {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes';
+      }
     }
   }
 }
@@ -188,6 +254,10 @@ export namespace FieldDeleteResponse {
      * for credentials created before rollout.
      */
     userId: string | null;
+
+    link?: Data.Link;
+
+    source?: 'mobilerun' | 'onepassword';
   }
 
   export namespace Data {
@@ -202,6 +272,35 @@ export namespace FieldDeleteResponse {
         | 'backup_codes';
 
       value: string;
+    }
+
+    export interface Link {
+      fieldMap: Array<Link.FieldMap>;
+
+      itemId: string;
+
+      itemTitle: string;
+
+      provider: 'onepassword';
+
+      vaultId: string;
+
+      vaultName: string;
+    }
+
+    export namespace Link {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes';
+      }
     }
   }
 }

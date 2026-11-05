@@ -1,14 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as LinksAPI from './links';
+import { LinkCreateParams, LinkCreateResponse, Links } from './links';
 import * as CredentialsAPI from './credentials/credentials';
 import {
   CredentialCreateParams,
   CredentialCreateResponse,
   CredentialDeleteParams,
   CredentialDeleteResponse,
-  CredentialRetrieveParams,
-  CredentialRetrieveResponse,
   Credentials,
 } from './credentials/credentials';
 import { APIPromise } from '../../../core/api-promise';
@@ -17,6 +17,7 @@ import { path } from '../../../internal/utils/path';
 
 export class Packages extends APIResource {
   credentials: CredentialsAPI.Credentials = new CredentialsAPI.Credentials(this._client);
+  links: LinksAPI.Links = new LinksAPI.Links(this._client);
 
   /**
    * Creates a new package (identified by `packageName`) under which credentials can
@@ -82,6 +83,10 @@ export namespace PackageListResponse {
      * for credentials created before rollout.
      */
     userId: string | null;
+
+    link?: Data.Link;
+
+    source?: 'mobilerun' | 'onepassword';
   }
 
   export namespace Data {
@@ -96,6 +101,35 @@ export namespace PackageListResponse {
         | 'backup_codes';
 
       value: string;
+    }
+
+    export interface Link {
+      fieldMap: Array<Link.FieldMap>;
+
+      itemId: string;
+
+      itemTitle: string;
+
+      provider: 'onepassword';
+
+      vaultId: string;
+
+      vaultName: string;
+    }
+
+    export namespace Link {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes';
+      }
     }
   }
 }
@@ -115,6 +149,7 @@ export interface PackageCreateParams {
 }
 
 Packages.Credentials = Credentials;
+Packages.Links = Links;
 
 export declare namespace Packages {
   export {
@@ -127,10 +162,14 @@ export declare namespace Packages {
   export {
     Credentials as Credentials,
     type CredentialCreateResponse as CredentialCreateResponse,
-    type CredentialRetrieveResponse as CredentialRetrieveResponse,
     type CredentialDeleteResponse as CredentialDeleteResponse,
     type CredentialCreateParams as CredentialCreateParams,
-    type CredentialRetrieveParams as CredentialRetrieveParams,
     type CredentialDeleteParams as CredentialDeleteParams,
+  };
+
+  export {
+    Links as Links,
+    type LinkCreateResponse as LinkCreateResponse,
+    type LinkCreateParams as LinkCreateParams,
   };
 }
