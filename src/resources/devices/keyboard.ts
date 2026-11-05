@@ -108,7 +108,7 @@ export interface KeyboardWriteParams {
   completionMode?: 'accepted' | 'committed';
 
   /**
-   * Body param: Per-character mistake rate for humantouch typing. -1 uses server
+   * Body param: Per-character mistake rate for humanized typing. -1 uses server
    * default.
    */
   errorRate?: number;

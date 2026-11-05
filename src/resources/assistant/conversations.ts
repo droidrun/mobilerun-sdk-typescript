@@ -537,6 +537,8 @@ export interface ConversationSendParams {
   sessionId: string;
 
   agent?: string;
+
+  model?: string;
 }
 
 export interface ConversationStreamParams {

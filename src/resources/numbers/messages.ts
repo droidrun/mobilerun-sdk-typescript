@@ -82,6 +82,12 @@ export namespace MessageListResponse {
 
     peerNumber: string | null;
 
+    /**
+     * Message status. Outbound messages move queued → sending → sent, or end at
+     * failed. `sent` means the mobile network accepted the message and is the final
+     * success status. `delivered` and `sent_unconfirmed` are kept for compatibility;
+     * current lines return no carrier delivery report, so neither is emitted.
+     */
     status:
       | 'received'
       | 'queued'
@@ -128,6 +134,12 @@ export namespace MessageSendResponse {
 
     peerNumber: string | null;
 
+    /**
+     * Message status. Outbound messages move queued → sending → sent, or end at
+     * failed. `sent` means the mobile network accepted the message and is the final
+     * success status. `delivered` and `sent_unconfirmed` are kept for compatibility;
+     * current lines return no carrier delivery report, so neither is emitted.
+     */
     status:
       | 'received'
       | 'queued'
@@ -171,7 +183,9 @@ export interface MessageSendParams {
   to: string;
 
   /**
-   * Request a delivery report. Defaults to false.
+   * @deprecated Deprecated: best effort and ignored on most lines. Hosted SIM
+   * numbers return no carrier delivery report, so their messages end at `sent` and
+   * no `sms.send.delivered` event follows. Defaults to false.
    */
   deliveryReport?: boolean;
 }
