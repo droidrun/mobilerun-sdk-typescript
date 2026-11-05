@@ -55,6 +55,12 @@ export namespace ConversationListResponse {
 
       occurredAt: string;
 
+      /**
+       * Message status. Outbound messages move queued → sending → sent, or end at
+       * failed. `sent` means the mobile network accepted the message and is the final
+       * success status. `delivered` and `sent_unconfirmed` are kept for compatibility;
+       * current lines return no carrier delivery report, so neither is emitted.
+       */
       status:
         | 'received'
         | 'queued'

@@ -2,6 +2,14 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
+import * as OnepasswordAPI from './onepassword/onepassword';
+import {
+  Onepassword,
+  OnepasswordConnectParams,
+  OnepasswordConnectResponse,
+  OnepasswordDisconnectResponse,
+  OnepasswordRetrieveResponse,
+} from './onepassword/onepassword';
 import * as PackagesAPI from './packages/packages';
 import {
   PackageCreateParams,
@@ -15,6 +23,7 @@ import { RequestOptions } from '../../internal/request-options';
 
 export class Credentials extends APIResource {
   packages: PackagesAPI.Packages = new PackagesAPI.Packages(this._client);
+  onepassword: OnepasswordAPI.Onepassword = new OnepasswordAPI.Onepassword(this._client);
 
   /**
    * Returns a paginated list of all credentials belonging to the authenticated user
@@ -54,6 +63,10 @@ export namespace CredentialListResponse {
      * for credentials created before rollout.
      */
     userId: string | null;
+
+    link?: Item.Link;
+
+    source?: 'mobilerun' | 'onepassword';
   }
 
   export namespace Item {
@@ -69,6 +82,35 @@ export namespace CredentialListResponse {
 
       value: string;
     }
+
+    export interface Link {
+      fieldMap: Array<Link.FieldMap>;
+
+      itemId: string;
+
+      itemTitle: string;
+
+      provider: 'onepassword';
+
+      vaultId: string;
+
+      vaultName: string;
+    }
+
+    export namespace Link {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes';
+      }
+    }
   }
 }
 
@@ -79,6 +121,7 @@ export interface CredentialListParams {
 }
 
 Credentials.Packages = Packages;
+Credentials.Onepassword = Onepassword;
 
 export declare namespace Credentials {
   export {
@@ -92,5 +135,13 @@ export declare namespace Credentials {
     type PackageListResponse as PackageListResponse,
     type PackageListAllResponse as PackageListAllResponse,
     type PackageCreateParams as PackageCreateParams,
+  };
+
+  export {
+    Onepassword as Onepassword,
+    type OnepasswordRetrieveResponse as OnepasswordRetrieveResponse,
+    type OnepasswordConnectResponse as OnepasswordConnectResponse,
+    type OnepasswordDisconnectResponse as OnepasswordDisconnectResponse,
+    type OnepasswordConnectParams as OnepasswordConnectParams,
   };
 }

@@ -22,8 +22,8 @@ export class Messages extends APIResource {
     params: MessageRetrieveParams,
     options?: RequestOptions,
   ): APIPromise<MessageRetrieveResponse> {
-    const { mailboxId } = params;
-    return this._client.get(path`/mailboxes/${mailboxId}/messages/${messageID}`, options);
+    const { mailboxId, ...query } = params;
+    return this._client.get(path`/mailboxes/${mailboxId}/messages/${messageID}`, { query, ...options });
   }
 
   /**
@@ -71,6 +71,13 @@ export namespace MessageRetrieveResponse {
     subject: string | null;
 
     textBody: string | null;
+
+    /**
+     * Raw HTML part as received. Present only with includeHtml=true; null when the
+     * mail has no HTML part or it exceeds 1 MiB (UTF-8 bytes). Untrusted content:
+     * render only in an isolated sandboxed frame, never inline.
+     */
+    htmlBody?: string | null;
   }
 
   export namespace Data {
@@ -109,7 +116,15 @@ export namespace MessageListResponse {
 }
 
 export interface MessageRetrieveParams {
+  /**
+   * Path param
+   */
   mailboxId: string;
+
+  /**
+   * Query param: Return the raw HTML part as htmlBody (untrusted; render isolated).
+   */
+  includeHtml?: 'true' | 'false';
 }
 
 export interface MessageListParams {
