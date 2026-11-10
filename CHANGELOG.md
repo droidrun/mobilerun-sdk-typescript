@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.1.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.1.0...v6.1.1) (2026-11-10)
+
+
+### Chores
+
+* release 6.1.1 ([6a66ce0](https://github.com/droidrun/mobilerun-sdk-typescript/commit/6a66ce08797115f75510e9892f92cc47dcbe4c32))
+* **sdk:** release 6.1.1 ([aa2b7fd](https://github.com/droidrun/mobilerun-sdk-typescript/commit/aa2b7fde6939d836a6af583f837ce26ce8abf951))
+
 ## [6.1.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.0.1...v6.1.0) (2026-11-03)
 
 
