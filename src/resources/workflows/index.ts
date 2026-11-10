@@ -4,6 +4,7 @@ export {
   ActionCatalog,
   type ActionCatalogRetrieveResponse,
   type ActionCatalogListResponse,
+  type ActionCatalogRetrieveParams,
   type ActionCatalogListParams,
 } from './action-catalog';
 export {
@@ -14,6 +15,7 @@ export {
   type ActionListResponse,
   type ActionDeleteResponse,
   type ActionCreateParams,
+  type ActionRetrieveParams,
   type ActionUpdateParams,
   type ActionListParams,
 } from './actions/index';
@@ -46,6 +48,7 @@ export {
   type FlowDeliveryOptionsResponse,
   type FlowDryRunResponse,
   type FlowListRepairsResponse,
+  type FlowRetrieveRepairResponse,
   type FlowRunResponse,
   type FlowTemplateContextResponse,
   type FlowUnblockResponse,
@@ -58,6 +61,7 @@ export {
   type FlowCapacityParams,
   type FlowCloneParams,
   type FlowDryRunParams,
+  type FlowRetrieveRepairParams,
   type FlowRunParams,
   type FlowTemplateContextParams,
   type FlowValidateParams,

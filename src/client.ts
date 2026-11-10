@@ -54,6 +54,13 @@ import {
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
+import {
+  AgentCreateParams,
+  AgentCreateResponse,
+  AgentListResponse,
+  AgentModelProfilesResponse,
+  Agents,
+} from './resources/agents/agents';
 import { Assistant } from './resources/assistant/assistant';
 import { Connect } from './resources/connect/connect';
 import {
@@ -884,6 +891,7 @@ export class Mobilerun {
   webhooks: API.Webhooks = new API.Webhooks(this);
   mailboxes: API.Mailboxes = new API.Mailboxes(this);
   files: API.Files = new API.Files(this);
+  agents: API.Agents = new API.Agents(this);
   assistant: API.Assistant = new API.Assistant(this);
   messages: API.Messages = new API.Messages(this);
   numbers: API.Numbers = new API.Numbers(this);
@@ -900,6 +908,7 @@ Mobilerun.Workflows = Workflows;
 Mobilerun.Webhooks = Webhooks;
 Mobilerun.Mailboxes = Mailboxes;
 Mobilerun.Files = Files;
+Mobilerun.Agents = Agents;
 Mobilerun.Assistant = Assistant;
 Mobilerun.Messages = Messages;
 Mobilerun.Numbers = Numbers;
@@ -1024,6 +1033,14 @@ export declare namespace Mobilerun {
     type FileUpdateParams as FileUpdateParams,
     type FileListParams as FileListParams,
     type FileUploadURLParams as FileUploadURLParams,
+  };
+
+  export {
+    Agents as Agents,
+    type AgentCreateResponse as AgentCreateResponse,
+    type AgentListResponse as AgentListResponse,
+    type AgentModelProfilesResponse as AgentModelProfilesResponse,
+    type AgentCreateParams as AgentCreateParams,
   };
 
   export { Assistant as Assistant };

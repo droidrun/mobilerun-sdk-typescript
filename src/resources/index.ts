@@ -2,6 +2,13 @@
 
 export * from './shared';
 export {
+  Agents,
+  type AgentCreateResponse,
+  type AgentListResponse,
+  type AgentModelProfilesResponse,
+  type AgentCreateParams,
+} from './agents/agents';
+export {
   Apps,
   type AppRetrieveResponse,
   type AppListResponse,

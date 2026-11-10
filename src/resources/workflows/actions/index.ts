@@ -8,6 +8,7 @@ export {
   type ActionListResponse,
   type ActionDeleteResponse,
   type ActionCreateParams,
+  type ActionRetrieveParams,
   type ActionUpdateParams,
   type ActionListParams,
 } from './actions';

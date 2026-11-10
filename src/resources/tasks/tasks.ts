@@ -198,8 +198,10 @@ export namespace TaskRetrieveResponse {
 
     /**
      * Where the task came from: 'api' for tasks created via POST /tasks, 'agent' for
-     * tasks spawned by an agent step. Agent tasks are readable (status, trajectory,
-     * media) but not controllable via this API.
+     * tasks spawned by an agent step or created with internal=true. 'source'
+     * classifies visibility only: tasks created with internal=true stay controllable
+     * via this API, while tasks spawned by an agent step are readable (status,
+     * trajectory, media) but not controllable.
      */
     source?: 'api' | 'agent';
 
@@ -344,8 +346,10 @@ export namespace TaskListResponse {
 
     /**
      * Where the task came from: 'api' for tasks created via POST /tasks, 'agent' for
-     * tasks spawned by an agent step. Agent tasks are readable (status, trajectory,
-     * media) but not controllable via this API.
+     * tasks spawned by an agent step or created with internal=true. 'source'
+     * classifies visibility only: tasks created with internal=true stay controllable
+     * via this API, while tasks spawned by an agent step are readable (status,
+     * trajectory, media) but not controllable.
      */
     source?: 'api' | 'agent';
 
@@ -1044,7 +1048,8 @@ export interface TaskListParams {
   query?: string | null;
 
   /**
-   * Only tasks created via the API ('api') or spawned by an agent step ('agent').
+   * Only tasks created via the API ('api') or tasks spawned by an agent step or
+   * created with internal=true ('agent').
    */
   source?: 'api' | 'agent' | null;
 
@@ -1093,6 +1098,14 @@ export interface TaskRunParams {
    * stealth field; both must agree when supplied together.
    */
   humanize?: boolean;
+
+  /**
+   * Mark a task started by an agent or worker on the user's behalf. It is listed as
+   * source='agent' (excluded from source='api' lists) and its events carry
+   * internal=true so user-facing notifications and webhooks skip it. It is still
+   * billed, controllable and retrievable by id.
+   */
+  internal?: boolean;
 
   /**
    * The LLM model identifier to use for the task (e.g.
@@ -1181,6 +1194,14 @@ export interface TaskRunStreamedParams {
    * stealth field; both must agree when supplied together.
    */
   humanize?: boolean;
+
+  /**
+   * Mark a task started by an agent or worker on the user's behalf. It is listed as
+   * source='agent' (excluded from source='api' lists) and its events carry
+   * internal=true so user-facing notifications and webhooks skip it. It is still
+   * billed, controllable and retrievable by id.
+   */
+  internal?: boolean;
 
   /**
    * The LLM model identifier to use for the task (e.g.

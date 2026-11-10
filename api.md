@@ -414,6 +414,32 @@ Methods:
 - <code title="get /devices/{deviceId}/traffic/sessions">client.devices.trafficSessions.<a href="./src/resources/devices/traffic-sessions.ts">list</a>(deviceID, { ...params }) -> TrafficSessionListResponse</code>
 - <code title="delete /devices/{deviceId}/traffic/sessions/{sessionId}">client.devices.trafficSessions.<a href="./src/resources/devices/traffic-sessions.ts">delete</a>(sessionID, { ...params }) -> TrafficSessionDeleteResponse</code>
 
+## Number
+
+Types:
+
+- <code><a href="./src/resources/devices/number.ts">NumberRetrieveResponse</a></code>
+- <code><a href="./src/resources/devices/number.ts">NumberBindResponse</a></code>
+- <code><a href="./src/resources/devices/number.ts">NumberUnbindResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/{deviceId}/number">client.devices.number.<a href="./src/resources/devices/number.ts">retrieve</a>(deviceID, { ...params }) -> NumberRetrieveResponse</code>
+- <code title="post /devices/{deviceId}/number">client.devices.number.<a href="./src/resources/devices/number.ts">bind</a>(deviceID, { ...params }) -> NumberBindResponse</code>
+- <code title="delete /devices/{deviceId}/number">client.devices.number.<a href="./src/resources/devices/number.ts">unbind</a>(deviceID, { ...params }) -> NumberUnbindResponse</code>
+
+## NumberBindings
+
+Types:
+
+- <code><a href="./src/resources/devices/number-bindings.ts">NumberBindingListResponse</a></code>
+- <code><a href="./src/resources/devices/number-bindings.ts">NumberBindingListCandidatesResponse</a></code>
+
+Methods:
+
+- <code title="get /devices/number-bindings">client.devices.numberBindings.<a href="./src/resources/devices/number-bindings.ts">list</a>() -> NumberBindingListResponse</code>
+- <code title="get /devices/number-bindings/candidates">client.devices.numberBindings.<a href="./src/resources/devices/number-bindings.ts">listCandidates</a>() -> NumberBindingListCandidatesResponse</code>
+
 # Models
 
 Types:
@@ -578,7 +604,7 @@ Types:
 
 Methods:
 
-- <code title="get /action-catalog/{catalogEntryId}">client.workflows.actionCatalog.<a href="./src/resources/workflows/action-catalog.ts">retrieve</a>(catalogEntryID) -> ActionCatalogRetrieveResponse</code>
+- <code title="get /action-catalog/{catalogEntryId}">client.workflows.actionCatalog.<a href="./src/resources/workflows/action-catalog.ts">retrieve</a>(catalogEntryID, { ...params }) -> ActionCatalogRetrieveResponse</code>
 - <code title="get /action-catalog">client.workflows.actionCatalog.<a href="./src/resources/workflows/action-catalog.ts">list</a>({ ...params }) -> ActionCatalogListResponse</code>
 
 ## Actions
@@ -594,7 +620,7 @@ Types:
 Methods:
 
 - <code title="post /actions">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">create</a>({ ...params }) -> ActionCreateResponse</code>
-- <code title="get /actions/{actionId}">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">retrieve</a>(actionID) -> ActionRetrieveResponse</code>
+- <code title="get /actions/{actionId}">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">retrieve</a>(actionID, { ...params }) -> ActionRetrieveResponse</code>
 - <code title="patch /actions/{actionId}">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">update</a>(actionID, { ...params }) -> ActionUpdateResponse</code>
 - <code title="get /actions">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">list</a>({ ...params }) -> ActionListResponse</code>
 - <code title="delete /actions/{actionId}">client.workflows.actions.<a href="./src/resources/workflows/actions/actions.ts">delete</a>(actionID) -> ActionDeleteResponse</code>
@@ -626,6 +652,7 @@ Types:
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowDeliveryOptionsResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowDryRunResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowListRepairsResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowRetrieveRepairResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowRunResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowTemplateContextResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowUnblockResponse</a></code>
@@ -645,6 +672,7 @@ Methods:
 - <code title="get /flows/{flowId}/delivery-options">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">deliveryOptions</a>(flowID) -> FlowDeliveryOptionsResponse</code>
 - <code title="post /flows/{flowId}/dry-run">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">dryRun</a>(flowID, { ...params }) -> FlowDryRunResponse</code>
 - <code title="get /flows/{flowId}/repairs">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">listRepairs</a>(flowID) -> FlowListRepairsResponse</code>
+- <code title="get /flows/{flowId}/repairs/{episodeId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">retrieveRepair</a>(episodeID, { ...params }) -> FlowRetrieveRepairResponse</code>
 - <code title="post /flows/{flowId}/run">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">run</a>(flowID, { ...params }) -> FlowRunResponse</code>
 - <code title="get /flows/template-context">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">templateContext</a>({ ...params }) -> FlowTemplateContextResponse</code>
 - <code title="post /flows/{flowId}/unblock">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">unblock</a>(flowID) -> FlowUnblockResponse</code>
@@ -666,6 +694,20 @@ Methods:
 - <code title="post /flows/{flowId}/actions">client.workflows.flows.actions.<a href="./src/resources/workflows/flows/actions.ts">add</a>(flowID, { ...params }) -> ActionAddResponse</code>
 - <code title="delete /flows/{flowId}/actions/{flowActionId}">client.workflows.flows.actions.<a href="./src/resources/workflows/flows/actions.ts">remove</a>(flowActionID, { ...params }) -> ActionRemoveResponse</code>
 - <code title="put /flows/{flowId}/actions">client.workflows.flows.actions.<a href="./src/resources/workflows/flows/actions.ts">replace</a>(flowID, { ...params }) -> ActionReplaceResponse</code>
+
+### State
+
+Types:
+
+- <code><a href="./src/resources/workflows/flows/state.ts">StateListResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/state.ts">StateDeleteResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/state.ts">StateListVersionsResponse</a></code>
+
+Methods:
+
+- <code title="get /flows/{flowId}/state">client.workflows.flows.state.<a href="./src/resources/workflows/flows/state.ts">list</a>(flowID) -> StateListResponse</code>
+- <code title="delete /flows/{flowId}/state/{key}">client.workflows.flows.state.<a href="./src/resources/workflows/flows/state.ts">delete</a>(key, { ...params }) -> StateDeleteResponse</code>
+- <code title="get /flows/{flowId}/state/{key}/versions">client.workflows.flows.state.<a href="./src/resources/workflows/flows/state.ts">listVersions</a>(key, { ...params }) -> StateListVersionsResponse</code>
 
 ## Events
 
@@ -833,6 +875,80 @@ Methods:
 - <code title="get /agents/files/{fileId}/download">client.files.<a href="./src/resources/files.ts">download</a>(fileID) -> void</code>
 - <code title="post /agents/files/upload-url">client.files.<a href="./src/resources/files.ts">uploadURL</a>({ ...params }) -> FileUploadURLResponse</code>
 
+# Agents
+
+Types:
+
+- <code><a href="./src/resources/agents/agents.ts">AgentCreateResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentListResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentModelProfilesResponse</a></code>
+
+Methods:
+
+- <code title="post /agents">client.agents.<a href="./src/resources/agents/agents.ts">create</a>({ ...params }) -> AgentCreateResponse</code>
+- <code title="get /agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>() -> AgentListResponse</code>
+- <code title="get /agents/model-profiles">client.agents.<a href="./src/resources/agents/agents.ts">modelProfiles</a>() -> AgentModelProfilesResponse</code>
+
+## Profile
+
+Types:
+
+- <code><a href="./src/resources/agents/profile.ts">ProfileUpdateResponse</a></code>
+
+Methods:
+
+- <code title="patch /agents/{agentId}/profile">client.agents.profile.<a href="./src/resources/agents/profile.ts">update</a>(agentID, { ...params }) -> ProfileUpdateResponse</code>
+
+## Files
+
+Types:
+
+- <code><a href="./src/resources/agents/files.ts">FileListResponse</a></code>
+
+Methods:
+
+- <code title="get /agents/{agentId}/files">client.agents.files.<a href="./src/resources/agents/files.ts">list</a>(agentID, { ...params }) -> FileListResponse</code>
+
+## Conversations
+
+Types:
+
+- <code><a href="./src/resources/agents/conversations.ts">ConversationCreateResponse</a></code>
+- <code><a href="./src/resources/agents/conversations.ts">ConversationListResponse</a></code>
+
+Methods:
+
+- <code title="post /agents/{agentId}/chat/sessions">client.agents.conversations.<a href="./src/resources/agents/conversations.ts">create</a>(agentID, { ...params }) -> ConversationCreateResponse</code>
+- <code title="get /agents/{agentId}/chat/sessions">client.agents.conversations.<a href="./src/resources/agents/conversations.ts">list</a>(agentID, { ...params }) -> ConversationListResponse</code>
+
+## Requests
+
+Types:
+
+- <code><a href="./src/resources/agents/requests.ts">RequestRetrieveResponse</a></code>
+- <code><a href="./src/resources/agents/requests.ts">RequestListResponse</a></code>
+- <code><a href="./src/resources/agents/requests.ts">RequestListForAgentResponse</a></code>
+- <code><a href="./src/resources/agents/requests.ts">RequestRetrieveBySessionResponse</a></code>
+
+Methods:
+
+- <code title="get /agents/requests/{requestId}">client.agents.requests.<a href="./src/resources/agents/requests.ts">retrieve</a>(requestID) -> RequestRetrieveResponse</code>
+- <code title="get /agents/requests">client.agents.requests.<a href="./src/resources/agents/requests.ts">list</a>({ ...params }) -> RequestListResponse</code>
+- <code title="get /agents/{agentId}/requests">client.agents.requests.<a href="./src/resources/agents/requests.ts">listForAgent</a>(agentID, { ...params }) -> RequestListForAgentResponse</code>
+- <code title="get /agents/sessions/{sessionId}/request">client.agents.requests.<a href="./src/resources/agents/requests.ts">retrieveBySession</a>(sessionID) -> RequestRetrieveBySessionResponse</code>
+
+## Routines
+
+Types:
+
+- <code><a href="./src/resources/agents/routines.ts">RoutineCreateResponse</a></code>
+- <code><a href="./src/resources/agents/routines.ts">RoutineCloneResponse</a></code>
+
+Methods:
+
+- <code title="post /agents/{agentId}/routines">client.agents.routines.<a href="./src/resources/agents/routines.ts">create</a>(agentID, { ...params }) -> RoutineCreateResponse</code>
+- <code title="post /agents/{agentId}/routines/{routineId}/clone">client.agents.routines.<a href="./src/resources/agents/routines.ts">clone</a>(routineID, { ...params }) -> RoutineCloneResponse</code>
+
 # Assistant
 
 ## Conversations
@@ -858,7 +974,7 @@ Methods:
 - <code title="post /assistant/chat/abort">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">abort</a>({ ...params }) -> ConversationAbortResponse</code>
 - <code title="post /assistant/chat/permission">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">answerPermission</a>({ ...params }) -> ConversationAnswerPermissionResponse</code>
 - <code title="post /assistant/chat/question">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">answerQuestion</a>({ ...params }) -> ConversationAnswerQuestionResponse</code>
-- <code title="get /assistant/chat/messages">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">history</a>({ ...params }) -> ConversationHistoryResponse</code>
+- <code title="get /assistant/chat/sessions/{id}/messages">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">history</a>(id, { ...params }) -> ConversationHistoryResponse</code>
 - <code title="post /assistant/chat/question/reject">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">rejectQuestion</a>({ ...params }) -> ConversationRejectQuestionResponse</code>
 - <code title="post /assistant/chat/message">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">send</a>({ ...params }) -> ConversationSendResponse</code>
 - <code title="get /assistant/chat/stream">client.assistant.conversations.<a href="./src/resources/assistant/conversations.ts">stream</a>({ ...params }) -> string</code>

@@ -26,10 +26,15 @@ export class Actions extends APIResource {
 
   /**
    * Fetch a single action by its ID, including its configured service, method, and
-   * params. Returns 404 if no action matches.
+   * params. Supports `profile=agent_routine`; returns 404 if no action matches or
+   * the action is outside that profile.
    */
-  retrieve(actionID: string, options?: RequestOptions): APIPromise<ActionRetrieveResponse> {
-    return this._client.get(path`/actions/${actionID}`, options);
+  retrieve(
+    actionID: string,
+    query: ActionRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ActionRetrieveResponse> {
+    return this._client.get(path`/actions/${actionID}`, { query, ...options });
   }
 
   /**
@@ -45,8 +50,9 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Return a paginated list of actions. Supports filtering by `service`, free-text
-   * `search`, and ordering by name, createdAt, or updatedAt.
+   * Return a paginated list of actions. Supports filtering by
+   * `profile=agent_routine`, `service`, free-text `search`, and ordering by name,
+   * createdAt, or updatedAt.
    */
   list(
     query: ActionListParams | null | undefined = {},
@@ -85,7 +91,7 @@ export namespace ActionCreateResponse {
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
 
     updatedAt: string | null;
 
@@ -122,7 +128,7 @@ export namespace ActionRetrieveResponse {
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
 
     updatedAt: string | null;
 
@@ -159,7 +165,7 @@ export namespace ActionUpdateResponse {
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
 
     updatedAt: string | null;
 
@@ -198,7 +204,7 @@ export namespace ActionListResponse {
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
+    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
 
     updatedAt: string | null;
 
@@ -227,6 +233,13 @@ export interface ActionCreateParams {
   params?: { [key: string]: unknown };
 }
 
+export interface ActionRetrieveParams {
+  /**
+   * Restrict reads to the agent routine step surface.
+   */
+  profile?: 'agent_routine';
+}
+
 export interface ActionUpdateParams {
   description?: string;
 
@@ -244,9 +257,14 @@ export interface ActionListParams {
 
   pageSize?: number;
 
+  /**
+   * Restrict reads to the agent routine step surface.
+   */
+  profile?: 'agent_routine';
+
   search?: string;
 
-  service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
+  service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
 }
 
 Actions.Services = Services;
@@ -259,6 +277,7 @@ export declare namespace Actions {
     type ActionListResponse as ActionListResponse,
     type ActionDeleteResponse as ActionDeleteResponse,
     type ActionCreateParams as ActionCreateParams,
+    type ActionRetrieveParams as ActionRetrieveParams,
     type ActionUpdateParams as ActionUpdateParams,
     type ActionListParams as ActionListParams,
   };

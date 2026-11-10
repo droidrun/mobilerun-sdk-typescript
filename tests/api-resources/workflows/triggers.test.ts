@@ -29,6 +29,7 @@ describe('resource triggers', () => {
       customPayloadSchema: { foo: 'bar' },
       description: 'description',
       eventType: 'eventType',
+      payload: { foo: 'bar' },
       scheduleRule: {
         type: 'once',
         dateTime: 'dateTime',
@@ -77,6 +78,7 @@ describe('resource triggers', () => {
           description: 'description',
           eventType: 'eventType',
           name: 'x',
+          payload: { foo: 'bar' },
           scheduleRule: {
             type: 'once',
             dateTime: 'dateTime',
