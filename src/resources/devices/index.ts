@@ -89,6 +89,20 @@ export {
   type LocationResetParams,
   type LocationSetParams,
 } from './location';
+export {
+  Number,
+  type NumberRetrieveResponse,
+  type NumberBindResponse,
+  type NumberUnbindResponse,
+  type NumberRetrieveParams,
+  type NumberBindParams,
+  type NumberUnbindParams,
+} from './number';
+export {
+  NumberBindings,
+  type NumberBindingListResponse,
+  type NumberBindingListCandidatesResponse,
+} from './number-bindings';
 export { Packages, type PackageListResponse, type PackageListParams } from './packages';
 export { Profile, type ProfileUpdateParams } from './profile';
 export {

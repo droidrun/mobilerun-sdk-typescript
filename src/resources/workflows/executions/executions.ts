@@ -127,6 +127,8 @@ export namespace ExecutionRetrieveResponse {
      */
     recordings: Array<Data.Recording>;
 
+    repair: Data.Repair | null;
+
     /**
      * Screenshots captured by tasks.run/agent.run steps and saved by scripts into the
      * flow screenshots recording (source recording), ordered by seq. Image bytes are
@@ -252,6 +254,30 @@ export namespace ExecutionRetrieveResponse {
       stepIndex: number;
 
       stoppedAt: string | null;
+    }
+
+    export interface Repair {
+      chatSessionId: string | null;
+
+      episode: number;
+
+      episodeId: string;
+
+      status: 'pending' | 'running' | 'canary' | 'promoting' | 'repaired' | 'failed' | 'escalated';
+
+      terminal: boolean;
+
+      verdict: Repair.Verdict | null;
+    }
+
+    export namespace Repair {
+      export interface Verdict {
+        outcome: 'ok' | 'flaky' | 'broken';
+
+        summary: string;
+
+        reason?: string;
+      }
     }
 
     export interface Screenshot {

@@ -77,10 +77,9 @@ export class Actions extends APIResource {
 
   /**
    * Swipes from a start coordinate to an end coordinate over the given duration in
-   * milliseconds. An optional humanize flag applies human-like jitter and curved
-   * paths on devices that support it. With holdMs > 0 the request returns 422 when
-   * combined with humanize, when duration + holdMs exceeds 9000 ms, or on devices
-   * that do not support it.
+   * milliseconds. The optional humanize flag (best-effort, also with holdMs) adds a
+   * human-like path and timing. With holdMs > 0 the request returns 422 when
+   * duration + holdMs exceeds 9000 ms, or on devices that do not support it.
    */
   swipe(deviceID: string, params: ActionSwipeParams, options?: RequestOptions): APIPromise<void> {
     const { 'X-Device-Display-ID': xDeviceDisplayID, ...body } = params;
