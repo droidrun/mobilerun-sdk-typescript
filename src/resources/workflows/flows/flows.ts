@@ -13,12 +13,22 @@ import {
   ActionReplaceResponse,
   Actions,
 } from './actions';
+import * as StateAPI from './state';
+import {
+  State,
+  StateDeleteParams,
+  StateDeleteResponse,
+  StateListResponse,
+  StateListVersionsParams,
+  StateListVersionsResponse,
+} from './state';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
 export class Flows extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
+  state: StateAPI.State = new StateAPI.State(this._client);
 
   /**
    * Create a flow that binds a trigger (`triggerId`) to an ordered list of actions,
@@ -142,7 +152,8 @@ export class Flows extends APIResource {
    *   the trigger conditions.
    * - `custom`: validates the payload against the custom payload schema (conditions
    *   do not apply).
-   * - `schedule`: ignores the payload and reports the next fire time.
+   * - `schedule`: validates the stored trigger payload and its step references, and
+   *   reports the next fire time; request payload overrides are ignored.
    *
    * The response reports `wouldFire` — whether the flow would actually run right now
    * — alongside the gates that decide it (enabled, device attached, blocked,
@@ -161,6 +172,18 @@ export class Flows extends APIResource {
    */
   listRepairs(flowID: string, options?: RequestOptions): APIPromise<FlowListRepairsResponse> {
     return this._client.get(path`/flows/${flowID}/repairs`, options);
+  }
+
+  /**
+   * Get a self-healing repair episode
+   */
+  retrieveRepair(
+    episodeID: string,
+    params: FlowRetrieveRepairParams,
+    options?: RequestOptions,
+  ): APIPromise<FlowRetrieveRepairResponse> {
+    const { flowId } = params;
+    return this._client.get(path`/flows/${flowId}/repairs/${episodeID}`, options);
   }
 
   /**
@@ -225,7 +248,8 @@ export class Flows extends APIResource {
    * - `event`: validates the payload against the event catalog schema and evaluates
    *   the trigger conditions; a failing gate returns 409 `conditions_not_met` with
    *   the dry-run report.
-   * - `schedule`: the payload is ignored.
+   * - `schedule`: uses the stored trigger payload as event.payload; request payload
+   *   overrides are ignored.
    */
   verify(flowID: string, body: FlowVerifyParams, options?: RequestOptions): APIPromise<FlowVerifyResponse> {
     return this._client.post(path`/flows/${flowID}/verify`, { body, ...options });
@@ -272,8 +296,14 @@ export namespace FlowCreateResponse {
 
     lastFailureAt: string | null;
 
+    /**
+     * Curated flow failure class. device_unavailable blocks immediately for a
+     * terminated device or a device confirmed gone; event deviceState="gone" is
+     * triggers-defined for a deleted/not-found device.
+     */
     lastFailureCode:
       | 'device_not_found'
+      | 'device_unavailable'
       | 'permission_denied'
       | 'client_error'
       | 'transient'
@@ -295,6 +325,8 @@ export namespace FlowCreateResponse {
 
     ownerId: string;
 
+    ownerWake: 'final' | 'off';
+
     /**
      * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
      * recordingEnabled=true, "off" = recordingEnabled=false).
@@ -302,6 +334,12 @@ export namespace FlowCreateResponse {
     recordingEnabled: boolean;
 
     recordingPolicy: Data.RecordingPolicy;
+
+    /**
+     * Effective routine result delivery: the stored setting, else message for a chat
+     * sink, else none.
+     */
+    resultDelivery: 'none' | 'message' | 'wake';
 
     selfHealingEnabled: boolean;
 
@@ -333,7 +371,15 @@ export namespace FlowCreateResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * not allowed when destination is mobilerun
+       * Absolute destination folder; not allowed when destination is mobilerun. May
+       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+       * of that run lands in the same folder. Each substituted value must be a single
+       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+       * delivered directly into the resolved folder; with a static folder they go into a
+       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
        */
       folder?: string;
 
@@ -390,12 +436,20 @@ export namespace FlowRetrieveResponse {
      */
     enabled: boolean;
 
+    health: Data.Health;
+
     healthMonitoringEnabled: boolean;
 
     lastFailureAt: string | null;
 
+    /**
+     * Curated flow failure class. device_unavailable blocks immediately for a
+     * terminated device or a device confirmed gone; event deviceState="gone" is
+     * triggers-defined for a deleted/not-found device.
+     */
     lastFailureCode:
       | 'device_not_found'
+      | 'device_unavailable'
       | 'permission_denied'
       | 'client_error'
       | 'transient'
@@ -417,6 +471,8 @@ export namespace FlowRetrieveResponse {
 
     ownerId: string;
 
+    ownerWake: 'final' | 'off';
+
     /**
      * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
      * recordingEnabled=true, "off" = recordingEnabled=false).
@@ -424,6 +480,12 @@ export namespace FlowRetrieveResponse {
     recordingEnabled: boolean;
 
     recordingPolicy: Data.RecordingPolicy;
+
+    /**
+     * Effective routine result delivery: the stored setting, else message for a chat
+     * sink, else none.
+     */
+    resultDelivery: 'none' | 'message' | 'wake';
 
     selfHealingEnabled: boolean;
 
@@ -455,7 +517,15 @@ export namespace FlowRetrieveResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * not allowed when destination is mobilerun
+       * Absolute destination folder; not allowed when destination is mobilerun. May
+       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+       * of that run lands in the same folder. Each substituted value must be a single
+       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+       * delivered directly into the resolved folder; with a static folder they go into a
+       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
        */
       folder?: string;
 
@@ -468,6 +538,48 @@ export namespace FlowRetrieveResponse {
       export interface Recording {
         filename: string;
       }
+    }
+
+    export interface Health {
+      /**
+       * Whether automatic health-status transitions are enabled; healthMonitoringEnabled
+       * must also be true.
+       */
+      autoBlockEnabled: boolean;
+
+      blockThreshold: number;
+
+      failingThreshold: number;
+
+      /**
+       * Default for new routines; this flow uses selfHealingMaxAttempts.
+       */
+      maxAttemptsDefault: number;
+
+      /**
+       * Permanent failure classes count toward the thresholds; invalid_config, preflight
+       * device_not_found, and device_unavailable with a terminated or confirmed gone
+       * device block immediately. Event deviceState="gone" is triggers-defined for a
+       * deleted/not-found device. Other device_unavailable states use normal thresholds;
+       * transient never counts.
+       */
+      permanentFailureCodes: Array<
+        | 'device_not_found'
+        | 'device_unavailable'
+        | 'permission_denied'
+        | 'client_error'
+        | 'transient'
+        | 'logic'
+        | 'invalid_config'
+        | null
+      >;
+
+      /**
+       * Configuration eligibility: health monitoring and self-healing are both enabled,
+       * and the flow is enabled and not deleted. Actual repair additionally requires an
+       * enabled repair worker and an eligible script execution/timeout failure.
+       */
+      selfHealingEligible: boolean;
     }
 
     export interface RecordingPolicy {
@@ -516,8 +628,14 @@ export namespace FlowUpdateResponse {
 
     lastFailureAt: string | null;
 
+    /**
+     * Curated flow failure class. device_unavailable blocks immediately for a
+     * terminated device or a device confirmed gone; event deviceState="gone" is
+     * triggers-defined for a deleted/not-found device.
+     */
     lastFailureCode:
       | 'device_not_found'
+      | 'device_unavailable'
       | 'permission_denied'
       | 'client_error'
       | 'transient'
@@ -539,6 +657,8 @@ export namespace FlowUpdateResponse {
 
     ownerId: string;
 
+    ownerWake: 'final' | 'off';
+
     /**
      * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
      * recordingEnabled=true, "off" = recordingEnabled=false).
@@ -546,6 +666,12 @@ export namespace FlowUpdateResponse {
     recordingEnabled: boolean;
 
     recordingPolicy: Data.RecordingPolicy;
+
+    /**
+     * Effective routine result delivery: the stored setting, else message for a chat
+     * sink, else none.
+     */
+    resultDelivery: 'none' | 'message' | 'wake';
 
     selfHealingEnabled: boolean;
 
@@ -577,7 +703,15 @@ export namespace FlowUpdateResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * not allowed when destination is mobilerun
+       * Absolute destination folder; not allowed when destination is mobilerun. May
+       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+       * of that run lands in the same folder. Each substituted value must be a single
+       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+       * delivered directly into the resolved folder; with a static folder they go into a
+       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
        */
       folder?: string;
 
@@ -640,8 +774,14 @@ export namespace FlowListResponse {
 
     lastFailureAt: string | null;
 
+    /**
+     * Curated flow failure class. device_unavailable blocks immediately for a
+     * terminated device or a device confirmed gone; event deviceState="gone" is
+     * triggers-defined for a deleted/not-found device.
+     */
     lastFailureCode:
       | 'device_not_found'
+      | 'device_unavailable'
       | 'permission_denied'
       | 'client_error'
       | 'transient'
@@ -663,6 +803,8 @@ export namespace FlowListResponse {
 
     ownerId: string;
 
+    ownerWake: 'final' | 'off';
+
     /**
      * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
      * recordingEnabled=true, "off" = recordingEnabled=false).
@@ -670,6 +812,12 @@ export namespace FlowListResponse {
     recordingEnabled: boolean;
 
     recordingPolicy: Item.RecordingPolicy;
+
+    /**
+     * Effective routine result delivery: the stored setting, else message for a chat
+     * sink, else none.
+     */
+    resultDelivery: 'none' | 'message' | 'wake';
 
     selfHealingEnabled: boolean;
 
@@ -701,7 +849,15 @@ export namespace FlowListResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * not allowed when destination is mobilerun
+       * Absolute destination folder; not allowed when destination is mobilerun. May
+       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+       * of that run lands in the same folder. Each substituted value must be a single
+       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+       * delivered directly into the resolved folder; with a static folder they go into a
+       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
        */
       folder?: string;
 
@@ -766,8 +922,14 @@ export namespace FlowActivateResponse {
 
     lastFailureAt: string | null;
 
+    /**
+     * Curated flow failure class. device_unavailable blocks immediately for a
+     * terminated device or a device confirmed gone; event deviceState="gone" is
+     * triggers-defined for a deleted/not-found device.
+     */
     lastFailureCode:
       | 'device_not_found'
+      | 'device_unavailable'
       | 'permission_denied'
       | 'client_error'
       | 'transient'
@@ -789,6 +951,8 @@ export namespace FlowActivateResponse {
 
     ownerId: string;
 
+    ownerWake: 'final' | 'off';
+
     /**
      * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
      * recordingEnabled=true, "off" = recordingEnabled=false).
@@ -796,6 +960,12 @@ export namespace FlowActivateResponse {
     recordingEnabled: boolean;
 
     recordingPolicy: Data.RecordingPolicy;
+
+    /**
+     * Effective routine result delivery: the stored setting, else message for a chat
+     * sink, else none.
+     */
+    resultDelivery: 'none' | 'message' | 'wake';
 
     selfHealingEnabled: boolean;
 
@@ -827,7 +997,15 @@ export namespace FlowActivateResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * not allowed when destination is mobilerun
+       * Absolute destination folder; not allowed when destination is mobilerun. May
+       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+       * of that run lands in the same folder. Each substituted value must be a single
+       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+       * delivered directly into the resolved folder; with a static folder they go into a
+       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
        */
       folder?: string;
 
@@ -902,8 +1080,14 @@ export namespace FlowCloneResponse {
 
     lastFailureAt: string | null;
 
+    /**
+     * Curated flow failure class. device_unavailable blocks immediately for a
+     * terminated device or a device confirmed gone; event deviceState="gone" is
+     * triggers-defined for a deleted/not-found device.
+     */
     lastFailureCode:
       | 'device_not_found'
+      | 'device_unavailable'
       | 'permission_denied'
       | 'client_error'
       | 'transient'
@@ -925,6 +1109,8 @@ export namespace FlowCloneResponse {
 
     ownerId: string;
 
+    ownerWake: 'final' | 'off';
+
     /**
      * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
      * recordingEnabled=true, "off" = recordingEnabled=false).
@@ -932,6 +1118,12 @@ export namespace FlowCloneResponse {
     recordingEnabled: boolean;
 
     recordingPolicy: Data.RecordingPolicy;
+
+    /**
+     * Effective routine result delivery: the stored setting, else message for a chat
+     * sink, else none.
+     */
+    resultDelivery: 'none' | 'message' | 'wake';
 
     selfHealingEnabled: boolean;
 
@@ -963,7 +1155,15 @@ export namespace FlowCloneResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * not allowed when destination is mobilerun
+       * Absolute destination folder; not allowed when destination is mobilerun. May
+       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+       * of that run lands in the same folder. Each substituted value must be a single
+       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+       * delivered directly into the resolved folder; with a static folder they go into a
+       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
        */
       folder?: string;
 
@@ -1062,7 +1262,7 @@ export namespace FlowDryRunResponse {
 
       recordingEnabled: boolean;
 
-      service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
+      service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
 
       /**
        * Nested child actions (loop/branch bodies), each the same shape as a
@@ -1157,6 +1357,64 @@ export namespace FlowListRepairsResponse {
   }
 }
 
+export interface FlowRetrieveRepairResponse {
+  data: FlowRetrieveRepairResponse.Data;
+}
+
+export namespace FlowRetrieveRepairResponse {
+  export interface Data {
+    id: string;
+
+    agentRunId: string | null;
+
+    attempt: number;
+
+    candidateSlug: string;
+
+    chatSessionId: string | null;
+
+    createdAt: string | null;
+
+    deviceId: string | null;
+
+    episode: number;
+
+    error: string | null;
+
+    failedStepIndex: number;
+
+    finishedAt: string | null;
+
+    flowId: string;
+
+    flowStatus: 'healthy' | 'failing' | 'blocked';
+
+    maxAttempts: number;
+
+    originalSlug: string;
+
+    sourceExecutionId: string;
+
+    startedAt: string | null;
+
+    status: 'pending' | 'running' | 'canary' | 'promoting' | 'repaired' | 'failed' | 'escalated';
+
+    updatedAt: string | null;
+
+    verdict: Data.Verdict | null;
+  }
+
+  export namespace Data {
+    export interface Verdict {
+      outcome: 'ok' | 'flaky' | 'broken';
+
+      summary: string;
+
+      reason?: string;
+    }
+  }
+}
+
 export interface FlowRunResponse {
   data: FlowRunResponse.Data;
 }
@@ -1170,6 +1428,33 @@ export namespace FlowRunResponse {
      * the original run.
      */
     executionIds: Array<string>;
+
+    /**
+     * At least one admitted execution failed queue submission. This is an enqueue
+     * error, not a skip. Keyed runs report prepared executions; post-commit submission
+     * failures are recorded on the execution instead.
+     */
+    enqueueFailed?: true;
+
+    /**
+     * Why no execution was admitted: device_required means no device and actions are
+     * not device-free eligible; flow_disabled means disabled at admission;
+     * flow_unavailable means missing or archived at admission. Blocked flows keep
+     * their existing error response. Manual runs bypass trigger conditions.
+     */
+    skipped?: Data.Skipped;
+  }
+
+  export namespace Data {
+    /**
+     * Why no execution was admitted: device_required means no device and actions are
+     * not device-free eligible; flow_disabled means disabled at admission;
+     * flow_unavailable means missing or archived at admission. Blocked flows keep
+     * their existing error response. Manual runs bypass trigger conditions.
+     */
+    export interface Skipped {
+      reason: 'device_required' | 'flow_disabled' | 'flow_unavailable';
+    }
   }
 }
 
@@ -1206,7 +1491,20 @@ export namespace FlowTemplateContextResponse {
 
       name: string;
 
-      shape?: unknown;
+      /**
+       * Known root members; meta lists all execution calendar variables
+       */
+      shape: Array<Root.Shape> | null;
+    }
+
+    export namespace Root {
+      export interface Shape {
+        description: string;
+
+        example: string;
+
+        name: string;
+      }
     }
 
     export interface StepReference {
@@ -1261,8 +1559,14 @@ export namespace FlowUnblockResponse {
 
     lastFailureAt: string | null;
 
+    /**
+     * Curated flow failure class. device_unavailable blocks immediately for a
+     * terminated device or a device confirmed gone; event deviceState="gone" is
+     * triggers-defined for a deleted/not-found device.
+     */
     lastFailureCode:
       | 'device_not_found'
+      | 'device_unavailable'
       | 'permission_denied'
       | 'client_error'
       | 'transient'
@@ -1284,6 +1588,8 @@ export namespace FlowUnblockResponse {
 
     ownerId: string;
 
+    ownerWake: 'final' | 'off';
+
     /**
      * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
      * recordingEnabled=true, "off" = recordingEnabled=false).
@@ -1291,6 +1597,12 @@ export namespace FlowUnblockResponse {
     recordingEnabled: boolean;
 
     recordingPolicy: Data.RecordingPolicy;
+
+    /**
+     * Effective routine result delivery: the stored setting, else message for a chat
+     * sink, else none.
+     */
+    resultDelivery: 'none' | 'message' | 'wake';
 
     selfHealingEnabled: boolean;
 
@@ -1322,7 +1634,15 @@ export namespace FlowUnblockResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * not allowed when destination is mobilerun
+       * Absolute destination folder; not allowed when destination is mobilerun. May
+       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+       * of that run lands in the same folder. Each substituted value must be a single
+       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+       * delivered directly into the resolved folder; with a static folder they go into a
+       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
        */
       folder?: string;
 
@@ -1364,9 +1684,21 @@ export namespace FlowValidateResponse {
 
       message: string;
 
+      actionId?: string;
+
       knownSteps?: Array<string>;
 
       reference?: string;
+
+      repair?: Error.Repair;
+    }
+
+    export namespace Error {
+      export interface Repair {
+        action: 'fix_spec_and_restart' | 'ask_user' | 'retry_later';
+
+        hint: string;
+      }
     }
 
     export interface Warning {
@@ -1439,6 +1771,8 @@ export interface FlowCreateParams {
   notifyOnSuccess?: boolean;
 
   notifyWebhookId?: string | null;
+
+  ownerWake?: 'final' | 'off';
 
   recordingEnabled?: boolean;
 
@@ -1514,7 +1848,15 @@ export namespace FlowCreateParams {
     destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
     /**
-     * not allowed when destination is mobilerun
+     * Absolute destination folder; not allowed when destination is mobilerun. May
+     * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+     * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+     * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+     * of that run lands in the same folder. Each substituted value must be a single
+     * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+     * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+     * delivered directly into the resolved folder; with a static folder they go into a
+     * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
      */
     folder?: string;
 
@@ -1562,6 +1904,8 @@ export interface FlowUpdateParams {
 
   notifyWebhookId?: string | null;
 
+  ownerWake?: 'final' | 'off';
+
   /**
    * @deprecated Deprecated compatibility field. true maps to
    * recordingPolicy.mode="flow"; false maps to "off".
@@ -1582,7 +1926,15 @@ export namespace FlowUpdateParams {
     destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
     /**
-     * not allowed when destination is mobilerun
+     * Absolute destination folder; not allowed when destination is mobilerun. May
+     * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+     * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+     * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+     * of that run lands in the same folder. Each substituted value must be a single
+     * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+     * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+     * delivered directly into the resolved folder; with a static folder they go into a
+     * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
      */
     folder?: string;
 
@@ -1658,6 +2010,10 @@ export interface FlowDryRunParams {
   payload?: { [key: string]: unknown };
 }
 
+export interface FlowRetrieveRepairParams {
+  flowId: string;
+}
+
 export interface FlowRunParams {
   /**
    * Record and keep this run's scripts.run screenshots
@@ -1673,71 +2029,110 @@ export interface FlowTemplateContextParams {
   templateResolutionVersion?: number;
 }
 
-export interface FlowValidateParams {
-  actions: Array<FlowValidateParams.FlowActionInput | FlowValidateParams.FlowDraftActionInput>;
+export type FlowValidateParams = FlowValidateParams.Variant0 | FlowValidateParams.Variant1;
 
-  name: string;
+export declare namespace FlowValidateParams {
+  export interface Variant0 {
+    actions: Array<Variant0.FlowActionInput | Variant0.FlowDraftActionInput>;
 
-  cooldownScope?: 'flow' | 'device';
+    name: string;
 
-  cooldownSeconds?: number | null;
+    cooldownScope?: 'flow' | 'device';
 
-  delivery?: FlowValidateParams.Delivery;
+    cooldownSeconds?: number | null;
 
-  description?: string;
+    delivery?: Variant0.Delivery;
 
-  deviceIds?: Array<string>;
+    description?: string;
 
-  enabled?: boolean;
+    deviceIds?: Array<string>;
 
-  healthMonitoringEnabled?: boolean;
+    enabled?: boolean;
 
-  notifyOnFailure?: boolean;
+    healthMonitoringEnabled?: boolean;
 
-  notifyOnSuccess?: boolean;
+    notifyOnFailure?: boolean;
 
-  notifyWebhookId?: string | null;
+    notifyOnSuccess?: boolean;
 
-  recordingEnabled?: boolean;
+    notifyWebhookId?: string | null;
 
-  recordingPolicy?: FlowValidateParams.RecordingPolicy;
-
-  selfHealingEnabled?: boolean;
-
-  selfHealingMaxAttempts?: number;
-
-  triggerId?: string;
-}
-
-export namespace FlowValidateParams {
-  export interface FlowActionInput {
-    actionId: string;
-
-    position: number;
-
-    children?: Array<FlowActionInput.Child>;
-
-    continueOnError?: boolean;
-
-    /**
-     * Stable identifier used by template resolution v2+ to address this step as
-     * {{key.field}}. Omitted keys are derived from the step name whenever a flow is
-     * created. For template resolution v3, replacing an existing flow's full action
-     * tree requires every step to carry an explicit key — a missing key is rejected
-     * there, not derived, so a name change can never silently move a step's key.
-     */
-    key?: string;
-
-    nameOverride?: string;
-
-    overrides?: FlowActionInput.Overrides | null;
+    ownerWake?: 'final' | 'off';
 
     recordingEnabled?: boolean;
+
+    recordingPolicy?: Variant0.RecordingPolicy;
+
+    selfHealingEnabled?: boolean;
+
+    selfHealingMaxAttempts?: number;
+
+    triggerId?: string;
   }
 
-  export namespace FlowActionInput {
-    export interface Child {
+  export namespace Variant0 {
+    export interface FlowActionInput {
       actionId: string;
+
+      position: number;
+
+      children?: Array<FlowActionInput.Child>;
+
+      continueOnError?: boolean;
+
+      /**
+       * Stable identifier used by template resolution v2+ to address this step as
+       * {{key.field}}. Omitted keys are derived from the step name whenever a flow is
+       * created. For template resolution v3, replacing an existing flow's full action
+       * tree requires every step to carry an explicit key — a missing key is rejected
+       * there, not derived, so a name change can never silently move a step's key.
+       */
+      key?: string;
+
+      nameOverride?: string;
+
+      overrides?: FlowActionInput.Overrides | null;
+
+      recordingEnabled?: boolean;
+    }
+
+    export namespace FlowActionInput {
+      export interface Child {
+        actionId: string;
+
+        position: number;
+
+        continueOnError?: boolean;
+
+        /**
+         * Stable identifier used by template resolution v2+ to address this step as
+         * {{key.field}}. Omitted keys are derived from the step name whenever a flow is
+         * created. For template resolution v3, replacing an existing flow's full action
+         * tree requires every step to carry an explicit key — a missing key is rejected
+         * there, not derived, so a name change can never silently move a step's key.
+         */
+        key?: string;
+
+        nameOverride?: string;
+
+        overrides?: Child.Overrides | null;
+
+        recordingEnabled?: boolean;
+      }
+
+      export namespace Child {
+        export interface Overrides {
+          params?: { [key: string]: unknown };
+        }
+      }
+
+      export interface Overrides {
+        params?: { [key: string]: unknown };
+      }
+    }
+
+    export interface FlowDraftActionInput {
+      draft: FlowDraftActionInput.Draft;
 
       position: number;
 
@@ -1754,82 +2149,285 @@ export namespace FlowValidateParams {
 
       nameOverride?: string;
 
-      overrides?: Child.Overrides | null;
+      overrides?: FlowDraftActionInput.Overrides | null;
 
       recordingEnabled?: boolean;
     }
 
-    export namespace Child {
+    export namespace FlowDraftActionInput {
+      export interface Draft {
+        method: string;
+
+        name: string;
+
+        service: string;
+
+        params?: { [key: string]: unknown };
+      }
+
       export interface Overrides {
         params?: { [key: string]: unknown };
       }
     }
 
-    export interface Overrides {
-      params?: { [key: string]: unknown };
+    export interface Delivery {
+      destination: 'mobilerun' | 'one_drive' | 'google_drive';
+
+      /**
+       * Absolute destination folder; not allowed when destination is mobilerun. May
+       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+       * of that run lands in the same folder. Each substituted value must be a single
+       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+       * delivered directly into the resolved folder; with a static folder they go into a
+       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+       */
+      folder?: string;
+
+      recording?: Delivery.Recording;
+
+      screenshots?: unknown;
+    }
+
+    export namespace Delivery {
+      export interface Recording {
+        filename: string;
+      }
+    }
+
+    export interface RecordingPolicy {
+      mode: 'off' | 'flow' | 'selected_steps';
     }
   }
 
-  export interface FlowDraftActionInput {
-    draft: FlowDraftActionInput.Draft;
+  export interface Variant1 {
+    draft: Variant1.Draft;
 
-    position: number;
+    agentId?: string;
 
-    continueOnError?: boolean;
+    contract?: Variant1.Contract;
 
-    /**
-     * Stable identifier used by template resolution v2+ to address this step as
-     * {{key.field}}. Omitted keys are derived from the step name whenever a flow is
-     * created. For template resolution v3, replacing an existing flow's full action
-     * tree requires every step to carry an explicit key — a missing key is rejected
-     * there, not derived, so a name change can never silently move a step's key.
-     */
-    key?: string;
-
-    nameOverride?: string;
-
-    overrides?: FlowDraftActionInput.Overrides | null;
-
-    recordingEnabled?: boolean;
+    verify?: Variant1.Verify;
   }
 
-  export namespace FlowDraftActionInput {
+  export namespace Variant1 {
     export interface Draft {
-      method: string;
+      actions: Array<Draft.Action>;
 
-      name: string;
+      flow: Draft.Flow;
 
-      service: string;
-
-      params?: { [key: string]: unknown };
+      trigger: { [key: string]: unknown };
     }
 
-    export interface Overrides {
-      params?: { [key: string]: unknown };
+    export namespace Draft {
+      export interface Action {
+        catalogEntryId: string;
+
+        name: string;
+
+        position: number;
+
+        role: string;
+
+        description?: string;
+
+        params?: { [key: string]: unknown };
+      }
+
+      export interface Flow {
+        cooldownScope?: 'flow' | 'device';
+
+        cooldownSeconds?: number | null;
+
+        delivery?: Flow.Delivery;
+
+        description?: string;
+
+        deviceIds?: Array<string>;
+
+        executionMode?: 'device' | 'cloud';
+
+        healthMonitoringEnabled?: boolean;
+
+        name?: string;
+
+        recordingPolicy?: Flow.RecordingPolicy;
+
+        selfHealingEnabled?: boolean;
+
+        selfHealingMaxAttempts?: number;
+      }
+
+      export namespace Flow {
+        export interface Delivery {
+          destination: 'mobilerun' | 'one_drive' | 'google_drive';
+
+          /**
+           * Absolute destination folder; not allowed when destination is mobilerun. May
+           * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+           * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+           * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+           * of that run lands in the same folder. Each substituted value must be a single
+           * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+           * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+           * delivered directly into the resolved folder; with a static folder they go into a
+           * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+           */
+          folder?: string;
+
+          recording?: Delivery.Recording;
+
+          screenshots?: unknown;
+        }
+
+        export namespace Delivery {
+          export interface Recording {
+            filename: string;
+          }
+        }
+
+        export interface RecordingPolicy {
+          mode: 'off' | 'flow' | 'selected_steps';
+        }
+      }
     }
-  }
 
-  export interface Delivery {
-    destination: 'mobilerun' | 'one_drive' | 'google_drive';
+    export interface Contract {
+      /**
+       * Required without profile. Ignored with agent_routine; derived from
+       * meta.sink.type.
+       */
+      deliverable?: 'none' | 'file' | 'chat' | 'integration';
 
-    /**
-     * not allowed when destination is mobilerun
-     */
-    folder?: string;
+      /**
+       * Ignored with agent_routine; derived from the action graph.
+       */
+      integrationRole?: string;
 
-    recording?: Delivery.Recording;
+      meta?: Contract.Meta;
 
-    screenshots?: unknown;
-  }
+      /**
+       * Ignored with agent_routine; derived from the action graph.
+       */
+      producerRoles?: Array<string>;
 
-  export namespace Delivery {
-    export interface Recording {
-      filename: string;
+      profile?: 'agent_routine';
+
+      slug?: string;
+
+      /**
+       * Ignored with agent_routine; derived from the action graph.
+       */
+      uploadRole?: string;
     }
-  }
 
-  export interface RecordingPolicy {
-    mode: 'off' | 'flow' | 'selected_steps';
+    export namespace Contract {
+      export interface Meta {
+        flow: Meta.Flow;
+
+        sink: Meta.Sink;
+
+        timezone: string | null;
+
+        trigger: Meta.Trigger;
+
+        verification: 'rules' | 'agent_review' | 'rules_then_review' | 'none';
+
+        cloudActions?: Array<Meta.CloudAction>;
+
+        outputFilename?: string | null;
+      }
+
+      export namespace Meta {
+        export interface Flow {
+          healthMonitoringEnabled: boolean;
+
+          selfHealingEnabled: boolean;
+
+          selfHealingMaxAttempts: number;
+
+          recordingMode?: 'off' | 'flow' | 'selected_steps';
+
+          resultDelivery?: 'none' | 'message' | 'wake';
+        }
+
+        export interface Sink {
+          type: 'chat' | 'file' | 'webhook';
+
+          endpointId?: string | null;
+        }
+
+        export interface Trigger {
+          /**
+           * Accepted for compatibility; derived from trigger.type with agent_routine.
+           */
+          activation: 'event' | 'schedule' | 'custom';
+
+          cadence: string | null;
+
+          eventType: string | null;
+
+          scheduleRule: Trigger.ScheduleRule;
+
+          timezone: string | null;
+
+          type: 'schedule' | 'app_event' | 'device_event' | 'platform_event' | 'custom';
+        }
+
+        export namespace Trigger {
+          export interface ScheduleRule {
+            type: 'once' | 'cron' | 'recurring';
+
+            /**
+             * ISO 8601 datetime (for type=once)
+             */
+            dateTime?: string;
+
+            /**
+             * Cron expression (for type=cron)
+             */
+            expression?: string;
+
+            /**
+             * Optional per-occurrence random window around the nominal schedule time
+             */
+            jitter?: ScheduleRule.Jitter;
+
+            /**
+             * RRULE string (for type=recurring)
+             */
+            rrule?: string;
+
+            [k: string]: unknown;
+          }
+
+          export namespace ScheduleRule {
+            /**
+             * Optional per-occurrence random window around the nominal schedule time
+             */
+            export interface Jitter {
+              afterMinutes?: number;
+
+              beforeMinutes?: number;
+            }
+          }
+        }
+
+        export interface CloudAction {
+          method: string;
+
+          role: string;
+        }
+      }
+    }
+
+    export interface Verify {
+      deviceId?: string;
+
+      payload?: { [key: string]: unknown };
+    }
   }
 }
 
@@ -1852,6 +2450,7 @@ export interface FlowVerifyParams {
 }
 
 Flows.Actions = Actions;
+Flows.State = State;
 
 export declare namespace Flows {
   export {
@@ -1866,6 +2465,7 @@ export declare namespace Flows {
     type FlowDeliveryOptionsResponse as FlowDeliveryOptionsResponse,
     type FlowDryRunResponse as FlowDryRunResponse,
     type FlowListRepairsResponse as FlowListRepairsResponse,
+    type FlowRetrieveRepairResponse as FlowRetrieveRepairResponse,
     type FlowRunResponse as FlowRunResponse,
     type FlowTemplateContextResponse as FlowTemplateContextResponse,
     type FlowUnblockResponse as FlowUnblockResponse,
@@ -1878,6 +2478,7 @@ export declare namespace Flows {
     type FlowCapacityParams as FlowCapacityParams,
     type FlowCloneParams as FlowCloneParams,
     type FlowDryRunParams as FlowDryRunParams,
+    type FlowRetrieveRepairParams as FlowRetrieveRepairParams,
     type FlowRunParams as FlowRunParams,
     type FlowTemplateContextParams as FlowTemplateContextParams,
     type FlowValidateParams as FlowValidateParams,
@@ -1893,5 +2494,14 @@ export declare namespace Flows {
     type ActionAddParams as ActionAddParams,
     type ActionRemoveParams as ActionRemoveParams,
     type ActionReplaceParams as ActionReplaceParams,
+  };
+
+  export {
+    State as State,
+    type StateListResponse as StateListResponse,
+    type StateDeleteResponse as StateDeleteResponse,
+    type StateListVersionsResponse as StateListVersionsResponse,
+    type StateDeleteParams as StateDeleteParams,
+    type StateListVersionsParams as StateListVersionsParams,
   };
 }

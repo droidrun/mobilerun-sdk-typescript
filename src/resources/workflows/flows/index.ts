@@ -23,6 +23,7 @@ export {
   type FlowDeliveryOptionsResponse,
   type FlowDryRunResponse,
   type FlowListRepairsResponse,
+  type FlowRetrieveRepairResponse,
   type FlowRunResponse,
   type FlowTemplateContextResponse,
   type FlowUnblockResponse,
@@ -35,8 +36,17 @@ export {
   type FlowCapacityParams,
   type FlowCloneParams,
   type FlowDryRunParams,
+  type FlowRetrieveRepairParams,
   type FlowRunParams,
   type FlowTemplateContextParams,
   type FlowValidateParams,
   type FlowVerifyParams,
 } from './flows';
+export {
+  State,
+  type StateListResponse,
+  type StateDeleteResponse,
+  type StateListVersionsResponse,
+  type StateDeleteParams,
+  type StateListVersionsParams,
+} from './state';

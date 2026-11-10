@@ -37,7 +37,8 @@ export class Messages extends APIResource {
    * rate_limited: too many sends by the owner in a short window; 429
    * number_rate_limited: too many outbound sends from this number in the configured
    * window (all sends from this number count, including those made on your behalf).
-   * 403 send_disabled: self-service SMS send is switched off.
+   * 403 send_disabled: self-service SMS send is switched off;
+   * outbound_sms_not_granted: outbound SMS requires an admin grant.
    *
    * @example
    * ```ts

@@ -47,7 +47,7 @@ export namespace ServiceListMethodsResponse {
 
       required: boolean;
 
-      type: 'string' | 'number' | 'boolean' | 'object' | 'array';
+      type: 'string' | 'number' | 'boolean' | 'object' | 'array' | 'any';
 
       default?: unknown;
 

@@ -21,11 +21,8 @@ export class Conversations extends APIResource {
 
   /**
    * Rename, change status, and/or pin. Title updates apply best-effort. Archiving
-   * always clears the pinned flag. `title` is rejected with 409
-   * `code: "session_title_managed_by_workflow"` when this chat is bound to a
-   * workflow — a bound chat's title is managed by the workflow. Other fields
-   * (description, status, pinned) remain updateable; archiving a bound chat stays
-   * allowed.
+   * always clears the pinned flag. Archiving a session with an in-flight turn is
+   * rejected with 409.
    */
   update(
     id: string,
@@ -61,10 +58,11 @@ export class Conversations extends APIResource {
   /**
    * Deliver a HITL approval/rejection for an in-flight turn. Interactive HITL
    * clients must start the turn with `Accept: text/event-stream`, wait for a
-   * `tool-hitl-approval` event, and send its `permissionId` here at
-   * `/assistant/chat/permission`. Do not submit approval as free-form user text or
-   * as `confirmed: true`. For `devices.reset`, only `once` and `reject` are allowed;
-   * the generic `always` response is rejected with HTTP 400.
+   * `tool-input-available` event with `toolName: "hitl-approval"`, and send its
+   * `toolCallId` as `permissionId` here at `/assistant/chat/permission`. Do not
+   * submit approval as free-form user text or as `confirmed: true`. For
+   * `devices.reset`, only `once` and `reject` are allowed; the generic `always`
+   * response is rejected with HTTP 400.
    */
   answerPermission(
     body: ConversationAnswerPermissionParams,
@@ -85,14 +83,15 @@ export class Conversations extends APIResource {
   }
 
   /**
-   * Return the user's chat history for the given session. History remains readable
-   * after the session is no longer active.
+   * Return the user's chat history for the given session. Inactive chat sessions
+   * return 404; workflow transcripts remain readable after completion.
    */
   history(
-    query: ConversationHistoryParams,
+    id: string,
+    query: ConversationHistoryParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ConversationHistoryResponse> {
-    return this._client.get('/assistant/chat/messages', { query, ...options });
+    return this._client.get(path`/assistant/chat/sessions/${id}/messages`, { query, ...options });
   }
 
   /**
@@ -109,12 +108,15 @@ export class Conversations extends APIResource {
   /**
    * Send a single user message. The response format follows the Accept header:
    * `text/event-stream` for SSE, `application/json` for a buffered assistant reply.
-   * Interactive HITL requires `Accept: text/event-stream`: the stream can emit a
-   * `tool-hitl-approval` event, whose decision must be delivered to
-   * `/assistant/chat/permission`. Buffered JSON responses do not provide an
-   * interactive HITL continuation contract. `sessionId` targets a concrete active
-   * chat. The resolved chat session ID is returned as `chatSessionId` in the JSON
-   * body and as the `X-Chat-Session-Id` response header on the SSE response.
+   * Interactive HITL requires `Accept: text/event-stream`. An approval request
+   * arrives as a `tool-input-available` event with `toolName: "hitl-approval"`. Its
+   * `toolCallId` (equal to `input.permissionID`) is the permission id; deliver the
+   * decision to `/assistant/chat/permission`. In the message history, the same
+   * request appears as a `tool-hitl-approval` part. Buffered JSON responses do not
+   * provide an interactive HITL continuation contract. `sessionId` targets a
+   * concrete active chat. The resolved chat session ID is returned as
+   * `chatSessionId` in the JSON body and as the `X-Chat-Session-Id` response header
+   * on the SSE response.
    */
   send(body: ConversationSendParams, options?: RequestOptions): APIPromise<ConversationSendResponse> {
     return this._client.post('/assistant/chat/message', { body, ...options });
@@ -149,6 +151,8 @@ export namespace ConversationCreateResponse {
     id: string;
 
     agent: string | null;
+
+    agentId: string | null;
 
     basePromptTokens: number | null;
 
@@ -194,6 +198,8 @@ export namespace ConversationUpdateResponse {
 
     agent: string | null;
 
+    agentId: string | null;
+
     basePromptTokens: number | null;
 
     contextExhaustedAt: string | null;
@@ -237,6 +243,8 @@ export namespace ConversationListResponse {
     id: string;
 
     agent: string | null;
+
+    agentId: string | null;
 
     basePromptTokens: number | null;
 
@@ -283,6 +291,8 @@ export namespace ConversationListResponse {
     id: string;
 
     agent: string | null;
+
+    agentId: string | null;
 
     basePromptTokens: number | null;
 
@@ -339,22 +349,88 @@ export interface ConversationAnswerQuestionResponse {
 }
 
 export interface ConversationHistoryResponse {
-  messages: Array<ConversationHistoryResponse.Message>;
+  /**
+   * Session Agent identity, present on every page; null only when the session has no
+   * Agent.
+   */
+  agent: ConversationHistoryResponse.Agent | null;
 
-  turnActive: boolean;
+  data: Array<ConversationHistoryResponse.Data>;
 
-  lastTurnOutcome?: string | null;
+  /**
+   * Oldest real row in the page; pass as before to load older turns.
+   */
+  firstId: string | null;
 
-  truncated?: boolean;
+  /**
+   * Older whole turns exist.
+   */
+  hasMore: boolean;
 
-  turnState?: ConversationHistoryResponse.TurnState | null;
+  /**
+   * Newest real row in the page, before continuation collapse or synthetic rows.
+   */
+  lastId: string | null;
+
+  /**
+   * Newest-page turn snapshot; null when before is supplied.
+   */
+  turn: ConversationHistoryResponse.Turn | null;
 }
 
 export namespace ConversationHistoryResponse {
-  export interface Message {
+  /**
+   * Session Agent identity, present on every page; null only when the session has no
+   * Agent.
+   */
+  export interface Agent {
     id: string;
 
-    parts: Array<Message.Part>;
+    profile: Agent.Profile;
+  }
+
+  export namespace Agent {
+    export interface Profile {
+      /**
+       * Configuration of a `blob` avatar: its seed and optional user-chosen palette
+       * color. A color-only config retains the default seed fallback.
+       */
+      avatarConfig: Profile.AvatarConfig | null;
+
+      avatarKind: 'blob' | null;
+
+      displayName: string | null;
+    }
+
+    export namespace Profile {
+      /**
+       * Configuration of a `blob` avatar: its seed and optional user-chosen palette
+       * color. A color-only config retains the default seed fallback.
+       */
+      export interface AvatarConfig {
+        color?:
+          | 'slate'
+          | 'red'
+          | 'orange'
+          | 'amber'
+          | 'lime'
+          | 'green'
+          | 'teal'
+          | 'cyan'
+          | 'blue'
+          | 'indigo'
+          | 'violet'
+          | 'pink';
+
+        seed?: string | number;
+      }
+    }
+  }
+
+  export interface Data {
+    id: string;
+
+    parts: Array<Data.Part>;
 
     role: 'user' | 'assistant' | 'system';
 
@@ -364,7 +440,7 @@ export namespace ConversationHistoryResponse {
 
     feedback?: boolean | null;
 
-    metadata?: Message.Metadata;
+    metadata?: Data.Metadata;
 
     source?: 'cloud' | 'telegram' | 'api' | 'workflow' | 'notification';
 
@@ -378,7 +454,7 @@ export namespace ConversationHistoryResponse {
     userId?: string | null;
   }
 
-  export namespace Message {
+  export namespace Data {
     export interface Part {
       type: string;
 
@@ -391,6 +467,11 @@ export namespace ConversationHistoryResponse {
       agentMessageId?: string;
 
       agentSessionId?: string;
+
+      /**
+       * Backend notice classification on synthetic turn notes; user_stop is reserved.
+       */
+      notice?: 'user_stop' | 'interrupted' | 'no_progress' | 'tool_error' | 'error' | 'empty_answer';
 
       /**
        * Steer user rows appear directly above the collapsed assistant group of their
@@ -420,24 +501,41 @@ export namespace ConversationHistoryResponse {
     }
   }
 
-  export interface TurnState {
-    id: string;
+  /**
+   * Newest-page turn snapshot; null when before is supplied.
+   */
+  export interface Turn {
+    /**
+     * Whether this session owns an in-flight turn.
+     */
+    turnActive: boolean;
 
-    abortRequested: boolean;
+    turnState: Turn.TurnState | null;
+  }
 
-    attachable: boolean;
+  export namespace Turn {
+    export interface TurnState {
+      id: string;
 
-    claimHeld: boolean;
+      abortRequested: boolean;
 
-    outcome: string | null;
+      attachable: boolean;
 
-    phase: 'created' | 'running' | 'closed' | 'delivered' | 'failed';
+      claimHeld: boolean;
 
-    reaping: boolean;
+      /**
+       * Outcome of the latest turn, or null while it is still open.
+       */
+      outcome: string | null;
 
-    revision: number;
+      phase: 'created' | 'running' | 'closed' | 'delivered' | 'failed';
 
-    startedAt: string;
+      reaping: boolean;
+
+      revision: number;
+
+      startedAt: string;
+    }
   }
 }
 
@@ -491,6 +589,8 @@ export interface ConversationAnswerPermissionParams {
   permissionId: string;
 
   response: 'once' | 'always' | 'reject';
+
+  sessionId?: string;
 }
 
 export interface ConversationAnswerQuestionParams {
@@ -503,6 +603,8 @@ export interface ConversationAnswerQuestionParams {
   >;
 
   questionId: string;
+
+  sessionId?: string;
 }
 
 export namespace ConversationAnswerQuestionParams {
@@ -522,13 +624,18 @@ export namespace ConversationAnswerQuestionParams {
 }
 
 export interface ConversationHistoryParams {
-  sessionId: string;
+  /**
+   * Any real row in this session; its containing turn is excluded.
+   */
+  before?: string;
 
   limit?: number;
 }
 
 export interface ConversationRejectQuestionParams {
   questionId: string;
+
+  sessionId?: string;
 }
 
 export interface ConversationSendParams {

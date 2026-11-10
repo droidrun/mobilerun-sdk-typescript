@@ -46,6 +46,18 @@ describe('resource actions', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.workflows.actions.retrieve(
+        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        { profile: 'agent_routine' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('update', async () => {
     const responsePromise = client.workflows.actions.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
@@ -95,6 +107,7 @@ describe('resource actions', () => {
           orderByDirection: 'asc',
           page: 1,
           pageSize: 1,
+          profile: 'agent_routine',
           search: 'x',
           service: 'tasks_api',
         },
