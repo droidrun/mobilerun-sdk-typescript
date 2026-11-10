@@ -178,6 +178,11 @@ export namespace NumberRetrieveResponse {
     currentPeriodEnd: string | null;
 
     /**
+     * The device this number is bound to, or null.
+     */
+    deviceBinding: Data.DeviceBinding | null;
+
+    /**
      * Why setup failed. Null unless state is failed, and null when the failure has no
      * classified reason. out_of_stock: no number is currently available for the
      * requested country.
@@ -218,6 +223,17 @@ export namespace NumberRetrieveResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * The device this number is bound to, or null.
+     */
+    export interface DeviceBinding {
+      boundAt: string;
+
+      deviceId: string;
+
+      deviceType: string | null;
     }
 
     /**
@@ -283,6 +299,11 @@ export namespace NumberUpdateResponse {
     currentPeriodEnd: string | null;
 
     /**
+     * The device this number is bound to, or null.
+     */
+    deviceBinding: Data.DeviceBinding | null;
+
+    /**
      * Why setup failed. Null unless state is failed, and null when the failure has no
      * classified reason. out_of_stock: no number is currently available for the
      * requested country.
@@ -323,6 +344,17 @@ export namespace NumberUpdateResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * The device this number is bound to, or null.
+     */
+    export interface DeviceBinding {
+      boundAt: string;
+
+      deviceId: string;
+
+      deviceType: string | null;
     }
 
     /**
@@ -390,6 +422,11 @@ export namespace NumberListResponse {
     currentPeriodEnd: string | null;
 
     /**
+     * The device this number is bound to, or null.
+     */
+    deviceBinding: Item.DeviceBinding | null;
+
+    /**
      * Why setup failed. Null unless state is failed, and null when the failure has no
      * classified reason. out_of_stock: no number is currently available for the
      * requested country.
@@ -430,6 +467,17 @@ export namespace NumberListResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * The device this number is bound to, or null.
+     */
+    export interface DeviceBinding {
+      boundAt: string;
+
+      deviceId: string;
+
+      deviceType: string | null;
     }
 
     /**
@@ -495,6 +543,11 @@ export namespace NumberDeleteResponse {
     currentPeriodEnd: string | null;
 
     /**
+     * The device this number is bound to, or null.
+     */
+    deviceBinding: Data.DeviceBinding | null;
+
+    /**
      * Why setup failed. Null unless state is failed, and null when the failure has no
      * classified reason. out_of_stock: no number is currently available for the
      * requested country.
@@ -535,6 +588,17 @@ export namespace NumberDeleteResponse {
        * checks still apply; the send endpoint stays the final judge.
        */
       send: boolean;
+    }
+
+    /**
+     * The device this number is bound to, or null.
+     */
+    export interface DeviceBinding {
+      boundAt: string;
+
+      deviceId: string;
+
+      deviceType: string | null;
     }
 
     /**

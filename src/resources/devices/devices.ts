@@ -50,6 +50,22 @@ import * as LanguageAPI from './language';
 import { Language, LanguageGetParams, LanguageGetResponse, LanguageSetParams } from './language';
 import * as LocationAPI from './location';
 import { Location, LocationGetParams, LocationResetParams, LocationSetParams } from './location';
+import * as NumberAPI from './number';
+import {
+  Number,
+  NumberBindParams,
+  NumberBindResponse,
+  NumberRetrieveParams,
+  NumberRetrieveResponse,
+  NumberUnbindParams,
+  NumberUnbindResponse,
+} from './number';
+import * as NumberBindingsAPI from './number-bindings';
+import {
+  NumberBindingListCandidatesResponse,
+  NumberBindingListResponse,
+  NumberBindings,
+} from './number-bindings';
 import * as PackagesAPI from './packages';
 import { PackageListParams, PackageListResponse, Packages } from './packages';
 import * as ProfileAPI from './profile';
@@ -155,6 +171,8 @@ export class Devices extends APIResource {
   kiosk: KioskAPI.Kiosk = new KioskAPI.Kiosk(this._client);
   recordings: RecordingsAPI.Recordings = new RecordingsAPI.Recordings(this._client);
   trafficSessions: TrafficSessionsAPI.TrafficSessions = new TrafficSessionsAPI.TrafficSessions(this._client);
+  number: NumberAPI.Number = new NumberAPI.Number(this._client);
+  numberBindings: NumberBindingsAPI.NumberBindings = new NumberBindingsAPI.NumberBindings(this._client);
 
   /**
    * Requests a new device from the specification in the request body. Optional query
@@ -623,6 +641,8 @@ export namespace DeviceRetrieveCapabilitiesResponse {
 
     stream: boolean;
 
+    telephony: boolean;
+
     time: boolean;
 
     trafficInspection: boolean;
@@ -1015,6 +1035,8 @@ Devices.Browser = Browser;
 Devices.Kiosk = Kiosk;
 Devices.Recordings = Recordings;
 Devices.TrafficSessions = TrafficSessions;
+Devices.Number = Number;
+Devices.NumberBindings = NumberBindings;
 
 export declare namespace Devices {
   export {
@@ -1198,5 +1220,21 @@ export declare namespace Devices {
     type TrafficSessionRetrieveParams as TrafficSessionRetrieveParams,
     type TrafficSessionListParams as TrafficSessionListParams,
     type TrafficSessionDeleteParams as TrafficSessionDeleteParams,
+  };
+
+  export {
+    Number as Number,
+    type NumberRetrieveResponse as NumberRetrieveResponse,
+    type NumberBindResponse as NumberBindResponse,
+    type NumberUnbindResponse as NumberUnbindResponse,
+    type NumberRetrieveParams as NumberRetrieveParams,
+    type NumberBindParams as NumberBindParams,
+    type NumberUnbindParams as NumberUnbindParams,
+  };
+
+  export {
+    NumberBindings as NumberBindings,
+    type NumberBindingListResponse as NumberBindingListResponse,
+    type NumberBindingListCandidatesResponse as NumberBindingListCandidatesResponse,
   };
 }

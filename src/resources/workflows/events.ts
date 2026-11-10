@@ -59,7 +59,13 @@ export namespace EventDryRunResponse {
 
         recordingEnabled: boolean;
 
-        service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api';
+        service:
+          | 'tasks_api'
+          | 'devices_api'
+          | 'agents_api'
+          | 'webhooks'
+          | 'integrations_api'
+          | 'triggers_api';
 
         /**
          * Nested child actions (loop/branch bodies), each the same shape as a
@@ -105,8 +111,14 @@ export namespace EventDryRunResponse {
 
         lastFailureAt: string | null;
 
+        /**
+         * Curated flow failure class. device_unavailable blocks immediately for a
+         * terminated device or a device confirmed gone; event deviceState="gone" is
+         * triggers-defined for a deleted/not-found device.
+         */
         lastFailureCode:
           | 'device_not_found'
+          | 'device_unavailable'
           | 'permission_denied'
           | 'client_error'
           | 'transient'
@@ -128,6 +140,8 @@ export namespace EventDryRunResponse {
 
         ownerId: string;
 
+        ownerWake: 'final' | 'off';
+
         /**
          * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
          * recordingEnabled=true, "off" = recordingEnabled=false).
@@ -135,6 +149,12 @@ export namespace EventDryRunResponse {
         recordingEnabled: boolean;
 
         recordingPolicy: Flow.RecordingPolicy;
+
+        /**
+         * Effective routine result delivery: the stored setting, else message for a chat
+         * sink, else none.
+         */
+        resultDelivery: 'none' | 'message' | 'wake';
 
         selfHealingEnabled: boolean;
 
@@ -166,7 +186,15 @@ export namespace EventDryRunResponse {
           destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
           /**
-           * not allowed when destination is mobilerun
+           * Absolute destination folder; not allowed when destination is mobilerun. May
+           * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+           * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+           * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+           * of that run lands in the same folder. Each substituted value must be a single
+           * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+           * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+           * delivered directly into the resolved folder; with a static folder they go into a
+           * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
            */
           folder?: string;
 
@@ -216,6 +244,8 @@ export namespace EventDryRunResponse {
         name: string;
 
         ownerId: string;
+
+        payload: { [key: string]: unknown } | null;
 
         scheduleRule: Trigger.ScheduleRule;
 

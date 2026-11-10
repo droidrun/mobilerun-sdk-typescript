@@ -20,7 +20,7 @@ export class Files extends APIResource {
   }
 
   /**
-   * List the user's ready files, optionally filtered by zone
+   * List the user's ready files, optionally filtered by zone.
    */
   list(
     query: FileListParams | null | undefined = {},
@@ -30,23 +30,25 @@ export class Files extends APIResource {
   }
 
   /**
-   * Hard-delete a file
+   * Hard-delete a file.
    */
   delete(fileID: string, options?: RequestOptions): APIPromise<FileDeleteResponse> {
     return this._client.delete(path`/agents/files/${fileID}`, options);
   }
 
   /**
-   * Soft-cancels an in-flight upload before confirm. Only acts on `pending` uploads
-   * — refuses to touch `ready` files, so confirmed files are never removed.
-   * Idempotent: `{ cancelled: false }` if the file exists but is no longer pending.
+   * Soft-cancels an in-flight upload before confirm, transitioning it to expired and
+   * deleting the underlying object. Only acts on `pending` uploads — refuses to
+   * touch `ready` files, so confirmed files are never removed. Idempotent:
+   * `{ cancelled: false }` if the file exists but is no longer pending.
    */
   cancelPending(fileID: string, options?: RequestOptions): APIPromise<FileCancelPendingResponse> {
     return this._client.delete(path`/agents/files/${fileID}/pending`, options);
   }
 
   /**
-   * Confirm a file upload by server-side HEAD validation
+   * Confirm a file upload after validating the stored object with a server-side HEAD
+   * request.
    */
   confirm(fileID: string, options?: RequestOptions): APIPromise<FileConfirmResponse> {
     return this._client.post(path`/agents/files/${fileID}/confirm`, options);
@@ -64,7 +66,7 @@ export class Files extends APIResource {
   }
 
   /**
-   * Mint a presigned PUT URL for a user file upload
+   * Mint a presigned PUT URL and a fileId for uploading a user file.
    */
   uploadURL(body: FileUploadURLParams, options?: RequestOptions): APIPromise<FileUploadURLResponse> {
     return this._client.post('/agents/files/upload-url', { body, ...options });
@@ -89,6 +91,8 @@ export interface FileUpdateResponse {
   sizeBytes: number;
 
   zone: 'user' | 'agent' | 'workflow' | 'skills';
+
+  agentId?: string;
 
   collectionStatus?: FileUpdateResponse.UnionMember0 | FileUpdateResponse.UnionMember1;
 }
@@ -154,6 +158,8 @@ export namespace FileListResponse {
     sizeBytes: number;
 
     zone: 'user' | 'agent' | 'workflow' | 'skills';
+
+    agentId?: string;
 
     collectionStatus?: File.UnionMember0 | File.UnionMember1;
   }
@@ -236,6 +242,8 @@ export interface FileConfirmResponse {
 
   zone: 'user' | 'agent' | 'workflow' | 'skills';
 
+  agentId?: string;
+
   collectionStatus?: FileConfirmResponse.UnionMember0 | FileConfirmResponse.UnionMember1;
 }
 
@@ -299,6 +307,8 @@ export interface FileUploadURLParams {
   mimeType: string;
 
   sizeBytes: number;
+
+  chatSessionId?: string;
 
   zone?: 'user' | 'skills';
 }

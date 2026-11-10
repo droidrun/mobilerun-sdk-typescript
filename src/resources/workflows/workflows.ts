@@ -6,6 +6,7 @@ import {
   ActionCatalog,
   ActionCatalogListParams,
   ActionCatalogListResponse,
+  ActionCatalogRetrieveParams,
   ActionCatalogRetrieveResponse,
 } from './action-catalog';
 import * as EventsAPI from './events';
@@ -39,6 +40,7 @@ import {
   ActionDeleteResponse,
   ActionListParams,
   ActionListResponse,
+  ActionRetrieveParams,
   ActionRetrieveResponse,
   ActionUpdateParams,
   ActionUpdateResponse,
@@ -71,6 +73,8 @@ import {
   FlowListParams,
   FlowListRepairsResponse,
   FlowListResponse,
+  FlowRetrieveRepairParams,
+  FlowRetrieveRepairResponse,
   FlowRetrieveResponse,
   FlowRunParams,
   FlowRunResponse,
@@ -123,6 +127,7 @@ export declare namespace Workflows {
     ActionCatalog as ActionCatalog,
     type ActionCatalogRetrieveResponse as ActionCatalogRetrieveResponse,
     type ActionCatalogListResponse as ActionCatalogListResponse,
+    type ActionCatalogRetrieveParams as ActionCatalogRetrieveParams,
     type ActionCatalogListParams as ActionCatalogListParams,
   };
 
@@ -134,6 +139,7 @@ export declare namespace Workflows {
     type ActionListResponse as ActionListResponse,
     type ActionDeleteResponse as ActionDeleteResponse,
     type ActionCreateParams as ActionCreateParams,
+    type ActionRetrieveParams as ActionRetrieveParams,
     type ActionUpdateParams as ActionUpdateParams,
     type ActionListParams as ActionListParams,
   };
@@ -151,6 +157,7 @@ export declare namespace Workflows {
     type FlowDeliveryOptionsResponse as FlowDeliveryOptionsResponse,
     type FlowDryRunResponse as FlowDryRunResponse,
     type FlowListRepairsResponse as FlowListRepairsResponse,
+    type FlowRetrieveRepairResponse as FlowRetrieveRepairResponse,
     type FlowRunResponse as FlowRunResponse,
     type FlowTemplateContextResponse as FlowTemplateContextResponse,
     type FlowUnblockResponse as FlowUnblockResponse,
@@ -163,6 +170,7 @@ export declare namespace Workflows {
     type FlowCapacityParams as FlowCapacityParams,
     type FlowCloneParams as FlowCloneParams,
     type FlowDryRunParams as FlowDryRunParams,
+    type FlowRetrieveRepairParams as FlowRetrieveRepairParams,
     type FlowRunParams as FlowRunParams,
     type FlowTemplateContextParams as FlowTemplateContextParams,
     type FlowValidateParams as FlowValidateParams,
