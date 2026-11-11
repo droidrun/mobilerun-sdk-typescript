@@ -107,13 +107,7 @@ export namespace LinkCreateParams {
     fieldId: string;
 
     fieldType:
-      | 'email'
-      | 'username'
-      | 'password'
-      | 'api_token'
-      | 'phone_number'
-      | 'two_factor_secret'
-      | 'backup_codes';
+      'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
   }
 }
 
