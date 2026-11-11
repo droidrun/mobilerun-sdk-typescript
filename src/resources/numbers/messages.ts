@@ -90,14 +90,7 @@ export namespace MessageListResponse {
      * current lines return no carrier delivery report, so neither is emitted.
      */
     status:
-      | 'received'
-      | 'queued'
-      | 'claimed'
-      | 'sending'
-      | 'sent'
-      | 'sent_unconfirmed'
-      | 'delivered'
-      | 'failed';
+      'received' | 'queued' | 'claimed' | 'sending' | 'sent' | 'sent_unconfirmed' | 'delivered' | 'failed';
   }
 
   export namespace Item {
@@ -142,14 +135,7 @@ export namespace MessageSendResponse {
      * current lines return no carrier delivery report, so neither is emitted.
      */
     status:
-      | 'received'
-      | 'queued'
-      | 'claimed'
-      | 'sending'
-      | 'sent'
-      | 'sent_unconfirmed'
-      | 'delivered'
-      | 'failed';
+      'received' | 'queued' | 'claimed' | 'sending' | 'sent' | 'sent_unconfirmed' | 'delivered' | 'failed';
   }
 
   export namespace Data {

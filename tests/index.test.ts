@@ -441,14 +441,14 @@ describe('instantiate client', () => {
 
   test('with environment variable arguments', () => {
     // set options via env var
-    process.env['MOBILERUN_CLOUD_API_KEY'] = 'My API Key';
+    process.env['MOBILERUN_API_KEY'] = 'My API Key';
     const client = new Mobilerun();
     expect(client.apiKey).toBe('My API Key');
   });
 
   test('with overridden environment variable arguments', () => {
     // set options via env var
-    process.env['MOBILERUN_CLOUD_API_KEY'] = 'another My API Key';
+    process.env['MOBILERUN_API_KEY'] = 'another My API Key';
     const client = new Mobilerun({ apiKey: 'My API Key' });
     expect(client.apiKey).toBe('My API Key');
   });
@@ -564,8 +564,8 @@ describe('retries', () => {
       { signal }: RequestInit = {},
     ): Promise<Response> => {
       if (count++ === 0) {
-        return new Promise(
-          (resolve, reject) => signal?.addEventListener('abort', () => reject(new Error('timed out'))),
+        return new Promise((resolve, reject) =>
+          signal?.addEventListener('abort', () => reject(new Error('timed out'))),
         );
       }
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
