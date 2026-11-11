@@ -60,12 +60,7 @@ export namespace EventDryRunResponse {
         recordingEnabled: boolean;
 
         service:
-          | 'tasks_api'
-          | 'devices_api'
-          | 'agents_api'
-          | 'webhooks'
-          | 'integrations_api'
-          | 'triggers_api';
+          'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
 
         /**
          * Nested child actions (loop/branch bodies), each the same shape as a

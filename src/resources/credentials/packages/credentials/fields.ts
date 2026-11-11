@@ -30,13 +30,7 @@ export class Fields extends APIResource {
    */
   update(
     fieldType:
-      | 'email'
-      | 'username'
-      | 'password'
-      | 'api_token'
-      | 'phone_number'
-      | 'two_factor_secret'
-      | 'backup_codes',
+      'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes',
     params: FieldUpdateParams,
     options?: RequestOptions,
   ): APIPromise<FieldUpdateResponse> {
@@ -53,13 +47,7 @@ export class Fields extends APIResource {
    */
   delete(
     fieldType:
-      | 'email'
-      | 'username'
-      | 'password'
-      | 'api_token'
-      | 'phone_number'
-      | 'two_factor_secret'
-      | 'backup_codes',
+      'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes',
     params: FieldDeleteParams,
     options?: RequestOptions,
   ): APIPromise<FieldDeleteResponse> {
@@ -315,13 +303,7 @@ export interface FieldCreateParams {
    * Body param
    */
   fieldType:
-    | 'email'
-    | 'username'
-    | 'password'
-    | 'api_token'
-    | 'phone_number'
-    | 'two_factor_secret'
-    | 'backup_codes';
+    'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
 
   /**
    * Body param
