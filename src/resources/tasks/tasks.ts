@@ -127,14 +127,7 @@ export namespace TaskRetrieveResponse {
     ownerId: string;
 
     status:
-      | 'prepared'
-      | 'queued'
-      | 'created'
-      | 'running'
-      | 'cancelling'
-      | 'completed'
-      | 'failed'
-      | 'cancelled';
+      'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
     task: string;
 
@@ -275,14 +268,7 @@ export namespace TaskListResponse {
     ownerId: string;
 
     status:
-      | 'prepared'
-      | 'queued'
-      | 'created'
-      | 'running'
-      | 'cancelling'
-      | 'completed'
-      | 'failed'
-      | 'cancelled';
+      'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
 
     task: string;
 
