@@ -110,6 +110,17 @@ export {
   type ProxyListParams,
 } from './proxies';
 export {
+  Scripts,
+  type Script,
+  type ScriptSource,
+  type ScriptCreateResponse,
+  type ScriptRetrieveResponse,
+  type ScriptListResponse,
+  type ScriptSourceResponse,
+  type ScriptCreateParams,
+  type ScriptListParams,
+} from './scripts';
+export {
   Tasks,
   type TaskRetrieveResponse,
   type TaskListResponse,
