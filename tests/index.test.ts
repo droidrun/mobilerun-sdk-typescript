@@ -441,16 +441,51 @@ describe('instantiate client', () => {
 
   test('with environment variable arguments', () => {
     // set options via env var
-    process.env['MOBILERUN_CLOUD_API_KEY'] = 'My API Key';
+    process.env['MOBILERUN_API_KEY'] = 'My API Key';
     const client = new Mobilerun();
     expect(client.apiKey).toBe('My API Key');
   });
 
   test('with overridden environment variable arguments', () => {
     // set options via env var
-    process.env['MOBILERUN_CLOUD_API_KEY'] = 'another My API Key';
+    process.env['MOBILERUN_API_KEY'] = 'another My API Key';
     const client = new Mobilerun({ apiKey: 'My API Key' });
     expect(client.apiKey).toBe('My API Key');
+  });
+
+  describe('api key environment variables', () => {
+    beforeEach(() => {
+      delete process.env['MOBILERUN_API_KEY'];
+      delete process.env['MOBILERUN_CLOUD_API_KEY'];
+    });
+
+    test('MOBILERUN_API_KEY only', () => {
+      process.env['MOBILERUN_API_KEY'] = 'new key';
+      expect(new Mobilerun().apiKey).toBe('new key');
+    });
+
+    test('MOBILERUN_CLOUD_API_KEY only (fallback)', () => {
+      process.env['MOBILERUN_CLOUD_API_KEY'] = 'old key';
+      expect(new Mobilerun().apiKey).toBe('old key');
+    });
+
+    test('empty MOBILERUN_API_KEY falls back to MOBILERUN_CLOUD_API_KEY', () => {
+      process.env['MOBILERUN_API_KEY'] = '';
+      process.env['MOBILERUN_CLOUD_API_KEY'] = 'old key';
+      expect(new Mobilerun().apiKey).toBe('old key');
+    });
+
+    test('MOBILERUN_API_KEY wins when both are set', () => {
+      process.env['MOBILERUN_API_KEY'] = 'new key';
+      process.env['MOBILERUN_CLOUD_API_KEY'] = 'old key';
+      expect(new Mobilerun().apiKey).toBe('new key');
+    });
+
+    test('neither set: apiKey is null and requests fail to authenticate', async () => {
+      const client = new Mobilerun({ baseURL: 'http://localhost:5000/' });
+      expect(client.apiKey).toBeNull();
+      await expect(client.buildRequest({ path: '/foo', method: 'get' })).rejects.toThrow(/MOBILERUN_API_KEY/);
+    });
   });
 });
 

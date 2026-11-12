@@ -26,7 +26,7 @@ The full API of this library can be found in [api.md](api.md).
 import Mobilerun from '@mobilerun/sdk';
 
 const client = new Mobilerun({
-  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
+  apiKey: process.env['MOBILERUN_API_KEY'], // This is the default and can be omitted
 });
 
 const devices = await client.devices.list();
@@ -43,7 +43,7 @@ This library includes TypeScript definitions for all request params and response
 import Mobilerun from '@mobilerun/sdk';
 
 const client = new Mobilerun({
-  apiKey: process.env['MOBILERUN_CLOUD_API_KEY'], // This is the default and can be omitted
+  apiKey: process.env['MOBILERUN_API_KEY'], // This is the default and can be omitted
 });
 
 const devices: Mobilerun.DeviceListResponse = await client.devices.list();

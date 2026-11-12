@@ -262,7 +262,7 @@ export class Mobilerun {
   /**
    * API Client for interfacing with the Mobilerun API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_CLOUD_API_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_API_KEY'] ?? process.env['MOBILERUN_CLOUD_API_KEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['MOBILERUN_BASE_URL'] ?? https://api.mobilerun.ai/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -273,7 +273,7 @@ export class Mobilerun {
    */
   constructor({
     baseURL = readEnv('MOBILERUN_BASE_URL'),
-    apiKey = readEnv('MOBILERUN_CLOUD_API_KEY') ?? null,
+    apiKey = readEnv('MOBILERUN_API_KEY') ?? readEnv('MOBILERUN_CLOUD_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
@@ -354,7 +354,7 @@ export class Mobilerun {
     }
 
     throw new Error(
-      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+      'Could not resolve authentication method. Expected the apiKey to be set (option `apiKey` or the MOBILERUN_API_KEY environment variable). Or for the "Authorization" headers to be explicitly omitted',
     );
   }
 
