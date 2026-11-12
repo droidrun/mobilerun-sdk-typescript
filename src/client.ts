@@ -55,6 +55,17 @@ import {
   ProxyUpdateResponse,
 } from './resources/proxies';
 import {
+  Script,
+  ScriptCreateParams,
+  ScriptCreateResponse,
+  ScriptListParams,
+  ScriptListResponse,
+  ScriptRetrieveResponse,
+  ScriptSource,
+  ScriptSourceResponse,
+  Scripts,
+} from './resources/scripts';
+import {
   AgentCreateParams,
   AgentCreateResponse,
   AgentListResponse,
@@ -262,7 +273,7 @@ export class Mobilerun {
   /**
    * API Client for interfacing with the Mobilerun API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_CLOUD_API_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_API_KEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['MOBILERUN_BASE_URL'] ?? https://api.mobilerun.ai/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -273,7 +284,7 @@ export class Mobilerun {
    */
   constructor({
     baseURL = readEnv('MOBILERUN_BASE_URL'),
-    apiKey = readEnv('MOBILERUN_CLOUD_API_KEY') ?? null,
+    apiKey = readEnv('MOBILERUN_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
@@ -283,7 +294,7 @@ export class Mobilerun {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? Mobilerun.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? Mobilerun.DEFAULT_TIMEOUT; /* 1 minute */
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -553,9 +564,7 @@ export class Mobilerun {
       throw new Errors.APIConnectionError({ cause: response });
     }
 
-    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${
-      response.ok ? 'succeeded' : 'failed'
-    } with status ${response.status} in ${headersTime - startTime}ms`;
+    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${response.ok ? 'succeeded' : 'failed'} with status ${response.status} in ${headersTime - startTime}ms`;
 
     if (!response.ok) {
       const shouldRetry = await this.shouldRetry(response);
@@ -882,6 +891,7 @@ export class Mobilerun {
   devices: API.Devices = new API.Devices(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
+  scripts: API.Scripts = new API.Scripts(this);
   connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
@@ -902,6 +912,7 @@ Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
+Mobilerun.Scripts = Scripts;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
@@ -968,6 +979,18 @@ export declare namespace Mobilerun {
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
+  };
+
+  export {
+    Scripts as Scripts,
+    type Script as Script,
+    type ScriptSource as ScriptSource,
+    type ScriptCreateResponse as ScriptCreateResponse,
+    type ScriptRetrieveResponse as ScriptRetrieveResponse,
+    type ScriptListResponse as ScriptListResponse,
+    type ScriptSourceResponse as ScriptSourceResponse,
+    type ScriptCreateParams as ScriptCreateParams,
+    type ScriptListParams as ScriptListParams,
   };
 
   export { Connect as Connect };

@@ -468,6 +468,25 @@ Methods:
 - <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
 - <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
 
+# Scripts
+
+Types:
+
+- <code><a href="./src/resources/scripts.ts">Script</a></code>
+- <code><a href="./src/resources/scripts.ts">ScriptSource</a></code>
+- <code><a href="./src/resources/scripts.ts">ScriptCreateResponse</a></code>
+- <code><a href="./src/resources/scripts.ts">ScriptRetrieveResponse</a></code>
+- <code><a href="./src/resources/scripts.ts">ScriptListResponse</a></code>
+- <code><a href="./src/resources/scripts.ts">ScriptSourceResponse</a></code>
+
+Methods:
+
+- <code title="post /sandbox/scripts">client.scripts.<a href="./src/resources/scripts.ts">create</a>({ ...params }) -> ScriptCreateResponse</code>
+- <code title="get /sandbox/scripts/{scriptId}">client.scripts.<a href="./src/resources/scripts.ts">retrieve</a>(scriptID) -> ScriptRetrieveResponse</code>
+- <code title="get /sandbox/scripts">client.scripts.<a href="./src/resources/scripts.ts">list</a>({ ...params }) -> ScriptListResponse</code>
+- <code title="delete /sandbox/scripts/{scriptId}">client.scripts.<a href="./src/resources/scripts.ts">delete</a>(scriptID) -> void</code>
+- <code title="get /sandbox/scripts/{scriptId}/source">client.scripts.<a href="./src/resources/scripts.ts">source</a>(scriptID) -> ScriptSourceResponse</code>
+
 # Connect
 
 ## Countries
