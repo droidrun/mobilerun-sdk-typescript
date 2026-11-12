@@ -55,6 +55,17 @@ import {
   ProxyUpdateResponse,
 } from './resources/proxies';
 import {
+  Script,
+  ScriptCreateParams,
+  ScriptCreateResponse,
+  ScriptListParams,
+  ScriptListResponse,
+  ScriptRetrieveResponse,
+  ScriptSource,
+  ScriptSourceResponse,
+  Scripts,
+} from './resources/scripts';
+import {
   AgentCreateParams,
   AgentCreateResponse,
   AgentListResponse,
@@ -880,6 +891,7 @@ export class Mobilerun {
   devices: API.Devices = new API.Devices(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
+  scripts: API.Scripts = new API.Scripts(this);
   connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
@@ -900,6 +912,7 @@ Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
+Mobilerun.Scripts = Scripts;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
@@ -966,6 +979,18 @@ export declare namespace Mobilerun {
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
+  };
+
+  export {
+    Scripts as Scripts,
+    type Script as Script,
+    type ScriptSource as ScriptSource,
+    type ScriptCreateResponse as ScriptCreateResponse,
+    type ScriptRetrieveResponse as ScriptRetrieveResponse,
+    type ScriptListResponse as ScriptListResponse,
+    type ScriptSourceResponse as ScriptSourceResponse,
+    type ScriptCreateParams as ScriptCreateParams,
+    type ScriptListParams as ScriptListParams,
   };
 
   export { Connect as Connect };
