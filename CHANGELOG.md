@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.2.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.2.0...v6.2.1) (2026-11-14)
+
+
+### Bug Fixes
+
+* **sdk:** webhook invalid json reason ([7514b96](https://github.com/droidrun/mobilerun-sdk-typescript/commit/7514b96c1b082834b1e0b1fded5f52250151e156))
+
+
+### Chores
+
+* release 6.2.1 ([3bad299](https://github.com/droidrun/mobilerun-sdk-typescript/commit/3bad299c7b9ac501129821fb64f3175792d215d4))
+
 ## [6.2.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.1.1...v6.2.0) (2026-11-14)
 
 
