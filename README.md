@@ -174,6 +174,8 @@ console.log(app.id);
 
 ### Verify webhook signatures
 
+`invalid_json` means the signature is valid but the body is not UTF-8 JSON; respond with HTTP 400 instead of 401.
+
 Verify the exact raw body before JSON parsing. Deduplicate replays within the tolerance window using an ID inside the signed body, never the unsigned `x-mobilerun-event-id` header. The helper needs the endpoint signing secret, but no API key. It checks both past and future timestamps with a five-minute tolerance. `sdk.webhooks.verify` offers the same verification. Failures raise `WebhookVerificationError` with a `reason` code. TypeScript requires `globalThis.crypto` (Node 19+ or modern runtimes). `now` is epoch milliseconds; `toleranceSeconds` overrides the tolerance in seconds.
 
 ```ts

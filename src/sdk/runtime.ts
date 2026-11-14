@@ -500,7 +500,8 @@ export interface SignatureVerificationOptions {
 }
 export class WebhookVerificationError extends Error {
   constructor(
-    readonly reason: 'missing_header' | 'invalid_signature' | 'timestamp_out_of_tolerance' | 'malformed',
+    readonly reason:
+      'missing_header' | 'invalid_signature' | 'timestamp_out_of_tolerance' | 'malformed' | 'invalid_json',
   ) {
     super('Webhook verification failed: ' + reason);
     this.name = 'WebhookVerificationError';
@@ -582,7 +583,7 @@ export async function verifySignature(
   try {
     return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)) as unknown;
   } catch {
-    throw new WebhookVerificationError('malformed');
+    throw new WebhookVerificationError('invalid_json');
   }
 }
 
