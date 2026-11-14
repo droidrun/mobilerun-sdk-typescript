@@ -1,5 +1,18 @@
 # Changelog
 
+## [6.2.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.1.1...v6.2.0) (2026-11-14)
+
+
+### Features
+
+* **sdk:** object api and helpers ([063830f](https://github.com/droidrun/mobilerun-sdk-typescript/commit/063830fc0a11d4d72169ef8126b6415708b43b16))
+* **sdk:** read MOBILERUN_API_KEY first ([c888104](https://github.com/droidrun/mobilerun-sdk-typescript/commit/c8881040052f6a8f65f13c2811e3286f8193ec51))
+
+
+### Chores
+
+* release 6.2.0 ([513234c](https://github.com/droidrun/mobilerun-sdk-typescript/commit/513234c925c34a6587cf60352dbb0b6f7558b1c3))
+
 ## [6.1.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.1.0...v6.1.1) (2026-11-10)
 
 
