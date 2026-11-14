@@ -262,7 +262,7 @@ export class Mobilerun {
   /**
    * API Client for interfacing with the Mobilerun API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_CLOUD_API_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.apiKey=process.env['MOBILERUN_API_KEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['MOBILERUN_BASE_URL'] ?? https://api.mobilerun.ai/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -273,7 +273,7 @@ export class Mobilerun {
    */
   constructor({
     baseURL = readEnv('MOBILERUN_BASE_URL'),
-    apiKey = readEnv('MOBILERUN_CLOUD_API_KEY') ?? null,
+    apiKey = readEnv('MOBILERUN_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
@@ -283,7 +283,7 @@ export class Mobilerun {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? Mobilerun.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? Mobilerun.DEFAULT_TIMEOUT; /* 1 minute */
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -553,9 +553,7 @@ export class Mobilerun {
       throw new Errors.APIConnectionError({ cause: response });
     }
 
-    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${
-      response.ok ? 'succeeded' : 'failed'
-    } with status ${response.status} in ${headersTime - startTime}ms`;
+    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${response.ok ? 'succeeded' : 'failed'} with status ${response.status} in ${headersTime - startTime}ms`;
 
     if (!response.ok) {
       const shouldRetry = await this.shouldRetry(response);
