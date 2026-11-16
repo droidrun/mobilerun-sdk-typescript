@@ -119,7 +119,7 @@ export {
   type ScriptSourceResponse,
   type ScriptCreateParams,
   type ScriptListParams,
-} from './scripts';
+} from './scripts/scripts';
 export {
   Tasks,
   type TaskRetrieveResponse,

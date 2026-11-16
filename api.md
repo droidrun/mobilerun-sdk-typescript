@@ -472,20 +472,33 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/scripts.ts">Script</a></code>
-- <code><a href="./src/resources/scripts.ts">ScriptSource</a></code>
-- <code><a href="./src/resources/scripts.ts">ScriptCreateResponse</a></code>
-- <code><a href="./src/resources/scripts.ts">ScriptRetrieveResponse</a></code>
-- <code><a href="./src/resources/scripts.ts">ScriptListResponse</a></code>
-- <code><a href="./src/resources/scripts.ts">ScriptSourceResponse</a></code>
+- <code><a href="./src/resources/scripts/scripts.ts">Script</a></code>
+- <code><a href="./src/resources/scripts/scripts.ts">ScriptSource</a></code>
+- <code><a href="./src/resources/scripts/scripts.ts">ScriptCreateResponse</a></code>
+- <code><a href="./src/resources/scripts/scripts.ts">ScriptRetrieveResponse</a></code>
+- <code><a href="./src/resources/scripts/scripts.ts">ScriptListResponse</a></code>
+- <code><a href="./src/resources/scripts/scripts.ts">ScriptSourceResponse</a></code>
 
 Methods:
 
-- <code title="post /sandbox/scripts">client.scripts.<a href="./src/resources/scripts.ts">create</a>({ ...params }) -> ScriptCreateResponse</code>
-- <code title="get /sandbox/scripts/{scriptId}">client.scripts.<a href="./src/resources/scripts.ts">retrieve</a>(scriptID) -> ScriptRetrieveResponse</code>
-- <code title="get /sandbox/scripts">client.scripts.<a href="./src/resources/scripts.ts">list</a>({ ...params }) -> ScriptListResponse</code>
-- <code title="delete /sandbox/scripts/{scriptId}">client.scripts.<a href="./src/resources/scripts.ts">delete</a>(scriptID) -> void</code>
-- <code title="get /sandbox/scripts/{scriptId}/source">client.scripts.<a href="./src/resources/scripts.ts">source</a>(scriptID) -> ScriptSourceResponse</code>
+- <code title="post /sandbox/scripts">client.scripts.<a href="./src/resources/scripts/scripts.ts">create</a>({ ...params }) -> ScriptCreateResponse</code>
+- <code title="get /sandbox/scripts/{scriptId}">client.scripts.<a href="./src/resources/scripts/scripts.ts">retrieve</a>(scriptID) -> ScriptRetrieveResponse</code>
+- <code title="get /sandbox/scripts">client.scripts.<a href="./src/resources/scripts/scripts.ts">list</a>({ ...params }) -> ScriptListResponse</code>
+- <code title="delete /sandbox/scripts/{scriptId}">client.scripts.<a href="./src/resources/scripts/scripts.ts">delete</a>(scriptID) -> void</code>
+- <code title="get /sandbox/scripts/{scriptId}/source">client.scripts.<a href="./src/resources/scripts/scripts.ts">source</a>(scriptID) -> ScriptSourceResponse</code>
+
+## Validations
+
+Types:
+
+- <code><a href="./src/resources/scripts/validations.ts">Validation</a></code>
+- <code><a href="./src/resources/scripts/validations.ts">ValidationCreateResponse</a></code>
+- <code><a href="./src/resources/scripts/validations.ts">ValidationRetrieveResponse</a></code>
+
+Methods:
+
+- <code title="post /sandbox/scripts/validations">client.scripts.validations.<a href="./src/resources/scripts/validations.ts">create</a>({ ...params }) -> ValidationCreateResponse</code>
+- <code title="get /sandbox/scripts/validations/{validationId}">client.scripts.validations.<a href="./src/resources/scripts/validations.ts">retrieve</a>(validationID, { ...params }) -> ValidationRetrieveResponse</code>
 
 # Connect
 
@@ -668,14 +681,19 @@ Types:
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowActivateResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowCapacityResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowCloneResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowCreateFromDocumentResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowDeliveryOptionsResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowDocumentSchemaResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowDryRunResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowListRepairsResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowReplaceDocumentResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowRetrieveDocumentResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowRetrieveRepairResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowRunResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowTemplateContextResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowUnblockResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowValidateResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/flows.ts">FlowValidateDocumentResponse</a></code>
 - <code><a href="./src/resources/workflows/flows/flows.ts">FlowVerifyResponse</a></code>
 
 Methods:
@@ -688,14 +706,19 @@ Methods:
 - <code title="post /flows/{flowId}/activate">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">activate</a>(flowID, { ...params }) -> FlowActivateResponse</code>
 - <code title="get /flows/capacity">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">capacity</a>({ ...params }) -> FlowCapacityResponse</code>
 - <code title="post /flows/{flowId}/clone">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">clone</a>(flowID, { ...params }) -> FlowCloneResponse</code>
+- <code title="post /flows/document">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">createFromDocument</a>({ ...params }) -> FlowCreateFromDocumentResponse</code>
 - <code title="get /flows/{flowId}/delivery-options">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">deliveryOptions</a>(flowID) -> FlowDeliveryOptionsResponse</code>
+- <code title="get /flows/document-schema">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">documentSchema</a>({ ...params }) -> FlowDocumentSchemaResponse</code>
 - <code title="post /flows/{flowId}/dry-run">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">dryRun</a>(flowID, { ...params }) -> FlowDryRunResponse</code>
 - <code title="get /flows/{flowId}/repairs">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">listRepairs</a>(flowID) -> FlowListRepairsResponse</code>
+- <code title="put /flows/{flowId}/document">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">replaceDocument</a>(flowID, { ...params }) -> FlowReplaceDocumentResponse</code>
+- <code title="get /flows/{flowId}/document">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">retrieveDocument</a>(flowID) -> FlowRetrieveDocumentResponse</code>
 - <code title="get /flows/{flowId}/repairs/{episodeId}">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">retrieveRepair</a>(episodeID, { ...params }) -> FlowRetrieveRepairResponse</code>
 - <code title="post /flows/{flowId}/run">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">run</a>(flowID, { ...params }) -> FlowRunResponse</code>
 - <code title="get /flows/template-context">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">templateContext</a>({ ...params }) -> FlowTemplateContextResponse</code>
 - <code title="post /flows/{flowId}/unblock">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">unblock</a>(flowID) -> FlowUnblockResponse</code>
 - <code title="post /flows/validate">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">validate</a>({ ...params }) -> FlowValidateResponse</code>
+- <code title="post /flows/document/validate">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">validateDocument</a>({ ...params }) -> FlowValidateDocumentResponse</code>
 - <code title="post /flows/{flowId}/verify">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">verify</a>(flowID, { ...params }) -> FlowVerifyResponse</code>
 
 ### Actions

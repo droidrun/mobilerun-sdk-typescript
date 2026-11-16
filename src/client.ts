@@ -55,17 +55,6 @@ import {
   ProxyUpdateResponse,
 } from './resources/proxies';
 import {
-  Script,
-  ScriptCreateParams,
-  ScriptCreateResponse,
-  ScriptListParams,
-  ScriptListResponse,
-  ScriptRetrieveResponse,
-  ScriptSource,
-  ScriptSourceResponse,
-  Scripts,
-} from './resources/scripts';
-import {
   AgentCreateParams,
   AgentCreateResponse,
   AgentListResponse,
@@ -136,6 +125,17 @@ import {
   NumberUpdateResponse,
   Numbers,
 } from './resources/numbers/numbers';
+import {
+  Script,
+  ScriptCreateParams,
+  ScriptCreateResponse,
+  ScriptListParams,
+  ScriptListResponse,
+  ScriptRetrieveResponse,
+  ScriptSource,
+  ScriptSourceResponse,
+  Scripts,
+} from './resources/scripts/scripts';
 import {
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
