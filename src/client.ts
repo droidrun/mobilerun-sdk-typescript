@@ -88,6 +88,17 @@ import {
   Devices,
 } from './resources/devices/devices';
 import {
+  FunctionCreateParams,
+  FunctionCreateResponse,
+  FunctionListParams,
+  FunctionListResponse,
+  FunctionRetrieveResponse,
+  FunctionSource,
+  FunctionSourceResponse,
+  Functions,
+  ServerlessFunction,
+} from './resources/functions/functions';
+import {
   MailboxCapacityResponse,
   MailboxCreateParams,
   MailboxCreateResponse,
@@ -880,6 +891,7 @@ export class Mobilerun {
   devices: API.Devices = new API.Devices(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
+  functions: API.Functions = new API.Functions(this);
   connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
@@ -900,6 +912,7 @@ Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
+Mobilerun.Functions = Functions;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
@@ -966,6 +979,18 @@ export declare namespace Mobilerun {
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
+  };
+
+  export {
+    Functions as Functions,
+    type FunctionSource as FunctionSource,
+    type ServerlessFunction as ServerlessFunction,
+    type FunctionCreateResponse as FunctionCreateResponse,
+    type FunctionRetrieveResponse as FunctionRetrieveResponse,
+    type FunctionListResponse as FunctionListResponse,
+    type FunctionSourceResponse as FunctionSourceResponse,
+    type FunctionCreateParams as FunctionCreateParams,
+    type FunctionListParams as FunctionListParams,
   };
 
   export { Connect as Connect };

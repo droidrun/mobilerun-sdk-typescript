@@ -247,6 +247,26 @@ describe('resource flows', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('createFromDocument', async () => {
+    const responsePromise = client.workflows.flows.createFromDocument();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('createFromDocument: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.workflows.flows.createFromDocument({ document: {} }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('deliveryOptions', async () => {
     const responsePromise = client.workflows.flows.deliveryOptions('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
@@ -256,6 +276,29 @@ describe('resource flows', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('documentSchema', async () => {
+    const responsePromise = client.workflows.flows.documentSchema();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('documentSchema: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.workflows.flows.documentSchema(
+        { profile: 'agent_routine' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -285,6 +328,42 @@ describe('resource flows', () => {
   // Mock server tests are disabled
   test.skip('listRepairs', async () => {
     const responsePromise = client.workflows.flows.listRepairs('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('replaceDocument', async () => {
+    const responsePromise = client.workflows.flows.replaceDocument('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('replaceDocument: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.workflows.flows.replaceDocument(
+        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        { document: {} },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieveDocument', async () => {
+    const responsePromise = client.workflows.flows.retrieveDocument('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -440,6 +519,26 @@ describe('resource flows', () => {
       selfHealingMaxAttempts: 1,
       triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('validateDocument', async () => {
+    const responsePromise = client.workflows.flows.validateDocument();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('validateDocument: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.workflows.flows.validateDocument({ document: {} }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 
   // Mock server tests are disabled
