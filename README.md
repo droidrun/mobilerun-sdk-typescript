@@ -6,18 +6,33 @@ This library provides convenient access to the Mobilerun REST API from server-si
 
 The full API of this library can be found in [api.md](api.md).
 
-It is generated with [Stainless](https://www.stainless.com/).
-
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:droidrun/mobilerun-sdk-typescript.git
+npm install @mobilerun/sdk
 ```
 
-> [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install @mobilerun/sdk`
-
 ## Usage
+
+Creating a device uses device minutes until you stop or terminate it. This example selects minute billing and stops the device at the end.
+
+```ts
+import { MobilerunSDK } from '@mobilerun/sdk';
+
+const sdk = new MobilerunSDK();
+const device = await sdk.devices.create({ billing: 'minute', deviceType: 'android_cloud_phone' });
+try {
+  const task = await device.run({ task: 'Open Settings' });
+  const result = await task.wait();
+  console.log(result.status, device.name);
+} finally {
+  await device.stop();
+}
+```
+
+Stopping requires a device type that supports stop; otherwise use `device.terminate()`.
+
+### Full client (`.api`)
 
 The full API of this library can be found in [api.md](api.md).
 
@@ -94,6 +109,206 @@ await client.devices.files.upload('deviceId', {
   file: await toFile(new Uint8Array([0, 1, 2]), 'file'),
 });
 ```
+
+## Object API
+
+The object API is additive. Existing client APIs are unchanged and the complete raw client is available as `.api`. Properties such as `device.name` and `task.status` read the last response in `info` without making a request. Call `refresh()` to update it. Object-layer logs show class, ID and declared fields, never `info` or the client; the explicit `.api` escape hatch stays raw. Waits poll with bounded requests and back off on 408/409/429/5xx.
+
+### Objects
+
+| Object             | How to get it                    | Main methods                                                                               |
+| ------------------ | -------------------------------- | ------------------------------------------------------------------------------------------ |
+| Device             | `sdk.devices`                    | `get, list, create, run, screenshot, recordings`                                           |
+| Task               | `sdk.tasks / device.run()`       | `run, get, list, wait, waitOutput`                                                         |
+| App                | `sdk.apps`                       | `get, list, upload, delete, listVersions`                                                  |
+| ProxyConfiguration | `sdk.proxies`                    | `get, list, create, update, delete`                                                        |
+| Trigger            | `sdk.workflows.triggers`         | `get, list, create, update, delete, fire`                                                  |
+| WorkflowAction     | `sdk.workflows.actions`          | `get, list, create, update, delete`                                                        |
+| CatalogEntry       | `sdk.workflows.actionCatalog`    | `get, list`                                                                                |
+| Flow               | `sdk.workflows.flows`            | `get, list, create, clone, run, verify`                                                    |
+| Execution          | `sdk.workflows.executions`       | `get, list, wait`                                                                          |
+| Agent              | `sdk.agents`                     | `create, list, profile.update, files.list, conversations, routines, requests.listForAgent` |
+| AgentRequest       | `sdk.agents.requests`            | `get, list, retrieveBySession`                                                             |
+| AgentFile          | `sdk.files / agent.files.list()` | `upload, list, update, delete, confirm, cancelPending, download`                           |
+| ConnectUser        | `sdk.connect.users`              | `get, list, create, update, delete, listConnections`                                       |
+| ConnectProxy       | `sdk.connect.proxies`            | `get, list, buy, update, ping, ensureHealthy, checkout, cancel`                            |
+| CredentialPackage  | `sdk.credentials.packages`       | `get, list, create, credentials`                                                           |
+| Credential         | `package.credentials`            | `create, list, delete, fields`                                                             |
+| NumberMessage      | `sdk.messages`                   | `get, list`                                                                                |
+| Mailbox            | `sdk.mailboxes`                  | `get, list, create, waitForOtp, messages`                                                  |
+| MailboxMessage     | `mailbox.messages`               | `get, list`                                                                                |
+| PhoneNumber        | `sdk.numbers`                    | `get, list, create, send, messages.list, waitUntilActive`                                  |
+| Webhook            | `sdk.webhooks`                   | `get, list, create, verify, update, delete, test, rotateSecret`                            |
+| TrafficSession     | `device.trafficSessions`         | `create, get, list, delete`                                                                |
+| MailboxConnection  | `sdk.mailboxes.connections`      | `create, get`                                                                              |
+| SavedScreenshot    | `device.screenshots`             | `list, image, delete`                                                                      |
+| WebhookDelivery    | `webhook.deliveries`             | `get, list`                                                                                |
+| Recording          | `device.recordings`              | `get, list, start, stop, wait, delete, trajectory, video, screenshots`                     |
+
+Every manager has `fromId(id)` / `from_id(id)` for an unfetched handle. Child managers carry their parent context. Agent and AgentFile have no get or refresh: their fields carry only the last create/list snapshot; fromId/from_id handles have no data. Agent profile.update returns a fresh Agent and leaves the original snapshot unchanged. Package get retains the full credentials-array response and takes its canonical name from the first row; an empty response keeps the requested name. Credential list maps that same package route to child handles. Recording start is its only factory and owns stop on scope exit; handles from get/list/fromId never stop automatically. Recording video/trajectory and AgentFile download return bytes. SavedScreenshot.image returns bytes; Screenshot remains the capture result returned by device.screenshot().
+
+Object purchase methods keep the API's own operation name:
+
+- Device.create uses device minutes until the device is stopped or terminated.
+- ConnectProxy.buy and ConnectProxy.checkout can incur upstream proxy charges.
+- PhoneNumber.create can incur upstream number rental charges.
+- Mailbox.create and Mailbox.restart can incur upstream mailbox rental charges; included capacity may apply.
+
+### Upload an app
+
+Uploading uses storage quota and may incur storage charges. A string upload input always names a local file path. Paths stream from disk with a measured Content-Length; bytes and blobs can specify a filename and content type with `{ data, filename, contentType }`. `sdk.files.upload({ file: 'notes.txt' })` uploads an agent file. Cleanup runs best-effort only for definite failures before confirmation; ambiguous confirm failures and failures after successful confirmation do not mark the upload failed; `UploadError.cause` retains the original failure.
+
+```ts
+import { MobilerunSDK } from '@mobilerun/sdk';
+
+const sdk = new MobilerunSDK();
+const app = await sdk.apps.upload({
+  bundleId: 'com.example.app',
+  displayName: 'Example',
+  versionCode: 1,
+  versionName: '1.0',
+  files: ['app.apk'],
+});
+console.log(app.id);
+```
+
+### Verify webhook signatures
+
+`invalid_json` means the signature is valid but the body is not UTF-8 JSON; respond with HTTP 400 instead of 401.
+
+Verify the exact raw body before JSON parsing. Deduplicate replays within the tolerance window using an ID inside the signed body, never the unsigned `x-mobilerun-event-id` header. The helper needs the endpoint signing secret, but no API key. It checks both past and future timestamps with a five-minute tolerance. `sdk.webhooks.verify` offers the same verification. Failures raise `WebhookVerificationError` with a `reason` code. TypeScript requires `globalThis.crypto` (Node 19+ or modern runtimes). `now` is epoch milliseconds; `toleranceSeconds` overrides the tolerance in seconds.
+
+```ts
+import { verifyWebhook } from '@mobilerun/sdk';
+
+export async function POST(request: Request): Promise<Response> {
+  const body = new Uint8Array(await request.arrayBuffer());
+  const event = await verifyWebhook({
+    body,
+    headers: request.headers,
+    secret: process.env['WEBHOOK_SECRET']!,
+  });
+  return Response.json(event);
+}
+```
+
+### Existing devices and screenshots
+
+```ts
+import { MobilerunSDK } from '@mobilerun/sdk';
+
+const sdk = new MobilerunSDK();
+const device = await sdk.devices.get('device-id');
+await device.home();
+await device.openApp('com.android.settings');
+await device.back();
+await device.stopApp('com.android.settings');
+await device.swipe(300, 800, 300, 200, 400);
+const screenshot = await device.screenshot();
+await screenshot.save('screenshot.png');
+for await (const existing of sdk.devices.list()) {
+  console.log(existing.id, existing.name, existing.state);
+}
+```
+
+### Park and wake a device
+
+```ts
+import { MobilerunSDK } from '@mobilerun/sdk';
+
+const device = new MobilerunSDK().devices.fromId('device-id');
+await device.stop();
+// Later, when the customer returns:
+await device.resume();
+```
+
+Both methods return the handle once the device has reached its target state: stopped or ready.
+
+### Typed task output
+
+Install Zod 4 to use the optional adapter. `waitOutput` validates the output and returns `WaitOutput` containing `output` and the raw `response`. Validation failures raise `OutputValidationError` with `objectId` and the response.
+
+```ts
+import { MobilerunSDK } from '@mobilerun/sdk';
+import { output } from '@mobilerun/sdk/zod';
+import { z } from 'zod/v4';
+
+const sdk = new MobilerunSDK();
+const device = await sdk.devices.get('device-id');
+const task = await device.run({
+  task: 'Read the visible heading',
+  outputSchema: output(z.object({ heading: z.string() })),
+});
+const result = await task.waitOutput();
+const heading: string = result.output.heading;
+console.log(heading);
+```
+
+### Recording uploads
+
+```ts
+import { writeFile } from 'node:fs/promises';
+import { MobilerunSDK } from '@mobilerun/sdk';
+
+const sdk = new MobilerunSDK();
+const device = sdk.devices.fromId('device-id');
+const recording = await device.recordings.start();
+const task = await device.run({ task: 'Open Settings' });
+await task.wait();
+await recording.stop();
+await recording.wait();
+const video = await recording.video();
+await writeFile('recording.mp4', video);
+```
+
+### Stream a device in a web app
+
+Install the React streaming package with `npm install @mobilerun/react`.
+
+On your server, resolve a device the authenticated end user may see; never send the API key to the browser, only that device's `streamUrl` and `streamToken`.
+
+```ts
+import { MobilerunSDK } from '@mobilerun/sdk';
+
+const sdk = new MobilerunSDK();
+// Call from your authenticated route handler after checking device access.
+export async function getDeviceStream(deviceId: string) {
+  const device = await sdk.devices.get(deviceId);
+  if (!device.info) throw new Error('Device info is unavailable');
+  return { streamUrl: device.info.streamUrl, streamToken: device.info.streamToken };
+}
+```
+
+Pass the returned values to your client component:
+
+```tsx
+import { DeviceStream } from '@mobilerun/react';
+import '@mobilerun/react/styles.css';
+
+export function DevicePanel({ streamUrl, streamToken }: { streamUrl: string; streamToken?: string }) {
+  return <DeviceStream streamUrl={streamUrl} streamToken={streamToken} hasControl />;
+}
+```
+
+See the [React package README](https://github.com/droidrun/mobilerun-react#readme) for hooks (`useDeviceStream`), reconnects and task approvals.
+
+### Automatic cleanup
+
+If readiness inside `create` fails, the new resource is disposed best-effort by default; set `disposeOnReadyFailure: false` to retain it. `ObjectReadyError` keeps the handle and readiness cause, with `disposed` and `cleanupError` reporting cleanup.
+
+Only lifecycle factories own their resources: `create` normally, and `Recording.start` for recordings. `await using` terminates that device on exit. Handles from `get`, `fromId`, lists and returned task handles do not clean up automatically. `await using` needs TypeScript explicit resource management support and a compatible runtime.
+
+```ts
+import { MobilerunSDK } from '@mobilerun/sdk';
+
+const sdk = new MobilerunSDK();
+async function runOnce() {
+  await using device = await sdk.devices.create({ billing: 'minute', deviceType: 'android_cloud_phone' });
+  await (await device.run({ task: 'Open Settings' })).wait();
+}
+```
+
+Examples: see [`examples/`](https://github.com/droidrun/mobilerun-sdk-typescript/tree/HEAD/examples)
 
 ## Handling errors
 
