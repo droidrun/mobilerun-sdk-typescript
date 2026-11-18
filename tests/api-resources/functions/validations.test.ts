@@ -10,7 +10,7 @@ const client = new Mobilerun({
 describe('resource validations', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.scripts.validations.create({ source: 'x' });
+    const responsePromise = client.functions.validations.create({ source: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,7 +22,7 @@ describe('resource validations', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.scripts.validations.create({
+    const response = await client.functions.validations.create({
       source: 'x',
       waitS: 0,
       manifest: {
@@ -35,7 +35,7 @@ describe('resource validations', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve', async () => {
-    const responsePromise = client.scripts.validations.retrieve('550e8400-e29b-41d4-a716-446655440000');
+    const responsePromise = client.functions.validations.retrieve('550e8400-e29b-41d4-a716-446655440000');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,7 +49,7 @@ describe('resource validations', () => {
   test.skip('retrieve: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.scripts.validations.retrieve(
+      client.functions.validations.retrieve(
         '550e8400-e29b-41d4-a716-446655440000',
         { waitS: 0 },
         { path: '/_stainless_unknown_path' },

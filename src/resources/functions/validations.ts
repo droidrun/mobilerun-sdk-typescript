@@ -7,35 +7,35 @@ import { path } from '../../internal/utils/path';
 
 export class Validations extends APIResource {
   /**
-   * Validate Python script source without uploading it
+   * Validate Python function source without uploading it
    */
   create(params: ValidationCreateParams, options?: RequestOptions): APIPromise<ValidationCreateResponse> {
     const { waitS, ...body } = params;
-    return this._client.post('/sandbox/scripts/validations', { query: { waitS }, body, ...options });
+    return this._client.post('/functions/validations', { query: { waitS }, body, ...options });
   }
 
   /**
-   * Retrieve a script validation owned by this organisation
+   * Retrieve a function validation owned by this organisation
    */
   retrieve(
     validationID: string,
     query: ValidationRetrieveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ValidationRetrieveResponse> {
-    return this._client.get(path`/sandbox/scripts/validations/${validationID}`, { query, ...options });
+    return this._client.get(path`/functions/validations/${validationID}`, { query, ...options });
   }
 }
 
-export interface Validation {
+export interface FunctionValidation {
   id: string;
 
   createdAt: string;
 
-  errors: Array<Validation.Error>;
+  errors: Array<FunctionValidation.Error>;
 
   status: 'pending' | 'done' | 'failed';
 
-  warnings: Array<Validation.Warning>;
+  warnings: Array<FunctionValidation.Warning>;
 
   datasetKey?: string | null;
 
@@ -52,7 +52,7 @@ export interface Validation {
   valid?: boolean;
 }
 
-export namespace Validation {
+export namespace FunctionValidation {
   export interface Error {
     code: string;
 
@@ -91,11 +91,11 @@ export namespace Validation {
 }
 
 export interface ValidationCreateResponse {
-  data: Validation;
+  data: FunctionValidation;
 }
 
 export interface ValidationRetrieveResponse {
-  data: Validation;
+  data: FunctionValidation;
 }
 
 export interface ValidationCreateParams {
@@ -144,7 +144,7 @@ export interface ValidationRetrieveParams {
 
 export declare namespace Validations {
   export {
-    type Validation as Validation,
+    type FunctionValidation as FunctionValidation,
     type ValidationCreateResponse as ValidationCreateResponse,
     type ValidationRetrieveResponse as ValidationRetrieveResponse,
     type ValidationCreateParams as ValidationCreateParams,

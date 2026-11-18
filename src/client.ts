@@ -88,6 +88,17 @@ import {
   Devices,
 } from './resources/devices/devices';
 import {
+  FunctionCreateParams,
+  FunctionCreateResponse,
+  FunctionListParams,
+  FunctionListResponse,
+  FunctionRetrieveResponse,
+  FunctionSource,
+  FunctionSourceResponse,
+  Functions,
+  ServerlessFunction,
+} from './resources/functions/functions';
+import {
   MailboxCapacityResponse,
   MailboxCreateParams,
   MailboxCreateResponse,
@@ -125,17 +136,6 @@ import {
   NumberUpdateResponse,
   Numbers,
 } from './resources/numbers/numbers';
-import {
-  Script,
-  ScriptCreateParams,
-  ScriptCreateResponse,
-  ScriptListParams,
-  ScriptListResponse,
-  ScriptRetrieveResponse,
-  ScriptSource,
-  ScriptSourceResponse,
-  Scripts,
-} from './resources/scripts/scripts';
 import {
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
@@ -891,7 +891,7 @@ export class Mobilerun {
   devices: API.Devices = new API.Devices(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
-  scripts: API.Scripts = new API.Scripts(this);
+  functions: API.Functions = new API.Functions(this);
   connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
@@ -912,7 +912,7 @@ Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
-Mobilerun.Scripts = Scripts;
+Mobilerun.Functions = Functions;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
@@ -982,15 +982,15 @@ export declare namespace Mobilerun {
   };
 
   export {
-    Scripts as Scripts,
-    type Script as Script,
-    type ScriptSource as ScriptSource,
-    type ScriptCreateResponse as ScriptCreateResponse,
-    type ScriptRetrieveResponse as ScriptRetrieveResponse,
-    type ScriptListResponse as ScriptListResponse,
-    type ScriptSourceResponse as ScriptSourceResponse,
-    type ScriptCreateParams as ScriptCreateParams,
-    type ScriptListParams as ScriptListParams,
+    Functions as Functions,
+    type FunctionSource as FunctionSource,
+    type ServerlessFunction as ServerlessFunction,
+    type FunctionCreateResponse as FunctionCreateResponse,
+    type FunctionRetrieveResponse as FunctionRetrieveResponse,
+    type FunctionListResponse as FunctionListResponse,
+    type FunctionSourceResponse as FunctionSourceResponse,
+    type FunctionCreateParams as FunctionCreateParams,
+    type FunctionListParams as FunctionListParams,
   };
 
   export { Connect as Connect };

@@ -7,10 +7,10 @@ const client = new Mobilerun({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource scripts', () => {
+describe('resource functions', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.scripts.create({ name: 'x', source: 'x' });
+    const responsePromise = client.functions.create({ name: 'x', source: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,7 +22,7 @@ describe('resource scripts', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.scripts.create({
+    const response = await client.functions.create({
       name: 'x',
       source: 'x',
       description: 'description',
@@ -36,7 +36,7 @@ describe('resource scripts', () => {
 
   // Mock server tests are disabled
   test.skip('retrieve', async () => {
-    const responsePromise = client.scripts.retrieve('550e8400-e29b-41d4-a716-446655440000');
+    const responsePromise = client.functions.retrieve('550e8400-e29b-41d4-a716-446655440000');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,7 +48,7 @@ describe('resource scripts', () => {
 
   // Mock server tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.scripts.list();
+    const responsePromise = client.functions.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -62,7 +62,7 @@ describe('resource scripts', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.scripts.list(
+      client.functions.list(
         {
           latest: 'true',
           name: 'x',
@@ -77,7 +77,7 @@ describe('resource scripts', () => {
 
   // Mock server tests are disabled
   test.skip('delete', async () => {
-    const responsePromise = client.scripts.delete('550e8400-e29b-41d4-a716-446655440000');
+    const responsePromise = client.functions.delete('550e8400-e29b-41d4-a716-446655440000');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -89,7 +89,7 @@ describe('resource scripts', () => {
 
   // Mock server tests are disabled
   test.skip('source', async () => {
-    const responsePromise = client.scripts.source('550e8400-e29b-41d4-a716-446655440000');
+    const responsePromise = client.functions.source('550e8400-e29b-41d4-a716-446655440000');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

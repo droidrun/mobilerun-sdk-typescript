@@ -156,7 +156,7 @@ export class MobilerunSDK {
   readonly devices: DeviceManager;
   readonly models: Raw['models'];
   readonly proxies: ProxyConfigurationManager;
-  readonly scripts: Raw['scripts'];
+  readonly functions: Raw['functions'];
   readonly connect: Without<Raw['connect'], 'proxies' | 'users'> & {
     proxies: ConnectProxyManager;
     users: ConnectUserManager;
@@ -216,17 +216,17 @@ export class MobilerunSDK {
     this.devices = new DeviceManager(this.api);
     this.models = withResources(this.api.models, {}, 'Models') as Raw['models'];
     this.proxies = new ProxyConfigurationManager(this.api);
-    this.scripts = withResources(
-      this.api.scripts,
+    this.functions = withResources(
+      this.api.functions,
       {
         validations: withResources(
-          this.api.scripts.validations,
+          this.api.functions.validations,
           {},
           'Validations',
-        ) as Raw['scripts']['validations'],
+        ) as Raw['functions']['validations'],
       },
-      'Scripts',
-    ) as Raw['scripts'];
+      'Functions',
+    ) as Raw['functions'];
     this.connect = withResources(
       this.api.connect,
       {

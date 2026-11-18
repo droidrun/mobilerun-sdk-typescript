@@ -468,37 +468,37 @@ Methods:
 - <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
 - <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
 
-# Scripts
+# Functions
 
 Types:
 
-- <code><a href="./src/resources/scripts/scripts.ts">Script</a></code>
-- <code><a href="./src/resources/scripts/scripts.ts">ScriptSource</a></code>
-- <code><a href="./src/resources/scripts/scripts.ts">ScriptCreateResponse</a></code>
-- <code><a href="./src/resources/scripts/scripts.ts">ScriptRetrieveResponse</a></code>
-- <code><a href="./src/resources/scripts/scripts.ts">ScriptListResponse</a></code>
-- <code><a href="./src/resources/scripts/scripts.ts">ScriptSourceResponse</a></code>
+- <code><a href="./src/resources/functions/functions.ts">FunctionSource</a></code>
+- <code><a href="./src/resources/functions/functions.ts">ServerlessFunction</a></code>
+- <code><a href="./src/resources/functions/functions.ts">FunctionCreateResponse</a></code>
+- <code><a href="./src/resources/functions/functions.ts">FunctionRetrieveResponse</a></code>
+- <code><a href="./src/resources/functions/functions.ts">FunctionListResponse</a></code>
+- <code><a href="./src/resources/functions/functions.ts">FunctionSourceResponse</a></code>
 
 Methods:
 
-- <code title="post /sandbox/scripts">client.scripts.<a href="./src/resources/scripts/scripts.ts">create</a>({ ...params }) -> ScriptCreateResponse</code>
-- <code title="get /sandbox/scripts/{scriptId}">client.scripts.<a href="./src/resources/scripts/scripts.ts">retrieve</a>(scriptID) -> ScriptRetrieveResponse</code>
-- <code title="get /sandbox/scripts">client.scripts.<a href="./src/resources/scripts/scripts.ts">list</a>({ ...params }) -> ScriptListResponse</code>
-- <code title="delete /sandbox/scripts/{scriptId}">client.scripts.<a href="./src/resources/scripts/scripts.ts">delete</a>(scriptID) -> void</code>
-- <code title="get /sandbox/scripts/{scriptId}/source">client.scripts.<a href="./src/resources/scripts/scripts.ts">source</a>(scriptID) -> ScriptSourceResponse</code>
+- <code title="post /functions">client.functions.<a href="./src/resources/functions/functions.ts">create</a>({ ...params }) -> FunctionCreateResponse</code>
+- <code title="get /functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">retrieve</a>(functionID) -> FunctionRetrieveResponse</code>
+- <code title="get /functions">client.functions.<a href="./src/resources/functions/functions.ts">list</a>({ ...params }) -> FunctionListResponse</code>
+- <code title="delete /functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">delete</a>(functionID) -> void</code>
+- <code title="get /functions/{functionId}/source">client.functions.<a href="./src/resources/functions/functions.ts">source</a>(functionID) -> FunctionSourceResponse</code>
 
 ## Validations
 
 Types:
 
-- <code><a href="./src/resources/scripts/validations.ts">Validation</a></code>
-- <code><a href="./src/resources/scripts/validations.ts">ValidationCreateResponse</a></code>
-- <code><a href="./src/resources/scripts/validations.ts">ValidationRetrieveResponse</a></code>
+- <code><a href="./src/resources/functions/validations.ts">FunctionValidation</a></code>
+- <code><a href="./src/resources/functions/validations.ts">ValidationCreateResponse</a></code>
+- <code><a href="./src/resources/functions/validations.ts">ValidationRetrieveResponse</a></code>
 
 Methods:
 
-- <code title="post /sandbox/scripts/validations">client.scripts.validations.<a href="./src/resources/scripts/validations.ts">create</a>({ ...params }) -> ValidationCreateResponse</code>
-- <code title="get /sandbox/scripts/validations/{validationId}">client.scripts.validations.<a href="./src/resources/scripts/validations.ts">retrieve</a>(validationID, { ...params }) -> ValidationRetrieveResponse</code>
+- <code title="post /functions/validations">client.functions.validations.<a href="./src/resources/functions/validations.ts">create</a>({ ...params }) -> ValidationCreateResponse</code>
+- <code title="get /functions/validations/{validationId}">client.functions.validations.<a href="./src/resources/functions/validations.ts">retrieve</a>(validationID, { ...params }) -> ValidationRetrieveResponse</code>
 
 # Connect
 
