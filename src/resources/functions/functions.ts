@@ -24,14 +24,14 @@ export class Functions extends APIResource {
    * Upload an immutable Python function as the next version of its name
    */
   create(body: FunctionCreateParams, options?: RequestOptions): APIPromise<FunctionCreateResponse> {
-    return this._client.post('/functions', { body, ...options });
+    return this._client.post('/compute/functions', { body, ...options });
   }
 
   /**
    * Get function metadata
    */
   retrieve(functionID: string, options?: RequestOptions): APIPromise<FunctionRetrieveResponse> {
-    return this._client.get(path`/functions/${functionID}`, options);
+    return this._client.get(path`/compute/functions/${functionID}`, options);
   }
 
   /**
@@ -41,14 +41,14 @@ export class Functions extends APIResource {
     query: FunctionListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<FunctionListResponse> {
-    return this._client.get('/functions', { query, ...options });
+    return this._client.get('/compute/functions', { query, ...options });
   }
 
   /**
    * Delete a function
    */
   delete(functionID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/functions/${functionID}`, {
+    return this._client.delete(path`/compute/functions/${functionID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -58,7 +58,7 @@ export class Functions extends APIResource {
    * Read verified function source
    */
   source(functionID: string, options?: RequestOptions): APIPromise<FunctionSourceResponse> {
-    return this._client.get(path`/functions/${functionID}/source`, options);
+    return this._client.get(path`/compute/functions/${functionID}/source`, options);
   }
 }
 

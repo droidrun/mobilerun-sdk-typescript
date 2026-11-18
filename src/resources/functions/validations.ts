@@ -11,7 +11,7 @@ export class Validations extends APIResource {
    */
   create(params: ValidationCreateParams, options?: RequestOptions): APIPromise<ValidationCreateResponse> {
     const { waitS, ...body } = params;
-    return this._client.post('/functions/validations', { query: { waitS }, body, ...options });
+    return this._client.post('/compute/functions/validations', { query: { waitS }, body, ...options });
   }
 
   /**
@@ -22,7 +22,7 @@ export class Validations extends APIResource {
     query: ValidationRetrieveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ValidationRetrieveResponse> {
-    return this._client.get(path`/functions/validations/${validationID}`, { query, ...options });
+    return this._client.get(path`/compute/functions/validations/${validationID}`, { query, ...options });
   }
 }
 

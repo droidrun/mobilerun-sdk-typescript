@@ -481,11 +481,11 @@ Types:
 
 Methods:
 
-- <code title="post /functions">client.functions.<a href="./src/resources/functions/functions.ts">create</a>({ ...params }) -> FunctionCreateResponse</code>
-- <code title="get /functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">retrieve</a>(functionID) -> FunctionRetrieveResponse</code>
-- <code title="get /functions">client.functions.<a href="./src/resources/functions/functions.ts">list</a>({ ...params }) -> FunctionListResponse</code>
-- <code title="delete /functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">delete</a>(functionID) -> void</code>
-- <code title="get /functions/{functionId}/source">client.functions.<a href="./src/resources/functions/functions.ts">source</a>(functionID) -> FunctionSourceResponse</code>
+- <code title="post /compute/functions">client.functions.<a href="./src/resources/functions/functions.ts">create</a>({ ...params }) -> FunctionCreateResponse</code>
+- <code title="get /compute/functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">retrieve</a>(functionID) -> FunctionRetrieveResponse</code>
+- <code title="get /compute/functions">client.functions.<a href="./src/resources/functions/functions.ts">list</a>({ ...params }) -> FunctionListResponse</code>
+- <code title="delete /compute/functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">delete</a>(functionID) -> void</code>
+- <code title="get /compute/functions/{functionId}/source">client.functions.<a href="./src/resources/functions/functions.ts">source</a>(functionID) -> FunctionSourceResponse</code>
 
 ## Validations
 
@@ -497,8 +497,8 @@ Types:
 
 Methods:
 
-- <code title="post /functions/validations">client.functions.validations.<a href="./src/resources/functions/validations.ts">create</a>({ ...params }) -> ValidationCreateResponse</code>
-- <code title="get /functions/validations/{validationId}">client.functions.validations.<a href="./src/resources/functions/validations.ts">retrieve</a>(validationID, { ...params }) -> ValidationRetrieveResponse</code>
+- <code title="post /compute/functions/validations">client.functions.validations.<a href="./src/resources/functions/validations.ts">create</a>({ ...params }) -> ValidationCreateResponse</code>
+- <code title="get /compute/functions/validations/{validationId}">client.functions.validations.<a href="./src/resources/functions/validations.ts">retrieve</a>(validationID, { ...params }) -> ValidationRetrieveResponse</code>
 
 # Connect
 
