@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.3.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.2.1...v6.3.0) (2026-11-18)
+
+
+### Features
+
+* **sdk:** add sandbox scripts preview ([d56a2ee](https://github.com/droidrun/mobilerun-sdk-typescript/commit/d56a2ee119550bae1f44b5ba6ddd2c91bf15f178))
+
 ## [6.2.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.2.0...v6.2.1) (2026-11-14)
 
 
