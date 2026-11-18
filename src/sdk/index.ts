@@ -156,6 +156,7 @@ export class MobilerunSDK {
   readonly devices: DeviceManager;
   readonly models: Raw['models'];
   readonly proxies: ProxyConfigurationManager;
+  readonly functions: Raw['functions'];
   readonly connect: Without<Raw['connect'], 'proxies' | 'users'> & {
     proxies: ConnectProxyManager;
     users: ConnectUserManager;
@@ -215,6 +216,17 @@ export class MobilerunSDK {
     this.devices = new DeviceManager(this.api);
     this.models = withResources(this.api.models, {}, 'Models') as Raw['models'];
     this.proxies = new ProxyConfigurationManager(this.api);
+    this.functions = withResources(
+      this.api.functions,
+      {
+        validations: withResources(
+          this.api.functions.validations,
+          {},
+          'Validations',
+        ) as Raw['functions']['validations'],
+      },
+      'Functions',
+    ) as Raw['functions'];
     this.connect = withResources(
       this.api.connect,
       {
@@ -1498,6 +1510,32 @@ export class FlowManager {
   }
 
   /**
+   * Atomically creates the trigger, actions and disabled flow. Body: {document}.
+   * Optional Idempotency-Key fingerprints the canonical document; identical retries
+   * reload the resource, changed documents return idempotency_key_reused. Verify and
+   * activate with the existing flow endpoints.
+   */
+  createFromDocument(
+    params?: FlowsAPI.FlowCreateFromDocumentParams,
+    options?: RequestOptions,
+  ): APIPromise<FlowsAPI.FlowCreateFromDocumentResponse> {
+    const result = this.api.workflows.flows.createFromDocument({ ...params }, options);
+    return result;
+  }
+
+  /**
+   * The optional agent_routine profile lists only agent-eligible steps. This is
+   * authoring guidance; backend validation remains authoritative.
+   */
+  documentSchema(
+    params?: FlowsAPI.FlowDocumentSchemaParams,
+    options?: RequestOptions,
+  ): APIPromise<FlowsAPI.FlowDocumentSchemaResponse> {
+    const result = this.api.workflows.flows.documentSchema({ ...params }, options);
+    return result;
+  }
+
+  /**
    * Get flow template context
    */
   templateContext(
@@ -1528,6 +1566,19 @@ export class FlowManager {
     options?: RequestOptions,
   ): APIPromise<FlowsAPI.FlowValidateResponse> {
     const result = this.api.workflows.flows.validate({ ...params }, options);
+    return result;
+  }
+
+  /**
+   * Validates graph, settings and scheduled inputs without writing. Disconnected
+   * delivery destinations produce warnings; create and replace enforce the existing
+   * delivery connection checks.
+   */
+  validateDocument(
+    params?: FlowsAPI.FlowValidateDocumentParams,
+    options?: RequestOptions,
+  ): APIPromise<FlowsAPI.FlowValidateDocumentResponse> {
+    const result = this.api.workflows.flows.validateDocument({ ...params }, options);
     return result;
   }
 }
@@ -5310,6 +5361,39 @@ export class Flow {
    */
   listRepairs(options?: RequestOptions): APIPromise<FlowsAPI.FlowListRepairsResponse> {
     const result = this.api.workflows.flows.listRepairs(
+      this.id,
+      boundOptions(options, [{ name: 'flowId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
+   * Body: {document}. Preserves enabled state. Omitted settings preserves all stored
+   * settings; present settings replaces them, with absent fields defaulted. Agent
+   * routines require a new version deployed through the agent. Omitted description,
+   * devices and trigger options clear their values. Shared triggers return
+   * trigger_shared and agent-managed routines return routine_agent_managed (409);
+   * shared action definitions are never modified.
+   */
+  replaceDocument(
+    params?: FlowsAPI.FlowReplaceDocumentParams,
+    options?: RequestOptions,
+  ): APIPromise<FlowsAPI.FlowReplaceDocumentResponse> {
+    const result = this.api.workflows.flows.replaceDocument(
+      this.id,
+      { ...params },
+      boundOptions(options, [{ name: 'flowId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
+   * Returns the canonical routine document, including delivery, recording, health,
+   * cooldown, owner wake and scheduled inputs. Unsupported stored behavior returns
+   * document_unsupported with JSON Pointer paths.
+   */
+  retrieveDocument(options?: RequestOptions): APIPromise<FlowsAPI.FlowRetrieveDocumentResponse> {
+    const result = this.api.workflows.flows.retrieveDocument(
       this.id,
       boundOptions(options, [{ name: 'flowId', location: 'path', value: this.id }]),
     );

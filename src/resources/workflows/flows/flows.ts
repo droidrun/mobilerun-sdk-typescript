@@ -132,6 +132,19 @@ export class Flows extends APIResource {
   }
 
   /**
+   * Atomically creates the trigger, actions and disabled flow. Body: {document}.
+   * Optional Idempotency-Key fingerprints the canonical document; identical retries
+   * reload the resource, changed documents return idempotency_key_reused. Verify and
+   * activate with the existing flow endpoints.
+   */
+  createFromDocument(
+    body: FlowCreateFromDocumentParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<FlowCreateFromDocumentResponse> {
+    return this._client.post('/flows/document', { body, ...options });
+  }
+
+  /**
    * Return the recording/delivery readiness for a flow (recording mode, whether
    * delivery can include the recording, whether a files.upload action exists, the
    * first direct OneDrive/Google Drive upload step if any) plus, per destination,
@@ -140,6 +153,17 @@ export class Flows extends APIResource {
    */
   deliveryOptions(flowID: string, options?: RequestOptions): APIPromise<FlowDeliveryOptionsResponse> {
     return this._client.get(path`/flows/${flowID}/delivery-options`, options);
+  }
+
+  /**
+   * The optional agent_routine profile lists only agent-eligible steps. This is
+   * authoring guidance; backend validation remains authoritative.
+   */
+  documentSchema(
+    query: FlowDocumentSchemaParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<FlowDocumentSchemaResponse> {
+    return this._client.get('/flows/document-schema', { query, ...options });
   }
 
   /**
@@ -172,6 +196,31 @@ export class Flows extends APIResource {
    */
   listRepairs(flowID: string, options?: RequestOptions): APIPromise<FlowListRepairsResponse> {
     return this._client.get(path`/flows/${flowID}/repairs`, options);
+  }
+
+  /**
+   * Body: {document}. Preserves enabled state. Omitted settings preserves all stored
+   * settings; present settings replaces them, with absent fields defaulted. Agent
+   * routines require a new version deployed through the agent. Omitted description,
+   * devices and trigger options clear their values. Shared triggers return
+   * trigger_shared and agent-managed routines return routine_agent_managed (409);
+   * shared action definitions are never modified.
+   */
+  replaceDocument(
+    flowID: string,
+    body: FlowReplaceDocumentParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<FlowReplaceDocumentResponse> {
+    return this._client.put(path`/flows/${flowID}/document`, { body, ...options });
+  }
+
+  /**
+   * Returns the canonical routine document, including delivery, recording, health,
+   * cooldown, owner wake and scheduled inputs. Unsupported stored behavior returns
+   * document_unsupported with JSON Pointer paths.
+   */
+  retrieveDocument(flowID: string, options?: RequestOptions): APIPromise<FlowRetrieveDocumentResponse> {
+    return this._client.get(path`/flows/${flowID}/document`, options);
   }
 
   /**
@@ -227,6 +276,18 @@ export class Flows extends APIResource {
    */
   validate(body: FlowValidateParams, options?: RequestOptions): APIPromise<FlowValidateResponse> {
     return this._client.post('/flows/validate', { body, ...options });
+  }
+
+  /**
+   * Validates graph, settings and scheduled inputs without writing. Disconnected
+   * delivery destinations produce warnings; create and replace enforce the existing
+   * delivery connection checks.
+   */
+  validateDocument(
+    body: FlowValidateDocumentParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<FlowValidateDocumentResponse> {
+    return this._client.post('/flows/document/validate', { body, ...options });
   }
 
   /**
@@ -1184,6 +1245,158 @@ export namespace FlowCloneResponse {
   }
 }
 
+export interface FlowCreateFromDocumentResponse {
+  data: FlowCreateFromDocumentResponse.Data;
+}
+
+export namespace FlowCreateFromDocumentResponse {
+  export interface Data {
+    document: { [key: string]: unknown };
+
+    flow: Data.Flow;
+  }
+
+  export namespace Data {
+    export interface Flow {
+      id: string;
+
+      agentId: string | null;
+
+      archivedAt: string | null;
+
+      blockedAt: string | null;
+
+      consecutiveFailures: number;
+
+      cooldownScope: 'flow' | 'device';
+
+      cooldownSeconds: number | null;
+
+      createdAt: string | null;
+
+      createdBy: string | null;
+
+      delivery: Flow.Delivery | null;
+
+      description: string | null;
+
+      deviceIds: Array<string>;
+
+      /**
+       * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+       * enabled.
+       */
+      enabled: boolean;
+
+      healthMonitoringEnabled: boolean;
+
+      lastFailureAt: string | null;
+
+      /**
+       * Curated flow failure class. device_unavailable blocks immediately for a
+       * terminated device or a device confirmed gone; event deviceState="gone" is
+       * triggers-defined for a deleted/not-found device.
+       */
+      lastFailureCode:
+        | 'device_not_found'
+        | 'device_unavailable'
+        | 'permission_denied'
+        | 'client_error'
+        | 'transient'
+        | 'logic'
+        | 'invalid_config'
+        | null;
+
+      lastTriggeredAt: string | null;
+
+      lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
+      name: string;
+
+      notifyOnFailure: boolean;
+
+      notifyOnSuccess: boolean;
+
+      notifyWebhookId: string | null;
+
+      ownerId: string;
+
+      ownerWake: 'final' | 'off';
+
+      /**
+       * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+       * recordingEnabled=true, "off" = recordingEnabled=false).
+       */
+      recordingEnabled: boolean;
+
+      recordingPolicy: Flow.RecordingPolicy;
+
+      /**
+       * Effective routine result delivery: the stored setting, else message for a chat
+       * sink, else none.
+       */
+      resultDelivery: 'none' | 'message' | 'wake';
+
+      selfHealingEnabled: boolean;
+
+      selfHealingMaxAttempts: number;
+
+      status: 'healthy' | 'failing' | 'blocked';
+
+      /**
+       * Template-resolver semantics this flow runs under. 1 = legacy
+       * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
+       * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
+       * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
+       * Existing flows stay 1; new flows default to the current version.
+       */
+      templateResolutionVersion: number;
+
+      triggerId: string;
+
+      updatedAt: string | null;
+
+      /**
+       * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+       */
+      userId: string;
+    }
+
+    export namespace Flow {
+      export interface Delivery {
+        destination: 'mobilerun' | 'one_drive' | 'google_drive';
+
+        /**
+         * Absolute destination folder; not allowed when destination is mobilerun. May
+         * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+         * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+         * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+         * of that run lands in the same folder. Each substituted value must be a single
+         * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+         * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+         * delivered directly into the resolved folder; with a static folder they go into a
+         * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+         */
+        folder?: string;
+
+        recording?: Delivery.Recording;
+
+        screenshots?: unknown;
+      }
+
+      export namespace Delivery {
+        export interface Recording {
+          filename: string;
+        }
+      }
+
+      export interface RecordingPolicy {
+        mode: 'off' | 'flow' | 'selected_steps';
+      }
+    }
+  }
+}
+
 export interface FlowDeliveryOptionsResponse {
   data: FlowDeliveryOptionsResponse.Data;
 }
@@ -1224,6 +1437,8 @@ export namespace FlowDeliveryOptionsResponse {
     }
   }
 }
+
+export type FlowDocumentSchemaResponse = { [key: string]: unknown };
 
 export interface FlowDryRunResponse {
   data: FlowDryRunResponse.Data;
@@ -1355,6 +1570,162 @@ export namespace FlowListRepairsResponse {
       reason?: string;
     }
   }
+}
+
+export interface FlowReplaceDocumentResponse {
+  data: FlowReplaceDocumentResponse.Data;
+}
+
+export namespace FlowReplaceDocumentResponse {
+  export interface Data {
+    document: { [key: string]: unknown };
+
+    flow: Data.Flow;
+  }
+
+  export namespace Data {
+    export interface Flow {
+      id: string;
+
+      agentId: string | null;
+
+      archivedAt: string | null;
+
+      blockedAt: string | null;
+
+      consecutiveFailures: number;
+
+      cooldownScope: 'flow' | 'device';
+
+      cooldownSeconds: number | null;
+
+      createdAt: string | null;
+
+      createdBy: string | null;
+
+      delivery: Flow.Delivery | null;
+
+      description: string | null;
+
+      deviceIds: Array<string>;
+
+      /**
+       * Compatibility projection of lifecycleStatus; true only when lifecycleStatus is
+       * enabled.
+       */
+      enabled: boolean;
+
+      healthMonitoringEnabled: boolean;
+
+      lastFailureAt: string | null;
+
+      /**
+       * Curated flow failure class. device_unavailable blocks immediately for a
+       * terminated device or a device confirmed gone; event deviceState="gone" is
+       * triggers-defined for a deleted/not-found device.
+       */
+      lastFailureCode:
+        | 'device_not_found'
+        | 'device_unavailable'
+        | 'permission_denied'
+        | 'client_error'
+        | 'transient'
+        | 'logic'
+        | 'invalid_config'
+        | null;
+
+      lastTriggeredAt: string | null;
+
+      lifecycleStatus: 'enabled' | 'disabled' | 'archived';
+
+      name: string;
+
+      notifyOnFailure: boolean;
+
+      notifyOnSuccess: boolean;
+
+      notifyWebhookId: string | null;
+
+      ownerId: string;
+
+      ownerWake: 'final' | 'off';
+
+      /**
+       * @deprecated Deprecated: use recordingPolicy.mode ("flow" =
+       * recordingEnabled=true, "off" = recordingEnabled=false).
+       */
+      recordingEnabled: boolean;
+
+      recordingPolicy: Flow.RecordingPolicy;
+
+      /**
+       * Effective routine result delivery: the stored setting, else message for a chat
+       * sink, else none.
+       */
+      resultDelivery: 'none' | 'message' | 'wake';
+
+      selfHealingEnabled: boolean;
+
+      selfHealingMaxAttempts: number;
+
+      status: 'healthy' | 'failing' | 'blocked';
+
+      /**
+       * Template-resolver semantics this flow runs under. 1 = legacy
+       * (missing/forbidden/null all resolve to ''). 2 = typed (missing/forbidden throw,
+       * a whole-token null stays JSON null). 3 = typed, key-based (steps are addressed
+       * as {{steps.<key>...}} instead of by name; trigger.payload is not available).
+       * Existing flows stay 1; new flows default to the current version.
+       */
+      templateResolutionVersion: number;
+
+      triggerId: string;
+
+      updatedAt: string | null;
+
+      /**
+       * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
+       */
+      userId: string;
+    }
+
+    export namespace Flow {
+      export interface Delivery {
+        destination: 'mobilerun' | 'one_drive' | 'google_drive';
+
+        /**
+         * Absolute destination folder; not allowed when destination is mobilerun. May
+         * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
+         * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
+         * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
+         * of that run lands in the same folder. Each substituted value must be a single
+         * safe folder name (no "/", "\", "..", control characters); otherwise delivery
+         * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
+         * delivered directly into the resolved folder; with a static folder they go into a
+         * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+         */
+        folder?: string;
+
+        recording?: Delivery.Recording;
+
+        screenshots?: unknown;
+      }
+
+      export namespace Delivery {
+        export interface Recording {
+          filename: string;
+        }
+      }
+
+      export interface RecordingPolicy {
+        mode: 'off' | 'flow' | 'selected_steps';
+      }
+    }
+  }
+}
+
+export interface FlowRetrieveDocumentResponse {
+  data: { [key: string]: unknown };
 }
 
 export interface FlowRetrieveRepairResponse {
@@ -1713,6 +2084,49 @@ export namespace FlowValidateResponse {
   }
 }
 
+export interface FlowValidateDocumentResponse {
+  data: FlowValidateDocumentResponse.Data;
+}
+
+export namespace FlowValidateDocumentResponse {
+  export interface Data {
+    errors: Array<Data.Error>;
+
+    valid: boolean;
+
+    warnings: Array<Data.Warning>;
+  }
+
+  export namespace Data {
+    export interface Error {
+      code: string;
+
+      /**
+       * RFC 6901 JSON Pointer; empty string is the document root
+       */
+      field: string;
+
+      message: string;
+
+      repair: Error.Repair;
+    }
+
+    export namespace Error {
+      export interface Repair {
+        action: 'fix_spec_and_restart' | 'ask_user' | 'retry_later';
+
+        hint: string;
+      }
+    }
+
+    export interface Warning {
+      code: string;
+
+      message: string;
+    }
+  }
+}
+
 export interface FlowVerifyResponse {
   data: FlowVerifyResponse.Data;
 }
@@ -2006,8 +2420,26 @@ export interface FlowCloneParams {
   name?: string;
 }
 
+export interface FlowCreateFromDocumentParams {
+  /**
+   * Routine document; format at GET /flows/document-schema
+   */
+  document?: unknown;
+}
+
+export interface FlowDocumentSchemaParams {
+  profile?: 'agent_routine';
+}
+
 export interface FlowDryRunParams {
   payload?: { [key: string]: unknown };
+}
+
+export interface FlowReplaceDocumentParams {
+  /**
+   * Routine document; format at GET /flows/document-schema
+   */
+  document?: unknown;
 }
 
 export interface FlowRetrieveRepairParams {
@@ -2431,6 +2863,13 @@ export declare namespace FlowValidateParams {
   }
 }
 
+export interface FlowValidateDocumentParams {
+  /**
+   * Routine document; format at GET /flows/document-schema
+   */
+  document?: unknown;
+}
+
 export interface FlowVerifyParams {
   /**
    * Client-supplied idempotency key. A repeat request for the same (flow,
@@ -2462,14 +2901,19 @@ export declare namespace Flows {
     type FlowActivateResponse as FlowActivateResponse,
     type FlowCapacityResponse as FlowCapacityResponse,
     type FlowCloneResponse as FlowCloneResponse,
+    type FlowCreateFromDocumentResponse as FlowCreateFromDocumentResponse,
     type FlowDeliveryOptionsResponse as FlowDeliveryOptionsResponse,
+    type FlowDocumentSchemaResponse as FlowDocumentSchemaResponse,
     type FlowDryRunResponse as FlowDryRunResponse,
     type FlowListRepairsResponse as FlowListRepairsResponse,
+    type FlowReplaceDocumentResponse as FlowReplaceDocumentResponse,
+    type FlowRetrieveDocumentResponse as FlowRetrieveDocumentResponse,
     type FlowRetrieveRepairResponse as FlowRetrieveRepairResponse,
     type FlowRunResponse as FlowRunResponse,
     type FlowTemplateContextResponse as FlowTemplateContextResponse,
     type FlowUnblockResponse as FlowUnblockResponse,
     type FlowValidateResponse as FlowValidateResponse,
+    type FlowValidateDocumentResponse as FlowValidateDocumentResponse,
     type FlowVerifyResponse as FlowVerifyResponse,
     type FlowCreateParams as FlowCreateParams,
     type FlowUpdateParams as FlowUpdateParams,
@@ -2477,11 +2921,15 @@ export declare namespace Flows {
     type FlowActivateParams as FlowActivateParams,
     type FlowCapacityParams as FlowCapacityParams,
     type FlowCloneParams as FlowCloneParams,
+    type FlowCreateFromDocumentParams as FlowCreateFromDocumentParams,
+    type FlowDocumentSchemaParams as FlowDocumentSchemaParams,
     type FlowDryRunParams as FlowDryRunParams,
+    type FlowReplaceDocumentParams as FlowReplaceDocumentParams,
     type FlowRetrieveRepairParams as FlowRetrieveRepairParams,
     type FlowRunParams as FlowRunParams,
     type FlowTemplateContextParams as FlowTemplateContextParams,
     type FlowValidateParams as FlowValidateParams,
+    type FlowValidateDocumentParams as FlowValidateDocumentParams,
     type FlowVerifyParams as FlowVerifyParams,
   };
 

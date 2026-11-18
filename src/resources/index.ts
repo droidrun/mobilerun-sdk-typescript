@@ -60,6 +60,17 @@ export {
   type FileUploadURLParams,
 } from './files';
 export {
+  Functions,
+  type FunctionSource,
+  type ServerlessFunction,
+  type FunctionCreateResponse,
+  type FunctionRetrieveResponse,
+  type FunctionListResponse,
+  type FunctionSourceResponse,
+  type FunctionCreateParams,
+  type FunctionListParams,
+} from './functions/functions';
+export {
   Mailboxes,
   type MailboxCreateResponse,
   type MailboxRetrieveResponse,
