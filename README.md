@@ -265,28 +265,35 @@ await writeFile('recording.mp4', video);
 
 Install the React streaming package with `npm install @mobilerun/react`.
 
-On your server, resolve a device the authenticated end user may see; never send the API key to the browser, only that device's `streamUrl` and `streamToken`.
+Keep the API key on your server. For each connection, mint a short-lived, single-use token for a device the authenticated end user may access. Recheck device access every time your authenticated token endpoint is called, including reconnects.
 
 ```ts
 import { MobilerunSDK } from '@mobilerun/sdk';
 
 const sdk = new MobilerunSDK();
 // Call from your authenticated route handler after checking device access.
-export async function getDeviceStream(deviceId: string) {
-  const device = await sdk.devices.get(deviceId);
-  if (!device.info) throw new Error('Device info is unavailable');
-  return { streamUrl: device.info.streamUrl, streamToken: device.info.streamToken };
+export async function createStreamToken(deviceId: string) {
+  const token = await sdk.streamTokens.create({ deviceId, ttlSeconds: 120 });
+  return { token: token.key };
 }
 ```
 
-Pass the returned values to your client component:
+Resolve `device.info.streamUrl` on your server and pass it to your client component. Expose the handler above at an authenticated endpoint such as `/api/devices/:deviceId/stream-token`. The browser's `tokenProvider` calls it for a fresh token on every connection:
 
 ```tsx
 import { DeviceStream } from '@mobilerun/react';
 import '@mobilerun/react/styles.css';
 
-export function DevicePanel({ streamUrl, streamToken }: { streamUrl: string; streamToken?: string }) {
-  return <DeviceStream streamUrl={streamUrl} streamToken={streamToken} hasControl />;
+export function DevicePanel({ deviceId, streamUrl }: { deviceId: string; streamUrl: string }) {
+  const tokenProvider = async () => {
+    const response = await fetch(`/api/devices/${encodeURIComponent(deviceId)}/stream-token`, {
+      method: 'POST',
+    });
+    if (!response.ok) throw new Error('Unable to create stream token');
+    const { token } = await response.json();
+    return token;
+  };
+  return <DeviceStream streamUrl={streamUrl} tokenProvider={tokenProvider} hasControl />;
 }
 ```
 

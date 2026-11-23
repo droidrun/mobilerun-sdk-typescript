@@ -54,6 +54,7 @@ import {
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
+import { StreamTokens } from './resources/stream-tokens';
 import {
   AgentCreateParams,
   AgentCreateResponse,
@@ -87,6 +88,17 @@ import {
   DeviceWaitReadyResponse,
   Devices,
 } from './resources/devices/devices';
+import {
+  FunctionCreateParams,
+  FunctionCreateResponse,
+  FunctionListParams,
+  FunctionListResponse,
+  FunctionRetrieveResponse,
+  FunctionSource,
+  FunctionSourceResponse,
+  Functions,
+  ServerlessFunction,
+} from './resources/functions/functions';
 import {
   MailboxCapacityResponse,
   MailboxCreateParams,
@@ -878,8 +890,10 @@ export class Mobilerun {
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
+  streamTokens: API.StreamTokens = new API.StreamTokens(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
+  functions: API.Functions = new API.Functions(this);
   connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
@@ -898,8 +912,10 @@ export class Mobilerun {
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
+Mobilerun.StreamTokens = StreamTokens;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
+Mobilerun.Functions = Functions;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
@@ -954,6 +970,8 @@ export declare namespace Mobilerun {
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 
+  export { StreamTokens as StreamTokens };
+
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
   export {
@@ -966,6 +984,18 @@ export declare namespace Mobilerun {
     type ProxyCreateParams as ProxyCreateParams,
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
+  };
+
+  export {
+    Functions as Functions,
+    type FunctionSource as FunctionSource,
+    type ServerlessFunction as ServerlessFunction,
+    type FunctionCreateResponse as FunctionCreateResponse,
+    type FunctionRetrieveResponse as FunctionRetrieveResponse,
+    type FunctionListResponse as FunctionListResponse,
+    type FunctionSourceResponse as FunctionSourceResponse,
+    type FunctionCreateParams as FunctionCreateParams,
+    type FunctionListParams as FunctionListParams,
   };
 
   export { Connect as Connect };
