@@ -11,7 +11,6 @@ describe('resource flows', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.workflows.flows.create({
-      actions: [{ actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', position: 0 }],
       name: 'x',
       triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
@@ -27,6 +26,8 @@ describe('resource flows', () => {
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.workflows.flows.create({
+      name: 'x',
+      triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       actions: [
         {
           actionId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
@@ -49,8 +50,6 @@ describe('resource flows', () => {
           recordingEnabled: true,
         },
       ],
-      name: 'x',
-      triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       cooldownScope: 'flow',
       cooldownSeconds: 0,
       delivery: {
@@ -69,6 +68,7 @@ describe('resource flows', () => {
       ownerWake: 'final',
       recordingEnabled: true,
       recordingPolicy: { mode: 'off' },
+      saveSandboxLogs: true,
       selfHealingEnabled: true,
       selfHealingMaxAttempts: 1,
     });
@@ -125,6 +125,7 @@ describe('resource flows', () => {
           ownerWake: 'final',
           recordingEnabled: true,
           recordingPolicy: { mode: 'off' },
+          saveSandboxLogs: true,
           selfHealingEnabled: true,
           selfHealingMaxAttempts: 1,
           triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
@@ -515,6 +516,7 @@ describe('resource flows', () => {
       ownerWake: 'final',
       recordingEnabled: true,
       recordingPolicy: { mode: 'off' },
+      saveSandboxLogs: true,
       selfHealingEnabled: true,
       selfHealingMaxAttempts: 1,
       triggerId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',

@@ -53,6 +53,7 @@ import {
   ExecutionGetMetricsResponse,
   ExecutionListParams,
   ExecutionListResponse,
+  ExecutionRetrieveParams,
   ExecutionRetrieveResponse,
   Executions,
 } from './executions/executions';
@@ -209,6 +210,7 @@ export declare namespace Workflows {
     type ExecutionListResponse as ExecutionListResponse,
     type ExecutionAbortResponse as ExecutionAbortResponse,
     type ExecutionGetMetricsResponse as ExecutionGetMetricsResponse,
+    type ExecutionRetrieveParams as ExecutionRetrieveParams,
     type ExecutionListParams as ExecutionListParams,
     type ExecutionGetMetricsParams as ExecutionGetMetricsParams,
   };

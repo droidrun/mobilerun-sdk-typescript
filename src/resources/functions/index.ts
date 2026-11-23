@@ -10,6 +10,7 @@ export {
   type FunctionSourceResponse,
   type FunctionCreateParams,
   type FunctionListParams,
+  type FunctionSourceParams,
 } from './functions';
 export {
   Validations,

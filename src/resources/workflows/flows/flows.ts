@@ -31,10 +31,12 @@ export class Flows extends APIResource {
   state: StateAPI.State = new StateAPI.State(this._client);
 
   /**
-   * Create a flow that binds a trigger (`triggerId`) to an ordered list of actions,
-   * with at least one action required. Optional settings include target `deviceIds`,
-   * a cooldown (`cooldownSeconds`/`cooldownScope`), and webhook notifications on
-   * success or failure.
+   * Create a flow that binds a trigger (`triggerId`) to an ordered list of actions.
+   * The list may be empty or omitted: a routine without steps is stored disabled and
+   * cannot be enabled, run or verified until it has a step. Enabling it returns 400
+   * with "Add a step before enabling this routine". Optional settings include target
+   * `deviceIds`, a cooldown (`cooldownSeconds`/`cooldownScope`), and webhook
+   * notifications on success or failure.
    *
    * Supports an optional `Idempotency-Key` header (1-255 printable ASCII
    * characters). Replays with the same key and an identical body return the original
@@ -54,7 +56,11 @@ export class Flows extends APIResource {
 
   /**
    * Partially update a flow's settings — name, trigger binding, enabled state,
-   * target devices, cooldown, or notifications; all fields are optional. Actions are
+   * target devices, cooldown, or notifications; all fields are optional. The owner
+   * can enable a routine directly with `enabled: true` or
+   * `lifecycleStatus: "enabled"`, without verification; at least one step is
+   * required. For the verified path used by agent deploys, use POST
+   * /flows/{flowId}/verify then POST /flows/{flowId}/activate instead. Actions are
    * managed through the flow-actions endpoints, not here. Returns 404 if the flow
    * does not exist.
    */
@@ -83,15 +89,20 @@ export class Flows extends APIResource {
   /**
    * Terminally archive a flow by its ID. Archived flows cannot be restored and are
    * hidden from customer reads. Repeating the request is idempotent for the owner.
+   * Files saved by its runs are deleted with it.
    */
   delete(flowID: string, options?: RequestOptions): APIPromise<FlowDeleteResponse> {
     return this._client.delete(path`/flows/${flowID}`, options);
   }
 
   /**
-   * Activate a disabled flow only when the supplied verification execution succeeded
-   * and the flow graph has not changed since verification. Repeating activation is
-   * idempotent for an already-enabled flow.
+   * The verified activation path used by agent deploys: first run POST
+   * /flows/{flowId}/verify, then activate the disabled flow only when the supplied
+   * verification execution succeeded and the flow graph has not changed since
+   * verification. Repeating activation is idempotent for an already-enabled flow.
+   * Alternatively, the owner can enable a routine with at least one step directly
+   * through PATCH /flows/{flowId} using `enabled: true` or
+   * `lifecycleStatus: "enabled"`, without verification.
    */
   activate(
     flowID: string,
@@ -134,8 +145,12 @@ export class Flows extends APIResource {
   /**
    * Atomically creates the trigger, actions and disabled flow. Body: {document}.
    * Optional Idempotency-Key fingerprints the canonical document; identical retries
-   * reload the resource, changed documents return idempotency_key_reused. Verify and
-   * activate with the existing flow endpoints.
+   * reload the resource, changed documents return idempotency_key_reused. The owner
+   * can enable a routine with at least one step directly through PATCH
+   * /flows/{flowId} using enabled: true or lifecycleStatus: "enabled", without
+   * verification. For the verified path used by agent deploys, call POST
+   * /flows/{flowId}/verify then POST /flows/{flowId}/activate; activation requires a
+   * successful verification of the current graph.
    */
   createFromDocument(
     body: FlowCreateFromDocumentParams | null | undefined = {},
@@ -204,7 +219,12 @@ export class Flows extends APIResource {
    * routines require a new version deployed through the agent. Omitted description,
    * devices and trigger options clear their values. Shared triggers return
    * trigger_shared and agent-managed routines return routine_agent_managed (409);
-   * shared action definitions are never modified.
+   * shared action definitions are never modified. To enable a disabled routine with
+   * at least one step, the owner can PATCH /flows/{flowId} with enabled: true or
+   * lifecycleStatus: "enabled", without verification. For the verified path used by
+   * agent deploys, call POST /flows/{flowId}/verify then POST
+   * /flows/{flowId}/activate; activation requires a successful verification of the
+   * current graph.
    */
   replaceDocument(
     flowID: string,
@@ -237,7 +257,8 @@ export class Flows extends APIResource {
 
   /**
    * Immediately enqueue one live execution on every device bound to the flow,
-   * regardless of whether its trigger is event-based, custom, or scheduled.
+   * regardless of whether its trigger is event-based, custom, or scheduled. A
+   * routine without steps is refused with 409 `flow_has_no_steps`.
    *
    * Supports an optional `Idempotency-Key` header (1-255 printable ASCII
    * characters). The run identity is derived from the key, so a retry never starts a
@@ -297,6 +318,7 @@ export class Flows extends APIResource {
    * Unlike a normal trigger firing, verification:
    *
    * - runs a flow that is `enabled` OR `disabled` (an archived flow returns 404);
+   * - refuses routines without steps with 409 `flow_has_no_steps`;
    * - targets one device (`deviceId`, or the single bound device);
    * - is idempotent per `invocationId`: a repeat returns the existing run
    *   (`deduplicated: true`, HTTP 200) instead of enqueuing another (HTTP 202);
@@ -386,6 +408,9 @@ export namespace FlowCreateResponse {
 
     ownerId: string;
 
+    /**
+     * Defaults to final.
+     */
     ownerWake: 'final' | 'off';
 
     /**
@@ -401,6 +426,8 @@ export namespace FlowCreateResponse {
      * sink, else none.
      */
     resultDelivery: 'none' | 'message' | 'wake';
+
+    saveSandboxLogs: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -432,15 +459,18 @@ export namespace FlowCreateResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * Absolute destination folder; not allowed when destination is mobilerun. May
-       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-       * of that run lands in the same folder. Each substituted value must be a single
-       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-       * delivered directly into the resolved folder; with a static folder they go into a
-       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+       * Absolute destination folder. For destination mobilerun, a folder turns on saving
+       * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+       * storage under that folder (counts against storage). May contain {{meta.<name>}}
+       * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+       * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+       * run so every artifact of that run lands in the same folder. Each substituted
+       * value must be a single safe folder name (no "/", "\", "..", control characters);
+       * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+       * Drive, screenshots are delivered directly into the resolved folder with a
+       * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+       * subfolder with a static folder. Mobilerun copies always go directly into the
+       * folder.
        */
       folder?: string;
 
@@ -532,6 +562,9 @@ export namespace FlowRetrieveResponse {
 
     ownerId: string;
 
+    /**
+     * Defaults to final.
+     */
     ownerWake: 'final' | 'off';
 
     /**
@@ -547,6 +580,8 @@ export namespace FlowRetrieveResponse {
      * sink, else none.
      */
     resultDelivery: 'none' | 'message' | 'wake';
+
+    saveSandboxLogs: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -578,15 +613,18 @@ export namespace FlowRetrieveResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * Absolute destination folder; not allowed when destination is mobilerun. May
-       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-       * of that run lands in the same folder. Each substituted value must be a single
-       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-       * delivered directly into the resolved folder; with a static folder they go into a
-       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+       * Absolute destination folder. For destination mobilerun, a folder turns on saving
+       * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+       * storage under that folder (counts against storage). May contain {{meta.<name>}}
+       * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+       * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+       * run so every artifact of that run lands in the same folder. Each substituted
+       * value must be a single safe folder name (no "/", "\", "..", control characters);
+       * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+       * Drive, screenshots are delivered directly into the resolved folder with a
+       * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+       * subfolder with a static folder. Mobilerun copies always go directly into the
+       * folder.
        */
       folder?: string;
 
@@ -718,6 +756,9 @@ export namespace FlowUpdateResponse {
 
     ownerId: string;
 
+    /**
+     * Defaults to final.
+     */
     ownerWake: 'final' | 'off';
 
     /**
@@ -733,6 +774,8 @@ export namespace FlowUpdateResponse {
      * sink, else none.
      */
     resultDelivery: 'none' | 'message' | 'wake';
+
+    saveSandboxLogs: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -764,15 +807,18 @@ export namespace FlowUpdateResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * Absolute destination folder; not allowed when destination is mobilerun. May
-       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-       * of that run lands in the same folder. Each substituted value must be a single
-       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-       * delivered directly into the resolved folder; with a static folder they go into a
-       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+       * Absolute destination folder. For destination mobilerun, a folder turns on saving
+       * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+       * storage under that folder (counts against storage). May contain {{meta.<name>}}
+       * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+       * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+       * run so every artifact of that run lands in the same folder. Each substituted
+       * value must be a single safe folder name (no "/", "\", "..", control characters);
+       * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+       * Drive, screenshots are delivered directly into the resolved folder with a
+       * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+       * subfolder with a static folder. Mobilerun copies always go directly into the
+       * folder.
        */
       folder?: string;
 
@@ -864,6 +910,9 @@ export namespace FlowListResponse {
 
     ownerId: string;
 
+    /**
+     * Defaults to final.
+     */
     ownerWake: 'final' | 'off';
 
     /**
@@ -879,6 +928,8 @@ export namespace FlowListResponse {
      * sink, else none.
      */
     resultDelivery: 'none' | 'message' | 'wake';
+
+    saveSandboxLogs: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -910,15 +961,18 @@ export namespace FlowListResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * Absolute destination folder; not allowed when destination is mobilerun. May
-       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-       * of that run lands in the same folder. Each substituted value must be a single
-       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-       * delivered directly into the resolved folder; with a static folder they go into a
-       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+       * Absolute destination folder. For destination mobilerun, a folder turns on saving
+       * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+       * storage under that folder (counts against storage). May contain {{meta.<name>}}
+       * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+       * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+       * run so every artifact of that run lands in the same folder. Each substituted
+       * value must be a single safe folder name (no "/", "\", "..", control characters);
+       * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+       * Drive, screenshots are delivered directly into the resolved folder with a
+       * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+       * subfolder with a static folder. Mobilerun copies always go directly into the
+       * folder.
        */
       folder?: string;
 
@@ -1012,6 +1066,9 @@ export namespace FlowActivateResponse {
 
     ownerId: string;
 
+    /**
+     * Defaults to final.
+     */
     ownerWake: 'final' | 'off';
 
     /**
@@ -1027,6 +1084,8 @@ export namespace FlowActivateResponse {
      * sink, else none.
      */
     resultDelivery: 'none' | 'message' | 'wake';
+
+    saveSandboxLogs: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -1058,15 +1117,18 @@ export namespace FlowActivateResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * Absolute destination folder; not allowed when destination is mobilerun. May
-       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-       * of that run lands in the same folder. Each substituted value must be a single
-       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-       * delivered directly into the resolved folder; with a static folder they go into a
-       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+       * Absolute destination folder. For destination mobilerun, a folder turns on saving
+       * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+       * storage under that folder (counts against storage). May contain {{meta.<name>}}
+       * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+       * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+       * run so every artifact of that run lands in the same folder. Each substituted
+       * value must be a single safe folder name (no "/", "\", "..", control characters);
+       * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+       * Drive, screenshots are delivered directly into the resolved folder with a
+       * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+       * subfolder with a static folder. Mobilerun copies always go directly into the
+       * folder.
        */
       folder?: string;
 
@@ -1170,6 +1232,9 @@ export namespace FlowCloneResponse {
 
     ownerId: string;
 
+    /**
+     * Defaults to final.
+     */
     ownerWake: 'final' | 'off';
 
     /**
@@ -1185,6 +1250,8 @@ export namespace FlowCloneResponse {
      * sink, else none.
      */
     resultDelivery: 'none' | 'message' | 'wake';
+
+    saveSandboxLogs: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -1216,15 +1283,18 @@ export namespace FlowCloneResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * Absolute destination folder; not allowed when destination is mobilerun. May
-       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-       * of that run lands in the same folder. Each substituted value must be a single
-       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-       * delivered directly into the resolved folder; with a static folder they go into a
-       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+       * Absolute destination folder. For destination mobilerun, a folder turns on saving
+       * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+       * storage under that folder (counts against storage). May contain {{meta.<name>}}
+       * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+       * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+       * run so every artifact of that run lands in the same folder. Each substituted
+       * value must be a single safe folder name (no "/", "\", "..", control characters);
+       * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+       * Drive, screenshots are delivered directly into the resolved folder with a
+       * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+       * subfolder with a static folder. Mobilerun copies always go directly into the
+       * folder.
        */
       folder?: string;
 
@@ -1321,6 +1391,9 @@ export namespace FlowCreateFromDocumentResponse {
 
       ownerId: string;
 
+      /**
+       * Defaults to final.
+       */
       ownerWake: 'final' | 'off';
 
       /**
@@ -1336,6 +1409,8 @@ export namespace FlowCreateFromDocumentResponse {
        * sink, else none.
        */
       resultDelivery: 'none' | 'message' | 'wake';
+
+      saveSandboxLogs: boolean;
 
       selfHealingEnabled: boolean;
 
@@ -1367,15 +1442,18 @@ export namespace FlowCreateFromDocumentResponse {
         destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
         /**
-         * Absolute destination folder; not allowed when destination is mobilerun. May
-         * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-         * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-         * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-         * of that run lands in the same folder. Each substituted value must be a single
-         * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-         * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-         * delivered directly into the resolved folder; with a static folder they go into a
-         * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+         * Absolute destination folder. For destination mobilerun, a folder turns on saving
+         * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+         * storage under that folder (counts against storage). May contain {{meta.<name>}}
+         * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+         * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+         * run so every artifact of that run lands in the same folder. Each substituted
+         * value must be a single safe folder name (no "/", "\", "..", control characters);
+         * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+         * Drive, screenshots are delivered directly into the resolved folder with a
+         * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+         * subfolder with a static folder. Mobilerun copies always go directly into the
+         * folder.
          */
         folder?: string;
 
@@ -1458,6 +1536,8 @@ export namespace FlowDryRunResponse {
 
     rateLimited: boolean;
 
+    testRun: Data.TestRun;
+
     validation: Data.Validation;
 
     wouldFire: boolean;
@@ -1471,17 +1551,36 @@ export namespace FlowDryRunResponse {
 
       key: string;
 
+      /**
+       * @deprecated Deprecated: use uses.
+       */
       method: string;
 
       name: string;
 
       recordingEnabled: boolean;
 
-      service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+      /**
+       * @deprecated Deprecated: use uses.
+       */
+      service:
+        | 'tasks_api'
+        | 'devices_api'
+        | 'agents_api'
+        | 'webhooks'
+        | 'integrations_api'
+        | 'triggers_api'
+        | 'sandbox_api';
+
+      /**
+       * Authored step name; null when this step has no name. Includes hidden executable
+       * steps.
+       */
+      uses: string | null;
 
       /**
        * Nested child actions (loop/branch bodies), each the same shape as a
-       * ResolvedAction.
+       * ResolvedAction, including nullable uses and deprecated service/method.
        */
       children?: Array<unknown>;
 
@@ -1498,6 +1597,41 @@ export namespace FlowDryRunResponse {
       deviceIds: Array<string>;
 
       enabled: boolean;
+    }
+
+    export interface TestRun {
+      /**
+       * Reasons a manual test cannot start; empty when ready is true.
+       */
+      blockers: Array<TestRun.Blocker>;
+
+      /**
+       * Absent required or referenced input paths to supply at test time; empty for
+       * stored schedule inputs.
+       */
+      missingInputs: Array<string>;
+
+      /**
+       * Whether verification can start, allowing paused or blocked flows and inputs
+       * supplied at test time.
+       */
+      ready: boolean;
+    }
+
+    export namespace TestRun {
+      export interface Blocker {
+        /**
+         * Blocking reason: invalid payload, failed conditions, required device absent,
+         * account rate limit reached, or a deployment of the flow in progress,
+         * respectively.
+         */
+        code: 'validation' | 'conditions_not_met' | 'no_device' | 'rate_limited' | 'deploy_in_progress';
+
+        /**
+         * Validation error field path, in the same format as validation.errors[].field.
+         */
+        field?: string;
+      }
     }
 
     export interface Validation {
@@ -1648,6 +1782,9 @@ export namespace FlowReplaceDocumentResponse {
 
       ownerId: string;
 
+      /**
+       * Defaults to final.
+       */
       ownerWake: 'final' | 'off';
 
       /**
@@ -1663,6 +1800,8 @@ export namespace FlowReplaceDocumentResponse {
        * sink, else none.
        */
       resultDelivery: 'none' | 'message' | 'wake';
+
+      saveSandboxLogs: boolean;
 
       selfHealingEnabled: boolean;
 
@@ -1694,15 +1833,18 @@ export namespace FlowReplaceDocumentResponse {
         destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
         /**
-         * Absolute destination folder; not allowed when destination is mobilerun. May
-         * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-         * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-         * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-         * of that run lands in the same folder. Each substituted value must be a single
-         * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-         * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-         * delivered directly into the resolved folder; with a static folder they go into a
-         * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+         * Absolute destination folder. For destination mobilerun, a folder turns on saving
+         * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+         * storage under that folder (counts against storage). May contain {{meta.<name>}}
+         * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+         * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+         * run so every artifact of that run lands in the same folder. Each substituted
+         * value must be a single safe folder name (no "/", "\", "..", control characters);
+         * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+         * Drive, screenshots are delivered directly into the resolved folder with a
+         * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+         * subfolder with a static folder. Mobilerun copies always go directly into the
+         * folder.
          */
         folder?: string;
 
@@ -1959,6 +2101,9 @@ export namespace FlowUnblockResponse {
 
     ownerId: string;
 
+    /**
+     * Defaults to final.
+     */
     ownerWake: 'final' | 'off';
 
     /**
@@ -1974,6 +2119,8 @@ export namespace FlowUnblockResponse {
      * sink, else none.
      */
     resultDelivery: 'none' | 'message' | 'wake';
+
+    saveSandboxLogs: boolean;
 
     selfHealingEnabled: boolean;
 
@@ -2005,15 +2152,18 @@ export namespace FlowUnblockResponse {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * Absolute destination folder; not allowed when destination is mobilerun. May
-       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-       * of that run lands in the same folder. Each substituted value must be a single
-       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-       * delivered directly into the resolved folder; with a static folder they go into a
-       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+       * Absolute destination folder. For destination mobilerun, a folder turns on saving
+       * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+       * storage under that folder (counts against storage). May contain {{meta.<name>}}
+       * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+       * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+       * run so every artifact of that run lands in the same folder. Each substituted
+       * value must be a single safe folder name (no "/", "\", "..", control characters);
+       * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+       * Drive, screenshots are delivered directly into the resolved folder with a
+       * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+       * subfolder with a static folder. Mobilerun copies always go directly into the
+       * folder.
        */
       folder?: string;
 
@@ -2160,11 +2310,11 @@ export namespace FlowVerifyResponse {
 }
 
 export interface FlowCreateParams {
-  actions: Array<FlowCreateParams.Action>;
-
   name: string;
 
   triggerId: string;
+
+  actions?: Array<FlowCreateParams.Action>;
 
   cooldownScope?: 'flow' | 'device';
 
@@ -2176,6 +2326,10 @@ export interface FlowCreateParams {
 
   deviceIds?: Array<string>;
 
+  /**
+   * Defaults to true when steps exist. A routine without steps is created disabled;
+   * explicit true is rejected.
+   */
   enabled?: boolean;
 
   healthMonitoringEnabled?: boolean;
@@ -2186,11 +2340,16 @@ export interface FlowCreateParams {
 
   notifyWebhookId?: string | null;
 
+  /**
+   * Defaults to final.
+   */
   ownerWake?: 'final' | 'off';
 
   recordingEnabled?: boolean;
 
   recordingPolicy?: FlowCreateParams.RecordingPolicy;
+
+  saveSandboxLogs?: boolean;
 
   selfHealingEnabled?: boolean;
 
@@ -2262,15 +2421,18 @@ export namespace FlowCreateParams {
     destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
     /**
-     * Absolute destination folder; not allowed when destination is mobilerun. May
-     * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-     * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-     * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-     * of that run lands in the same folder. Each substituted value must be a single
-     * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-     * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-     * delivered directly into the resolved folder; with a static folder they go into a
-     * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+     * Absolute destination folder. For destination mobilerun, a folder turns on saving
+     * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+     * storage under that folder (counts against storage). May contain {{meta.<name>}}
+     * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+     * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+     * run so every artifact of that run lands in the same folder. Each substituted
+     * value must be a single safe folder name (no "/", "\", "..", control characters);
+     * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+     * Drive, screenshots are delivered directly into the resolved folder with a
+     * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+     * subfolder with a static folder. Mobilerun copies always go directly into the
+     * folder.
      */
     folder?: string;
 
@@ -2318,6 +2480,9 @@ export interface FlowUpdateParams {
 
   notifyWebhookId?: string | null;
 
+  /**
+   * Defaults to final.
+   */
   ownerWake?: 'final' | 'off';
 
   /**
@@ -2327,6 +2492,8 @@ export interface FlowUpdateParams {
   recordingEnabled?: boolean;
 
   recordingPolicy?: FlowUpdateParams.RecordingPolicy;
+
+  saveSandboxLogs?: boolean;
 
   selfHealingEnabled?: boolean;
 
@@ -2340,15 +2507,18 @@ export namespace FlowUpdateParams {
     destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
     /**
-     * Absolute destination folder; not allowed when destination is mobilerun. May
-     * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-     * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-     * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-     * of that run lands in the same folder. Each substituted value must be a single
-     * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-     * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-     * delivered directly into the resolved folder; with a static folder they go into a
-     * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+     * Absolute destination folder. For destination mobilerun, a folder turns on saving
+     * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+     * storage under that folder (counts against storage). May contain {{meta.<name>}}
+     * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+     * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+     * run so every artifact of that run lands in the same folder. Each substituted
+     * value must be a single safe folder name (no "/", "\", "..", control characters);
+     * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+     * Drive, screenshots are delivered directly into the resolved folder with a
+     * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+     * subfolder with a static folder. Mobilerun copies always go directly into the
+     * folder.
      */
     folder?: string;
 
@@ -2489,11 +2659,16 @@ export declare namespace FlowValidateParams {
 
     notifyWebhookId?: string | null;
 
+    /**
+     * Defaults to final.
+     */
     ownerWake?: 'final' | 'off';
 
     recordingEnabled?: boolean;
 
     recordingPolicy?: Variant0.RecordingPolicy;
+
+    saveSandboxLogs?: boolean;
 
     selfHealingEnabled?: boolean;
 
@@ -2606,15 +2781,18 @@ export declare namespace FlowValidateParams {
       destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
       /**
-       * Absolute destination folder; not allowed when destination is mobilerun. May
-       * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-       * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-       * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-       * of that run lands in the same folder. Each substituted value must be a single
-       * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-       * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-       * delivered directly into the resolved folder; with a static folder they go into a
-       * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+       * Absolute destination folder. For destination mobilerun, a folder turns on saving
+       * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+       * storage under that folder (counts against storage). May contain {{meta.<name>}}
+       * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+       * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+       * run so every artifact of that run lands in the same folder. Each substituted
+       * value must be a single safe folder name (no "/", "\", "..", control characters);
+       * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+       * Drive, screenshots are delivered directly into the resolved folder with a
+       * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+       * subfolder with a static folder. Mobilerun copies always go directly into the
+       * folder.
        */
       folder?: string;
 
@@ -2697,15 +2875,18 @@ export declare namespace FlowValidateParams {
           destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
           /**
-           * Absolute destination folder; not allowed when destination is mobilerun. May
-           * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-           * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-           * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-           * of that run lands in the same folder. Each substituted value must be a single
-           * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-           * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-           * delivered directly into the resolved folder; with a static folder they go into a
-           * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+           * Absolute destination folder. For destination mobilerun, a folder turns on saving
+           * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+           * storage under that folder (counts against storage). May contain {{meta.<name>}}
+           * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+           * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+           * run so every artifact of that run lands in the same folder. Each substituted
+           * value must be a single safe folder name (no "/", "\", "..", control characters);
+           * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+           * Drive, screenshots are delivered directly into the resolved folder with a
+           * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+           * subfolder with a static folder. Mobilerun copies always go directly into the
+           * folder.
            */
           folder?: string;
 
@@ -2745,6 +2926,16 @@ export declare namespace FlowValidateParams {
        */
       producerRoles?: Array<string>;
 
+      /**
+       * For agent_routine, contract.meta owns trigger activation, eventType,
+       * scheduleRule and timezone. Draft timing copies are deprecated and ignored;
+       * deploy still checks the types of supplied copies, while public full-draft
+       * trigger objects retain their existing loose structure. For agent_routine,
+       * contract.meta.flow owns healthMonitoringEnabled, selfHealingEnabled,
+       * selfHealingMaxAttempts and explicit recordingMode. Draft setting copies are
+       * deprecated and ignored after type checking. When metadata omits recordingMode,
+       * the draft recordingPolicy still applies (implicitly off when absent).
+       */
       profile?: 'agent_routine';
 
       slug?: string;
@@ -2770,6 +2961,12 @@ export declare namespace FlowValidateParams {
         cloudActions?: Array<Meta.CloudAction>;
 
         outputFilename?: string | null;
+
+        /**
+         * Absent means version 1 (internal service.method names); version 2 signs public
+         * step names. Signed records are never rewritten.
+         */
+        version?: 1 | 2;
       }
 
       export namespace Meta {
@@ -2792,11 +2989,6 @@ export declare namespace FlowValidateParams {
         }
 
         export interface Trigger {
-          /**
-           * Accepted for compatibility; derived from trigger.type with agent_routine.
-           */
-          activation: 'event' | 'schedule' | 'custom';
-
           cadence: string | null;
 
           eventType: string | null;
@@ -2806,6 +2998,11 @@ export declare namespace FlowValidateParams {
           timezone: string | null;
 
           type: 'schedule' | 'app_event' | 'device_event' | 'platform_event' | 'custom';
+
+          /**
+           * Optional; derived from trigger.type with agent_routine.
+           */
+          activation?: 'event' | 'schedule' | 'custom';
         }
 
         export namespace Trigger {

@@ -69,6 +69,7 @@ export {
   type FunctionSourceResponse,
   type FunctionCreateParams,
   type FunctionListParams,
+  type FunctionSourceParams,
 } from './functions/functions';
 export {
   Mailboxes,
@@ -120,6 +121,7 @@ export {
   type ProxyUpdateParams,
   type ProxyListParams,
 } from './proxies';
+export { StreamTokens, type StreamTokenCreateResponse, type StreamTokenCreateParams } from './stream-tokens';
 export {
   Tasks,
   type TaskRetrieveResponse,

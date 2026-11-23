@@ -32,6 +32,7 @@ export {
   type ExecutionListResponse,
   type ExecutionAbortResponse,
   type ExecutionGetMetricsResponse,
+  type ExecutionRetrieveParams,
   type ExecutionListParams,
   type ExecutionGetMetricsParams,
 } from './executions/index';

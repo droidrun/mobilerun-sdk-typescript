@@ -54,6 +54,7 @@ import {
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
+import { StreamTokenCreateParams, StreamTokenCreateResponse, StreamTokens } from './resources/stream-tokens';
 import {
   AgentCreateParams,
   AgentCreateResponse,
@@ -94,6 +95,7 @@ import {
   FunctionListResponse,
   FunctionRetrieveResponse,
   FunctionSource,
+  FunctionSourceParams,
   FunctionSourceResponse,
   Functions,
   ServerlessFunction,
@@ -889,6 +891,7 @@ export class Mobilerun {
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
+  streamTokens: API.StreamTokens = new API.StreamTokens(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
   functions: API.Functions = new API.Functions(this);
@@ -910,6 +913,7 @@ export class Mobilerun {
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
+Mobilerun.StreamTokens = StreamTokens;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
 Mobilerun.Functions = Functions;
@@ -967,6 +971,12 @@ export declare namespace Mobilerun {
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 
+  export {
+    StreamTokens as StreamTokens,
+    type StreamTokenCreateResponse as StreamTokenCreateResponse,
+    type StreamTokenCreateParams as StreamTokenCreateParams,
+  };
+
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
   export {
@@ -991,6 +1001,7 @@ export declare namespace Mobilerun {
     type FunctionSourceResponse as FunctionSourceResponse,
     type FunctionCreateParams as FunctionCreateParams,
     type FunctionListParams as FunctionListParams,
+    type FunctionSourceParams as FunctionSourceParams,
   };
 
   export { Connect as Connect };

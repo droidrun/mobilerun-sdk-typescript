@@ -21,7 +21,7 @@ export class Functions extends APIResource {
   validations: ValidationsAPI.Validations = new ValidationsAPI.Validations(this._client);
 
   /**
-   * Upload an immutable Python function as the next version of its name
+   * Create a function with its first immutable version
    */
   create(body: FunctionCreateParams, options?: RequestOptions): APIPromise<FunctionCreateResponse> {
     return this._client.post('/compute/functions', { body, ...options });
@@ -57,8 +57,12 @@ export class Functions extends APIResource {
   /**
    * Read verified function source
    */
-  source(functionID: string, options?: RequestOptions): APIPromise<FunctionSourceResponse> {
-    return this._client.get(path`/compute/functions/${functionID}/source`, options);
+  source(
+    functionID: string,
+    query: FunctionSourceParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<FunctionSourceResponse> {
+    return this._client.get(path`/compute/functions/${functionID}/source`, { query, ...options });
   }
 }
 
@@ -77,85 +81,99 @@ export interface ServerlessFunction {
 
   createdAt: string;
 
-  createdBy: string;
-
-  datasetKey: string | null;
-
   description: string | null;
 
-  inputSchema: { [key: string]: unknown } | null;
+  latestReadyVersion: number | null;
 
-  inspectError: ServerlessFunction.InspectError | null;
-
-  manifest: ServerlessFunction.Manifest;
+  latestVersion: ServerlessFunction.LatestVersion | null;
 
   name: string;
 
-  outputKind: string | null;
+  updatedAt: string;
 
-  outputSchema: { [key: string]: unknown } | null;
-
-  runtimeVersion: string | null;
-
-  sha256: string;
-
-  sizeBytes: number;
-
-  status: 'pending_inspection' | 'ready' | 'rejected';
-
-  /**
-   * Per-name version number, starting at 1 and never reused.
-   */
-  version: number;
-
-  /**
-   * Number of active versions of this name. Only set when listing with latest=true.
-   */
-  versionCount?: number;
+  versionCount: number;
 }
 
 export namespace ServerlessFunction {
-  export interface InspectError {
-    code: string;
+  export interface LatestVersion {
+    apiKey: LatestVersion.Permissions | LatestVersion.Full;
 
-    message: string;
+    createdAt: string;
 
-    errors?: Array<InspectError.Error>;
+    functionId: string;
+
+    inputSchema: { [key: string]: unknown } | null;
+
+    inspectError: LatestVersion.InspectError | null;
+
+    manifest: LatestVersion.Manifest;
+
+    outputKind: string | null;
+
+    outputSchema: { [key: string]: unknown } | null;
+
+    runtimeVersion: string | null;
+
+    sha256: string;
+
+    sizeBytes: number;
+
+    status: 'pending_inspection' | 'ready' | 'rejected';
+
+    version: number;
   }
 
-  export namespace InspectError {
-    export interface Error {
+  export namespace LatestVersion {
+    export interface Permissions {
+      permissions: { [key: string]: Array<string> };
+    }
+
+    export interface Full {
+      full: true;
+    }
+
+    export interface InspectError {
       code: string;
 
       message: string;
 
-      line?: number;
-
-      repair?: Error.Repair;
+      errors?: Array<InspectError.Error>;
     }
 
-    export namespace Error {
-      export interface Repair {
-        action: string;
+    export namespace InspectError {
+      export interface Error {
+        code: string;
 
-        hint: string;
+        message: string;
+
+        line?: number;
+
+        repair?: Error.Repair;
+      }
+
+      export namespace Error {
+        export interface Repair {
+          action: string;
+
+          hint: string;
+        }
       }
     }
-  }
 
-  export interface Manifest {
-    credentials?: Array<Manifest.Credential>;
+    export interface Manifest {
+      credentials?: Array<Manifest.Credential>;
 
-    hosts?: Array<string>;
+      hosts?: Array<string>;
 
-    scopes?: Array<string>;
-  }
+      scopes?: Array<string>;
+    }
 
-  export namespace Manifest {
-    export interface Credential {
-      name: string;
+    export namespace Manifest {
+      export interface Credential {
+        name: string;
 
-      packageName: string;
+        packageName: string;
+      }
     }
   }
 }
@@ -189,12 +207,22 @@ export interface FunctionCreateParams {
 
   source: string;
 
+  apiKey?: FunctionCreateParams.Permissions | FunctionCreateParams.Full;
+
   description?: string;
 
   manifest?: FunctionCreateParams.Manifest;
 }
 
 export namespace FunctionCreateParams {
+  export interface Permissions {
+    permissions: { [key: string]: Array<string> };
+  }
+
+  export interface Full {
+    full: true;
+  }
+
   export interface Manifest {
     credentials?: Array<Manifest.Credential>;
 
@@ -213,17 +241,6 @@ export namespace FunctionCreateParams {
 }
 
 export interface FunctionListParams {
-  /**
-   * Return one row per function name: its newest upload (any status), with
-   * versionCount. Combined with name, returns that single row.
-   */
-  latest?: 'true' | 'false';
-
-  /**
-   * Exact function name. Returns every active version of that name, newest first.
-   */
-  name?: string;
-
   page?: number;
 
   pageSize?: number;
@@ -232,6 +249,10 @@ export interface FunctionListParams {
    * Case-insensitive substring match against the function name.
    */
   search?: string;
+}
+
+export interface FunctionSourceParams {
+  version?: number;
 }
 
 Functions.Validations = Validations;
@@ -246,6 +267,7 @@ export declare namespace Functions {
     type FunctionSourceResponse as FunctionSourceResponse,
     type FunctionCreateParams as FunctionCreateParams,
     type FunctionListParams as FunctionListParams,
+    type FunctionSourceParams as FunctionSourceParams,
   };
 
   export {
