@@ -60,6 +60,18 @@ export {
   type FileUploadURLParams,
 } from './files';
 export {
+  Functions,
+  type FunctionSource,
+  type ServerlessFunction,
+  type FunctionCreateResponse,
+  type FunctionRetrieveResponse,
+  type FunctionListResponse,
+  type FunctionSourceResponse,
+  type FunctionCreateParams,
+  type FunctionListParams,
+  type FunctionSourceParams,
+} from './functions/functions';
+export {
   Mailboxes,
   type MailboxCreateResponse,
   type MailboxRetrieveResponse,
@@ -109,6 +121,7 @@ export {
   type ProxyUpdateParams,
   type ProxyListParams,
 } from './proxies';
+export { StreamTokens, type StreamTokenCreateResponse, type StreamTokenCreateParams } from './stream-tokens';
 export {
   Tasks,
   type TaskRetrieveResponse,
