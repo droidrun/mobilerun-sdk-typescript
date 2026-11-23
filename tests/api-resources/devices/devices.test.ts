@@ -168,6 +168,23 @@ describe('resource devices', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('setIdleTimeout: only required params', async () => {
+    const responsePromise = client.devices.setIdleTimeout('deviceId', { minutes: 0 });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('setIdleTimeout: required and optional params', async () => {
+    const response = await client.devices.setIdleTimeout('deviceId', { minutes: 0 });
+  });
+
+  // Mock server tests are disabled
   test.skip('setName: only required params', async () => {
     const responsePromise = client.devices.setName('deviceId', { name: 'x' });
     const rawResponse = await responsePromise.asResponse();

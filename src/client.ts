@@ -54,6 +54,7 @@ import {
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
+import { StreamTokenCreateParams, StreamTokenCreateResponse, StreamTokens } from './resources/stream-tokens';
 import {
   AgentCreateParams,
   AgentCreateResponse,
@@ -62,6 +63,7 @@ import {
   Agents,
 } from './resources/agents/agents';
 import { Assistant } from './resources/assistant/assistant';
+import { Compute } from './resources/compute/compute';
 import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
@@ -79,6 +81,8 @@ import {
   DeviceResetParams,
   DeviceRetrieveCapabilitiesResponse,
   DeviceRetrieveResponse,
+  DeviceSetIdleTimeoutParams,
+  DeviceSetIdleTimeoutResponse,
   DeviceSetNameParams,
   DeviceSetNameResponse,
   DeviceSummaryParams,
@@ -87,6 +91,20 @@ import {
   DeviceWaitReadyResponse,
   Devices,
 } from './resources/devices/devices';
+import {
+  FunctionCreateParams,
+  FunctionCreateResponse,
+  FunctionListParams,
+  FunctionListResponse,
+  FunctionRetrieveResponse,
+  FunctionSource,
+  FunctionSourceParams,
+  FunctionSourceResponse,
+  FunctionUpdateParams,
+  FunctionUpdateResponse,
+  Functions,
+  ServerlessFunction,
+} from './resources/functions/functions';
 import {
   MailboxCapacityResponse,
   MailboxCreateParams,
@@ -126,6 +144,15 @@ import {
   Numbers,
 } from './resources/numbers/numbers';
 import {
+  RoutineFile,
+  RoutineFileDeleteAllParams,
+  RoutineFileDeleteAllResponse,
+  RoutineFileListParams,
+  RoutineFileListResponse,
+  RoutineFiles,
+} from './resources/routine-files/routine-files';
+import { Store } from './resources/store/store';
+import {
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
   TaskListParams,
@@ -137,6 +164,8 @@ import {
   TaskRunStreamedResponse,
   TaskSendMessageParams,
   TaskSendMessageResponse,
+  TaskStatsParams,
+  TaskStatsResponse,
   TaskStopResponse,
   Tasks,
 } from './resources/tasks/tasks';
@@ -878,14 +907,19 @@ export class Mobilerun {
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
+  streamTokens: API.StreamTokens = new API.StreamTokens(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
+  functions: API.Functions = new API.Functions(this);
+  compute: API.Compute = new API.Compute(this);
   connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
    */
   tasks: API.Tasks = new API.Tasks(this);
   workflows: API.Workflows = new API.Workflows(this);
+  routineFiles: API.RoutineFiles = new API.RoutineFiles(this);
+  store: API.Store = new API.Store(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   mailboxes: API.Mailboxes = new API.Mailboxes(this);
   files: API.Files = new API.Files(this);
@@ -898,11 +932,16 @@ export class Mobilerun {
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
+Mobilerun.StreamTokens = StreamTokens;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
+Mobilerun.Functions = Functions;
+Mobilerun.Compute = Compute;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
+Mobilerun.RoutineFiles = RoutineFiles;
+Mobilerun.Store = Store;
 Mobilerun.Webhooks = Webhooks;
 Mobilerun.Mailboxes = Mailboxes;
 Mobilerun.Files = Files;
@@ -942,6 +981,7 @@ export declare namespace Mobilerun {
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceFingerprintResponse as DeviceFingerprintResponse,
     type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
+    type DeviceSetIdleTimeoutResponse as DeviceSetIdleTimeoutResponse,
     type DeviceSetNameResponse as DeviceSetNameResponse,
     type DeviceSummaryResponse as DeviceSummaryResponse,
     type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
@@ -949,9 +989,16 @@ export declare namespace Mobilerun {
     type DeviceListParams as DeviceListParams,
     type DeviceFingerprintParams as DeviceFingerprintParams,
     type DeviceResetParams as DeviceResetParams,
+    type DeviceSetIdleTimeoutParams as DeviceSetIdleTimeoutParams,
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
+  };
+
+  export {
+    StreamTokens as StreamTokens,
+    type StreamTokenCreateResponse as StreamTokenCreateResponse,
+    type StreamTokenCreateParams as StreamTokenCreateParams,
   };
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
@@ -968,6 +1015,23 @@ export declare namespace Mobilerun {
     type ProxyListParams as ProxyListParams,
   };
 
+  export {
+    Functions as Functions,
+    type FunctionSource as FunctionSource,
+    type ServerlessFunction as ServerlessFunction,
+    type FunctionCreateResponse as FunctionCreateResponse,
+    type FunctionRetrieveResponse as FunctionRetrieveResponse,
+    type FunctionUpdateResponse as FunctionUpdateResponse,
+    type FunctionListResponse as FunctionListResponse,
+    type FunctionSourceResponse as FunctionSourceResponse,
+    type FunctionCreateParams as FunctionCreateParams,
+    type FunctionUpdateParams as FunctionUpdateParams,
+    type FunctionListParams as FunctionListParams,
+    type FunctionSourceParams as FunctionSourceParams,
+  };
+
+  export { Compute as Compute };
+
   export { Connect as Connect };
 
   export {
@@ -979,14 +1043,27 @@ export declare namespace Mobilerun {
     type TaskRunResponse as TaskRunResponse,
     type TaskRunStreamedResponse as TaskRunStreamedResponse,
     type TaskSendMessageResponse as TaskSendMessageResponse,
+    type TaskStatsResponse as TaskStatsResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
     type TaskSendMessageParams as TaskSendMessageParams,
+    type TaskStatsParams as TaskStatsParams,
   };
 
   export { Workflows as Workflows };
+
+  export {
+    RoutineFiles as RoutineFiles,
+    type RoutineFile as RoutineFile,
+    type RoutineFileListResponse as RoutineFileListResponse,
+    type RoutineFileDeleteAllResponse as RoutineFileDeleteAllResponse,
+    type RoutineFileListParams as RoutineFileListParams,
+    type RoutineFileDeleteAllParams as RoutineFileDeleteAllParams,
+  };
+
+  export { Store as Store };
 
   export {
     Webhooks as Webhooks,

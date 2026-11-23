@@ -20,8 +20,9 @@ export class Credentials extends APIResource {
 
   /**
    * Creates a credential under the given package with a `credentialName` and at
-   * least one field. Each field has a `fieldType` (email, username, password,
-   * api_token, phone_number, two_factor_secret, or backup_codes) and a value.
+   * least one field. Field types must be unique. Each field has a `fieldType`
+   * (email, username, password, api_token, phone_number, two_factor_secret, or
+   * backup_codes) and a value.
    */
   create(
     packageName: string,
@@ -29,6 +30,24 @@ export class Credentials extends APIResource {
     options?: RequestOptions,
   ): APIPromise<CredentialCreateResponse> {
     return this._client.post(path`/credentials/packages/${packageName}`, { body, ...options });
+  }
+
+  /**
+   * Sets or clears the optional `label` (human-readable name, free text, max 200
+   * characters) of an existing credential. `null` or an empty text clears it. Works
+   * for linked credentials too: the label is metadata of the credential, not a field
+   * of the linked item. Returns the updated credential.
+   */
+  update(
+    credentialName: string,
+    params: CredentialUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<CredentialUpdateResponse> {
+    const { packageName, ...body } = params;
+    return this._client.patch(path`/credentials/packages/${packageName}/credentials/${credentialName}`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -76,9 +95,11 @@ export namespace CredentialCreateResponse {
      */
     userId: string | null;
 
-    link?: Data.Link;
+    label?: string;
 
-    source?: 'mobilerun' | 'onepassword';
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
   }
 
   export namespace Data {
@@ -90,13 +111,17 @@ export namespace CredentialCreateResponse {
         | 'api_token'
         | 'phone_number'
         | 'two_factor_secret'
-        | 'backup_codes';
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
 
       value: string;
     }
 
-    export interface Link {
-      fieldMap: Array<Link.FieldMap>;
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
 
       itemId: string;
 
@@ -109,7 +134,7 @@ export namespace CredentialCreateResponse {
       vaultName: string;
     }
 
-    export namespace Link {
+    export namespace UnionMember0 {
       export interface FieldMap {
         fieldId: string;
 
@@ -120,7 +145,157 @@ export namespace CredentialCreateResponse {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes';
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+  }
+}
+
+export interface CredentialUpdateResponse {
+  data: CredentialUpdateResponse.Data;
+
+  message: string;
+
+  success: true;
+}
+
+export namespace CredentialUpdateResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+
+    label?: string;
+
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType:
+        | 'email'
+        | 'username'
+        | 'password'
+        | 'api_token'
+        | 'phone_number'
+        | 'two_factor_secret'
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
+
+      value: string;
+    }
+
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
+
+      itemId: string;
+
+      itemTitle: string;
+
+      provider: 'onepassword';
+
+      vaultId: string;
+
+      vaultName: string;
+    }
+
+    export namespace UnionMember0 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
       }
     }
   }
@@ -154,9 +329,11 @@ export namespace CredentialDeleteResponse {
      */
     userId: string | null;
 
-    link?: Data.Link;
+    label?: string;
 
-    source?: 'mobilerun' | 'onepassword';
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
   }
 
   export namespace Data {
@@ -168,13 +345,17 @@ export namespace CredentialDeleteResponse {
         | 'api_token'
         | 'phone_number'
         | 'two_factor_secret'
-        | 'backup_codes';
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
 
       value: string;
     }
 
-    export interface Link {
-      fieldMap: Array<Link.FieldMap>;
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
 
       itemId: string;
 
@@ -187,7 +368,7 @@ export namespace CredentialDeleteResponse {
       vaultName: string;
     }
 
-    export namespace Link {
+    export namespace UnionMember0 {
       export interface FieldMap {
         fieldId: string;
 
@@ -198,7 +379,40 @@ export namespace CredentialDeleteResponse {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes';
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
       }
     }
   }
@@ -208,15 +422,39 @@ export interface CredentialCreateParams {
   credentialName: string;
 
   fields: Array<CredentialCreateParams.Field>;
+
+  label?: string;
 }
 
 export namespace CredentialCreateParams {
   export interface Field {
     fieldType:
-      'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
+      | 'email'
+      | 'username'
+      | 'password'
+      | 'api_token'
+      | 'phone_number'
+      | 'two_factor_secret'
+      | 'backup_codes'
+      | 'cc_number'
+      | 'cc_exp'
+      | 'cc_csc'
+      | 'cc_name';
 
     value: string;
   }
+}
+
+export interface CredentialUpdateParams {
+  /**
+   * Path param
+   */
+  packageName: string;
+
+  /**
+   * Body param
+   */
+  label: string | null;
 }
 
 export interface CredentialDeleteParams {
@@ -228,8 +466,10 @@ Credentials.Fields = Fields;
 export declare namespace Credentials {
   export {
     type CredentialCreateResponse as CredentialCreateResponse,
+    type CredentialUpdateResponse as CredentialUpdateResponse,
     type CredentialDeleteResponse as CredentialDeleteResponse,
     type CredentialCreateParams as CredentialCreateParams,
+    type CredentialUpdateParams as CredentialUpdateParams,
     type CredentialDeleteParams as CredentialDeleteParams,
   };
 
