@@ -53,6 +53,7 @@ describe('resource proxies', () => {
           country: 'country',
           page: 1,
           pageSize: 1,
+          type: ['dedicated_residential'],
         },
         { path: '/_stainless_unknown_path' },
       ),
