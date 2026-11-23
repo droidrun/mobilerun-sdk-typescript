@@ -442,6 +442,15 @@ Methods:
 
 # StreamTokens
 
+Types:
+
+- <code><a href="./src/resources/stream-tokens.ts">StreamTokenCreateResponse</a></code>
+
+Methods:
+
+- <code title="post /identity/stream-keys">client.streamTokens.<a href="./src/resources/stream-tokens.ts">create</a>({ ...params }) -> StreamTokenCreateResponse</code>
+- <code title="delete /identity/stream-keys/{id}">client.streamTokens.<a href="./src/resources/stream-tokens.ts">delete</a>(id) -> void</code>
+
 # Models
 
 Types:
@@ -487,7 +496,7 @@ Methods:
 - <code title="get /compute/functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">retrieve</a>(functionID) -> FunctionRetrieveResponse</code>
 - <code title="get /compute/functions">client.functions.<a href="./src/resources/functions/functions.ts">list</a>({ ...params }) -> FunctionListResponse</code>
 - <code title="delete /compute/functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">delete</a>(functionID) -> void</code>
-- <code title="get /compute/functions/{functionId}/source">client.functions.<a href="./src/resources/functions/functions.ts">source</a>(functionID) -> FunctionSourceResponse</code>
+- <code title="get /compute/functions/{functionId}/source">client.functions.<a href="./src/resources/functions/functions.ts">source</a>(functionID, { ...params }) -> FunctionSourceResponse</code>
 
 ## Validations
 
@@ -776,7 +785,7 @@ Types:
 
 Methods:
 
-- <code title="get /executions/{executionId}">client.workflows.executions.<a href="./src/resources/workflows/executions/executions.ts">retrieve</a>(executionID) -> ExecutionRetrieveResponse</code>
+- <code title="get /executions/{executionId}">client.workflows.executions.<a href="./src/resources/workflows/executions/executions.ts">retrieve</a>(executionID, { ...params }) -> ExecutionRetrieveResponse</code>
 - <code title="get /executions">client.workflows.executions.<a href="./src/resources/workflows/executions/executions.ts">list</a>({ ...params }) -> ExecutionListResponse</code>
 - <code title="post /executions/{executionId}/abort">client.workflows.executions.<a href="./src/resources/workflows/executions/executions.ts">abort</a>(executionID) -> ExecutionAbortResponse</code>
 - <code title="get /executions/metrics">client.workflows.executions.<a href="./src/resources/workflows/executions/executions.ts">getMetrics</a>({ ...params }) -> ExecutionGetMetricsResponse</code>

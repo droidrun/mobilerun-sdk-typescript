@@ -25,6 +25,7 @@ describe('resource functions', () => {
     const response = await client.functions.create({
       name: 'x',
       source: 'x',
+      apiKey: { permissions: { foo: ['x'] } },
       description: 'description',
       manifest: {
         credentials: [{ name: 'x', packageName: 'x' }],
@@ -64,8 +65,6 @@ describe('resource functions', () => {
     await expect(
       client.functions.list(
         {
-          latest: 'true',
-          name: 'x',
           page: 1,
           pageSize: 1,
           search: 'x',
@@ -97,5 +96,17 @@ describe('resource functions', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('source: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.functions.source(
+        '550e8400-e29b-41d4-a716-446655440000',
+        { version: 1 },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
   });
 });

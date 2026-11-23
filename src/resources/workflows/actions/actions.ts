@@ -85,13 +85,26 @@ export namespace ActionCreateResponse {
 
     description: string | null;
 
+    /**
+     * @deprecated Deprecated: use uses.
+     */
     method: string;
 
     name: string;
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+    /**
+     * @deprecated Deprecated: use uses.
+     */
+    service:
+      | 'tasks_api'
+      | 'devices_api'
+      | 'agents_api'
+      | 'webhooks'
+      | 'integrations_api'
+      | 'triggers_api'
+      | 'sandbox_api';
 
     updatedAt: string | null;
 
@@ -99,6 +112,12 @@ export namespace ActionCreateResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+
+    /**
+     * Authored step name; null when this step has no name. Includes hidden executable
+     * steps.
+     */
+    uses: string | null;
 
     params?: unknown;
 
@@ -122,13 +141,26 @@ export namespace ActionRetrieveResponse {
 
     description: string | null;
 
+    /**
+     * @deprecated Deprecated: use uses.
+     */
     method: string;
 
     name: string;
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+    /**
+     * @deprecated Deprecated: use uses.
+     */
+    service:
+      | 'tasks_api'
+      | 'devices_api'
+      | 'agents_api'
+      | 'webhooks'
+      | 'integrations_api'
+      | 'triggers_api'
+      | 'sandbox_api';
 
     updatedAt: string | null;
 
@@ -136,6 +168,12 @@ export namespace ActionRetrieveResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+
+    /**
+     * Authored step name; null when this step has no name. Includes hidden executable
+     * steps.
+     */
+    uses: string | null;
 
     params?: unknown;
 
@@ -159,13 +197,26 @@ export namespace ActionUpdateResponse {
 
     description: string | null;
 
+    /**
+     * @deprecated Deprecated: use uses.
+     */
     method: string;
 
     name: string;
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+    /**
+     * @deprecated Deprecated: use uses.
+     */
+    service:
+      | 'tasks_api'
+      | 'devices_api'
+      | 'agents_api'
+      | 'webhooks'
+      | 'integrations_api'
+      | 'triggers_api'
+      | 'sandbox_api';
 
     updatedAt: string | null;
 
@@ -173,6 +224,12 @@ export namespace ActionUpdateResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+
+    /**
+     * Authored step name; null when this step has no name. Includes hidden executable
+     * steps.
+     */
+    uses: string | null;
 
     params?: unknown;
 
@@ -198,13 +255,26 @@ export namespace ActionListResponse {
 
     description: string | null;
 
+    /**
+     * @deprecated Deprecated: use uses.
+     */
     method: string;
 
     name: string;
 
     ownerId: string;
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+    /**
+     * @deprecated Deprecated: use uses.
+     */
+    service:
+      | 'tasks_api'
+      | 'devices_api'
+      | 'agents_api'
+      | 'webhooks'
+      | 'integrations_api'
+      | 'triggers_api'
+      | 'sandbox_api';
 
     updatedAt: string | null;
 
@@ -212,6 +282,12 @@ export namespace ActionListResponse {
      * @deprecated Deprecated: use ownerId (tenancy) / createdBy (actor).
      */
     userId: string;
+
+    /**
+     * Authored step name; null when this step has no name. Includes hidden executable
+     * steps.
+     */
+    uses: string | null;
 
     params?: unknown;
 
@@ -264,7 +340,14 @@ export interface ActionListParams {
 
   search?: string;
 
-  service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+  service?:
+    | 'tasks_api'
+    | 'devices_api'
+    | 'agents_api'
+    | 'webhooks'
+    | 'integrations_api'
+    | 'triggers_api'
+    | 'sandbox_api';
 }
 
 Actions.Services = Services;
