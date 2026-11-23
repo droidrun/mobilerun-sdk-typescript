@@ -8,10 +8,10 @@ import { path } from '../../internal/utils/path';
 
 export class ActionCatalog extends APIResource {
   /**
-   * Fetch a single action catalog entry by its ID, including its service, method,
-   * parameter schema, and `deviceFree` eligibility. Supports
-   * `profile=agent_routine`; returns 404 if no entry matches or the entry is outside
-   * that profile.
+   * Fetch a single action catalog entry by its ID, including its public `stepName`
+   * for routine documents, service, method, parameter schema, and `deviceFree`
+   * eligibility. Supports `profile=agent_routine`; returns 404 if no entry matches
+   * or the entry is outside that profile.
    */
   retrieve(
     catalogEntryID: string,
@@ -23,8 +23,9 @@ export class ActionCatalog extends APIResource {
 
   /**
    * Return a paginated list of catalog entries — the service/method templates that
-   * actions are created from, each carrying its parameter schema and `deviceFree`
-   * eligibility. Supports filtering by `service` and `profile=agent_routine`.
+   * actions are created from, each carrying its public `stepName` for routine
+   * documents, parameter schema and `deviceFree` eligibility. Supports filtering by
+   * `service` and `profile=agent_routine`.
    */
   list(
     query: ActionCatalogListParams | null | undefined = {},
@@ -53,13 +54,31 @@ export namespace ActionCatalogRetrieveResponse {
      */
     deviceFree: boolean;
 
+    /**
+     * @deprecated Deprecated: use stepName.
+     */
     method: string;
 
     name: string;
 
     provider: 'mobilerun' | 'oneDrive' | 'googleDrive';
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+    /**
+     * @deprecated Deprecated: use stepName.
+     */
+    service:
+      | 'tasks_api'
+      | 'devices_api'
+      | 'agents_api'
+      | 'webhooks'
+      | 'integrations_api'
+      | 'triggers_api'
+      | 'sandbox_api';
+
+    /**
+     * Public step name for routine document uses, e.g. files.upload or scripts.run.
+     */
+    stepName: string;
 
     updatedAt: string | null;
 
@@ -104,13 +123,31 @@ export namespace ActionCatalogListResponse {
      */
     deviceFree: boolean;
 
+    /**
+     * @deprecated Deprecated: use stepName.
+     */
     method: string;
 
     name: string;
 
     provider: 'mobilerun' | 'oneDrive' | 'googleDrive';
 
-    service: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+    /**
+     * @deprecated Deprecated: use stepName.
+     */
+    service:
+      | 'tasks_api'
+      | 'devices_api'
+      | 'agents_api'
+      | 'webhooks'
+      | 'integrations_api'
+      | 'triggers_api'
+      | 'sandbox_api';
+
+    /**
+     * Public step name for routine document uses, e.g. files.upload or scripts.run.
+     */
+    stepName: string;
 
     updatedAt: string | null;
 
@@ -151,7 +188,14 @@ export interface ActionCatalogListParams {
    */
   profile?: 'agent_routine';
 
-  service?: 'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+  service?:
+    | 'tasks_api'
+    | 'devices_api'
+    | 'agents_api'
+    | 'webhooks'
+    | 'integrations_api'
+    | 'triggers_api'
+    | 'sandbox_api';
 }
 
 export declare namespace ActionCatalog {
