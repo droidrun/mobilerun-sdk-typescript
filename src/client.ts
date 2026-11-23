@@ -55,6 +55,16 @@ import {
   ProxyUpdateResponse,
 } from './resources/proxies';
 import {
+  RoutineFileDeleteManyParams,
+  RoutineFileDeleteManyResponse,
+  RoutineFileListFoldersParams,
+  RoutineFileListFoldersResponse,
+  RoutineFileListParams,
+  RoutineFileListResponse,
+  RoutineFiles,
+} from './resources/routine-files';
+import { StreamTokenCreateParams, StreamTokenCreateResponse, StreamTokens } from './resources/stream-tokens';
+import {
   AgentCreateParams,
   AgentCreateResponse,
   AgentListResponse,
@@ -62,6 +72,7 @@ import {
   Agents,
 } from './resources/agents/agents';
 import { Assistant } from './resources/assistant/assistant';
+import { Compute } from './resources/compute/compute';
 import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
@@ -878,8 +889,10 @@ export class Mobilerun {
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
+  streamTokens: API.StreamTokens = new API.StreamTokens(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
+  compute: API.Compute = new API.Compute(this);
   connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
@@ -888,6 +901,7 @@ export class Mobilerun {
   workflows: API.Workflows = new API.Workflows(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   mailboxes: API.Mailboxes = new API.Mailboxes(this);
+  routineFiles: API.RoutineFiles = new API.RoutineFiles(this);
   files: API.Files = new API.Files(this);
   agents: API.Agents = new API.Agents(this);
   assistant: API.Assistant = new API.Assistant(this);
@@ -898,13 +912,16 @@ export class Mobilerun {
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
+Mobilerun.StreamTokens = StreamTokens;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
+Mobilerun.Compute = Compute;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
 Mobilerun.Webhooks = Webhooks;
 Mobilerun.Mailboxes = Mailboxes;
+Mobilerun.RoutineFiles = RoutineFiles;
 Mobilerun.Files = Files;
 Mobilerun.Agents = Agents;
 Mobilerun.Assistant = Assistant;
@@ -954,6 +971,12 @@ export declare namespace Mobilerun {
     type DeviceTerminateParams as DeviceTerminateParams,
   };
 
+  export {
+    StreamTokens as StreamTokens,
+    type StreamTokenCreateResponse as StreamTokenCreateResponse,
+    type StreamTokenCreateParams as StreamTokenCreateParams,
+  };
+
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
   export {
@@ -967,6 +990,8 @@ export declare namespace Mobilerun {
     type ProxyUpdateParams as ProxyUpdateParams,
     type ProxyListParams as ProxyListParams,
   };
+
+  export { Compute as Compute };
 
   export { Connect as Connect };
 
@@ -1018,6 +1043,16 @@ export declare namespace Mobilerun {
     type MailboxListParams as MailboxListParams,
     type MailboxOtpParams as MailboxOtpParams,
     type MailboxRestartParams as MailboxRestartParams,
+  };
+
+  export {
+    RoutineFiles as RoutineFiles,
+    type RoutineFileListResponse as RoutineFileListResponse,
+    type RoutineFileDeleteManyResponse as RoutineFileDeleteManyResponse,
+    type RoutineFileListFoldersResponse as RoutineFileListFoldersResponse,
+    type RoutineFileListParams as RoutineFileListParams,
+    type RoutineFileDeleteManyParams as RoutineFileDeleteManyParams,
+    type RoutineFileListFoldersParams as RoutineFileListFoldersParams,
   };
 
   export {
