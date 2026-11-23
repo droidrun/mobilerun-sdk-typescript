@@ -93,4 +93,31 @@ describe('resource screenshots', () => {
   test.skip('image: required and optional params', async () => {
     const response = await client.devices.screenshots.image('screenshotId', { deviceId: 'deviceId' });
   });
+
+  // Mock server tests are disabled
+  test.skip('listAll', async () => {
+    const responsePromise = client.devices.screenshots.listAll();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('listAll: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.devices.screenshots.listAll(
+        {
+          cursor: 'cursor',
+          deviceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+          limit: 1,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Mobilerun.NotFoundError);
+  });
 });

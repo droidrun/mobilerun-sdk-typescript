@@ -81,6 +81,8 @@ import {
 import * as RecordingsAPI from './recordings';
 import {
   RecordingDeleteParams,
+  RecordingListAllParams,
+  RecordingListAllResponse,
   RecordingListParams,
   RecordingListResponse,
   RecordingScreenshotsParams,
@@ -101,6 +103,8 @@ import {
   ScreenshotCaptureResponse,
   ScreenshotDeleteParams,
   ScreenshotImageParams,
+  ScreenshotListAllParams,
+  ScreenshotListAllResponse,
   ScreenshotListParams,
   ScreenshotListResponse,
   Screenshots,
@@ -192,7 +196,8 @@ export class Devices extends APIResource {
   /**
    * Returns the current state and metadata for a single device, including its
    * lifecycle state, type, stream URL, billing strategy, and timestamps. A stream
-   * token is included while the device is active.
+   * token is included while the device is active, but may be omitted when it cannot
+   * be read at that moment. Refetch the device to obtain the stream token.
    */
   retrieve(deviceID: string, options?: RequestOptions): APIPromise<DeviceRetrieveResponse> {
     return this._client.get(path`/devices/${deviceID}`, options);
@@ -285,7 +290,8 @@ export class Devices extends APIResource {
   /**
    * Wakes a parked device: it first checks that the device can run again, then the
    * same device starts and per-minute billing resumes. On a device that is not
-   * parked, the request does nothing.
+   * parked, the request does nothing. Unsupported intents return 400
+   * DEVICE_TOOL_UNSUPPORTED.
    */
   resume(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/resume`, {
@@ -306,6 +312,28 @@ export class Devices extends APIResource {
   }
 
   /**
+   * Sets the device's own idle stop setting and returns the updated device.
+   * `minutes` between 5 and 240 sets a custom timeout; `0` turns the idle timer off
+   * for this device; `null` removes the device's own setting, so the platform
+   * default applies again (a pay-as-you-go device that can be stopped stops after
+   * the default; other devices have no timer). Other values return 422. While a
+   * timer is on, the device is stopped automatically (state `stopped`, `stopReason`
+   * `IDLE_TIMEOUT`) once it has had no client activity for longer than that: API
+   * tool calls, open stream/adb/browser/frida/port connections and a held lease all
+   * count as activity, reading device state does not. Setting a custom timeout
+   * requires a device whose capabilities report stop=true, otherwise 409; `0` and
+   * `null` are always allowed. The response's `idleTimeoutMinutes` is the effective
+   * timeout.
+   */
+  setIdleTimeout(
+    deviceID: string,
+    body: DeviceSetIdleTimeoutParams,
+    options?: RequestOptions,
+  ): APIPromise<DeviceSetIdleTimeoutResponse> {
+    return this._client.put(path`/devices/${deviceID}/idle-timeout`, { body, ...options });
+  }
+
+  /**
    * Sets the display name for a device from the name in the request body and returns
    * the updated device.
    */
@@ -319,8 +347,10 @@ export class Devices extends APIResource {
 
   /**
    * Parks the device: its data, apps and identity are kept, but nothing runs and
-   * nothing is billed until it is resumed. Only devices whose capabilities report
-   * stop=true support this; others return 404.
+   * nothing is billed until it is resumed. Hosted subscription devices refuse a new
+   * park with 400 DEVICE_TOOL_UNSUPPORTED. Stop remains available for cleanup when
+   * the device already targets stopped. Other devices require stop support;
+   * unsupported intents return 400 DEVICE_TOOL_UNSUPPORTED.
    */
   stop(deviceID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.post(path`/devices/${deviceID}/stop`, {
@@ -410,9 +440,59 @@ export interface DeviceCreateResponse {
 
   createdBy?: string;
 
+  /**
+   * The platform default idle timeout this device uses when its own setting is
+   * cleared (PUT idle-timeout with minutes null). Omitted when no default applies to
+   * this device.
+   */
+  idleTimeoutDefaultMinutes?: number;
+
+  /**
+   * The effective idle timeout: minutes without client activity after which the
+   * device is stopped automatically (state stopped, stopReason IDLE_TIMEOUT). It is
+   * the device's own setting when one exists, otherwise the platform default for
+   * pay-as-you-go (minute-billed) devices that can be stopped. Omitted while no idle
+   * timer applies (explicitly turned off, or no default for this device). Change it
+   * with PUT /devices/{deviceId}/idle-timeout.
+   */
+  idleTimeoutMinutes?: number;
+
+  /**
+   * Where idleTimeoutMinutes comes from: device = the device's own setting (also
+   * when it is off), default = the platform default. Omitted when no idle timer can
+   * apply.
+   */
+  idleTimeoutSource?: 'device' | 'default';
+
+  /**
+   * When the device last had client activity (RFC 3339). Tracked only while the idle
+   * timer is on, to about one minute of precision; omitted otherwise.
+   */
+  lastActivityAt?: string;
+
   ownerId?: string;
 
   providerId?: string;
+
+  /**
+   * Why the device was last stopped. Present only while state is stopped; clients
+   * should use this value instead of parsing stateMessage.
+   */
+  stopReason?:
+    | 'STOP_REQUESTED'
+    | 'MINUTE_BALANCE_EXHAUSTED'
+    | 'RESOURCE_EXHAUSTED'
+    | 'SUBSCRIPTION_REQUIRED'
+    | 'PAYMENT_REQUIRED'
+    | 'DEVICE_OPERATION_FAILED'
+    | 'DEVICE_LEFT'
+    | 'IDLE_TIMEOUT';
+
+  /**
+   * When devices-api recorded the stop reason (RFC 3339). Present only while state
+   * is stopped and a reason is recorded.
+   */
+  stopReasonAt?: string;
 
   streamToken?: string;
 
@@ -461,9 +541,59 @@ export interface DeviceRetrieveResponse {
 
   createdBy?: string;
 
+  /**
+   * The platform default idle timeout this device uses when its own setting is
+   * cleared (PUT idle-timeout with minutes null). Omitted when no default applies to
+   * this device.
+   */
+  idleTimeoutDefaultMinutes?: number;
+
+  /**
+   * The effective idle timeout: minutes without client activity after which the
+   * device is stopped automatically (state stopped, stopReason IDLE_TIMEOUT). It is
+   * the device's own setting when one exists, otherwise the platform default for
+   * pay-as-you-go (minute-billed) devices that can be stopped. Omitted while no idle
+   * timer applies (explicitly turned off, or no default for this device). Change it
+   * with PUT /devices/{deviceId}/idle-timeout.
+   */
+  idleTimeoutMinutes?: number;
+
+  /**
+   * Where idleTimeoutMinutes comes from: device = the device's own setting (also
+   * when it is off), default = the platform default. Omitted when no idle timer can
+   * apply.
+   */
+  idleTimeoutSource?: 'device' | 'default';
+
+  /**
+   * When the device last had client activity (RFC 3339). Tracked only while the idle
+   * timer is on, to about one minute of precision; omitted otherwise.
+   */
+  lastActivityAt?: string;
+
   ownerId?: string;
 
   providerId?: string;
+
+  /**
+   * Why the device was last stopped. Present only while state is stopped; clients
+   * should use this value instead of parsing stateMessage.
+   */
+  stopReason?:
+    | 'STOP_REQUESTED'
+    | 'MINUTE_BALANCE_EXHAUSTED'
+    | 'RESOURCE_EXHAUSTED'
+    | 'SUBSCRIPTION_REQUIRED'
+    | 'PAYMENT_REQUIRED'
+    | 'DEVICE_OPERATION_FAILED'
+    | 'DEVICE_LEFT'
+    | 'IDLE_TIMEOUT';
+
+  /**
+   * When devices-api recorded the stop reason (RFC 3339). Present only while state
+   * is stopped and a reason is recorded.
+   */
+  stopReasonAt?: string;
 
   streamToken?: string;
 
@@ -524,9 +654,59 @@ export namespace DeviceListResponse {
 
     createdBy?: string;
 
+    /**
+     * The platform default idle timeout this device uses when its own setting is
+     * cleared (PUT idle-timeout with minutes null). Omitted when no default applies to
+     * this device.
+     */
+    idleTimeoutDefaultMinutes?: number;
+
+    /**
+     * The effective idle timeout: minutes without client activity after which the
+     * device is stopped automatically (state stopped, stopReason IDLE_TIMEOUT). It is
+     * the device's own setting when one exists, otherwise the platform default for
+     * pay-as-you-go (minute-billed) devices that can be stopped. Omitted while no idle
+     * timer applies (explicitly turned off, or no default for this device). Change it
+     * with PUT /devices/{deviceId}/idle-timeout.
+     */
+    idleTimeoutMinutes?: number;
+
+    /**
+     * Where idleTimeoutMinutes comes from: device = the device's own setting (also
+     * when it is off), default = the platform default. Omitted when no idle timer can
+     * apply.
+     */
+    idleTimeoutSource?: 'device' | 'default';
+
+    /**
+     * When the device last had client activity (RFC 3339). Tracked only while the idle
+     * timer is on, to about one minute of precision; omitted otherwise.
+     */
+    lastActivityAt?: string;
+
     ownerId?: string;
 
     providerId?: string;
+
+    /**
+     * Why the device was last stopped. Present only while state is stopped; clients
+     * should use this value instead of parsing stateMessage.
+     */
+    stopReason?:
+      | 'STOP_REQUESTED'
+      | 'MINUTE_BALANCE_EXHAUSTED'
+      | 'RESOURCE_EXHAUSTED'
+      | 'SUBSCRIPTION_REQUIRED'
+      | 'PAYMENT_REQUIRED'
+      | 'DEVICE_OPERATION_FAILED'
+      | 'DEVICE_LEFT'
+      | 'IDLE_TIMEOUT';
+
+    /**
+     * When devices-api recorded the stop reason (RFC 3339). Present only while state
+     * is stopped and a reason is recorded.
+     */
+    stopReasonAt?: string;
 
     streamToken?: string;
 
@@ -633,6 +813,12 @@ export namespace DeviceRetrieveCapabilitiesResponse {
 
     reset: boolean;
 
+    resetPreserve: Array<'proxy' | 'location' | 'locale' | 'timezone'>;
+
+    setGeo: boolean;
+
+    setTime: boolean;
+
     shell: boolean;
 
     spoofing: boolean;
@@ -649,6 +835,107 @@ export namespace DeviceRetrieveCapabilitiesResponse {
 
     mediaInjectionTransport?: 'direct';
   }
+}
+
+export interface DeviceSetIdleTimeoutResponse {
+  id: string;
+
+  activeTaskId: string;
+
+  assignedAt: string | null;
+
+  createdAt: string;
+
+  name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
+
+  state: string;
+
+  stateMessage: string;
+
+  streamUrl: string;
+
+  taskCount: number;
+
+  terminatesAt: string | null;
+
+  type: string;
+
+  updatedAt: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  billingStrategy?: string;
+
+  createdBy?: string;
+
+  /**
+   * The platform default idle timeout this device uses when its own setting is
+   * cleared (PUT idle-timeout with minutes null). Omitted when no default applies to
+   * this device.
+   */
+  idleTimeoutDefaultMinutes?: number;
+
+  /**
+   * The effective idle timeout: minutes without client activity after which the
+   * device is stopped automatically (state stopped, stopReason IDLE_TIMEOUT). It is
+   * the device's own setting when one exists, otherwise the platform default for
+   * pay-as-you-go (minute-billed) devices that can be stopped. Omitted while no idle
+   * timer applies (explicitly turned off, or no default for this device). Change it
+   * with PUT /devices/{deviceId}/idle-timeout.
+   */
+  idleTimeoutMinutes?: number;
+
+  /**
+   * Where idleTimeoutMinutes comes from: device = the device's own setting (also
+   * when it is off), default = the platform default. Omitted when no idle timer can
+   * apply.
+   */
+  idleTimeoutSource?: 'device' | 'default';
+
+  /**
+   * When the device last had client activity (RFC 3339). Tracked only while the idle
+   * timer is on, to about one minute of precision; omitted otherwise.
+   */
+  lastActivityAt?: string;
+
+  ownerId?: string;
+
+  providerId?: string;
+
+  /**
+   * Why the device was last stopped. Present only while state is stopped; clients
+   * should use this value instead of parsing stateMessage.
+   */
+  stopReason?:
+    | 'STOP_REQUESTED'
+    | 'MINUTE_BALANCE_EXHAUSTED'
+    | 'RESOURCE_EXHAUSTED'
+    | 'SUBSCRIPTION_REQUIRED'
+    | 'PAYMENT_REQUIRED'
+    | 'DEVICE_OPERATION_FAILED'
+    | 'DEVICE_LEFT'
+    | 'IDLE_TIMEOUT';
+
+  /**
+   * When devices-api recorded the stop reason (RFC 3339). Present only while state
+   * is stopped and a reason is recorded.
+   */
+  stopReasonAt?: string;
+
+  streamToken?: string;
+
+  /**
+   * @deprecated Deprecated: use ownerId/createdBy.
+   */
+  userId?: string;
 }
 
 export interface DeviceSetNameResponse {
@@ -690,9 +977,59 @@ export interface DeviceSetNameResponse {
 
   createdBy?: string;
 
+  /**
+   * The platform default idle timeout this device uses when its own setting is
+   * cleared (PUT idle-timeout with minutes null). Omitted when no default applies to
+   * this device.
+   */
+  idleTimeoutDefaultMinutes?: number;
+
+  /**
+   * The effective idle timeout: minutes without client activity after which the
+   * device is stopped automatically (state stopped, stopReason IDLE_TIMEOUT). It is
+   * the device's own setting when one exists, otherwise the platform default for
+   * pay-as-you-go (minute-billed) devices that can be stopped. Omitted while no idle
+   * timer applies (explicitly turned off, or no default for this device). Change it
+   * with PUT /devices/{deviceId}/idle-timeout.
+   */
+  idleTimeoutMinutes?: number;
+
+  /**
+   * Where idleTimeoutMinutes comes from: device = the device's own setting (also
+   * when it is off), default = the platform default. Omitted when no idle timer can
+   * apply.
+   */
+  idleTimeoutSource?: 'device' | 'default';
+
+  /**
+   * When the device last had client activity (RFC 3339). Tracked only while the idle
+   * timer is on, to about one minute of precision; omitted otherwise.
+   */
+  lastActivityAt?: string;
+
   ownerId?: string;
 
   providerId?: string;
+
+  /**
+   * Why the device was last stopped. Present only while state is stopped; clients
+   * should use this value instead of parsing stateMessage.
+   */
+  stopReason?:
+    | 'STOP_REQUESTED'
+    | 'MINUTE_BALANCE_EXHAUSTED'
+    | 'RESOURCE_EXHAUSTED'
+    | 'SUBSCRIPTION_REQUIRED'
+    | 'PAYMENT_REQUIRED'
+    | 'DEVICE_OPERATION_FAILED'
+    | 'DEVICE_LEFT'
+    | 'IDLE_TIMEOUT';
+
+  /**
+   * When devices-api recorded the stop reason (RFC 3339). Present only while state
+   * is stopped and a reason is recorded.
+   */
+  stopReasonAt?: string;
 
   streamToken?: string;
 
@@ -754,9 +1091,59 @@ export interface DeviceWaitReadyResponse {
 
   createdBy?: string;
 
+  /**
+   * The platform default idle timeout this device uses when its own setting is
+   * cleared (PUT idle-timeout with minutes null). Omitted when no default applies to
+   * this device.
+   */
+  idleTimeoutDefaultMinutes?: number;
+
+  /**
+   * The effective idle timeout: minutes without client activity after which the
+   * device is stopped automatically (state stopped, stopReason IDLE_TIMEOUT). It is
+   * the device's own setting when one exists, otherwise the platform default for
+   * pay-as-you-go (minute-billed) devices that can be stopped. Omitted while no idle
+   * timer applies (explicitly turned off, or no default for this device). Change it
+   * with PUT /devices/{deviceId}/idle-timeout.
+   */
+  idleTimeoutMinutes?: number;
+
+  /**
+   * Where idleTimeoutMinutes comes from: device = the device's own setting (also
+   * when it is off), default = the platform default. Omitted when no idle timer can
+   * apply.
+   */
+  idleTimeoutSource?: 'device' | 'default';
+
+  /**
+   * When the device last had client activity (RFC 3339). Tracked only while the idle
+   * timer is on, to about one minute of precision; omitted otherwise.
+   */
+  lastActivityAt?: string;
+
   ownerId?: string;
 
   providerId?: string;
+
+  /**
+   * Why the device was last stopped. Present only while state is stopped; clients
+   * should use this value instead of parsing stateMessage.
+   */
+  stopReason?:
+    | 'STOP_REQUESTED'
+    | 'MINUTE_BALANCE_EXHAUSTED'
+    | 'RESOURCE_EXHAUSTED'
+    | 'SUBSCRIPTION_REQUIRED'
+    | 'PAYMENT_REQUIRED'
+    | 'DEVICE_OPERATION_FAILED'
+    | 'DEVICE_LEFT'
+    | 'IDLE_TIMEOUT';
+
+  /**
+   * When devices-api recorded the stop reason (RFC 3339). Present only while state
+   * is stopped and a reason is recorded.
+   */
+  stopReasonAt?: string;
 
   streamToken?: string;
 
@@ -990,6 +1377,16 @@ export interface DeviceResetParams {
   preserve?: Array<'proxy' | 'location' | 'locale' | 'timezone'> | null;
 }
 
+export interface DeviceSetIdleTimeoutParams {
+  /**
+   * Minutes without client activity after which the device is stopped automatically:
+   * 5 to 240 sets a custom timeout, 0 turns the idle timer off for this device, null
+   * removes the device's own setting so the platform default applies again (if any).
+   * 1 to 4 are rejected.
+   */
+  minutes: number | null;
+}
+
 export interface DeviceSetNameParams {
   name: string;
 }
@@ -1046,6 +1443,7 @@ export declare namespace Devices {
     type DeviceCountResponse as DeviceCountResponse,
     type DeviceFingerprintResponse as DeviceFingerprintResponse,
     type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
+    type DeviceSetIdleTimeoutResponse as DeviceSetIdleTimeoutResponse,
     type DeviceSetNameResponse as DeviceSetNameResponse,
     type DeviceSummaryResponse as DeviceSummaryResponse,
     type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
@@ -1053,6 +1451,7 @@ export declare namespace Devices {
     type DeviceListParams as DeviceListParams,
     type DeviceFingerprintParams as DeviceFingerprintParams,
     type DeviceResetParams as DeviceResetParams,
+    type DeviceSetIdleTimeoutParams as DeviceSetIdleTimeoutParams,
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
@@ -1139,10 +1538,12 @@ export declare namespace Devices {
     Screenshots as Screenshots,
     type ScreenshotListResponse as ScreenshotListResponse,
     type ScreenshotCaptureResponse as ScreenshotCaptureResponse,
+    type ScreenshotListAllResponse as ScreenshotListAllResponse,
     type ScreenshotListParams as ScreenshotListParams,
     type ScreenshotDeleteParams as ScreenshotDeleteParams,
     type ScreenshotCaptureParams as ScreenshotCaptureParams,
     type ScreenshotImageParams as ScreenshotImageParams,
+    type ScreenshotListAllParams as ScreenshotListAllParams,
   };
 
   export {
@@ -1196,12 +1597,14 @@ export declare namespace Devices {
   export {
     Recordings as Recordings,
     type RecordingListResponse as RecordingListResponse,
+    type RecordingListAllResponse as RecordingListAllResponse,
     type RecordingScreenshotsResponse as RecordingScreenshotsResponse,
     type RecordingStartResponse as RecordingStartResponse,
     type RecordingStatusResponse as RecordingStatusResponse,
     type RecordingStopResponse as RecordingStopResponse,
     type RecordingListParams as RecordingListParams,
     type RecordingDeleteParams as RecordingDeleteParams,
+    type RecordingListAllParams as RecordingListAllParams,
     type RecordingScreenshotsParams as RecordingScreenshotsParams,
     type RecordingStartParams as RecordingStartParams,
     type RecordingStatusParams as RecordingStatusParams,

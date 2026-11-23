@@ -22,6 +22,7 @@ export {
   type AppCreateSignedUploadURLParams,
 } from './apps';
 export { Assistant } from './assistant/assistant';
+export { Compute } from './compute/compute';
 export { Connect } from './connect/connect';
 export {
   Credentials,
@@ -36,6 +37,7 @@ export {
   type DeviceCountResponse,
   type DeviceFingerprintResponse,
   type DeviceRetrieveCapabilitiesResponse,
+  type DeviceSetIdleTimeoutResponse,
   type DeviceSetNameResponse,
   type DeviceSummaryResponse,
   type DeviceWaitReadyResponse,
@@ -43,6 +45,7 @@ export {
   type DeviceListParams,
   type DeviceFingerprintParams,
   type DeviceResetParams,
+  type DeviceSetIdleTimeoutParams,
   type DeviceSetNameParams,
   type DeviceSummaryParams,
   type DeviceTerminateParams,
@@ -59,6 +62,20 @@ export {
   type FileListParams,
   type FileUploadURLParams,
 } from './files';
+export {
+  Functions,
+  type FunctionSource,
+  type ServerlessFunction,
+  type FunctionCreateResponse,
+  type FunctionRetrieveResponse,
+  type FunctionUpdateResponse,
+  type FunctionListResponse,
+  type FunctionSourceResponse,
+  type FunctionCreateParams,
+  type FunctionUpdateParams,
+  type FunctionListParams,
+  type FunctionSourceParams,
+} from './functions/functions';
 export {
   Mailboxes,
   type MailboxCreateResponse,
@@ -110,6 +127,16 @@ export {
   type ProxyListParams,
 } from './proxies';
 export {
+  RoutineFiles,
+  type RoutineFile,
+  type RoutineFileListResponse,
+  type RoutineFileDeleteAllResponse,
+  type RoutineFileListParams,
+  type RoutineFileDeleteAllParams,
+} from './routine-files/routine-files';
+export { Store } from './store/store';
+export { StreamTokens, type StreamTokenCreateResponse, type StreamTokenCreateParams } from './stream-tokens';
+export {
   Tasks,
   type TaskRetrieveResponse,
   type TaskListResponse,
@@ -118,11 +145,13 @@ export {
   type TaskRunResponse,
   type TaskRunStreamedResponse,
   type TaskSendMessageResponse,
+  type TaskStatsResponse,
   type TaskStopResponse,
   type TaskListParams,
   type TaskRunParams,
   type TaskRunStreamedParams,
   type TaskSendMessageParams,
+  type TaskStatsParams,
 } from './tasks/tasks';
 export {
   Webhooks,

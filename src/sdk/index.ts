@@ -41,6 +41,7 @@ import * as MessagesConversationsAPI from '../resources/messages/conversations';
 import * as ResourcesMessagesAPI from '../resources/messages/messages';
 import * as NumbersMessagesAPI from '../resources/numbers/messages';
 import * as NumbersAPI from '../resources/numbers/numbers';
+import * as ApprovalsAPI from '../resources/tasks/approvals';
 import * as TasksScreenshotsAPI from '../resources/tasks/screenshots';
 import * as ResourcesTasksAPI from '../resources/tasks/tasks';
 import * as UiStatesAPI from '../resources/tasks/ui-states';
@@ -58,6 +59,7 @@ import * as ServicesAPI from '../resources/workflows/actions/services';
 import * as ExecutionsAPI from '../resources/workflows/executions/executions';
 import * as FlowsActionsAPI from '../resources/workflows/flows/actions';
 import * as FlowsAPI from '../resources/workflows/flows/flows';
+import * as ScheduledRunsAPI from '../resources/workflows/flows/scheduled-runs';
 import * as FlowsStateAPI from '../resources/workflows/flows/state';
 import * as CredentialsAPI from '../resources/credentials/packages/credentials/credentials';
 import * as FieldsAPI from '../resources/credentials/packages/credentials/fields';
@@ -154,8 +156,11 @@ export class MobilerunSDK {
   readonly apps: AppManager;
   readonly credentials: Without<Raw['credentials'], 'packages'> & { packages: CredentialPackageManager };
   readonly devices: DeviceManager;
+  readonly streamTokens: Raw['streamTokens'];
   readonly models: Raw['models'];
   readonly proxies: ProxyConfigurationManager;
+  readonly functions: Raw['functions'];
+  readonly compute: Raw['compute'];
   readonly connect: Without<Raw['connect'], 'proxies' | 'users'> & {
     proxies: ConnectProxyManager;
     users: ConnectUserManager;
@@ -171,6 +176,8 @@ export class MobilerunSDK {
     flows: FlowManager;
     executions: ExecutionManager;
   };
+  readonly routineFiles: Raw['routineFiles'];
+  readonly store: Raw['store'];
   readonly webhooks: WebhookManager;
   readonly mailboxes: MailboxManager;
   readonly files: AgentFileManager;
@@ -213,8 +220,45 @@ export class MobilerunSDK {
       'Credentials',
     );
     this.devices = new DeviceManager(this.api);
+    this.streamTokens = withResources(this.api.streamTokens, {}, 'StreamTokens') as Raw['streamTokens'];
     this.models = withResources(this.api.models, {}, 'Models') as Raw['models'];
     this.proxies = new ProxyConfigurationManager(this.api);
+    this.functions = withResources(
+      this.api.functions,
+      {
+        runs: withResources(this.api.functions.runs, {}, 'Runs') as Raw['functions']['runs'],
+        versions: withResources(this.api.functions.versions, {}, 'Versions') as Raw['functions']['versions'],
+        validations: withResources(
+          this.api.functions.validations,
+          {},
+          'Validations',
+        ) as Raw['functions']['validations'],
+      },
+      'Functions',
+    ) as Raw['functions'];
+    this.compute = withResources(
+      this.api.compute,
+      {
+        runs: withResources(this.api.compute.runs, {}, 'Runs') as Raw['compute']['runs'],
+        sandboxes: withResources(
+          this.api.compute.sandboxes,
+          {
+            commands: withResources(
+              this.api.compute.sandboxes.commands,
+              {},
+              'Commands',
+            ) as Raw['compute']['sandboxes']['commands'],
+            files: withResources(
+              this.api.compute.sandboxes.files,
+              {},
+              'Files',
+            ) as Raw['compute']['sandboxes']['files'],
+          },
+          'Sandboxes',
+        ) as Raw['compute']['sandboxes'],
+      },
+      'Compute',
+    ) as Raw['compute'];
     this.connect = withResources(
       this.api.connect,
       {
@@ -242,6 +286,25 @@ export class MobilerunSDK {
       },
       'Workflows',
     );
+    this.routineFiles = withResources(
+      this.api.routineFiles,
+      {
+        folders: withResources(
+          this.api.routineFiles.folders,
+          {},
+          'Folders',
+        ) as Raw['routineFiles']['folders'],
+      },
+      'RoutineFiles',
+    ) as Raw['routineFiles'];
+    this.store = withResources(
+      this.api.store,
+      {
+        apps: withResources(this.api.store.apps, {}, 'Apps') as Raw['store']['apps'],
+        requests: withResources(this.api.store.requests, {}, 'Requests') as Raw['store']['requests'],
+      },
+      'Store',
+    ) as Raw['store'];
     this.webhooks = new WebhookManager(this.api);
     this.mailboxes = new MailboxManager(this.api);
     this.files = new AgentFileManager(this.api);
@@ -296,6 +359,7 @@ export class AppManager {
         platform: params?.['platform'],
         query: params?.['query'],
         sortBy: params?.['sortBy'],
+        source: params?.['source'],
         status: params?.['status'],
       });
       const response = await this.api.apps.list({ ...params }, pageOptions);
@@ -524,8 +588,9 @@ export class CredentialManager {
 
   /**
    * Creates a credential under the given package with a `credentialName` and at
-   * least one field. Each field has a `fieldType` (email, username, password,
-   * api_token, phone_number, two_factor_secret, or backup_codes) and a value.
+   * least one field. Field types must be unique. Each field has a `fieldType`
+   * (email, username, password, api_token, phone_number, two_factor_secret, or
+   * backup_codes) and a value.
    */
   async create(params: CredentialsAPI.CredentialCreateParams, options?: RequestOptions): Promise<Credential> {
     const requestOptions = createRequestOptions(options);
@@ -974,6 +1039,7 @@ export class ConnectProxyManager {
         country: params?.['country'],
         page: params?.['page'],
         pageSize: params?.['pageSize'],
+        type: params?.['type'],
       });
       const response = await this.api.connect.proxies.list({ ...params }, pageOptions);
       return new PagedObjectPage(
@@ -1134,6 +1200,18 @@ export class TaskManager {
     options?: RequestOptions,
   ): APIPromise<unknown> {
     const result = this.api.tasks.runStreamed({ ...params }, options);
+    return result;
+  }
+
+  /**
+   * Task outcome counts per time bucket, success rate, duration percentiles and top
+   * failure reasons for a window. Tasks are bucketed by creation time.
+   */
+  stats(
+    params: ResourcesTasksAPI.TaskStatsParams,
+    options?: RequestOptions,
+  ): APIPromise<ResourcesTasksAPI.TaskStatsResponse> {
+    const result = this.api.tasks.stats({ ...params }, options);
     return result;
   }
 
@@ -1430,10 +1508,12 @@ export class FlowManager {
   }
 
   /**
-   * Create a flow that binds a trigger (`triggerId`) to an ordered list of actions,
-   * with at least one action required. Optional settings include target `deviceIds`,
-   * a cooldown (`cooldownSeconds`/`cooldownScope`), and webhook notifications on
-   * success or failure.
+   * Create a flow that binds a trigger (`triggerId`) to an ordered list of actions.
+   * The list may be empty or omitted: a routine without steps is stored disabled and
+   * cannot be enabled, run or verified until it has a step. Enabling it returns 400
+   * with "Add a step before enabling this routine". Optional settings include target
+   * `deviceIds`, a cooldown (`cooldownSeconds`/`cooldownScope`), and webhook
+   * notifications on success or failure.
    *
    * Supports an optional `Idempotency-Key` header (1-255 printable ASCII
    * characters). Replays with the same key and an identical body return the original
@@ -1498,6 +1578,36 @@ export class FlowManager {
   }
 
   /**
+   * Atomically creates the trigger, actions and disabled flow. Body: {document}.
+   * Optional Idempotency-Key fingerprints the canonical document; identical retries
+   * reload the resource, changed documents return idempotency_key_reused. The owner
+   * can enable a routine with at least one step directly through PATCH
+   * /flows/{flowId} using enabled: true or lifecycleStatus: "enabled", without
+   * verification. For the verified path used by agent deploys, call POST
+   * /flows/{flowId}/verify then POST /flows/{flowId}/activate; activation requires a
+   * successful verification of the current graph.
+   */
+  createFromDocument(
+    params?: FlowsAPI.FlowCreateFromDocumentParams,
+    options?: RequestOptions,
+  ): APIPromise<FlowsAPI.FlowCreateFromDocumentResponse> {
+    const result = this.api.workflows.flows.createFromDocument({ ...params }, options);
+    return result;
+  }
+
+  /**
+   * The optional agent_routine profile lists only agent-eligible steps. This is
+   * authoring guidance; backend validation remains authoritative.
+   */
+  documentSchema(
+    params?: FlowsAPI.FlowDocumentSchemaParams,
+    options?: RequestOptions,
+  ): APIPromise<FlowsAPI.FlowDocumentSchemaResponse> {
+    const result = this.api.workflows.flows.documentSchema({ ...params }, options);
+    return result;
+  }
+
+  /**
    * Get flow template context
    */
   templateContext(
@@ -1530,6 +1640,19 @@ export class FlowManager {
     const result = this.api.workflows.flows.validate({ ...params }, options);
     return result;
   }
+
+  /**
+   * Validates graph, settings and scheduled inputs without writing. Disconnected
+   * delivery destinations produce warnings; create and replace enforce the existing
+   * delivery connection checks.
+   */
+  validateDocument(
+    params?: FlowsAPI.FlowValidateDocumentParams,
+    options?: RequestOptions,
+  ): APIPromise<FlowsAPI.FlowValidateDocumentResponse> {
+    const result = this.api.workflows.flows.validateDocument({ ...params }, options);
+    return result;
+  }
 }
 
 export type ExecutionListPage = PagedObjectPage<Execution, ExecutionsAPI.ExecutionListResponse>;
@@ -1546,9 +1669,14 @@ export class ExecutionManager {
     return new Execution(this.api, id);
   }
 
-  async get(id: string, options?: RequestOptions): Promise<Execution> {
+  async get(
+    id: string,
+    params?: ExecutionsAPI.ExecutionRetrieveParams,
+    options?: RequestOptions,
+  ): Promise<Execution> {
     const info = await this.api.workflows.executions.retrieve(
       id,
+      { ...params },
       boundOptions(options, [{ name: 'executionId', location: 'path', value: id }]),
     );
     return new Execution(this.api, id, info, false, 'data');
@@ -1565,6 +1693,7 @@ export class ExecutionManager {
         flowId: params?.['flowId'],
         from: params?.['from'],
         invocationId: params?.['invocationId'],
+        kind: params?.['kind'],
         orderBy: params?.['orderBy'],
         orderByDirection: params?.['orderByDirection'],
         page: params?.['page'],
@@ -2512,9 +2641,13 @@ export class CredentialPackage {
     this.credentials = new CredentialManager(this.api, this.id);
     this.links = {
       /**
-       * Link a 1Password item to a credential
+       * Creates a read-only credential that resolves its values live from the provider.
+       * `provider` defaults to `onepassword` (vaultId, itemId, fieldMap). `wallet` takes
+       * a cardId, is only allowed in the reserved payment_cards package, and only the
+       * cardholder may link the card (404 otherwise). Never replaces an existing
+       * credential of the same name.
        */
-      create: (
+      create: ((
         params: LinksAPI.LinkCreateParams,
         options?: RequestOptions,
       ): APIPromise<LinksAPI.LinkCreateResponse> => {
@@ -2524,6 +2657,19 @@ export class CredentialPackage {
           boundOptions(options, [{ name: 'packageName', location: 'path', value: this.id }]),
         );
         return result;
+      }) as {
+        (
+          params: LinksAPI.LinkCreateParams.LinkOnePasswordCredentialBody,
+          options?: RequestOptions,
+        ): APIPromise<LinksAPI.LinkCreateResponse>;
+        (
+          params: LinksAPI.LinkCreateParams.LinkWalletCredentialBody,
+          options?: RequestOptions,
+        ): APIPromise<LinksAPI.LinkCreateResponse>;
+        (
+          params: LinksAPI.LinkCreateParams,
+          options?: RequestOptions,
+        ): APIPromise<LinksAPI.LinkCreateResponse>;
       },
     };
   }
@@ -2595,7 +2741,11 @@ export class Credential {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes',
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name',
         params: Omit<FieldsAPI.FieldUpdateParams, 'credentialName' | 'packageName'>,
         options?: RequestOptions,
       ): APIPromise<FieldsAPI.FieldUpdateResponse> => {
@@ -2621,7 +2771,11 @@ export class Credential {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes',
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name',
         options?: RequestOptions,
       ): APIPromise<FieldsAPI.FieldDeleteResponse> => {
         const result = this.api.credentials.packages.credentials.fields.delete(
@@ -2646,8 +2800,30 @@ export class Credential {
   }
 
   /** Reads only the last create/list snapshot without making a request; fromId/from_id handles have no data. */
-  get source(): 'mobilerun' | 'onepassword' | undefined {
-    return objectFieldValue(this.info, this.infoRoot, 'source') as 'mobilerun' | 'onepassword' | undefined;
+  get source(): 'mobilerun' | 'onepassword' | 'wallet' | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'source') as
+      'mobilerun' | 'onepassword' | 'wallet' | undefined;
+  }
+
+  /**
+   * Sets or clears the optional `label` (human-readable name, free text, max 200
+   * characters) of an existing credential. `null` or an empty text clears it. Works
+   * for linked credentials too: the label is metadata of the credential, not a field
+   * of the linked item. Returns the updated credential.
+   */
+  update(
+    params: Omit<CredentialsAPI.CredentialUpdateParams, 'packageName'>,
+    options?: RequestOptions,
+  ): APIPromise<CredentialsAPI.CredentialUpdateResponse> {
+    const result = this.api.credentials.packages.credentials.update(
+      this.id,
+      { ...params, packageName: this.packageName },
+      boundOptions(options, [
+        { name: 'credentialName', location: 'path', value: this.id },
+        { name: 'packageName', location: 'path', value: this.packageName },
+      ]),
+    );
+    return result;
   }
 
   /**
@@ -2841,6 +3017,7 @@ export class Device {
       }) as {
         (params: DevicesAppsAPI.AppInstallParams.Variant0, options?: RequestOptions): APIPromise<void>;
         (params: DevicesAppsAPI.AppInstallParams.Variant1, options?: RequestOptions): APIPromise<void>;
+        (params: DevicesAppsAPI.AppInstallParams.Variant2, options?: RequestOptions): APIPromise<void>;
         (params: DevicesAppsAPI.AppInstallParams, options?: RequestOptions): APIPromise<void>;
       },
       /**
@@ -3546,6 +3723,32 @@ export class Device {
   }
 
   /**
+   * Sets the device's own idle stop setting and returns the updated device.
+   * `minutes` between 5 and 240 sets a custom timeout; `0` turns the idle timer off
+   * for this device; `null` removes the device's own setting, so the platform
+   * default applies again (a pay-as-you-go device that can be stopped stops after
+   * the default; other devices have no timer). Other values return 422. While a
+   * timer is on, the device is stopped automatically (state `stopped`, `stopReason`
+   * `IDLE_TIMEOUT`) once it has had no client activity for longer than that: API
+   * tool calls, open stream/adb/browser/frida/port connections and a held lease all
+   * count as activity, reading device state does not. Setting a custom timeout
+   * requires a device whose capabilities report stop=true, otherwise 409; `0` and
+   * `null` are always allowed. The response's `idleTimeoutMinutes` is the effective
+   * timeout.
+   */
+  setIdleTimeout(
+    params: DevicesAPI.DeviceSetIdleTimeoutParams,
+    options?: RequestOptions,
+  ): APIPromise<DevicesAPI.DeviceSetIdleTimeoutResponse> {
+    const result = this.api.devices.setIdleTimeout(
+      this.id,
+      { ...params },
+      boundOptions(options, [{ name: 'deviceId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
    * Sets the display name for a device from the name in the request body and returns
    * the updated device.
    */
@@ -3582,7 +3785,8 @@ export class Device {
   /**
    * Wakes a parked device: it first checks that the device can run again, then the
    * same device starts and per-minute billing resumes. On a device that is not
-   * parked, the request does nothing.
+   * parked, the request does nothing. Unsupported intents return 400
+   * DEVICE_TOOL_UNSUPPORTED.
    *
    * Waits until the object is ready again (default), returns the handle; opt out with `waitReady: false` and set the timeout with `readyTimeoutMs`.
    */
@@ -3604,8 +3808,10 @@ export class Device {
 
   /**
    * Parks the device: its data, apps and identity are kept, but nothing runs and
-   * nothing is billed until it is resumed. Only devices whose capabilities report
-   * stop=true support this; others return 404.
+   * nothing is billed until it is resumed. Hosted subscription devices refuse a new
+   * park with 400 DEVICE_TOOL_UNSUPPORTED. Stop remains available for cleanup when
+   * the device already targets stopped. Other devices require stop support;
+   * unsupported intents return 400 DEVICE_TOOL_UNSUPPORTED.
    *
    * Runs waitStopped after success (default), returns the handle; opt out with `wait: false` and set the timeout with `waitTimeoutMs`.
    */
@@ -4578,6 +4784,8 @@ export type TaskInfo =
   | NonNullable<NonNullable<ResourcesTasksAPI.TaskListResponse>['items']>[number];
 
 export class Task<T = never> {
+  readonly approvals;
+
   readonly screenshots;
 
   readonly uiStates;
@@ -4591,6 +4799,24 @@ export class Task<T = never> {
     private infoRoot = 'task',
   ) {
     configureObject(this);
+    this.approvals = {
+      /**
+       * Approve or deny the approval a running task is waiting for (see
+       * `pendingApproval` on the task). Deny ends the task as failed.
+       */
+      respond: (
+        approvalID: string,
+        params: Omit<ApprovalsAPI.ApprovalRespondParams, 'task_id'>,
+        options?: RequestOptions,
+      ): APIPromise<ApprovalsAPI.ApprovalRespondResponse> => {
+        const result = this.api.tasks.approvals.respond(
+          approvalID,
+          { ...params, task_id: this.id },
+          boundOptions(options, [{ name: 'task_id', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+    };
     this.screenshots = {
       /**
        * Get a specific screenshot by index.
@@ -4958,6 +5184,7 @@ export class CatalogEntry {
     | 'webhooks'
     | 'integrations_api'
     | 'triggers_api'
+    | 'sandbox_api'
     | undefined {
     return objectFieldValue(this.info, this.infoRoot, 'service') as
       | 'tasks_api'
@@ -4966,6 +5193,7 @@ export class CatalogEntry {
       | 'webhooks'
       | 'integrations_api'
       | 'triggers_api'
+      | 'sandbox_api'
       | undefined;
   }
 
@@ -5025,6 +5253,7 @@ export class WorkflowAction {
     | 'webhooks'
     | 'integrations_api'
     | 'triggers_api'
+    | 'sandbox_api'
     | undefined {
     return objectFieldValue(this.info, this.infoRoot, 'service') as
       | 'tasks_api'
@@ -5033,6 +5262,7 @@ export class WorkflowAction {
       | 'webhooks'
       | 'integrations_api'
       | 'triggers_api'
+      | 'sandbox_api'
       | undefined;
   }
 
@@ -5073,6 +5303,8 @@ export type FlowInfo =
   | NonNullable<NonNullable<FlowsAPI.FlowListResponse>['items']>[number];
 
 export class Flow {
+  readonly scheduledRuns;
+
   readonly actions;
 
   readonly state;
@@ -5085,6 +5317,54 @@ export class Flow {
     private infoRoot = 'data',
   ) {
     configureObject(this);
+    this.scheduledRuns = {
+      /**
+       * Plan Run now for a future time, using the same devices, payload rules and
+       * admission at fire time. A flow can have at most 100 scheduled runs. Supports an
+       * optional Idempotency-Key; a replay returns the current scheduled run with the
+       * original 201 status.
+       */
+      create: (
+        params: ScheduledRunsAPI.ScheduledRunCreateParams,
+        options?: RequestOptions,
+      ): APIPromise<ScheduledRunsAPI.ScheduledRunCreateResponse> => {
+        const result = this.api.workflows.flows.scheduledRuns.create(
+          this.id,
+          { ...params },
+          boundOptions(options, [{ name: 'flowId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+      /**
+       * Lists upcoming runs by default, including claimed runs awaiting dispatch. Set
+       * status=all to include terminal rows. Ordered by runAt ascending.
+       */
+      list: (
+        params?: ScheduledRunsAPI.ScheduledRunListParams,
+        options?: RequestOptions,
+      ): APIPromise<ScheduledRunsAPI.ScheduledRunListResponse> => {
+        const result = this.api.workflows.flows.scheduledRuns.list(
+          this.id,
+          { ...params },
+          boundOptions(options, [{ name: 'flowId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+      /**
+       * Cancel a planned flow run
+       */
+      cancel: (
+        scheduledRunID: string,
+        options?: RequestOptions,
+      ): APIPromise<ScheduledRunsAPI.ScheduledRunCancelResponse> => {
+        const result = this.api.workflows.flows.scheduledRuns.cancel(
+          scheduledRunID,
+          { flowId: this.id },
+          boundOptions(options, [{ name: 'flowId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+    };
     this.actions = {
       /**
        * Return the ordered list of actions attached to a flow, including any nested
@@ -5216,7 +5496,11 @@ export class Flow {
 
   /**
    * Partially update a flow's settings — name, trigger binding, enabled state,
-   * target devices, cooldown, or notifications; all fields are optional. Actions are
+   * target devices, cooldown, or notifications; all fields are optional. The owner
+   * can enable a routine directly with `enabled: true` or
+   * `lifecycleStatus: "enabled"`, without verification; at least one step is
+   * required. For the verified path used by agent deploys, use POST
+   * /flows/{flowId}/verify then POST /flows/{flowId}/activate instead. Actions are
    * managed through the flow-actions endpoints, not here. Returns 404 if the flow
    * does not exist.
    */
@@ -5235,6 +5519,7 @@ export class Flow {
   /**
    * Terminally archive a flow by its ID. Archived flows cannot be restored and are
    * hidden from customer reads. Repeating the request is idempotent for the owner.
+   * Files saved by its runs are deleted with it.
    */
   delete(options?: RequestOptions): APIPromise<FlowsAPI.FlowDeleteResponse> {
     const result = this.api.workflows.flows.delete(
@@ -5245,9 +5530,13 @@ export class Flow {
   }
 
   /**
-   * Activate a disabled flow only when the supplied verification execution succeeded
-   * and the flow graph has not changed since verification. Repeating activation is
-   * idempotent for an already-enabled flow.
+   * The verified activation path used by agent deploys: first run POST
+   * /flows/{flowId}/verify, then activate the disabled flow only when the supplied
+   * verification execution succeeded and the flow graph has not changed since
+   * verification. Repeating activation is idempotent for an already-enabled flow.
+   * Alternatively, the owner can enable a routine with at least one step directly
+   * through PATCH /flows/{flowId} using `enabled: true` or
+   * `lifecycleStatus: "enabled"`, without verification.
    */
   activate(
     params: FlowsAPI.FlowActivateParams,
@@ -5317,6 +5606,44 @@ export class Flow {
   }
 
   /**
+   * Body: {document}. Preserves enabled state. Omitted settings preserves all stored
+   * settings; present settings replaces them, with absent fields defaulted. Agent
+   * routines require a new version deployed through the agent. Omitted description,
+   * devices and trigger options clear their values. Shared triggers return
+   * trigger_shared and agent-managed routines return routine_agent_managed (409);
+   * shared action definitions are never modified. To enable a disabled routine with
+   * at least one step, the owner can PATCH /flows/{flowId} with enabled: true or
+   * lifecycleStatus: "enabled", without verification. For the verified path used by
+   * agent deploys, call POST /flows/{flowId}/verify then POST
+   * /flows/{flowId}/activate; activation requires a successful verification of the
+   * current graph.
+   */
+  replaceDocument(
+    params?: FlowsAPI.FlowReplaceDocumentParams,
+    options?: RequestOptions,
+  ): APIPromise<FlowsAPI.FlowReplaceDocumentResponse> {
+    const result = this.api.workflows.flows.replaceDocument(
+      this.id,
+      { ...params },
+      boundOptions(options, [{ name: 'flowId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
+   * Returns the canonical routine document, including delivery, recording, health,
+   * cooldown, owner wake and scheduled inputs. Unsupported stored behavior returns
+   * document_unsupported with JSON Pointer paths.
+   */
+  retrieveDocument(options?: RequestOptions): APIPromise<FlowsAPI.FlowRetrieveDocumentResponse> {
+    const result = this.api.workflows.flows.retrieveDocument(
+      this.id,
+      boundOptions(options, [{ name: 'flowId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
    * Get a self-healing repair episode
    */
   retrieveRepair(
@@ -5333,7 +5660,8 @@ export class Flow {
 
   /**
    * Immediately enqueue one live execution on every device bound to the flow,
-   * regardless of whether its trigger is event-based, custom, or scheduled.
+   * regardless of whether its trigger is event-based, custom, or scheduled. A
+   * routine without steps is refused with 409 `flow_has_no_steps`.
    *
    * Supports an optional `Idempotency-Key` header (1-255 printable ASCII
    * characters). The run identity is derived from the key, so a retry never starts a
@@ -5389,6 +5717,7 @@ export class Flow {
    * Unlike a normal trigger firing, verification:
    *
    * - runs a flow that is `enabled` OR `disabled` (an archived flow returns 404);
+   * - refuses routines without steps with 409 `flow_has_no_steps`;
    * - targets one device (`deviceId`, or the single bound device);
    * - is idempotent per `invocationId`: a repeat returns the existing run
    *   (`deduplicated: true`, HTTP 200) instead of enqueuing another (HTTP 202);
@@ -5459,9 +5788,13 @@ export class Execution {
     );
   }
 
-  refresh(options?: RequestOptions): APIPromise<ExecutionsAPI.ExecutionRetrieveResponse> {
+  refresh(
+    params?: ExecutionsAPI.ExecutionRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<ExecutionsAPI.ExecutionRetrieveResponse> {
     const result = this.api.workflows.executions.retrieve(
       this.id,
+      { ...params },
       boundOptions(options, [{ name: 'executionId', location: 'path', value: this.id }]),
     );
     return result._thenUnwrap((info) => {

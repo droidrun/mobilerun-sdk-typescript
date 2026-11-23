@@ -145,6 +145,32 @@ The object API is additive. Existing client APIs are unchanged and the complete 
 | WebhookDelivery    | `webhook.deliveries`             | `get, list`                                                                                |
 | Recording          | `device.recordings`              | `get, list, start, stop, wait, delete, trajectory, video, screenshots`                     |
 
+### Additional client APIs
+
+These methods are available on the raw client (`client`) or through `sdk.api`.
+
+| Resource                                  | New methods                            |
+| ----------------------------------------- | -------------------------------------- |
+| `client.functions`                        | `update`                               |
+| `client.functions.runs`                   | `create, list`                         |
+| `client.functions.versions`               | `create, list, retrieve, delete`       |
+| `client.compute.runs`                     | `list, retrieve, cancel, logs`         |
+| `client.compute.sandboxes`                | `create, list, retrieve, delete, exec` |
+| `client.compute.sandboxes.commands`       | `list, retrieve`                       |
+| `client.compute.sandboxes.files`          | `download, upload`                     |
+| `client.streamTokens`                     | `create, delete`                       |
+| `client.routineFiles`                     | `list, delete, deleteAll, download`    |
+| `client.routineFiles.folders`             | `list`                                 |
+| `client.store.apps`                       | `list`                                 |
+| `client.store.requests`                   | `create`                               |
+| `client.devices`                          | `setIdleTimeout`                       |
+| `client.devices.recordings`               | `listAll`                              |
+| `client.devices.screenshots`              | `listAll`                              |
+| `client.workflows.flows.scheduledRuns`    | `create, list, cancel`                 |
+| `client.tasks`                            | `stats`                                |
+| `client.tasks.approvals`                  | `respond`                              |
+| `client.credentials.packages.credentials` | `update`                               |
+
 Every manager has `fromId(id)` / `from_id(id)` for an unfetched handle. Child managers carry their parent context. Agent and AgentFile have no get or refresh: their fields carry only the last create/list snapshot; fromId/from_id handles have no data. Agent profile.update returns a fresh Agent and leaves the original snapshot unchanged. Package get retains the full credentials-array response and takes its canonical name from the first row; an empty response keeps the requested name. Credential list maps that same package route to child handles. Recording start is its only factory and owns stop on scope exit; handles from get/list/fromId never stop automatically. Recording video/trajectory and AgentFile download return bytes. SavedScreenshot.image returns bytes; Screenshot remains the capture result returned by device.screenshot().
 
 Object purchase methods keep the API's own operation name:
@@ -265,28 +291,35 @@ await writeFile('recording.mp4', video);
 
 Install the React streaming package with `npm install @mobilerun/react`.
 
-On your server, resolve a device the authenticated end user may see; never send the API key to the browser, only that device's `streamUrl` and `streamToken`.
+Keep the API key on your server. For each connection, mint a short-lived, single-use token for a device the authenticated end user may access. Recheck device access every time your authenticated token endpoint is called, including reconnects.
 
 ```ts
 import { MobilerunSDK } from '@mobilerun/sdk';
 
 const sdk = new MobilerunSDK();
 // Call from your authenticated route handler after checking device access.
-export async function getDeviceStream(deviceId: string) {
-  const device = await sdk.devices.get(deviceId);
-  if (!device.info) throw new Error('Device info is unavailable');
-  return { streamUrl: device.info.streamUrl, streamToken: device.info.streamToken };
+export async function createStreamToken(deviceId: string) {
+  const token = await sdk.streamTokens.create({ deviceId, ttlSeconds: 120 });
+  return { token: token.key };
 }
 ```
 
-Pass the returned values to your client component:
+Resolve `device.info.streamUrl` on your server and pass it to your client component. Expose the handler above at an authenticated endpoint such as `/api/devices/:deviceId/stream-token`. The browser's `tokenProvider` calls it for a fresh token on every connection:
 
 ```tsx
 import { DeviceStream } from '@mobilerun/react';
 import '@mobilerun/react/styles.css';
 
-export function DevicePanel({ streamUrl, streamToken }: { streamUrl: string; streamToken?: string }) {
-  return <DeviceStream streamUrl={streamUrl} streamToken={streamToken} hasControl />;
+export function DevicePanel({ deviceId, streamUrl }: { deviceId: string; streamUrl: string }) {
+  const tokenProvider = async () => {
+    const response = await fetch(`/api/devices/${encodeURIComponent(deviceId)}/stream-token`, {
+      method: 'POST',
+    });
+    if (!response.ok) throw new Error('Unable to create stream token');
+    const { token } = await response.json();
+    return token;
+  };
+  return <DeviceStream streamUrl={streamUrl} tokenProvider={tokenProvider} hasControl />;
 }
 ```
 

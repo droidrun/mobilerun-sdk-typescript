@@ -97,6 +97,8 @@ describe('resource apps', () => {
   test.skip('install: required and optional params', async () => {
     const response = await client.devices.apps.install('deviceId', {
       bundleId: 'x',
+      appId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      appUrl: 'appUrl',
       background: true,
       country: 'se',
       packageName: 'x',
