@@ -69,6 +69,7 @@ export async function compute(sdk: MobilerunSDK, name: string) {
     run = await fn.runs.create({ input: { name: 'Ada' }, version, waitS: 0 });
     if (!(run instanceof Run)) throw new Error('Expected a Run handle');
     const finished = await run.wait({ timeoutMs: 600_000 });
+    await run.waitLogs();
     const logs = await run.logs(); // A link envelope, not the log bytes.
     return { finished, logs };
   } catch (error) {

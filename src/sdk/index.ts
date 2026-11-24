@@ -5116,6 +5116,35 @@ export class Run {
     );
   }
 
+  /** Wait for the declared success condition; failure raises with the last response. */
+  waitLogs(options: WaitOptions = {}): Promise<RunsAPI.RunRetrieveResponse> {
+    return waitFor(
+      options,
+      60000,
+      1000,
+      async (signal, timeout) => {
+        const requestOptions: RequestOptions = { ...options, signal, timeout, maxRetries: 0 };
+        const result = await this.api.compute.runs.retrieve(
+          this.id,
+          {},
+          boundOptions(requestOptions, [{ name: 'runId', location: 'path', value: this.id }]),
+        );
+        this.info = result;
+        this.infoRoot = 'data';
+        const state = result['data']['logs'];
+        if ((['available'] as readonly string[]).includes(state)) return { done: true, result };
+        if (
+          (['none', 'gone'] as readonly string[]).includes(state) ||
+          !(['pending'] as readonly string[]).includes(state)
+        )
+          throw new WaitFailureError(result);
+        return { done: false, result };
+      },
+      retryPoll,
+      30000,
+    );
+  }
+
   async [Symbol.asyncDispose](): Promise<void> {}
 }
 
@@ -5232,7 +5261,7 @@ export class Sandbox {
   }
 
   /**
-   * Requests sandbox shutdown; a 202 response means shutdown is still in progress.
+   * Stops the sandbox; a 202 response means shutdown is still in progress; once stopped, the sandbox stays listed with status stopped.
    *
    * Stop a sandbox
    */

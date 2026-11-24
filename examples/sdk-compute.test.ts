@@ -180,13 +180,16 @@ test('compute example validates, inspects numeric versions, returns global Run a
     json({ data: { items: [version], pagination } }),
     json({ data: { items: [fn], pagination } }),
     json({ data: running }),
+    json({ data: { ...done, logs: 'pending' } }),
+    json({ data: { ...done, logs: 'pending' } }),
     json({ data: done }),
     json({ data: { url: 'https://storage.example/log', expiresAt: '2026-11-23T12:00:00Z', sizeBytes: 12 } }),
     { status: 204 },
     { status: 204 },
   ]);
   const result = await compute(t.sdk, 'greeting');
-  expect(result.finished.data).toEqual(done); // done + partial is terminal success for wait.
+  // wait() finishes before logs are available; waitLogs() polls until they are downloadable.
+  expect(result.finished.data).toEqual({ ...done, logs: 'pending' });
   expect(t.requests.map((r) => r.url.pathname)).toEqual([
     '/v1/compute/functions/validations',
     '/v1/compute/functions/validations/validation-1',
@@ -198,6 +201,8 @@ test('compute example validates, inspects numeric versions, returns global Run a
     '/v1/compute/functions/fn-1/versions',
     '/v1/compute/functions',
     '/v1/compute/functions/fn-1/runs',
+    '/v1/compute/runs/run-1',
+    '/v1/compute/runs/run-1',
     '/v1/compute/runs/run-1',
     '/v1/compute/runs/run-1/logs',
     '/v1/compute/functions/fn-1/versions/2',
@@ -217,6 +222,16 @@ test('function run factory returns global Run and failed wait retains response',
   await expect(run.wait()).rejects.toMatchObject({ response: failed, name: 'WaitFailureError' });
   expect(run.status).toBe('failed');
   expect(t.requests[1]?.url.pathname).toBe('/v1/compute/runs/run-1');
+});
+
+test.each(['none', 'gone'] as const)('unavailable logs (%s) fail with the run response', async (logs) => {
+  const failed = { data: { ...done, logs } };
+  const t = transport([json(failed)]);
+  await expect(t.sdk.compute.runs.fromId('run-1').waitLogs()).rejects.toMatchObject({
+    name: 'WaitFailureError',
+    response: failed,
+  });
+  expect(t.requests).toHaveLength(1);
 });
 
 test('running wait spans its bounded caller deadline', async () => {
@@ -388,7 +403,7 @@ async function close(server: Server) {
   await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
 }
 
-test('routine example downloads bytes through native cross-origin redirect without authorization', async () => {
+test('routine example downloads bytes through cross-origin redirect without authorization', async () => {
   const storageHeaders: (string | undefined)[] = [];
   const storage = createServer((request, response) => {
     storageHeaders.push(request.headers.authorization);
@@ -483,7 +498,7 @@ test('global Run get/refresh and numeric object version retrieval use their own 
   ]);
 });
 
-test('compute failure cancels and confirms terminal state before deleting its version and function', async () => {
+test('compute failure confirms cancellation before deleting its version and function', async () => {
   const t = transport([
     json({ data: { id: 'validation-1', status: 'done', valid: true } }),
     json({ data: { id: 'validation-1', status: 'done', valid: true } }),
