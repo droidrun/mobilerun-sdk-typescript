@@ -1,5 +1,23 @@
 # Changelog
 
+## [6.3.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.2.1...v6.3.0) (2026-11-24)
+
+
+### Features
+
+* **sdk:** add sandbox scripts preview ([d56a2ee](https://github.com/droidrun/mobilerun-sdk-typescript/commit/d56a2ee119550bae1f44b5ba6ddd2c91bf15f178))
+* **sdk:** stream tokens resource ([492d6ad](https://github.com/droidrun/mobilerun-sdk-typescript/commit/492d6ada499953dd1179e848c9886660c6fdf799))
+
+
+### Bug Fixes
+
+* **sdk:** re-anchor 6.3.0 tracking ([96bee58](https://github.com/droidrun/mobilerun-sdk-typescript/commit/96bee5839814a67710f6fdecfadef2cad6ba9654))
+
+
+### Chores
+
+* release 6.3.0 ([28f5db0](https://github.com/droidrun/mobilerun-sdk-typescript/commit/28f5db0d65e3362487b1478b7b2074017f4bd22c))
+
 ## [6.2.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.2.0...v6.2.1) (2026-11-14)
 
 
