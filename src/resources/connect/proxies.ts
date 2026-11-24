@@ -590,6 +590,12 @@ export interface ProxyListParams {
    * Number of items per page.
    */
   pageSize?: number;
+
+  /**
+   * Filter to proxies of these types. Repeat the parameter for several types
+   * (`?type=a&type=b`).
+   */
+  type?: Array<'dedicated_residential' | 'residential' | 'mobile'>;
 }
 
 export interface ProxyBuyParams {
