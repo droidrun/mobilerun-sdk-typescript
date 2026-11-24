@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.3.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.3.0...v6.3.1) (2026-11-24)
+
+
+### Bug Fixes
+
+* **sdk:** wait for run logs and 6.3.1 ([be15189](https://github.com/droidrun/mobilerun-sdk-typescript/commit/be15189eb5598e3e58270645ef00098f90d3752a))
+
+
+### Chores
+
+* release 6.3.1 ([a3bae33](https://github.com/droidrun/mobilerun-sdk-typescript/commit/a3bae33758d04f0981f5c541b63933078d83c917))
+
 ## [6.3.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.2.1...v6.3.0) (2026-11-24)
 
 
