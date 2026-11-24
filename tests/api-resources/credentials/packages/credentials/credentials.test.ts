@@ -28,6 +28,7 @@ describe('resource credentials', () => {
     const response = await client.credentials.packages.credentials.create('x', {
       credentialName: '26f1kl_-n-71',
       fields: [{ fieldType: 'email', value: 'x' }],
+      label: 'label',
     });
   });
 
