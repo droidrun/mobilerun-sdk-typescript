@@ -31,7 +31,7 @@ describe('resource conversations', () => {
 
   // Mock server tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.assistant.conversations.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {});
+    const responsePromise = client.assistant.conversations.update('550e8400-e29b-41d4-a716-446655440000', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -140,7 +140,7 @@ describe('resource conversations', () => {
 
   // Mock server tests are disabled
   test.skip('history', async () => {
-    const responsePromise = client.assistant.conversations.history('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
+    const responsePromise = client.assistant.conversations.history('550e8400-e29b-41d4-a716-446655440000');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -155,7 +155,7 @@ describe('resource conversations', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.assistant.conversations.history(
-        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+        '550e8400-e29b-41d4-a716-446655440000',
         { before: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', limit: 1 },
         { path: '/_stainless_unknown_path' },
       ),
