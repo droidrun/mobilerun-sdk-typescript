@@ -1,5 +1,5 @@
 // Compute charges apply until stopped. Run: pnpm tsn examples/compute-sandbox.ts
-import { MobilerunSDK } from '@mobilerun/sdk';
+import { APIError, MobilerunSDK } from '@mobilerun/sdk';
 
 export async function computeSandbox(sdk: MobilerunSDK) {
   const sandbox = await sdk.compute.sandboxes.create({ timeoutS: 60, idleTimeoutS: 60 });
@@ -21,8 +21,11 @@ export async function computeSandbox(sdk: MobilerunSDK) {
 }
 
 if (require.main === module) {
-  computeSandbox(new MobilerunSDK()).catch(() => {
-    console.error('Sandbox example failed.');
+  computeSandbox(new MobilerunSDK()).catch((error: unknown) => {
+    console.error(
+      error instanceof Error ? error.message : 'Example failed',
+      error instanceof APIError ? error.status : undefined,
+    );
     process.exitCode = 1;
   });
 }

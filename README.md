@@ -152,8 +152,6 @@ The object API is additive. Existing client APIs are unchanged and the complete 
 
 Every manager has `fromId(id)` / `from_id(id)` for an unfetched handle. Child managers carry their parent context. Agent and AgentFile have no get or refresh: their fields carry only the last create/list snapshot; fromId/from_id handles have no data. Agent profile.update returns a fresh Agent and leaves the original snapshot unchanged. Package get retains the full credentials-array response and takes its canonical name from the first row; an empty response keeps the requested name. Credential list maps that same package route to child handles. Recording start is its only factory and owns stop on scope exit; handles from get/list/fromId never stop automatically. Recording video/trajectory and AgentFile download return bytes. SavedScreenshot.image returns bytes; Screenshot remains the capture result returned by device.screenshot().
 
-The unreleased top-level `functions` namespace has moved to `compute.functions` without an alias.
-
 Use `device.createStreamToken()` to bind the device ID; the top-level stream token create/delete API remains available. ScheduledRun and RoutineFile have no get or refresh because the API exposes no retrieve operation. Function versions use integer version numbers and return API records. Run.logs() returns a short-lived log download link. Sandbox scope cleanup requests shutdown; shutdown may finish asynchronously. RoutineFile `listFolders` and `deleteMany` are manager methods; download and delete are file methods.
 
 Object purchase methods keep the API's own operation name:

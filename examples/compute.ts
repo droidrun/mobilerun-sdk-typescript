@@ -1,7 +1,7 @@
 // Function inspection and runs may incur compute charges. Run: pnpm tsn examples/compute.ts
 import { randomUUID } from 'node:crypto';
 import { setTimeout as pause } from 'node:timers/promises';
-import { MobilerunSDK, Run, WaitFailureError } from '@mobilerun/sdk';
+import { APIError, MobilerunSDK, Run, WaitFailureError } from '@mobilerun/sdk';
 
 // The public mobilerun-functions greeting example; no hosts, credentials or scopes.
 export const source = `from pydantic import BaseModel
@@ -95,8 +95,11 @@ export async function compute(sdk: MobilerunSDK, name: string) {
 }
 
 if (require.main === module) {
-  compute(new MobilerunSDK(), `sdk-example-${randomUUID()}`).catch(() => {
-    console.error('Compute example failed; inspect the function cleanup status.');
+  compute(new MobilerunSDK(), `sdk-example-${randomUUID()}`).catch((error: unknown) => {
+    console.error(
+      error instanceof Error ? error.message : 'Example failed',
+      error instanceof APIError ? error.status : undefined,
+    );
     process.exitCode = 1;
   });
 }

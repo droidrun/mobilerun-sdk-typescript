@@ -512,3 +512,9 @@ test('compute failure cancels and confirms terminal state before deleting its ve
     ['DELETE', '/v1/compute/functions/fn-1'],
   ]);
 });
+
+test('stream token without a key ID preserves the shape error and never revokes', async () => {
+  const t = transport([json({ key: 'fixture-only-secret', expiresAt: '2026-11-23T12:00:00Z' })]);
+  await expect(streamToken(t.sdk, 'device-1')).rejects.toThrow('Invalid token response');
+  expect(t.requests.map((request) => request.init.method)).toEqual(['POST']);
+});

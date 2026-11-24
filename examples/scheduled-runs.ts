@@ -1,5 +1,5 @@
 // Schedule and cancel without dispatching a device run. Pass an existing test flow ID.
-import { MobilerunSDK } from '@mobilerun/sdk';
+import { APIError, MobilerunSDK } from '@mobilerun/sdk';
 
 export async function scheduledRuns(sdk: MobilerunSDK, flowId: string) {
   const flow = sdk.workflows.flows.fromId(flowId);
@@ -35,8 +35,11 @@ export async function scheduledRuns(sdk: MobilerunSDK, flowId: string) {
 if (require.main === module) {
   const id = process.argv[2];
   if (!id) throw new Error('Pass an existing test flow ID');
-  scheduledRuns(new MobilerunSDK(), id).catch(() => {
-    console.error('Schedule example failed.');
+  scheduledRuns(new MobilerunSDK(), id).catch((error: unknown) => {
+    console.error(
+      error instanceof Error ? error.message : 'Example failed',
+      error instanceof APIError ? error.status : undefined,
+    );
     process.exitCode = 1;
   });
 }
