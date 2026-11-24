@@ -1,8 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../core/resource';
+import { APIResource } from '../../../core/resource';
 import * as FunctionsAPI from './functions';
-import * as Shared from '../shared';
+import * as Shared from '../../shared';
+import * as RunsAPI from './runs';
+import { RunCreateParams, RunCreateResponse, RunListParams, RunListResponse, Runs } from './runs';
 import * as ValidationsAPI from './validations';
 import {
   FunctionValidation,
@@ -12,13 +14,26 @@ import {
   ValidationRetrieveResponse,
   Validations,
 } from './validations';
-import { APIPromise } from '../../core/api-promise';
-import { buildHeaders } from '../../internal/headers';
-import { RequestOptions } from '../../internal/request-options';
-import { path } from '../../internal/utils/path';
+import * as VersionsAPI from './versions';
+import {
+  VersionCreateParams,
+  VersionCreateResponse,
+  VersionDeleteParams,
+  VersionListParams,
+  VersionListResponse,
+  VersionRetrieveParams,
+  VersionRetrieveResponse,
+  Versions,
+} from './versions';
+import { APIPromise } from '../../../core/api-promise';
+import { buildHeaders } from '../../../internal/headers';
+import { RequestOptions } from '../../../internal/request-options';
+import { path } from '../../../internal/utils/path';
 
 export class Functions extends APIResource {
   validations: ValidationsAPI.Validations = new ValidationsAPI.Validations(this._client);
+  versions: VersionsAPI.Versions = new VersionsAPI.Versions(this._client);
+  runs: RunsAPI.Runs = new RunsAPI.Runs(this._client);
 
   /**
    * Create a function with its first immutable version
@@ -32,6 +47,17 @@ export class Functions extends APIResource {
    */
   retrieve(functionID: string, options?: RequestOptions): APIPromise<FunctionRetrieveResponse> {
     return this._client.get(path`/compute/functions/${functionID}`, options);
+  }
+
+  /**
+   * Rename a function or update its description
+   */
+  update(
+    functionID: string,
+    body: FunctionUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<FunctionUpdateResponse> {
+    return this._client.patch(path`/compute/functions/${functionID}`, { body, ...options });
   }
 
   /**
@@ -186,6 +212,10 @@ export interface FunctionRetrieveResponse {
   data: ServerlessFunction;
 }
 
+export interface FunctionUpdateResponse {
+  data: ServerlessFunction;
+}
+
 export interface FunctionListResponse {
   data: FunctionListResponse.Data;
 }
@@ -240,6 +270,12 @@ export namespace FunctionCreateParams {
   }
 }
 
+export interface FunctionUpdateParams {
+  description?: string;
+
+  name?: string;
+}
+
 export interface FunctionListParams {
   page?: number;
 
@@ -256,6 +292,8 @@ export interface FunctionSourceParams {
 }
 
 Functions.Validations = Validations;
+Functions.Versions = Versions;
+Functions.Runs = Runs;
 
 export declare namespace Functions {
   export {
@@ -263,9 +301,11 @@ export declare namespace Functions {
     type ServerlessFunction as ServerlessFunction,
     type FunctionCreateResponse as FunctionCreateResponse,
     type FunctionRetrieveResponse as FunctionRetrieveResponse,
+    type FunctionUpdateResponse as FunctionUpdateResponse,
     type FunctionListResponse as FunctionListResponse,
     type FunctionSourceResponse as FunctionSourceResponse,
     type FunctionCreateParams as FunctionCreateParams,
+    type FunctionUpdateParams as FunctionUpdateParams,
     type FunctionListParams as FunctionListParams,
     type FunctionSourceParams as FunctionSourceParams,
   };
@@ -277,5 +317,24 @@ export declare namespace Functions {
     type ValidationRetrieveResponse as ValidationRetrieveResponse,
     type ValidationCreateParams as ValidationCreateParams,
     type ValidationRetrieveParams as ValidationRetrieveParams,
+  };
+
+  export {
+    Versions as Versions,
+    type VersionCreateResponse as VersionCreateResponse,
+    type VersionRetrieveResponse as VersionRetrieveResponse,
+    type VersionListResponse as VersionListResponse,
+    type VersionCreateParams as VersionCreateParams,
+    type VersionRetrieveParams as VersionRetrieveParams,
+    type VersionListParams as VersionListParams,
+    type VersionDeleteParams as VersionDeleteParams,
+  };
+
+  export {
+    Runs as Runs,
+    type RunCreateResponse as RunCreateResponse,
+    type RunListResponse as RunListResponse,
+    type RunCreateParams as RunCreateParams,
+    type RunListParams as RunListParams,
   };
 }
