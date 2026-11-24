@@ -54,6 +54,15 @@ import {
   ProxyUpdateParams,
   ProxyUpdateResponse,
 } from './resources/proxies';
+import {
+  RoutineFileDeleteManyParams,
+  RoutineFileDeleteManyResponse,
+  RoutineFileListFoldersParams,
+  RoutineFileListFoldersResponse,
+  RoutineFileListParams,
+  RoutineFileListResponse,
+  RoutineFiles,
+} from './resources/routine-files';
 import { StreamTokenCreateParams, StreamTokenCreateResponse, StreamTokens } from './resources/stream-tokens';
 import {
   AgentCreateParams,
@@ -63,6 +72,7 @@ import {
   Agents,
 } from './resources/agents/agents';
 import { Assistant } from './resources/assistant/assistant';
+import { Compute } from './resources/compute/compute';
 import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
@@ -88,18 +98,6 @@ import {
   DeviceWaitReadyResponse,
   Devices,
 } from './resources/devices/devices';
-import {
-  FunctionCreateParams,
-  FunctionCreateResponse,
-  FunctionListParams,
-  FunctionListResponse,
-  FunctionRetrieveResponse,
-  FunctionSource,
-  FunctionSourceParams,
-  FunctionSourceResponse,
-  Functions,
-  ServerlessFunction,
-} from './resources/functions/functions';
 import {
   MailboxCapacityResponse,
   MailboxCreateParams,
@@ -894,7 +892,7 @@ export class Mobilerun {
   streamTokens: API.StreamTokens = new API.StreamTokens(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
-  functions: API.Functions = new API.Functions(this);
+  compute: API.Compute = new API.Compute(this);
   connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
@@ -903,6 +901,7 @@ export class Mobilerun {
   workflows: API.Workflows = new API.Workflows(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   mailboxes: API.Mailboxes = new API.Mailboxes(this);
+  routineFiles: API.RoutineFiles = new API.RoutineFiles(this);
   files: API.Files = new API.Files(this);
   agents: API.Agents = new API.Agents(this);
   assistant: API.Assistant = new API.Assistant(this);
@@ -916,12 +915,13 @@ Mobilerun.Devices = Devices;
 Mobilerun.StreamTokens = StreamTokens;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
-Mobilerun.Functions = Functions;
+Mobilerun.Compute = Compute;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
 Mobilerun.Webhooks = Webhooks;
 Mobilerun.Mailboxes = Mailboxes;
+Mobilerun.RoutineFiles = RoutineFiles;
 Mobilerun.Files = Files;
 Mobilerun.Agents = Agents;
 Mobilerun.Assistant = Assistant;
@@ -991,18 +991,7 @@ export declare namespace Mobilerun {
     type ProxyListParams as ProxyListParams,
   };
 
-  export {
-    Functions as Functions,
-    type FunctionSource as FunctionSource,
-    type ServerlessFunction as ServerlessFunction,
-    type FunctionCreateResponse as FunctionCreateResponse,
-    type FunctionRetrieveResponse as FunctionRetrieveResponse,
-    type FunctionListResponse as FunctionListResponse,
-    type FunctionSourceResponse as FunctionSourceResponse,
-    type FunctionCreateParams as FunctionCreateParams,
-    type FunctionListParams as FunctionListParams,
-    type FunctionSourceParams as FunctionSourceParams,
-  };
+  export { Compute as Compute };
 
   export { Connect as Connect };
 
@@ -1054,6 +1043,16 @@ export declare namespace Mobilerun {
     type MailboxListParams as MailboxListParams,
     type MailboxOtpParams as MailboxOtpParams,
     type MailboxRestartParams as MailboxRestartParams,
+  };
+
+  export {
+    RoutineFiles as RoutineFiles,
+    type RoutineFileListResponse as RoutineFileListResponse,
+    type RoutineFileDeleteManyResponse as RoutineFileDeleteManyResponse,
+    type RoutineFileListFoldersResponse as RoutineFileListFoldersResponse,
+    type RoutineFileListParams as RoutineFileListParams,
+    type RoutineFileDeleteManyParams as RoutineFileDeleteManyParams,
+    type RoutineFileListFoldersParams as RoutineFileListFoldersParams,
   };
 
   export {

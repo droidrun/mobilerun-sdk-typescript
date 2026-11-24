@@ -22,6 +22,7 @@ export {
   type AppCreateSignedUploadURLParams,
 } from './apps';
 export { Assistant } from './assistant/assistant';
+export { Compute } from './compute/compute';
 export { Connect } from './connect/connect';
 export {
   Credentials,
@@ -59,18 +60,6 @@ export {
   type FileListParams,
   type FileUploadURLParams,
 } from './files';
-export {
-  Functions,
-  type FunctionSource,
-  type ServerlessFunction,
-  type FunctionCreateResponse,
-  type FunctionRetrieveResponse,
-  type FunctionListResponse,
-  type FunctionSourceResponse,
-  type FunctionCreateParams,
-  type FunctionListParams,
-  type FunctionSourceParams,
-} from './functions/functions';
 export {
   Mailboxes,
   type MailboxCreateResponse,
@@ -121,6 +110,15 @@ export {
   type ProxyUpdateParams,
   type ProxyListParams,
 } from './proxies';
+export {
+  RoutineFiles,
+  type RoutineFileListResponse,
+  type RoutineFileDeleteManyResponse,
+  type RoutineFileListFoldersResponse,
+  type RoutineFileListParams,
+  type RoutineFileDeleteManyParams,
+  type RoutineFileListFoldersParams,
+} from './routine-files';
 export { StreamTokens, type StreamTokenCreateResponse, type StreamTokenCreateParams } from './stream-tokens';
 export {
   Tasks,
