@@ -40,6 +40,7 @@ export {
   type DeviceRetrieveCapabilitiesResponse,
   type DeviceSetNameResponse,
   type DeviceSummaryResponse,
+  type DeviceUpdateIdleTimeoutResponse,
   type DeviceWaitReadyResponse,
   type DeviceCreateParams,
   type DeviceListParams,
@@ -48,6 +49,7 @@ export {
   type DeviceSetNameParams,
   type DeviceSummaryParams,
   type DeviceTerminateParams,
+  type DeviceUpdateIdleTimeoutParams,
 } from './devices';
 export {
   Esim,
