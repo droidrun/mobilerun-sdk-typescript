@@ -20,8 +20,9 @@ export class Credentials extends APIResource {
 
   /**
    * Creates a credential under the given package with a `credentialName` and at
-   * least one field. Each field has a `fieldType` (email, username, password,
-   * api_token, phone_number, two_factor_secret, or backup_codes) and a value.
+   * least one field. Field types must be unique. Each field has a `fieldType`
+   * (email, username, password, api_token, phone_number, two_factor_secret, or
+   * backup_codes) and a value.
    */
   create(
     packageName: string,
@@ -76,9 +77,11 @@ export namespace CredentialCreateResponse {
      */
     userId: string | null;
 
-    link?: Data.Link;
+    label?: string;
 
-    source?: 'mobilerun' | 'onepassword';
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
   }
 
   export namespace Data {
@@ -90,13 +93,17 @@ export namespace CredentialCreateResponse {
         | 'api_token'
         | 'phone_number'
         | 'two_factor_secret'
-        | 'backup_codes';
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
 
       value: string;
     }
 
-    export interface Link {
-      fieldMap: Array<Link.FieldMap>;
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
 
       itemId: string;
 
@@ -109,7 +116,7 @@ export namespace CredentialCreateResponse {
       vaultName: string;
     }
 
-    export namespace Link {
+    export namespace UnionMember0 {
       export interface FieldMap {
         fieldId: string;
 
@@ -120,7 +127,40 @@ export namespace CredentialCreateResponse {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes';
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
       }
     }
   }
@@ -154,9 +194,11 @@ export namespace CredentialDeleteResponse {
      */
     userId: string | null;
 
-    link?: Data.Link;
+    label?: string;
 
-    source?: 'mobilerun' | 'onepassword';
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
   }
 
   export namespace Data {
@@ -168,13 +210,17 @@ export namespace CredentialDeleteResponse {
         | 'api_token'
         | 'phone_number'
         | 'two_factor_secret'
-        | 'backup_codes';
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
 
       value: string;
     }
 
-    export interface Link {
-      fieldMap: Array<Link.FieldMap>;
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
 
       itemId: string;
 
@@ -187,7 +233,7 @@ export namespace CredentialDeleteResponse {
       vaultName: string;
     }
 
-    export namespace Link {
+    export namespace UnionMember0 {
       export interface FieldMap {
         fieldId: string;
 
@@ -198,7 +244,40 @@ export namespace CredentialDeleteResponse {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes';
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
       }
     }
   }
@@ -208,12 +287,24 @@ export interface CredentialCreateParams {
   credentialName: string;
 
   fields: Array<CredentialCreateParams.Field>;
+
+  label?: string;
 }
 
 export namespace CredentialCreateParams {
   export interface Field {
     fieldType:
-      'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
+      | 'email'
+      | 'username'
+      | 'password'
+      | 'api_token'
+      | 'phone_number'
+      | 'two_factor_secret'
+      | 'backup_codes'
+      | 'cc_number'
+      | 'cc_exp'
+      | 'cc_csc'
+      | 'cc_name';
 
     value: string;
   }
