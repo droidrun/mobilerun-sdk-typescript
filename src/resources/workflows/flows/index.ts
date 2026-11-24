@@ -52,6 +52,15 @@ export {
   type FlowVerifyParams,
 } from './flows';
 export {
+  ScheduledRuns,
+  type ScheduledRunCreateResponse,
+  type ScheduledRunListResponse,
+  type ScheduledRunCancelResponse,
+  type ScheduledRunCreateParams,
+  type ScheduledRunListParams,
+  type ScheduledRunCancelParams,
+} from './scheduled-runs';
+export {
   State,
   type StateListResponse,
   type StateDeleteResponse,
