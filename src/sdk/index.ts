@@ -3144,6 +3144,7 @@ export type DeviceInfo =
   | DevicesAPI.DeviceCreateResponse
   | DevicesAPI.DeviceRetrieveResponse
   | DevicesAPI.DeviceWaitReadyResponse
+  | DevicesAPI.DeviceUpdateIdleTimeoutResponse
   | NonNullable<NonNullable<DevicesAPI.DeviceListResponse>['items']>[number];
 
 export class Device {
@@ -4066,6 +4067,42 @@ export class Device {
       boundOptions(options, [{ name: 'deviceId', location: 'body', value: this.id }]),
     );
     return result;
+  }
+
+  /**
+   * Sets the idle timeout to 5–240 minutes, 0 to turn it off, or null to use the platform default. Returns the updated device as a new handle; call refresh() on an existing handle to update it. A custom timeout returns 409 when the device cannot be stopped; other values return 422.
+   *
+   * Sets the device's own idle stop setting and returns the updated device.
+   * `minutes` between 5 and 240 sets a custom timeout; `0` turns the idle timer off
+   * for this device; `null` removes the device's own setting, so the platform
+   * default applies again (a pay-as-you-go device that can be stopped stops after
+   * the default; other devices have no timer). Other values return 422. While a
+   * timer is on, the device is stopped automatically (state `stopped`, `stopReason`
+   * `IDLE_TIMEOUT`) once it has had no client activity for longer than that: API
+   * tool calls, open stream/adb/browser/frida/port connections and a held lease all
+   * count as activity, reading device state does not. Setting a custom timeout
+   * requires a device whose capabilities report stop=true, otherwise 409; `0` and
+   * `null` are always allowed. The response's `idleTimeoutMinutes` is the effective
+   * timeout.
+   */
+  setIdleTimeout(
+    params: DevicesAPI.DeviceUpdateIdleTimeoutParams,
+    options?: RequestOptions,
+  ): APIPromise<Device>;
+  setIdleTimeout(minutes: number | null, options?: RequestOptions): APIPromise<Device>;
+  setIdleTimeout(...__args: unknown[]): APIPromise<Device> {
+    const positional = __args[0] === null || typeof __args[0] !== 'object' || !('minutes' in __args[0]);
+    const params = (
+      positional ?
+        { ...({} as Omit<DevicesAPI.DeviceUpdateIdleTimeoutParams, 'minutes'>), minutes: __args[0] }
+      : __args[0]) as DevicesAPI.DeviceUpdateIdleTimeoutParams;
+    const options = (positional ? __args[1] : __args[1]) as RequestOptions | undefined;
+    const result = this.api.devices.updateIdleTimeout(
+      this.id,
+      { ...params },
+      boundOptions(options, [{ name: 'deviceId', location: 'path', value: this.id }]),
+    );
+    return result._thenUnwrap((info) => new Device(this.api, info['id'], info, false, ''));
   }
 
   /**

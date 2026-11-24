@@ -144,6 +144,7 @@ Types:
 - <code><a href="./src/resources/devices/devices.ts">DeviceRetrieveCapabilitiesResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceSetNameResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceSummaryResponse</a></code>
+- <code><a href="./src/resources/devices/devices.ts">DeviceUpdateIdleTimeoutResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceWaitReadyResponse</a></code>
 
 Methods:
@@ -161,6 +162,7 @@ Methods:
 - <code title="post /devices/{deviceId}/stop">client.devices.<a href="./src/resources/devices/devices.ts">stop</a>(deviceID) -> void</code>
 - <code title="get /devices/summary">client.devices.<a href="./src/resources/devices/devices.ts">summary</a>({ ...params }) -> DeviceSummaryResponse</code>
 - <code title="delete /devices/{deviceId}">client.devices.<a href="./src/resources/devices/devices.ts">terminate</a>(deviceID, { ...params }) -> void</code>
+- <code title="put /devices/{deviceId}/idle-timeout">client.devices.<a href="./src/resources/devices/devices.ts">updateIdleTimeout</a>(deviceID, { ...params }) -> DeviceUpdateIdleTimeoutResponse</code>
 - <code title="get /devices/{deviceId}/wait">client.devices.<a href="./src/resources/devices/devices.ts">waitReady</a>(deviceID) -> DeviceWaitReadyResponse</code>
 
 ## Actions
