@@ -44,6 +44,7 @@ describe('resource apps', () => {
           platform: 'all',
           query: 'query',
           sortBy: 'createdAt',
+          source: 'user',
           status: 'all',
         },
         { path: '/_stainless_unknown_path' },
