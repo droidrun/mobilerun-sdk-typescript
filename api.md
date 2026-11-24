@@ -144,6 +144,7 @@ Types:
 - <code><a href="./src/resources/devices/devices.ts">DeviceRetrieveCapabilitiesResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceSetNameResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceSummaryResponse</a></code>
+- <code><a href="./src/resources/devices/devices.ts">DeviceUpdateIdleTimeoutResponse</a></code>
 - <code><a href="./src/resources/devices/devices.ts">DeviceWaitReadyResponse</a></code>
 
 Methods:
@@ -161,6 +162,7 @@ Methods:
 - <code title="post /devices/{deviceId}/stop">client.devices.<a href="./src/resources/devices/devices.ts">stop</a>(deviceID) -> void</code>
 - <code title="get /devices/summary">client.devices.<a href="./src/resources/devices/devices.ts">summary</a>({ ...params }) -> DeviceSummaryResponse</code>
 - <code title="delete /devices/{deviceId}">client.devices.<a href="./src/resources/devices/devices.ts">terminate</a>(deviceID, { ...params }) -> void</code>
+- <code title="put /devices/{deviceId}/idle-timeout">client.devices.<a href="./src/resources/devices/devices.ts">updateIdleTimeout</a>(deviceID, { ...params }) -> DeviceUpdateIdleTimeoutResponse</code>
 - <code title="get /devices/{deviceId}/wait">client.devices.<a href="./src/resources/devices/devices.ts">waitReady</a>(deviceID) -> DeviceWaitReadyResponse</code>
 
 ## Actions
@@ -479,37 +481,121 @@ Methods:
 - <code title="get /proxies">client.proxies.<a href="./src/resources/proxies.ts">list</a>({ ...params }) -> ProxyListResponse</code>
 - <code title="delete /proxies/{proxyId}">client.proxies.<a href="./src/resources/proxies.ts">delete</a>(proxyID) -> ProxyDeleteResponse</code>
 
-# Functions
+# Compute
+
+## Functions
 
 Types:
 
-- <code><a href="./src/resources/functions/functions.ts">FunctionSource</a></code>
-- <code><a href="./src/resources/functions/functions.ts">ServerlessFunction</a></code>
-- <code><a href="./src/resources/functions/functions.ts">FunctionCreateResponse</a></code>
-- <code><a href="./src/resources/functions/functions.ts">FunctionRetrieveResponse</a></code>
-- <code><a href="./src/resources/functions/functions.ts">FunctionListResponse</a></code>
-- <code><a href="./src/resources/functions/functions.ts">FunctionSourceResponse</a></code>
+- <code><a href="./src/resources/compute/functions/functions.ts">FunctionSource</a></code>
+- <code><a href="./src/resources/compute/functions/functions.ts">ServerlessFunction</a></code>
+- <code><a href="./src/resources/compute/functions/functions.ts">FunctionCreateResponse</a></code>
+- <code><a href="./src/resources/compute/functions/functions.ts">FunctionRetrieveResponse</a></code>
+- <code><a href="./src/resources/compute/functions/functions.ts">FunctionUpdateResponse</a></code>
+- <code><a href="./src/resources/compute/functions/functions.ts">FunctionListResponse</a></code>
+- <code><a href="./src/resources/compute/functions/functions.ts">FunctionSourceResponse</a></code>
 
 Methods:
 
-- <code title="post /compute/functions">client.functions.<a href="./src/resources/functions/functions.ts">create</a>({ ...params }) -> FunctionCreateResponse</code>
-- <code title="get /compute/functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">retrieve</a>(functionID) -> FunctionRetrieveResponse</code>
-- <code title="get /compute/functions">client.functions.<a href="./src/resources/functions/functions.ts">list</a>({ ...params }) -> FunctionListResponse</code>
-- <code title="delete /compute/functions/{functionId}">client.functions.<a href="./src/resources/functions/functions.ts">delete</a>(functionID) -> void</code>
-- <code title="get /compute/functions/{functionId}/source">client.functions.<a href="./src/resources/functions/functions.ts">source</a>(functionID, { ...params }) -> FunctionSourceResponse</code>
+- <code title="post /compute/functions">client.compute.functions.<a href="./src/resources/compute/functions/functions.ts">create</a>({ ...params }) -> FunctionCreateResponse</code>
+- <code title="get /compute/functions/{functionId}">client.compute.functions.<a href="./src/resources/compute/functions/functions.ts">retrieve</a>(functionID) -> FunctionRetrieveResponse</code>
+- <code title="patch /compute/functions/{functionId}">client.compute.functions.<a href="./src/resources/compute/functions/functions.ts">update</a>(functionID, { ...params }) -> FunctionUpdateResponse</code>
+- <code title="get /compute/functions">client.compute.functions.<a href="./src/resources/compute/functions/functions.ts">list</a>({ ...params }) -> FunctionListResponse</code>
+- <code title="delete /compute/functions/{functionId}">client.compute.functions.<a href="./src/resources/compute/functions/functions.ts">delete</a>(functionID) -> void</code>
+- <code title="get /compute/functions/{functionId}/source">client.compute.functions.<a href="./src/resources/compute/functions/functions.ts">source</a>(functionID, { ...params }) -> FunctionSourceResponse</code>
 
-## Validations
+### Validations
 
 Types:
 
-- <code><a href="./src/resources/functions/validations.ts">FunctionValidation</a></code>
-- <code><a href="./src/resources/functions/validations.ts">ValidationCreateResponse</a></code>
-- <code><a href="./src/resources/functions/validations.ts">ValidationRetrieveResponse</a></code>
+- <code><a href="./src/resources/compute/functions/validations.ts">FunctionValidation</a></code>
+- <code><a href="./src/resources/compute/functions/validations.ts">ValidationCreateResponse</a></code>
+- <code><a href="./src/resources/compute/functions/validations.ts">ValidationRetrieveResponse</a></code>
 
 Methods:
 
-- <code title="post /compute/functions/validations">client.functions.validations.<a href="./src/resources/functions/validations.ts">create</a>({ ...params }) -> ValidationCreateResponse</code>
-- <code title="get /compute/functions/validations/{validationId}">client.functions.validations.<a href="./src/resources/functions/validations.ts">retrieve</a>(validationID, { ...params }) -> ValidationRetrieveResponse</code>
+- <code title="post /compute/functions/validations">client.compute.functions.validations.<a href="./src/resources/compute/functions/validations.ts">create</a>({ ...params }) -> ValidationCreateResponse</code>
+- <code title="get /compute/functions/validations/{validationId}">client.compute.functions.validations.<a href="./src/resources/compute/functions/validations.ts">retrieve</a>(validationID, { ...params }) -> ValidationRetrieveResponse</code>
+
+### Versions
+
+Types:
+
+- <code><a href="./src/resources/compute/functions/versions.ts">VersionCreateResponse</a></code>
+- <code><a href="./src/resources/compute/functions/versions.ts">VersionRetrieveResponse</a></code>
+- <code><a href="./src/resources/compute/functions/versions.ts">VersionListResponse</a></code>
+
+Methods:
+
+- <code title="post /compute/functions/{functionId}/versions">client.compute.functions.versions.<a href="./src/resources/compute/functions/versions.ts">create</a>(functionID, { ...params }) -> VersionCreateResponse</code>
+- <code title="get /compute/functions/{functionId}/versions/{version}">client.compute.functions.versions.<a href="./src/resources/compute/functions/versions.ts">retrieve</a>(version, { ...params }) -> VersionRetrieveResponse</code>
+- <code title="get /compute/functions/{functionId}/versions">client.compute.functions.versions.<a href="./src/resources/compute/functions/versions.ts">list</a>(functionID, { ...params }) -> VersionListResponse</code>
+- <code title="delete /compute/functions/{functionId}/versions/{version}">client.compute.functions.versions.<a href="./src/resources/compute/functions/versions.ts">delete</a>(version, { ...params }) -> void</code>
+
+### Runs
+
+Types:
+
+- <code><a href="./src/resources/compute/functions/runs.ts">RunCreateResponse</a></code>
+- <code><a href="./src/resources/compute/functions/runs.ts">RunListResponse</a></code>
+
+Methods:
+
+- <code title="post /compute/functions/{functionId}/runs">client.compute.functions.runs.<a href="./src/resources/compute/functions/runs.ts">create</a>(functionID, { ...params }) -> RunCreateResponse</code>
+- <code title="get /compute/functions/{functionId}/runs">client.compute.functions.runs.<a href="./src/resources/compute/functions/runs.ts">list</a>(functionID, { ...params }) -> RunListResponse</code>
+
+## Runs
+
+Types:
+
+- <code><a href="./src/resources/compute/runs.ts">RunRetrieveResponse</a></code>
+- <code><a href="./src/resources/compute/runs.ts">RunListResponse</a></code>
+- <code><a href="./src/resources/compute/runs.ts">RunCancelResponse</a></code>
+- <code><a href="./src/resources/compute/runs.ts">RunLogsResponse</a></code>
+
+Methods:
+
+- <code title="get /compute/runs/{runId}">client.compute.runs.<a href="./src/resources/compute/runs.ts">retrieve</a>(runID, { ...params }) -> RunRetrieveResponse</code>
+- <code title="get /compute/runs">client.compute.runs.<a href="./src/resources/compute/runs.ts">list</a>({ ...params }) -> RunListResponse</code>
+- <code title="post /compute/runs/{runId}/cancel">client.compute.runs.<a href="./src/resources/compute/runs.ts">cancel</a>(runID) -> RunCancelResponse</code>
+- <code title="get /compute/runs/{runId}/logs">client.compute.runs.<a href="./src/resources/compute/runs.ts">logs</a>(runID) -> RunLogsResponse</code>
+
+## Sandboxes
+
+Types:
+
+- <code><a href="./src/resources/compute/sandboxes/sandboxes.ts">SandboxCreateResponse</a></code>
+- <code><a href="./src/resources/compute/sandboxes/sandboxes.ts">SandboxRetrieveResponse</a></code>
+- <code><a href="./src/resources/compute/sandboxes/sandboxes.ts">SandboxListResponse</a></code>
+- <code><a href="./src/resources/compute/sandboxes/sandboxes.ts">SandboxDeleteResponse</a></code>
+- <code><a href="./src/resources/compute/sandboxes/sandboxes.ts">SandboxExecResponse</a></code>
+
+Methods:
+
+- <code title="post /compute/sandboxes">client.compute.sandboxes.<a href="./src/resources/compute/sandboxes/sandboxes.ts">create</a>({ ...params }) -> SandboxCreateResponse</code>
+- <code title="get /compute/sandboxes/{sandboxId}">client.compute.sandboxes.<a href="./src/resources/compute/sandboxes/sandboxes.ts">retrieve</a>(sandboxID) -> SandboxRetrieveResponse</code>
+- <code title="get /compute/sandboxes">client.compute.sandboxes.<a href="./src/resources/compute/sandboxes/sandboxes.ts">list</a>({ ...params }) -> SandboxListResponse</code>
+- <code title="delete /compute/sandboxes/{sandboxId}">client.compute.sandboxes.<a href="./src/resources/compute/sandboxes/sandboxes.ts">delete</a>(sandboxID) -> SandboxDeleteResponse</code>
+- <code title="post /compute/sandboxes/{sandboxId}/exec">client.compute.sandboxes.<a href="./src/resources/compute/sandboxes/sandboxes.ts">exec</a>(sandboxID, { ...params }) -> SandboxExecResponse</code>
+
+### Commands
+
+Types:
+
+- <code><a href="./src/resources/compute/sandboxes/commands.ts">CommandRetrieveResponse</a></code>
+- <code><a href="./src/resources/compute/sandboxes/commands.ts">CommandListResponse</a></code>
+
+Methods:
+
+- <code title="get /compute/sandboxes/{sandboxId}/commands/{commandId}">client.compute.sandboxes.commands.<a href="./src/resources/compute/sandboxes/commands.ts">retrieve</a>(commandID, { ...params }) -> CommandRetrieveResponse</code>
+- <code title="get /compute/sandboxes/{sandboxId}/commands">client.compute.sandboxes.commands.<a href="./src/resources/compute/sandboxes/commands.ts">list</a>(sandboxID) -> CommandListResponse</code>
+
+### Files
+
+Methods:
+
+- <code title="get /compute/sandboxes/{sandboxId}/files">client.compute.sandboxes.files.<a href="./src/resources/compute/sandboxes/files.ts">retrieve</a>(sandboxID, { ...params }) -> Response</code>
+- <code title="put /compute/sandboxes/{sandboxId}/files">client.compute.sandboxes.files.<a href="./src/resources/compute/sandboxes/files.ts">upload</a>(sandboxID, body, { ...params }) -> void</code>
 
 # Connect
 
@@ -732,6 +818,20 @@ Methods:
 - <code title="post /flows/document/validate">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">validateDocument</a>({ ...params }) -> FlowValidateDocumentResponse</code>
 - <code title="post /flows/{flowId}/verify">client.workflows.flows.<a href="./src/resources/workflows/flows/flows.ts">verify</a>(flowID, { ...params }) -> FlowVerifyResponse</code>
 
+### ScheduledRuns
+
+Types:
+
+- <code><a href="./src/resources/workflows/flows/scheduled-runs.ts">ScheduledRunCreateResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/scheduled-runs.ts">ScheduledRunListResponse</a></code>
+- <code><a href="./src/resources/workflows/flows/scheduled-runs.ts">ScheduledRunCancelResponse</a></code>
+
+Methods:
+
+- <code title="post /flows/{flowId}/scheduled-runs">client.workflows.flows.scheduledRuns.<a href="./src/resources/workflows/flows/scheduled-runs.ts">create</a>(flowID, { ...params }) -> ScheduledRunCreateResponse</code>
+- <code title="get /flows/{flowId}/scheduled-runs">client.workflows.flows.scheduledRuns.<a href="./src/resources/workflows/flows/scheduled-runs.ts">list</a>(flowID, { ...params }) -> ScheduledRunListResponse</code>
+- <code title="post /flows/{flowId}/scheduled-runs/{scheduledRunId}/cancel">client.workflows.flows.scheduledRuns.<a href="./src/resources/workflows/flows/scheduled-runs.ts">cancel</a>(scheduledRunID, { ...params }) -> ScheduledRunCancelResponse</code>
+
 ### Actions
 
 Types:
@@ -906,6 +1006,22 @@ Methods:
 
 - <code title="get /mailboxes/{mailboxId}/messages/{messageId}">client.mailboxes.messages.<a href="./src/resources/mailboxes/messages.ts">retrieve</a>(messageID, { ...params }) -> MessageRetrieveResponse</code>
 - <code title="get /mailboxes/{mailboxId}/messages">client.mailboxes.messages.<a href="./src/resources/mailboxes/messages.ts">list</a>(mailboxID, { ...params }) -> MessageListResponse</code>
+
+# RoutineFiles
+
+Types:
+
+- <code><a href="./src/resources/routine-files.ts">RoutineFileListResponse</a></code>
+- <code><a href="./src/resources/routine-files.ts">RoutineFileDeleteManyResponse</a></code>
+- <code><a href="./src/resources/routine-files.ts">RoutineFileListFoldersResponse</a></code>
+
+Methods:
+
+- <code title="get /routine-files">client.routineFiles.<a href="./src/resources/routine-files.ts">list</a>({ ...params }) -> RoutineFileListResponse</code>
+- <code title="delete /routine-files/{fileId}">client.routineFiles.<a href="./src/resources/routine-files.ts">delete</a>(fileID) -> void</code>
+- <code title="delete /routine-files">client.routineFiles.<a href="./src/resources/routine-files.ts">deleteMany</a>({ ...params }) -> RoutineFileDeleteManyResponse</code>
+- <code title="get /routine-files/{fileId}/download">client.routineFiles.<a href="./src/resources/routine-files.ts">download</a>(fileID) -> void</code>
+- <code title="get /routine-files/folders">client.routineFiles.<a href="./src/resources/routine-files.ts">listFolders</a>({ ...params }) -> RoutineFileListFoldersResponse</code>
 
 # Files
 

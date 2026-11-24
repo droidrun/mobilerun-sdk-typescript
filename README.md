@@ -116,39 +116,47 @@ The object API is additive. Existing client APIs are unchanged and the complete 
 
 ### Objects
 
-| Object             | How to get it                    | Main methods                                                                               |
-| ------------------ | -------------------------------- | ------------------------------------------------------------------------------------------ |
-| Device             | `sdk.devices`                    | `get, list, create, run, screenshot, recordings`                                           |
-| Task               | `sdk.tasks / device.run()`       | `run, get, list, wait, waitOutput`                                                         |
-| App                | `sdk.apps`                       | `get, list, upload, delete, listVersions`                                                  |
-| ProxyConfiguration | `sdk.proxies`                    | `get, list, create, update, delete`                                                        |
-| Trigger            | `sdk.workflows.triggers`         | `get, list, create, update, delete, fire`                                                  |
-| WorkflowAction     | `sdk.workflows.actions`          | `get, list, create, update, delete`                                                        |
-| CatalogEntry       | `sdk.workflows.actionCatalog`    | `get, list`                                                                                |
-| Flow               | `sdk.workflows.flows`            | `get, list, create, clone, run, verify`                                                    |
-| Execution          | `sdk.workflows.executions`       | `get, list, wait`                                                                          |
-| Agent              | `sdk.agents`                     | `create, list, profile.update, files.list, conversations, routines, requests.listForAgent` |
-| AgentRequest       | `sdk.agents.requests`            | `get, list, retrieveBySession`                                                             |
-| AgentFile          | `sdk.files / agent.files.list()` | `upload, list, update, delete, confirm, cancelPending, download`                           |
-| ConnectUser        | `sdk.connect.users`              | `get, list, create, update, delete, listConnections`                                       |
-| ConnectProxy       | `sdk.connect.proxies`            | `get, list, buy, update, ping, ensureHealthy, checkout, cancel`                            |
-| CredentialPackage  | `sdk.credentials.packages`       | `get, list, create, credentials`                                                           |
-| Credential         | `package.credentials`            | `create, list, delete, fields`                                                             |
-| NumberMessage      | `sdk.messages`                   | `get, list`                                                                                |
-| Mailbox            | `sdk.mailboxes`                  | `get, list, create, waitForOtp, messages`                                                  |
-| MailboxMessage     | `mailbox.messages`               | `get, list`                                                                                |
-| PhoneNumber        | `sdk.numbers`                    | `get, list, create, send, messages.list, waitUntilActive`                                  |
-| Webhook            | `sdk.webhooks`                   | `get, list, create, verify, update, delete, test, rotateSecret`                            |
-| TrafficSession     | `device.trafficSessions`         | `create, get, list, delete`                                                                |
-| MailboxConnection  | `sdk.mailboxes.connections`      | `create, get`                                                                              |
-| SavedScreenshot    | `device.screenshots`             | `list, image, delete`                                                                      |
-| WebhookDelivery    | `webhook.deliveries`             | `get, list`                                                                                |
-| Recording          | `device.recordings`              | `get, list, start, stop, wait, delete, trajectory, video, screenshots`                     |
+| Object             | How to get it                               | Main methods                                                                               |
+| ------------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Device             | `sdk.devices`                               | `get, list, create, run, screenshot, recordings, createStreamToken`                        |
+| ComputeFunction    | `sdk.compute.functions`                     | `get, list, create, update, delete, source, versions, runs`                                |
+| Run                | `sdk.compute.runs / function.runs.create()` | `get, list, refresh, wait, waitLogs, cancel, logs`                                         |
+| Sandbox            | `sdk.compute.sandboxes`                     | `get, list, create, delete, exec, commands, files.download, files.upload`                  |
+| ScheduledRun       | `flow.scheduledRuns`                        | `create, list, cancel`                                                                     |
+| RoutineFile        | `sdk.routineFiles`                          | `list, download, delete, listFolders, deleteMany`                                          |
+| Task               | `sdk.tasks / device.run()`                  | `run, get, list, wait, waitOutput`                                                         |
+| App                | `sdk.apps`                                  | `get, list, upload, delete, listVersions`                                                  |
+| ProxyConfiguration | `sdk.proxies`                               | `get, list, create, update, delete`                                                        |
+| Trigger            | `sdk.workflows.triggers`                    | `get, list, create, update, delete, fire`                                                  |
+| WorkflowAction     | `sdk.workflows.actions`                     | `get, list, create, update, delete`                                                        |
+| CatalogEntry       | `sdk.workflows.actionCatalog`               | `get, list`                                                                                |
+| Flow               | `sdk.workflows.flows`                       | `get, list, create, clone, run, verify`                                                    |
+| Execution          | `sdk.workflows.executions`                  | `get, list, wait`                                                                          |
+| Agent              | `sdk.agents`                                | `create, list, profile.update, files.list, conversations, routines, requests.listForAgent` |
+| AgentRequest       | `sdk.agents.requests`                       | `get, list, retrieveBySession`                                                             |
+| AgentFile          | `sdk.files / agent.files.list()`            | `upload, list, update, delete, confirm, cancelPending, download`                           |
+| ConnectUser        | `sdk.connect.users`                         | `get, list, create, update, delete, listConnections`                                       |
+| ConnectProxy       | `sdk.connect.proxies`                       | `get, list, buy, update, ping, ensureHealthy, checkout, cancel`                            |
+| CredentialPackage  | `sdk.credentials.packages`                  | `get, list, create, credentials`                                                           |
+| Credential         | `package.credentials`                       | `create, list, delete, fields`                                                             |
+| NumberMessage      | `sdk.messages`                              | `get, list`                                                                                |
+| Mailbox            | `sdk.mailboxes`                             | `get, list, create, waitForOtp, messages`                                                  |
+| MailboxMessage     | `mailbox.messages`                          | `get, list`                                                                                |
+| PhoneNumber        | `sdk.numbers`                               | `get, list, create, send, messages.list, waitUntilActive`                                  |
+| Webhook            | `sdk.webhooks`                              | `get, list, create, verify, update, delete, test, rotateSecret`                            |
+| TrafficSession     | `device.trafficSessions`                    | `create, get, list, delete`                                                                |
+| MailboxConnection  | `sdk.mailboxes.connections`                 | `create, get`                                                                              |
+| SavedScreenshot    | `device.screenshots`                        | `list, image, delete`                                                                      |
+| WebhookDelivery    | `webhook.deliveries`                        | `get, list`                                                                                |
+| Recording          | `device.recordings`                         | `get, list, start, stop, wait, delete, trajectory, video, screenshots`                     |
 
 Every manager has `fromId(id)` / `from_id(id)` for an unfetched handle. Child managers carry their parent context. Agent and AgentFile have no get or refresh: their fields carry only the last create/list snapshot; fromId/from_id handles have no data. Agent profile.update returns a fresh Agent and leaves the original snapshot unchanged. Package get retains the full credentials-array response and takes its canonical name from the first row; an empty response keeps the requested name. Credential list maps that same package route to child handles. Recording start is its only factory and owns stop on scope exit; handles from get/list/fromId never stop automatically. Recording video/trajectory and AgentFile download return bytes. SavedScreenshot.image returns bytes; Screenshot remains the capture result returned by device.screenshot().
 
+Use `device.createStreamToken()` to bind the device ID; the top-level stream token create/delete API remains available. ScheduledRun and RoutineFile have no get or refresh because the API exposes no retrieve operation. Function versions use integer version numbers and return API records. After `wait()` returns, run logs may be `pending` for a few seconds; call `waitLogs()` before `logs()`, which returns a short-lived log download link. Calling `waitLogs()` while the run is still running fails immediately because its logs read `none` until the run ends. A cancelled run ends with status `failed` and `errorCode` `cancelled`; `wait()` then raises `WaitFailureError`, whose `response` holds the run record. Sandbox `delete()` and scope cleanup stop the sandbox; a 202 response means shutdown is still in progress; once stopped, the sandbox stays listed with status `stopped`. RoutineFile `listFolders` and `deleteMany` are manager methods; download and delete are file methods.
+
 Object purchase methods keep the API's own operation name:
 
+- Compute function runs and sandboxes may incur compute usage charges.
 - Device.create uses device minutes until the device is stopped or terminated.
 - ConnectProxy.buy and ConnectProxy.checkout can incur upstream proxy charges.
 - PhoneNumber.create can incur upstream number rental charges.

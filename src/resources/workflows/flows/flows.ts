@@ -13,6 +13,16 @@ import {
   ActionReplaceResponse,
   Actions,
 } from './actions';
+import * as ScheduledRunsAPI from './scheduled-runs';
+import {
+  ScheduledRunCancelParams,
+  ScheduledRunCancelResponse,
+  ScheduledRunCreateParams,
+  ScheduledRunCreateResponse,
+  ScheduledRunListParams,
+  ScheduledRunListResponse,
+  ScheduledRuns,
+} from './scheduled-runs';
 import * as StateAPI from './state';
 import {
   State,
@@ -27,6 +37,7 @@ import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
 export class Flows extends APIResource {
+  scheduledRuns: ScheduledRunsAPI.ScheduledRuns = new ScheduledRunsAPI.ScheduledRuns(this._client);
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
   state: StateAPI.State = new StateAPI.State(this._client);
 
@@ -3085,6 +3096,7 @@ export interface FlowVerifyParams {
   payload?: { [key: string]: unknown };
 }
 
+Flows.ScheduledRuns = ScheduledRuns;
 Flows.Actions = Actions;
 Flows.State = State;
 
@@ -3128,6 +3140,16 @@ export declare namespace Flows {
     type FlowValidateParams as FlowValidateParams,
     type FlowValidateDocumentParams as FlowValidateDocumentParams,
     type FlowVerifyParams as FlowVerifyParams,
+  };
+
+  export {
+    ScheduledRuns as ScheduledRuns,
+    type ScheduledRunCreateResponse as ScheduledRunCreateResponse,
+    type ScheduledRunListResponse as ScheduledRunListResponse,
+    type ScheduledRunCancelResponse as ScheduledRunCancelResponse,
+    type ScheduledRunCreateParams as ScheduledRunCreateParams,
+    type ScheduledRunListParams as ScheduledRunListParams,
+    type ScheduledRunCancelParams as ScheduledRunCancelParams,
   };
 
   export {

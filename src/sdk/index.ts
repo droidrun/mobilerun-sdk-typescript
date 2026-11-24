@@ -3,13 +3,16 @@
 import * as AppsAPI from '../resources/apps';
 import * as FilesAPI from '../resources/files';
 import * as ProxiesAPI from '../resources/proxies';
+import * as RoutineFilesAPI from '../resources/routine-files';
 import * as Shared from '../resources/shared';
+import * as StreamTokensAPI from '../resources/stream-tokens';
 import * as AgentsAPI from '../resources/agents/agents';
 import * as ConversationsAPI from '../resources/agents/conversations';
 import * as AgentsFilesAPI from '../resources/agents/files';
 import * as ProfileAPI from '../resources/agents/profile';
 import * as RequestsAPI from '../resources/agents/requests';
 import * as RoutinesAPI from '../resources/agents/routines';
+import * as RunsAPI from '../resources/compute/runs';
 import * as ConnectProxiesAPI from '../resources/connect/proxies';
 import * as UsersAPI from '../resources/connect/users';
 import * as ActionsAPI from '../resources/devices/actions';
@@ -49,6 +52,13 @@ import * as IntegrationsAPI from '../resources/webhooks/integrations';
 import * as WebhooksAPI from '../resources/webhooks/webhooks';
 import * as ActionCatalogAPI from '../resources/workflows/action-catalog';
 import * as TriggersAPI from '../resources/workflows/triggers';
+import * as FunctionsAPI from '../resources/compute/functions/functions';
+import * as FunctionsRunsAPI from '../resources/compute/functions/runs';
+import * as ValidationsAPI from '../resources/compute/functions/validations';
+import * as VersionsAPI from '../resources/compute/functions/versions';
+import * as CommandsAPI from '../resources/compute/sandboxes/commands';
+import * as SandboxesFilesAPI from '../resources/compute/sandboxes/files';
+import * as SandboxesAPI from '../resources/compute/sandboxes/sandboxes';
 import * as LinksAPI from '../resources/credentials/packages/links';
 import * as CredentialsPackagesAPI from '../resources/credentials/packages/packages';
 import * as ApnAPI from '../resources/devices/esim/apn';
@@ -58,6 +68,7 @@ import * as ServicesAPI from '../resources/workflows/actions/services';
 import * as ExecutionsAPI from '../resources/workflows/executions/executions';
 import * as FlowsActionsAPI from '../resources/workflows/flows/actions';
 import * as FlowsAPI from '../resources/workflows/flows/flows';
+import * as ScheduledRunsAPI from '../resources/workflows/flows/scheduled-runs';
 import * as FlowsStateAPI from '../resources/workflows/flows/state';
 import * as CredentialsAPI from '../resources/credentials/packages/credentials/credentials';
 import * as FieldsAPI from '../resources/credentials/packages/credentials/fields';
@@ -157,7 +168,11 @@ export class MobilerunSDK {
   readonly streamTokens: Raw['streamTokens'];
   readonly models: Raw['models'];
   readonly proxies: ProxyConfigurationManager;
-  readonly functions: Raw['functions'];
+  readonly compute: Without<Raw['compute'], 'functions' | 'runs' | 'sandboxes'> & {
+    functions: ComputeFunctionManager;
+    runs: RunManager;
+    sandboxes: SandboxManager;
+  };
   readonly connect: Without<Raw['connect'], 'proxies' | 'users'> & {
     proxies: ConnectProxyManager;
     users: ConnectUserManager;
@@ -175,6 +190,7 @@ export class MobilerunSDK {
   };
   readonly webhooks: WebhookManager;
   readonly mailboxes: MailboxManager;
+  readonly routineFiles: RoutineFileManager;
   readonly files: AgentFileManager;
   readonly agents: AgentManager;
   readonly assistant: Raw['assistant'];
@@ -218,17 +234,15 @@ export class MobilerunSDK {
     this.streamTokens = withResources(this.api.streamTokens, {}, 'StreamTokens') as Raw['streamTokens'];
     this.models = withResources(this.api.models, {}, 'Models') as Raw['models'];
     this.proxies = new ProxyConfigurationManager(this.api);
-    this.functions = withResources(
-      this.api.functions,
+    this.compute = withResources(
+      this.api.compute,
       {
-        validations: withResources(
-          this.api.functions.validations,
-          {},
-          'Validations',
-        ) as Raw['functions']['validations'],
+        functions: new ComputeFunctionManager(this.api),
+        runs: new RunManager(this.api),
+        sandboxes: new SandboxManager(this.api),
       },
-      'Functions',
-    ) as Raw['functions'];
+      'Compute',
+    );
     this.connect = withResources(
       this.api.connect,
       {
@@ -258,6 +272,7 @@ export class MobilerunSDK {
     );
     this.webhooks = new WebhookManager(this.api);
     this.mailboxes = new MailboxManager(this.api);
+    this.routineFiles = new RoutineFileManager(this.api);
     this.files = new AgentFileManager(this.api);
     this.agents = new AgentManager(this.api);
     this.assistant = withResources(
@@ -957,6 +972,217 @@ export class ProxyConfigurationManager {
   }
 }
 
+export type ComputeFunctionListPage = PagedObjectPage<ComputeFunction, FunctionsAPI.FunctionListResponse>;
+export class ComputeFunctionManager {
+  readonly validations;
+
+  constructor(readonly api: Raw) {
+    configureObject(this);
+    this.validations = {
+      /**
+       * Validate Python function source without uploading it
+       */
+      create: (
+        params: ValidationsAPI.ValidationCreateParams,
+        options?: RequestOptions,
+      ): APIPromise<ValidationsAPI.ValidationCreateResponse> => {
+        const result = this.api.compute.functions.validations.create({ ...params }, options);
+        return result;
+      },
+      /**
+       * Retrieve a function validation owned by this organisation
+       */
+      retrieve: (
+        validationID: string,
+        params?: ValidationsAPI.ValidationRetrieveParams,
+        options?: RequestOptions,
+      ): APIPromise<ValidationsAPI.ValidationRetrieveResponse> => {
+        const result = this.api.compute.functions.validations.retrieve(validationID, { ...params }, options);
+        return result;
+      },
+    };
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot('ComputeFunctionManager');
+  }
+
+  fromId(id: string): ComputeFunction {
+    return new ComputeFunction(this.api, id);
+  }
+
+  async get(id: string, options?: RequestOptions): Promise<ComputeFunction> {
+    const info = await this.api.compute.functions.retrieve(
+      id,
+      boundOptions(options, [{ name: 'functionId', location: 'path', value: id }]),
+    );
+    return new ComputeFunction(this.api, id, info, false, 'data');
+  }
+
+  /**
+   * Create a function with its first immutable version
+   */
+  async create(
+    params: FunctionsAPI.FunctionCreateParams,
+    options?: RequestOptions,
+  ): Promise<ComputeFunction> {
+    const requestOptions = createRequestOptions(options);
+    const info = await this.api.compute.functions.create({ ...params }, requestOptions);
+    const object = new ComputeFunction(this.api, info['data']['id'], info, true, 'data');
+    return object;
+  }
+
+  list(
+    params?: FunctionsAPI.FunctionListParams,
+    options?: RequestOptions,
+  ): ObjectPager<ComputeFunction, FunctionsAPI.FunctionListResponse> {
+    const load = async (
+      page: number,
+    ): Promise<PagedObjectPage<ComputeFunction, FunctionsAPI.FunctionListResponse>> => {
+      const pageOptions = pageRequestOptions(options, 'page', page, {
+        page: params?.['page'],
+        pageSize: params?.['pageSize'],
+        search: params?.['search'],
+      });
+      const response = await this.api.compute.functions.list({ ...params }, pageOptions);
+      return new PagedObjectPage(
+        (response['data']['items'] ?? []).map(
+          (info) => new ComputeFunction(this.api, info['id'], info, false, ''),
+        ),
+        response,
+        {
+          next: () =>
+            nextObjectPage(
+              response['data']['pagination']['page'],
+              response['data']['pagination']['hasNext'],
+              response['data']['pagination']['pages'],
+              page,
+            ),
+          load,
+        },
+      );
+    };
+    return new ObjectPager(() => load(params?.['page'] ?? 1));
+  }
+}
+
+export type RunListPage = PagedObjectPage<Run, RunsAPI.RunListResponse>;
+export class RunManager {
+  constructor(readonly api: Raw) {
+    configureObject(this);
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot('RunManager');
+  }
+
+  fromId(id: string): Run {
+    return new Run(this.api, id);
+  }
+
+  async get(id: string, params?: RunsAPI.RunRetrieveParams, options?: RequestOptions): Promise<Run> {
+    const info = await this.api.compute.runs.retrieve(
+      id,
+      { ...params },
+      boundOptions(options, [{ name: 'runId', location: 'path', value: id }]),
+    );
+    return new Run(this.api, id, info, false, 'data');
+  }
+
+  list(params?: RunsAPI.RunListParams, options?: RequestOptions): ObjectPager<Run, RunsAPI.RunListResponse> {
+    const load = async (page: number): Promise<PagedObjectPage<Run, RunsAPI.RunListResponse>> => {
+      const pageOptions = pageRequestOptions(options, 'page', page, {
+        functionId: params?.['functionId'],
+        page: params?.['page'],
+        pageSize: params?.['pageSize'],
+        status: params?.['status'],
+      });
+      const response = await this.api.compute.runs.list({ ...params }, pageOptions);
+      return new PagedObjectPage(
+        (response['data']['items'] ?? []).map((info) => new Run(this.api, info['id'], info, false, '')),
+        response,
+        {
+          next: () =>
+            nextObjectPage(
+              response['data']['pagination']['page'],
+              response['data']['pagination']['hasNext'],
+              response['data']['pagination']['pages'],
+              page,
+            ),
+          load,
+        },
+      );
+    };
+    return new ObjectPager(() => load(params?.['page'] ?? 1));
+  }
+}
+
+export type SandboxListPage = PagedObjectPage<Sandbox, SandboxesAPI.SandboxListResponse>;
+export class SandboxManager {
+  constructor(readonly api: Raw) {
+    configureObject(this);
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot('SandboxManager');
+  }
+
+  fromId(id: string): Sandbox {
+    return new Sandbox(this.api, id);
+  }
+
+  async get(id: string, options?: RequestOptions): Promise<Sandbox> {
+    const info = await this.api.compute.sandboxes.retrieve(
+      id,
+      boundOptions(options, [{ name: 'sandboxId', location: 'path', value: id }]),
+    );
+    return new Sandbox(this.api, id, info, false, 'data');
+  }
+
+  /**
+   * Starts a compute sandbox; compute usage may incur charges until it stops.
+   *
+   * Create a sandbox
+   */
+  async create(params?: SandboxesAPI.SandboxCreateParams, options?: RequestOptions): Promise<Sandbox> {
+    const requestOptions = createRequestOptions(options);
+    const info = await this.api.compute.sandboxes.create({ ...params }, requestOptions);
+    const object = new Sandbox(this.api, info['data']['id'], info, true, 'data');
+    return object;
+  }
+
+  list(
+    params?: SandboxesAPI.SandboxListParams,
+    options?: RequestOptions,
+  ): ObjectPager<Sandbox, SandboxesAPI.SandboxListResponse> {
+    const load = async (
+      page: number,
+    ): Promise<PagedObjectPage<Sandbox, SandboxesAPI.SandboxListResponse>> => {
+      const pageOptions = pageRequestOptions(options, 'page', page, {
+        page: params?.['page'],
+        pageSize: params?.['pageSize'],
+        status: params?.['status'],
+      });
+      const response = await this.api.compute.sandboxes.list({ ...params }, pageOptions);
+      return new PagedObjectPage(
+        (response['data']['items'] ?? []).map((info) => new Sandbox(this.api, info['id'], info, false, '')),
+        response,
+        {
+          next: () =>
+            nextObjectPage(
+              response['data']['pagination']['page'],
+              response['data']['pagination']['hasNext'],
+              response['data']['pagination']['pages'],
+              page,
+            ),
+          load,
+        },
+      );
+    };
+    return new ObjectPager(() => load(params?.['page'] ?? 1));
+  }
+}
+
 export type ConnectProxyListPage = PagedObjectPage<ConnectProxy, ConnectProxiesAPI.ProxyListResponse>;
 export class ConnectProxyManager {
   constructor(readonly api: Raw) {
@@ -1594,6 +1820,81 @@ export class FlowManager {
   }
 }
 
+export type ScheduledRunListPage = PagedObjectPage<ScheduledRun, ScheduledRunsAPI.ScheduledRunListResponse>;
+export class ScheduledRunManager {
+  constructor(
+    readonly api: Raw,
+    readonly flowID: string,
+  ) {
+    configureObject(this);
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot('ScheduledRunManager');
+  }
+
+  fromId(id: string): ScheduledRun {
+    return new ScheduledRun(this.api, this.flowID, id);
+  }
+
+  /**
+   * Plan Run now for a future time, using the same devices, payload rules and
+   * admission at fire time. A flow can have at most 100 scheduled runs. Supports an
+   * optional Idempotency-Key; a replay returns the current scheduled run with the
+   * original 201 status.
+   */
+  async create(
+    params: ScheduledRunsAPI.ScheduledRunCreateParams,
+    options?: RequestOptions,
+  ): Promise<ScheduledRun> {
+    const requestOptions = createRequestOptions(options);
+    const info = await this.api.workflows.flows.scheduledRuns.create(
+      this.flowID,
+      { ...params },
+      boundOptions(requestOptions, [{ name: 'flowId', location: 'path', value: this.flowID }]),
+    );
+    const object = new ScheduledRun(this.api, this.flowID, info['data']['id'], info, true, 'data');
+    return object;
+  }
+
+  list(
+    params?: ScheduledRunsAPI.ScheduledRunListParams,
+    options?: RequestOptions,
+  ): ObjectPager<ScheduledRun, ScheduledRunsAPI.ScheduledRunListResponse> {
+    const load = async (
+      page: number,
+    ): Promise<PagedObjectPage<ScheduledRun, ScheduledRunsAPI.ScheduledRunListResponse>> => {
+      const pageOptions = pageRequestOptions(options, 'page', page, {
+        page: params?.['page'],
+        pageSize: params?.['pageSize'],
+        status: params?.['status'],
+      });
+      const response = await this.api.workflows.flows.scheduledRuns.list(
+        this.flowID,
+        { ...params },
+        boundOptions(pageOptions, [{ name: 'flowId', location: 'path', value: this.flowID }]),
+      );
+      return new PagedObjectPage(
+        (response['items'] ?? []).map(
+          (info) => new ScheduledRun(this.api, this.flowID, info['id'], info, false, ''),
+        ),
+        response,
+        {
+          next: () =>
+            nextObjectPage(
+              response['pagination']['page'],
+              response['pagination']['hasNext'],
+              response['pagination']['pages'],
+              page,
+            ),
+          load,
+        },
+      );
+    };
+    return new ObjectPager(() => load(params?.['page'] ?? 1));
+  }
+}
+
 export type ExecutionListPage = PagedObjectPage<Execution, ExecutionsAPI.ExecutionListResponse>;
 export class ExecutionManager {
   constructor(readonly api: Raw) {
@@ -2063,6 +2364,82 @@ export class MailboxMessageManager {
       );
     };
     return new ObjectPager(() => load(params?.['cursor']));
+  }
+}
+
+export type RoutineFileListPage = PagedObjectPage<RoutineFile, RoutineFilesAPI.RoutineFileListResponse>;
+export class RoutineFileManager {
+  constructor(readonly api: Raw) {
+    configureObject(this);
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot('RoutineFileManager');
+  }
+
+  fromId(id: string): RoutineFile {
+    return new RoutineFile(this.api, id);
+  }
+
+  list(
+    params?: RoutineFilesAPI.RoutineFileListParams,
+    options?: RequestOptions,
+  ): ObjectPager<RoutineFile, RoutineFilesAPI.RoutineFileListResponse> {
+    const load = async (
+      page: number,
+    ): Promise<PagedObjectPage<RoutineFile, RoutineFilesAPI.RoutineFileListResponse>> => {
+      const pageOptions = pageRequestOptions(options, 'page', page, {
+        executionId: params?.['executionId'],
+        flowId: params?.['flowId'],
+        folder: params?.['folder'],
+        page: params?.['page'],
+        pageSize: params?.['pageSize'],
+      });
+      const response = await this.api.routineFiles.list({ ...params }, pageOptions);
+      return new PagedObjectPage(
+        (response['items'] ?? []).map((info) => new RoutineFile(this.api, info['id'], info, false, '')),
+        response,
+        {
+          next: () =>
+            nextObjectPage(
+              response['pagination']['page'],
+              response['pagination']['hasNext'],
+              response['pagination']['pages'],
+              page,
+            ),
+          load,
+        },
+      );
+    };
+    return new ObjectPager(() => load(params?.['page'] ?? 1));
+  }
+
+  /**
+   * Permanently deletes files for exactly one folder or executionId.
+   *
+   * Deletes every saved file of exactly one folder (`folder`) or one run
+   * (`executionId`) permanently. Pass exactly one of the two. Returns how many files
+   * were deleted.
+   */
+  deleteMany(
+    params?: RoutineFilesAPI.RoutineFileDeleteManyParams,
+    options?: RequestOptions,
+  ): APIPromise<RoutineFilesAPI.RoutineFileDeleteManyResponse> {
+    const result = this.api.routineFiles.deleteMany({ ...params }, options);
+    return result;
+  }
+
+  /**
+   * Lists the folders that hold saved files with their file count, total size and
+   * newest save time, newest first. Independent of whether the routine or run still
+   * exists; `flows` names the routines that saved into each folder.
+   */
+  listFolders(
+    params?: RoutineFilesAPI.RoutineFileListFoldersParams,
+    options?: RequestOptions,
+  ): APIPromise<RoutineFilesAPI.RoutineFileListFoldersResponse> {
+    const result = this.api.routineFiles.listFolders({ ...params }, options);
+    return result;
   }
 }
 
@@ -2767,6 +3144,7 @@ export type DeviceInfo =
   | DevicesAPI.DeviceCreateResponse
   | DevicesAPI.DeviceRetrieveResponse
   | DevicesAPI.DeviceWaitReadyResponse
+  | DevicesAPI.DeviceUpdateIdleTimeoutResponse
   | NonNullable<NonNullable<DevicesAPI.DeviceListResponse>['items']>[number];
 
 export class Device {
@@ -3675,6 +4053,59 @@ export class Device {
   }
 
   /**
+   * Mints a short-lived single-use stream token for this device. Returns the token response; does not update the device snapshot.
+   *
+   * Mint a short-lived, single-use stream token for a device. The token permits
+   * streaming and control.
+   */
+  createStreamToken(
+    params?: Omit<StreamTokensAPI.StreamTokenCreateParams, 'deviceId'>,
+    options?: RequestOptions,
+  ): APIPromise<StreamTokensAPI.StreamTokenCreateResponse> {
+    const result = this.api.streamTokens.create(
+      { ...params, deviceId: this.id },
+      boundOptions(options, [{ name: 'deviceId', location: 'body', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
+   * Sets the idle timeout to 5–240 minutes, 0 to turn it off, or null to use the platform default. Returns the updated device as a new handle; call refresh() on an existing handle to update it. A custom timeout returns 409 when the device cannot be stopped; other values return 422.
+   *
+   * Sets the device's own idle stop setting and returns the updated device.
+   * `minutes` between 5 and 240 sets a custom timeout; `0` turns the idle timer off
+   * for this device; `null` removes the device's own setting, so the platform
+   * default applies again (a pay-as-you-go device that can be stopped stops after
+   * the default; other devices have no timer). Other values return 422. While a
+   * timer is on, the device is stopped automatically (state `stopped`, `stopReason`
+   * `IDLE_TIMEOUT`) once it has had no client activity for longer than that: API
+   * tool calls, open stream/adb/browser/frida/port connections and a held lease all
+   * count as activity, reading device state does not. Setting a custom timeout
+   * requires a device whose capabilities report stop=true, otherwise 409; `0` and
+   * `null` are always allowed. The response's `idleTimeoutMinutes` is the effective
+   * timeout.
+   */
+  setIdleTimeout(
+    params: DevicesAPI.DeviceUpdateIdleTimeoutParams,
+    options?: RequestOptions,
+  ): APIPromise<Device>;
+  setIdleTimeout(minutes: number | null, options?: RequestOptions): APIPromise<Device>;
+  setIdleTimeout(...__args: unknown[]): APIPromise<Device> {
+    const positional = __args[0] === null || typeof __args[0] !== 'object' || !('minutes' in __args[0]);
+    const params = (
+      positional ?
+        { ...({} as Omit<DevicesAPI.DeviceUpdateIdleTimeoutParams, 'minutes'>), minutes: __args[0] }
+      : __args[0]) as DevicesAPI.DeviceUpdateIdleTimeoutParams;
+    const options = (positional ? __args[1] : __args[1]) as RequestOptions | undefined;
+    const result = this.api.devices.updateIdleTimeout(
+      this.id,
+      { ...params },
+      boundOptions(options, [{ name: 'deviceId', location: 'path', value: this.id }]),
+    );
+    return result._thenUnwrap((info) => new Device(this.api, info['id'], info, false, ''));
+  }
+
+  /**
    * Wakes a parked device: it first checks that the device can run again, then the
    * same device starts and per-minute billing resumes. On a device that is not
    * parked, the request does nothing. Unsupported intents return 400
@@ -4422,6 +4853,487 @@ export class ProxyConfiguration {
   }
 
   async [Symbol.asyncDispose](): Promise<void> {}
+}
+
+export type ComputeFunctionInfo =
+  | FunctionsAPI.FunctionCreateResponse
+  | FunctionsAPI.FunctionRetrieveResponse
+  | NonNullable<NonNullable<NonNullable<FunctionsAPI.FunctionListResponse>['data']>['items']>[number];
+
+export class ComputeFunction {
+  readonly versions;
+
+  readonly runs;
+
+  constructor(
+    readonly api: Raw,
+    readonly id: string,
+    public info: ComputeFunctionInfo | undefined = undefined,
+    private owned = false,
+    private infoRoot = 'data',
+  ) {
+    configureObject(this);
+    this.versions = {
+      /**
+       * Upload a new immutable version
+       */
+      create: (
+        params: VersionsAPI.VersionCreateParams,
+        options?: RequestOptions,
+      ): APIPromise<VersionsAPI.VersionCreateResponse> => {
+        const result = this.api.compute.functions.versions.create(
+          this.id,
+          { ...params },
+          boundOptions(options, [{ name: 'functionId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+      /**
+       * Get an exact version
+       */
+      retrieve: (
+        version: number,
+        options?: RequestOptions,
+      ): APIPromise<VersionsAPI.VersionRetrieveResponse> => {
+        const result = this.api.compute.functions.versions.retrieve(
+          version,
+          { functionId: this.id },
+          boundOptions(options, [{ name: 'functionId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+      /**
+       * List active versions, newest first
+       */
+      list: (
+        params?: VersionsAPI.VersionListParams,
+        options?: RequestOptions,
+      ): APIPromise<VersionsAPI.VersionListResponse> => {
+        const result = this.api.compute.functions.versions.list(
+          this.id,
+          { ...params },
+          boundOptions(options, [{ name: 'functionId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+      /**
+       * Delete a version except the last active version
+       */
+      delete: (version: number, options?: RequestOptions): APIPromise<void> => {
+        const result = this.api.compute.functions.versions.delete(
+          version,
+          { functionId: this.id },
+          boundOptions(options, [{ name: 'functionId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+    };
+    this.runs = {
+      /**
+       * List the runs of a function, newest first
+       */
+      list: (
+        params?: FunctionsRunsAPI.RunListParams,
+        options?: RequestOptions,
+      ): ObjectPager<Run, FunctionsRunsAPI.RunListResponse> => {
+        const load = async (
+          page: number,
+        ): Promise<PagedObjectPage<Run, FunctionsRunsAPI.RunListResponse>> => {
+          const pageOptions = pageRequestOptions(options, 'page', page, {
+            page: params?.['page'],
+            pageSize: params?.['pageSize'],
+            status: params?.['status'],
+          });
+          const response = await this.api.compute.functions.runs.list(
+            this.id,
+            { ...params },
+            boundOptions(pageOptions, [{ name: 'functionId', location: 'path', value: this.id }]),
+          );
+          return new PagedObjectPage(
+            (response['data']['items'] ?? []).map((info) => new Run(this.api, info['id'], info, false, '')),
+            response,
+            {
+              next: () =>
+                nextObjectPage(
+                  response['data']['pagination']['page'],
+                  response['data']['pagination']['hasNext'],
+                  response['data']['pagination']['pages'],
+                  page,
+                ),
+              load,
+            },
+          );
+        };
+        return new ObjectPager(() => load(params?.['page'] ?? 1));
+      },
+      /**
+       * Returns 200 with the finished run when it ends within `waitS`, else 202 with the
+       * run.
+       */
+      create: (params: FunctionsRunsAPI.RunCreateParams, options?: RequestOptions): APIPromise<Run> => {
+        const result = this.api.compute.functions.runs.create(
+          this.id,
+          { ...params },
+          boundOptions(options, [{ name: 'functionId', location: 'path', value: this.id }]),
+        );
+        return result._thenUnwrap((info) => new Run(this.api, info['data']['id'], info, false, 'data'));
+      },
+    };
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot(
+      'ComputeFunction',
+      this.id,
+      this.info === undefined ? undefined : { name: this.name },
+    );
+  }
+
+  refresh(options?: RequestOptions): APIPromise<FunctionsAPI.FunctionRetrieveResponse> {
+    const result = this.api.compute.functions.retrieve(
+      this.id,
+      boundOptions(options, [{ name: 'functionId', location: 'path', value: this.id }]),
+    );
+    return result._thenUnwrap((info) => {
+      this.info = info;
+      this.infoRoot = 'data';
+      return info;
+    });
+  }
+
+  /** Reads the last response without making a request. */
+  get name(): string | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'name') as string | undefined;
+  }
+
+  /**
+   * Rename a function or update its description
+   */
+  update(
+    params?: FunctionsAPI.FunctionUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<FunctionsAPI.FunctionUpdateResponse> {
+    const result = this.api.compute.functions.update(
+      this.id,
+      { ...params },
+      boundOptions(options, [{ name: 'functionId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
+   * Delete a function
+   */
+  delete(options?: RequestOptions): APIPromise<void> {
+    const result = this.api.compute.functions.delete(
+      this.id,
+      boundOptions(options, [{ name: 'functionId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
+   * Read verified function source
+   */
+  source(
+    params?: FunctionsAPI.FunctionSourceParams,
+    options?: RequestOptions,
+  ): APIPromise<FunctionsAPI.FunctionSourceResponse> {
+    const result = this.api.compute.functions.source(
+      this.id,
+      { ...params },
+      boundOptions(options, [{ name: 'functionId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  async [Symbol.asyncDispose](): Promise<void> {}
+}
+
+export type RunInfo =
+  | RunsAPI.RunRetrieveResponse
+  | FunctionsRunsAPI.RunCreateResponse
+  | NonNullable<NonNullable<NonNullable<FunctionsRunsAPI.RunListResponse>['data']>['items']>[number]
+  | NonNullable<NonNullable<NonNullable<RunsAPI.RunListResponse>['data']>['items']>[number];
+
+export class Run {
+  constructor(
+    readonly api: Raw,
+    readonly id: string,
+    public info: RunInfo | undefined = undefined,
+    private owned = false,
+    private infoRoot = 'data',
+  ) {
+    configureObject(this);
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot(
+      'Run',
+      this.id,
+      this.info === undefined ? undefined : { status: this.status, outcome: this.outcome },
+    );
+  }
+
+  refresh(
+    params?: RunsAPI.RunRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<RunsAPI.RunRetrieveResponse> {
+    const result = this.api.compute.runs.retrieve(
+      this.id,
+      { ...params },
+      boundOptions(options, [{ name: 'runId', location: 'path', value: this.id }]),
+    );
+    return result._thenUnwrap((info) => {
+      this.info = info;
+      this.infoRoot = 'data';
+      return info;
+    });
+  }
+
+  /** Reads the last response without making a request. */
+  get status(): 'running' | 'done' | 'failed' | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'status') as 'running' | 'done' | 'failed' | undefined;
+  }
+
+  /** Reads the last response without making a request. */
+  get outcome(): 'succeeded' | 'partial' | 'failed' | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'outcome') as
+      'succeeded' | 'partial' | 'failed' | undefined;
+  }
+
+  /**
+   * Cancel a run
+   */
+  cancel(options?: RequestOptions): APIPromise<RunsAPI.RunCancelResponse> {
+    const result = this.api.compute.runs.cancel(
+      this.id,
+      boundOptions(options, [{ name: 'runId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
+   * Get a short-lived download link for the full log of a run
+   */
+  logs(options?: RequestOptions): APIPromise<RunsAPI.RunLogsResponse> {
+    const result = this.api.compute.runs.logs(
+      this.id,
+      boundOptions(options, [{ name: 'runId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /** Wait for the declared success condition; failure raises with the last response. */
+  wait(options: WaitOptions = {}): Promise<RunsAPI.RunRetrieveResponse> {
+    return waitFor(
+      options,
+      600000,
+      1000,
+      async (signal, timeout) => {
+        const requestOptions: RequestOptions = { ...options, signal, timeout, maxRetries: 0 };
+        const result = await this.api.compute.runs.retrieve(
+          this.id,
+          {},
+          boundOptions(requestOptions, [{ name: 'runId', location: 'path', value: this.id }]),
+        );
+        this.info = result;
+        this.infoRoot = 'data';
+        const state = result['data']['status'];
+        if ((['done'] as readonly string[]).includes(state)) return { done: true, result };
+        if (
+          (['failed'] as readonly string[]).includes(state) ||
+          !(['running'] as readonly string[]).includes(state)
+        )
+          throw new WaitFailureError(result);
+        return { done: false, result };
+      },
+      retryPoll,
+      30000,
+    );
+  }
+
+  /** Wait for the declared success condition; failure raises with the last response. */
+  waitLogs(options: WaitOptions = {}): Promise<RunsAPI.RunRetrieveResponse> {
+    return waitFor(
+      options,
+      60000,
+      1000,
+      async (signal, timeout) => {
+        const requestOptions: RequestOptions = { ...options, signal, timeout, maxRetries: 0 };
+        const result = await this.api.compute.runs.retrieve(
+          this.id,
+          {},
+          boundOptions(requestOptions, [{ name: 'runId', location: 'path', value: this.id }]),
+        );
+        this.info = result;
+        this.infoRoot = 'data';
+        const state = result['data']['logs'];
+        if ((['available'] as readonly string[]).includes(state)) return { done: true, result };
+        if (
+          (['none', 'gone'] as readonly string[]).includes(state) ||
+          !(['pending'] as readonly string[]).includes(state)
+        )
+          throw new WaitFailureError(result);
+        return { done: false, result };
+      },
+      retryPoll,
+      30000,
+    );
+  }
+
+  async [Symbol.asyncDispose](): Promise<void> {}
+}
+
+export type SandboxInfo =
+  | SandboxesAPI.SandboxCreateResponse
+  | SandboxesAPI.SandboxRetrieveResponse
+  | NonNullable<NonNullable<NonNullable<SandboxesAPI.SandboxListResponse>['data']>['items']>[number];
+
+export class Sandbox {
+  readonly commands;
+
+  readonly files;
+
+  constructor(
+    readonly api: Raw,
+    readonly id: string,
+    public info: SandboxInfo | undefined = undefined,
+    private owned = false,
+    private infoRoot = 'data',
+  ) {
+    configureObject(this);
+    this.commands = {
+      /**
+       * Get a command result
+       */
+      retrieve: (
+        commandID: string,
+        params?: Omit<CommandsAPI.CommandRetrieveParams, 'sandboxId'>,
+        options?: RequestOptions,
+      ): APIPromise<CommandsAPI.CommandRetrieveResponse> => {
+        const result = this.api.compute.sandboxes.commands.retrieve(
+          commandID,
+          { ...params, sandboxId: this.id },
+          boundOptions(options, [{ name: 'sandboxId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+      /**
+       * List the newest commands
+       */
+      list: (options?: RequestOptions): APIPromise<CommandsAPI.CommandListResponse> => {
+        const result = this.api.compute.sandboxes.commands.list(
+          this.id,
+          boundOptions(options, [{ name: 'sandboxId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+    };
+    this.files = {
+      /**
+       * Upload a file
+       */
+      upload: (
+        body: string | ArrayBuffer | ArrayBufferView | Blob | DataView,
+        params: SandboxesFilesAPI.FileUploadParams,
+        options?: RequestOptions,
+      ): APIPromise<void> => {
+        const result = this.api.compute.sandboxes.files.upload(
+          this.id,
+          body,
+          { ...params },
+          boundOptions(options, [{ name: 'sandboxId', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+      /**
+       * Download a file
+       */
+      download: async (
+        params: SandboxesFilesAPI.FileRetrieveParams,
+        options?: RequestOptions,
+      ): Promise<Uint8Array> => {
+        const response = await this.api.compute.sandboxes.files
+          .retrieve(
+            this.id,
+            { ...params },
+            boundOptions(options, [{ name: 'sandboxId', location: 'path', value: this.id }]),
+          )
+          .asResponse();
+        return new Uint8Array(await response.arrayBuffer());
+      },
+    };
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot(
+      'Sandbox',
+      this.id,
+      this.info === undefined ? undefined : { name: this.name, status: this.status },
+    );
+  }
+
+  refresh(options?: RequestOptions): APIPromise<SandboxesAPI.SandboxRetrieveResponse> {
+    const result = this.api.compute.sandboxes.retrieve(
+      this.id,
+      boundOptions(options, [{ name: 'sandboxId', location: 'path', value: this.id }]),
+    );
+    return result._thenUnwrap((info) => {
+      this.info = info;
+      this.infoRoot = 'data';
+      return info;
+    });
+  }
+
+  /** Reads the last response without making a request. */
+  get name(): string | null | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'name') as string | null | undefined;
+  }
+
+  /** Reads the last response without making a request. */
+  get status(): 'starting' | 'running' | 'stopped' | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'status') as
+      'starting' | 'running' | 'stopped' | undefined;
+  }
+
+  /**
+   * Stops the sandbox; a 202 response means shutdown is still in progress; once stopped, the sandbox stays listed with status stopped.
+   *
+   * Stop a sandbox
+   */
+  delete(options?: RequestOptions): APIPromise<SandboxesAPI.SandboxDeleteResponse> {
+    const result = this.api.compute.sandboxes.delete(
+      this.id,
+      boundOptions(options, [{ name: 'sandboxId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
+   * Execute a shell command
+   */
+  exec(
+    params: SandboxesAPI.SandboxExecParams,
+    options?: RequestOptions,
+  ): APIPromise<SandboxesAPI.SandboxExecResponse> {
+    const result = this.api.compute.sandboxes.exec(
+      this.id,
+      { ...params },
+      boundOptions(options, [{ name: 'sandboxId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  async [Symbol.asyncDispose](): Promise<void> {
+    if (!this.owned) return;
+    this.owned = false;
+    const options: RequestOptions = {};
+    await this.api.compute.sandboxes.delete(
+      this.id,
+      boundOptions(options, [{ name: 'sandboxId', location: 'path', value: this.id }]),
+    );
+  }
 }
 
 export type ConnectProxyInfo =
@@ -5175,6 +6087,8 @@ export type FlowInfo =
   | NonNullable<NonNullable<FlowsAPI.FlowListResponse>['items']>[number];
 
 export class Flow {
+  readonly scheduledRuns;
+
   readonly actions;
 
   readonly state;
@@ -5187,6 +6101,7 @@ export class Flow {
     private infoRoot = 'data',
   ) {
     configureObject(this);
+    this.scheduledRuns = new ScheduledRunManager(this.api, this.id);
     this.actions = {
       /**
        * Return the ordered list of actions attached to a flow, including any nested
@@ -5564,6 +6479,59 @@ export class Flow {
     return result._thenUnwrap(
       (info) => new Execution(this.api, info['data']['executionId'], info, false, 'data'),
     );
+  }
+
+  async [Symbol.asyncDispose](): Promise<void> {}
+}
+
+export type ScheduledRunInfo =
+  | ScheduledRunsAPI.ScheduledRunCreateResponse
+  | NonNullable<NonNullable<ScheduledRunsAPI.ScheduledRunListResponse>['items']>[number];
+
+export class ScheduledRun {
+  constructor(
+    readonly api: Raw,
+    readonly flowID: string,
+    readonly id: string,
+    public info: ScheduledRunInfo | undefined = undefined,
+    private owned = false,
+    private infoRoot = 'data',
+  ) {
+    configureObject(this);
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot(
+      'ScheduledRun',
+      this.id,
+      this.info === undefined ? undefined : { status: this.status, runAt: this.runAt },
+    );
+  }
+
+  /** Reads only the last create/list snapshot without making a request; fromId/from_id handles have no data. */
+  get status(): 'scheduled' | 'started' | 'skipped' | 'failed' | 'missed' | 'cancelled' | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'status') as
+      'scheduled' | 'started' | 'skipped' | 'failed' | 'missed' | 'cancelled' | undefined;
+  }
+
+  /** Reads only the last create/list snapshot without making a request; fromId/from_id handles have no data. */
+  get runAt(): string | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'runAt') as string | undefined;
+  }
+
+  /**
+   * Cancel a planned flow run
+   */
+  cancel(options?: RequestOptions): APIPromise<ScheduledRunsAPI.ScheduledRunCancelResponse> {
+    const result = this.api.workflows.flows.scheduledRuns.cancel(
+      this.id,
+      { flowId: this.flowID },
+      boundOptions(options, [
+        { name: 'scheduledRunId', location: 'path', value: this.id },
+        { name: 'flowId', location: 'path', value: this.flowID },
+      ]),
+    );
+    return result;
   }
 
   async [Symbol.asyncDispose](): Promise<void> {}
@@ -6128,6 +7096,74 @@ export class MailboxMessage {
   /** Reads the last response without making a request. */
   get subject(): string | null | undefined {
     return objectFieldValue(this.info, this.infoRoot, 'subject') as string | null | undefined;
+  }
+
+  async [Symbol.asyncDispose](): Promise<void> {}
+}
+
+export type RoutineFileInfo = NonNullable<
+  NonNullable<RoutineFilesAPI.RoutineFileListResponse>['items']
+>[number];
+
+export class RoutineFile {
+  constructor(
+    readonly api: Raw,
+    readonly id: string,
+    public info: RoutineFileInfo | undefined = undefined,
+    private owned = false,
+    private infoRoot = '',
+  ) {
+    configureObject(this);
+  }
+
+  toJSON(): ReturnType<typeof objectSnapshot> {
+    return objectSnapshot(
+      'RoutineFile',
+      this.id,
+      this.info === undefined ? undefined : { filename: this.filename, folder: this.folder, kind: this.kind },
+    );
+  }
+
+  /** Reads only the last create/list snapshot without making a request; fromId/from_id handles have no data. */
+  get filename(): string | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'filename') as string | undefined;
+  }
+
+  /** Reads only the last create/list snapshot without making a request; fromId/from_id handles have no data. */
+  get folder(): string | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'folder') as string | undefined;
+  }
+
+  /** Reads only the last create/list snapshot without making a request; fromId/from_id handles have no data. */
+  get kind(): 'recording' | 'screenshot' | 'file' | undefined {
+    return objectFieldValue(this.info, this.infoRoot, 'kind') as
+      'recording' | 'screenshot' | 'file' | undefined;
+  }
+
+  /**
+   * Permanently deletes this saved routine file.
+   *
+   * Deletes one saved file permanently and frees its storage (the file disappears at
+   * once; the stored object is removed right after). Idempotent: an already deleted
+   * file returns 204 too.
+   */
+  delete(options?: RequestOptions): APIPromise<void> {
+    const result = this.api.routineFiles.delete(
+      this.id,
+      boundOptions(options, [{ name: 'fileId', location: 'path', value: this.id }]),
+    );
+    return result;
+  }
+
+  /**
+   * Redirects (302) to a time-limited (at most 5 minutes) download URL for the file.
+   * 404 when the file does not exist or belongs to someone else.
+   */
+  async download(options?: RequestOptions): Promise<Uint8Array> {
+    const response = await this.api.routineFiles
+      .download(this.id, boundOptions(options, [{ name: 'fileId', location: 'path', value: this.id }]))
+      .asResponse();
+    return new Uint8Array(await response.arrayBuffer());
   }
 
   async [Symbol.asyncDispose](): Promise<void> {}
