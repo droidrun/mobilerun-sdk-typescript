@@ -178,6 +178,11 @@ export namespace TaskRetrieveResponse {
 
     outputSchema?: { [key: string]: unknown } | null;
 
+    /**
+     * A human approval the running task is waiting for.
+     */
+    pendingApproval?: Task.PendingApproval | null;
+
     reasoning?: boolean;
 
     recordingDeviceId?: string | null;
@@ -233,6 +238,37 @@ export namespace TaskRetrieveResponse {
       credentialNames: Array<string>;
 
       packageName: string;
+    }
+
+    /**
+     * A human approval the running task is waiting for.
+     */
+    export interface PendingApproval {
+      /**
+       * Identifies the approval
+       */
+      approvalId: string;
+
+      /**
+       * Kind-specific, non-secret context (payment_card: label, secretGroup,
+       * targetPackage, targetHost?)
+       */
+      details: { [key: string]: unknown };
+
+      /**
+       * Without an answer by this time the task fails
+       */
+      expiresAt: string;
+
+      /**
+       * What is being approved, e.g. payment_card; new kinds may be added
+       */
+      kind: string;
+
+      /**
+       * Device the task runs on, so a client can show it next to the approval
+       */
+      deviceId?: string | null;
     }
   }
 }
@@ -319,6 +355,11 @@ export namespace TaskListResponse {
 
     outputSchema?: { [key: string]: unknown } | null;
 
+    /**
+     * A human approval the running task is waiting for.
+     */
+    pendingApproval?: Item.PendingApproval | null;
+
     reasoning?: boolean;
 
     recordingDeviceId?: string | null;
@@ -375,6 +416,37 @@ export namespace TaskListResponse {
 
       packageName: string;
     }
+
+    /**
+     * A human approval the running task is waiting for.
+     */
+    export interface PendingApproval {
+      /**
+       * Identifies the approval
+       */
+      approvalId: string;
+
+      /**
+       * Kind-specific, non-secret context (payment_card: label, secretGroup,
+       * targetPackage, targetHost?)
+       */
+      details: { [key: string]: unknown };
+
+      /**
+       * Without an answer by this time the task fails
+       */
+      expiresAt: string;
+
+      /**
+       * What is being approved, e.g. payment_card; new kinds may be added
+       */
+      kind: string;
+
+      /**
+       * Device the task runs on, so a client can show it next to the approval
+       */
+      deviceId?: string | null;
+    }
   }
 }
 
@@ -383,6 +455,11 @@ export interface TaskGetStatusResponse {
    * The status of the task
    */
   status: 'prepared' | 'queued' | 'created' | 'running' | 'cancelling' | 'completed' | 'failed' | 'cancelled';
+
+  /**
+   * True when the task has reached a final status and will not change again
+   */
+  terminal: boolean;
 
   /**
    * Execution metadata for abnormal terminal outcomes
@@ -403,6 +480,11 @@ export interface TaskGetStatusResponse {
    * Structured output if outputSchema was set
    */
   output?: { [key: string]: unknown } | null;
+
+  /**
+   * A human approval the running task is waiting for.
+   */
+  pendingApproval?: TaskGetStatusResponse.PendingApproval | null;
 
   /**
    * Device ID associated with recordingId
@@ -447,6 +529,37 @@ export namespace TaskGetStatusResponse {
 
       steps?: number;
     }
+  }
+
+  /**
+   * A human approval the running task is waiting for.
+   */
+  export interface PendingApproval {
+    /**
+     * Identifies the approval
+     */
+    approvalId: string;
+
+    /**
+     * Kind-specific, non-secret context (payment_card: label, secretGroup,
+     * targetPackage, targetHost?)
+     */
+    details: { [key: string]: unknown };
+
+    /**
+     * Without an answer by this time the task fails
+     */
+    expiresAt: string;
+
+    /**
+     * What is being approved, e.g. payment_card; new kinds may be added
+     */
+    kind: string;
+
+    /**
+     * Device the task runs on, so a client can show it next to the approval
+     */
+    deviceId?: string | null;
   }
 }
 
@@ -1088,8 +1201,9 @@ export interface TaskRunParams {
   /**
    * Mark a task started by an agent or worker on the user's behalf. It is listed as
    * source='agent' (excluded from source='api' lists) and its events carry
-   * internal=true so user-facing notifications and webhooks skip it. It is still
-   * billed, controllable and retrievable by id.
+   * internal=true so user-facing notifications and webhooks skip it, except task
+   * approval events, which always reach the owner. It is still billed, controllable
+   * and retrievable by id.
    */
   internal?: boolean;
 
@@ -1184,8 +1298,9 @@ export interface TaskRunStreamedParams {
   /**
    * Mark a task started by an agent or worker on the user's behalf. It is listed as
    * source='agent' (excluded from source='api' lists) and its events carry
-   * internal=true so user-facing notifications and webhooks skip it. It is still
-   * billed, controllable and retrievable by id.
+   * internal=true so user-facing notifications and webhooks skip it, except task
+   * approval events, which always reach the owner. It is still billed, controllable
+   * and retrievable by id.
    */
   internal?: boolean;
 
