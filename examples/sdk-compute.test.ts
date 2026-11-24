@@ -10,6 +10,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   MobilerunSDK,
+  Device,
   ComputeFunction,
   Run,
   Sandbox,
@@ -532,4 +533,41 @@ test('stream token without a key ID preserves the shape error and never revokes'
   const t = transport([json({ key: 'fixture-only-secret', expiresAt: '2026-11-23T12:00:00Z' })]);
   await expect(streamToken(t.sdk, 'device-1')).rejects.toThrow('Invalid token response');
   expect(t.requests.map((request) => request.init.method)).toEqual(['POST']);
+});
+
+test.each([30, 0, null])('device idle timeout (%s) sends PUT and returns a fresh handle', async (minutes) => {
+  const info = {
+    id: 'device-1',
+    name: 'fixture',
+    state: 'ready',
+    stateMessage: '',
+    streamUrl: '',
+    type: 'cloud',
+    platform: 'android',
+    createdAt: '2026-11-24T00:00:00Z',
+    updatedAt: '2026-11-24T00:00:00Z',
+    assignedAt: null,
+    terminatesAt: null,
+    taskCount: 0,
+    activeTaskId: '',
+    idleTimeoutSource: 'default',
+    idleTimeoutMinutes: 15,
+  } satisfies import('@mobilerun/sdk/resources/devices').DeviceUpdateIdleTimeoutResponse;
+  const t = transport([json(info), json(info)]);
+  const device = t.sdk.devices.fromId('device-1');
+  const raw = await t.sdk.api.devices.updateIdleTimeout('device-1', { minutes });
+  const updated = await device.setIdleTimeout(minutes);
+  expect(raw).toEqual(info);
+  expect(updated).toBeInstanceOf(Device);
+  expect(updated).not.toBe(device);
+  expect(updated.id).toBe('device-1');
+  expect(updated.info).toEqual(info);
+  expect(device.info).toBeUndefined();
+  expect(t.requests.map((r) => r.init.method)).toEqual(['PUT', 'PUT']);
+  expect(t.requests.map((r) => r.url.pathname)).toEqual([
+    '/v1/devices/device-1/idle-timeout',
+    '/v1/devices/device-1/idle-timeout',
+  ]);
+  expect(t.requests.map((r) => JSON.parse(String(r.init.body)))).toEqual([{ minutes }, { minutes }]);
+  expect(t.replies).toHaveLength(0);
 });

@@ -366,6 +366,28 @@ export class Devices extends APIResource {
   }
 
   /**
+   * Sets the device's own idle stop setting and returns the updated device.
+   * `minutes` between 5 and 240 sets a custom timeout; `0` turns the idle timer off
+   * for this device; `null` removes the device's own setting, so the platform
+   * default applies again (a pay-as-you-go device that can be stopped stops after
+   * the default; other devices have no timer). Other values return 422. While a
+   * timer is on, the device is stopped automatically (state `stopped`, `stopReason`
+   * `IDLE_TIMEOUT`) once it has had no client activity for longer than that: API
+   * tool calls, open stream/adb/browser/frida/port connections and a held lease all
+   * count as activity, reading device state does not. Setting a custom timeout
+   * requires a device whose capabilities report stop=true, otherwise 409; `0` and
+   * `null` are always allowed. The response's `idleTimeoutMinutes` is the effective
+   * timeout.
+   */
+  updateIdleTimeout(
+    deviceID: string,
+    body: DeviceUpdateIdleTimeoutParams,
+    options?: RequestOptions,
+  ): APIPromise<DeviceUpdateIdleTimeoutResponse> {
+    return this._client.put(path`/devices/${deviceID}/idle-timeout`, { body, ...options });
+  }
+
+  /**
    * Blocks until the device reaches the ready state, then returns the same payload
    * as Get device info. The call returns early with an error if the wait is
    * cancelled or times out.
@@ -925,6 +947,107 @@ export interface DeviceSummaryResponse {
   $schema?: string;
 }
 
+export interface DeviceUpdateIdleTimeoutResponse {
+  id: string;
+
+  activeTaskId: string;
+
+  assignedAt: string | null;
+
+  createdAt: string;
+
+  name: string;
+
+  /**
+   * Operating system the device runs.
+   */
+  platform: 'android' | 'ios';
+
+  state: string;
+
+  stateMessage: string;
+
+  streamUrl: string;
+
+  taskCount: number;
+
+  terminatesAt: string | null;
+
+  type: string;
+
+  updatedAt: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+
+  billingStrategy?: string;
+
+  createdBy?: string;
+
+  /**
+   * The platform default idle timeout this device uses when its own setting is
+   * cleared (PUT idle-timeout with minutes null). Omitted when no default applies to
+   * this device.
+   */
+  idleTimeoutDefaultMinutes?: number;
+
+  /**
+   * The effective idle timeout: minutes without client activity after which the
+   * device is stopped automatically (state stopped, stopReason IDLE_TIMEOUT). It is
+   * the device's own setting when one exists, otherwise the platform default for
+   * pay-as-you-go (minute-billed) devices that can be stopped. Omitted while no idle
+   * timer applies (explicitly turned off, or no default for this device). Change it
+   * with PUT /devices/{deviceId}/idle-timeout.
+   */
+  idleTimeoutMinutes?: number;
+
+  /**
+   * Where idleTimeoutMinutes comes from: device = the device's own setting (also
+   * when it is off), default = the platform default. Omitted when no idle timer can
+   * apply.
+   */
+  idleTimeoutSource?: 'device' | 'default';
+
+  /**
+   * When the device last had client activity (RFC 3339). Tracked only while the idle
+   * timer is on, to about one minute of precision; omitted otherwise.
+   */
+  lastActivityAt?: string;
+
+  ownerId?: string;
+
+  providerId?: string;
+
+  /**
+   * Why the device was last stopped. Present only while state is stopped; clients
+   * should use this value instead of parsing stateMessage.
+   */
+  stopReason?:
+    | 'STOP_REQUESTED'
+    | 'MINUTE_BALANCE_EXHAUSTED'
+    | 'RESOURCE_EXHAUSTED'
+    | 'SUBSCRIPTION_REQUIRED'
+    | 'PAYMENT_REQUIRED'
+    | 'DEVICE_OPERATION_FAILED'
+    | 'DEVICE_LEFT'
+    | 'IDLE_TIMEOUT';
+
+  /**
+   * When devices-api recorded the stop reason (RFC 3339). Present only while state
+   * is stopped and a reason is recorded.
+   */
+  stopReasonAt?: string;
+
+  streamToken?: string;
+
+  /**
+   * @deprecated Deprecated: use ownerId/createdBy.
+   */
+  userId?: string;
+}
+
 export interface DeviceWaitReadyResponse {
   id: string;
 
@@ -1275,6 +1398,16 @@ export interface DeviceTerminateParams {
   terminateAt?: string;
 }
 
+export interface DeviceUpdateIdleTimeoutParams {
+  /**
+   * Minutes without client activity after which the device is stopped automatically:
+   * 5 to 240 sets a custom timeout, 0 turns the idle timer off for this device, null
+   * removes the device's own setting so the platform default applies again (if any).
+   * 1 to 4 are rejected.
+   */
+  minutes: number | null;
+}
+
 Devices.Actions = Actions;
 Devices.Apps = Apps;
 Devices.Esim = Esim;
@@ -1308,6 +1441,7 @@ export declare namespace Devices {
     type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
     type DeviceSetNameResponse as DeviceSetNameResponse,
     type DeviceSummaryResponse as DeviceSummaryResponse,
+    type DeviceUpdateIdleTimeoutResponse as DeviceUpdateIdleTimeoutResponse,
     type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
@@ -1316,6 +1450,7 @@ export declare namespace Devices {
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
+    type DeviceUpdateIdleTimeoutParams as DeviceUpdateIdleTimeoutParams,
   };
 
   export {

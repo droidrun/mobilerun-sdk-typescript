@@ -95,6 +95,8 @@ import {
   DeviceSummaryParams,
   DeviceSummaryResponse,
   DeviceTerminateParams,
+  DeviceUpdateIdleTimeoutParams,
+  DeviceUpdateIdleTimeoutResponse,
   DeviceWaitReadyResponse,
   Devices,
 } from './resources/devices/devices';
@@ -961,6 +963,7 @@ export declare namespace Mobilerun {
     type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
     type DeviceSetNameResponse as DeviceSetNameResponse,
     type DeviceSummaryResponse as DeviceSummaryResponse,
+    type DeviceUpdateIdleTimeoutResponse as DeviceUpdateIdleTimeoutResponse,
     type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
@@ -969,6 +972,7 @@ export declare namespace Mobilerun {
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
+    type DeviceUpdateIdleTimeoutParams as DeviceUpdateIdleTimeoutParams,
   };
 
   export {
