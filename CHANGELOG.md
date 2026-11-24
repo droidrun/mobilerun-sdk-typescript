@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.3.2](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.3.1...v6.3.2) (2026-11-24)
+
+
+### Features
+
+* **sdk:** device idle timeout ([21f717f](https://github.com/droidrun/mobilerun-sdk-typescript/commit/21f717f528228c26695f0ef3d25a4860dac379ad))
+
+
+### Chores
+
+* release 6.3.2 ([7422a14](https://github.com/droidrun/mobilerun-sdk-typescript/commit/7422a147190ab1b67bad0fb03ec587d3f33b0d01))
+
 ## [6.3.1](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.3.0...v6.3.1) (2026-11-24)
 
 
