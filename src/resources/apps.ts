@@ -157,6 +157,8 @@ export namespace AppRetrieveResponse {
   export interface Data {
     id: string;
 
+    appStoreId: number | null;
+
     bundleId: string;
 
     createdAt: string | null;
@@ -196,6 +198,8 @@ export namespace AppListResponse {
 
   export interface Item {
     id: string;
+
+    appStoreId: number | null;
 
     bundleId: string;
 
@@ -886,6 +890,12 @@ export interface AppListParams {
   query?: string;
 
   sortBy?: 'createdAt' | 'name';
+
+  /**
+   * Only list apps that have a version of this source (for example `user` for the
+   * apps you uploaded).
+   */
+  source?: 'user' | 'system' | 'portal' | 'store';
 
   status?: 'all' | 'queued' | 'available' | 'failed' | 'pruned';
 }
