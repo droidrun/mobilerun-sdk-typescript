@@ -5261,7 +5261,7 @@ export class Sandbox {
   }
 
   /**
-   * Stops the sandbox; a 202 response means shutdown is still in progress. The sandbox stays listed with status stopped.
+   * Stops the sandbox; a 202 response means shutdown is still in progress; once stopped, the sandbox stays listed with status stopped.
    *
    * Stop a sandbox
    */
