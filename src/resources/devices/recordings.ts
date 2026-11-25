@@ -30,6 +30,18 @@ export class Recordings extends APIResource {
   }
 
   /**
+   * Recordings whose files are still stored across all devices, newest first,
+   * including files whose device has been removed. Expired recordings are excluded.
+   * Pass nextCursor as cursor to retrieve the next page.
+   */
+  listAll(
+    query: RecordingListAllParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<RecordingListAllResponse> {
+    return this._client.get('/devices/recordings', { query, ...options });
+  }
+
+  /**
    * Screenshots saved into the recording with
    * `GET /devices/{deviceId}/screenshot?save=true`, oldest first, each with a
    * presigned download URL.
@@ -140,6 +152,72 @@ export namespace RecordingListResponse {
   }
 
   export namespace RecordingListResponseItem {
+    export interface Display {
+      height: number;
+
+      rotation: number;
+
+      width: number;
+    }
+
+    export interface Video {
+      durationMs: number;
+
+      format: string;
+
+      sizeBytes: number;
+
+      limited?: boolean;
+
+      limitReason?: string;
+    }
+  }
+}
+
+export interface RecordingListAllResponse {
+  items: Array<RecordingListAllResponse.Item> | null;
+
+  nextCursor: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export namespace RecordingListAllResponse {
+  export interface Item {
+    id: string;
+
+    actions: number;
+
+    deviceId: string;
+
+    display: Item.Display;
+
+    expiresAt: string;
+
+    name: string;
+
+    startedAt: string;
+
+    status: string;
+
+    types: Array<string> | null;
+
+    /**
+     * A URL to the JSON Schema for this object.
+     */
+    $schema?: string;
+
+    endedAt?: string;
+
+    error?: string;
+
+    video?: Item.Video;
+  }
+
+  export namespace Item {
     export interface Display {
       height: number;
 
@@ -349,6 +427,18 @@ export interface RecordingDeleteParams {
   deviceId: string;
 }
 
+export interface RecordingListAllParams {
+  cursor?: string;
+
+  deviceId?: string;
+
+  limit?: number;
+
+  status?: string;
+
+  type?: string;
+}
+
 export interface RecordingScreenshotsParams {
   deviceId: string;
 }
@@ -394,12 +484,14 @@ export interface RecordingVideoParams {
 export declare namespace Recordings {
   export {
     type RecordingListResponse as RecordingListResponse,
+    type RecordingListAllResponse as RecordingListAllResponse,
     type RecordingScreenshotsResponse as RecordingScreenshotsResponse,
     type RecordingStartResponse as RecordingStartResponse,
     type RecordingStatusResponse as RecordingStatusResponse,
     type RecordingStopResponse as RecordingStopResponse,
     type RecordingListParams as RecordingListParams,
     type RecordingDeleteParams as RecordingDeleteParams,
+    type RecordingListAllParams as RecordingListAllParams,
     type RecordingScreenshotsParams as RecordingScreenshotsParams,
     type RecordingStartParams as RecordingStartParams,
     type RecordingStatusParams as RecordingStatusParams,

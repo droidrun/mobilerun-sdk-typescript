@@ -2,6 +2,8 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
+import * as ApprovalsAPI from './approvals';
+import { ApprovalDecideParams, ApprovalDecideResponse, Approvals } from './approvals';
 import * as ScreenshotsAPI from './screenshots';
 import {
   ScreenshotListResponse,
@@ -22,6 +24,7 @@ import { path } from '../../internal/utils/path';
 export class Tasks extends APIResource {
   screenshots: ScreenshotsAPI.Screenshots = new ScreenshotsAPI.Screenshots(this._client);
   uiStates: UiStatesAPI.UiStates = new UiStatesAPI.UiStates(this._client);
+  approvals: ApprovalsAPI.Approvals = new ApprovalsAPI.Approvals(this._client);
 
   /**
    * Get full details of a task by ID.
@@ -90,6 +93,14 @@ export class Tasks extends APIResource {
     options?: RequestOptions,
   ): APIPromise<TaskSendMessageResponse> {
     return this._client.post(path`/tasks/${taskID}/message`, { body, ...options });
+  }
+
+  /**
+   * Task outcome counts per time bucket, success rate, duration percentiles and top
+   * failure reasons for a window. Tasks are bucketed by creation time.
+   */
+  stats(query: TaskStatsParams, options?: RequestOptions): APIPromise<TaskStatsResponse> {
+    return this._client.get('/tasks/stats', { query, ...options });
   }
 
   /**
@@ -1115,6 +1126,99 @@ export interface TaskSendMessageResponse {
   sent: boolean;
 }
 
+export interface TaskStatsResponse {
+  bucket: 'hour' | 'day';
+
+  /**
+   * Every bucket in the window, zero-filled
+   */
+  buckets: Array<TaskStatsResponse.Bucket>;
+
+  /**
+   * finishedAt - claimedAt of finished tasks created in the window
+   */
+  durationSeconds: TaskStatsResponse.DurationSeconds;
+
+  /**
+   * Window start (UTC, inclusive)
+   */
+  from: string;
+
+  /**
+   * Window end (UTC, exclusive)
+   */
+  to: string;
+
+  /**
+   * Up to 5 most common failure messages
+   */
+  topFailures: Array<TaskStatsResponse.TopFailure>;
+
+  totals: TaskStatsResponse.Totals;
+}
+
+export namespace TaskStatsResponse {
+  export interface Bucket {
+    cancelled: number;
+
+    failed: number;
+
+    /**
+     * Tasks not finished yet (prepared, queued, created, running, cancelling)
+     */
+    running: number;
+
+    /**
+     * Bucket start (UTC, floored to the bucket size)
+     */
+    start: string;
+
+    succeeded: number;
+  }
+
+  /**
+   * finishedAt - claimedAt of finished tasks created in the window
+   */
+  export interface DurationSeconds {
+    /**
+     * Median seconds from claim to finish
+     */
+    p50?: number | null;
+
+    /**
+     * 95th percentile seconds from claim to finish
+     */
+    p95?: number | null;
+  }
+
+  export interface TopFailure {
+    count: number;
+
+    /**
+     * Failure message: first line, trimmed, max 80 chars
+     */
+    message: string;
+  }
+
+  export interface Totals {
+    cancelled: number;
+
+    failed: number;
+
+    /**
+     * Tasks not finished yet (prepared, queued, created, running, cancelling)
+     */
+    running: number;
+
+    succeeded: number;
+
+    /**
+     * succeeded / (succeeded + failed); null when nothing finished
+     */
+    successRate?: number | null;
+  }
+}
+
 export interface TaskStopResponse {
   /**
    * Whether the task was cancelled
@@ -1365,8 +1469,32 @@ export interface TaskSendMessageParams {
   message: string;
 }
 
+export interface TaskStatsParams {
+  /**
+   * Window start, ISO 8601 UTC (inclusive).
+   */
+  from: string;
+
+  /**
+   * Window end, ISO 8601 UTC (exclusive). At most 90 days after `from`.
+   */
+  to: string;
+
+  /**
+   * Bucket size. `hour` only for windows of at most 7 days.
+   */
+  bucket?: 'hour' | 'day';
+
+  /**
+   * Only tasks created via the API ('api') or tasks spawned by an agent step or
+   * created with internal=true ('agent').
+   */
+  source?: 'api' | 'agent' | null;
+}
+
 Tasks.Screenshots = Screenshots;
 Tasks.UiStates = UiStates;
+Tasks.Approvals = Approvals;
 
 export declare namespace Tasks {
   export {
@@ -1377,11 +1505,13 @@ export declare namespace Tasks {
     type TaskRunResponse as TaskRunResponse,
     type TaskRunStreamedResponse as TaskRunStreamedResponse,
     type TaskSendMessageResponse as TaskSendMessageResponse,
+    type TaskStatsResponse as TaskStatsResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
     type TaskSendMessageParams as TaskSendMessageParams,
+    type TaskStatsParams as TaskStatsParams,
   };
 
   export {
@@ -1396,5 +1526,11 @@ export declare namespace Tasks {
     type UiStateRetrieveResponse as UiStateRetrieveResponse,
     type UiStateListResponse as UiStateListResponse,
     type UiStateRetrieveParams as UiStateRetrieveParams,
+  };
+
+  export {
+    Approvals as Approvals,
+    type ApprovalDecideResponse as ApprovalDecideResponse,
+    type ApprovalDecideParams as ApprovalDecideParams,
   };
 }
