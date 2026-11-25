@@ -81,6 +81,8 @@ import {
 import * as RecordingsAPI from './recordings';
 import {
   RecordingDeleteParams,
+  RecordingListAllParams,
+  RecordingListAllResponse,
   RecordingListParams,
   RecordingListResponse,
   RecordingScreenshotsParams,
@@ -101,6 +103,8 @@ import {
   ScreenshotCaptureResponse,
   ScreenshotDeleteParams,
   ScreenshotImageParams,
+  ScreenshotListAllParams,
+  ScreenshotListAllResponse,
   ScreenshotListParams,
   ScreenshotListResponse,
   Screenshots,
@@ -349,9 +353,11 @@ export class Devices extends APIResource {
    * the owner (API key or user) can instead remove the phone from the account so
    * anyone can pair it again; the phone must be disconnected first, otherwise the
    * request is rejected with 409 BYOD_DEVICE_CONNECTED. Other subscription-billed
-   * devices cannot be terminated with this request; it is rejected with 401. The
-   * `terminateAt` and `previousDeviceId` body fields are reserved for internal use;
-   * requests that set them are rejected with 401.
+   * devices cannot be terminated with this request; it is rejected with 403
+   * FORBIDDEN: Subscription devices are managed through subscription cancellation.
+   * This includes owner requests that set `terminateAt` or `previousDeviceId`. Those
+   * body fields are reserved for internal use; owner requests on other devices that
+   * set them are rejected with 401.
    */
   terminate(
     deviceID: string,
@@ -1534,10 +1540,12 @@ export declare namespace Devices {
     Screenshots as Screenshots,
     type ScreenshotListResponse as ScreenshotListResponse,
     type ScreenshotCaptureResponse as ScreenshotCaptureResponse,
+    type ScreenshotListAllResponse as ScreenshotListAllResponse,
     type ScreenshotListParams as ScreenshotListParams,
     type ScreenshotDeleteParams as ScreenshotDeleteParams,
     type ScreenshotCaptureParams as ScreenshotCaptureParams,
     type ScreenshotImageParams as ScreenshotImageParams,
+    type ScreenshotListAllParams as ScreenshotListAllParams,
   };
 
   export {
@@ -1591,12 +1599,14 @@ export declare namespace Devices {
   export {
     Recordings as Recordings,
     type RecordingListResponse as RecordingListResponse,
+    type RecordingListAllResponse as RecordingListAllResponse,
     type RecordingScreenshotsResponse as RecordingScreenshotsResponse,
     type RecordingStartResponse as RecordingStartResponse,
     type RecordingStatusResponse as RecordingStatusResponse,
     type RecordingStopResponse as RecordingStopResponse,
     type RecordingListParams as RecordingListParams,
     type RecordingDeleteParams as RecordingDeleteParams,
+    type RecordingListAllParams as RecordingListAllParams,
     type RecordingScreenshotsParams as RecordingScreenshotsParams,
     type RecordingStartParams as RecordingStartParams,
     type RecordingStatusParams as RecordingStatusParams,

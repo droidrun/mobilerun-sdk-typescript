@@ -64,6 +64,17 @@ export class Screenshots extends APIResource {
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
+
+  /**
+   * Saved screenshots across all devices, newest first, including files whose device
+   * has been removed. Pass nextCursor as cursor to retrieve the next page.
+   */
+  listAll(
+    query: ScreenshotListAllParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ScreenshotListAllResponse> {
+    return this._client.get('/devices/screenshots', { query, ...options });
+  }
 }
 
 export interface ScreenshotListResponse {
@@ -94,6 +105,33 @@ export namespace ScreenshotListResponse {
 }
 
 export type ScreenshotCaptureResponse = string;
+
+export interface ScreenshotListAllResponse {
+  items: Array<ScreenshotListAllResponse.Item> | null;
+
+  nextCursor: string;
+
+  /**
+   * A URL to the JSON Schema for this object.
+   */
+  $schema?: string;
+}
+
+export namespace ScreenshotListAllResponse {
+  export interface Item {
+    id: string;
+
+    capturedAt: string;
+
+    deviceId: string;
+
+    expiresAt: string;
+
+    recordingId: string | null;
+
+    sizeBytes: number;
+  }
+}
 
 export interface ScreenshotListParams {
   cursor?: string;
@@ -128,13 +166,23 @@ export interface ScreenshotImageParams {
   deviceId: string;
 }
 
+export interface ScreenshotListAllParams {
+  cursor?: string;
+
+  deviceId?: string;
+
+  limit?: number;
+}
+
 export declare namespace Screenshots {
   export {
     type ScreenshotListResponse as ScreenshotListResponse,
     type ScreenshotCaptureResponse as ScreenshotCaptureResponse,
+    type ScreenshotListAllResponse as ScreenshotListAllResponse,
     type ScreenshotListParams as ScreenshotListParams,
     type ScreenshotDeleteParams as ScreenshotDeleteParams,
     type ScreenshotCaptureParams as ScreenshotCaptureParams,
     type ScreenshotImageParams as ScreenshotImageParams,
+    type ScreenshotListAllParams as ScreenshotListAllParams,
   };
 }

@@ -42,6 +42,7 @@ import {
   FileUploadURLResponse,
   Files,
 } from './resources/files';
+import { Identity, IdentityMeResponse } from './resources/identity';
 import { ModelListResponse, Models } from './resources/models';
 import {
   Proxies,
@@ -138,6 +139,7 @@ import {
   NumberUpdateResponse,
   Numbers,
 } from './resources/numbers/numbers';
+import { Store } from './resources/store/store';
 import {
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
@@ -150,6 +152,8 @@ import {
   TaskRunStreamedResponse,
   TaskSendMessageParams,
   TaskSendMessageResponse,
+  TaskStatsParams,
+  TaskStatsResponse,
   TaskStopResponse,
   Tasks,
 } from './resources/tasks/tasks';
@@ -892,6 +896,7 @@ export class Mobilerun {
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
   streamTokens: API.StreamTokens = new API.StreamTokens(this);
+  identity: API.Identity = new API.Identity(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
   compute: API.Compute = new API.Compute(this);
@@ -909,12 +914,14 @@ export class Mobilerun {
   assistant: API.Assistant = new API.Assistant(this);
   messages: API.Messages = new API.Messages(this);
   numbers: API.Numbers = new API.Numbers(this);
+  store: API.Store = new API.Store(this);
 }
 
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
 Mobilerun.StreamTokens = StreamTokens;
+Mobilerun.Identity = Identity;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
 Mobilerun.Compute = Compute;
@@ -929,6 +936,7 @@ Mobilerun.Agents = Agents;
 Mobilerun.Assistant = Assistant;
 Mobilerun.Messages = Messages;
 Mobilerun.Numbers = Numbers;
+Mobilerun.Store = Store;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
@@ -981,6 +989,8 @@ export declare namespace Mobilerun {
     type StreamTokenCreateParams as StreamTokenCreateParams,
   };
 
+  export { Identity as Identity, type IdentityMeResponse as IdentityMeResponse };
+
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
   export {
@@ -1008,11 +1018,13 @@ export declare namespace Mobilerun {
     type TaskRunResponse as TaskRunResponse,
     type TaskRunStreamedResponse as TaskRunStreamedResponse,
     type TaskSendMessageResponse as TaskSendMessageResponse,
+    type TaskStatsResponse as TaskStatsResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
     type TaskSendMessageParams as TaskSendMessageParams,
+    type TaskStatsParams as TaskStatsParams,
   };
 
   export { Workflows as Workflows };
@@ -1103,6 +1115,8 @@ export declare namespace Mobilerun {
     type NumberListParams as NumberListParams,
     type NumberCapacityParams as NumberCapacityParams,
   };
+
+  export { Store as Store };
 
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
