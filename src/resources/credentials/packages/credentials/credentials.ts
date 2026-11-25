@@ -33,6 +33,24 @@ export class Credentials extends APIResource {
   }
 
   /**
+   * Sets or clears the optional `label` (human-readable name, free text, max 200
+   * characters) of an existing credential. `null` or an empty text clears it. Works
+   * for linked credentials too: the label is metadata of the credential, not a field
+   * of the linked item. Returns the updated credential.
+   */
+  update(
+    credentialName: string,
+    params: CredentialUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<CredentialUpdateResponse> {
+    const { packageName, ...body } = params;
+    return this._client.patch(path`/credentials/packages/${packageName}/credentials/${credentialName}`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
    * Permanently deletes the credential identified by `packageName` and
    * `credentialName`, removing all of its fields. Returns the deleted credential.
    */
@@ -58,6 +76,123 @@ export interface CredentialCreateResponse {
 }
 
 export namespace CredentialCreateResponse {
+  export interface Data {
+    createdBy: string | null;
+
+    credentialName: string;
+
+    fields: Array<Data.Field>;
+
+    ownerId: string;
+
+    packageName: string;
+
+    secretPath: string;
+
+    /**
+     * @deprecated Deprecated: use createdBy (same value — the creating actor). Null
+     * for credentials created before rollout.
+     */
+    userId: string | null;
+
+    label?: string;
+
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
+  }
+
+  export namespace Data {
+    export interface Field {
+      fieldType:
+        | 'email'
+        | 'username'
+        | 'password'
+        | 'api_token'
+        | 'phone_number'
+        | 'two_factor_secret'
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
+
+      value: string;
+    }
+
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
+
+      itemId: string;
+
+      itemTitle: string;
+
+      provider: 'onepassword';
+
+      vaultId: string;
+
+      vaultName: string;
+    }
+
+    export namespace UnionMember0 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+  }
+}
+
+export interface CredentialUpdateResponse {
+  data: CredentialUpdateResponse.Data;
+
+  message: string;
+
+  success: true;
+}
+
+export namespace CredentialUpdateResponse {
   export interface Data {
     createdBy: string | null;
 
@@ -310,6 +445,18 @@ export namespace CredentialCreateParams {
   }
 }
 
+export interface CredentialUpdateParams {
+  /**
+   * Path param
+   */
+  packageName: string;
+
+  /**
+   * Body param
+   */
+  label: string | null;
+}
+
 export interface CredentialDeleteParams {
   packageName: string;
 }
@@ -319,8 +466,10 @@ Credentials.Fields = Fields;
 export declare namespace Credentials {
   export {
     type CredentialCreateResponse as CredentialCreateResponse,
+    type CredentialUpdateResponse as CredentialUpdateResponse,
     type CredentialDeleteResponse as CredentialDeleteResponse,
     type CredentialCreateParams as CredentialCreateParams,
+    type CredentialUpdateParams as CredentialUpdateParams,
     type CredentialDeleteParams as CredentialDeleteParams,
   };
 

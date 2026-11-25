@@ -44,6 +44,7 @@ import * as MessagesConversationsAPI from '../resources/messages/conversations';
 import * as ResourcesMessagesAPI from '../resources/messages/messages';
 import * as NumbersMessagesAPI from '../resources/numbers/messages';
 import * as NumbersAPI from '../resources/numbers/numbers';
+import * as ApprovalsAPI from '../resources/tasks/approvals';
 import * as TasksScreenshotsAPI from '../resources/tasks/screenshots';
 import * as ResourcesTasksAPI from '../resources/tasks/tasks';
 import * as UiStatesAPI from '../resources/tasks/ui-states';
@@ -166,6 +167,7 @@ export class MobilerunSDK {
   readonly credentials: Without<Raw['credentials'], 'packages'> & { packages: CredentialPackageManager };
   readonly devices: DeviceManager;
   readonly streamTokens: Raw['streamTokens'];
+  readonly identity: Raw['identity'];
   readonly models: Raw['models'];
   readonly proxies: ProxyConfigurationManager;
   readonly compute: Without<Raw['compute'], 'functions' | 'runs' | 'sandboxes'> & {
@@ -196,6 +198,7 @@ export class MobilerunSDK {
   readonly assistant: Raw['assistant'];
   readonly messages: NumberMessageManager;
   readonly numbers: PhoneNumberManager;
+  readonly store: Raw['store'];
   constructor(options: ClientOptions = {}) {
     this.api = new Raw(options);
     configureObject(this);
@@ -232,6 +235,7 @@ export class MobilerunSDK {
     );
     this.devices = new DeviceManager(this.api);
     this.streamTokens = withResources(this.api.streamTokens, {}, 'StreamTokens') as Raw['streamTokens'];
+    this.identity = withResources(this.api.identity, {}, 'Identity') as Raw['identity'];
     this.models = withResources(this.api.models, {}, 'Models') as Raw['models'];
     this.proxies = new ProxyConfigurationManager(this.api);
     this.compute = withResources(
@@ -288,6 +292,14 @@ export class MobilerunSDK {
     ) as Raw['assistant'];
     this.messages = new NumberMessageManager(this.api);
     this.numbers = new PhoneNumberManager(this.api);
+    this.store = withResources(
+      this.api.store,
+      {
+        apps: withResources(this.api.store.apps, {}, 'Apps') as Raw['store']['apps'],
+        requests: withResources(this.api.store.requests, {}, 'Requests') as Raw['store']['requests'],
+      },
+      'Store',
+    ) as Raw['store'];
   }
   toJSON(): ReturnType<typeof objectSnapshot> {
     return objectSnapshot('MobilerunSDK');
@@ -1377,6 +1389,18 @@ export class TaskManager {
     options?: RequestOptions,
   ): APIPromise<unknown> {
     const result = this.api.tasks.runStreamed({ ...params }, options);
+    return result;
+  }
+
+  /**
+   * Task outcome counts per time bucket, success rate, duration percentiles and top
+   * failure reasons for a window. Tasks are bucketed by creation time.
+   */
+  stats(
+    params: ResourcesTasksAPI.TaskStatsParams,
+    options?: RequestOptions,
+  ): APIPromise<ResourcesTasksAPI.TaskStatsResponse> {
+    const result = this.api.tasks.stats({ ...params }, options);
     return result;
   }
 
@@ -3122,6 +3146,27 @@ export class Credential {
   }
 
   /**
+   * Sets or clears the optional `label` (human-readable name, free text, max 200
+   * characters) of an existing credential. `null` or an empty text clears it. Works
+   * for linked credentials too: the label is metadata of the credential, not a field
+   * of the linked item. Returns the updated credential.
+   */
+  update(
+    params: Omit<CredentialsAPI.CredentialUpdateParams, 'packageName'>,
+    options?: RequestOptions,
+  ): APIPromise<CredentialsAPI.CredentialUpdateResponse> {
+    const result = this.api.credentials.packages.credentials.update(
+      this.id,
+      { ...params, packageName: this.packageName },
+      boundOptions(options, [
+        { name: 'credentialName', location: 'path', value: this.id },
+        { name: 'packageName', location: 'path', value: this.packageName },
+      ]),
+    );
+    return result;
+  }
+
+  /**
    * Permanently deletes the credential identified by `packageName` and
    * `credentialName`, removing all of its fields. Returns the deleted credential.
    */
@@ -4039,9 +4084,11 @@ export class Device {
    * the owner (API key or user) can instead remove the phone from the account so
    * anyone can pair it again; the phone must be disconnected first, otherwise the
    * request is rejected with 409 BYOD_DEVICE_CONNECTED. Other subscription-billed
-   * devices cannot be terminated with this request; it is rejected with 401. The
-   * `terminateAt` and `previousDeviceId` body fields are reserved for internal use;
-   * requests that set them are rejected with 401.
+   * devices cannot be terminated with this request; it is rejected with 403
+   * FORBIDDEN: Subscription devices are managed through subscription cancellation.
+   * This includes owner requests that set `terminateAt` or `previousDeviceId`. Those
+   * body fields are reserved for internal use; owner requests on other devices that
+   * set them are rejected with 401.
    */
   terminate(params?: DevicesAPI.DeviceTerminateParams, options?: RequestOptions): APIPromise<void> {
     const result = this.api.devices.terminate(
@@ -5592,6 +5639,8 @@ export class Task<T = never> {
 
   readonly uiStates;
 
+  readonly approvals;
+
   constructor(
     readonly api: Raw,
     readonly id: string,
@@ -5648,6 +5697,24 @@ export class Task<T = never> {
       list: (options?: RequestOptions): APIPromise<UiStatesAPI.UiStateListResponse> => {
         const result = this.api.tasks.uiStates.list(
           this.id,
+          boundOptions(options, [{ name: 'task_id', location: 'path', value: this.id }]),
+        );
+        return result;
+      },
+    };
+    this.approvals = {
+      /**
+       * Approve or deny the approval a running task is waiting for (see
+       * `pendingApproval` on the task). Deny ends the task as failed.
+       */
+      decide: (
+        approvalID: string,
+        params: Omit<ApprovalsAPI.ApprovalDecideParams, 'task_id'>,
+        options?: RequestOptions,
+      ): APIPromise<ApprovalsAPI.ApprovalDecideResponse> => {
+        const result = this.api.tasks.approvals.decide(
+          approvalID,
+          { ...params, task_id: this.id },
           boundOptions(options, [{ name: 'task_id', location: 'path', value: this.id }]),
         );
         return result;
