@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.5.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.4.0...v6.5.0) (2026-11-25)
+
+
+### Features
+
+* **docs:** enable go code samples ([68291b7](https://github.com/droidrun/mobilerun-sdk-typescript/commit/68291b71bc697648c3b1eaa7dd9af855593b0c24))
+
 ## [6.4.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.3.2...v6.4.0) (2026-11-25)
 
 
