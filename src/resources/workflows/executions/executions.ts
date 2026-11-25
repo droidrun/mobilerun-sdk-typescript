@@ -13,17 +13,22 @@ export class Executions extends APIResource {
 
   /**
    * Fetch a single flow execution by its ID, including its status, kind, result or
-   * error, and start/finish timestamps. Returns 404 if no execution matches.
+   * error, and start/finish timestamps. Add `include=input` to get what each step
+   * ran with. Returns 404 if no execution matches.
    */
-  retrieve(executionID: string, options?: RequestOptions): APIPromise<ExecutionRetrieveResponse> {
-    return this._client.get(path`/executions/${executionID}`, options);
+  retrieve(
+    executionID: string,
+    query: ExecutionRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ExecutionRetrieveResponse> {
+    return this._client.get(path`/executions/${executionID}`, { query, ...options });
   }
 
   /**
    * Return a paginated history of flow executions. Supports filtering by `flowId`,
-   * `triggerId`, `invocationId` (the client/verify key), `status`, and a `from`/`to`
-   * time range, plus free-text `search` and ordering by startedAt, finishedAt, or
-   * status.
+   * `triggerId`, `invocationId` (the client/verify key), `status`, `kind` (one or
+   * more execution kinds), and a `from`/`to` time range, plus free-text `search` and
+   * ordering by startedAt, finishedAt, or status.
    */
   list(
     query: ExecutionListParams | null | undefined = {},
@@ -146,11 +151,17 @@ export namespace ExecutionRetrieveResponse {
     triggerName: string | null;
 
     /**
-     * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
-     * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
-     * step that opted into a verdict — null otherwise. Steps of current executions
-     * also carry a `status` string (e.g. success/failed/stopped); it is optional and
-     * absent on older executions, so clients must not assume its presence.
+     * Opaque result blob ({ steps: [...] } or historical dry-run { actions: [...] }).
+     * Steps and nested loop/action children carry `uses` (authored step name,
+     * including hidden executable steps; null when unavailable). Admin execution list
+     * responses do not carry `uses`. The retained `service` and `method` fields are
+     * deprecated; use `uses`. Each step additionally carries a `verdict` field ({
+     * outcome, summary, reason? } | null) when it is an agent.run step that opted into
+     * a verdict — null otherwise. Steps of current executions also carry a `status`
+     * string (e.g. success/failed/stopped); it is optional and absent on older
+     * executions, so clients must not assume its presence. With `include=input` on the
+     * detail request each step (loop children included) also carries `input`; see that
+     * parameter.
      */
     result?: unknown;
   }
@@ -205,10 +216,16 @@ export namespace ExecutionRetrieveResponse {
 
         index: number;
 
+        /**
+         * @deprecated Deprecated: use uses.
+         */
         method: string;
 
         name: string;
 
+        /**
+         * @deprecated Deprecated: use uses.
+         */
         service: string;
 
         sessionId: string | null;
@@ -216,6 +233,12 @@ export namespace ExecutionRetrieveResponse {
         startedAt: string | null;
 
         status: 'pending' | 'running' | 'success' | 'failed' | 'skipped' | 'cancelled';
+
+        /**
+         * Authored step name; null when this step has no name. Includes hidden executable
+         * steps.
+         */
+        uses: string | null;
 
         /**
          * Zero-based retry attempt of the execution job during which this step last ran (0
@@ -361,11 +384,17 @@ export namespace ExecutionListResponse {
     triggerName: string | null;
 
     /**
-     * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
-     * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
-     * step that opted into a verdict — null otherwise. Steps of current executions
-     * also carry a `status` string (e.g. success/failed/stopped); it is optional and
-     * absent on older executions, so clients must not assume its presence.
+     * Opaque result blob ({ steps: [...] } or historical dry-run { actions: [...] }).
+     * Steps and nested loop/action children carry `uses` (authored step name,
+     * including hidden executable steps; null when unavailable). Admin execution list
+     * responses do not carry `uses`. The retained `service` and `method` fields are
+     * deprecated; use `uses`. Each step additionally carries a `verdict` field ({
+     * outcome, summary, reason? } | null) when it is an agent.run step that opted into
+     * a verdict — null otherwise. Steps of current executions also carry a `status`
+     * string (e.g. success/failed/stopped); it is optional and absent on older
+     * executions, so clients must not assume its presence. With `include=input` on the
+     * detail request each step (loop children included) also carries `input`; see that
+     * parameter.
      */
     result?: unknown;
   }
@@ -454,11 +483,17 @@ export namespace ExecutionAbortResponse {
     triggerName: string | null;
 
     /**
-     * Opaque per-step result blob ({ steps: [...] }). Each step additionally carries a
-     * `verdict` field ({ outcome, summary, reason? } | null) when it is an agent.run
-     * step that opted into a verdict — null otherwise. Steps of current executions
-     * also carry a `status` string (e.g. success/failed/stopped); it is optional and
-     * absent on older executions, so clients must not assume its presence.
+     * Opaque result blob ({ steps: [...] } or historical dry-run { actions: [...] }).
+     * Steps and nested loop/action children carry `uses` (authored step name,
+     * including hidden executable steps; null when unavailable). Admin execution list
+     * responses do not carry `uses`. The retained `service` and `method` fields are
+     * deprecated; use `uses`. Each step additionally carries a `verdict` field ({
+     * outcome, summary, reason? } | null) when it is an agent.run step that opted into
+     * a verdict — null otherwise. Steps of current executions also carry a `status`
+     * string (e.g. success/failed/stopped); it is optional and absent on older
+     * executions, so clients must not assume its presence. With `include=input` on the
+     * detail request each step (loop children included) also carries `input`; see that
+     * parameter.
      */
     result?: unknown;
   }
@@ -498,12 +533,41 @@ export namespace ExecutionGetMetricsResponse {
   }
 }
 
+export interface ExecutionRetrieveParams {
+  /**
+   * Extra data to add to each step of `result.steps` (loop children included).
+   * `input` adds a field `input` per step: what the step ran with, resolved after
+   * templating and without values the platform adds (ids, session and idempotency
+   * keys, script state). For sandbox steps, nested `input` is the effective input
+   * when available, otherwise the submitted input. The value is the input object, a
+   * marker `{ "notRecorded": "too_large" | "invalid" | "unavailable" }` (`too_large`
+   * adds `bytes`) when it could not be stored or exceeds 64 KiB, or null for a step
+   * without a recorded input, such as a run from before inputs were stored. Secrets
+   * are redacted before storing, best effort and by key name only: a value is
+   * replaced with `[REDACTED]` at any depth when its key, read as words
+   * (`clientSecret`, `x-auth-token`), contains `password`, `passwd`, `passphrase`,
+   * `secret`, `token`, `authorization`, `cookie`, `credential`, `signature`,
+   * `api key`, `private key`, `client key` or `card number`, or is exactly `pwd`,
+   * `otp`, `totp`, `pin`, `cvv` or `cvc`. `Bearer`, `Basic` and `Token`
+   * authorization values in strings are masked too. Secrets inside other strings
+   * (for example agent prompts) or under other key names are not detected. The
+   * content of file uploads is never stored, only its size, encoding and type.
+   * Without `include` the response has no `input` fields.
+   */
+  include?: 'input';
+}
+
 export interface ExecutionListParams {
   flowId?: string;
 
   from?: string | null;
 
   invocationId?: string;
+
+  /**
+   * Only include these execution kinds. Omit to include all kinds.
+   */
+  kind?: Array<'live' | 'dry_run' | 'verification'>;
 
   orderBy?: 'startedAt' | 'finishedAt' | 'status';
 
@@ -540,6 +604,7 @@ export declare namespace Executions {
     type ExecutionListResponse as ExecutionListResponse,
     type ExecutionAbortResponse as ExecutionAbortResponse,
     type ExecutionGetMetricsResponse as ExecutionGetMetricsResponse,
+    type ExecutionRetrieveParams as ExecutionRetrieveParams,
     type ExecutionListParams as ExecutionListParams,
     type ExecutionGetMetricsParams as ExecutionGetMetricsParams,
   };

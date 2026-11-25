@@ -53,18 +53,36 @@ export namespace EventDryRunResponse {
 
         key: string;
 
+        /**
+         * @deprecated Deprecated: use uses.
+         */
         method: string;
 
         name: string;
 
         recordingEnabled: boolean;
 
+        /**
+         * @deprecated Deprecated: use uses.
+         */
         service:
-          'tasks_api' | 'devices_api' | 'agents_api' | 'webhooks' | 'integrations_api' | 'triggers_api';
+          | 'tasks_api'
+          | 'devices_api'
+          | 'agents_api'
+          | 'webhooks'
+          | 'integrations_api'
+          | 'triggers_api'
+          | 'sandbox_api';
+
+        /**
+         * Authored step name; null when this step has no name. Includes hidden executable
+         * steps.
+         */
+        uses: string | null;
 
         /**
          * Nested child actions (loop/branch bodies), each the same shape as a
-         * ResolvedAction.
+         * ResolvedAction, including nullable uses and deprecated service/method.
          */
         children?: Array<unknown>;
 
@@ -135,6 +153,9 @@ export namespace EventDryRunResponse {
 
         ownerId: string;
 
+        /**
+         * Defaults to final.
+         */
         ownerWake: 'final' | 'off';
 
         /**
@@ -150,6 +171,8 @@ export namespace EventDryRunResponse {
          * sink, else none.
          */
         resultDelivery: 'none' | 'message' | 'wake';
+
+        saveSandboxLogs: boolean;
 
         selfHealingEnabled: boolean;
 
@@ -181,15 +204,18 @@ export namespace EventDryRunResponse {
           destination: 'mobilerun' | 'one_drive' | 'google_drive';
 
           /**
-           * Absolute destination folder; not allowed when destination is mobilerun. May
-           * contain {{meta.<name>}} (for example {{meta.shortDate}} = YYMMDD,
-           * {{meta.fileTime}} = HH-mm, in the trigger timezone) and
-           * {{event.payload.<field>}} placeholders, resolved once per run so every artifact
-           * of that run lands in the same folder. Each substituted value must be a single
-           * safe folder name (no "/", "\", "..", control characters); otherwise delivery
-           * fails with invalid_delivery_folder. With a placeholder folder, screenshots are
-           * delivered directly into the resolved folder; with a static folder they go into a
-           * per-run "<flow>-<timestamp>-<id>-screenshots" subfolder.
+           * Absolute destination folder. For destination mobilerun, a folder turns on saving
+           * a copy of the run's recording, screenshots and files.upload outputs in Mobilerun
+           * storage under that folder (counts against storage). May contain {{meta.<name>}}
+           * (for example {{meta.shortDate}} = YYMMDD, {{meta.fileTime}} = HH-mm, in the
+           * trigger timezone) and {{event.payload.<field>}} placeholders, resolved once per
+           * run so every artifact of that run lands in the same folder. Each substituted
+           * value must be a single safe folder name (no "/", "\", "..", control characters);
+           * otherwise delivery fails with invalid_delivery_folder. For OneDrive and Google
+           * Drive, screenshots are delivered directly into the resolved folder with a
+           * placeholder folder, and into a per-run "<flow>-<timestamp>-<id>-screenshots"
+           * subfolder with a static folder. Mobilerun copies always go directly into the
+           * folder.
            */
           folder?: string;
 
