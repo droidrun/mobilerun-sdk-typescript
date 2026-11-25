@@ -9,6 +9,8 @@ import {
   CredentialCreateResponse,
   CredentialDeleteParams,
   CredentialDeleteResponse,
+  CredentialUpdateParams,
+  CredentialUpdateResponse,
   Credentials,
 } from './credentials/credentials';
 import { APIPromise } from '../../../core/api-promise';
@@ -84,9 +86,11 @@ export namespace PackageListResponse {
      */
     userId: string | null;
 
-    link?: Data.Link;
+    label?: string;
 
-    source?: 'mobilerun' | 'onepassword';
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
   }
 
   export namespace Data {
@@ -98,13 +102,17 @@ export namespace PackageListResponse {
         | 'api_token'
         | 'phone_number'
         | 'two_factor_secret'
-        | 'backup_codes';
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
 
       value: string;
     }
 
-    export interface Link {
-      fieldMap: Array<Link.FieldMap>;
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
 
       itemId: string;
 
@@ -117,7 +125,7 @@ export namespace PackageListResponse {
       vaultName: string;
     }
 
-    export namespace Link {
+    export namespace UnionMember0 {
       export interface FieldMap {
         fieldId: string;
 
@@ -128,7 +136,40 @@ export namespace PackageListResponse {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes';
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
       }
     }
   }
@@ -162,8 +203,10 @@ export declare namespace Packages {
   export {
     Credentials as Credentials,
     type CredentialCreateResponse as CredentialCreateResponse,
+    type CredentialUpdateResponse as CredentialUpdateResponse,
     type CredentialDeleteResponse as CredentialDeleteResponse,
     type CredentialCreateParams as CredentialCreateParams,
+    type CredentialUpdateParams as CredentialUpdateParams,
     type CredentialDeleteParams as CredentialDeleteParams,
   };
 
