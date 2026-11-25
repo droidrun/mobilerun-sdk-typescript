@@ -42,6 +42,7 @@ import {
   FileUploadURLResponse,
   Files,
 } from './resources/files';
+import { Identity, IdentityMeResponse } from './resources/identity';
 import { ModelListResponse, Models } from './resources/models';
 import {
   Proxies,
@@ -55,6 +56,16 @@ import {
   ProxyUpdateResponse,
 } from './resources/proxies';
 import {
+  RoutineFileDeleteManyParams,
+  RoutineFileDeleteManyResponse,
+  RoutineFileListFoldersParams,
+  RoutineFileListFoldersResponse,
+  RoutineFileListParams,
+  RoutineFileListResponse,
+  RoutineFiles,
+} from './resources/routine-files';
+import { StreamTokenCreateParams, StreamTokenCreateResponse, StreamTokens } from './resources/stream-tokens';
+import {
   AgentCreateParams,
   AgentCreateResponse,
   AgentListResponse,
@@ -62,6 +73,7 @@ import {
   Agents,
 } from './resources/agents/agents';
 import { Assistant } from './resources/assistant/assistant';
+import { Compute } from './resources/compute/compute';
 import { Connect } from './resources/connect/connect';
 import {
   CredentialListParams,
@@ -84,6 +96,8 @@ import {
   DeviceSummaryParams,
   DeviceSummaryResponse,
   DeviceTerminateParams,
+  DeviceUpdateIdleTimeoutParams,
+  DeviceUpdateIdleTimeoutResponse,
   DeviceWaitReadyResponse,
   Devices,
 } from './resources/devices/devices';
@@ -125,6 +139,7 @@ import {
   NumberUpdateResponse,
   Numbers,
 } from './resources/numbers/numbers';
+import { Store } from './resources/store/store';
 import {
   TaskGetStatusResponse,
   TaskGetTrajectoryResponse,
@@ -137,6 +152,8 @@ import {
   TaskRunStreamedResponse,
   TaskSendMessageParams,
   TaskSendMessageResponse,
+  TaskStatsParams,
+  TaskStatsResponse,
   TaskStopResponse,
   Tasks,
 } from './resources/tasks/tasks';
@@ -878,8 +895,11 @@ export class Mobilerun {
   apps: API.Apps = new API.Apps(this);
   credentials: API.Credentials = new API.Credentials(this);
   devices: API.Devices = new API.Devices(this);
+  streamTokens: API.StreamTokens = new API.StreamTokens(this);
+  identity: API.Identity = new API.Identity(this);
   models: API.Models = new API.Models(this);
   proxies: API.Proxies = new API.Proxies(this);
+  compute: API.Compute = new API.Compute(this);
   connect: API.Connect = new API.Connect(this);
   /**
    * Tasks API
@@ -888,28 +908,35 @@ export class Mobilerun {
   workflows: API.Workflows = new API.Workflows(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   mailboxes: API.Mailboxes = new API.Mailboxes(this);
+  routineFiles: API.RoutineFiles = new API.RoutineFiles(this);
   files: API.Files = new API.Files(this);
   agents: API.Agents = new API.Agents(this);
   assistant: API.Assistant = new API.Assistant(this);
   messages: API.Messages = new API.Messages(this);
   numbers: API.Numbers = new API.Numbers(this);
+  store: API.Store = new API.Store(this);
 }
 
 Mobilerun.Apps = Apps;
 Mobilerun.Credentials = Credentials;
 Mobilerun.Devices = Devices;
+Mobilerun.StreamTokens = StreamTokens;
+Mobilerun.Identity = Identity;
 Mobilerun.Models = Models;
 Mobilerun.Proxies = Proxies;
+Mobilerun.Compute = Compute;
 Mobilerun.Connect = Connect;
 Mobilerun.Tasks = Tasks;
 Mobilerun.Workflows = Workflows;
 Mobilerun.Webhooks = Webhooks;
 Mobilerun.Mailboxes = Mailboxes;
+Mobilerun.RoutineFiles = RoutineFiles;
 Mobilerun.Files = Files;
 Mobilerun.Agents = Agents;
 Mobilerun.Assistant = Assistant;
 Mobilerun.Messages = Messages;
 Mobilerun.Numbers = Numbers;
+Mobilerun.Store = Store;
 
 export declare namespace Mobilerun {
   export type RequestOptions = Opts.RequestOptions;
@@ -944,6 +971,7 @@ export declare namespace Mobilerun {
     type DeviceRetrieveCapabilitiesResponse as DeviceRetrieveCapabilitiesResponse,
     type DeviceSetNameResponse as DeviceSetNameResponse,
     type DeviceSummaryResponse as DeviceSummaryResponse,
+    type DeviceUpdateIdleTimeoutResponse as DeviceUpdateIdleTimeoutResponse,
     type DeviceWaitReadyResponse as DeviceWaitReadyResponse,
     type DeviceCreateParams as DeviceCreateParams,
     type DeviceListParams as DeviceListParams,
@@ -952,7 +980,16 @@ export declare namespace Mobilerun {
     type DeviceSetNameParams as DeviceSetNameParams,
     type DeviceSummaryParams as DeviceSummaryParams,
     type DeviceTerminateParams as DeviceTerminateParams,
+    type DeviceUpdateIdleTimeoutParams as DeviceUpdateIdleTimeoutParams,
   };
+
+  export {
+    StreamTokens as StreamTokens,
+    type StreamTokenCreateResponse as StreamTokenCreateResponse,
+    type StreamTokenCreateParams as StreamTokenCreateParams,
+  };
+
+  export { Identity as Identity, type IdentityMeResponse as IdentityMeResponse };
 
   export { Models as Models, type ModelListResponse as ModelListResponse };
 
@@ -968,6 +1005,8 @@ export declare namespace Mobilerun {
     type ProxyListParams as ProxyListParams,
   };
 
+  export { Compute as Compute };
+
   export { Connect as Connect };
 
   export {
@@ -979,11 +1018,13 @@ export declare namespace Mobilerun {
     type TaskRunResponse as TaskRunResponse,
     type TaskRunStreamedResponse as TaskRunStreamedResponse,
     type TaskSendMessageResponse as TaskSendMessageResponse,
+    type TaskStatsResponse as TaskStatsResponse,
     type TaskStopResponse as TaskStopResponse,
     type TaskListParams as TaskListParams,
     type TaskRunParams as TaskRunParams,
     type TaskRunStreamedParams as TaskRunStreamedParams,
     type TaskSendMessageParams as TaskSendMessageParams,
+    type TaskStatsParams as TaskStatsParams,
   };
 
   export { Workflows as Workflows };
@@ -1018,6 +1059,16 @@ export declare namespace Mobilerun {
     type MailboxListParams as MailboxListParams,
     type MailboxOtpParams as MailboxOtpParams,
     type MailboxRestartParams as MailboxRestartParams,
+  };
+
+  export {
+    RoutineFiles as RoutineFiles,
+    type RoutineFileListResponse as RoutineFileListResponse,
+    type RoutineFileDeleteManyResponse as RoutineFileDeleteManyResponse,
+    type RoutineFileListFoldersResponse as RoutineFileListFoldersResponse,
+    type RoutineFileListParams as RoutineFileListParams,
+    type RoutineFileDeleteManyParams as RoutineFileDeleteManyParams,
+    type RoutineFileListFoldersParams as RoutineFileListFoldersParams,
   };
 
   export {
@@ -1064,6 +1115,8 @@ export declare namespace Mobilerun {
     type NumberListParams as NumberListParams,
     type NumberCapacityParams as NumberCapacityParams,
   };
+
+  export { Store as Store };
 
   export type DeviceCarrier = API.DeviceCarrier;
   export type DeviceIdentifiers = API.DeviceIdentifiers;
