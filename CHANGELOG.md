@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.4.0](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.3.2...v6.4.0) (2026-11-25)
+
+
+### Features
+
+* **sdk:** go objects and 6.4.0 ([bad71f5](https://github.com/droidrun/mobilerun-sdk-typescript/commit/bad71f58cbc181178201ab625c9f81c3f54ac824))
+
+
+### Chores
+
+* release 6.4.0 ([a4feb14](https://github.com/droidrun/mobilerun-sdk-typescript/commit/a4feb1438b461f4254c6d0152345129489d17bd4))
+
 ## [6.3.2](https://github.com/droidrun/mobilerun-sdk-typescript/compare/v6.3.1...v6.3.2) (2026-11-24)
 
 
