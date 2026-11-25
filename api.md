@@ -65,11 +65,13 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">CredentialCreateResponse</a></code>
+- <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">CredentialUpdateResponse</a></code>
 - <code><a href="./src/resources/credentials/packages/credentials/credentials.ts">CredentialDeleteResponse</a></code>
 
 Methods:
 
 - <code title="post /credentials/packages/{packageName}">client.credentials.packages.credentials.<a href="./src/resources/credentials/packages/credentials/credentials.ts">create</a>(packageName, { ...params }) -> CredentialCreateResponse</code>
+- <code title="patch /credentials/packages/{packageName}/credentials/{credentialName}">client.credentials.packages.credentials.<a href="./src/resources/credentials/packages/credentials/credentials.ts">update</a>(credentialName, { ...params }) -> CredentialUpdateResponse</code>
 - <code title="delete /credentials/packages/{packageName}/credentials/{credentialName}">client.credentials.packages.credentials.<a href="./src/resources/credentials/packages/credentials/credentials.ts">delete</a>(credentialName, { ...params }) -> CredentialDeleteResponse</code>
 
 #### Fields
@@ -290,6 +292,7 @@ Types:
 
 - <code><a href="./src/resources/devices/screenshots.ts">ScreenshotListResponse</a></code>
 - <code><a href="./src/resources/devices/screenshots.ts">ScreenshotCaptureResponse</a></code>
+- <code><a href="./src/resources/devices/screenshots.ts">ScreenshotListAllResponse</a></code>
 
 Methods:
 
@@ -297,6 +300,7 @@ Methods:
 - <code title="delete /devices/{deviceId}/screenshots/{screenshotId}">client.devices.screenshots.<a href="./src/resources/devices/screenshots.ts">delete</a>(screenshotID, { ...params }) -> void</code>
 - <code title="post /devices/{deviceId}/screenshots">client.devices.screenshots.<a href="./src/resources/devices/screenshots.ts">capture</a>(deviceID, { ...params }) -> string</code>
 - <code title="get /devices/{deviceId}/screenshots/{screenshotId}/image">client.devices.screenshots.<a href="./src/resources/devices/screenshots.ts">image</a>(screenshotID, { ...params }) -> void</code>
+- <code title="get /devices/screenshots">client.devices.screenshots.<a href="./src/resources/devices/screenshots.ts">listAll</a>({ ...params }) -> ScreenshotListAllResponse</code>
 
 ## State
 
@@ -384,6 +388,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/devices/recordings.ts">RecordingListResponse</a></code>
+- <code><a href="./src/resources/devices/recordings.ts">RecordingListAllResponse</a></code>
 - <code><a href="./src/resources/devices/recordings.ts">RecordingScreenshotsResponse</a></code>
 - <code><a href="./src/resources/devices/recordings.ts">RecordingStartResponse</a></code>
 - <code><a href="./src/resources/devices/recordings.ts">RecordingStatusResponse</a></code>
@@ -393,6 +398,7 @@ Methods:
 
 - <code title="get /devices/{deviceId}/recordings">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">list</a>(deviceID, { ...params }) -> RecordingListResponse | null</code>
 - <code title="delete /devices/{deviceId}/recordings/{recordingId}">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">delete</a>(recordingID, { ...params }) -> void</code>
+- <code title="get /devices/recordings">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">listAll</a>({ ...params }) -> RecordingListAllResponse</code>
 - <code title="get /devices/{deviceId}/recordings/{recordingId}/screenshots">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">screenshots</a>(recordingID, { ...params }) -> RecordingScreenshotsResponse | null</code>
 - <code title="post /devices/{deviceId}/recordings">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">start</a>(deviceID, { ...params }) -> RecordingStartResponse</code>
 - <code title="get /devices/{deviceId}/recordings/{recordingId}">client.devices.recordings.<a href="./src/resources/devices/recordings.ts">status</a>(recordingID, { ...params }) -> RecordingStatusResponse</code>
@@ -452,6 +458,16 @@ Methods:
 
 - <code title="post /identity/stream-keys">client.streamTokens.<a href="./src/resources/stream-tokens.ts">create</a>({ ...params }) -> StreamTokenCreateResponse</code>
 - <code title="delete /identity/stream-keys/{id}">client.streamTokens.<a href="./src/resources/stream-tokens.ts">delete</a>(id) -> void</code>
+
+# Identity
+
+Types:
+
+- <code><a href="./src/resources/identity.ts">IdentityMeResponse</a></code>
+
+Methods:
+
+- <code title="get /identity/me">client.identity.<a href="./src/resources/identity.ts">me</a>() -> IdentityMeResponse</code>
 
 # Models
 
@@ -664,6 +680,7 @@ Types:
 - <code><a href="./src/resources/tasks/tasks.ts">TaskRunResponse</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskRunStreamedResponse</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskSendMessageResponse</a></code>
+- <code><a href="./src/resources/tasks/tasks.ts">TaskStatsResponse</a></code>
 - <code><a href="./src/resources/tasks/tasks.ts">TaskStopResponse</a></code>
 
 Methods:
@@ -676,6 +693,7 @@ Methods:
 - <code title="post /tasks">client.tasks.<a href="./src/resources/tasks/tasks.ts">run</a>({ ...params }) -> TaskRunResponse</code>
 - <code title="post /tasks/stream">client.tasks.<a href="./src/resources/tasks/tasks.ts">runStreamed</a>({ ...params }) -> unknown</code>
 - <code title="post /tasks/{task_id}/message">client.tasks.<a href="./src/resources/tasks/tasks.ts">sendMessage</a>(taskID, { ...params }) -> TaskSendMessageResponse</code>
+- <code title="get /tasks/stats">client.tasks.<a href="./src/resources/tasks/tasks.ts">stats</a>({ ...params }) -> TaskStatsResponse</code>
 - <code title="post /tasks/{task_id}/cancel">client.tasks.<a href="./src/resources/tasks/tasks.ts">stop</a>(taskID) -> TaskStopResponse</code>
 
 ## Screenshots
@@ -701,6 +719,16 @@ Methods:
 
 - <code title="get /tasks/{task_id}/ui_states/{index}">client.tasks.uiStates.<a href="./src/resources/tasks/ui-states.ts">retrieve</a>(index, { ...params }) -> UiStateRetrieveResponse</code>
 - <code title="get /tasks/{task_id}/ui_states">client.tasks.uiStates.<a href="./src/resources/tasks/ui-states.ts">list</a>(taskID) -> UiStateListResponse</code>
+
+## Approvals
+
+Types:
+
+- <code><a href="./src/resources/tasks/approvals.ts">ApprovalDecideResponse</a></code>
+
+Methods:
+
+- <code title="post /tasks/{task_id}/approvals/{approval_id}">client.tasks.approvals.<a href="./src/resources/tasks/approvals.ts">decide</a>(approvalID, { ...params }) -> ApprovalDecideResponse</code>
 
 # Workflows
 
@@ -1205,3 +1233,25 @@ Methods:
 
 - <code title="get /numbers/phones/{id}/messages">client.numbers.messages.<a href="./src/resources/numbers/messages.ts">list</a>(id, { ...params }) -> MessageListResponse</code>
 - <code title="post /numbers/phones/{id}/messages">client.numbers.messages.<a href="./src/resources/numbers/messages.ts">send</a>(id, { ...params }) -> MessageSendResponse</code>
+
+# Store
+
+## Apps
+
+Types:
+
+- <code><a href="./src/resources/store/apps.ts">AppListResponse</a></code>
+
+Methods:
+
+- <code title="get /store/apps">client.store.apps.<a href="./src/resources/store/apps.ts">list</a>({ ...params }) -> AppListResponse</code>
+
+## Requests
+
+Types:
+
+- <code><a href="./src/resources/store/requests.ts">RequestCreateResponse</a></code>
+
+Methods:
+
+- <code title="post /store/requests">client.store.requests.<a href="./src/resources/store/requests.ts">create</a>({ ...params }) -> RequestCreateResponse</code>

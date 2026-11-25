@@ -117,12 +117,14 @@ export {
 export {
   Recordings,
   type RecordingListResponse,
+  type RecordingListAllResponse,
   type RecordingScreenshotsResponse,
   type RecordingStartResponse,
   type RecordingStatusResponse,
   type RecordingStopResponse,
   type RecordingListParams,
   type RecordingDeleteParams,
+  type RecordingListAllParams,
   type RecordingScreenshotsParams,
   type RecordingStartParams,
   type RecordingStatusParams,
@@ -134,10 +136,12 @@ export {
   Screenshots,
   type ScreenshotListResponse,
   type ScreenshotCaptureResponse,
+  type ScreenshotListAllResponse,
   type ScreenshotListParams,
   type ScreenshotDeleteParams,
   type ScreenshotCaptureParams,
   type ScreenshotImageParams,
+  type ScreenshotListAllParams,
 } from './screenshots';
 export {
   State,

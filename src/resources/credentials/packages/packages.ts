@@ -9,6 +9,8 @@ import {
   CredentialCreateResponse,
   CredentialDeleteParams,
   CredentialDeleteResponse,
+  CredentialUpdateParams,
+  CredentialUpdateResponse,
   Credentials,
 } from './credentials/credentials';
 import { APIPromise } from '../../../core/api-promise';
@@ -201,8 +203,10 @@ export declare namespace Packages {
   export {
     Credentials as Credentials,
     type CredentialCreateResponse as CredentialCreateResponse,
+    type CredentialUpdateResponse as CredentialUpdateResponse,
     type CredentialDeleteResponse as CredentialDeleteResponse,
     type CredentialCreateParams as CredentialCreateParams,
+    type CredentialUpdateParams as CredentialUpdateParams,
     type CredentialDeleteParams as CredentialDeleteParams,
   };
 

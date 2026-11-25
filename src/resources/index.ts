@@ -62,6 +62,7 @@ export {
   type FileListParams,
   type FileUploadURLParams,
 } from './files';
+export { Identity, type IdentityMeResponse } from './identity';
 export {
   Mailboxes,
   type MailboxCreateResponse,
@@ -121,6 +122,7 @@ export {
   type RoutineFileDeleteManyParams,
   type RoutineFileListFoldersParams,
 } from './routine-files';
+export { Store } from './store/store';
 export { StreamTokens, type StreamTokenCreateResponse, type StreamTokenCreateParams } from './stream-tokens';
 export {
   Tasks,
@@ -131,11 +133,13 @@ export {
   type TaskRunResponse,
   type TaskRunStreamedResponse,
   type TaskSendMessageResponse,
+  type TaskStatsResponse,
   type TaskStopResponse,
   type TaskListParams,
   type TaskRunParams,
   type TaskRunStreamedParams,
   type TaskSendMessageParams,
+  type TaskStatsParams,
 } from './tasks/tasks';
 export {
   Webhooks,

@@ -33,6 +33,29 @@ describe('resource credentials', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('update: only required params', async () => {
+    const responsePromise = client.credentials.packages.credentials.update('26f1kl_-n-71', {
+      packageName: 'x',
+      label: 'label',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('update: required and optional params', async () => {
+    const response = await client.credentials.packages.credentials.update('26f1kl_-n-71', {
+      packageName: 'x',
+      label: 'label',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.credentials.packages.credentials.delete('26f1kl_-n-71', {
       packageName: 'x',
