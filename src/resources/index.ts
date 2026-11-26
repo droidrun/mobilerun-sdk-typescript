@@ -22,6 +22,7 @@ export {
   type AppCreateSignedUploadURLParams,
 } from './apps';
 export { Assistant } from './assistant/assistant';
+export { Compute } from './compute/compute';
 export { Connect } from './connect/connect';
 export {
   Credentials,
@@ -38,6 +39,7 @@ export {
   type DeviceRetrieveCapabilitiesResponse,
   type DeviceSetNameResponse,
   type DeviceSummaryResponse,
+  type DeviceUpdateIdleTimeoutResponse,
   type DeviceWaitReadyResponse,
   type DeviceCreateParams,
   type DeviceListParams,
@@ -46,6 +48,7 @@ export {
   type DeviceSetNameParams,
   type DeviceSummaryParams,
   type DeviceTerminateParams,
+  type DeviceUpdateIdleTimeoutParams,
 } from './devices/devices';
 export {
   Files,
@@ -59,6 +62,7 @@ export {
   type FileListParams,
   type FileUploadURLParams,
 } from './files';
+export { Identity, type IdentityMeResponse } from './identity';
 export {
   Mailboxes,
   type MailboxCreateResponse,
@@ -110,6 +114,17 @@ export {
   type ProxyListParams,
 } from './proxies';
 export {
+  RoutineFiles,
+  type RoutineFileListResponse,
+  type RoutineFileDeleteManyResponse,
+  type RoutineFileListFoldersResponse,
+  type RoutineFileListParams,
+  type RoutineFileDeleteManyParams,
+  type RoutineFileListFoldersParams,
+} from './routine-files';
+export { Store } from './store/store';
+export { StreamTokens, type StreamTokenCreateResponse, type StreamTokenCreateParams } from './stream-tokens';
+export {
   Tasks,
   type TaskRetrieveResponse,
   type TaskListResponse,
@@ -118,11 +133,13 @@ export {
   type TaskRunResponse,
   type TaskRunStreamedResponse,
   type TaskSendMessageResponse,
+  type TaskStatsResponse,
   type TaskStopResponse,
   type TaskListParams,
   type TaskRunParams,
   type TaskRunStreamedParams,
   type TaskSendMessageParams,
+  type TaskStatsParams,
 } from './tasks/tasks';
 export {
   Webhooks,
