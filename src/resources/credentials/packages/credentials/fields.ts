@@ -30,7 +30,17 @@ export class Fields extends APIResource {
    */
   update(
     fieldType:
-      'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes',
+      | 'email'
+      | 'username'
+      | 'password'
+      | 'api_token'
+      | 'phone_number'
+      | 'two_factor_secret'
+      | 'backup_codes'
+      | 'cc_number'
+      | 'cc_exp'
+      | 'cc_csc'
+      | 'cc_name',
     params: FieldUpdateParams,
     options?: RequestOptions,
   ): APIPromise<FieldUpdateResponse> {
@@ -47,7 +57,17 @@ export class Fields extends APIResource {
    */
   delete(
     fieldType:
-      'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes',
+      | 'email'
+      | 'username'
+      | 'password'
+      | 'api_token'
+      | 'phone_number'
+      | 'two_factor_secret'
+      | 'backup_codes'
+      | 'cc_number'
+      | 'cc_exp'
+      | 'cc_csc'
+      | 'cc_name',
     params: FieldDeleteParams,
     options?: RequestOptions,
   ): APIPromise<FieldDeleteResponse> {
@@ -87,9 +107,11 @@ export namespace FieldCreateResponse {
      */
     userId: string | null;
 
-    link?: Data.Link;
+    label?: string;
 
-    source?: 'mobilerun' | 'onepassword';
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
   }
 
   export namespace Data {
@@ -101,13 +123,17 @@ export namespace FieldCreateResponse {
         | 'api_token'
         | 'phone_number'
         | 'two_factor_secret'
-        | 'backup_codes';
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
 
       value: string;
     }
 
-    export interface Link {
-      fieldMap: Array<Link.FieldMap>;
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
 
       itemId: string;
 
@@ -120,7 +146,7 @@ export namespace FieldCreateResponse {
       vaultName: string;
     }
 
-    export namespace Link {
+    export namespace UnionMember0 {
       export interface FieldMap {
         fieldId: string;
 
@@ -131,7 +157,40 @@ export namespace FieldCreateResponse {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes';
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
       }
     }
   }
@@ -165,9 +224,11 @@ export namespace FieldUpdateResponse {
      */
     userId: string | null;
 
-    link?: Data.Link;
+    label?: string;
 
-    source?: 'mobilerun' | 'onepassword';
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
   }
 
   export namespace Data {
@@ -179,13 +240,17 @@ export namespace FieldUpdateResponse {
         | 'api_token'
         | 'phone_number'
         | 'two_factor_secret'
-        | 'backup_codes';
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
 
       value: string;
     }
 
-    export interface Link {
-      fieldMap: Array<Link.FieldMap>;
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
 
       itemId: string;
 
@@ -198,7 +263,7 @@ export namespace FieldUpdateResponse {
       vaultName: string;
     }
 
-    export namespace Link {
+    export namespace UnionMember0 {
       export interface FieldMap {
         fieldId: string;
 
@@ -209,7 +274,40 @@ export namespace FieldUpdateResponse {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes';
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
       }
     }
   }
@@ -243,9 +341,11 @@ export namespace FieldDeleteResponse {
      */
     userId: string | null;
 
-    link?: Data.Link;
+    label?: string;
 
-    source?: 'mobilerun' | 'onepassword';
+    link?: Data.UnionMember0 | Data.UnionMember1;
+
+    source?: 'mobilerun' | 'onepassword' | 'wallet';
   }
 
   export namespace Data {
@@ -257,13 +357,17 @@ export namespace FieldDeleteResponse {
         | 'api_token'
         | 'phone_number'
         | 'two_factor_secret'
-        | 'backup_codes';
+        | 'backup_codes'
+        | 'cc_number'
+        | 'cc_exp'
+        | 'cc_csc'
+        | 'cc_name';
 
       value: string;
     }
 
-    export interface Link {
-      fieldMap: Array<Link.FieldMap>;
+    export interface UnionMember0 {
+      fieldMap: Array<UnionMember0.FieldMap>;
 
       itemId: string;
 
@@ -276,7 +380,7 @@ export namespace FieldDeleteResponse {
       vaultName: string;
     }
 
-    export namespace Link {
+    export namespace UnionMember0 {
       export interface FieldMap {
         fieldId: string;
 
@@ -287,7 +391,40 @@ export namespace FieldDeleteResponse {
           | 'api_token'
           | 'phone_number'
           | 'two_factor_secret'
-          | 'backup_codes';
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
+      }
+    }
+
+    export interface UnionMember1 {
+      cardId: string;
+
+      fieldMap: Array<UnionMember1.FieldMap>;
+
+      label: string;
+
+      provider: 'wallet';
+    }
+
+    export namespace UnionMember1 {
+      export interface FieldMap {
+        fieldId: string;
+
+        fieldType:
+          | 'email'
+          | 'username'
+          | 'password'
+          | 'api_token'
+          | 'phone_number'
+          | 'two_factor_secret'
+          | 'backup_codes'
+          | 'cc_number'
+          | 'cc_exp'
+          | 'cc_csc'
+          | 'cc_name';
       }
     }
   }
@@ -303,7 +440,17 @@ export interface FieldCreateParams {
    * Body param
    */
   fieldType:
-    'email' | 'username' | 'password' | 'api_token' | 'phone_number' | 'two_factor_secret' | 'backup_codes';
+    | 'email'
+    | 'username'
+    | 'password'
+    | 'api_token'
+    | 'phone_number'
+    | 'two_factor_secret'
+    | 'backup_codes'
+    | 'cc_number'
+    | 'cc_exp'
+    | 'cc_csc'
+    | 'cc_name';
 
   /**
    * Body param
