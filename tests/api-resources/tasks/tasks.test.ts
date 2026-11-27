@@ -192,6 +192,31 @@ describe('resource tasks', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('stats: only required params', async () => {
+    const responsePromise = client.tasks.stats({
+      from: '2019-12-27T18:11:19.117Z',
+      to: '2019-12-27T18:11:19.117Z',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('stats: required and optional params', async () => {
+    const response = await client.tasks.stats({
+      from: '2019-12-27T18:11:19.117Z',
+      to: '2019-12-27T18:11:19.117Z',
+      bucket: 'hour',
+      source: 'api',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('stop', async () => {
     const responsePromise = client.tasks.stop('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
