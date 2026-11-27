@@ -189,6 +189,11 @@ export namespace NumberRetrieveResponse {
      */
     failureReason: 'out_of_stock' | 'unknown' | null;
 
+    /**
+     * ICCID of the SIM behind this line when a trustworthy value is known, else null.
+     */
+    iccid: string | null;
+
     label: string | null;
 
     /**
@@ -201,6 +206,12 @@ export namespace NumberRetrieveResponse {
 
     purpose: string | null;
 
+    /**
+     * SIM of a phone connected through the Mobilerun Portal app; null for other phones
+     * or before the first sync.
+     */
+    sim: Data.Sim | null;
+
     state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
 
     updatedAt: string | null;
@@ -212,7 +223,21 @@ export namespace NumberRetrieveResponse {
      */
     export interface Actions {
       /**
-       * True when DELETE /numbers/phones/{id} would currently succeed.
+       * True when this number can be bound to a cloud device (active, has a phone
+       * number, receives SMS, not a BYO device line). When false,
+       * `bindDeviceBlockedReason` says why.
+       */
+      bindDevice: boolean;
+
+      /**
+       * Why `bindDevice` is false; null exactly when it is true.
+       */
+      bindDeviceBlockedReason:
+        'number_not_active' | 'no_phone_number' | 'sms_inbound_unsupported' | 'byo_device_line' | null;
+
+      /**
+       * True when DELETE /numbers/phones/{id} would cancel or abort this number now.
+       * False once a cancellation is already scheduled; the DELETE stays idempotent.
        */
       cancel: boolean;
 
@@ -256,6 +281,18 @@ export namespace NumberRetrieveResponse {
          */
         outbound: boolean;
       }
+    }
+
+    /**
+     * SIM of a phone connected through the Mobilerun Portal app; null for other phones
+     * or before the first sync.
+     */
+    export interface Sim {
+      carrierName: string | null;
+
+      displayName: string | null;
+
+      simSlot: number | null;
     }
   }
 }
@@ -310,6 +347,11 @@ export namespace NumberUpdateResponse {
      */
     failureReason: 'out_of_stock' | 'unknown' | null;
 
+    /**
+     * ICCID of the SIM behind this line when a trustworthy value is known, else null.
+     */
+    iccid: string | null;
+
     label: string | null;
 
     /**
@@ -322,6 +364,12 @@ export namespace NumberUpdateResponse {
 
     purpose: string | null;
 
+    /**
+     * SIM of a phone connected through the Mobilerun Portal app; null for other phones
+     * or before the first sync.
+     */
+    sim: Data.Sim | null;
+
     state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
 
     updatedAt: string | null;
@@ -333,7 +381,21 @@ export namespace NumberUpdateResponse {
      */
     export interface Actions {
       /**
-       * True when DELETE /numbers/phones/{id} would currently succeed.
+       * True when this number can be bound to a cloud device (active, has a phone
+       * number, receives SMS, not a BYO device line). When false,
+       * `bindDeviceBlockedReason` says why.
+       */
+      bindDevice: boolean;
+
+      /**
+       * Why `bindDevice` is false; null exactly when it is true.
+       */
+      bindDeviceBlockedReason:
+        'number_not_active' | 'no_phone_number' | 'sms_inbound_unsupported' | 'byo_device_line' | null;
+
+      /**
+       * True when DELETE /numbers/phones/{id} would cancel or abort this number now.
+       * False once a cancellation is already scheduled; the DELETE stays idempotent.
        */
       cancel: boolean;
 
@@ -377,6 +439,18 @@ export namespace NumberUpdateResponse {
          */
         outbound: boolean;
       }
+    }
+
+    /**
+     * SIM of a phone connected through the Mobilerun Portal app; null for other phones
+     * or before the first sync.
+     */
+    export interface Sim {
+      carrierName: string | null;
+
+      displayName: string | null;
+
+      simSlot: number | null;
     }
   }
 }
@@ -433,6 +507,11 @@ export namespace NumberListResponse {
      */
     failureReason: 'out_of_stock' | 'unknown' | null;
 
+    /**
+     * ICCID of the SIM behind this line when a trustworthy value is known, else null.
+     */
+    iccid: string | null;
+
     label: string | null;
 
     /**
@@ -445,6 +524,12 @@ export namespace NumberListResponse {
 
     purpose: string | null;
 
+    /**
+     * SIM of a phone connected through the Mobilerun Portal app; null for other phones
+     * or before the first sync.
+     */
+    sim: Item.Sim | null;
+
     state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
 
     updatedAt: string | null;
@@ -456,7 +541,21 @@ export namespace NumberListResponse {
      */
     export interface Actions {
       /**
-       * True when DELETE /numbers/phones/{id} would currently succeed.
+       * True when this number can be bound to a cloud device (active, has a phone
+       * number, receives SMS, not a BYO device line). When false,
+       * `bindDeviceBlockedReason` says why.
+       */
+      bindDevice: boolean;
+
+      /**
+       * Why `bindDevice` is false; null exactly when it is true.
+       */
+      bindDeviceBlockedReason:
+        'number_not_active' | 'no_phone_number' | 'sms_inbound_unsupported' | 'byo_device_line' | null;
+
+      /**
+       * True when DELETE /numbers/phones/{id} would cancel or abort this number now.
+       * False once a cancellation is already scheduled; the DELETE stays idempotent.
        */
       cancel: boolean;
 
@@ -500,6 +599,18 @@ export namespace NumberListResponse {
          */
         outbound: boolean;
       }
+    }
+
+    /**
+     * SIM of a phone connected through the Mobilerun Portal app; null for other phones
+     * or before the first sync.
+     */
+    export interface Sim {
+      carrierName: string | null;
+
+      displayName: string | null;
+
+      simSlot: number | null;
     }
   }
 }
@@ -554,6 +665,11 @@ export namespace NumberDeleteResponse {
      */
     failureReason: 'out_of_stock' | 'unknown' | null;
 
+    /**
+     * ICCID of the SIM behind this line when a trustworthy value is known, else null.
+     */
+    iccid: string | null;
+
     label: string | null;
 
     /**
@@ -566,6 +682,12 @@ export namespace NumberDeleteResponse {
 
     purpose: string | null;
 
+    /**
+     * SIM of a phone connected through the Mobilerun Portal app; null for other phones
+     * or before the first sync.
+     */
+    sim: Data.Sim | null;
+
     state: 'awaiting_payment' | 'provisioning' | 'active' | 'cancel_scheduled' | 'expired' | 'failed';
 
     updatedAt: string | null;
@@ -577,7 +699,21 @@ export namespace NumberDeleteResponse {
      */
     export interface Actions {
       /**
-       * True when DELETE /numbers/phones/{id} would currently succeed.
+       * True when this number can be bound to a cloud device (active, has a phone
+       * number, receives SMS, not a BYO device line). When false,
+       * `bindDeviceBlockedReason` says why.
+       */
+      bindDevice: boolean;
+
+      /**
+       * Why `bindDevice` is false; null exactly when it is true.
+       */
+      bindDeviceBlockedReason:
+        'number_not_active' | 'no_phone_number' | 'sms_inbound_unsupported' | 'byo_device_line' | null;
+
+      /**
+       * True when DELETE /numbers/phones/{id} would cancel or abort this number now.
+       * False once a cancellation is already scheduled; the DELETE stays idempotent.
        */
       cancel: boolean;
 
@@ -621,6 +757,18 @@ export namespace NumberDeleteResponse {
          */
         outbound: boolean;
       }
+    }
+
+    /**
+     * SIM of a phone connected through the Mobilerun Portal app; null for other phones
+     * or before the first sync.
+     */
+    export interface Sim {
+      carrierName: string | null;
+
+      displayName: string | null;
+
+      simSlot: number | null;
     }
   }
 }

@@ -1,5 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export { Approvals, type ApprovalDecideResponse, type ApprovalDecideParams } from './approvals';
 export {
   Screenshots,
   type ScreenshotRetrieveResponse,
@@ -15,11 +16,13 @@ export {
   type TaskRunResponse,
   type TaskRunStreamedResponse,
   type TaskSendMessageResponse,
+  type TaskStatsResponse,
   type TaskStopResponse,
   type TaskListParams,
   type TaskRunParams,
   type TaskRunStreamedParams,
   type TaskSendMessageParams,
+  type TaskStatsParams,
 } from './tasks';
 export {
   UiStates,
