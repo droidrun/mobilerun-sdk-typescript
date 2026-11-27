@@ -472,13 +472,22 @@ export interface MailboxCapacityResponse {
 
 export namespace MailboxCapacityResponse {
   export interface Data {
-    included: number;
+    /**
+     * null with status unlimited
+     */
+    included: number | null;
 
-    includedRemaining: number;
+    /**
+     * null with status unlimited
+     */
+    includedRemaining: number | null;
 
-    remaining: number;
+    /**
+     * null with status unlimited
+     */
+    remaining: number | null;
 
-    status: 'available' | 'exhausted' | 'not_included';
+    status: 'available' | 'exhausted' | 'not_included' | 'unlimited';
   }
 }
 
