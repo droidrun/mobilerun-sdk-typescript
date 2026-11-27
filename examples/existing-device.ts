@@ -1,4 +1,4 @@
-// Uses device minutes until the device is stopped or terminated. Run: pnpm tsn examples/existing-device.ts DEVICE_ID
+// Uses device credits until the device is stopped or terminated. Run: pnpm tsn examples/existing-device.ts DEVICE_ID
 import { MobilerunSDK } from '@mobilerun/sdk';
 
 async function main() {
