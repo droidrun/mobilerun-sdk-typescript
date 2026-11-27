@@ -1,4 +1,4 @@
-// Uses device minutes until the device is stopped or terminated. Task execution may incur costs. Run: pnpm tsn examples/quickstart.ts
+// Uses device credits until the device is stopped or terminated. Task execution may incur costs. Run: pnpm tsn examples/quickstart.ts
 import { MobilerunSDK } from '@mobilerun/sdk';
 
 async function main() {

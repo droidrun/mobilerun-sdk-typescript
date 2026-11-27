@@ -1,4 +1,4 @@
-// Uses device minutes until the device is stopped or terminated. Task execution may incur costs. Run: pnpm tsn examples/typed-output.ts DEVICE_ID
+// Uses device credits until the device is stopped or terminated. Task execution may incur costs. Run: pnpm tsn examples/typed-output.ts DEVICE_ID
 // Install the optional adapter dependency: pnpm add zod@^4
 import { MobilerunSDK } from '@mobilerun/sdk';
 import { output } from '@mobilerun/sdk/zod';

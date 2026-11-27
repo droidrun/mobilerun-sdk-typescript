@@ -1,4 +1,4 @@
-// Uses device minutes until the device is stopped or terminated. Task execution may incur costs. Recording storage may incur costs. Run: pnpm tsn examples/recording.ts DEVICE_ID
+// Uses device credits until the device is stopped or terminated. Task execution may incur costs. Recording storage may incur costs. Run: pnpm tsn examples/recording.ts DEVICE_ID
 import { writeFile } from 'node:fs/promises';
 import { MobilerunSDK } from '@mobilerun/sdk';
 
