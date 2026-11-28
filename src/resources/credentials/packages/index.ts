@@ -3,8 +3,10 @@
 export {
   Credentials,
   type CredentialCreateResponse,
+  type CredentialUpdateResponse,
   type CredentialDeleteResponse,
   type CredentialCreateParams,
+  type CredentialUpdateParams,
   type CredentialDeleteParams,
 } from './credentials/index';
 export { Links, type LinkCreateResponse, type LinkCreateParams } from './links';
