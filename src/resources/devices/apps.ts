@@ -322,7 +322,8 @@ export interface AppGrantPermissionParams {
   'X-Device-Display-ID'?: number;
 }
 
-export type AppInstallParams = AppInstallParams.Variant0 | AppInstallParams.Variant1;
+export type AppInstallParams =
+  AppInstallParams.Variant0 | AppInstallParams.Variant1 | AppInstallParams.Variant2;
 
 export declare namespace AppInstallParams {
   export interface Variant0 {
@@ -332,6 +333,17 @@ export declare namespace AppInstallParams {
     bundleId: string;
 
     /**
+     * Body param: UUID of a published Android or iOS store app.
+     */
+    appId?: string;
+
+    /**
+     * Body param: HTTPS APK URL downloaded and installed by the device; not stored in
+     * your app library.
+     */
+    appUrl?: string;
+
+    /**
      * Body param: true: return 202 immediately and install in the background (poll
      * list-app-installs). false/omitted: install inline and return the outcome
      * directly (200 on success, an error status on failure).
@@ -339,8 +351,8 @@ export declare namespace AppInstallParams {
     background?: boolean;
 
     /**
-     * Body param: Optional ISO 3166-1 alpha-2 country of the uploaded app version
-     * (e.g. MY or SG).
+     * Body param: Optional ISO 3166-1 alpha-2 country of the library or store app
+     * version (e.g. MY or SG).
      */
     country?: string;
 
@@ -350,7 +362,7 @@ export declare namespace AppInstallParams {
     packageName?: string;
 
     /**
-     * Body param: Optional exact app-library version code. Use with country when
+     * Body param: Optional exact library or store version code. Use with country when
      * multiple regional versions share an identifier.
      */
     versionCode?: number;
@@ -368,6 +380,17 @@ export declare namespace AppInstallParams {
     packageName: string;
 
     /**
+     * Body param: UUID of a published Android or iOS store app.
+     */
+    appId?: string;
+
+    /**
+     * Body param: HTTPS APK URL downloaded and installed by the device; not stored in
+     * your app library.
+     */
+    appUrl?: string;
+
+    /**
      * Body param: true: return 202 immediately and install in the background (poll
      * list-app-installs). false/omitted: install inline and return the outcome
      * directly (200 on success, an error status on failure).
@@ -380,13 +403,60 @@ export declare namespace AppInstallParams {
     bundleId?: string;
 
     /**
-     * Body param: Optional ISO 3166-1 alpha-2 country of the uploaded app version
-     * (e.g. MY or SG).
+     * Body param: Optional ISO 3166-1 alpha-2 country of the library or store app
+     * version (e.g. MY or SG).
      */
     country?: string;
 
     /**
-     * Body param: Optional exact app-library version code. Use with country when
+     * Body param: Optional exact library or store version code. Use with country when
+     * multiple regional versions share an identifier.
+     */
+    versionCode?: number;
+
+    /**
+     * Header param
+     */
+    'X-Device-Display-ID'?: number;
+  }
+
+  export interface Variant2 {
+    /**
+     * Body param: UUID of a published Android or iOS store app.
+     */
+    appId: string;
+
+    /**
+     * Body param: HTTPS APK URL downloaded and installed by the device; not stored in
+     * your app library.
+     */
+    appUrl?: string;
+
+    /**
+     * Body param: true: return 202 immediately and install in the background (poll
+     * list-app-installs). false/omitted: install inline and return the outcome
+     * directly (200 on success, an error status on failure).
+     */
+    background?: boolean;
+
+    /**
+     * Body param: iOS bundle identifier (e.g. com.example.app)
+     */
+    bundleId?: string;
+
+    /**
+     * Body param: Optional ISO 3166-1 alpha-2 country of the library or store app
+     * version (e.g. MY or SG).
+     */
+    country?: string;
+
+    /**
+     * Body param: Android package name (e.g. com.example.app)
+     */
+    packageName?: string;
+
+    /**
+     * Body param: Optional exact library or store version code. Use with country when
      * multiple regional versions share an identifier.
      */
     versionCode?: number;
