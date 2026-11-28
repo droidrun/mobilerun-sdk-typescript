@@ -32,6 +32,7 @@ describe('resource links', () => {
       fieldMap: [{ fieldId: 'x', fieldType: 'email' }],
       itemId: 'x',
       vaultId: 'x',
+      provider: 'onepassword',
     });
   });
 });
